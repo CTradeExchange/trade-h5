@@ -8,29 +8,29 @@
         :size='size'
     >
         <h4 class='tip'>
-            请准确填写公司注册证书上的公司名称和公司注册号
+            {{ $t('businessKYC.inputTip') }}
         </h4>
         <p class='title'>
-            账户信息
+            {{ $t('businessKYC.accountInfo') }}
         </p>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='公司名称' prop='accountInfo.companyName'>
+                <el-form-item :label='$t("businessKYC.companyName")' prop='accountInfo.companyName'>
                     <el-input v-model='form.accountInfo.companyName' />
                 </el-form-item>
             </el-col>
             <el-col :offset='0' prop='regNo' :span='12'>
-                <el-form-item label='注册号' prop='accountInfo.regNo'>
+                <el-form-item :label='$t("businessKYC.regNo")' prop='accountInfo.regNo'>
                     <el-input v-model='form.accountInfo.regNo' />
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='成立日期' prop='accountInfo.createTime'>
+                <el-form-item :label='$t("businessKYC.registration")' prop='accountInfo.createTime'>
                     <el-date-picker
                         v-model='form.accountInfo.createTime'
-                        placeholder='请选择成立日期'
+                        :placeholder="$t('common.select')+$t('businessKYC.registration')"
                         style='width: 100%;'
                         type='date'
                     />
@@ -39,10 +39,10 @@
             <el-col :offset='0' :span='12'>
                 <el-row :gutter='20'>
                     <el-col :span='10'>
-                        <el-form-item label='区号' prop='accountInfo.area'>
+                        <el-form-item :label='$t("businessKYC.area")' prop='accountInfo.area'>
                             <el-select
                                 v-model='form.accountInfo.area'
-                                placeholder='请选择区号'
+                                :placeholder='$t("common.select")'
                             >
                                 <el-option
                                     v-for='item in countryList'
@@ -54,7 +54,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col prop='phone' :span='14'>
-                        <el-form-item label='联系电话' prop='accountInfo.phone'>
+                        <el-form-item :label='$t("businessKYC.contact")' prop='accountInfo.phone'>
                             <el-input v-model='form.accountInfo.phone' type='number' />
                         </el-form-item>
                     </el-col>
@@ -64,15 +64,15 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='资金来源' prop='accountInfo.resource'>
+                <el-form-item :label='$t("businessKYC.source")' prop='accountInfo.resource'>
                     <el-input v-model='form.accountInfo.resource' />
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='业务性质' prop='accountInfo.nature'>
+                <el-form-item :label='$t("businessKYC.nature")' prop='accountInfo.nature'>
                     <el-select
                         v-model='form.accountInfo.nature'
-                        placeholder='请选择业务性质'
+                        :placeholder="$t('common.select') + $t('businessKYC.nature')"
                     >
                         <el-option v-for='item in businessNature' :key='item.code' :label='item.displayName' :value='item.code' />
                     </el-select>
@@ -82,20 +82,20 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='申请原因' prop='accountInfo.reason'>
+                <el-form-item :label='$t("businessKYC.reason")' prop='accountInfo.reason'>
                     <el-input v-model='form.accountInfo.reason' type='textarea' />
                 </el-form-item>
             </el-col>
         </el-row>
         <p class='title'>
-            注册地址
+            {{ $t("businessKYC.regAddr") }}
         </p>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='国家/地区' prop='regAddress.regCountry'>
+                <el-form-item :label='$t("businessKYC.country")' prop='regAddress.regCountry'>
                     <el-select
                         v-model='form.regAddress.regCountry'
-                        placeholder='请选择国家/地区'
+                        :placeholder="$t('common.select') + $t('businessKYC.country')"
                     >
                         <el-option
                             v-for='item in countryList'
@@ -107,7 +107,7 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='城市' prop='regAddress.regCity'>
+                <el-form-item :label='$t("businessKYC.city")' prop='regAddress.regCity'>
                     <el-input v-model='form.regAddress.regCity' />
                 </el-form-item>
             </el-col>
@@ -115,21 +115,21 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='街道地址' prop='regAddress.regStreet'>
+                <el-form-item :label='$t("businessKYC.street")' prop='regAddress.regStreet'>
                     <el-input v-model='form.regAddress.regStreet' />
                 </el-form-item>
             </el-col>
         </el-row>
 
         <p class='title'>
-            商务运营地址
+            {{ $t('businessKYC.operatingAddr') }}
         </p>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='国家/地区' prop='opertion.opertionCountry'>
+                <el-form-item :label='$t("businessKYC.country")' prop='opertion.opertionCountry'>
                     <el-select
                         v-model='form.opertion.opertionCountry'
-                        placeholder='请选择国家/地区'
+                        :placeholder="$t('common.select') + $t('businessKYC.country')"
                     >
                         <el-option
                             v-for='item in countryList'
@@ -141,14 +141,14 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='城市' prop='opertion.opertionCity'>
+                <el-form-item :label='$t("businessKYC.city")' prop='opertion.opertionCity'>
                     <el-input v-model='form.opertion.opertionCity' />
                 </el-form-item>
             </el-col>
         </el-row>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='街道地址' prop='opertion.opertionStreet'>
+                <el-form-item :label='$t("businessKYC.street")' prop='opertion.opertionStreet'>
                     <el-input v-model='form.opertion.opertionStreet' />
                 </el-form-item>
             </el-col>
@@ -159,18 +159,20 @@
 <script>
 import { reactive, ref, computed, unref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
+import { useI18n } from 'vue-i18n'
 import { upload, getListByParentCode, getCountryListByParentCode } from '@/api/base'
+import { isEmpty } from '@/utils/util'
 
 export default {
     props: {
         formData: {
             type: Object,
             require: true
-        }
+        },
     },
     setup (props, context) {
         const store = useStore()
-
+        const { t, locale } = useI18n({ useScope: 'global' })
         const businessNature = ref([])
         const formRef = ref(null)
         const state = reactive({
@@ -200,62 +202,62 @@ export default {
             rules: {
                 accountInfo: {
                     companyName: [
-                        { type: 'string', required: true, message: '请输入公司名称', trigger: 'blur' },
+                        { type: 'string', required: true, message: t('common.input') + t('businessKYC.companyName'), trigger: 'blur' },
 
                     ],
                     regNo: [
-                        { required: true, message: '请输入注册号', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.regNo'), trigger: 'blur' },
 
                     ],
                     createTime: [
-                        { required: true, message: '请输入成立日期', trigger: 'change' },
+                        { required: true, message: t('common.select') + t('businessKYC.registration'), trigger: 'change' },
 
                     ],
                     area: [
-                        { required: true, message: '请选择区号', trigger: 'change' },
+                        { required: true, message: t('common.select'), trigger: 'change' },
 
                     ],
                     phone: [
-                        { required: true, message: '请输入联系电话', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.contact'), trigger: 'blur' },
                     ],
                     resource: [
-                        { required: true, message: '请输入资金来源', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.source'), trigger: 'blur' },
 
                     ],
                     nature: [
-                        { required: true, message: '请选择业务性质', trigger: 'change' },
+                        { required: true, message: t('common.select') + t('businessKYC.nature'), trigger: 'change' },
 
                     ],
                     reason: [
-                        { required: true, message: '请输入申请原因', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.reason'), trigger: 'blur' },
 
                     ],
                 },
                 regAddress: {
                     regCountry: [
-                        { required: true, message: '请选择国家/地区', trigger: 'change' },
+                        { required: true, message: t('common.select') + t('businessKYC.country'), trigger: 'change' },
 
                     ],
                     regCity: [
-                        { required: true, message: '请输入城市', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.city'), trigger: 'blur' },
 
                     ],
                     regStreet: [
-                        { required: true, message: '请输入街道地址', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.street'), trigger: 'blur' },
 
                     ],
                 },
                 opertion: {
                     opertionCountry: [
-                        { required: true, message: '请选择国家/地区', trigger: 'change' },
+                        { required: true, message: t('common.select') + t('businessKYC.street'), trigger: 'change' },
 
                     ],
                     opertionCity: [
-                        { required: true, message: '请输入城市', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.street'), trigger: 'blur' },
 
                     ],
                     opertionStreet: [
-                        { required: true, message: '请输入街道地址', trigger: 'blur' },
+                        { required: true, message: t('common.input') + t('businessKYC.street'), trigger: 'blur' },
 
                     ]
                 }
@@ -279,9 +281,8 @@ export default {
 
         watch(
             () => props.formData, (val) => {
-                if (val) {
-                    const elementValue = val.find(el => el.elementCode === 'company_basic_info')?.elementValue
-                    if (elementValue) { state.form = JSON.parse(elementValue) }
+                if (!isEmpty(val)) {
+                    state.form = val
                 }
             }, {
                 immediate: true

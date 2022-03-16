@@ -10,12 +10,12 @@
     >
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='注册证书' prop='regCertificate'>
+                <el-form-item :label=' $t("businessKYC.certificate") ' prop='regCertificate'>
                     <van-uploader :after-read='afterRead' name='regCertificate' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
@@ -33,18 +33,18 @@
                         <img class='icon-upload' src='/images/upload.png' srcset='' />
                         <upload-filled />
                         <div class='el-upload__text'>
-                            拖动文件或 <em>点击上传</em>
+                            拖动文件或 <em>{{ $t('businessKYC.upload') }}</em>
                         </div>
                     </el-upload> -->
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='公司章程' prop='policy'>
+                <el-form-item :label=' $t("businessKYC.memorandum") ' prop='policy'>
                     <van-uploader :after-read='afterRead' name='policy' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
@@ -56,17 +56,17 @@
         </el-row>
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='董事名册/董事职权证明书（注册代理人证书）/注册信息摘要' prop='directorsList'>
+                <el-form-item :label=' $t("businessKYC.CertificateIssued") ' prop='directorsList'>
                     <van-uploader :after-read='afterRead' name='directorsList' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
                     <div class='el-upload__tip'>
-                        最近12个月内出具，且包含现任董事信息
+                        {{ $t("businessKYC.tip1") }}
                     </div>
                     <a class='link' :href='form.directorsList' target='_blank'>
                         {{ form.directorsList }}
@@ -74,58 +74,40 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='董事名册/董事职权证明书（注册代理人证书）/注册信息摘要' prop='directorsList2'>
+                <el-form-item :label='$t("businessKYC.tip2") ' prop='directorsList2'>
                     <van-uploader :after-read='afterRead' name='directorsList2' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
                     <div class='el-upload__tip'>
-                        最近12个月内由政府网站出具的公司信息摘要，包含现任董事及股东信息
+                        {{ $t("businessKYC.tip3") }}
                     </div>
                     <a class='link' :href='form.directorsList2' target='_blank'>
                         {{ form.directorsList2 }}
                     </a>
-
-                    <!-- <el-upload
-                        action=''
-                        class='upload-demo'
-                        drag
-                        multiple
-                    >
-                        <img class='icon-upload' src='/images/upload.png' srcset='' />
-                        <upload-filled />
-                        <div class='el-upload__text'>
-                            拖动文件或 <em>点击上传</em>
-                        </div>
-                        <template #tip>
-                            <div class='el-upload__tip'>
-                                最近12个月内由政府网站出具的公司信息摘要，包含现任董事及股东信息
-                            </div>
-                        </template>
-                    </el-upload> -->
                 </el-form-item>
             </el-col>
         </el-row>
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='所有权结构图' prop='structure'>
+                <el-form-item :label=' $t("businessKYC.ownershipStructure") ' prop='structure'>
                     <van-uploader :after-read='afterRead' name='structure' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
 
                     <div class='el-upload__tip'>
                         <p class='tips'>
-                            请列出所有最终实益拥有人（25%及以上），并由董事签署且附上最新日期
+                            {{ $t("businessKYC.tip4") }}
                         </p>
                     </div>
                     <a class='link' :href='form.structure' target='_blank'>
@@ -134,12 +116,12 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='制裁问卷' prop='sanctionsQues'>
+                <el-form-item :label=' $t("businessKYC.sanctionQuestionnaire") ' prop='sanctionsQues'>
                     <van-uploader :after-read='afterRead' name='sanctionsQues' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
@@ -153,12 +135,12 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='授权信' prop='sanctionsQues'>
+                <el-form-item :label='$t("businessKYC.letterOfAuthorization") ' prop='sanctionsQues'>
                     <van-uploader :after-read='afterRead' name='authorizationLetter' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
@@ -169,28 +151,28 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='经营状况说明' prop='businessConditions'>
+                <el-form-item :label=' $t("businessKYC.businessConditions") ' prop='businessConditions'>
                     <van-uploader :after-read='afterRead' name='businessConditions' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
 
                     <div class='el-upload__tip'>
                         <p class='tips'>
-                            请提供以下资料中的任意项（3个月内出具）：
+                            {{ $t("businessKYC.tip5") }}
                         </p>
                         <p class='tips'>
-                            1）通过政府网站链接找到的公司信息截图，截图请包括电脑桌面的时间日期信息；
+                            {{ $t("businessKYC.tip6") }}
                         </p>
                         <p class='tips'>
-                            2）董事职权证明书（注册代理人证书）
+                            {{ $t("businessKYC.tip7") }}
                         </p>
                         <p class='tips'>
-                            3）良好存续证明
+                            {{ $t("businessKYC.tip8") }}
                         </p>
                     </div>
                     <a class='link' :href='form.businessConditions' target='_blank'>
@@ -202,22 +184,22 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='中间股东信息（如有直接/间接持有25%及以上的公司）' prop='intermediateShareholders'>
+                <el-form-item :label='$t("businessKYC.tip9") ' prop='intermediateShareholders'>
                     <van-uploader :after-read='afterRead' name='intermediateShareholders' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
 
                     <div class='el-upload__tip'>
                         <p class='tips'>
-                            1）股东名册/董事职权证明书（注册代理人证书）/注册信息摘要（包含现任股东信息）；
+                            {{ $t("businessKYC.tip10") }}
                         </p>
                         <p class='tips'>
-                            2）良好存续证明/董事职权证明书（注册代理人证书）/注册信息摘要（证明公司现经营状况）
+                            {{ $t("businessKYC.tip11") }}
                         </p>
                     </div>
                     <a class='link' :href='form.intermediateShareholders' target='_blank'>
@@ -226,12 +208,12 @@
                 </el-form-item>
             </el-col>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='补充资料（选填）' prop='furtherInfo'>
+                <el-form-item :label='$t("businessKYC.supplementaryDocuments") ' prop='furtherInfo'>
                     <van-uploader :after-read='afterRead' name='furtherInfo' result-type='file'>
                         <div class='uploader'>
                             <img class='icon-upload' src='/images/upload.png' srcset='' />
                             <p class='upload-tip'>
-                                点击上传
+                                {{ $t('businessKYC.upload') }}
                             </p>
                         </div>
                     </van-uploader>
@@ -244,7 +226,7 @@
 
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
-                <el-form-item label='公司网站（如有，没有填写无）' prop='websit'>
+                <el-form-item :label='$t("businessKYC.website") ' prop='websit'>
                     <el-input v-model='form.websit' />
                 </el-form-item>
             </el-col>
@@ -256,7 +238,9 @@
 import { reactive, ref, computed, unref, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import { ElIcon, ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
 import { upload, getListByParentCode } from '@/api/base'
+import { isEmpty } from '@/utils/util'
 
 export default {
     props: {
@@ -267,6 +251,7 @@ export default {
     },
     setup (props, context) {
         const formRef = ref(null)
+        const { t, locale } = useI18n({ useScope: 'global' })
         const state = reactive({
             loading: false,
             form: {
@@ -284,34 +269,34 @@ export default {
             },
             rules: {
                 regCertificate: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 policy: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 directorsList: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 directorsList2: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 structure: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 sanctionsQues: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 authorizationLetter: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 businessConditions: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 intermediateShareholders: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ],
                 websit: [
-                    { type: 'string', required: true, message: '请上传', trigger: 'blur' },
+                    { type: 'string', required: true, message: t('businessKYC.pleaseUpload'), trigger: 'blur' },
                 ]
 
             }
@@ -320,9 +305,8 @@ export default {
 
         watch(
             () => props.formData, (val) => {
-                if (val) {
-                    const elementValue = val.find(el => el.elementCode === 'company_upload_file')?.elementValue
-                    if (elementValue) { state.form = JSON.parse(elementValue) }
+                if (!isEmpty(val)) {
+                    state.form = val
                 }
             }, {
                 immediate: true

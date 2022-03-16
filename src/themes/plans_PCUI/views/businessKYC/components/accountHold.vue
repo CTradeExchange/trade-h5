@@ -8,29 +8,29 @@
     >
         <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
             <div class='head'>
-                <h3>账户持有人/交易员{{ index+1 }}</h3>
+                <h3>traders {{ $t('businessKYC.traders') }}{{ index+1 }}</h3>
                 <el-button v-if='index>0' size='small' @click='deleteItem(index)'>
-                    删&nbsp;除
+                    {{ $t('common.remove') }}
                 </el-button>
             </div>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
-                    主要验证人&nbsp;&nbsp;<el-switch
+                    {{ $t('businessKYC.mainValidator') }}&nbsp;&nbsp;<el-switch
                         v-model='item.main'
                     />
                 </el-col>
             </el-row>
             <p class='title'>
-                基础信息
+                {{ $t('businessKYC.basicInfo') }}
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='名字'
+                        :label="$t('businessKYC.firstName')"
                         :prop='"list."+index+".lastname"'
                         :rules="{
                             required: true,
-                            message: '请输入名字',
+                            message: $t('common.input') + $t('businessKYC.firstName'),
                             trigger: 'blur',
                         }"
                     >
@@ -39,11 +39,11 @@
                 </el-col>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='姓名'
+                        :label=' $t("businessKYC.lastName") '
                         :prop='"list."+index+".firstName"'
                         :rules="{
                             required: true,
-                            message: '请输入姓名',
+                            message: $t('common.input') + $t('businessKYC.lastName'),
                             trigger: 'blur',
                         }"
                     >
@@ -54,17 +54,17 @@
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='出生日期'
+                        :label='$t("businessKYC.birth") '
                         :prop='"list."+index+".birthDay"'
                         :rules="{
                             required: true,
-                            message: '请输入出生日期',
+                            message: $t('common.select') + $t('businessKYC.birth'),
                             trigger: 'change',
                         }"
                     >
                         <el-date-picker
                             v-model='item.birthDay'
-                            placeholder='请选择出生日期'
+                            :placeholder=' $t("businessKYC.birth")'
                             style='width: 100%;'
                             type='date'
                         />
@@ -72,17 +72,17 @@
                 </el-col>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='国家/地区'
+                        :label='$t("businessKYC.country") '
                         :prop='"list."+index+".firstName"'
                         :rules="{
                             required: true,
-                            message: '请选择国家/地区',
+                            message: $t('common.select') + $t('businessKYC.country'),
                             trigger: 'change',
                         }"
                     >
                         <el-select
                             v-model='item.address'
-                            placeholder='请选择国家/地区'
+                            :placeholder='$t("businessKYC.country")'
                         >
                             <el-option
                                 v-for='country in countryList'
@@ -97,16 +97,16 @@
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='邮箱'
+                        :label='$t("businessKYC.email")'
                         :prop='"list."+index+".email"'
                         :rules="[{
                                      required: true,
-                                     message: '请输入邮箱',
+                                     message: $t('common.input')+ $t('businessKYC.email'),
                                      trigger: 'blur',
                                  },
                                  {
                                      type: 'email',
-                                     message: '请输入正确的邮箱',
+                                     message: $t('common.inputRealEmail'),
                                      trigger: ['blur', 'change'],
                                  },]"
                     >
@@ -115,22 +115,22 @@
                 </el-col>
             </el-row>
             <p class='title'>
-                上传身份证明文件
+                {{ $t("businessKYC.UploadId") }}
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='证件类型'
+                        :label='$t("register.certificateType") '
                         :prop='"list."+index+".idType"'
                         :rules="{
                             required: true,
-                            message: '请选择证件类型',
+                            message: $t('common.select') + $t('register.certificateType'),
                             trigger: 'change',
                         }"
                     >
                         <el-select
                             v-model='item.idType'
-                            placeholder='请选择证件类型'
+                            :placeholder='$t("register.certificateType")'
                         >
                             <el-option
                                 v-for='ict in idCardType'
@@ -143,11 +143,11 @@
                 </el-col>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='证件号'
+                        :label='$t("register.certificateNo") '
                         :prop='"list."+index+".idNo"'
                         :rules="{
                             required: true,
-                            message: '请输入证件号',
+                            message: $t('common.input') + $t('register.certificateNo') ,
                             trigger: 'blur',
                         }"
                     >
@@ -159,17 +159,17 @@
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='证件签发国家/地区'
+                        :label='$t("businessKYC.regionIssue")'
                         :prop='"list."+index+".issued"'
                         :rules="{
                             required: true,
-                            message: '请选择证件签发国家/地区',
+                            message: $t('common.select') + $t('businessKYC.regionIssue'),
                             trigger: 'change',
                         }"
                     >
                         <el-select
                             v-model='item.issued'
-                            placeholder='请选择证件签发国家/地区'
+                            :placeholder="$t('businessKYC.regionIssue')"
                         >
                             <el-option
                                 v-for='country in countryList'
@@ -184,11 +184,11 @@
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='证件文件'
+                        :label='$t("businessKYC.identificationFile")'
                         :prop='"list."+index+".documents"'
                         :rules="{
                             required: true,
-                            message: '请上传证件文件',
+                            message: $t('businessKYC.pleaseUpload') + $t('businessKYC.identificationFile'),
                             trigger: 'blur',
                         }"
                     >
@@ -196,7 +196,7 @@
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
                                 <p class='upload-tip'>
-                                    点击上传
+                                    {{ $t('businessKYC.upload') }}
                                 </p>
                             </div>
                         </van-uploader>
@@ -207,11 +207,11 @@
                 </el-col>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='个人肖像照'
+                        :label=' $t("businessKYC.portraitPhoto")'
                         :prop='"list."+index+".photo"'
                         :rules="{
                             required: true,
-                            message: '请上传个人肖像照',
+                            message:$t('businessKYC.pleaseUpload') + $t('businessKYC.portraitPhoto'),
                             trigger: 'blur',
                         }"
                     >
@@ -219,7 +219,7 @@
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
                                 <p class='upload-tip'>
-                                    点击上传
+                                    {{ $t('businessKYC.upload') }}
                                 </p>
                             </div>
                         </van-uploader>
@@ -232,16 +232,16 @@
         </div>
         <template v-if='accountHoldVis || !mainAccountVis'>
             <p class='title'>
-                账户持有人/交易员身份认证
+                {{ $t('businessKYC.traders') }} + {{ $t('cRoute.regKyc') }}
             </p>
             <el-row :gutter='20'>
                 <el-col :offset='0' :span='12'>
                     <el-form-item
-                        label='手持证件照'
+                        :label='$t("businessKYC.handId")'
                         prop='mainAccount'
                         :rules="{
                             required: true,
-                            message: '请上传手持证件照',
+                            message: $t('businessKYC.pleaseUpload')+ $t('businessKYC.handId'),
                             trigger: 'blur',
                         }"
                     >
@@ -249,7 +249,7 @@
                             <div class='uploader'>
                                 <img class='icon-upload' src='/images/upload.png' srcset='' />
                                 <p class='upload-tip'>
-                                    点击上传
+                                    {{ $t('businessKYC.upload') }}
                                 </p>
                             </div>
                         </van-uploader>
@@ -265,7 +265,7 @@
             <el-col :offset='0' :span='24'>
                 <div class='add' @click='add'>
                     <i class='el-icon-plus'></i>
-                    添加账户持有人/交易员
+                    {{ $t('common.add') }}{{ $t("businessKYC.traders") }}
                 </div>
             </el-col>
         </el-row>
@@ -274,20 +274,20 @@
     <el-dialog
         v-model='dialogVis'
         :before-close='handleClose'
-        title='需要主账户持有人/交易员进行身份验证'
+        title='$t("businessKYC.tip12")'
         width='30%'
     >
-        <span>进行身份验证之前，请确保您是主要的账户持有人/交易员</span>
+        <span>{{ $t("businessKYC.tip13") }}</span>
         <template #footer>
             <span class='dialog-footer'>
                 <el-button @click='onClose'>
-                    我再想想
+                    {{ $t('businessKYC.think') }}
                 </el-button>
                 <el-button
                     type='primary'
                     @click='onConfirm'
                 >
-                    我是主要账户持有人/交易员
+                    {{ $t('businessKYC.mainAccount') }}
                 </el-button>
             </span>
         </template>
@@ -300,7 +300,7 @@ import { reactive, ref, computed, unref, toRefs, watch, onBeforeUnmount, onMount
 import { ElIcon, ElMessage, ElMessageBox } from 'element-plus'
 import { useStore } from 'vuex'
 import { upload, getListByParentCode, getCountryListByParentCode } from '@/api/base'
-
+import { isEmpty } from '@/utils/util'
 export default {
     components: {
 
@@ -342,9 +342,8 @@ export default {
 
         watch(
             () => props.formData, (val) => {
-                if (val) {
-                    const elementValue = val.find(el => el.elementCode === 'company_account_owner')?.elementValue
-                    if (elementValue) { state.form = JSON.parse(elementValue) }
+                if (!isEmpty(val)) {
+                    state.form = val
                 }
             }, {
                 immediate: true

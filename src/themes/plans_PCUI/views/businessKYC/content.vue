@@ -5,10 +5,10 @@
             <el-step v-for='item in authList' :key='item' :title='authMap[item]' />
         </el-steps>
 
-        <basicInfo v-if='active === 0' ref='basicInfoRef' :form-data='formData' />
-        <uploadFiles v-if='active === 1' ref='uploadFilesRef' :form-data='formData' />
-        <certDirector v-if='active === 2' ref='certDirectorRef' :form-data='formData' />
-        <beneficiary v-if='active === 3' ref='beneficiaryRef' :form-data='formData' />
+        <basicInfo v-if='active === 0' ref='basicInfoRef' :form-data='formDataMap[currentCode]' :form-data1='formData' />
+        <uploadFiles v-if='active === 1' ref='uploadFilesRef' :form-data='formDataMap[currentCode]' :form-data1='formData' />
+        <certDirector v-if='active === 2' ref='certDirectorRef' :form-data='formDataMap[currentCode]' :form-data1='formData' />
+        <beneficiary v-if='active === 3' ref='beneficiaryRef' :form-data='formDataMap[currentCode]' :form-data1='formData' />
         <accountHold
             v-if='active === 4'
             ref='accountHoldRef'
@@ -20,17 +20,17 @@
         <info v-if='active === 5' @update:protocol='updateProtocol' />
         <div class='oper-wrap'>
             <el-button style='margin-top: 12px;' @click='prev'>
-                上一步
+                {{ $t("businessKYC.prev") }}
             </el-button>
             <el-button v-if='draftVis' style='margin-top: 12px;' @click='save(false,true)'>
-                保存草稿
+                {{ $t("businessKYC.saveDraft") }}
             </el-button>
 
-            <el-button v-if='active === 5' style='margin-top: 12px;' type='primary' @click='save(true,true)'>
-                提交
+            <el-button v-if='active === 5' :disabled='nextBtnDisabled' style='margin-top: 12px;' type='primary' @click='save(true,true)'>
+                {{ $t("common.submit") }}
             </el-button>
-            <el-button v-else :disabled='nextBtnDisabled' style='margin-top: 12px;' type='primary' @click='next'>
-                下一步
+            <el-button v-else style='margin-top: 12px;' type='primary' @click='next'>
+                {{ $t("businessKYC.next") }}
             </el-button>
         </div>
     </div>
@@ -45,19 +45,18 @@ import certDirector from './components/certDirector.vue'
 import beneficiary from './components/beneficiary.vue'
 import accountHold from './components/accountHold.vue'
 import info from './components/info.vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter, useRoute } from 'vue-router'
 import Schema from 'async-validator'
 
 import { findAllLevelKyc, kycLevelApply, kycApply, findAllBizKycList } from '@/api/user'
-var cn = {
-    required: '%s 必填',
-}
 
 export default {
     components: {
         basicInfo, uploadFiles, certDirector, beneficiary, accountHold, info
     },
     setup (props, context) {
+        const { t, locale } = useI18n({ useScope: 'global' })
         const router = useRouter()
         const route = useRoute()
 
@@ -71,11 +70,11 @@ export default {
         //     'company_basic_info', 'company_upload_file', 'company_auth_director', 'company_auth_owner', 'company_account_owner'
         // ]
         const authMap = {
-            'company_basic_info': '基础信息', // 企业认证-基础信息
-            'company_upload_file': '上传文件', // 企业认证-上传文件
-            'company_auth_director': '认证董事', // 企业认证-认证董事
-            'company_auth_owner': '认证最终收益拥有人', // 企业认证-认证最终收益拥有人
-            'company_account_owner': '账户持有人/交易员', // 企业认证-账户持有人/交易员
+            'company_basic_info': t('businessKYC.basicInfo'), // 企业认证-基础信息
+            'company_upload_file': t('businessKYC.upload'), // 企业认证-上传文件
+            'company_auth_director': t('businessKYC.directors'), // 企业认证-认证董事
+            'company_auth_owner': t('businessKYC.verify'), // 企业认证-认证最终收益拥有人
+            'company_account_owner': t('businessKYC.traders'), // 企业认证-账户持有人/交易员
         }
         const { elementCode, selectCountry, levelCode, selectCompanyType, index } = route.query
 
@@ -88,8 +87,14 @@ export default {
             authList: elementCode.split(','), // 需要认证的步骤
             loading: false,
             formData: [], // 认证表单数据
-            alreadyUpload: false // 账户持有人是否已上传
+            alreadyUpload: false, // 账户持有人是否已上传
+            formDataMap: {}
         })
+
+        if (elementCode.split(',').length > 0) {
+            const elementCodeList = elementCode.split(',')
+            elementCodeList.forEach(el => { state.formDataMap[el] = {} })
+        }
 
         // 当前认证code
         const currentCode = computed(() => state.authList[state.active])
@@ -130,7 +135,14 @@ export default {
                 // loading.value = false
                 if (res.check()) {
                     if (res.data.length > 0) {
-                        state.formData = res.data[0].elementList
+                        // state.formData = res.data[0].elementList
+                        const elementList = res.data[0].elementList
+                        if (elementList.length > 0) {
+                            elementList.forEach(el => {
+                                state.formDataMap[el.elementCode] = JSON.parse(el.elementValue)
+                            })
+                        }
+
                         console.log('form-data', state.formData)
                     }
                 }
@@ -147,35 +159,54 @@ export default {
             }
         })
 
-        watch(() => state.active, val => {
-            getKycData()
-        }, {
-            immediate: true
-        })
+        // watch(() => state.active, val => {
+        //     getKycData()
+        // }, {
+        //     immediate: true
+        // })
 
         // 保存和提交
         const save = (commitTag = false, showToast = true) => {
             // console.log('currentComp====', unref([currentComp.value]))
-            state.loading = true
+
             const elementList = []
-            if (currentComp.value) {
+            if (commitTag) {
+                for (const key in state.formDataMap) {
+                    if (Object.hasOwnProperty.call(state.formDataMap, key)) {
+                        const element = state.formDataMap[key]
+                        elementList.push({
+                            elementCode: key,
+                            elementValue: JSON.stringify(element)
+                        })
+                    }
+                }
+            } else {
                 elementList.push({
                     elementCode: currentCode.value,
-                    elementValue: JSON.stringify(currentComp.value.value?.form)
+                    elementValue: JSON.stringify(state.formDataMap[currentCode.value])
                 })
             }
 
-            // 每次保存需要把其它认证步骤的数据取出来
-            if (state.formData.length > 0) {
-                state.formData.forEach(el => {
-                    if (el.elementCode !== currentCode.value && el.elementValue) {
-                        elementList.push({
-                            elementCode: el.elementCode,
-                            elementValue: el.elementValue
-                        })
-                    }
-                })
-            }
+            state.loading = true
+            // const elementList = []
+            // if (currentComp.value) {
+            //     elementList.push({
+            //         elementCode: currentCode.value,
+            //         elementValue: JSON.stringify(state.formDataMap[currentCode.value])
+            //     })
+            // }
+
+            // // 每次保存需要把其它认证步骤的数据取出来
+            // if (state.formData.length > 0) {
+            //     state.formData.forEach(el => {
+            //         if (el.elementCode !== currentCode.value && el.elementValue) {
+            //             elementList.push({
+            //                 elementCode: el.elementCode,
+            //                 elementValue: el.elementValue
+            //             })
+            //         }
+            //     })
+            // }
 
             kycLevelApply({
                 selectCountry,
@@ -222,6 +253,7 @@ export default {
 
         const next = async () => {
             if (currentComp.value) {
+                state.formDataMap[currentCode.value] = currentComp.value.value?.form
                 const form = currentComp.value.value.formRef
                 const flag = await form.validate()
                 if (!flag) {
@@ -232,7 +264,7 @@ export default {
                     state.dialogVis = true
                 } else {
                     // 每点下一步，都保存一下
-                    save(false, false)
+                    // save(false, false)
                     state.active++
                 }
 
@@ -264,6 +296,7 @@ export default {
         }
 
         infoButtonState()
+        getKycData()
 
         return {
             save,
@@ -277,6 +310,7 @@ export default {
             authMap,
             updateDialogVis,
             updateProtocol,
+            currentCode,
             mainAccountState,
             ...toRefs(state)
         }

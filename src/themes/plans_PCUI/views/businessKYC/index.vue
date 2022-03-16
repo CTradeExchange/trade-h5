@@ -10,11 +10,10 @@
             :rules='rules'
             size='default'
         >
-            <h2>企业KYC认证</h2>
-            <el-form-item label='您当前所在国家/地区' prop='selectCountry'>
+            <h2>kyc {{ $t("businessKYC.kyc") }}</h2>
+            <el-form-item :label='$t("businessKYC.currentCountry")' prop='selectCountry'>
                 <el-select
                     v-model='form.selectCountry'
-                    placeholder='请选择您当前所在国家/地区'
                 >
                     <el-option
                         v-for='item in allCountry'
@@ -25,19 +24,18 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                label='企业类型'
+                :label='$t("businessKYC.enterpriseType")'
                 prop='selectCompanyType'
             >
                 <el-select
                     v-model='form.selectCompanyType'
-                    placeholder='请选择企业类型'
                 >
                     <el-option v-for='item in businessType' :key='item.code' :label='item.displayName' :value='item.code' />
                 </el-select>
             </el-form-item>
             <el-form-item>
                 <el-button type='primary' @click='onSubmit'>
-                    下一步
+                    {{ $t('businessKYC.next') }}
                 </el-button>
             </el-form-item>
         </el-form>

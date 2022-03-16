@@ -1,7 +1,7 @@
 <template>
     <router-view />
     <div class='page-wrap'>
-        <h3>企业认证</h3>
+        <h3>{{ $t("businessKYC.enterpriseKYC") }}</h3>
         <div v-if='kycList.length === 0' class='empty-data'>
             <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
         </div>
