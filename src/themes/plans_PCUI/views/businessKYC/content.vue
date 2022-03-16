@@ -116,7 +116,7 @@ export default {
 
         const mainAccountVis = computed(() => {
             // 判断“账户持有人步骤”的主账户持有人是否有值
-            debugger
+
             const mainAccount = state.formDataMap['company_account_owner']?.mainAccount
             return mainAccount
         })
