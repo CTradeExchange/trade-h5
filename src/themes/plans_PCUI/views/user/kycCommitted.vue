@@ -3,12 +3,15 @@
         <div class='pageWrap'>
             <i class='icon_success'></i>
             <p class='t1'>
+                {{ $t('auth.tips0') }}
+            </p>
+            <p class='t2'>
                 {{ $t('auth.tips1') }}
             </p>
 
-            <p class='t2'>
+            <!-- <p class='t2'>
                 {{ $t('auth.tips2') }}
-            </p>
+            </p> -->
 
             <div class='btns'>
                 <van-button hairline type='success' @click='toExperience'>
@@ -39,11 +42,12 @@ export default {
         }
         const toExperience = () => {
             // 退出登录 断开ws
-            store.dispatch('_user/logout').then(() => {
-                return router.push('/login')
-            }).then(() => {
-                location.reload()
-            })
+            router.go(-2)
+            // store.dispatch('_user/logout').then(() => {
+            //     return router.push('/login')
+            // }).then(() => {
+            //     location.reload()
+            // })
         }
         return {
             toExperience,
@@ -71,7 +75,6 @@ export default {
     .t2 {
         margin: rem(100px) rem(50px);
         line-height: rem(50px);
-        text-align: left;
     }
     .btns {
         display: flex;
