@@ -172,43 +172,20 @@ export default {
             if (isEmpty(state.formDataMap[currentCode.value]) && currentCode.value) {
                 state.formDataMap[currentCode.value] = currentComp.value.value?.form
             }
+            debugger
             for (const key in state.formDataMap) {
                 if (Object.hasOwnProperty.call(state.formDataMap, key)) {
                     const element = state.formDataMap[key]
-                    elementList.push({
-                        elementCode: key,
-                        elementValue: JSON.stringify(element)
-                    })
+                    if (!isEmpty(element)) {
+                        elementList.push({
+                            elementCode: key,
+                            elementValue: JSON.stringify(element)
+                        })
+                    }
                 }
             }
-            // } else {
-            //     const form = currentComp.value.value?.form
-            //     elementList.push({
-            //         elementCode: currentCode.value,
-            //         elementValue: JSON.stringify(form)
-            //     })
-            // }
 
             state.loading = true
-            // const elementList = []
-            // if (currentComp.value) {
-            //     elementList.push({
-            //         elementCode: currentCode.value,
-            //         elementValue: JSON.stringify(state.formDataMap[currentCode.value])
-            //     })
-            // }
-
-            // // 每次保存需要把其它认证步骤的数据取出来
-            // if (state.formData.length > 0) {
-            //     state.formData.forEach(el => {
-            //         if (el.elementCode !== currentCode.value && el.elementValue) {
-            //             elementList.push({
-            //                 elementCode: el.elementCode,
-            //                 elementValue: el.elementValue
-            //             })
-            //         }
-            //     })
-            // }
 
             kycLevelApply({
                 selectCountry,
@@ -277,6 +254,10 @@ export default {
             }
         }
         const prev = () => {
+            if (currentComp.value) {
+                state.formDataMap[currentCode.value] = currentComp.value.value?.form
+            }
+
             if (state.active === 0) {
                 return router.back()
             }
