@@ -6,6 +6,7 @@
         :model='form'
         :rules='rules'
         :size='size'
+        @submit.native.prevent
     >
         <h4 class='tip'>
             {{ $t('businessKYC.inputTip') }}

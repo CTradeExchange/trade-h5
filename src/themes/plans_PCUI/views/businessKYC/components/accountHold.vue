@@ -5,6 +5,7 @@
         label-width='auto'
         :model='form'
         :size='size'
+        @submit.native.prevent
     >
         <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
             <div class='head'>

@@ -7,6 +7,7 @@
         :model='form'
         :rules='rules'
         :size='size'
+        @submit.native.prevent
     >
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
