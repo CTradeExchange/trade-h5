@@ -74,6 +74,7 @@
                     <el-select
                         v-model='form.accountInfo.nature'
                         :placeholder="$t('common.select') + $t('businessKYC.nature')"
+                        @change='changeNature'
                     >
                         <el-option v-for='item in businessNature' :key='item.code' :label='item.displayName' :value='item.code' />
                     </el-select>
@@ -188,6 +189,7 @@ export default {
                     phone: '',
                     resource: '',
                     nature: '',
+                    natureName: '',
                     reason: '',
                 },
                 regAddress: {
@@ -305,6 +307,11 @@ export default {
             })
         }
 
+        // 业务性质选择事件
+        const changeNature = val => {
+            state.form.accountInfo.natureName = businessNature.value.find(el => el.code === val).displayName
+        }
+
         const getAllCountry = () => {
             getCountryListByParentCode({ parentCode: '-1' }).then(res => {
                 if (res.check()) {
@@ -346,6 +353,7 @@ export default {
             ...toRefs(state),
             businessNature,
             formRef,
+            changeNature,
             selectRegCountry,
             selectOperCountry
         }
