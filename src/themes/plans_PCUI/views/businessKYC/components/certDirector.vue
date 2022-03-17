@@ -5,6 +5,7 @@
         label-width='auto'
         :model='form'
         :size='size'
+        @submit.native.prevent
     >
         <div v-for='(item,index) in form.list' :key='index' v-loading='loading' class='director'>
             <div class='head'>
@@ -355,6 +356,8 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     const param = detail.name.split(',')
+                    const propName = 'list.' + param[0] + '.' + param[1]
+                    formRef.value.clearValidate([propName])
                     state.form.list[param[0]][param[1]] = res.data
                     ElMessage({
                         message: t('auth.uploadSuccess'),

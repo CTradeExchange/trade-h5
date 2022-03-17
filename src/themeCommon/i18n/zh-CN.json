@@ -880,7 +880,7 @@
       "regNo": "注册号",
       "registration": "成立日期",
       "area": "区号",
-      "contact": "联系电话（区号+号码）",
+      "contact": "联系电话",
       "source": "资金来源",
       "nature": "业务性质",
       "reason": "申请原因",

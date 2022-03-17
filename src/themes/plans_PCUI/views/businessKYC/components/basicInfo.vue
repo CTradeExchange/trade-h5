@@ -6,6 +6,7 @@
         :model='form'
         :rules='rules'
         :size='size'
+        @submit.native.prevent
     >
         <h4 class='tip'>
             {{ $t('businessKYC.inputTip') }}
@@ -221,7 +222,7 @@ export default {
 
                     ],
                     area: [
-                        { required: true, message: t('common.select'), trigger: 'change' },
+                        { required: true, message: t('common.select') + t('businessKYC.area'), trigger: 'change' },
 
                     ],
                     phone: [

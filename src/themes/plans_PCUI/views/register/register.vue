@@ -189,6 +189,7 @@ export default {
                     state.countryVal = defaultZoneConfig.code
                     state.zone = `(${defaultZoneConfig.countryCode})`
                     state.countryCode = defaultZoneConfig.code
+                    state.countryZone = defaultZoneConfig.countryCode
                 }
             }
         })

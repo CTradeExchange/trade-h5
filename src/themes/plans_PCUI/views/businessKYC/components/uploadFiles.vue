@@ -7,6 +7,7 @@
         :model='form'
         :rules='rules'
         :size='size'
+        @submit.native.prevent
     >
         <el-row :gutter='20'>
             <el-col :offset='0' :span='12'>
@@ -324,6 +325,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     state.form[detail.name] = res.data
+                    formRef.value.clearValidate([detail.name])
                     ElMessage({
                         message: t('auth.uploadSuccess'),
                         type: 'success',
