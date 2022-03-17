@@ -382,6 +382,7 @@ export default {
             state.country = item
             state.countryCode = item.code // 国家code
             state.zone = item.countryCode
+            state.countryZone = item.countryCode
         }
 
         onMounted(() => {
