@@ -172,7 +172,7 @@ export default {
             if (isEmpty(state.formDataMap[currentCode.value]) && currentCode.value) {
                 state.formDataMap[currentCode.value] = currentComp.value.value?.form
             }
-            debugger
+
             for (const key in state.formDataMap) {
                 if (Object.hasOwnProperty.call(state.formDataMap, key)) {
                     const element = state.formDataMap[key]
