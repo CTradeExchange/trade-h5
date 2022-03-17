@@ -355,6 +355,8 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     const param = detail.name.split(',')
+                    const propName = 'list.' + param[0] + '.' + param[1]
+                    formRef.value.clearValidate([propName])
                     state.form.list[param[0]][param[1]] = res.data
                     ElMessage({
                         message: t('auth.uploadSuccess'),

@@ -450,10 +450,14 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     const param = detail.name.split(',')
+
                     if (param[0] === 'form') {
                         state.form[param[1]] = res.data
                         context.emit('update:mainAccount', true)
+                        formRef.value.clearValidate([param[1]])
                     } else {
+                        const propName = 'list.' + param[0] + '.' + param[1]
+                        formRef.value.clearValidate([propName])
                         state.form.list[param[0]][param[1]] = res.data
                     }
 

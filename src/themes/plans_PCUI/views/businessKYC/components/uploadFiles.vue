@@ -324,6 +324,7 @@ export default {
                 state.loading = false
                 if (res.check()) {
                     state.form[detail.name] = res.data
+                    formRef.value.clearValidate([detail.name])
                     ElMessage({
                         message: t('auth.uploadSuccess'),
                         type: 'success',
