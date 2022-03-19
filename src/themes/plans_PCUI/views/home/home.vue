@@ -188,9 +188,9 @@ export default {
                     program: 'https://www.vitatoken.com/zh-CN/new1',
                     vip: 'https://www.vitatoken.com/zh-CN/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.com/zh-CN/faqs',
-                    terms: 'https://www.vitatoken.com/zh-CN/terms',
-                    policy: 'https://www.vitatoken.com/zh-CN/privacy'
+                    faqs: 'https://www.vitatoken.com/site/faqs',
+                    terms: 'https://www.vitatoken.com/site/terms-conditions',
+                    policy: 'https://www.vitatoken.com/site/privacy-policy'
                 }
             } else {
                 linkList = {
@@ -199,9 +199,9 @@ export default {
                     program: 'https://www.vitatoken.com/en-US/new1',
                     vip: 'https://www.vitatoken.com/en-US/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.com/en-US/faqs',
-                    terms: 'https://www.vitatoken.com/en-US/terms',
-                    policy: 'https://www.vitatoken.com/en-US/privacy'
+                    faqs: 'https://www.vitatoken.com/site/faqs',
+                    terms: 'https://www.vitatoken.com/site/terms-conditions',
+                    policy: 'https://www.vitatoken.com/site/privacy-policy'
                 }
             }
             const community = {
