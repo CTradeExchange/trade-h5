@@ -1,8 +1,8 @@
 <template>
     <div class='mobileBar'>
-        <div class='zone' :class='{ disabled: disabled }'>
+        <div v-if="type ==='mobile'" class='zone' :class='{ "disabled": disabled }'>
             <!-- <VueSelect v-model='zoneVal' :actions='countryList' :text="type === 'mobile' ? 'name': 'countryName'" value='name' @select='zoneOnSelect' /> -->
-            <el-select v-model='zoneVal' placeholder='Select' @change='zoneOnSelect'>
+            <el-select v-model='zoneVal' :disabled='disabled' placeholder='Select' @change='zoneOnSelect'>
                 <el-option
                     v-for='item in countryList'
                     :key='item.code'
@@ -79,7 +79,7 @@ export default {
             const tempArr = []
 
             countryList.forEach(item => {
-                const lable = this.type === 'mobile' ? item.name + ' (' + item.countryCode + ')' : item.name
+                const lable = this.type === 'mobile' ? item.countryCode : item.name
                 const value = this.type === 'mobile' ? item.countryCode : item.code
                 tempArr.push({
                     name: lable,
@@ -118,12 +118,14 @@ export default {
             //     countryName: "中国大陆",
             //     name: "中国大陆 (86)",
             // }
-            const typeKey = this.type === 'mobile' ? 'code' : 'countryCode'
-            const item = find(this.countryList, { [typeKey]: val })
-
             if (!this.disabled) {
-                this.$emit('update:zone', item.name)
-                this.$emit('zoneSelect', item)
+                const typeKey = this.type === 'mobile' ? 'code' : 'countryCode'
+                const item = find(this.countryList, { [typeKey]: val })
+
+                if (!this.disabled) {
+                    this.$emit('update:zone', item.name)
+                    this.$emit('zoneSelect', item)
+                }
             }
         }
     }
@@ -142,29 +144,28 @@ export default {
     }
     .zone {
         flex: none;
-        margin-right: 10px;
         width: 152px;
+        margin-right: 10px;
         &.disabled {
             color: #C5C5C5;
             pointer-events: none;
         }
-        :deep{
-
-        .el-input__inner{
-                border: none;
-                background-color: var(--assistColor);
-                border-radius: 4px;
+        :deep {
+            .el-input__inner {
                 height: 48px;
-                line-height: 48px;
                 color: var(--color);
                 font-size: 16px;
-        }
-        .el-input__suffix-inner{
-            .el-input__icon{
                 line-height: 48px;
-                color: var(--color);
+                background-color: var(--assistColor);
+                border: none;
+                border-radius: 4px;
             }
-        }
+            .el-input__suffix-inner {
+                .el-input__icon {
+                    color: var(--color);
+                    line-height: 48px;
+                }
+            }
         }
     }
 }

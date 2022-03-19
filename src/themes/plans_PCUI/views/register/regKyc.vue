@@ -54,10 +54,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .notice {
+    margin-top: rem(20px);
     margin-bottom: rem(20px);
     padding-left: rem(30px);
 }
-.registerAuthCondition{
+.registerAuthCondition {
     height: 100%;
     overflow: auto;
 }

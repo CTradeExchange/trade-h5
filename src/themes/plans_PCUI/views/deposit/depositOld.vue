@@ -590,7 +590,8 @@ export default {
         // 检查是否需要KYC认证
         const checkKyc = () => {
             checkKycApply({
-                businessCode: 'cashin'
+                businessCode: 'cashin',
+                openAccountType: customerInfo.value.openAccountType
             }).then(res => {
                 if (res.check()) {
                     if (Number(res.data) !== 2) {
@@ -750,7 +751,6 @@ export default {
     color: var(--primary);
     font-size: 12px;
 }
-
 .pageWrap {
     margin-top: 42px;
     background-color: var(--contentColor);
@@ -799,8 +799,8 @@ export default {
                     font-size: rem(20px);
                 }
                 &.active {
-                    border: rem(2px) solid var(--focusColor);
                     color: var(--focusColor);
+                    border: rem(2px) solid var(--focusColor);
                 }
             }
         }

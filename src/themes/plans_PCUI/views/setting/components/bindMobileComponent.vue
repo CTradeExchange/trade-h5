@@ -15,12 +15,33 @@
             <div class='field'>
                 <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")' />
             </div>
-            <div class='field'>
+
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    {{ $t('common.sendToYourPhone') }}
+                </p>
+                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+            </div>
+
+            <div v-if='type === "change"' class='field'>
+                <p class='title'>
+                    {{ $t('common.sendToYou') }} {{ customInfo.phone }}
+                </p>
+                <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
+            </div>
+            <div v-else class='field'>
                 <!-- <label class='label'>
                     验证码
                 </label> -->
                 <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
+            <div v-if='googleCodeVis' class='field field-google'>
+                <p class='title'>
+                    {{ $t('common.inputGoogleCode') }}
+                </p>
+                <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+            </div>
+
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
             </van-button>
@@ -30,6 +51,7 @@
 
 <script>
 import Top from '@/components/top'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import areaInput from '@/components/form/areaInput'
 import CheckCode from '@/components/form/checkCode'
 import { toRefs, reactive, computed, onUnmounted } from 'vue'
@@ -38,12 +60,13 @@ import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { verifyCodeSend } from '@/api/base'
-import { bindPhone, changePhone, checkUserStatus } from '@/api/user'
+import { bindPhone, changePhoneV1v1v2, checkUserStatus } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
         Top,
         areaInput,
+        googleVerifyCode,
         CheckCode
     },
     props: {
@@ -60,9 +83,12 @@ export default {
         const state = reactive({
             zone: '',
             sendToken: '',
+            sendTokenOld: '',
             mobile: '',
             checkCode: '',
-            loading: false
+            checkCodeOld: '',
+            loading: false,
+            googleCode: ''
         })
 
         store.dispatch('getCountryListByParentCode')
@@ -70,6 +96,7 @@ export default {
 
         const countryList = computed(() => store.state.countryList)
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const zoneText = computed(() => {
             const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
             if (countryObj) state.zone = countryObj.countryCode
@@ -77,6 +104,25 @@ export default {
         })
         // 手机正则表达式
         const mobileReg = computed(() => getArrayObj(countryList.value, 'code', customInfo.value.country).extend || '')
+
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
+        const handleVerifyCodeSendOld = (callback) => {
+            const params = {
+                bizType: 'SMS_LOGINED_VERIFICATION_CODE'
+            }
+            verifyCodeSend(params).then(res => {
+                if (res.check()) {
+                    if (Number(res.code) === 0) {
+                        state.sendTokenOld = res.data.token
+                        Toast(t('common.verifySended'))
+                        callback && callback()
+                    }
+                }
+            })
+        }
 
         // 发送验证码
         const handleVerifyCodeSend = (callback) => {
@@ -148,13 +194,27 @@ export default {
             if (isEmpty(state.sendToken)) {
                 return Toast(t('common.getVerifyCode'))
             }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
+            if (props.type === 'change') {
+                if (isEmpty(state.checkCodeOld)) {
+                    return Toast(t('common.inputVerifyCode'))
+                }
+                if (isEmpty(state.sendTokenOld)) {
+                    return Toast(t('common.getVerifyCode'))
+                }
+            }
 
             state.loading = true
             const params = {
                 phone: state.mobile,
                 verifyCode: state.checkCode,
                 sendToken: state.sendToken || '11',
-                phoneArea: state.zone
+                phoneArea: state.zone,
+                verifyCodeOld: state.checkCodeOld,
+                sendTokenOld: state.sendTokenOld,
+                googleCode: state.googleCode
             }
 
             if (props.type === 'bind') {
@@ -162,6 +222,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.phoneBindSuccess'))
+                        store.dispatch('_user/findCustomerInfo')
 
                         setTimeout(() => {
                             router.back()
@@ -171,10 +232,11 @@ export default {
                     state.loading = false
                 })
             } else if (props.type === 'change') {
-                changePhone(params).then(res => {
+                changePhoneV1v1v2(params).then(res => {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replacePhoneSuccess'))
+                        store.dispatch('_user/findCustomerInfo')
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -191,9 +253,13 @@ export default {
 
         return {
             handleVerifyCodeSend,
+            handleVerifyCodeSendOld,
             handleConfirm,
             onlineServices,
             zoneText,
+            customInfo,
+            googleCodeVis,
+            getGooleVerifyCode,
             title,
             ...toRefs(state)
         }
@@ -208,10 +274,15 @@ export default {
     .form {
         padding-top: rem(20px);
         .field {
+            margin-top: 10px;
             padding: 0 rem(30px);
             background: var(--contentColor);
             .label {
                 color: var(--minorColor);
+            }
+            .title {
+                padding: 10px 0 0;
+                line-height: 1.4;
             }
         }
         .confirm-btn {
@@ -224,6 +295,14 @@ export default {
                 color: var(--color);
                 font-size: rem(32px);
             }
+        }
+    }
+    .field-google :deep() {
+        .van-cell {
+            background: none;
+        }
+        .paste {
+            display: none;
         }
     }
 }

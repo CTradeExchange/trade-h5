@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='pageWrap'>
-            <Top back left-icon='arrow-left' :right-action='false' show-center>
+            <Top back left-icon='arrow-left' :right-action='false' show-center :title='$t(isFirstSet ? "common.settings" : "common.modify") + $t("login.loginPwd")'>
                 <template #left>
                     <a class='topBack' href='javascript:;' @click='$router.back()'>
                         <span class='icon_icon_close_big'></span>
@@ -12,7 +12,7 @@
             </Top>
             <header class='header'>
                 <h1 class='pageTitle'>
-                    {{ $t(isFirstSet ? "common.settings" : 'common.modify') + $t("login.loginPwd") }}
+                    {{ $t(isFirstSet ? "common.settings" : "common.modify") + $t("login.loginPwd") }}
                 </h1>
                 <h6>{{ $t('forgot.pwdRule') }}</h6>
             </header>
@@ -29,6 +29,12 @@
                     <van-field v-model='confirmPwd' label='' :placeholder='$t("forgot.newPwdAgain")' :type='confirmVis ? "text" : "password"' />
                     <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
                 </div>
+                <div class='form-item form-item-google'>
+                    <googleVerifyCode
+                        v-if='googleCodeVis'
+                        @getGooleVerifyCode='getGooleVerifyCode'
+                    />
+                </div>
             </van-cell-group>
             <van-button class='confirmBtn' @click='handleConfirm'>
                 <span>{{ $t('common.sure') }}</span>
@@ -40,6 +46,7 @@
 <script>
 import Top from '@/components/top'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import { reactive, toRefs, computed } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
@@ -53,6 +60,7 @@ export default {
         Top,
         centerViewDialog,
         Toast,
+        googleVerifyCode,
         Dialog
     },
     setup (props) {
@@ -63,6 +71,7 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
 
         const isFirstSet = computed(() => Number(customInfo.value.loginPassStatus) === 1)
 
@@ -70,6 +79,7 @@ export default {
             newPwd: '',
             confirmPwd: '',
             oldPwd: '',
+            googleCode: '',
             newPwdVis: false,
             confirmVis: false,
             oldPwdVis: false
@@ -77,6 +87,9 @@ export default {
 
         function changeState (type) {
             state[type] = !state[type]
+        }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
         }
 
         function handleConfirm () {
@@ -100,6 +113,9 @@ export default {
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
             }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
 
             const toast = Toast.loading({
                 message: t('common.loading'),
@@ -108,7 +124,8 @@ export default {
 
             if (isFirstSet.value) {
                 setLoginPwd({
-                    pwd: md5(state.confirmPwd)
+                    pwd: md5(state.confirmPwd),
+                    googleCode: state.googleCode
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
@@ -120,7 +137,8 @@ export default {
             } else {
                 modifyLoginPwd({
                     oldPwd: md5(state.oldPwd),
-                    newPwd: md5(state.confirmPwd)
+                    newPwd: md5(state.confirmPwd),
+                    googleCode: state.googleCode
                 }).then((res) => {
                     if (res.check()) {
                         toast.clear()
@@ -146,7 +164,9 @@ export default {
             changeState,
             customInfo,
             isFirstSet,
-            handleConfirm
+            handleConfirm,
+            googleCodeVis,
+            getGooleVerifyCode
         }
     }
 }
@@ -166,9 +186,9 @@ export default {
     }
     .pageTitle {
         margin-bottom: rem(10px);
+        color: var(--color);
         font-weight: normal;
         font-size: rem(50px);
-        color: var(--color);
     }
     .confirmBtn {
         position: absolute;
@@ -192,6 +212,15 @@ export default {
             &::before {
                 font-size: rem(30px);
             }
+        }
+    }
+    .form-item-google :deep() {
+        .van-cell {
+            padding-left: 15px;
+            background: none;
+        }
+        .paste {
+            display: none;
         }
     }
 }

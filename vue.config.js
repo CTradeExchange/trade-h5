@@ -176,7 +176,7 @@ const config = {
                 }
             },
             '/upload': {
-                target: 'http://precatsapi.cats-trade.com/upload'
+                target: 'https://uatcom-03b1ee05fa3b4fcbe21e9da72e5516cd-prebo.cats-trade.com/cats-gateway/upload'
             }
         },
         before: require('./mock/mock-server.js')

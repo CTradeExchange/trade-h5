@@ -143,6 +143,15 @@
                         {{ $t('login.forgotFundPwd') }}
                     </span>
                 </div>
+                <p v-if='googleCodeVis' class='bw-t'>
+                    {{ $t('common.googleCode') }}
+                </p>
+                <div class='pwd-oper field-google'>
+                    <googleVerifyCode
+                        v-if='googleCodeVis'
+                        @getGooleVerifyCode='getGooleVerifyCode'
+                    />
+                </div>
             </div>
         </div>
 
@@ -216,6 +225,7 @@
 <script>
 // components
 import centerViewDialog from '@planspc/layout/centerViewDialog'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 // vue
 import { reactive, toRefs, computed, onMounted, watch } from 'vue'
 // router
@@ -245,6 +255,7 @@ import InputComp from '@/components/form/input'
 export default {
     components: {
         centerViewDialog,
+        googleVerifyCode,
         InputComp
     },
     setup (props) {
@@ -305,7 +316,8 @@ export default {
             currentWallet: null,
             // 当前选择钱包地址id
             walletId: 0,
-            pwd: ''
+            pwd: '',
+            googleCode: '',
         })
 
         // 数据初始化
@@ -313,6 +325,7 @@ export default {
             state.showCanMoney = false
             state.coinTotal = ''
             state.coinCount = ''
+            state.googleCode = ''
             state.serviceCount = '0.00'
             state.arriveCount = '0.00'
             state.minusCount = '0.00'
@@ -335,6 +348,7 @@ export default {
 
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.googleId > 0)
 
         // 客服信息
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
@@ -502,6 +516,10 @@ export default {
             }
         }
 
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
         // 请求参数
         const params = {
             customerNo: customInfo.customerNo,
@@ -551,7 +569,8 @@ export default {
         // 检测取款是否需要kyc
         const checkKyc = () => {
             checkKycApply({
-                businessCode: 'withdraw'
+                businessCode: 'withdraw',
+                openAccountType: customInfo.openAccountType
             }).then(res => {
                 state.loading = false
                 const withdrawConfig = state.withdrawConfig
@@ -562,10 +581,16 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? t('withdraw.kycBtn_1') : t('withdraw.kycBtn_2'),
                         message: Number(res.data) === 2 ? t('withdraw.kycMsg_1') : t('withdraw.kycMsg_2'),
                     }).then(() => {
-                        router.replace({
-                            path: '/assets/authentication',
-                            query: { businessCode: 'withdraw' }
-                        })
+                        if (customInfo.openAccountType === 0) {
+                            router.replace({
+                                path: '/assets/authentication',
+                                query: { businessCode: 'withdraw' }
+                            })
+                        } else {
+                            router.replace({
+                                path: '/businessKYC'
+                            })
+                        }
                     })
                 } else {
                     if (!withdrawConfig.accountActiveEnable) {
@@ -780,6 +805,9 @@ export default {
             if (!state.pwd) {
                 return Toast(t('common.inputFundPwd'))
             }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
 
             // 发起提现
             launchHandleWithdraw()
@@ -800,7 +828,8 @@ export default {
                 withdrawType: 2,
                 withdrawCurrency: state.coinKind,
                 blockchainName: state.chainName,
-                fundPwd: md5(state.pwd)
+                fundPwd: md5(state.pwd),
+                googleCode: state.googleCode
             }
             handleWithdraw(item).then(res => {
                 state.loading = false
@@ -841,6 +870,8 @@ export default {
             openWalletSelect,
             selectWallet,
             onConfirm,
+            googleCodeVis,
+            getGooleVerifyCode,
             accountCurrency
         }
     }
@@ -851,8 +882,8 @@ export default {
 @import '@/sass/mixin.scss';
 .container {
     flex: 1;
-    overflow-y: auto;
     padding-top: rem(90px);
+    overflow-y: auto;
     .empty {
         height: rem(20px);
         background-color: var(--bgColor);
@@ -868,15 +899,15 @@ export default {
         color: var(--color);
         font-size: rem(28px);
         border-bottom: 1px solid var(--lineColor);
-        :deep(.el-select){
-            width:100%;
-            .el-input__inner{
-                background: #fff;
+        :deep(.el-select) {
+            width: 100%;
+            .el-input__inner {
+                background: #FFF;
             }
         }
-        :deep(.el-input__inner){
+        :deep(.el-input__inner) {
+            text-align: right;
             border: none;
-            text-align:right;
         }
         .option {
             display: inline-flex;
@@ -968,24 +999,36 @@ export default {
             }
         }
     }
-    .fund{
-        .bw-t{
-                color: var(--color);
+    .fund {
+        .bw-t {
+            color: var(--color);
             font-size: rem(28px);
             line-height: rem(72px);
         }
-        .fund-input{
+        .fund-input {
             display: flex;
             align-items: center;
-            .input-comp{
+            .input-comp {
                 flex: 1;
             }
-            .href{
-                vertical-align: middle;
+            .href {
                 color: var(--primary);
+                vertical-align: middle;
                 cursor: pointer;
             }
         }
+    }
+}
+.field-google :deep() {
+    .van-cell {
+        // padding-left: 20px;
+        background: none;
+    }
+    .form-item {
+        margin-bottom: 0;
+    }
+    .paste {
+        display: none;
     }
 }
 .module-wallet {
@@ -1060,23 +1103,23 @@ export default {
         }
     }
 }
-.fund{
+.fund {
     padding: 0 rem(30px) rem(30px) rem(30px);
     background-color: var(--contentColor);
-    .bw-t{
-            color: var(--color);
+    .bw-t {
+        color: var(--color);
         font-size: rem(28px);
         line-height: rem(72px);
     }
-    .fund-input{
+    .fund-input {
         display: flex;
         align-items: center;
-        .input-comp{
+        .input-comp {
             flex: 1;
         }
-        .href{
-            vertical-align: middle;
+        .href {
             color: var(--primary);
+            vertical-align: middle;
         }
     }
 }

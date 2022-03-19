@@ -27,6 +27,7 @@ export default function () {
         const loginParams = {
             type: state.loginName.includes('@') ? 1 : 2,
             loginName: state.loginName,
+            googleCode: state.googleCode,
             device: getDevice(),
             verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
             loginPwd: state.loginType === 'password' ? state.pwd : undefined,

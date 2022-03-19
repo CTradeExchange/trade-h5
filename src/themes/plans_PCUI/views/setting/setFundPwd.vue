@@ -50,6 +50,12 @@
                     />
                     <span class='icon' :class="confirmVis ? 'icon_icon_pressed': 'icon_icon_default'" @click='changeState("confirmVis")'></span>
                 </div>
+                <div class='form-item form-item-google'>
+                    <googleVerifyCode
+                        v-if='googleCodeVis'
+                        @getGooleVerifyCode='getGooleVerifyCode'
+                    />
+                </div>
             </van-cell-group>
             <div v-if='!isFirstSet' class='forgot'>
                 <router-link class='href' :to="{ name: 'Forgot', query: { type: 'fund' } }">
@@ -66,6 +72,7 @@
 <script>
 import Top from '@/components/top'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import { reactive, toRefs, computed } from 'vue'
 import { Toast, Dialog } from 'vant'
 import { useStore } from 'vuex'
@@ -78,6 +85,7 @@ export default {
     components: {
         Top,
         centerViewDialog,
+        googleVerifyCode,
     },
     setup (props) {
         const store = useStore()
@@ -87,6 +95,7 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
 
         const isFirstSet = computed(() => Number(customInfo.value.assertPassStatus) === 1)
 
@@ -96,12 +105,18 @@ export default {
             oldPwd: '',
             newPwdVis: false,
             confirmVis: false,
-            oldPwdVis: false
+            oldPwdVis: false,
+            googleCode: ''
         })
 
         function changeState (type) {
             state[type] = !state[type]
         }
+
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
         function formatter (value) {
             // 过滤输入的非数字
             return value.replace(/[^\d]/g, '')
@@ -127,6 +142,9 @@ export default {
             if (state.oldPwd === state.newPwd) {
                 return Toast(t('forgot.pwdSame'))
             }
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
+            }
 
             const toast = Toast.loading({
                 message: t('common.loading'),
@@ -135,19 +153,23 @@ export default {
 
             if (isFirstSet.value) {
                 bindAssertsPwd({
-                    pwd: md5(state.confirmPwd)
+                    pwd: md5(state.confirmPwd),
+                    googleCode: state.googleCode
                 }).then(res => {
                     toast.clear()
                     if (res.check()) {
                         Toast(t('forgot.fundPwdSetSuccess'))
                         store.dispatch('_user/findCustomerInfo')
                         router.back()
+                    } else {
+                        Toast(res.msg)
                     }
                 })
             } else {
                 updateAssertsPwd({
                     oldPwd: md5(state.oldPwd),
-                    newPwd: md5(state.confirmPwd)
+                    newPwd: md5(state.confirmPwd),
+                    googleCode: state.googleCode
                 }).then((res) => {
                     toast.clear()
                     if (res.check()) {
@@ -167,7 +189,9 @@ export default {
             customInfo,
             isFirstSet,
             handleConfirm,
-            formatter
+            formatter,
+            getGooleVerifyCode,
+            googleCodeVis
         }
     }
 }
@@ -187,9 +211,9 @@ export default {
     }
     .pageTitle {
         margin-bottom: rem(10px);
+        color: var(--color);
         font-weight: normal;
         font-size: rem(50px);
-        color: var(--color);
     }
     .confirmBtn {
         position: absolute;
@@ -215,11 +239,20 @@ export default {
             }
         }
     }
-    .forgot{
-        text-align: right;
+    .form-item-google :deep() {
+        .van-cell {
+            padding-left: 15px;
+            background: none;
+        }
+        .paste {
+            display: none;
+        }
+    }
+    .forgot {
         padding-top: rem(30px);
         padding-right: rem(30px);
-        .href{
+        text-align: right;
+        .href {
             color: var(--primary);
         }
     }

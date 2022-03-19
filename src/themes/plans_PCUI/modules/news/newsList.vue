@@ -27,7 +27,7 @@
         </div> -->
     </div>
     <!-- 新闻详情弹窗 -->
-    <news-dialog ref='dialog' />
+    <news-dialog ref='dialog' :data='data' />
 </template>
 
 <script>

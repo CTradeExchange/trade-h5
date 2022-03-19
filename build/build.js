@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const inquirer = require('inquirer')
 const child_process = require('child_process')
+const dayjs = require('dayjs')
 
 function resolvePath (_path) {
     return path.join(__dirname, _path)
@@ -49,10 +50,11 @@ async function init () {
     ]
     inquirer.prompt(questions)
         .then((answers) => {
-            console.log(answers)
             Object.assign(process.env, answers)
             const command = answers.buildType === 'cats-upload-admin' ? 'npm run build_admin' : 'npm run build'
             child_process.execSync(command, { stdio: [0, 1, 2] })
+            answers.time = dayjs().format('YYYY-MM-DD HH:mm')
+            console.log(answers)
         })
 }
 init()

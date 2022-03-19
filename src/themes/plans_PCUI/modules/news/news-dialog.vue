@@ -18,7 +18,13 @@ import { getCookie } from '@/utils/util'
 import { articleDetail } from '@/api/information'
 
 export default {
-    setup () {
+    props: {
+        data: {
+            type: Object,
+            default: () => {}
+        }
+    },
+    setup (props) {
         const state = reactive({
             lang: getCookie('lang') || 'zh-CN',
             // 是否显示弹窗
@@ -35,9 +41,9 @@ export default {
             state.loading = true
             const params = {
                 id: item.id,
-                orgid: item.orgid
+                orgid: props.data.orgid
             }
-            articleDetail(params, state.lang).then(res => {
+            articleDetail(params, state.lang, props.data.newsArea).then(res => {
                 state.loading = false
                 state.detailInfo = res
             })

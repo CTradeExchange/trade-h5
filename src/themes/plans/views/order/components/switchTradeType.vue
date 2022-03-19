@@ -1,6 +1,6 @@
 <template>
     <div class='switchTradeType'>
-        <div class='productInfo'>
+        <div v-if='product' class='productInfo'>
             <span class='icon_chouti1' @click="$emit('switchProduct')"></span>
             <span class='productName'>
                 {{ product.symbolName }}

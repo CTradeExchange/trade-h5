@@ -7,6 +7,7 @@
             :placeholder='placeholder'
             :type='type'
             :value='modelValue'
+            @blur='onBlur'
             @input='onInput'
         />
         <span v-if='clear' v-show='modelValue.length' class='van-badge__wrapper van-icon van-icon-clear' @click='onClear'></span>
@@ -39,7 +40,7 @@ export default {
             default: 'text'
         },
     },
-    emits: ['update:modelValue'],
+    emits: ['update:modelValue', 'onBlur'],
     setup (props, { emit }) {
         const inputEl = ref()
 
@@ -47,6 +48,10 @@ export default {
         const onInput = event => {
             const val = event.target.value
             emit('update:modelValue', val)
+        }
+        // 离开输入框
+        const onBlur = event => {
+            emit('onBlur', event)
         }
 
         // 清空内容
@@ -57,6 +62,7 @@ export default {
         return {
             inputEl,
             onInput,
+            onBlur,
             onClear,
         }
     }
@@ -64,29 +70,29 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.pcInputBar{
+.pcInputBar {
     display: flex;
     align-items: center;
     background: var(--assistColor);
 }
-.pcInput{
-    height: 48px;
-    line-height: 48px;
-    padding: 0 0 0 20px;
+.pcInput {
     flex: 1;
-    ::placeholder{
+    height: 48px;
+    padding: 0 0 0 20px;
+    line-height: 48px;
+    ::placeholder {
         color: var(--placeholdColor);
     }
-    &.block{
+    &.block {
         width: 100%;
     }
 }
-.van-icon-clear{
+.van-icon-clear {
     margin-top: -3px;
     padding: 0 10px;
+    color: var(--minorColor);
     font-size: 18px;
     cursor: pointer;
-    color: var(--minorColor);
 }
 
 </style>

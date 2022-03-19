@@ -170,7 +170,7 @@ import {
 } from '@/api/user'
 // vant
 import { Toast, Dialog } from 'vant'
-import DialogFundPwd from '@plans/components/dialogFundPwd'
+import DialogFundPwd from '@/themeCommon/components/dialogFundPwd'
 import md5 from 'js-md5'
 export default {
     components: {
@@ -519,7 +519,8 @@ export default {
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
-                businessCode: 'withdraw'
+                businessCode: 'withdraw',
+                openAccountType: customInfo.value.openAccountType
             }).then(res => {
                 state.loading = false
                 if (Number(res.data) !== 2) {
@@ -803,9 +804,9 @@ export default {
             margin-bottom: rem(40px);
             span {
                 display: block;
+                margin-top: rem(16px);
                 color: var(--minorColor);
                 font-size: rem(24px);
-                margin-top: rem(16px);
             }
         }
         .bank-wrap {
@@ -908,7 +909,7 @@ export default {
 </style>
 
 <style lang="scss">
-@import '@/sass/mixin.scss';
+
 .add-success {
     padding: rem(30px) rem(30px) 0 rem(30px);
     text-align: center;
@@ -964,4 +965,6 @@ export default {
         }
     }
 }
+
+@import '@/sass/mixin.scss';
 </style>

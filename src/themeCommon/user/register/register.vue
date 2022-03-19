@@ -4,7 +4,7 @@
         <!-- <PageComp v-if='pageui' :data='pageui' /> -->
         <div class='container'>
             <p class='pageTitle'>
-                {{ $t('register.openAccount') }}
+                {{ openAccountType===1 ? $t('register.businessOpen') : $t("register.openAccount") }}
             </p>
             <div class='banner'>
                 <img v-if='registerBanner' alt='' :src='registerBanner' srcset='' />
@@ -25,13 +25,19 @@
                 <!-- <CurrencyAction v-model='currency' class='cellRow' />
                 <TradeTypeAction v-model='tradeType' class='cellRow' /> -->
                 <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
+                <div class='cell'>
+                    <a class='countryPlease van-hairline--bottom' @click='countrySheetVisible=true'>
+                        <span>{{ country.name }}</span>
+                        <van-icon name='arrow-down' />
+                    </a>
+                </div>
                 <div v-if="openType === 'mobile'" class='cell'>
                     <areaInput
                         v-model.trim='mobile'
                         v-model:zone='zone'
                         clear
                         :placeholder='$t("register.phoneNo")'
-                        type='mobile'
+                        :show-select='false'
                         @zoneSelect='zoneSelect'
                     />
                 </div>
@@ -42,7 +48,7 @@
                         clear
                         input-type='text'
                         :placeholder='$t("register.email")'
-                        type='email'
+                        :zone-show='false'
                         @zoneSelect='zoneSelect'
                     />
                 </div>
@@ -55,6 +61,12 @@
                     </van-checkbox>
                 </div>
             </form>
+
+            <div v-if='companyCountryVisible' class='businessOpen'>
+                <a class='businessOpenBtn' href='javascript:;' @click='openAccountType=openAccountType===0 ? 1:0'>
+                    {{ openAccountType===0 ? $t('register.businessOpen') : $t("register.openAccount") }}
+                </a>
+            </div>
         </div>
         <div class='footerBtn'>
             <van-button
@@ -66,6 +78,10 @@
                 {{ $t('common.submit') }}
             </van-button>
         </div>
+
+        <!-- 选择国家的弹窗 -->
+        <CountrySheet v-model='countrySheetVisible' :data='countryList' @select='countrySelect' />
+
         <Loading :show='loading' />
     </div>
 </template>
@@ -75,14 +91,15 @@ import Schema from 'async-validator'
 import Top from '@/components/top'
 import Loading from '@/components/loading'
 import CheckCode from '@/components/form/checkCode'
-import areaInput from '@/components/form/areaInput'
+import areaInput from './components/areaInput'
+import CountrySheet from './components/countrySheet'
 // import CurrencyAction from './components/currencyAction'
 // import TradeTypeAction from './components/tradeTypeAction'
 import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
 import { register, checkUserStatus } from '@/api/user'
-import { verifyCodeSend } from '@/api/base'
+import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
-import { reactive, toRefs, computed, getCurrentInstance } from 'vue'
+import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import { unescape } from 'lodash'
@@ -98,6 +115,7 @@ export default {
         areaInput,
         CheckCode,
         Loading,
+        CountrySheet,
         // CurrencyAction,
         // TradeTypeAction,
     },
@@ -123,7 +141,12 @@ export default {
             email: '',
             pageui: '',
             protocol: true,
-            visited: false // 是否已点击过获取验证码
+            visited: false, // 是否已点击过获取验证码
+            companyCountryList: [], // 获取白标后台配置的企业开户国家
+            openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
+            countrySheetVisible: false,
+            country: {},
+            allCountry: [] // 所有国家列表
         })
         let token = ''
 
@@ -137,13 +160,26 @@ export default {
                 const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
                 const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
                 if (defaultZoneConfig?.code) {
-                    state.zone = `${defaultZoneConfig.name} (${defaultZoneConfig.countryCode})`
+                    state.zone = defaultZoneConfig.countryCode
                     state.countryZone = defaultZoneConfig.countryCode
                     state.countryCode = defaultZoneConfig.code
+                    state.country = defaultZoneConfig
                 }
             }
         })
-        const countryList = computed(() => store.state.countryList)
+        const countryList = computed(() => {
+            const countryList = store.state.countryList
+            return state.openAccountType === 0 ? countryList : state.allCountry.filter(el => state.companyCountryList.includes(el.code))
+        })
+
+        const getAllCountry = () => {
+            getCountryListByParentCode({ parentCode: '-1' }).then(res => {
+                if (res.check()) {
+                    state.allCountry = res.data
+                }
+            })
+        }
+
         const style = computed(() => store.state.style)
         // 注册类型
         const registerTypes = computed(() => store.state._base.wpCompanyInfo?.registerTypes)
@@ -241,7 +277,8 @@ export default {
                 protocol: state.protocol,
                 tradeTypeCurrencyList: getPlansByCountry(state.countryCode),
                 customerGroupId: getCustomerGroupIdByCountry(state.countryCode),
-                country: state.countryCode
+                country: state.countryCode,
+                openAccountType: state.openAccountType,
             }
 
             if (state.openType === 'mobile') {
@@ -322,9 +359,36 @@ export default {
         }
 
         const zoneSelect = (data) => {
+            // state.country = data
             state.countryZone = data.code
-            state.countryCode = data.countryCode
         }
+
+        // 获取白标后台配置的企业开户国家
+        const queryCompanyCountry = () => {
+            findCompanyCountry().then(res => {
+                if (res.check() && res.data) {
+                    state.companyCountryList = res.data.openCompanyCountry
+                }
+            })
+        }
+
+        // 是否显示企业开户的入口
+        const companyCountryVisible = computed(() => {
+            return state.companyCountryList.includes(state.country.code)
+        })
+
+        // 选择国家
+        const countrySelect = item => {
+            state.country = item
+            state.countryCode = item.code // 国家code
+            state.zone = item.countryCode
+            state.countryZone = item.countryCode
+        }
+
+        onMounted(() => {
+            getAllCountry()
+            queryCompanyCountry()
+        })
 
         return {
             ...toRefs(state),
@@ -336,6 +400,8 @@ export default {
             registerTypes,
             instructions,
             registerBanner,
+            companyCountryVisible,
+            countrySelect,
         // showProtocol
         }
     }
@@ -376,6 +442,12 @@ export default {
 }
 .form {
     margin-top: rem(30px);
+    .countryPlease {
+        display: flex;
+        flex: 1;
+        justify-content: space-between;
+        padding: 10px 0;
+    }
 }
 .cell {
     display: flex;
@@ -444,6 +516,17 @@ export default {
         font-size: rem(26px);
         line-height: rem(24px);
         border-radius: 100%;
+    }
+}
+.businessOpen {
+    margin-top: rem(80px);
+    text-align: center;
+    .businessOpenBtn {
+        display: inline-block;
+        color: var(--primary);
+        font-size: rem(26px);
+        line-height: 1;
+        border-bottom: 1px solid var(--primary);
     }
 }
 </style>

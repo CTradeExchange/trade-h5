@@ -206,7 +206,7 @@ import {
 } from '@api/user'
 // 工具方法
 import { isEmpty, debounce } from '@/utils/util'
-import DialogFundPwd from '@plans/components/dialogFundPwd'
+import DialogFundPwd from '@/themeCommon/components/dialogFundPwd'
 import md5 from 'js-md5'
 
 export default {
@@ -522,7 +522,8 @@ export default {
         // 检测取款是否需要kyc
         const checkKyc = () => {
             checkKycApply({
-                businessCode: 'withdraw'
+                businessCode: 'withdraw',
+                openAccountType: customInfo.openAccountType
             }).then(res => {
                 state.loading = false
                 const withdrawConfig = state.withdrawConfig

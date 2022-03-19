@@ -15,7 +15,7 @@
         </LayoutTop>
 
         <!-- 内容区域 -->
-        <div class='page-content'>
+        <div id='depositBox' class='page-content'>
             <p class='header'>
                 {{ $t('deposit.limit') }}
             </p>
@@ -84,17 +84,24 @@
                 </p>
             </div>
             <!-- 支付信息 -->
-            <div class='pay-info'>
+            <div v-if="checkedType && checkedType.paymentCode!=='payredeem'" class='pay-info'>
                 <p class='item'>
                     <span>{{ $t('deposit.expectInBank') }}</span>
                     <strong>{{ computeAccount }} {{ currency }}</strong>
                 </p>
             </div>
+
+            <!-- PayRedeem 支付弹窗 -->
+            <PayRedeemDialog v-model='payRedeemDialogVisible' @submit='pinSubmit' />
         </div>
 
         <!-- 存款按钮 -->
         <div class='footer-handle'>
-            <van-button block class='next-btn' type='primary' @click='next'>
+            <van-button v-if="checkedType && checkedType.paymentCode==='payredeem'" block class='next-btn' type='primary' @click='payRedeemDialogVisible=true'>
+                <span>{{ $t('common.nextStep') }}</span>
+                <van-icon name='arrow' />
+            </van-button>
+            <van-button v-else block class='next-btn' type='primary' @click='next'>
                 <span>{{ $t('deposit.confirmPay') }} {{ computeExpectedpay }}{{ currencyChecked }}</span>
                 <van-icon name='arrow' />
             </van-button>
@@ -123,6 +130,9 @@
             <div class='append-wrap'>
                 <p class='title'>
                     {{ $t('deposit.appendFiled') }}
+                </p>
+                <p class='appendVisDesc'>
+                    {{ $t('deposit.appendVisDesc') }}
                 </p>
                 <van-cell-group inset>
                     <van-field
@@ -158,6 +168,7 @@
 <script>
 import centerViewDialog from '@planspc/layout/centerViewDialog'
 import CurrencyIcon from '@/components/currencyIcon'
+import PayRedeemDialog from './components/payRedeemDialog.vue'
 import { reactive, computed, toRefs, onBeforeUnmount, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
@@ -171,6 +182,7 @@ import { getListByParentCode } from '@/api/base'
 export default {
     components: {
         centerViewDialog,
+        PayRedeemDialog,
         CurrencyIcon
     },
     setup (props) {
@@ -225,7 +237,10 @@ export default {
             // 存款提案创建成功返回的数据
             despositResult: {
                 data: '{}'
-            }
+            },
+            // payRedeem支付弹窗是否显示
+            payRedeemDialogVisible: false,
+            pin: '',
         })
 
         // 获取账户信息
@@ -582,6 +597,21 @@ export default {
             }
         }
 
+        // 输入pin码提交
+        const pinSubmit = ({ pin, callback }) => {
+            state.pin = pin
+            handleDeposit().then(() => {
+                callback && callback()
+                Dialog.alert({
+                    message: t('deposit.payRedeemSuccess'),
+                }).then(() => {
+                    state.payRedeemDialogVisible = false
+                })
+            }).catch(() => {
+                callback && callback()
+            })
+        }
+
         // 点击下一步
         const next = () => {
             if (!state.amount) {
@@ -640,17 +670,29 @@ export default {
                 params.extend = JSON.stringify(state.paramsExtens)
             }
 
+            // payRedeem支付
+            if (params.paymentChannelCode === 'payredeem') {
+                params.extend = state.pin
+            }
+
             state.loading = true
-            handleDesposit(params).then(res => {
-                state.loading = false
-                if (res.check()) {
-                    state.despositResult = res.data
-                    despositSuccess()
-                } else {
-                    Toast(res.msg)
-                }
-            }).catch(err => {
-                state.loading = false
+            return new Promise((resolve, reject) => {
+                handleDesposit(params).then(res => {
+                    state.loading = false
+                    state.pin = ''
+                    if (res.check()) {
+                        state.despositResult = res.data
+                        if (params.paymentChannelCode !== 'payredeem') despositSuccess() // payredeem支付成功不需要处理
+                        resolve()
+                    } else {
+                        Toast(res.msg)
+                        reject()
+                    }
+                }).catch(err => {
+                    state.pin = ''
+                    state.loading = false
+                    reject()
+                })
             })
         }
 
@@ -749,7 +791,8 @@ export default {
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
-                businessCode: 'cashin'
+                businessCode: 'cashin',
+                openAccountType: customInfo.value.openAccountType
             }).then(res => {
                 if (res.check()) {
                     state.loading = false
@@ -760,12 +803,18 @@ export default {
                             confirmButtonText: Number(res.data) === 1 ? t('common.goLook') : t('login.goAuthenticate'),
                             message: Number(res.data) === 2 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
                         }).then(() => {
-                            router.replace({
-                                path: '/assets/authentication',
-                                query: {
-                                    businessCode: 'cashin'
-                                }
-                            })
+                            if (customInfo.value.openAccountType === 0) {
+                                router.replace({
+                                    path: '/assets/authentication',
+                                    query: {
+                                        businessCode: 'cashin'
+                                    }
+                                })
+                            } else {
+                                router.replace({
+                                    path: '/businessKYC'
+                                })
+                            }
                         })
                     }
                     // 获取支付通道
@@ -823,6 +872,7 @@ export default {
             openOtherMoney,
             getDepositExchangeRate,
             next,
+            pinSubmit,
             computeTime,
             onCancel,
             onConfirm,
@@ -839,25 +889,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/sass/mixin.scss';
 
 .page-content {
     display: flex;
-    flex-direction: column;
     flex: 1;
+    flex-direction: column;
     padding: 0 rem(30px);
-    background: var(--bgColor);
-    overflow-y: auto;
     padding-top: rem(110px);
-    .header{
+    overflow-y: auto;
+    background: var(--bgColor);
+    .header {
         font-size: rem(48px);
     }
 }
 
 // 存款金额筛选
 .amount-filter {
-    padding-top: rem(30px);
     margin-bottom: rem(60px);
+    padding-top: rem(30px);
     .amount-list {
         display: flex;
         flex-wrap: wrap;
@@ -865,8 +914,8 @@ export default {
             position: relative;
             display: flex;
             flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: 48%;
             height: rem(110px);
             margin-right: rem(20px);
@@ -879,43 +928,43 @@ export default {
                 margin-right: 0;
             }
             .t1 {
-                font-size: rem(28px);
                 color: var(--color);
+                font-size: rem(28px);
             }
             .t2 {
                 padding: rem(3px) rem(10px);
-                font-size: rem(20px);
                 color: var(--focusColor);
-                background: rgba(242, 161, 27, .1);
+                font-size: rem(20px);
+                background: rgba(242, 161, 27, 0.1);
                 border-radius: rem(30px);
             }
-            .tick{
+            .tick {
                 position: absolute;
-                right: rem(8px);
                 top: 0;
+                right: rem(8px);
+                z-index: 99;
                 width: rem(10px);
                 height: rem(18px);
                 border-color: var(--contentColor);
                 border-style: solid;
                 border-width: 0 rem(4px) rem(4px) 0;
                 transform: rotate(45deg);
-                z-index: 99;
             }
         }
         .active {
             position: relative;
-            background: rgba(242, 161, 27, .1);
+            background: rgba(242, 161, 27, 0.1);
             border: 1px solid var(--focusColor);
-            &::after{
+            &::after {
                 position: absolute;
-                content: '\e728';
+                top: rem(-2px);
+                right: 0;
                 width: rem(30px);
                 height: rem(30px);
-                background: var(--primary);
-                border-radius: 0px rem(10px) 0px rem(10px);
-                right: 0;
-                top: rem(-2px);
                 font-family: 'iconfont';
+                background: var(--primary);
+                border-radius: 0 rem(10px) 0 rem(10px);
+                content: '\e728';
             }
             .t1 {
                 color: var(--focusColor);
@@ -926,43 +975,42 @@ export default {
         }
     }
     .other-amount {
-        overflow: hidden;
         display: flex;
+        align-items: center;
         justify-content: space-between;
         height: rem(96px);
-        line-height: rem(96px);
-        align-items: center;
         //padding-left: rem(32px);
         padding-right: rem(25px);
+        overflow: hidden;
+        line-height: rem(96px);
         //background: var(--contentColor);
         //border: 1px solid var(--lineColor);
         border-radius: rem(10px);
-        .icon-currency{
-            height: 100%;
+        .icon-currency {
             min-width: rem(250px);
-            border-radius: rem(10px);
+            height: 100%;
             margin-right: rem(27px);
-            background: var(--contentColor);
-            padding-left: rem(30px);
             padding-right: rem(30px);
-            .label{
+            padding-left: rem(30px);
+            background: var(--contentColor);
+            border-radius: rem(10px);
+            .label {
                 margin-left: rem(20px);
-                vertical-align: -3px;
                 font-size: rem(36px);
+                vertical-align: -3px;
             }
         }
         input {
-            border-radius: rem(10px);
-            padding-left: rem(32px);
             flex: 1;
             height: 100%;
+            padding-left: rem(32px);
             font-size: rem(36px);
             background: var(--contentColor);
-
+            border-radius: rem(10px);
         }
         .van-icon-clear {
-            font-size: rem(36px);
             color: var(--minorColor);
+            font-size: rem(36px);
         }
     }
 }
@@ -970,26 +1018,26 @@ export default {
 // 支付方式
 .pay-wrap {
     .title {
-        line-height: 1;
         padding-top: rem(42px);
         padding-bottom: rem(36px);
-        font-size: rem(28px);
-        font-weight: bold;
         color: var(--color);
+        font-weight: bold;
+        font-size: rem(28px);
+        line-height: 1;
     }
     .pay-module {
-        border-radius: rem(10px);
-        overflow: hidden;
         margin-top: rem(30px);
+        overflow: hidden;
+        border-radius: rem(10px);
         .van-icon {
             line-height: 1;
         }
         .pay-case {
-            border-radius: rem(10px);
-            padding-left: rem(40px);
-            padding-right: rem(32px);
-            background: var(--contentColor);
             margin-bottom: rem(30px);
+            padding-right: rem(32px);
+            padding-left: rem(40px);
+            background: var(--contentColor);
+            border-radius: rem(10px);
             cursor: pointer;
             .pay-channel {
                 display: flex;
@@ -1002,30 +1050,30 @@ export default {
                 }
                 .name {
                     flex: 1;
-                    font-size: rem(28px);
                     color: var(--color);
+                    font-size: rem(28px);
                 }
             }
             .currency-list {
                 overflow: hidden;
                 &.show {
                     max-height: rem(1000px);
-                    transition: all .3s ease-in-out;
+                    transition: all 0.3s ease-in-out;
                 }
                 &.hide {
                     max-height: 0;
                 }
                 .item {
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
+                    justify-content: space-between;
                     height: rem(112px);
                     border-top: 1px solid var(--lineColor);
                     .name {
-                        font-size: rem(28px);
                         color: var(--color);
+                        font-size: rem(28px);
                     }
-                    &:last-child{
+                    &:last-child {
                         border-bottom: none;
                     }
                 }
@@ -1034,13 +1082,13 @@ export default {
     }
     .none-channel {
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         height: rem(150px);
-        padding: 0 rem(20px);
         margin-top: rem(30px);
-        font-size: rem(24px);
+        padding: 0 rem(20px);
         color: var(--color);
+        font-size: rem(24px);
         background: var(--contentColor);
         border: 1px solid var(--lineColor);
         border-radius: rem(10px);
@@ -1060,8 +1108,8 @@ export default {
             font-size: rem(24px);
         }
         strong {
-            font-size: rem(28px);
             color: var(--focusColor);
+            font-size: rem(28px);
         }
     }
 }
@@ -1076,7 +1124,7 @@ export default {
         background: var(--primary);
         border-radius: rem(10px);
         span {
-            color: #fff;
+            color: #FFF;
             font-size: rem(30px);
         }
     }
@@ -1117,6 +1165,10 @@ export default {
             font-size: rem(32px);
             text-align: center;
         }
+        .appendVisDesc {
+            padding: 0 rem(50px) rem(40px);
+            text-align: left;
+        }
         .confirm-btn {
             width: 80%;
             margin: rem(50px) auto;
@@ -1126,15 +1178,17 @@ export default {
 
 // 支付表单
 .payForm {
+    position: fixed;
+    bottom: -100%;
     width: 100%;
     padding: 0 rem(30px);
     background: var(--contentColor);
-    position: fixed;
-    bottom: -100%;
     opacity: 0;
     input {
         width: 100%;
         height: rem(50px);
     }
 }
+
+@import '@/sass/mixin.scss';
 </style>
