@@ -7,14 +7,19 @@
                 </h1>
             </router-link>
             <div class='menus'>
-                <div :class="['item', { 'active': $route.path === '/quote' }]">
-                    <router-link to='/quote'>
+                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
+                    <router-link to='/fund'>
                         <span class='link'>
-                            {{ $t('header.quote') }}
+                            {{ $t('header.fund') }}
                         </span>
                     </router-link>
                 </div>
-                <div :class="['item', { 'active': $route.path === '/order' }]">
+                <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
+                    <span class='link'>
+                        {{ $t('tradeType.5') }}
+                    </span>
+                </div>
+                <!-- <div :class="['item', { 'active': $route.path === '/order' }]">
                     <el-dropdown @command='changePlans'>
                         <span class='link'>
                             {{ plansName }}
@@ -32,11 +37,11 @@
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                </div>
-                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
-                    <router-link to='/fund'>
+                </div> -->
+                <div :class="['item', { 'active': $route.path === '/quote' }]">
+                    <router-link to='/quote'>
                         <span class='link'>
-                            {{ $t('header.fund') }}
+                            {{ $t('header.quote') }}
                         </span>
                     </router-link>
                 </div>
@@ -194,6 +199,11 @@ export default {
             })
         }
 
+        // 跳转到现货交易页面
+        const toOrder = () => {
+            changePlans({ name: t('tradeType.5'), id: '5' })
+        }
+
         // 路由跳转
         const handRoutTo = (path) => router.push(route.path + path)
 
@@ -205,6 +215,7 @@ export default {
             handRoutTo,
             customInfo,
             formatTime,
+            toOrder,
             changePlans,
             plansName,
             ...toRefs(state),
