@@ -294,7 +294,8 @@
         "incorrectlyFormed": "Incorrect format",
         "pleaseEnter": "Please enter ",
         "businessOpen": "Create Corporate Account",
-        "reGet": "Get again"
+        "reGet": "Get again",
+        "input":"Insert Your Email or Phone Number"
     },
     "chart": {
         "candleStick": "Candle Stick",

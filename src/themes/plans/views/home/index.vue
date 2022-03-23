@@ -6,20 +6,20 @@
 
         <div v-if='!customerInfo' class='reg-wrap'>
             <div class='input-wrap'>
-                <input v-model='regVal' placeholder='邮箱/手机号码' type='text' />
+                <input v-model='regVal' :placeholder='$t("register.input")' type='text' />
             </div>
             <div class='btn' @click='start'>
-                开始使用
+                {{ $t('register.registerBtn') }}
             </div>
         </div>
 
         <div class='product-wrap'>
-            <h1>市场趋势</h1>
+            <h1>{{ $t('vitaHome.trend') }}</h1>
             <div class='list'>
                 <div class='header'>
                     <span>{{ $t('trade.symbol') }}</span>
                     <span>{{ $t('trade.positionLastPrice') }}</span>
-                    <span>24h涨幅</span>
+                    <span>24h{{ $t('chart.quoteChange') }}</span>
                 </div>
                 <ul class='content'>
                     <li v-for='item in productList' :key='item.symbolKey' class='product' @click='openProduct(item)'>
@@ -390,6 +390,9 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                     text-align: center;
                     .icon-label {
                         font-size: rem(20px);
+                    }
+                    .item-icon {
+                        margin-bottom: rem(10px);
                     }
                 }
             }

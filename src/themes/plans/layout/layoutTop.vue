@@ -56,7 +56,7 @@
             </router-link>
         </div>
         <van-cell-group class='cellGroup'>
-            <van-cell class='cellItem' is-link title='基金' @click="routerTo('fundProductList')">
+            <van-cell class='cellItem' is-link :title='$t("fundInfo.fund")' @click="routerTo('fundProductList')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -68,7 +68,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link title='行情' @click="routerTo('quote')">
+            <van-cell class='cellItem' is-link :title='$t("route.quote")' @click="routerTo('quote')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -80,7 +80,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link title='现货交易' @click="routerTo('order')">
+            <van-cell class='cellItem' is-link :title='$t("vitaHome.trade")' @click="routerTo('order')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -92,7 +92,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link title='资产' @click="routerTo('assets')">
+            <van-cell class='cellItem' is-link :title='$t("route.assets")' @click="routerTo('assets')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>

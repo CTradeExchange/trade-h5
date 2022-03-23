@@ -298,7 +298,8 @@
     "incorrectlyFormed": "格式不正确",
     "pleaseEnter": "请输入",
     "businessOpen": "企业开户",
-    "reGet": "重新获取"
+    "reGet": "重新获取",
+    "input":"輸入你的郵箱和手機號"
   },
   "chart": {
     "candleStick": "阴阳烛",
