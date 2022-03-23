@@ -148,15 +148,15 @@ export default {
 .quoteWrap {
     display: flex;
     flex: 1;
-    height: 100%;
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+    height: 100%;
     // margin-top: rem(90px);
     overflow: auto;
     background: var(--bgColor);
-    &.hasNav{
-        padding-bottom: rem(100px);
+    &.hasNav {
+        //padding-bottom: rem(100px);
     }
     .productListWrap {
         flex: 1;
@@ -208,11 +208,11 @@ export default {
         }
     }
 }
-.etfBanner{
+.etfBanner {
     display: block;
     padding: 4px 0;
     background: var(--contentColor);
-    img{
+    img {
         display: block;
         width: 100%;
     }

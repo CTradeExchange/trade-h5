@@ -176,63 +176,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/mixin.scss";
-
+@import '@/sass/mixin.scss';
 .page-wrap {
+    padding: 8px;
     font-size: 14px;
-    padding:  8px;
     background: var(--bgColor);
-
     .content-top {
-        max-height: 874px;
         display: flex;
         justify-content: space-between;
-
+        max-height: 874px;
         >div {
             margin-right: 8px;
-            border-radius: 10px;
             background: var(--contentColor);
-            &:last-child{
+            border-radius: 10px;
+            &:last-child {
                 margin-right: 0;
             }
         }
-
         .quote-wrap {
-            width: 360px;
             // height: 709px;
             display: flex;
             flex-direction: row;
             flex-shrink: 0;
+            width: 320px;
         }
-
         .middle-wrap {
-            flex: 1;
             display: flex;
+            flex: 1;
             flex-direction: column;
             justify-content: space-between;
             background: var(--bgColor);
-            >div{
-                 border-radius: 10px;
-                 background: var(--contentColor);
+            >div {
+                background: var(--contentColor);
+                border-radius: 10px;
             }
-            .chart-content{
+            .chart-content {
                 margin-bottom: 8px;
             }
-            .trade-content{
+            .trade-content {
                 position: relative;
-                padding: 5px 16px 20px 16px;
+                padding: 5px 16px 20px;
             }
         }
-
         .right-wrap {
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
-            width: 360px;
+            width: 280px;
             &:deep {
                 .el-tabs {
-                    padding: 0 20px;
                     height: 40px;
+                    padding: 0 20px;
                 }
                 .el-tabs__header {
                     margin: 0;
@@ -250,11 +244,11 @@ export default {
                 }
                 .el-tabs__item {
                     flex: 1;
-                    font-size: 14px;
-                    color: var(--normalColor);
                     height: 40px;
-                    text-align: center;
+                    color: var(--normalColor);
+                    font-size: 14px;
                     line-height: 40px;
+                    text-align: center;
                     &.is-active {
                         color: var(--primary);
                     }
@@ -270,30 +264,30 @@ export default {
                     margin: rem(30px) rem(20px);
                 }
             }
-            .handicap-content{
-                border-radius: 10px;
-                background: var(--contentColor);
-                padding: 10px 0 8px 16px;
+            .handicap-content {
                 height: 368px;
-            }
-            .deal-content{
-                border-radius: 10px;
+                padding: 10px 0 8px 16px;
                 background: var(--contentColor);
-                padding: 10px 16px 10px 16px;
+                border-radius: 10px;
+            }
+            .deal-content {
                 flex: 1;
                 margin-top: 8px;
+                padding: 10px 16px;
+                background: var(--contentColor);
+                border-radius: 10px;
             }
         }
     }
-    .orders-wrap{
-        margin-top: 8px;
+    .orders-wrap {
         height: 398px;
+        margin-top: 8px;
         background: var(--contentColor);
     }
-    .assetsSticky{
-        :deep(.van-sticky--fixed){
-            box-shadow: 0 0 10px rgba(0,0,0,.15);
+    .assetsSticky {
+        :deep(.van-sticky--fixed) {
             background-color: var(--bgColor);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
         }
     }
 }
