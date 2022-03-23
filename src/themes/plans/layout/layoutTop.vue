@@ -217,6 +217,7 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
 .menu-wrap {
     .menu-list {
         padding: rem(30px) rem(30px) rem(30px) rem(30px);
+        font-size: rem(28px);
         .reg-btn {
             display: inline-block;
             width: 100%;
@@ -231,6 +232,7 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             display: inline-block;
             width: 100%;
             margin-bottom: rem(30px);
+            color: var(--pirmary);
             text-align: center;
         }
     }

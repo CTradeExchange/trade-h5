@@ -17,8 +17,8 @@
             <h1>市场趋势</h1>
             <div class='list'>
                 <div class='header'>
-                    <span>名称</span>
-                    <span>最新价</span>
+                    <span>{{ $t('trade.symbol') }}</span>
+                    <span>{{ $t('trade.positionLastPrice') }}</span>
                     <span>24h涨幅</span>
                 </div>
                 <ul class='content'>
@@ -298,7 +298,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                 .product {
                     display: flex;
                     align-items: center;
-                    margin-bottom: rem(30px);
+                    margin-bottom: rem(40px);
                     .icon {
                         width: rem(65px);
                         height: rem(65px);
@@ -310,6 +310,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                     .symbol {
                         .symbol-name {
                             width: rem(320px);
+                            margin-bottom: rem(10px);
                             overflow: hidden;
                             color: var(--color);
                             font-weight: bold;
@@ -345,6 +346,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         .view-more {
             display: inline-block;
             margin-top: rem(60px);
+            color: var(--pirmary);
             font-weight: bold;
             font-size: rem(28px);
         }

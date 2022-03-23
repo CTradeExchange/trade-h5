@@ -48,14 +48,14 @@ const routes = [
                     keepAlive: true,
                 }
             },
-            {
-                path: 'mine',
-                name: 'Mine',
-                component: () => import(/* webpackChunkName: "Mine" */ '../views/mine/mine.vue'),
-                meta: {
-                    title: 'route.mine',
-                }
-            },
+            // {
+            //     path: 'mine',
+            //     name: 'Mine',
+            //     component: () => import(/* webpackChunkName: "Mine" */ '../views/mine/mine.vue'),
+            //     meta: {
+            //         title: 'route.mine',
+            //     }
+            // },
             {
                 path: 'assets',
                 name: 'Assets',
