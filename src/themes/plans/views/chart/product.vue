@@ -291,6 +291,11 @@
                         {{ product.sell_price }}
                     </p> -->
                 </div>
+                <div v-if='fundtoken' class='fundTradeBtn' @click='fundtokenLink'>
+                    <span class='text'>
+                        申/赎
+                    </span>
+                </div>
 
                 <!-- <span class='spread_text'>
                     {{ product.spread_text }}
@@ -333,6 +338,7 @@ import realtimeInvestCompose from '@plans/modules/fundInformation/realtimeInvest
 import { toolHooks } from '@plans/hooks/handicap'
 import i18n, { loadLocaleMessages } from '@plans/i18n/i18n.js'
 import Colors, { setRootVariable } from '@plans/colorVariables'
+import { findFundPage } from '@/api/fund'
 
 export default {
     components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct, ETF, realtimeInvestCompose },
@@ -505,7 +511,8 @@ export default {
             symbolId: getSymbolId(),
             tradeType: getTradeType(),
             onChartReadyFlag: false,
-            loading: false
+            loading: false,
+            findFundPageList: [], // 基金产品列表
         })
 
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId.value}_${tradeType.value}`)
@@ -546,6 +553,20 @@ export default {
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
+
+        // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
+        const fundtoken = computed(() => {
+            return state.findFundPageList.find(el => el.shareTokenCode === product.value?.baseCurrency)
+        })
+
+        // 获取基金产品列表，
+        const getFundPage = () => {
+            findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
+                if (res.check()) {
+                    state.findFundPageList = res.data.records
+                }
+            })
+        }
 
         // 选择指标
         const onClickStudy = (type, name) => {
@@ -1031,11 +1052,19 @@ export default {
             if (val) { return window.dayjs(Number(val)).format('HH:mm:ss') }
         }
 
+        // 跳转到基金的产品详情
+        const fundtokenLink = () => {
+            router.push('/fundProductInfo??fundId=' + fundtoken.value.fundId)
+        }
+
         // 初始化图表配置
         initChartData()
 
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() })
+
+        // 获取基金列表
+        getFundPage()
 
         const showSidebar = ref(false)
 
@@ -1131,6 +1160,8 @@ export default {
             primaryColor,
             dealModeShowMap,
             updateStudy,
+            fundtoken,
+            fundtokenLink,
             plansLen
         }
     }
@@ -1693,8 +1724,14 @@ export default {
             .buy {
                 margin-right: rem(20px);
             }
+            .fundTradeBtn {
+                width: rem(140px);
+                flex: none;
+                margin-left: rem(20px);
+            }
         }
         .sell,
+        .fundTradeBtn,
         .buy {
             @include active();
             position: relative;

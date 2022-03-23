@@ -957,6 +957,7 @@
 		"assetIndexQquestionTip":"图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
 		"assetQquestionTip":"图表为基金投资组合所含资产在近24小时内的市场表现(报价单位:USDT)",
 		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击前往",
-		"fundTokenTrade": "现货交易"
+		"fundTokenTrade": "现货交易",
+		"noTradeMarket": "暂无交易市场"
 	}
 }

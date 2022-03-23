@@ -332,7 +332,7 @@ export default {
 
         // 获取基金产品列表，
         const getFundPage = () => {
-            findFundPage({ size: 1000 }).then(res => {
+            findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
                 if (res.check()) {
                     state.findFundPageList = res.data.records
                 }

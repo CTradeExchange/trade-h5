@@ -89,9 +89,11 @@
 <script setup>
 import { defineProps, ref } from 'vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
+import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import { useRouter } from 'vue-router'
+const { t } = useI18n({ useScope: 'global' })
 
 const store = useStore()
 const router = useRouter()
@@ -114,7 +116,7 @@ const toOrderFund = () => {
         product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode)
     }
     if (!product) {
-        return Toast('暂无交易市场')
+        return Toast(t('fundInfo.noTradeMarket'))
     }
     router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
 }
