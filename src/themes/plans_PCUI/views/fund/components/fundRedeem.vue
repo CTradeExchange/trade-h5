@@ -72,14 +72,13 @@
             </p>
         </div>
         <!-- 未登录 -->
-        <div v-if='!isLogin' class='login-button'>
-            <span @click="router.push('/login')">
-                {{ $t('c.login') }}
-            </span>
-            <em>{{ $t('c.or') }}</em>
-            <span @click="router.push('/register')">
+        <div v-if='!isLogin' class='handle-not'>
+            <button class='register-btn' @click="router.push('/register')">
                 {{ $t('c.register') }}
-            </span>
+            </button>
+            <button class='login-btn' @click="router.push('/login')">
+                {{ $t('c.login') }}
+            </button>
         </div>
     </div>
 
@@ -257,23 +256,27 @@ const openRules = () => {
             }
         }
     }
-    .login-button {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 50px;
+    .handle-not {
         margin-top: 30px;
-        font-size: 14px;
-        background: var(--lineColor);
-        border-radius: 5px;
-        cursor: pointer;
-        span {
-            color: var(--primary);
-        }
-        em {
-            margin: 0 3px;
-            font-style: normal;
-            color: var(--normalColor);
+        button {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 50px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            letter-spacing: 2px;
+            border-radius: 5px;
+            cursor: pointer;
+            &.register-btn {
+                color: #fff;
+                background: var(--primary);
+            }
+            &.login-btn {
+                color: var(--primary);
+                background: var(--lineColor);
+            }
         }
     }
     .rules-link {

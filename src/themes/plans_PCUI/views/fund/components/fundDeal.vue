@@ -9,7 +9,7 @@
                 <fundRedeem :fund='fund' />
             </el-tab-pane>
         </el-tabs>
-        <LoginMask />
+        <!-- <LoginMask /> -->
     </div>
 </template>
 
@@ -17,7 +17,7 @@
 import { ref, defineProps } from 'vue'
 import fundApply from './fundApply.vue'
 import fundRedeem from './fundRedeem.vue'
-import LoginMask from '@planspc/components/loginMask.vue'
+// import LoginMask from '@planspc/components/loginMask.vue'
 
 defineProps({
     fund: {
