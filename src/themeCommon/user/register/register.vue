@@ -100,7 +100,7 @@ import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { Toast } from 'vant'
 import { unescape } from 'lodash'
 import RuleFn, { checkCustomerExistRule } from './rule'
@@ -124,6 +124,7 @@ export default {
         const delayer = null
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
         const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const state = reactive({
@@ -386,6 +387,15 @@ export default {
         }
 
         onMounted(() => {
+            const { mobile, email } = route.query
+            if (mobile) {
+                state.mobile = mobile
+                state.openType = 'mobile'
+            } else if (email) {
+                state.email = email
+                state.openType = 'email'
+            }
+
             getAllCountry()
             queryCompanyCountry()
         })

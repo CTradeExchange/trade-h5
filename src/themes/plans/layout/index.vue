@@ -1,5 +1,7 @@
 <template>
     <!-- <router-view /> -->
+    <Top />
+
     <Suspense>
         <template #default>
             <router-view v-slot='{ Component, route }'>
@@ -17,17 +19,19 @@
             Loading...
         </template>
     </Suspense>
-    <footerMenu v-if='navData' id='footerMenu' class='footerMenu' :data='navData.data' />
+    <!-- <footerMenu v-if='navData' id='footerMenu' class='footerMenu' :data='navData.data' /> -->
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import footerMenu from '../modules/nav/nav'
+import Top from './layoutTop.vue'
 export default {
     name: 'Layout',
     components: {
-        footerMenu,
+        Top,
+        footerMenu
     },
     setup () {
         const store = useStore()

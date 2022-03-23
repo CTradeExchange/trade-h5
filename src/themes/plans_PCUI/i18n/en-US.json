@@ -949,19 +949,6 @@
 		"redeem_tip3": "After the redemption process finished, the fund tokens you redeemed will be deposited to your Spot wallet with the selected receiving assets",
 		"assetIndexQquestionTip": "The picture shows the market performance of the assets contained in the index constituent stocks in the recent 24 hours(Quotation unit:USDT)",
 		"assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)"
-	},
-    "newHomeFooter":{ 
-        "product": "Products",
-        "trading": "Spot Trading",
-        "fund": "Index Fund",
-        "service": "Services",
-        "program": "Program for New Clients",
-        "vip": "Institutional & VIP",
-        "customer": "Customer Service",
-        "help": "Support",
-        "faqs": "FAQs",
-        "terms": "Terms&Conditions ",
-        "policy": "Privacy Policy ",
-        "community": "Community"
-    }
+	}
+    
 }

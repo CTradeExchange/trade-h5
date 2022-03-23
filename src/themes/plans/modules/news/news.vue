@@ -13,11 +13,9 @@
                             @refresh='onFocusNewsRefresh'
                         >
                             <van-list
-                                v-model:loading='state.focusNews.loading'
                                 :finished='state.focusNews.finished'
                                 :finished-text="$t('information.noMore')"
                                 :loading-text="$t('compLang.loading')"
-                                @load='onLoadFocusNews'
                             >
                                 <van-cell v-for='news in state.focusNews.list' :key='news.id' class='new'>
                                     <template #title>
@@ -52,14 +50,11 @@
                             :loosing-text="$t('compLang.vanPullRefresh.loosing')"
                             :pulling-text="$t('compLang.vanPullRefresh.pulling')"
                             :success-text="$t('information.refresh')"
-                            @refresh='onNewsFlashRefresh'
                         >
                             <van-list
-                                v-model:loading='state.newsFlash.loading'
                                 :finished='state.newsFlash.finished'
                                 :finished-text="$t('information.noMore')"
                                 :loading-text="$t('compLang.loading')"
-                                @load='onLoadNewsFlash'
                             >
                                 <div class='story-date'>
                                     {{ today }}
@@ -145,6 +140,36 @@
             </van-tabs>
         </div>
     </div>
+    <van-pagination
+        v-if='state.activeTab === 0'
+        v-model='state.focusNews.page'
+        force-ellipses
+        :show-page-size='5'
+        :total-items='state.total'
+        @change='pageChangeFocus'
+    >
+        <template #prev-text>
+            <van-icon name='arrow-left' />
+        </template>
+        <template #next-text>
+            <van-icon name='arrow' />
+        </template>
+    </van-pagination>
+    <van-pagination
+        v-if='state.activeTab === 1'
+        v-model='state.newsFlash.page'
+        force-ellipses
+        :show-page-size='5'
+        :total-items='state.total'
+        @change='pageChangeFlash'
+    >
+        <template #prev-text>
+            <van-icon name='arrow-left' />
+        </template>
+        <template #next-text>
+            <van-icon name='arrow' />
+        </template>
+    </van-pagination>
 </template>
 
 <script>
@@ -197,7 +222,8 @@ export default {
             },
             calendarList: [],
             filterCalendarList: [],
-            lang: getCookie('lang') || 'zh-CN'
+            lang: getCookie('lang') || 'zh-CN',
+            total: 0
         })
         const { t } = useI18n({ useScope: 'global' })
         state.newsTypes = [
@@ -209,20 +235,21 @@ export default {
                 id: 8,
                 name: t('information.newsFlash')
             },
-            {
-                id: 10,
-                name: t('information.calendar')
-            }
+            // {
+            //     id: 10,
+            //     name: t('information.calendar')
+            // }
         ]
+
         state.firstFocusNewsParams = {
             page: 1,
-            pageSize: h5Preview ? 2 : 10,
+            pageSize: h5Preview ? 2 : 5,
             type: 7, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
             orgid: props.data.orgid // 机构id
         }
         state.firstNewsFlashParams = {
             page: 1,
-            pageSize: h5Preview ? 2 : 10,
+            pageSize: h5Preview ? 2 : 5,
             type: 8, // 类目id, 要闻:7; 7X24快讯:8; 财经日历:10
             orgid: props.data.orgid // 机构id
         }
@@ -307,8 +334,8 @@ export default {
         // }
         const getNewsListByType = (params, callback) => {
             newsListByTypeByPage(params, state.lang, props.data.newsArea).then(
-                ({ data, pages, page }) => {
-                    typeof (callback) === 'function' && callback({ data, pages, page })
+                ({ data, pages, page, total }) => {
+                    typeof (callback) === 'function' && callback({ data, pages, page, total })
                 })
         }
         // const getNewsFlash = (callback) => {
@@ -337,16 +364,17 @@ export default {
                 return false
             }
             if (state.focusNews.list.length > 0) {
-                state.focusNews.page++
+                // state.focusNews.page++
             }
-            getNewsListByType({ ...state.firstFocusNewsParams, page: state.focusNews.page }, ({ data, page, pages }) => {
+            getNewsListByType({ ...state.firstFocusNewsParams, page: state.focusNews.page }, ({ data, page, pages, total }) => {
                 state.focusNews.loading = false
+                state.total = total
                 if (state.focusNews.page >= pages) {
                     state.focusNews.finished = true
                 }
                 if (Array.isArray(data) && data.length > 0) {
                     const tempData = data.map(el => ({ ...el, updatetimeStr: beforeTime(el.updatetime * 1000) }))
-                    state.focusNews.list = Number(page) > 1 ? [...state.focusNews.list, ...tempData] : tempData
+                    state.focusNews.list = tempData // Number(page) > 1 ? [...state.focusNews.list, ...tempData] : tempData
                 }
             })
         }
@@ -356,7 +384,7 @@ export default {
                 return false
             }
             if (state.newsFlash.list.length > 0) {
-                state.newsFlash.page++
+                // state.newsFlash.page++
             }
             getNewsListByType({ ...state.firstNewsFlashParams, page: state.newsFlash.page }, ({ data, page, pages }) => {
                 state.newsFlash.loading = false
@@ -365,7 +393,7 @@ export default {
                 }
                 if (Array.isArray(data) && data.length > 0) {
                     const tempData = data.map(el => ({ ...el, ellipsis: true, shotTime: el.addtime_text.slice(11, 16) }))
-                    state.newsFlash.list = Number(page) > 1 ? [...state.newsFlash.list, ...tempData] : tempData
+                    state.newsFlash.list = tempData // Number(page) > 1 ? [...state.newsFlash.list, ...tempData] : tempData
                 }
             })
         }
@@ -396,6 +424,7 @@ export default {
                     // } else {
                     //     state.newsFlash.list = [...tempData]
                     // }
+                    debugger
                     state.newsFlash.list = [...tempData]
                     state.newsFlash.timeAxis = data[0].addtime
                 }
@@ -469,6 +498,17 @@ export default {
             state.filterCalendarList = state.calendarList.filter(el => el.type === val)
         }
 
+        const pageChangeFocus = page => {
+            onLoadFocusNews()
+        }
+
+        const pageChangeFlash = page => {
+            onLoadNewsFlash()
+        }
+
+        onLoadFocusNews()
+        onLoadNewsFlash()
+
         renderCalendar()
         return {
             state,
@@ -483,7 +523,9 @@ export default {
             onNewsFlashRefresh,
             onFocusNewsRefresh,
             onLoadFocusNews,
-            onLoadNewsFlash
+            onLoadNewsFlash,
+            pageChangeFocus,
+            pageChangeFlash
         }
     },
 }
@@ -495,6 +537,9 @@ export default {
     padding: rem(20px) rem(30px);
     color: var(--color);
     font-size: rem(34px);
+}
+.van-pagination {
+    background: var(--contentColor);
 }
 .container {
     :deep(.van-tabs__wrap) {
@@ -515,7 +560,7 @@ export default {
     }
 }
 .extra-tabpanel {
-    padding: 0 rem(28px);
+    //padding: 0 rem(28px);
 }
 .new {
     padding: 0 rem(26px);
@@ -777,8 +822,8 @@ export default {
     }
 }
 :deep(.van-checkbox__icon--checked .van-icon) {
-    color: var(--van-white)!important;
-    background-color: var(--primary)!important;
-    border-color: var(--primary)!important;
+    color: var(--van-white) !important;
+    background-color: var(--primary) !important;
+    border-color: var(--primary) !important;
 }
 </style>

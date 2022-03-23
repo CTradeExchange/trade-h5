@@ -212,7 +212,8 @@
         "emailCodeInput": "Please enter email verification code",
         "invite": "invite",
         "remove": "Remove",
-        "add": "Add "
+        "add": "Add ",
+        "viewMore": "View more markets"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",
@@ -713,6 +714,7 @@
         "timeName": "Submit time",
         "remarkName": "Remark",
         "noMore": "No more",
+        "accountDeduction": "Account Deduction",
         "auditStatus": {
             "1": "Under review",
             "2": "Cancelled",
@@ -935,5 +937,19 @@
         "mainAccount": "I am the primary account holder/trader",
         "declaration": "Declaration",
         "commited": "Your application for certification has been submitted successfully, please be patient and wait for the result of the examination"
+    },
+    "newHomeFooter":{ 
+        "product": "Products",
+        "trading": "Spot Trading",
+        "fund": "Index Fund",
+        "service": "Services",
+        "program": "Program for New Clients",
+        "vip": "Institutional & VIP",
+        "customer": "Customer Service",
+        "help": "Support",
+        "faqs": "FAQs",
+        "terms": "Terms&Conditions ",
+        "policy": "Privacy Policy ",
+        "community": "Community"
     }
 }
