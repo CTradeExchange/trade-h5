@@ -68,9 +68,9 @@ export default {
                 type: state.type,
                 page: state.page,
                 pageSize: state.size,
-                orgid: wpCompanyInfo.value.orgid || 1
+                orgid: 5
             }
-            newsListByTypeByPage(params, state.lang, wpCompanyInfo.value.newsArea).then(res => {
+            newsListByTypeByPage(params, state.lang, 2).then(res => {
                 res.data.map(elem => {
                     elem.updatetimeStr = beforeTime(elem.updatetime * 1000, t)
                 })

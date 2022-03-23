@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { computed, unref } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 
@@ -31,12 +31,20 @@ export default {
     setup (props, context) {
         const store = useStore()
         const router = useRouter()
-        // 产品map数据
-        const productMap = unref(computed(() => store.state._quote.productMap))
-        // 产品symbolKey集合
-        const productKeys = ['27_1', '4_1', '7_1', '33_2', '12_2']
+        // 产品列表map数据
+        const productMap = computed(() => store.state._quote.productMap)
+        // 当前要显示的产品keys
+        const productKeys = ['695_5', '696_5', '697_5', '698_5', '699_5']
+        // const productKeys = ['368_5', '328_5', '329_5', '331_5', '332_5']
         // 产品列表数据
-        const productList = productKeys.map(key => productMap[key]).filter(elem => elem)
+        const productList = computed(() => {
+            return Object.values(productMap.value).filter(elem => checkProductShow(elem))
+        })
+
+        // 判断当前产品是否展示
+        const checkProductShow = (product) => {
+            return productKeys.includes(product.symbolKey)
+        }
 
         // 跳转到下单页面
         const goOrder = (item) => {
@@ -49,7 +57,9 @@ export default {
             })
         }
 
-        context.emit('update', productKeys)
+        onMounted(() => {
+            context.emit('update', productKeys)
+        })
 
         return {
             productList,
@@ -99,13 +109,13 @@ export default {
             }
             strong {
                 font-size: 16px;
+                font-weight: normal;
             }
         }
         .row_2 {
             margin-top: 3px;
             span {
                 font-size: 24px;
-                font-weight: bold;
                 color: #B7C0E7;
             }
         }

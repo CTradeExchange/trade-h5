@@ -113,9 +113,9 @@
                         <i class='icon icon_kefu' :title="$t('header.service')"></i>
                     </a>
                 </div>
-                <!-- <div class='item'>
+                <div class='item'>
                     <DownloadIcon />
-                </div> -->
+                </div>
                 <div class='item'>
                     <LangIcon />
                 </div>
@@ -232,6 +232,7 @@ export default {
     z-index: 100;
     display: flex;
     justify-content: space-between;
+    flex-shrink: 0;
     min-width: 1200px;
     height: 50px;
     padding: 0 16px;

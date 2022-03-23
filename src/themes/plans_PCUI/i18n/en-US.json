@@ -213,7 +213,9 @@
     "home": {
         "quick": {
             "title": "Reach Financial Freedom",
-            "describe": "Invest in Cryptocurrency Index Fund & 30 Mainstream Spots Effortlessly"
+            "describe": "Invest in Cryptocurrency Index Fund & Mainstream Spots Effortlessly",
+            "placeholder": "Insert Your Email or Phone Number",
+            "register": "Register"
         },
         "download": {
             "title": "Trade 7x24 with no boundary",
@@ -229,17 +231,18 @@
             "text3": "Which crypto is suitable for beginner"
         },
         "why": {
-            "title": "Why us？",
-            "describe": "The reason to choose CATS to trade crypto currency",
-            "title1": "Zero fee to trade cyrpto",
-            "text1": "Multiple depsoit ways to trade crypto, no charges. fast and safety",
-            "title2": "The best transaction fee",
-            "text2": "Favourable transaction fee, competitive VIP rights with high quality service",
-            "title3": "Trusty and safeguard",
-            "text3": "Favourable transaction fee, competitive VIP rights with high quality service",
-            "title4": "24*7 Customer Service",
-            "text4": "24*7 Operations, answer all your enquiries"
-        }
+            "title": "Why trade with Us?",
+            "describe": "Choose Vitatoken as Your Cryptocurrency Trading Platform",
+            "title1": "Lowest Fee",
+            "text1": "0.5% Handling Fee for Index Fund Trading, More Funds Are Coming Soon",
+            "title2": "Data & Technical Support",
+            "text2": "Machine Learning & Testing to Optimize the Parameter",
+            "title3": "Track & Compare",
+            "text3": "Reduce Human Biases in Trading, to Avoid Unintentional Loss",
+            "title4": "Blockchain Circulation",
+            "text4": "Track Real Time Underlying Asset Price, Examine Trades on Blockchain"
+        },
+        "marketTrend": "Market Trend"
     },
     "chart": {
         "high": "High",

@@ -7,9 +7,9 @@
             {{ $t('home.quick.describe') }}
         </p>
         <div class='register-box'>
-            <input v-model.trim='registerAccount' :placeholder="$t('signIn.mobileEmailPlaceholder')" />
+            <input v-model.trim='registerAccount' :placeholder="$t('home.quick.placeholder')" />
             <button @click='goRegister'>
-                {{ $t('c.register') }}
+                {{ $t('home.quick.register') }}
             </button>
         </div>
     </div>
@@ -42,7 +42,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .quick-module {
-    padding-top: 90px;
+    padding-top: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;

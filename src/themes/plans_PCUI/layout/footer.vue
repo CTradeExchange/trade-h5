@@ -1,187 +1,185 @@
 <template>
     <div class='footer-nav'>
-        <div class='footer-auto auto-width'>
-            <div class='nav-left'>
-                <img class='logo' src='@planspc/images/logo.png' />
-                <p class='year'>
-                    © 2021 Trade Switcher
-                </p>
+        <div class='auto-width'>
+            <div class='footer-auto'>
+                <div class='nav-left'>
+                    <ul>
+                        <li>
+                            <h4 class='title'>
+                                {{ $t('newHomeFooter.product') }}
+                            </h4>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("trading")'>
+                                    {{ $t('newHomeFooter.trading') }}
+                                </a>
+                            </p>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("fund")'>
+                                    {{ $t('newHomeFooter.fund') }}
+                                </a>
+                            </p>
+                        </li>
+                        <li>
+                            <h4 class='title'>
+                                {{ $t('newHomeFooter.service') }}
+                            </h4>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("program")'>
+                                    {{ $t('newHomeFooter.program') }}
+                                </a>
+                            </p>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("vip")'>
+                                    {{ $t('newHomeFooter.vip') }}
+                                </a>
+                            </p>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("customer")'>
+                                    {{ $t('newHomeFooter.customer') }}
+                                </a>
+                            </p>
+                        </li>
+                        <li>
+                            <h4 class='title'>
+                                {{ $t('newHomeFooter.help') }}
+                            </h4>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("faqs")'>
+                                    {{ $t('newHomeFooter.faqs') }}
+                                </a>
+                            </p>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("terms")'>
+                                    {{ $t('newHomeFooter.terms') }}
+                                </a>
+                            </p>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("policy")'>
+                                    {{ $t('newHomeFooter.policy') }}
+                                </a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+                <div class='nav-right'>
+                    <h4 class='title'>
+                        {{ $t('newHomeFooter.community') }}
+                    </h4>
+                    <ul>
+                        <li @click='jumpUrl("fb")'>
+                            <img class='icon' src='../images/home/facebook.png' />
+                            <p class='name'>
+                                Facebook
+                            </p>
+                        </li>
+                        <li @click='jumpUrl("ig")'>
+                            <img class='icon' src='../images/home/instagram.png' />
+                            <p class='name'>
+                                Instagram
+                            </p>
+                        </li>
+                        <li @click='jumpUrl("twitter")'>
+                            <img class='icon' src='../images/home/twitter.png' />
+                            <p class='name'>
+                                Twitter
+                            </p>
+                        </li>
+                        <li @click='jumpUrl("telegram")'>
+                            <img class='icon' src='../images/home/telegram.png' />
+                            <p class='name'>
+                                Telegram
+                            </p>
+                        </li>
+                        <li @click='jumpUrl("yt")'>
+                            <img class='icon' src='../images/home/youtube.png' />
+                            <p class='name'>
+                                Youtube
+                            </p>
+                        </li>
+                    </ul>
+                </div>
             </div>
-            <div class='nav-right'>
-                <ul>
-                    <li>
-                        <h4 class='title'>
-                            {{ $t('footer.about.title') }}
-                        </h4>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.about.1') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.about.2') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.about.3') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.about.4') }}
-                            </a>
-                        </p>
-                    </li>
-                    <li>
-                        <h4 class='title'>
-                            {{ $t('footer.tool.title') }}
-                        </h4>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.tool.1') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.tool.2') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.tool.3') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.tool.4') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.tool.5') }}
-                            </a>
-                        </p>
-                    </li>
-                    <li>
-                        <h4 class='title'>
-                            {{ $t('footer.serve.title') }}
-                        </h4>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.serve.1') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.serve.2') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.serve.3') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.serve.4') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.serve.5') }}
-                            </a>
-                        </p>
-                    </li>
-                    <li>
-                        <h4 class='title'>
-                            {{ $t('footer.support.title') }}
-                        </h4>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.support.1') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.support.2') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.support.3') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.support.4') }}
-                            </a>
-                        </p>
-                    </li>
-                    <li>
-                        <h4 class='title'>
-                            {{ $t('footer.terms.title') }}
-                        </h4>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.terms.1') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.terms.2') }}
-                            </a>
-                        </p>
-                        <p class='name'>
-                            <a href='javascript:;'>
-                                {{ $t('footer.terms.3') }}
-                            </a>
-                        </p>
-                    </li>
-                </ul>
+            <div class='footer-last'>
+                <p class='year'>
+                    Vitatoken © 2022
+                </p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+import { getCookie } from '@/utils/util.js'
 export default {
     setup () {
-        return {}
+        // 底部nav跳转
+        const jumpUrl = (index) => {
+            const lang = getCookie('lang') || 'zh-CN'
+            let linkList = {}
+            if (lang === 'zh-CN') {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/zh-CN/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/zh-CN/fund',
+                    program: 'https://www.vitatoken.com/zh-CN/new1',
+                    vip: 'https://www.vitatoken.com/zh-CN/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.com/site/faqs',
+                    terms: 'https://www.vitatoken.com/site/terms-conditions',
+                    policy: 'https://www.vitatoken.com/site/privacy-policy'
+                }
+            } else {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/en-US/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/en-US/fund',
+                    program: 'https://www.vitatoken.com/en-US/new1',
+                    vip: 'https://www.vitatoken.com/en-US/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.com/site/faqs',
+                    terms: 'https://www.vitatoken.com/site/terms-conditions',
+                    policy: 'https://www.vitatoken.com/site/privacy-policy'
+                }
+            }
+            const community = {
+                fb: 'https://www.facebook.com/Vitatoken-100578379186941',
+                ig: 'https://www.instagram.com/vitatoken_official/',
+                twitter: 'https://twitter.com/Vitatoken_',
+                telegram: 'https://t.me/VitatokenEnglish',
+                yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
+            }
+            const newLinkList = { ...linkList, ...community }
+            window.open(newLinkList[index])
+        }
+
+        return {
+            jumpUrl
+        }
     }
 }
 </script>
 
 <style lang="scss" scoped>
 .footer-nav {
-    position: relative;
     min-width: 1200px;
     height: 380px;
     background: #15191E;
+    position: relative;
     .footer-auto {
         display: flex;
         justify-content: space-between;
-    }
-    .nav-left {
-        padding-top: 87px;
-        .year {
-            margin-top: 18px;
-            color: #9293A3;
-            font-size: 12px;
-        }
-    }
-    .nav-right {
+        align-items: center;
         padding-top: 90px;
+    }
+     .nav-left {
         ul {
             display: flex;
         }
         li {
-            margin-right: 110px;
+            margin-right: 150px;
             &:last-of-type {
                 margin-right: 0;
             }
             .title {
+                margin-bottom: 20px;
                 color: #515366;
                 font-size: 14px;
             }
@@ -190,9 +188,53 @@ export default {
                 a {
                     color: #9293A3;
                     font-size: 14px;
+                    &:hover {
+                        color: var(--primary);
+                    }
                 }
             }
         }
+    }
+    .nav-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+       .title {
+            margin-bottom: 20px;
+            color: #515366;
+            font-size: 14px;
+        }
+        ul {
+            display: flex;
+            li {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+                margin-right: 30px;
+                cursor: pointer;
+                &:last-of-type {
+                    margin-right: 0;
+                }
+                .name {
+                    margin-top: 10px;
+                    color: #9293A3;
+                    font-size: 14px;
+                    &:hover {
+                        color: var(--primary);
+                    }
+                }
+            }
+        }
+    }
+}
+.footer-last {
+    position: absolute;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%);
+    .year {
+        color: #9293A3;
+        font-size: 12px;
     }
 }
 </style>

@@ -12,36 +12,28 @@
                 <p class='name'>
                     {{ $t('home.why.title1') }}
                 </p>
-                <p class='describe'>
-                    {{ $t('home.why.text1') }}
-                </p>
+                <p class='describe' v-html="$t('home.why.text1')"></p>
             </li>
             <li>
                 <img src='@planspc/images/home/why-icon2.png' />
                 <p class='name'>
                     {{ $t('home.why.title2') }}
                 </p>
-                <p class='describe'>
-                    {{ $t('home.why.text2') }}
-                </p>
+                <p class='describe' v-html="$t('home.why.text2')"></p>
             </li>
             <li>
                 <img src='@planspc/images/home/why-icon3.png' />
                 <p class='name'>
                     {{ $t('home.why.title3') }}
                 </p>
-                <p class='describe'>
-                    {{ $t('home.why.text3') }}
-                </p>
+                <p class='describe' v-html="$t('home.why.text3')"></p>
             </li>
             <li>
                 <img src='@planspc/images/home/why-icon4.png' />
                 <p class='name'>
                     {{ $t('home.why.title4') }}
                 </p>
-                <p class='describe'>
-                    {{ $t('home.why.text4') }}
-                </p>
+                <p class='describe' v-html="$t('home.why.text4')"></p>
             </li>
         </ul>
     </div>
@@ -73,20 +65,24 @@ export default {
         li {
             display: flex;
             flex-direction: column;
+            align-items: center;
             width: 245px;
+            text-align: center;
             margin-right: 64px;
             &:last-of-type {
                 margin-right: 0;
             }
             img {
-                width: 68px;
-                height: 68px;
+                width: 140px;
+                height: 140px;
             }
             .name {
                 margin-top: 25px;
                 font-size: 16px;
+                font-weight: bold;
             }
             .describe {
+                 padding: 0 30px;
                 margin-top: 18px;
                 line-height: 22px;
                 font-size: 14px;

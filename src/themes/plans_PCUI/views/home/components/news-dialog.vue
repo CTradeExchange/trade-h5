@@ -35,9 +35,9 @@ export default {
             state.loading = true
             const params = {
                 id: item.id,
-                orgid: item.orgid
+                orgid: 5
             }
-            articleDetail(params, state.lang).then(res => {
+            articleDetail(params, state.lang, 2).then(res => {
                 state.loading = false
                 state.detailInfo = res
             })

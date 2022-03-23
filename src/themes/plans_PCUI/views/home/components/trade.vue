@@ -1,30 +1,13 @@
 <template>
     <div class='trade-module auto-width'>
-        <!-- 玩法选项 -->
-        <div class='play-tabs'>
-            <ul>
-                <li
-                    v-for='item in plansList'
-                    :key='item.tradeType'
-                    :class="{ 'active': Number(item.tradeType) === tradeType }"
-                    @click='switchPlan(Number(item.tradeType))'
-                >
-                    <span>{{ $t('tradeType.' + item.tradeType) }}</span>
-                </li>
-            </ul>
-        </div>
-        <!-- 分类选项 -->
-        <div class='category-tabs'>
-            <ul>
-                <li
-                    v-for='(item, index) in categoryList'
-                    :key='index'
-                    :class="{ 'active': index === categoryType }"
-                    @click='switchCategory(index)'
-                >
-                    <span>{{ item.title }}</span>
-                </li>
-            </ul>
+        <div class='trade-header'>
+            <strong class='title'>
+                {{ $t('home.marketTrend') }}
+            </strong>
+            <a class='more' href='javascript:;' @click='examineMore'>
+                <span>{{ $t('examineMore') }}</span>
+                <i class='el-icon-arrow-right'></i>
+            </a>
         </div>
         <!-- 产品列表 -->
         <div class='product-module'>
@@ -46,8 +29,9 @@
                 </li>
             </ul>
             <ul class='product-list'>
-                <li v-for='item in filterProductList' :key='item.symbolKey' @click='toOrder(item)'>
-                    <div>
+                <li v-for='item in productList' :key='item.symbolKey' @click='toOrder(item)'>
+                    <div class='name'>
+                        <currency-icon class='currency-icon' :currency='item.baseCurrency' :size='36' />
                         <span>{{ item.symbolName }}</span>
                     </div>
                     <div>
@@ -75,69 +59,37 @@
                     </div>
                 </li>
             </ul>
-            <div class='view-more'>
-                <a href='javascript:;' @click='examineMore'>
-                    <span>{{ $t('examineMore') }}</span>
-                    <i class='el-icon-arrow-right'></i>
-                </a>
-            </div>
         </div>
     </div>
 </template>
 
 <script>
-import { computed, ref, watch, onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import useProduct from '@planspc/hooks/useProduct'
 import { useRouter } from 'vue-router'
+import currencyIcon from '@/components/currencyIcon.vue'
 
 export default {
+    components: {
+        currencyIcon
+    },
     emits: ['update'],
     setup (props, context) {
         const router = useRouter()
         const store = useStore()
-        // 玩法列表
-        const plansList = computed(() => store.state._base.plans)
-        // 玩法类型
-        const tradeType = ref(Number(plansList.value[0].tradeType))
-        // 分类类型
-        const categoryType = ref(0)
-        // 过滤后的产品列表数据
-        const filterProductList = ref([])
-
-        // 获取板块列表和所选板块的产品列表
-        const { categoryList, productList } = useProduct({
-            tradeType, categoryType, isSelfSymbol: false
+        // 产品列表map数据
+        const productMap = computed(() => store.state._quote.productMap)
+        // 当前要显示的产品keys
+        const productKeys = ['695_5', '696_5', '697_5', '698_5', '699_5', '700_5']
+        // const productKeys = ['368_5', '328_5', '329_5', '331_5', '332_5', '323_5']
+        // 产品列表数据
+        const productList = computed(() => {
+            return Object.values(productMap.value).filter(elem => checkProductShow(elem))
         })
 
-        // 切换玩法
-        const switchPlan = (val) => {
-            if (tradeType.value !== val) {
-                tradeType.value = val
-            }
-        }
-
-        // 切换分类
-        const switchCategory = (index) => {
-            if (categoryType.value !== index) {
-                categoryType.value = index
-            }
-        }
-
-        // 设置产品数据
-        const setProducts = () => {
-            // 只显示指定数量数据
-            const list = []
-            const keys = []
-            for (let i = 0; i < 6; i++) {
-                const item = productList.value[i]
-                if (item) {
-                    list.push(item)
-                    keys.push(item.symbolKey)
-                }
-            }
-            filterProductList.value = list
-            context.emit('update', keys)
+        // 判断当前产品是否展示
+        const checkProductShow = (product) => {
+            return productKeys.includes(product.symbolKey)
         }
 
         // 去交易
@@ -147,30 +99,18 @@ export default {
 
         // 查看更多
         const examineMore = () => {
-            const symbolId = productList.value[0].symbolId
-            router.push(`/order?symbolId=${symbolId}&tradeType=${tradeType.value}`)
+            const item = productList.value[0]
+            router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
         }
 
-        // 监听玩法类型、分类类型
-        watch([tradeType, categoryType, productList], () => {
-            setProducts()
-        })
-
         onMounted(() => {
-            setProducts()
+            context.emit('update', productKeys)
         })
 
         return {
-            plansList,
-            tradeType,
-            categoryType,
-            categoryList,
             productList,
-            filterProductList,
-            switchPlan,
             toOrder,
-            examineMore,
-            switchCategory
+            examineMore
         }
     }
 }
@@ -182,71 +122,30 @@ export default {
 .trade-module {
     margin-top: 96px;
 }
-
-// 玩法选项
-.play-tabs {
-    ul {
-        display: flex;
-    }
-    li {
-        margin-right: 47px;
-        padding-bottom: 4px;
-        cursor: pointer;
-        &:last-of-type {
-            margin-right: 0;
-        }
-        span {
-            @include font();
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--minorColor);
-        }
-    }
-    li:hover {
-        span {
-            color: var(--color);
-        }
-    }
-    .active {
-        border-bottom: 3px solid var(--primary);
-        span {
-            color: var(--color);
-        }
-    }
-}
-
-// 分类选项
-.category-tabs {
-    margin-top: 38px;
-    ul {
-        display: flex;
-    }
-    li {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        height: 32px;
-        padding: 0 22px;
-        margin-right: 10px;
-        font-size: 14px;
+.trade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+        letter-spacing: 2px;
+        font-size: 30px;
+        font-weight: bold;
         color: var(--color);
-        background: var(--bgColor);
-        border-radius: 4px;
-        cursor: pointer;
-        &:last-of-type {
-            margin-right: 0;
-        }
-        &:hover {
-            color: var(--primary);
-        }
     }
-    .active {
-        color: var(--primary);
-        background: var(--primaryAssistColor);
+    .more {
+        display: inline-flex;
+        align-items: center;
+        color: var(--color);
+        i {
+            font-weight: bold;
+        }
+        span {
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
     }
 }
-
-// 产品模块
 .product-module {
     margin-top: 30px;
     .header-block {
@@ -293,12 +192,18 @@ export default {
             }
             span {
                 font-size: 20px;
-                font-weight: bold;
             }
             &:first-of-type {
                 span {
                     margin-left: 16px;
                 }
+            }
+        }
+        .name {
+            display: inline-flex;
+            align-items: center;
+            .currency-icon {
+                margin-left: 10px;
             }
         }
         .handle {
@@ -330,22 +235,6 @@ export default {
             background: var(--bgColor);
             border-radius: 10px;
         }
-    }
-}
-.view-more {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    cursor: pointer;
-    a {
-        display: inline-flex;
-        align-items: center;
-        height: 100%;
-        color: var(--minorColor);
-    }
-    span {
-        font-size: 14px;
     }
 }
 </style>

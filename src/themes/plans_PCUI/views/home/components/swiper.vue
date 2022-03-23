@@ -1,24 +1,31 @@
 <template>
     <el-carousel arrow='never' class='swiper-module' height='540px'>
-        <el-carousel-item v-for='(item, index) in 2' :key='index'>
-            <!-- <img src='@planspc/images/home/banner.png' /> -->
-            <div class='bannerImg' :style='{ backgroundImage: "url("+bannerImg+")" }' @click='bannerClick'></div>
+        <el-carousel-item v-for='(item, index) in bannerList' :key='index'>
+            <div class='bannerImg' :style='{ backgroundImage: "url("+ item.url +")" }' @click='bannerClick(item)'></div>
         </el-carousel-item>
     </el-carousel>
 </template>
 
-<script>
-import bannerImg from '@planspc/images/home/banner.png'
-export default {
-    setup () {
-        const bannerClick = () => {
-            window.open('https://tradeswitcher.com/')
-        }
-        return {
-            bannerClick,
-            bannerImg
-        }
+<script setup>
+import { getCookie } from '@/utils/util.js'
+
+// 当前语言
+const lang = getCookie('lang')
+// 轮播图列表
+const bannerList = [
+    {
+        url: require('@planspc/images/' + lang + '/banner-1.png')
+    },
+    {
+        url: require('@planspc/images/' + lang + '/banner-2.png')
+    },
+    {
+        url: require('@planspc/images/' + lang + '/banner-3.png')
     }
+]
+// 点击轮播图
+const bannerClick = (item) => {
+    window.open('https://www.vitatoken.com/site/new')
 }
 </script>
 
