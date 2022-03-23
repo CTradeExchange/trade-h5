@@ -1,6 +1,11 @@
 <template>
-    <div v-loading="loading === 'loading'" class='seven-module'>
-        <div class='seven-list'>
+    <div v-loading='!inited' class='seven-module'>
+        <div
+            v-infinite-scroll='loadMore'
+            class='seven-list'
+            :infinite-scroll-distance='50'
+            :infinite-scroll-immediate='false'
+        >
             <p class='today'>
                 {{ today }}
             </p>
@@ -14,9 +19,9 @@
                 </el-timeline-item>
             </el-timeline>
         </div>
-        <div class='pagination-case'>
+        <!-- <div class='pagination-case'>
             <el-pagination layout='prev, pager, next' :total='total' @current-change='changePage' />
-        </div>
+        </div> -->
         <!-- <div v-if="loading !== 'noMore'" class='load-more'>
             <a href='javascript:;' @click='getNewsLilst'>
                 <span>{{ $t('loadMore') }}</span>
@@ -45,7 +50,8 @@ export default {
             size: 10,
             list: [],
             total: 0,
-            loading: 'more'
+            loading: 'more',
+            inited: false
         })
 
         // 获取新闻列表
@@ -59,15 +65,22 @@ export default {
                 orgid: 5
             }
             newsListByTypeByPage(params, state.lang, 2).then(res => {
-                state.list = res.data
+                state.inited = true
+                state.list = state.page === 1 ? res.data : state.list.concat(res.data)
                 state.total = res.total
-                state.loading = 'more'
+                state.page += 1
+                state.loading = state.list.length === state.total ? 'noMore' : 'more'
             })
         }
 
         // 改变当前分页
         const changePage = (value) => {
             state.page = value
+            getNewsLilst()
+        }
+
+        // 加载更多数据
+        const loadMore = () => {
             getNewsLilst()
         }
 
@@ -79,7 +92,8 @@ export default {
         return {
             ...toRefs(state),
             getNewsLilst,
-            changePage
+            changePage,
+            loadMore
         }
     }
 }
