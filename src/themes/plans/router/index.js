@@ -14,9 +14,18 @@ const routes = [
         keepAlive: true,
         children: [
             {
+                path: 'home1',
+                name: 'Home1',
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/home.vue'),
+                meta: {
+                    title: 'route.home',
+                    keepAlive: true,
+                }
+            },
+            {
                 path: 'home',
                 name: 'Home',
-                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/home.vue'),
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/index.vue'),
                 meta: {
                     title: 'route.home',
                     keepAlive: true,
@@ -39,14 +48,14 @@ const routes = [
                     keepAlive: true,
                 }
             },
-            {
-                path: 'mine',
-                name: 'Mine',
-                component: () => import(/* webpackChunkName: "Mine" */ '../views/mine/mine.vue'),
-                meta: {
-                    title: 'route.mine',
-                }
-            },
+            // {
+            //     path: 'mine',
+            //     name: 'Mine',
+            //     component: () => import(/* webpackChunkName: "Mine" */ '../views/mine/mine.vue'),
+            //     meta: {
+            //         title: 'route.mine',
+            //     }
+            // },
             {
                 path: 'assets',
                 name: 'Assets',

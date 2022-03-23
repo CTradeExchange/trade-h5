@@ -217,7 +217,8 @@
     "emailCodeInput": "请输入邮箱验证码",
     "invite": "邀请",
     "remove": "删除",
-    "add": "添加"
+    "add": "添加",
+    "viewMore": "查看更多"
   },
   "faceAuth": {
     "faceDetectTip": "请正对手机，保持光线充足",
@@ -297,7 +298,8 @@
     "incorrectlyFormed": "格式不正确",
     "pleaseEnter": "请输入",
     "businessOpen": "企业开户",
-    "reGet": "重新获取"
+    "reGet": "重新获取",
+    "input":"輸入你的郵箱和手機號"
   },
   "chart": {
     "candleStick": "阴阳烛",
@@ -941,5 +943,19 @@
       "mainAccount": "我是主要账户持有人/交易员",
       "declaration": "声明",
       "commited": "您的认证申请已提交成功，请耐心等待审核结果"
-  }
+  },
+  "newHomeFooter":{ 
+    "product": "產品",
+    "trading": "現貨交易",
+    "fund": "指數基金",
+    "service": "服务",
+    "program": "新客活動",
+    "vip": "機構及VIP",
+    "customer": "在線客服",
+    "help": "幫助",
+    "faqs": "FAQs",
+    "terms": "條款条例",
+    "policy": "隱私政策",
+    "community": "社媒"
+}
 }
