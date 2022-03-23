@@ -164,7 +164,7 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 const downloadVis = ref(true)
 const regVal = ref('')
 const lang = ref(getCookie('lang') || 'zh-CN')
-const newsData = ref({ orgid: 1 })
+const newsData = ref({ orgid: 1, newsArea: 1 })
 const serviceVis = ref(false)
 const productVis = ref(false)
 const helpVis = ref(false)
@@ -231,6 +231,11 @@ const jumpUrl = (index) => {
     }
     const newLinkList = { ...linkList, ...community }
     window.open(newLinkList[index])
+}
+
+const openProduct = (data) => {
+    // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
+    router.push(`/product?symbolId=${data.symbolId}&tradeType=${data.tradeType}`)
 }
 
 QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
