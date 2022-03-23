@@ -73,6 +73,9 @@ import { Search } from '@element-plus/icons'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import { useFund } from '../hooks.js'
 import { debounce } from '@/utils/util'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
 
 // 搜索内容
 const searchValue = ref('')
@@ -103,7 +106,11 @@ const inputHandler = debounce(() => {
 const getProductList = () => {
     getFundList({ name: searchValue.value, isRealTime: true }).then(() => {
         if (fundProductList.value.length > 0) {
-            fund.value = fundProductList.value[0]
+            let findFund = ''
+            if (route.query.fundId) {
+                findFund = fundProductList.value.find(el => el.fundId === parseInt(route.query.fundId))
+            }
+            fund.value = findFund || fundProductList.value[0]
             updateFundInfo()
         }
     })

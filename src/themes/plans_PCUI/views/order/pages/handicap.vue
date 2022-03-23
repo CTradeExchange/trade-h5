@@ -243,6 +243,9 @@ export default {
     font-size: 14px;
     line-height: 20px;
     height: 114px;
+    @media screen and (max-width: 1560px){
+        font-size: 12px;
+    }
     &.sell {
         color: var(--riseColor);
         margin-top: 0;

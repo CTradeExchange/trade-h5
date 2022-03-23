@@ -120,6 +120,9 @@ export default {
         scrollbar-width: none;
         -ms-overflow-style: none;
         overflow: -moz-scrollbars-none;
+        @media screen and (max-width: 1560px){
+            font-size: 12px;
+        }
         .deal-item {
             line-height: 27px;
             color: var(--normalColor);

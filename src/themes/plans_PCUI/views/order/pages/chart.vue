@@ -3,7 +3,14 @@
         <div class='item symbol-name'>
             <p class='name'>
                 <span>{{ product?.symbolName }}</span>
-                <EtfIcon v-if='product?.etf' />
+                <van-popover v-model:show='showEtfPopover' theme='dark'>
+                    <p style='padding:10px; width:400px;'>
+                        {{ $t('trade.etfTip') }}
+                    </p>
+                    <template #reference>
+                        <EtfIcon v-if='product?.etf' @mouseenter='showEtfPopover=true' @mouseleave='showEtfPopover=false' />
+                    </template>
+                </van-popover>
             </p>
             <p class='code'>
                 {{ product?.symbolCode }}
@@ -315,6 +322,7 @@ export default {
             settingList: [],
             initConfig: {},
             onChartReadyFlag: false,
+            showEtfPopover: false,
             lineList: [
                 {
                     title: t('chart.lastValueLine'),

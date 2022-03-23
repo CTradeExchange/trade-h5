@@ -315,7 +315,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick, onBeforeUnmount } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
@@ -344,6 +344,7 @@ export default {
         const getSymbolId = () => unref(symbolId)
         const getTradeType = () => unref(tradeType)
         const { dealModeShowMap } = toolHooks()
+        const originTitle = document.title
 
         // uniapp传参
         const { lang, customerGroupId, theme, isUniapp } = route.query
@@ -1077,8 +1078,24 @@ export default {
             }
         )
 
+        // 价格跳动修改页面title
+        const unWatchPrice = watch(
+            () => product.value?.cur_price,
+            (newval, oldval) => {
+                if (newval) {
+                    document.title = `${newval} | ${product.value.symbolCode} | ${originTitle}`
+                }
+            },
+            { immediate: true }
+        )
+
         onMounted(() => {
             subscribeToProduct()
+        })
+
+        onBeforeUnmount(() => {
+            unWatchPrice()
+            document.title = originTitle
         })
 
         return {

@@ -11,6 +11,24 @@
             <span v-if='fund.fundType' class='title'>
                 {{ fund.fundType }}
             </span>
+            <div class='rightImmediatTrade'>
+                <van-popover v-model:show='showPopover' theme='dark'>
+                    <p style='padding: 10px; width:300px;'>
+                        {{ $t('fundInfo.fundTokenTradeTip') }}
+                    </p>
+                    <template #reference>
+                        <a
+                            class='immediatTrade'
+                            href='javascript:;'
+                            @click='toOrderFund'
+                            @mouseenter='showPopover=true'
+                            @mouseleave='showPopover=false'
+                        >
+                            {{ $t('fundInfo.fundTokenTrade') }}
+                        </a>
+                    </template>
+                </van-popover>
+            </div>
         </div>
         <p class='desc'>
             {{ fund.introduction }}
@@ -69,23 +87,47 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps, ref } from 'vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
+import { useStore } from 'vuex'
+import { Toast } from 'vant'
+import { useRouter } from 'vue-router'
 
-defineProps({
+const store = useStore()
+const router = useRouter()
+
+const props = defineProps({
     fund: {
         type: Object,
         default: () => {}
     }
 })
+
+// 直接交易按钮的popover是否显示
+const showPopover = ref(false)
+
+// 点击前往交易页面的对应产品
+const toOrderFund = () => {
+    const productList = store.state._quote.productList
+    let product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 'USDT')
+    if (!product) {
+        product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode)
+    }
+    if (!product) {
+        return Toast('暂无交易市场')
+    }
+    router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
+}
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .fund-info {
     .header {
+        position: relative;
         display: flex;
         align-items: center;
+        justify-content: space-between;
         .name {
             margin-left: 25px;
             margin-right: 20px;
@@ -98,6 +140,21 @@ defineProps({
         .type {
             margin-right: 10px;
         }
+        .rightImmediatTrade{
+            flex: 1;
+            text-align: right;
+        }
+    }
+    .immediatTrade{
+        display: inline-block;
+        height: 24px;
+        color: var(--color);
+        background: var(--assistColor);
+        padding: 0 rem(16px);
+        border-radius: 4px;
+        margin-right: rem(24px);
+        border: solid 1px var(--color);
+        @include active();
     }
     .desc {
         margin-top: 20px;

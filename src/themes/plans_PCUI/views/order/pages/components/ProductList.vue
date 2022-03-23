@@ -205,4 +205,12 @@ const addOptional = ({ symbolId, tradeType }) => {
         top: 0;
     }
 }
+
+@media screen and (max-width: 1560px){
+    .listWrap .items{
+        .li {
+            font-size: 12px;
+        }
+    }
+}
 </style>
