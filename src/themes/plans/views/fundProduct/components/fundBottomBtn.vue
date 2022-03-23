@@ -11,15 +11,25 @@
                     {{ fund.canRedemption===1 ? $t('fundInfo.sell'):$t('fundInfo.disabledSell') }}
                 </span>
             </div>
+            <div class='tradeBtn' @click='toOrderFund'>
+                <span class='text'>
+                    {{ $t('route.trade') }}
+                </span>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import { Toast } from 'vant'
 import { defineProps } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import { useStore } from 'vuex'
+const store = useStore()
 const router = useRouter()
 const route = useRoute()
+const { t } = useI18n({ useScope: 'global' })
 const { fundId } = route.query
 const props = defineProps({
     fund: Object
@@ -35,6 +45,19 @@ const toOrder = direction => {
         name: direction === 'buy' ? 'FundApply' : 'FundRedeem',
         query: { direction, fundId }
     })
+}
+
+// 点击前往交易页面的对应产品
+const toOrderFund = () => {
+    const productList = store.state._quote.productList
+    let product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 'USDT')
+    if (!product) {
+        product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode)
+    }
+    if (!product) {
+        return Toast(t('fundInfo.noTradeMarket'))
+    }
+    router.push(`/product?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
 }
 </script>
 
@@ -63,8 +86,14 @@ const toOrder = direction => {
         .buy {
             margin-right: rem(20px);
         }
+        .tradeBtn {
+            flex: none;
+            width: rem(140px);
+            margin-left: rem(20px);
+        }
     }
     .sell,
+    .tradeBtn,
     .buy {
         @include active();
         position: relative;

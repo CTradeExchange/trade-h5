@@ -953,6 +953,7 @@
 		"assetIndexQquestionTip": "The picture shows the market performance of the assets contained in the index constituent stocks in the recent 24 hours(Quotation unit:USDT)",
 		"assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)",
 		"fundTokenTradeTip": "When the fund token is listed, investors can buy and sell fund shares in the open spot market just like buying and selling cryptocurrencies. Click to go to",
-		"fundTokenTrade": "Spot trade"
+		"fundTokenTrade": "Spot trade",
+		"noTradeMarket": "No trading market"
 	}
 }
