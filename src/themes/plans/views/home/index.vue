@@ -233,6 +233,11 @@ const jumpUrl = (index) => {
     window.open(newLinkList[index])
 }
 
+const openProduct = (data) => {
+    // router.push({ name: 'Order', query: { symbolId: data.symbolId, direction: 'buy' } })
+    router.push(`/product?symbolId=${data.symbolId}&tradeType=${data.tradeType}`)
+}
+
 QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 
 </script>
