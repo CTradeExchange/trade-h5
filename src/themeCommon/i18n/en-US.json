@@ -713,6 +713,7 @@
         "timeName": "Submit time",
         "remarkName": "Remark",
         "noMore": "No more",
+        "accountDeduction": "Account Deduction",
         "auditStatus": {
             "1": "Under review",
             "2": "Cancelled",
