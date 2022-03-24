@@ -14,14 +14,14 @@ const lang = getCookie('lang')
 // 轮播图列表
 const bannerList = [
     {
-        url: require('@planspc/images/' + lang + '/banner-1.png')
+        url: require('@planspc/images/' + lang + '/banner5.jpg')
     },
-    {
-        url: require('@planspc/images/' + lang + '/banner-2.png')
-    },
-    {
-        url: require('@planspc/images/' + lang + '/banner-3.png')
-    }
+    // {
+    //     url: require('@planspc/images/' + lang + '/banner-2.png')
+    // },
+    // {
+    //     url: require('@planspc/images/' + lang + '/banner-3.png')
+    // }
 ]
 // 点击轮播图
 const bannerClick = (item) => {
@@ -34,7 +34,7 @@ const bannerClick = (item) => {
     position: fixed;
     z-index: 0;
     left: 0;
-    top: 0;
+    top: 64px;
     width: 100%;
     .bannerImg{
         height: 100%;

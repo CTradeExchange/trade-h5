@@ -3,7 +3,7 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' src='@planspc/images/logo_top.jpg' />
+                    <img alt='' height='24' src='/images/logo_vitamin.png' />
                 </h1>
             </router-link>
             <div class='menus'>
@@ -12,6 +12,8 @@
                         <span class='link'>
                             {{ $t('header.fund') }}
                         </span>
+                        <!-- <span class='symbolUp icon_mairu'></span> -->
+                        <van-icon class='symbolUp' name='arrow-up' />
                     </router-link>
                 </div>
                 <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
@@ -234,15 +236,15 @@ export default {
     justify-content: space-between;
     flex-shrink: 0;
     min-width: 1200px;
-    height: 50px;
+    height: 64px;
     padding: 0 16px;
-    background-color: rgba(21, 25, 30, 1);
+    background-color: #181A20;
     &.Home {
         position: sticky;
         top: 0;
         left: 0;
         width: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: #181A20;
     }
     .nav-left {
         display: flex;
@@ -257,7 +259,9 @@ export default {
             display: flex;
             align-items: center;
             height: 100%;
+            font-weight: bold;
             .item {
+                position: relative;
                 margin-right: 30px;
                 cursor: pointer;
                 &:last-of-type {
@@ -276,6 +280,12 @@ export default {
                 .link {
                     color: var(--primary);
                 }
+            }
+            .symbolUp{
+                margin-left: 4px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #EE0A24;
             }
         }
     }

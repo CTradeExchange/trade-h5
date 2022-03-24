@@ -107,7 +107,7 @@
                         用户安全资产基金(SAFU)
                     </p>
                     <p class='descContent'>
-                        币安将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。
+                        我们将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。
                     </p>
                 </div>
                 <div class='row'>
@@ -220,6 +220,13 @@
                 </li>
             </ul>
 
+            <div class='langWrap'>
+                <van-button block class='langBtn' plain type='primary' @click='langShow=true'>
+                    <span>{{ langObj[lang] }}</span>
+                    <span class='arrow icon_icon_arrow'></span>
+                </van-button>
+            </div>
+
             <div class='copyright'>
                 Vitamin © 2022
             </div>
@@ -227,6 +234,8 @@
         <a class='serviceIcon' href='javascript:;' @click='toService'>
             <img alt='' src='/images/serviceIcon.png' />
         </a>
+
+        <LangPop v-model='langShow' />
     </div>
 </template>
 
@@ -235,6 +244,7 @@ import { computed, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { setCookie, getCookie, isEmpty, localGet, localSet } from '@/utils/util'
 import News from '@plans/modules/news/news.vue'
+import LangPop from './components/langPop.vue'
 import { useStore } from 'vuex'
 import currencyIcon from '@/components/currencyIcon.vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -245,6 +255,11 @@ const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
 const customerInfo = computed(() => store.state._user.customerInfo)
 
+const langShow = ref(false)
+const langObj = ref({
+    'zh-CN': '简体中文',
+    'en-US': 'English',
+})
 const regVal = ref('')
 const lang = ref(getCookie('lang') || 'zh-CN')
 const newsData = ref({ orgid: 1, newsArea: 1 })
@@ -497,8 +512,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             display: inline-block;
             margin-top: rem(60px);
             color: var(--minorColor);
-            font-weight: bold;
-            font-size: rem(28px);
+            font-size: rem(24px);
         }
     }
     .why-wrap {
@@ -580,7 +594,22 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             }
         }
     }
-    .copyright {
+    .langWrap{
+        margin: 10px 20%;
+        .langBtn{
+            background: #999;
+            border-color: #999;
+            color: #333;
+            height: 40px;
+        }
+
+        .van-button__text{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+    .copyright{
         margin-top: rem(30px);
         padding-top: rem(30px);
         color: rgb(234, 236, 239);

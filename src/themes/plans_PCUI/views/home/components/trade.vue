@@ -50,12 +50,18 @@
                         </span>
                     </div>
                     <div class='handle'>
-                        <button class='buy'>
+                        <button v-if='item.etf' class='trade active'>
+                            {{ $t('fundInfo.buy') }}
+                        </button>
+                        <button class='trade'>
+                            {{ $t('route.trade') }}
+                        </button>
+                        <!-- <button class='buy'>
                             {{ $t('trade.buy') }}
                         </button>
                         <button class='sale'>
                             {{ $t('trade.sell') }}
-                        </button>
+                        </button> -->
                     </div>
                 </li>
             </ul>
@@ -130,7 +136,7 @@ export default {
     .more {
         display: inline-flex;
         align-items: center;
-        color: var(--color);
+        color: var(--minorColor);
         i {
             font-weight: bold;
         }
@@ -220,6 +226,16 @@ export default {
                 }
                 &.sale {
                     background: var(--fallColor);
+                }
+                &.trade {
+                    background: none;
+                    border: 1px solid var(--primary);
+                    border-radius: 5px;
+                    color: var(--primary);
+                    &:hover,&.active{
+                        background: var(--primary);
+                        color: #fff;
+                    }
                 }
                 &:hover {
                     opacity: .7;
