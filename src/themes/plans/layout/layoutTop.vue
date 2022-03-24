@@ -142,6 +142,7 @@ const download = () => {
         window.open('https://play.google.com/store/apps/details?id=uni.UNI8B7D0E0')
     } else if (device === 3) {
         // 苹果端
+        window.open('https://starapp016.com:1888/i7qq.app')
     }
 }
 

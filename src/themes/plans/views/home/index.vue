@@ -57,10 +57,49 @@
         </div>
 
         <!-- why模块 -->
-        <!-- <div class='why-wrap'>
+        <div class='why-wrap'>
             <h2>{{ $t('vitaHome.why.title') }}</h2>
             <h4>{{ $t('vitaHome.why.describe') }}</h4>
-        </div> -->
+            <ul class='reason-list'>
+                <li class='reason-item'>
+                    <img alt='' class='ri-img' src='../../images/low-fee-100.jpg' srcset='' />
+                    <p class='t1'>
+                        {{ $t('vitaHome.why.title1') }}
+                    </p>
+                    <p class='t2'>
+                        {{ $t('vitaHome.why.text1') }}
+                    </p>
+                </li>
+                <li class='reason-item'>
+                    <img alt='' class='ri-img' src='../../images/support-100.jpg' srcset='' />
+                    <p class='t1'>
+                        {{ $t('vitaHome.why.title2') }}
+                    </p>
+                    <p class='t2'>
+                        {{ $t('vitaHome.why.text2') }}
+                    </p>
+                </li>
+                <li class='reason-item'>
+                    <img alt='' class='ri-img' src='../../images/Tracking-100.jpg' srcset='' />
+                    <p class='t1'>
+                        {{ $t('vitaHome.why.title3') }}
+                    </p>
+                    <p class='t2'>
+                        {{ $t('vitaHome.why.text3') }}
+                    </p>
+                </li>
+
+                <li class='reason-item'>
+                    <img alt='' class='ri-img' src='../../images/Clock-chain-100.jpg' srcset='' />
+                    <p class='t1'>
+                        {{ $t('vitaHome.why.title4') }}
+                    </p>
+                    <p class='t2'>
+                        {{ $t('vitaHome.why.text4') }}
+                    </p>
+                </li>
+            </ul>
+        </div>
 
         <!-- 页脚 -->
         <div class='footer-wrap'>
@@ -358,6 +397,33 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             color: var(--pirmary);
             font-weight: bold;
             font-size: rem(28px);
+        }
+    }
+    .why-wrap {
+        margin: rem(50px) 0;
+        padding: rem(50px) 0;
+        background: var(--contentColor);
+        h2 {
+            margin-bottom: rem(20px);
+            padding: 0 rem(30px);
+        }
+        h4 {
+            padding: 0 rem(30px);
+        }
+        .reason-list {
+            text-align: center;
+            .reason-item {
+                margin-top: rem(60px);
+                .ri-img {
+                    width: 100%;
+                }
+            }
+            .t1 {
+                margin-top: rem(30px);
+                margin-bottom: rem(20px);
+                font-weight: bold;
+                font-size: rem(38px);
+            }
         }
     }
     .footer-wrap {
