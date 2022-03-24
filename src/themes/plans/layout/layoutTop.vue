@@ -202,7 +202,7 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
         display: inline-block;
         height: rem(120px);
         padding-left: rem(30px);
-        line-height: rem(130px);
+        line-height: rem(140px);
         img {
             height: rem(40px);
         }
