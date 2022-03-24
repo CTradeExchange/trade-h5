@@ -4,7 +4,9 @@
             <van-tabs v-model:active='state.activeTab' :color='$style.primary' :title-inactive-color='$style.primary' @click='tabClick'>
                 <van-tab v-for='(tab,index) in state.newsTypes' :key='tab.id' class='extra-tabpanel' :name='index' :title='tab.name'>
                     <template v-if='state.activeTab===0'>
+                        <van-empty v-if='state.focusNews.list.length === 0' :description='$t("common.noData")' />
                         <van-pull-refresh
+                            v-else
                             v-model='state.focusNews.refreshing'
                             :loading-text="$t('compLang.loading')"
                             :loosing-text="$t('compLang.vanPullRefresh.loosing')"
@@ -141,7 +143,7 @@
         </div>
     </div>
     <van-pagination
-        v-if='state.activeTab === 0'
+        v-if='state.activeTab === 0 && state.focusNews.list.length > 0'
         v-model='state.focusNews.page'
         force-ellipses
         :show-page-size='5'
