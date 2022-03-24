@@ -23,11 +23,11 @@
                             <h4 class='title'>
                                 {{ $t('newHomeFooter.service') }}
                             </h4>
-                            <p class='name'>
+                            <!-- <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("program")'>
                                     {{ $t('newHomeFooter.program') }}
                                 </a>
-                            </p>
+                            </p> -->
                             <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("vip")'>
                                     {{ $t('newHomeFooter.vip') }}
@@ -156,11 +156,23 @@ export default {
                 yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
             }
             switch (index) {
+                case 'trading':
+                    router.push({
+                        path: '/order',
+                        query: {
+                            symbolId: 364,
+                            tradeType: 5
+                        }
+                    })
+                    break
+                case 'fund':
+                    router.push({ path: '/fund' })
+                    break
                 case 'vip':
                     if (customerInfo.value) {
-                        router.push({ name: 'Assets' })
+                        router.push({ path: '/assets' })
                     } else {
-                        router.push({ name: 'Register' })
+                        router.push({ path: '/register' })
                     }
                     break
                 default:

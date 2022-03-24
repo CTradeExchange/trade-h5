@@ -84,13 +84,8 @@ export default {
         // const productKeys = ['368_5', '328_5', '329_5', '331_5', '332_5', '323_5']
         // 产品列表数据
         const productList = computed(() => {
-            return Object.values(productMap.value).filter(elem => checkProductShow(elem))
+            return productKeys.map(key => productMap.value[key])
         })
-
-        // 判断当前产品是否展示
-        const checkProductShow = (product) => {
-            return productKeys.includes(product.symbolKey)
-        }
 
         // 去交易
         const toOrder = item => {
