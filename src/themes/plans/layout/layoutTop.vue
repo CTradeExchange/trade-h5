@@ -163,6 +163,7 @@ import i18n, { loadLocaleMessages } from '@/themeCommon/i18n/i18n.js'
 import { setCookie, getCookie, isEmpty, localGet, localSet, getDevice } from '@/utils/util'
 import Colors, { setRootVariable } from '@plans/colorVariables'
 import minePerson from '@plans/modules/minePerson/minePerson.vue'
+import { isIOS } from 'vant/lib/utils'
 
 const store = useStore()
 const router = useRouter()
@@ -181,13 +182,9 @@ const routerTo = path => {
 }
 
 const download = () => {
-    const device = getDevice()
-    if (device === 2) {
-        window.open('https://play.google.com/store/apps/details?id=uni.UNI8B7D0E0')
-    } else if (device === 3) {
-        // 苹果端
-        window.open('https://starapp016.com:1888/i7qq.app')
-    }
+    const downloadUrl = isIOS() ? 'https://starapp016.com:1888/i7qq.app' : 'https://play.google.com/store/apps/details?id=uni.UNI8B7D0E0'
+
+    window.open(downloadUrl)
 }
 
 watch(() => route.path, val => {

@@ -9,7 +9,7 @@
                 <input v-model='regVal' :placeholder='$t("register.input")' type='text' />
             </div>
             <div class='btn' @click='start'>
-                开始使用
+                {{ $t('vitaHome.start') }}
             </div>
         </div>
 
@@ -19,7 +19,7 @@
                 <div class='header'>
                     <span>{{ $t('trade.symbol') }}</span>
                     <span>{{ $t('trade.positionLastPrice') }}</span>
-                    <span>24h{{ $t('chart.quoteChange') }}</span>
+                    <span>{{ $t('vitaHome.upDown') }} </span>
                 </div>
                 <ul class='content'>
                     <li v-for='item in productList' :key='item.symbolKey' class='product' @click='openProduct(item)'>
@@ -133,13 +133,13 @@
             <div class='registerFooter'>
                 <div class='css-128y11d'>
                     <div class='immediatelyText'>
-                        立即赚取收益
+                        {{ $t('vitaHome.getProfit') }}
                     </div>
                     <div class='css-1r4nzjd'>
                         <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
                         </a>
                         <van-button block class='lijiRegister' type='primary'>
-                            立即注册
+                            {{ $t('vitaHome.toReg') }}
                         </van-button>
                     </div>
                 </div>
@@ -200,7 +200,7 @@
 
         <div class='social'>
             <p class='nav-dt'>
-                关注我们
+                {{ $t('vitaHome.follow') }}
             </p>
             <ul class='community-box f-b-t'>
                 <li class='box-item' @click='jumpUrl("fb")'>
@@ -338,53 +338,52 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 </script>
 
 <style lang="scss">
-.descList{
+.descList {
     padding-top: 40px;
-    padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 16px;
-    background: var(--contentColor);
+    padding-left: 16px;
     text-align: center;
-    .row{
+    background: var(--contentColor);
+    .row {
         margin-bottom: 40px;
     }
-    .icon{
+    .icon {
         width: 56px;
     }
-    .descTitle{
+    .descTitle {
+        margin-bottom: 8px;
         padding-top: 10px;
         color: #1E2329;
         font-weight: 500;
         font-size: 20px;
         line-height: 28px;
-        margin-bottom: 8px;
     }
-    .descContent{
+    .descContent {
+        min-height: 1.2em;
         color: #474D57;
         font-weight: 400;
         font-size: 14px;
         line-height: 20px;
-        min-height: 1.2em;
     }
 }
-.registerFooter{
-    text-align: center;
+.registerFooter {
     padding: 40px 16px 16px;
-    .immediatelyText{
+    text-align: center;
+    .immediatelyText {
+        color: #1E2329;
         font-weight: 600;
         font-size: 24px;
         line-height: 32px;
-        color: #1E2329;
         text-align: center;
     }
-    .lijiRegister{
-        margin-top: 24px;
+    .lijiRegister {
         height: 40px;
+        margin-top: 24px;
         background-color: #FCD535;
         border-color: #FCD535;
     }
 }
-
 .page-wrap {
     .banner {
         height: rem(450px);
@@ -412,9 +411,9 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             width: 100%;
             height: rem(96px);
             margin-left: 0;
+            font-size: 16px;
             line-height: rem(96px);
             text-align: center;
-            font-size: 16px;
             background-color: #FCD535;
             border-radius: rem(10px);
         }
@@ -436,8 +435,8 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                 color: var(--minorColor);
                 >span {
                     flex: 1;
-                    text-align: right;
                     font-size: 12px;
+                    text-align: right;
                     &:first-child {
                         flex: 2;
                         text-align: left;
@@ -484,8 +483,8 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                             text-align: right;
                         }
                         .up-down {
-                            text-align: right;
                             font-weight: 500;
+                            text-align: right;
                         }
                     }
                     &:last-child {
@@ -556,16 +555,15 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         }
     }
 }
-
 .social {
     position: relative;
-    background: rgb(18,22,28);
-    color: rgb(234,236,239);
     padding: 0 rem(30px) rem(30px) rem(30px);
+    color: rgb(234, 236, 239);
+    background: rgb(18, 22, 28);
     .nav-dt {
         padding: rem(40px) 0;
-        text-align: center;
         font-size: 16px;
+        text-align: center;
     }
     .community-box {
         display: flex;
@@ -582,16 +580,16 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             }
         }
     }
-    .copyright{
+    .copyright {
         margin-top: rem(30px);
-        border-top: 1px solid #555;
         padding-top: rem(30px);
+        color: rgb(234, 236, 239);
         font-size: 14px;
-        color: rgb(234,236,239);
         text-align: center;
+        border-top: 1px solid #555;
     }
 }
-.serviceIcon{
+.serviceIcon {
     position: fixed;
     right: 24px;
     bottom: 16px;
