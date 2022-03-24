@@ -196,37 +196,37 @@
                     </div>
                 </div>
             </div>
-
-            <div class='social'>
-                <p class='nav-dt'>
-                    关注我们
-                </p>
-                <ul class='community-box f-b-t'>
-                    <li class='box-item' @click='jumpUrl("fb")'>
-                        <img alt='facebook' class='item-icon' src='../../images/home/facebook.png' />
-                    </li>
-                    <li class='box-item' @click='jumpUrl("ig")'>
-                        <img alt='instagram' class='item-icon' src='../../images/home/instagram.png' />
-                    </li>
-                    <li class='box-item' @click='jumpUrl("twitter")'>
-                        <img alt='twitter' class='item-icon' src='../../images/home/twitter.png' />
-                    </li>
-                    <li class='box-item' @click='jumpUrl("telegram")'>
-                        <img alt='telegram' class='item-icon' src='../../images/home/telegram.png' />
-                    </li>
-                    <li class='box-item' @click='jumpUrl("yt")'>
-                        <img alt='youtube' class='item-icon' src='../../images/home/youtube.png' />
-                    </li>
-                </ul>
-
-                <div class='copyright'>
-                    Vitamin © 2022
-                </div>
-            </div>
-            <a class='serviceIcon' href='javascript:;' @click='toService'>
-                <img alt='' src='/images/serviceIcon.png' />
-            </a>
         </div>
+
+        <div class='social'>
+            <p class='nav-dt'>
+                关注我们
+            </p>
+            <ul class='community-box f-b-t'>
+                <li class='box-item' @click='jumpUrl("fb")'>
+                    <img alt='facebook' class='item-icon' src='../../images/home/facebook.png' />
+                </li>
+                <li class='box-item' @click='jumpUrl("ig")'>
+                    <img alt='instagram' class='item-icon' src='../../images/home/instagram.png' />
+                </li>
+                <li class='box-item' @click='jumpUrl("twitter")'>
+                    <img alt='twitter' class='item-icon' src='../../images/home/twitter.png' />
+                </li>
+                <li class='box-item' @click='jumpUrl("telegram")'>
+                    <img alt='telegram' class='item-icon' src='../../images/home/telegram.png' />
+                </li>
+                <li class='box-item' @click='jumpUrl("yt")'>
+                    <img alt='youtube' class='item-icon' src='../../images/home/youtube.png' />
+                </li>
+            </ul>
+
+            <div class='copyright'>
+                Vitamin © 2022
+            </div>
+        </div>
+        <a class='serviceIcon' href='javascript:;' @click='toService'>
+            <img alt='' src='/images/serviceIcon.png' />
+        </a>
     </div>
 </template>
 
