@@ -110,8 +110,17 @@
 
 <script>
 import { getCookie } from '@/utils/util.js'
+import { computed } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
     setup () {
+        const store = useStore()
+        const router = useRouter()
+
+        // 用户信息
+        const customerInfo = computed(() => store.state._user.customerInfo)
+
         // 底部nav跳转
         const jumpUrl = (index) => {
             const lang = getCookie('lang') || 'zh-CN'
@@ -146,8 +155,18 @@ export default {
                 telegram: 'https://t.me/VitatokenEnglish',
                 yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
             }
-            const newLinkList = { ...linkList, ...community }
-            window.open(newLinkList[index])
+            switch (index) {
+                case 'vip':
+                    if (customerInfo.value) {
+                        router.push({ name: 'Assets' })
+                    } else {
+                        router.push({ name: 'Register' })
+                    }
+                    break
+                default:
+                    const newLinkList = { ...linkList, ...community }
+                    window.open(newLinkList[index])
+            }
         }
 
         return {
