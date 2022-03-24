@@ -1,7 +1,7 @@
 <template>
     <div v-show='downloadVis' class='download-app'>
         <div class='brand'>
-            <img alt='' class='logo' src='/images/logo_top.png' srcset='' />
+            <img alt='' class='logo' src='/images/vitamin_logo.png' srcset='' />
             <div class='text'>
                 <p>Vitatoken APP</p>
                 <p>Secure, fast and elegant.</p>
@@ -161,15 +161,20 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: rem(30px) 0;
+    padding: rem(26px) 0;
+    height: 60px;
     background: rgba(18, 22, 28, 0.9);
     .brand {
         .logo {
+            margin-left: 16px;
+            margin-right: 12px;
             display: inline-block;
-            height: rem(40px);
-            padding: 0 rem(20px);
+            vertical-align: middle;
+            height: 34px;
+            width: 34px;
         }
         .text {
+            vertical-align: middle;
             display: inline-block;
             color: #FFF;
         }
@@ -179,13 +184,16 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             display: inline-block;
             width: 36px;
             height: 36px;
+            margin-top: -2px;
             margin-right: 12px;
             margin-left: 12px;
-            padding: rem(10px);
+            padding: 8px rem(10px);
             background-color: #F0B90B;
             border-radius: 50%;
+            text-align: center;
             img {
-                width: 100%;
+                width: 16px;
+                height: 18px;
             }
         }
         .close {
@@ -201,9 +209,9 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
     background: var(--contentColor);
     .logo {
         display: inline-block;
-        height: rem(120px);
+        height: 64px;
         padding-left: rem(30px);
-        line-height: rem(140px);
+        line-height: rem(144px);
         img {
             height: rem(40px);
         }

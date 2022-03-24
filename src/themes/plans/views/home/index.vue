@@ -9,7 +9,7 @@
                 <input v-model='regVal' :placeholder='$t("register.input")' type='text' />
             </div>
             <div class='btn' @click='start'>
-                {{ $t('register.registerBtn') }}
+                开始使用
             </div>
         </div>
 
@@ -99,95 +99,133 @@
                     </p>
                 </li>
             </ul>
-        </div>
 
-        <!-- 页脚 -->
-        <div class='footer-wrap'>
-            <div class='menu'>
-                <div class='main' @click="expand('product')">
-                    <span>{{ $t('newHomeFooter.product') }}</span>
-                    <van-icon :name='productVis ? "minus" : "plus"' />
-                </div>
-                <div v-show='productVis' class='sub'>
-                    <p class='link' @click='jumpUrl("trading")'>
-                        {{ $t('newHomeFooter.trading') }}
+            <div class='descList'>
+                <div class='row'>
+                    <img alt='' class='icon' src='~@plans/images/moneyBox.png' />
+                    <p class='descTitle'>
+                        用户安全资产基金(SAFU)
                     </p>
-                    <p class='link' @click='jumpUrl("fund")'>
-                        {{ $t('newHomeFooter.fund') }}
+                    <p class='descContent'>
+                        币安将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。
                     </p>
                 </div>
-            </div>
-            <div class='menu'>
-                <div class='main' @click="expand('service')">
-                    <span>{{ $t('newHomeFooter.service') }}</span>
-                    <van-icon :name='serviceVis ? "minus" : "plus"' />
+                <div class='row'>
+                    <img alt='' class='icon' src='~@plans/images/trafficLight.png' />
+                    <p class='descTitle'>
+                        个性化访问控制
+                    </p>
+                    <p class='descContent'>
+                        高级访问控制限制访问个人账户的设备和地址，让用户无后顾之忧。
+                    </p>
                 </div>
-                <div v-show='serviceVis' class='sub'>
-                    <p class='link' @click='jumpUrl("program")'>
-                        {{ $t('newHomeFooter.program') }}
+                <div class='row'>
+                    <img alt='' class='icon' src='~@plans/images/lock.png' />
+                    <p class='descTitle'>
+                        先进数据加密
                     </p>
-                    <p class='link' @click='jumpUrl("vip")'>
-                        {{ $t('newHomeFooter.vip') }}
-                    </p>
-                    <p class='link' @click='jumpUrl("customer")'>
-                        {{ $t('newHomeFooter.customer') }}
+                    <p class='descContent'>
+                        个人交易数据通过端到端加密获得保障，仅限本人访问个人信息。
                     </p>
                 </div>
             </div>
-            <div class='menu'>
-                <div class='main' @click="expand('help')">
-                    <span>{{ $t('newHomeFooter.help') }}</span>
-                    <van-icon :name='helpVis ? "minus" : "plus"' />
-                </div>
-                <div v-show='helpVis' class='sub'>
-                    <p class='link' @click='jumpUrl("faqs")'>
-                        {{ $t('newHomeFooter.faqs') }}
-                    </p>
-                    <p class='link' @click='jumpUrl("terms")'>
-                        {{ $t('newHomeFooter.terms') }}
-                    </p>
-                    <p class='link' @click='jumpUrl("policy")'>
-                        {{ $t('newHomeFooter.policy') }}
-                    </p>
+
+            <div class='registerFooter'>
+                <div class='css-128y11d'>
+                    <div class='immediatelyText'>
+                        立即赚取收益
+                    </div>
+                    <div class='css-1r4nzjd'>
+                        <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
+                        </a>
+                        <van-button block class='lijiRegister' type='primary'>
+                            立即注册
+                        </van-button>
+                    </div>
                 </div>
             </div>
+
+            <!-- 页脚 -->
+            <div class='footer-wrap'>
+                <div class='menu'>
+                    <div class='main' @click="expand('product')">
+                        <span>{{ $t('newHomeFooter.product') }}</span>
+                        <van-icon :name='productVis ? "minus" : "plus"' />
+                    </div>
+                    <div v-show='productVis' class='sub'>
+                        <p class='link' @click='jumpUrl("trading")'>
+                            {{ $t('newHomeFooter.trading') }}
+                        </p>
+                        <p class='link' @click='jumpUrl("fund")'>
+                            {{ $t('newHomeFooter.fund') }}
+                        </p>
+                    </div>
+                </div>
+                <div class='menu'>
+                    <div class='main' @click="expand('service')">
+                        <span>{{ $t('newHomeFooter.service') }}</span>
+                        <van-icon :name='serviceVis ? "minus" : "plus"' />
+                    </div>
+                    <div v-show='serviceVis' class='sub'>
+                        <p class='link' @click='jumpUrl("program")'>
+                            {{ $t('newHomeFooter.program') }}
+                        </p>
+                        <p class='link' @click='jumpUrl("vip")'>
+                            {{ $t('newHomeFooter.vip') }}
+                        </p>
+                        <p class='link' @click='jumpUrl("customer")'>
+                            {{ $t('newHomeFooter.customer') }}
+                        </p>
+                    </div>
+                </div>
+                <div class='menu'>
+                    <div class='main' @click="expand('help')">
+                        <span>{{ $t('newHomeFooter.help') }}</span>
+                        <van-icon :name='helpVis ? "minus" : "plus"' />
+                    </div>
+                    <div v-show='helpVis' class='sub'>
+                        <p class='link' @click='jumpUrl("faqs")'>
+                            {{ $t('newHomeFooter.faqs') }}
+                        </p>
+                        <p class='link' @click='jumpUrl("terms")'>
+                            {{ $t('newHomeFooter.terms') }}
+                        </p>
+                        <p class='link' @click='jumpUrl("policy")'>
+                            {{ $t('newHomeFooter.policy') }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
             <div class='social'>
                 <p class='nav-dt'>
-                    {{ $t('newHomeFooter.community') }}
+                    关注我们
                 </p>
                 <ul class='community-box f-b-t'>
                     <li class='box-item' @click='jumpUrl("fb")'>
                         <img alt='facebook' class='item-icon' src='../../images/home/facebook.png' />
-                        <p class='icon-label'>
-                            Facebook
-                        </p>
                     </li>
                     <li class='box-item' @click='jumpUrl("ig")'>
                         <img alt='instagram' class='item-icon' src='../../images/home/instagram.png' />
-                        <p class='icon-label'>
-                            Instagram
-                        </p>
                     </li>
                     <li class='box-item' @click='jumpUrl("twitter")'>
                         <img alt='twitter' class='item-icon' src='../../images/home/twitter.png' />
-                        <p class='icon-label'>
-                            Twitter
-                        </p>
                     </li>
                     <li class='box-item' @click='jumpUrl("telegram")'>
                         <img alt='telegram' class='item-icon' src='../../images/home/telegram.png' />
-                        <p class='icon-label'>
-                            Telegram
-                        </p>
                     </li>
                     <li class='box-item' @click='jumpUrl("yt")'>
                         <img alt='youtube' class='item-icon' src='../../images/home/youtube.png' />
-                        <p class='icon-label'>
-                            Youtube
-                        </p>
                     </li>
                 </ul>
+
+                <div class='copyright'>
+                    Vitamin © 2022
+                </div>
             </div>
+            <a class='serviceIcon' href='javascript:;' @click='toService'>
+                <img alt='' src='/images/serviceIcon.png' />
+            </a>
         </div>
     </div>
 </template>
@@ -200,9 +238,11 @@ import News from '@plans/modules/news/news.vue'
 import { useStore } from 'vuex'
 import currencyIcon from '@/components/currencyIcon.vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import { useI18n } from 'vue-i18n'
 
 const router = useRouter()
 const store = useStore()
+const { t } = useI18n({ useScope: 'global' })
 const customerInfo = computed(() => store.state._user.customerInfo)
 
 const regVal = ref('')
@@ -212,6 +252,7 @@ const serviceVis = ref(false)
 const productVis = ref(false)
 const helpVis = ref(false)
 // const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5']
+// const symbolKeys = ['1_5', '21_5', '22_5', '23_5', '26_5', '28_5']
 const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5', '717_5']
 // uat 测试 1 、 21 、22、23、26、28
 
@@ -281,11 +322,69 @@ const openProduct = (data) => {
     router.push(`/product?symbolId=${data.symbolId}&tradeType=${data.tradeType}`)
 }
 
+const toService = () => {
+    const onlineService = store.state._base.wpCompanyInfo?.onlineService
+    if (onlineService) {
+        router.push({
+            name: 'Otherpage',
+            params: { type: 'page' },
+            query: { pageTitle: t('route.onlineService'), url: onlineService }
+        })
+    }
+}
+
 QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 
 </script>
 
 <style lang="scss">
+.descList{
+    padding-top: 40px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 16px;
+    background: var(--contentColor);
+    text-align: center;
+    .row{
+        margin-bottom: 40px;
+    }
+    .icon{
+        width: 56px;
+    }
+    .descTitle{
+        padding-top: 10px;
+        color: #1E2329;
+        font-weight: 500;
+        font-size: 20px;
+        line-height: 28px;
+        margin-bottom: 8px;
+    }
+    .descContent{
+        color: #474D57;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        min-height: 1.2em;
+    }
+}
+.registerFooter{
+    text-align: center;
+    padding: 40px 16px 16px;
+    .immediatelyText{
+        font-weight: 600;
+        font-size: 24px;
+        line-height: 32px;
+        color: #1E2329;
+        text-align: center;
+    }
+    .lijiRegister{
+        margin-top: 24px;
+        height: 40px;
+        background-color: #FCD535;
+        border-color: #FCD535;
+    }
+}
+
 .page-wrap {
     .banner {
         height: rem(450px);
@@ -315,6 +414,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             margin-left: 0;
             line-height: rem(96px);
             text-align: center;
+            font-size: 16px;
             background-color: #FCD535;
             border-radius: rem(10px);
         }
@@ -326,7 +426,8 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         border-top-left-radius: 40px;
         border-top-right-radius: 40px;
         h1 {
-            padding: 0 0 rem(40px) 0;
+            padding-bottom: 24px;
+            font-size: 24px;
         }
         .list {
             .header {
@@ -336,6 +437,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                 >span {
                     flex: 1;
                     text-align: right;
+                    font-size: 12px;
                     &:first-child {
                         flex: 2;
                         text-align: left;
@@ -377,12 +479,13 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                     }
                     .price {
                         flex: 1;
+                        font-size: 14px;
                         .cur-price {
-                            font-size: rem(32px);
                             text-align: right;
                         }
                         .up-down {
                             text-align: right;
+                            font-weight: 500;
                         }
                     }
                     &:last-child {
@@ -394,7 +497,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         .view-more {
             display: inline-block;
             margin-top: rem(60px);
-            color: var(--pirmary);
+            color: var(--minorColor);
             font-weight: bold;
             font-size: rem(28px);
         }
@@ -451,28 +554,46 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                 }
             }
         }
-        .social {
-            .nav-dt {
-                padding: rem(40px) 0;
-                text-align: center;
-            }
-            .community-box {
-                display: flex;
-                justify-content: center;
-                .box-item {
-                    display: inline-block;
-                    flex: 1;
-                    text-align: center;
-                    .icon-label {
-                        font-size: rem(20px);
-                    }
-                    .item-icon {
-                        margin-bottom: rem(10px);
-                    }
-                }
-            }
-        }
     }
 }
 
+.social {
+    position: relative;
+    background: rgb(18,22,28);
+    color: rgb(234,236,239);
+    padding: 0 rem(30px) rem(40px) rem(30px);
+    .nav-dt {
+        padding: rem(40px) 0;
+        text-align: center;
+        font-size: 16px;
+    }
+    .community-box {
+        display: flex;
+        justify-content: center;
+        .box-item {
+            display: inline-block;
+            flex: 1;
+            text-align: center;
+            .icon-label {
+                font-size: rem(20px);
+            }
+            .item-icon {
+                margin-bottom: rem(10px);
+            }
+        }
+    }
+    .copyright{
+        margin-top: rem(30px);
+        border-top: 1px solid #555;
+        padding-top: rem(20px);
+        font-size: 14px;
+        color: rgb(234,236,239);
+        text-align: center;
+    }
+}
+.serviceIcon{
+    position: fixed;
+    right: 24px;
+    bottom: 16px;
+}
 </style>
