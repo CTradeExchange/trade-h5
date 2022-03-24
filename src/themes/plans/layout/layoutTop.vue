@@ -150,7 +150,73 @@
                     </div>
                 </template>
             </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("common.lang")'
+                @click='langShow=true'
+            >
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='css-mykl4n' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#language-f' />
+                            <symbol id='language-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M15.2307 20.4027C18.2316 19.2481 20.4577 16.5321 20.9137 13.25H16.9718C16.8248 16.1102 16.1791 18.638 15.2307 20.4027ZM14.473 13.25C14.2952 17.3518 13.2556 20.5 11.9998 20.5C10.744 20.5 9.70447 17.3518 9.52667 13.25H14.473ZM14.473 10.75H9.52667C9.70447 6.64821 10.744 3.5 11.9998 3.5C13.2556 3.5 14.2952 6.64821 14.473 10.75ZM16.9718 10.75H20.9137C20.4577 7.46786 18.2316 4.75191 15.2307 3.59731C16.1791 5.36198 16.8248 7.88979 16.9718 10.75ZM7.03566 10.75C7.18282 7.88774 7.82928 5.35836 8.77882 3.59353C5.77291 4.74598 3.54249 7.46427 3.08594 10.75H7.03566ZM7.03566 13.25H3.08594C3.54249 16.5357 5.77291 19.254 8.77882 20.4065C7.82928 18.6416 7.18282 16.1123 7.03566 13.25Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+                <template #right-icon>
+                    <img alt='' class='lang-icon' :src="'/images/country_icon/'+ lang + '.png'" />
+                    <van-icon class='right-arrow' name='arrow' />
+                </template>
+            </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("common.dark")'
+            >
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='css-mykl4n' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#language-f' />
+                            <symbol id='language-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M15.2307 20.4027C18.2316 19.2481 20.4577 16.5321 20.9137 13.25H16.9718C16.8248 16.1102 16.1791 18.638 15.2307 20.4027ZM14.473 13.25C14.2952 17.3518 13.2556 20.5 11.9998 20.5C10.744 20.5 9.70447 17.3518 9.52667 13.25H14.473ZM14.473 10.75H9.52667C9.70447 6.64821 10.744 3.5 11.9998 3.5C13.2556 3.5 14.2952 6.64821 14.473 10.75ZM16.9718 10.75H20.9137C20.4577 7.46786 18.2316 4.75191 15.2307 3.59731C16.1791 5.36198 16.8248 7.88979 16.9718 10.75ZM7.03566 10.75C7.18282 7.88774 7.82928 5.35836 8.77882 3.59353C5.77291 4.74598 3.54249 7.46427 3.08594 10.75H7.03566ZM7.03566 13.25H3.08594C3.54249 16.5357 5.77291 19.254 8.77882 20.4065C7.82928 18.6416 7.18282 16.1123 7.03566 13.25Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+                <template #right-icon>
+                    <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
+                </template>
+            </van-cell>
         </van-cell-group>
+    </van-popup>
+
+    <van-popup
+        v-model:show='langShow'
+        class='custom-popup lang-popup'
+        position='bottom'
+        round
+    >
+        <div class='header'>
+            <div class='header-title'>
+                {{ $t('common.lang') }}
+            </div>
+            <i class='icon_guanbi' @click='langShow=false'></i>
+        </div>
+
+        <div class='popup-wrap'>
+            <div
+                v-for='(item, index) in supportLanguages'
+                :key='index'
+                class='lang-item'
+                :class='{ active: lang === item.val }'
+                @click='langSelect(item)'
+            >
+                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png?555'" />
+            </div>
+        </div>
     </van-popup>
 </template>
 
@@ -164,17 +230,23 @@ import { setCookie, getCookie, isEmpty, localGet, localSet, getDevice } from '@/
 import Colors, { setRootVariable } from '@plans/colorVariables'
 import minePerson from '@plans/modules/minePerson/minePerson.vue'
 import { isIOS } from 'vant/lib/utils'
+import { useI18n } from 'vue-i18n'
 
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
 
 const downloadVis = ref(true)
+const langShow = ref(false)
 const menuVis = ref(false)
 const menuListData = ref([])
 const minePersonData = ref([])
+const themeVal = ref(localGet('invertColor') === 'night')
+const lang = ref(getCookie('lang') || store.state._base.wpCompanyInfo.language)
+const { t, locale } = useI18n({ useScope: 'global' })
 
 const customerInfo = computed(() => store.state._user.customerInfo)
+const supportLanguages = computed(() => store.state.supportLanguages)
 
 const routerTo = path => {
     router.push(path)
@@ -195,6 +267,59 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
     menuListData.value = res.find(el => el.tag === 'menulist')?.data
     minePersonData.value = res.find(el => el.tag === 'minePerson')?.data
 })
+
+// 选择语言
+const langSelect = (action) => {
+    new Promise((resolve, reject) => {
+        if (customerInfo.value) {
+            return changeLang(action.val).then(res => {
+                return res.check() ? resolve() : reject()
+            })
+        } else {
+            resolve()
+        }
+    }).then(() => {
+        lang.value = action.val
+
+        // 替换URL
+        const str = location.pathname
+        const firstSlash = str.indexOf('/') + 1
+        const twoSlash = str.indexOf('/', firstSlash) // 第二个斜杠下标
+        const pathTemp = str.substring(twoSlash).substring(1, str.length)
+        location.pathname = action.val + '/' + pathTemp
+
+        loadLocaleMessages(i18n, action.val).then(() => {
+            locale.value = action.val // change!
+            store.commit('del_cacheViews', 'Home')
+            store.commit('del_cacheViews', 'Layout')
+        })
+
+        setCookie('lang', action.val, 'y10')
+    }).catch(err => {})
+}
+
+// 选择颜色
+const colorSelect = (action) => {
+    const themeColor = action ? 'night' : 'light'
+    // 设置全局变量
+    store.commit('Update_invertColor', themeColor)
+    setRootVariable(themeColor)
+
+    let themeColors = sessionStorage.getItem('themeColors')
+    if (!isEmpty(themeColors)) {
+        themeColors = JSON.parse(themeColors)
+
+        document.body.style.setProperty('--color', themeColors[themeColor].color)
+        document.body.style.setProperty('--contentColor', themeColors[themeColor].contentColor)
+        document.body.style.setProperty('--primaryAssistColor', themeColors[themeColor].primaryAssistColor)
+        document.body.style.setProperty('--bgColor', themeColors[themeColor].bgColor)
+        document.body.style.setProperty('--normalColor', themeColors[themeColor].normalColor)
+        document.body.style.setProperty('--minorColor', themeColors[themeColor].minorColor)
+        document.body.style.setProperty('--lineColor', themeColors[themeColor].lineColor)
+        document.body.style.setProperty('--assistColor', themeColors[themeColor].assistColor)
+        document.body.style.setProperty('--placeholdColor', themeColors[themeColor].placeholdColor)
+    }
+}
 </script>
 
 <style lang="scss" scoped>
