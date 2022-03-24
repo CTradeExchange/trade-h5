@@ -80,7 +80,7 @@ export default {
         // 产品列表map数据
         const productMap = computed(() => store.state._quote.productMap)
         // 当前要显示的产品keys
-        const productKeys = ['695_5', '696_5', '697_5', '698_5', '699_5', '700_5']
+        const productKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5', '717_5']
         // const productKeys = ['368_5', '328_5', '329_5', '331_5', '332_5', '323_5']
         // 产品列表数据
         const productList = computed(() => {
