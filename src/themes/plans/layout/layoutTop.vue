@@ -39,7 +39,7 @@
         close-on-popstate
         closeable
         position='right'
-        :style="{ height: '100%',width: '100%',paddingTop: '30px' }"
+        :style="{ height: '100%',width: '100%',paddingTop: '50px' }"
         teleport='body'
     >
         <div v-if='!customerInfo' class='menu-list'>
@@ -253,10 +253,10 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
     background: var(--contentColor);
     .logo {
         display: inline-block;
-        height: 64px;
-        padding-left: rem(30px);
         display: flex;
         align-items: center;
+        height: 64px;
+        padding-left: rem(30px);
         img {
             height: rem(48px);
         }
@@ -281,20 +281,20 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             width: 100%;
             height: rem(96px);
             margin-left: 0;
+            color: rgb(24, 26, 32);
+            font-size: 16px;
             line-height: rem(96px);
             text-align: center;
             background-color: #FCD535;
             border-radius: rem(10px);
-            font-size: 16px;
-            color: rgb(24, 26, 32);
         }
         .btn {
             display: inline-block;
             width: 100%;
             margin-bottom: rem(30px);
-            text-align: center;
-            font-size: 14px;
             color: rgb(30, 35, 41);
+            font-size: 14px;
+            text-align: center;
         }
     }
     .cellGroup {
