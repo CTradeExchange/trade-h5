@@ -743,7 +743,19 @@
 	},
     "vitaHome": {
         "trend": "Market Trend",
-        "trade": "Trade Spot"
+        "trade": "Trade Spot",
+        "why": {
+            "title": "Why trade with Us?",
+            "describe": "Choose Vitatoken as Your Cryptocurrency Trading Platform",
+            "title1": "Lowest Fee",
+            "text1": "0.5% Handling Fee for Index Fund Trading, More Funds Are Coming Soon",
+            "title2": "Data & Technical Support",
+            "text2": "Machine Learning & Testing to Optimize the Parameter",
+            "title3": "Track & Compare",
+            "text3": "Reduce Human Biases in Trading, to Avoid Unintentional Loss",
+            "title4": "Blockchain Circulation",
+            "text4": "Track Real Time Underlying Asset Price, Examine Trades on Blockchain"
+        },
   
     }
 }

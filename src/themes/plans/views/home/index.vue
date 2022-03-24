@@ -23,9 +23,7 @@
                 </div>
                 <ul class='content'>
                     <li v-for='item in productList' :key='item.symbolKey' class='product' @click='openProduct(item)'>
-                        <i class='icon'>
-                            <img alt='' :src='"/images/currency_icon/"+item.baseCurrency+".png"' srcset='' />
-                        </i>
+                        <currency-icon class='icon' :currency='item.baseCurrency' :size='36' />
                         <div class='symbol'>
                             <p class='symbol-name'>
                                 {{ item.symbolName }}
@@ -57,6 +55,12 @@
         <div class='news-wrap'>
             <News :data='newsData' />
         </div>
+
+        <!-- why模块 -->
+        <!-- <div class='why-wrap'>
+            <h2>{{ $t('vitaHome.why.title') }}</h2>
+            <h4>{{ $t('vitaHome.why.describe') }}</h4>
+        </div> -->
 
         <!-- 页脚 -->
         <div class='footer-wrap'>
@@ -155,13 +159,13 @@ import { useRouter } from 'vue-router'
 import { setCookie, getCookie, isEmpty, localGet, localSet } from '@/utils/util'
 import News from '@plans/modules/news/news.vue'
 import { useStore } from 'vuex'
+import currencyIcon from '@/components/currencyIcon.vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 
 const router = useRouter()
 const store = useStore()
 const customerInfo = computed(() => store.state._user.customerInfo)
 
-const downloadVis = ref(true)
 const regVal = ref('')
 const lang = ref(getCookie('lang') || 'zh-CN')
 const newsData = ref({ orgid: 1, newsArea: 1 })
@@ -169,7 +173,7 @@ const serviceVis = ref(false)
 const productVis = ref(false)
 const helpVis = ref(false)
 // const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5']
-const symbolKeys = ['1_5', '21_5', '22_5', '23_5', '26_5', '28_5']
+const symbolKeys = ['1564 _5', '706_5', '709_5', '714_5', '720_5', '717_5']
 // uat 测试 1 、 21 、22、23、26、28
 
 // 产品列表数据
