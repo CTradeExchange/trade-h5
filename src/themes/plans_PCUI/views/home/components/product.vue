@@ -40,7 +40,6 @@ export default {
         const productList = computed(() => {
             return Object.values(productMap.value).filter(elem => checkProductShow(elem))
         })
-        console.log('productMap', productMap)
 
         // 判断当前产品是否展示
         const checkProductShow = (product) => {
