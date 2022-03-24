@@ -155,12 +155,13 @@ export default {
                 telegram: 'https://t.me/VitatokenEnglish',
                 yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
             }
+            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === 5 && el.symbolName)?.symbolId
             switch (index) {
                 case 'trading':
                     router.push({
                         path: '/order',
                         query: {
-                            symbolId: 364,
+                            symbolId,
                             tradeType: 5
                         }
                     })

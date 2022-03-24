@@ -187,7 +187,7 @@ export default {
 
         const changePlans = (item) => {
             state.plansName = item.name
-            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id))?.symbolId
+            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id) && el.symbolName)?.symbolId
             store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
 
             router.push({

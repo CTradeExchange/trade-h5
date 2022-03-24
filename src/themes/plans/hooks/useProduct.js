@@ -39,16 +39,18 @@ export default function ({ tradeType, categoryType }) {
                 result.push(productMapVal[newId])
             }
         })
+
         // 产品排序
-        arr.map(elem => {
-            currencys.map(currency => {
-                if (elem.symbolCode === currency) {
+        currencys.map(currency => {
+            arr.map(elem => {
+                if (elem.baseCurrency + '/' + elem.profitCurrency === currency) {
                     result.push(elem)
                     arr = arr.filter(el => el.symbolId !== elem.symbolId)
                 }
             })
         })
         result = result.concat(arr)
+
         return result
     })
 
