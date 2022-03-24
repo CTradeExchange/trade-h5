@@ -654,7 +654,8 @@
         "saveSetting": "Save",
         "etfTip": "ETF is a special open-end fund. Investors can buy and sell ETF shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem ETF shares from fund management companies.",
 		"purchaseOrRedemptionTip": "Purchase / Redemption: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to",
-		"purchaseOrRedemption": "Purchase / Redemption"
+		"purchaseOrRedemption": "Purchase / Redemption",
+		"noFeature": "This feature is not currently supported"
     },
     "contract": {
         "advance": "Prepay",

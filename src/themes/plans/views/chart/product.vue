@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div v-if='product.etf' class='ft'>
-                    <ETF />
+                    <ETF @click='etfTip' />
                 </div>
             </div>
             <div v-if='product' class='bd'>
@@ -291,9 +291,9 @@
                         {{ product.sell_price }}
                     </p> -->
                 </div>
-                <div v-if='fundtoken' class='fundTradeBtn' @click='fundtokenLink'>
+                <div v-if='product.etf' class='fundTradeBtn' :class='[lang]' @click='fundtokenLink'>
                     <span class='text'>
-                        申/赎
+                        {{ $t('trade.purchaseRedeemBtn') }}
                     </span>
                 </div>
 
@@ -513,6 +513,7 @@ export default {
             onChartReadyFlag: false,
             loading: false,
             findFundPageList: [], // 基金产品列表
+            lang: getCookie('lang')
         })
 
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId.value}_${tradeType.value}`)
@@ -1054,7 +1055,10 @@ export default {
 
         // 跳转到基金的产品详情
         const fundtokenLink = () => {
-            router.push('/fundProductInfo??fundId=' + fundtoken.value.fundId)
+            if (!unref(fundtoken)) {
+                return Toast(t('trade.noFeature'))
+            }
+            router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
         }
 
         // 初始化图表配置
@@ -1083,6 +1087,13 @@ export default {
                 }
             }).then(() => {
                 close()
+            })
+        }
+
+        // 点击etf图标的提示
+        const etfTip = () => {
+            Dialog.alert({
+                message: t('trade.productEtfTip'),
             })
         }
 
@@ -1160,6 +1171,7 @@ export default {
             primaryColor,
             dealModeShowMap,
             updateStudy,
+            etfTip,
             fundtoken,
             fundtokenLink,
             plansLen
@@ -1728,6 +1740,16 @@ export default {
                 width: rem(140px);
                 flex: none;
                 margin-left: rem(20px);
+                white-space: normal;
+                word-break: break-word;
+                text-align: center;
+                &.en-US{
+                    padding-top: rem(18px);
+                    line-height: 1.2;
+                     .text{
+                        font-size: rem(26px);
+                    }
+                }
             }
         }
         .sell,

@@ -37,7 +37,7 @@
                 </p>
                 <template #reference>
                     <a
-                        v-if='fundtoken'
+                        v-if='product.etf'
                         class='fundtokenLink'
                         @click='fundtokenLink'
                         @mouseenter='showFundPopover=true'
@@ -484,6 +484,9 @@ export default {
 
         // 跳转到基金的产品详情
         const fundtokenLink = () => {
+            if (!unref(fundtoken)) {
+                return Toast(t('trade.noFeature'))
+            }
             router.push('/fund?fundId=' + fundtoken.value.fundId)
         }
 

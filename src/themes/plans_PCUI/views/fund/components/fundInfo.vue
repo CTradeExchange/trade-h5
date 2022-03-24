@@ -111,9 +111,9 @@ const showPopover = ref(false)
 // 点击前往交易页面的对应产品
 const toOrderFund = () => {
     const productList = store.state._quote.productList
-    let product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 'USDT')
+    let product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 'USDT' && el.profitCurrency === 5)
     if (!product) {
-        product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode)
+        product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 5)
     }
     if (!product) {
         return Toast(t('fundInfo.noTradeMarket'))
