@@ -1,7 +1,7 @@
 <template>
     <div class='page-wrap'>
         <div class='banner'>
-            <img alt='' :src='require("../../images/banner/h5banner-"+ lang +".png")' srcset='' />
+            <img alt='' :src='require("../../images/banner/h5banner5-"+ lang +".jpg")' srcset='' />
         </div>
 
         <div v-if='!customerInfo' class='reg-wrap'>
@@ -561,7 +561,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     position: relative;
     background: rgb(18,22,28);
     color: rgb(234,236,239);
-    padding: 0 rem(30px) rem(40px) rem(30px);
+    padding: 0 rem(30px) rem(30px) rem(30px);
     .nav-dt {
         padding: rem(40px) 0;
         text-align: center;
@@ -585,7 +585,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     .copyright{
         margin-top: rem(30px);
         border-top: 1px solid #555;
-        padding-top: rem(20px);
+        padding-top: rem(30px);
         font-size: 14px;
         color: rgb(234,236,239);
         text-align: center;

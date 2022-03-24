@@ -19,7 +19,7 @@
     </div>
     <div class='nav-wrap'>
         <div class='logo' @click="$router.push('/')">
-            <img alt='' src='/images/logo_top.png' srcset='' />
+            <img alt='' src='/images/logo_vitamin.png' srcset='' />
         </div>
         <div class='right'>
             <div class='menu' @click='menuVis=true'>
@@ -255,9 +255,10 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
         display: inline-block;
         height: 64px;
         padding-left: rem(30px);
-        line-height: rem(144px);
+        display: flex;
+        align-items: center;
         img {
-            height: rem(40px);
+            height: rem(48px);
         }
     }
     .right {
@@ -284,13 +285,16 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             text-align: center;
             background-color: #FCD535;
             border-radius: rem(10px);
+            font-size: 16px;
+            color: rgb(24, 26, 32);
         }
         .btn {
             display: inline-block;
             width: 100%;
             margin-bottom: rem(30px);
-            color: var(--pirmary);
             text-align: center;
+            font-size: 14px;
+            color: rgb(30, 35, 41);
         }
     }
     .cellGroup {
