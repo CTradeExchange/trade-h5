@@ -45,6 +45,8 @@
             </div>
         </div>
     </div>
+    <!-- 客服 -->
+    <service />
 </template>
 
 <script setup>
@@ -61,6 +63,7 @@ import seven from './components/seven.vue'
 import why from './components/why.vue'
 import portfolio from './components/portfolio.vue'
 import FundDesc from './components/fundDesc.vue'
+import service from './components/service.vue'
 
 // 当前页面的产品symbolKey
 const productKeys = ref([])

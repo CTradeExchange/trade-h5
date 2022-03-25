@@ -75,7 +75,6 @@
             background-size: contain;
             background-repeat: no-repeat;
             border-radius: 50%;
-            box-shadow: 0 0 10px rgba(0,0,0,.1);
         }
         .icon1{
             background-image: url('../../../images/home/portfolio-icon1.png');

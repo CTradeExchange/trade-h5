@@ -1,8 +1,8 @@
 <template>
     <el-popover
         placement='bottom'
-        trigger='hover'
-        :width='152'
+        trigger='click'
+        :width='160'
     >
         <template #reference>
             <i class='icon icon_xiazai' :title="$t('header.download')"></i>
@@ -10,7 +10,15 @@
         <div class='download-dialog'>
             <!-- <img src='@planspc/images/home/download-code.png' /> -->
             <div ref='qrCode' class='qrcode'></div>
-            <p>{{ $t('header.downloadTip') }}</p>
+            <p class='tip'>
+                {{ $t('header.downloadTip') }}
+            </p>
+            <p class='line'></p>
+            <div class='handle'>
+                <button class='btn'>
+                    更多下载选择
+                </button>
+            </div>
         </div>
     </el-popover>
 </template>
@@ -29,8 +37,8 @@ const creatQrCode = () => {
         qrCode.value.innerHTML = ''
         new QRCode(qrCode.value, {
             text: 'https://play.google.com/store/apps/details?id=uni.UNI8B7D0E0',
-            width: 88,
-            height: 88,
+            width: 120,
+            height: 120,
             colorDark: localGet('invertColor') === 'light' ? '#000000' : '#ffffff',
             colorLight: localGet('invertColor') === 'light' ? '#ffffff' : '#000000',
             correctLevel: QRCode.CorrectLevel.H
@@ -47,7 +55,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .icon {
-    font-size: 20px;
+    font-size: 16px;
     color: #D6DAE1;
     cursor: pointer;
 }
@@ -55,20 +63,43 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 120px;
+    padding: 5px 0;
+    margin: 0 auto;
     img, .qrcode {
-        width: 88px;
-        height: 88px;
-        margin-top: 5px;
+        display: block;
+        width: 120px;
+        height: 120px;
     }
-    p {
-        width: 92px;
+    .tip {
         text-align: center;
-        line-height: 20px;
+        line-height: 14px;
         margin-top: 10px;
-        font-size: 14px;
+        font-size: 12px;
         color: var(--color);
         word-break: break-word;
         overflow-wrap: break-word;
+    }
+    .line {
+        width: 100%;
+        height: 1px;
+        margin-top: 5px;
+        margin-bottom: 10px;
+        background: var(--lineColor);
+        transform: scaleY(.5);
+    }
+    .handle {
+        width: 100%;
+        .btn {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 6px 0;
+            font-size: 12px;
+            color: #fff;
+            background: var(--primary);
+        }
     }
 }
 </style>

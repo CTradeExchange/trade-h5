@@ -170,7 +170,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         // 在线客服地址
-        const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
 
         onBeforeMount(() => {
 
@@ -360,7 +360,7 @@ export default {
                 }
                 .icon {
                     color: #D6DAE1;
-                    font-size: 20px;
+                    font-size: 16px;
                     cursor: pointer;
                 }
             }
@@ -382,7 +382,7 @@ export default {
                 }
                 .icon {
                     color: #D6DAE1;
-                    font-size: 20px;
+                    font-size: 16px;
                     cursor: pointer;
                 }
                 &:deep(.icon_yuyan) {

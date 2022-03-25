@@ -212,13 +212,14 @@ export default {
             }
             .title {
                 margin-bottom: 20px;
-                color: #515366;
-                font-size: 14px;
+                color: #9293A3;
+                font-size: 20px;
+                font-weight: 500;
             }
             .name {
                 margin-top: 10px;
                 a {
-                    color: #9293A3;
+                    color: #515366;
                     font-size: 14px;
                     &:hover {
                         color: var(--primary);
@@ -233,8 +234,9 @@ export default {
         align-items: center;
        .title {
             margin-bottom: 20px;
-            color: #515366;
-            font-size: 14px;
+            color: #9293A3;
+            font-size: 20px;
+            font-weight: 500;
         }
         ul {
             display: flex;
@@ -249,7 +251,7 @@ export default {
                 }
                 .name {
                     margin-top: 10px;
-                    color: #9293A3;
+                    color: #515366;
                     font-size: 14px;
                     &:hover {
                         color: var(--primary);
