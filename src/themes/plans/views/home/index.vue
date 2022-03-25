@@ -110,28 +110,37 @@
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/moneyBox.png' />
                     <p class='descTitle'>
-                        用户安全资产基金(SAFU)
+                        {{ $t('vitaHome.why.title5') }}
                     </p>
                     <p class='descContent'>
-                        我们将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。
+                        {{ $t('vitaHome.why.text5') }}
                     </p>
                 </div>
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/trafficLight.png' />
                     <p class='descTitle'>
-                        个性化访问控制
+                        {{ $t('vitaHome.why.title6') }}
                     </p>
                     <p class='descContent'>
-                        高级访问控制限制访问个人账户的设备和地址，让用户无后顾之忧。
+                        {{ $t('vitaHome.why.text6') }}
                     </p>
                 </div>
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/lock.png' />
                     <p class='descTitle'>
-                        先进数据加密
+                        {{ $t('vitaHome.why.title7') }}
                     </p>
                     <p class='descContent'>
-                        个人交易数据通过端到端加密获得保障，仅限本人访问个人信息。
+                        {{ $t('vitaHome.why.text7') }}
+                    </p>
+                </div>
+                <div class='row'>
+                    <img alt='' class='icon' src='~@plans/images/check.png' />
+                    <p class='descTitle'>
+                        {{ $t('vitaHome.why.title8') }}
+                    </p>
+                    <p class='descContent'>
+                        {{ $t('vitaHome.why.text8') }}
                     </p>
                 </div>
             </div>

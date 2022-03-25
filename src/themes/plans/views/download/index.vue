@@ -30,7 +30,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .page-wrap {
     padding: rem(50px) rem(30px);
     .img-download {
@@ -57,7 +57,7 @@
     }
     .content {
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
         .btn-wrap {
             margin-right: rem(30px);
             .btn {
