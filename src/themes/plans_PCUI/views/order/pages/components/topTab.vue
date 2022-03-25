@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model:active='active' class='tabs' @tab-click='updataActive'>
+    <el-tabs v-model:active='active' class='tabs' :model-value='active' @tab-click='updataActive'>
         <el-tab-pane v-for='(item, index) in list' :key='index' class='tab' :label='item.title' :name='String(index)' />
     </el-tabs>
 </template>

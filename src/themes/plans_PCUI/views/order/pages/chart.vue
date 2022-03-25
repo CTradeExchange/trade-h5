@@ -889,7 +889,7 @@ export default {
             flex-basis: auto !important;
             padding: 0;
             padding-bottom: 5px;
-            font-size: 14px;
+            font-size: 12px;
             white-space: nowrap;
         }
         :deep(.van-tabs__wrap) {
@@ -900,7 +900,7 @@ export default {
             .van-tabs__line {
                 bottom: 0;
                 width: 27px !important;
-                height: 3px !important;
+                height: 2px !important;
             }
         }
     }
@@ -1084,6 +1084,7 @@ export default {
     .main-study,
     .side-study {
         width: 100%;
+        font-size: 12px;
         .content {
             display: flex;
             flex: 1;

@@ -306,14 +306,4 @@ export default {
     }
 }
 
-@media screen and (max-width: 1560px){
-    .page-wrap .content-top{
-        .quote-wrap{
-            width: 320px;
-        }
-        .right-wrap{
-            width: 320px;
-        }
-    }
-}
 </style>

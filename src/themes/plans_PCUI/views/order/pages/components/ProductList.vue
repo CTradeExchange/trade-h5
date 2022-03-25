@@ -180,7 +180,7 @@ const addOptional = ({ symbolId, tradeType }) => {
         .li {
             height: 45px;
             padding: 0 8px;
-            font-size: 14px;
+            font-size: 12px;
             cursor: pointer;
             .name{
                 font-weight: 400;
@@ -206,11 +206,4 @@ const addOptional = ({ symbolId, tradeType }) => {
     }
 }
 
-@media screen and (max-width: 1560px){
-    .listWrap .items{
-        .li {
-            font-size: 12px;
-        }
-    }
-}
 </style>
