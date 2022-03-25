@@ -759,6 +759,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 }
 .serviceIcon {
     position: fixed;
+    z-index: 109;
     right: 24px;
     bottom: 16px;
     display: flex;

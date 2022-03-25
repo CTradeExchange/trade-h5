@@ -31,7 +31,7 @@
             <ul class='product-list'>
                 <li v-for='item in productList' :key='item.symbolKey'>
                     <div class='row'>
-                        <currency-icon class='currency-icon' :currency='item.baseCurrency' :size='36' />
+                        <currency-icon class='currency-icon' :currency='item.baseCurrency' :size='32' />
                         <div class='name'>
                             <span>{{ item.symbolName }}</span>
                             <etf-icon v-if='item.etf' />
@@ -225,7 +225,7 @@ export default {
                 min-width: 300px;
             }
             span {
-                font-size: 20px;
+                font-size: 16px;
             }
             &:first-of-type {
                 span {
@@ -238,6 +238,7 @@ export default {
             align-items: center;
             .currency-icon {
                 margin-left: 10px;
+
             }
             .name {
                 display: inline-flex;
@@ -257,7 +258,7 @@ export default {
                 width: 80px;
                 height: 32px;
                 margin-right: 16px;
-                font-size: 16px;
+                font-size: 14px;
                 color: #fff;
                 border-radius: 4px;
                 cursor: pointer;
