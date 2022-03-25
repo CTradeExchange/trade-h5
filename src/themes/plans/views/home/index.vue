@@ -70,7 +70,7 @@
             </div>
             <ul class='pro-list'>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/user.svg' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img2.png' srcset='' />
                     <p class='t3'>
                         {{ $t('vitaHome.startThreeStep.step1_title') }}
                     </p>
@@ -79,7 +79,7 @@
                     </p>
                 </li>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/kyc.svg' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
                     <p class='t3'>
                         {{ $t('vitaHome.startThreeStep.step2_title') }}
                     </p>
@@ -88,7 +88,7 @@
                     </p>
                 </li>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/spot.svg' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img4.png' srcset='' />
                     <p class='t3'>
                         {{ $t('vitaHome.startThreeStep.step3_title') }}
                     </p>
@@ -102,14 +102,14 @@
             </router-link>
         </div>
 
-        <!-- 信息流 -->
-        <div class='news-wrap'>
+        <!-- 信息流 屏蔽-->
+        <!-- <div class='news-wrap'>
             <News :data='newsData' />
-        </div>
+        </div> -->
 
         <!-- why模块 -->
         <div class='why-wrap'>
-            <h2>{{ $t('vitaHome.why.title') }}</h2>
+            <!-- <h2>{{ $t('vitaHome.why.title') }}</h2>
             <h4>{{ $t('vitaHome.why.describe') }}</h4>
             <ul class='reason-list'>
                 <li class='reason-item'>
@@ -149,7 +149,7 @@
                         {{ $t('vitaHome.why.text4') }}
                     </p>
                 </li>
-            </ul>
+            </ul> -->
 
             <div class='descBarTitle'>
                 安全始终是我们的优先考虑
@@ -469,7 +469,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 <style lang="scss">
 .descBarTitle{
     box-sizing: border-box;
-    margin-top: 80px;
+    // margin-top: 80px;
     padding-bottom: 10px;
     text-align: center;
     min-width: 0;
@@ -581,7 +581,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             margin-bottom: 40px;
             text-align: center;
             .pro-img {
-                width: 190px;
+                width: 220px;
             }
         }
         .pro-list {

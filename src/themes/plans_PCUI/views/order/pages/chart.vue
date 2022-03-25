@@ -869,6 +869,7 @@ export default {
             }
             &.ohlc {
                 color: var(--normalColor);
+                white-space: nowrap;
             }
             &.collect {
                 flex: 1;
