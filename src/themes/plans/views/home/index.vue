@@ -60,11 +60,11 @@
 
         <div class='portfolio'>
             <p class='t1'>
-                Build your crypto portfolio
+                {{ $t('vitaHome.startThreeStep.title') }}
             </p>
-            <p class='t2'>
+            <!-- <p class='t2'>
                 Start your first trade with these easy steps.
-            </p>
+            </p> -->
             <div class='img-wrap'>
                 <img alt='' class='pro-img' src='/images/portfolio-section.png' srcset='' />
             </div>
@@ -72,33 +72,33 @@
                 <li class='pro-item'>
                     <img alt='' class='icon-img' src='/images/user.svg' srcset='' />
                     <p class='t3'>
-                        Fund your account
+                        {{ $t('vitaHome.startThreeStep.step1_title') }}
                     </p>
                     <p class='t4'>
-                        Add funds to your crypto account to start trading crypto. You can add funds with a variety of payment methods.
+                        {{ $t('vitaHome.startThreeStep.step1_desc') }}
                     </p>
                 </li>
                 <li class='pro-item'>
                     <img alt='' class='icon-img' src='/images/kyc.svg' srcset='' />
                     <p class='t3'>
-                        Verify your identity
+                        {{ $t('vitaHome.startThreeStep.step2_title') }}
                     </p>
                     <p class='t4'>
-                        Complete the identity verification process to secure your account and transactions.
+                        {{ $t('vitaHome.startThreeStep.step2_desc') }}
                     </p>
                 </li>
                 <li class='pro-item'>
                     <img alt='' class='icon-img' src='/images/spot.svg' srcset='' />
                     <p class='t3'>
-                        Start trading
+                        {{ $t('vitaHome.startThreeStep.step3_title') }}
                     </p>
                     <p class='t4'>
-                        You're good to go! Buy/sell crypto, set up recurring buys for your investments, and discover what Binance has to offer.
+                        {{ $t('vitaHome.startThreeStep.step3_desc') }}
                     </p>
                 </li>
             </ul>
             <router-link class='start-btn' to='/registe'>
-                Get Started
+                {{ $t('vitaHome.start') }}
             </router-link>
         </div>
 

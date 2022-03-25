@@ -123,7 +123,7 @@ export default {
         margin-right: 40px;
         &::after{
             content: "";
-            height: 80%;
+            height: 100%;
             width: 1px;
             background: var(--placeholdColor);
             position: absolute;
