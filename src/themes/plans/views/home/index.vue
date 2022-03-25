@@ -15,6 +15,7 @@
 
         <div class='product-wrap'>
             <h1>{{ $t('vitaHome.trend') }}</h1>
+
             <div class='list'>
                 <div class='header'>
                     <span>{{ $t('trade.symbol') }}</span>
@@ -54,6 +55,50 @@
             <router-link class='view-more' to='/quote'>
                 {{ $t('common.viewMore') }}
                 <van-icon name='arrow' />
+            </router-link>
+        </div>
+
+        <div class='portfolio'>
+            <p class='t1'>
+                Build your crypto portfolio
+            </p>
+            <p class='t2'>
+                Start your first trade with these easy steps.
+            </p>
+            <div class='img-wrap'>
+                <img alt='' class='pro-img' src='/images/portfolio-section.png' srcset='' />
+            </div>
+            <ul class='pro-list'>
+                <li class='pro-item'>
+                    <img alt='' class='icon-img' src='/images/user.svg' srcset='' />
+                    <p class='t3'>
+                        Fund your account
+                    </p>
+                    <p class='t4'>
+                        Add funds to your crypto account to start trading crypto. You can add funds with a variety of payment methods.
+                    </p>
+                </li>
+                <li class='pro-item'>
+                    <img alt='' class='icon-img' src='/images/kyc.svg' srcset='' />
+                    <p class='t3'>
+                        Verify your identity
+                    </p>
+                    <p class='t4'>
+                        Complete the identity verification process to secure your account and transactions.
+                    </p>
+                </li>
+                <li class='pro-item'>
+                    <img alt='' class='icon-img' src='/images/spot.svg' srcset='' />
+                    <p class='t3'>
+                        Start trading
+                    </p>
+                    <p class='t4'>
+                        You're good to go! Buy/sell crypto, set up recurring buys for your investments, and discover what Binance has to offer.
+                    </p>
+                </li>
+            </ul>
+            <router-link class='start-btn' to='/registe'>
+                Get Started
             </router-link>
         </div>
 
@@ -496,6 +541,66 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             border-radius: rem(10px);
         }
     }
+    .portfolio {
+        //margin-top: rem(30px);
+        margin-bottom: rem(30px);
+        padding: rem(60px) rem(30px);
+        background: var(--contentColor);
+        .t1 {
+            color: #1E2329;
+            font-weight: 600;
+            font-size: 24px;
+            line-height: 32px;
+        }
+        .t2 {
+            margin-top: 8px;
+            color: #474D57;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+        }
+        .img-wrap {
+            margin-top: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            .pro-img {
+                width: 190px;
+            }
+        }
+        .pro-list {
+            .pro-item {
+                margin-bottom: 40px;
+                .icon-img {
+                    width: rem(96px);
+                    margin-bottom: 16px;
+                }
+                .t3 {
+                    margin-bottom: 8px;
+                    color: #1E2329;
+                    font-weight: 500;
+                    font-size: 20px;
+                    line-height: 28px;
+                }
+                .t4 {
+                    color: #474D57;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 20px;
+                }
+            }
+        }
+        .start-btn {
+            display: inline-block;
+            width: 100%;
+            color: #181A20;
+            font-weight: bold;
+            line-height: 40px;
+            text-align: center;
+            background-color: #FCD535;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    }
     .product-wrap {
         margin-top: rem(50px);
         padding: rem(60px) rem(30px);
@@ -741,7 +846,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         .close-btn {
             display: inline-block;
             width: fit-content;
-            margin-left: rem(20px);
+            margin-left: rem(80px);
             padding: 0 24px;
             color: rgb(255, 255, 255);
             font-size: 14px;
@@ -759,9 +864,9 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 }
 .serviceIcon {
     position: fixed;
-    z-index: 109;
     right: 24px;
     bottom: 16px;
+    z-index: 109;
     display: flex;
     align-items: center;
     justify-content: center;
