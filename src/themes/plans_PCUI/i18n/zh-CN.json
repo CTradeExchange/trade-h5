@@ -658,6 +658,10 @@
         "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
         "saveSetting": "保存设置",
 		"offer": "报价",
+		"etfTip": "ETF是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖ETF基金份额；同时，投资者也可向基金管理公司申购或赎回ETF份额",
+		"purchaseOrRedemptionTip": "申购/赎回：指投资者可向基金管理公司申购或者赎回基金份额代币，点击前往",
+		"purchaseOrRedemption": "申购/赎回",
+		"noFeature": "暂不支持该功能",
 		"material": "资料"
 	},
 	"contract": {
@@ -956,6 +960,9 @@
 		"redeem_tip3": "赎回流程结束，那你所赎回的基金代币将以选择的接收资产汇入您的现货钱包",
 		"assetIndexQquestionTip":"图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
 		"assetQquestionTip":"图表为基金投资组合所含资产在近24小时内的市场表现(报价单位:USDT)",
-        "fundTrade": "申购/赎回"
+        "fundTrade": "申购/赎回",
+		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击前往",
+		"fundTokenTrade": "现货交易",
+		"noTradeMarket": "暂无交易市场"
 	}
 }

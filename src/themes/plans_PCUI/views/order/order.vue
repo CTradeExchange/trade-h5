@@ -102,6 +102,7 @@ export default {
         store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
         const customerInfo = computed(() => store.state._user.customerInfo)
         const product = computed(() => store.getters.productActived)
+        const originTitle = document.title
         const state = reactive({
             // 当前选中选项卡 offer:报价 material:资料
             activeName: 'offer',
@@ -149,6 +150,17 @@ export default {
             { immediate: true }
         )
 
+        // 价格跳动修改页面title
+        const unWatchPrice = watch(
+            () => product.value?.cur_price,
+            (newval, oldval) => {
+                if (newval) {
+                    document.title = `${newval} | ${product.value.symbolCode} | ${originTitle}`
+                }
+            },
+            { immediate: true }
+        )
+
         // 监听产品symbolId
         watch(() => product.value?.symbolId, () => {
             // 设置默认选项卡
@@ -158,6 +170,8 @@ export default {
         })
 
         onBeforeUnmount(() => {
+            unWatchPrice()
+            document.title = originTitle
             // 取消订阅
             QuoteSocket.cancel_subscribe()
             MsgSocket.cancelSubscribeAsset()
@@ -215,7 +229,7 @@ export default {
             }
             .trade-content {
                 position: relative;
-                padding: 5px 16px 20px;
+                padding: 5px 16px 15px 16px;
             }
         }
         .right-wrap {
@@ -288,6 +302,17 @@ export default {
         :deep(.van-sticky--fixed) {
             background-color: var(--bgColor);
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+        }
+    }
+}
+
+@media screen and (max-width: 1560px){
+    .page-wrap .content-top{
+        .quote-wrap{
+            width: 320px;
+        }
+        .right-wrap{
+            width: 320px;
         }
     }
 }

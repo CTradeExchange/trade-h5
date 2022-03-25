@@ -654,7 +654,11 @@
         "multilpSetting": "Leverage ratio setting",
         "multilpRange": "Leverage ratio range：",
         "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
-        "saveSetting": "Save"
+        "saveSetting": "Save",
+        "etfTip": "ETF is a special open-end fund. Investors can buy and sell ETF shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem ETF shares from fund management companies.",
+		"purchaseOrRedemptionTip": "Purchase / Redemption: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to",
+		"purchaseOrRedemption": "Purchase / Redemption",
+		"noFeature": "This feature is not currently supported"
     },
     "contract": {
         "advance": "Prepay",
@@ -952,7 +956,10 @@
 		"redeem_tip3": "After the redemption process finished, the fund tokens you redeemed will be deposited to your Spot wallet with the selected receiving assets",
 		"assetIndexQquestionTip": "The picture shows the market performance of the assets contained in the index constituent stocks in the recent 24 hours(Quotation unit:USDT)",
 		"assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)",
-        "fundTrade": "Purchase/Redemption"
+        "fundTrade": "Purchase/Redemption",
+		"fundTokenTradeTip": "When the fund token is listed, investors can buy and sell fund shares in the open spot market just like buying and selling cryptocurrencies. Click to go to",
+		"fundTokenTrade": "Spot trade",
+		"noTradeMarket": "No trading market"
 	}
     
 }

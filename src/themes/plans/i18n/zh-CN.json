@@ -485,6 +485,9 @@
     "multilpRange": "杠杆范围：",
     "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
     "saveSetting": "保存设置",
+    "noFeature": "暂不支持该功能",
+    "purchaseRedeemBtn": "申/赎",
+    "productEtfTip": "ETF是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖ETF基金份额；同时，投资者也可向基金管理公司申购或赎回ETF份额",
     "quantity": "数量(手)"
   },
   "bizType": {
@@ -739,7 +742,8 @@
     "redeemCost": "赎回费",
     "redeemTipRemark": "赎回费指赎回基金的时候产生的手续费，一次性收取。",
     "applyRule_tipRemark1": "基金管理费指基金管理人管理基金资产所收取的报酬。",
-    "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。"
+    "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
+    "noTradeMarket": "暂无交易市场"
   },
   "vitaHome": {
     "trend": "市场趋势",
