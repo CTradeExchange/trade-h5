@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div v-if='product.etf' class='ft'>
-                    <ETF />
+                    <ETF @click='etfTip' />
                 </div>
             </div>
             <div v-if='product' class='bd'>
@@ -291,6 +291,11 @@
                         {{ product.sell_price }}
                     </p> -->
                 </div>
+                <div v-if='product.etf' class='fundTradeBtn' :class='[lang]' @click='fundtokenLink'>
+                    <span class='text'>
+                        {{ $t('trade.purchaseRedeemBtn') }}
+                    </span>
+                </div>
 
                 <!-- <span class='spread_text'>
                     {{ product.spread_text }}
@@ -315,7 +320,7 @@
 import { useRouter, useRoute } from 'vue-router'
 import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
-import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick } from 'vue'
+import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick, onBeforeUnmount } from 'vue'
 import KIcon from './icons/kIcon.vue'
 import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
@@ -333,6 +338,7 @@ import realtimeInvestCompose from '@plans/modules/fundInformation/realtimeInvest
 import { toolHooks } from '@plans/hooks/handicap'
 import i18n, { loadLocaleMessages } from '@plans/i18n/i18n.js'
 import Colors, { setRootVariable } from '@plans/colorVariables'
+import { findFundPage } from '@/api/fund'
 
 export default {
     components: { KIcon, StudyList, tv, StallsAndDeal, Loading, sidebarProduct, ETF, realtimeInvestCompose },
@@ -344,6 +350,7 @@ export default {
         const getSymbolId = () => unref(symbolId)
         const getTradeType = () => unref(tradeType)
         const { dealModeShowMap } = toolHooks()
+        const originTitle = document.title
 
         // uniapp传参
         const { lang, customerGroupId, theme, isUniapp } = route.query
@@ -504,7 +511,9 @@ export default {
             symbolId: getSymbolId(),
             tradeType: getTradeType(),
             onChartReadyFlag: false,
-            loading: false
+            loading: false,
+            findFundPageList: [], // 基金产品列表
+            lang: getCookie('lang')
         })
 
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId.value}_${tradeType.value}`)
@@ -545,6 +554,20 @@ export default {
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
+
+        // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
+        const fundtoken = computed(() => {
+            return state.findFundPageList.find(el => el.shareTokenCode === product.value?.baseCurrency)
+        })
+
+        // 获取基金产品列表，
+        const getFundPage = () => {
+            findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
+                if (res.check()) {
+                    state.findFundPageList = res.data.records
+                }
+            })
+        }
 
         // 选择指标
         const onClickStudy = (type, name) => {
@@ -1030,11 +1053,22 @@ export default {
             if (val) { return window.dayjs(Number(val)).format('HH:mm:ss') }
         }
 
+        // 跳转到基金的产品详情
+        const fundtokenLink = () => {
+            if (!unref(fundtoken)) {
+                return Toast(t('trade.noFeature'))
+            }
+            router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
+        }
+
         // 初始化图表配置
         initChartData()
 
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() })
+
+        // 获取基金列表
+        getFundPage()
 
         const showSidebar = ref(false)
 
@@ -1053,6 +1087,13 @@ export default {
                 }
             }).then(() => {
                 close()
+            })
+        }
+
+        // 点击etf图标的提示
+        const etfTip = () => {
+            Dialog.alert({
+                message: t('trade.productEtfTip'),
             })
         }
 
@@ -1077,8 +1118,24 @@ export default {
             }
         )
 
+        // 价格跳动修改页面title
+        const unWatchPrice = watch(
+            () => product.value?.cur_price,
+            (newval, oldval) => {
+                if (newval) {
+                    document.title = `${newval} | ${product.value.symbolCode} | ${originTitle}`
+                }
+            },
+            { immediate: true }
+        )
+
         onMounted(() => {
             subscribeToProduct()
+        })
+
+        onBeforeUnmount(() => {
+            unWatchPrice()
+            document.title = originTitle
         })
 
         return {
@@ -1114,6 +1171,9 @@ export default {
             primaryColor,
             dealModeShowMap,
             updateStudy,
+            etfTip,
+            fundtoken,
+            fundtokenLink,
             plansLen
         }
     }
@@ -1676,8 +1736,24 @@ export default {
             .buy {
                 margin-right: rem(20px);
             }
+            .fundTradeBtn {
+                width: rem(140px);
+                flex: none;
+                margin-left: rem(20px);
+                white-space: normal;
+                word-break: break-word;
+                text-align: center;
+                &.en-US{
+                    padding-top: rem(18px);
+                    line-height: 1.2;
+                     .text{
+                        font-size: rem(26px);
+                    }
+                }
+            }
         }
         .sell,
+        .fundTradeBtn,
         .buy {
             @include active();
             position: relative;

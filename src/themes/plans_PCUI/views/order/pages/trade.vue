@@ -30,6 +30,23 @@
                     size='20'
                 />
             </div>
+            <!-- 基金代币产品 -->
+            <van-popover v-model:show='showFundPopover' placement='left' theme='dark'>
+                <p style='padding:10px; width:300px;'>
+                    {{ $t('trade.purchaseOrRedemptionTip') }}
+                </p>
+                <template #reference>
+                    <a
+                        v-if='product.etf'
+                        class='fundtokenLink'
+                        @click='fundtokenLink'
+                        @mouseenter='showFundPopover=true'
+                        @mouseleave='showFundPopover=false'
+                    >
+                        {{ $t('trade.purchaseOrRedemption') }}
+                    </a>
+                </template>
+            </van-popover>
         </div>
     </div>
     <!-- 杠杆设置 -->
@@ -112,19 +129,20 @@
                 :product='product'
                 :volume='buy.volume'
             />
-            <div v-if='customerInfo && product.tradeEnable === 1' class='footerBtn buy'>
-                <van-button block :disabled='buy.loading' :loading='buy.loading' size='normal' @click='submitHandler("buy")'>
+            <div class='footerBtn buy'>
+                <van-button block :disabled='buy.loading || product.tradeEnable === 2' :loading='buy.loading' size='normal' @click='submitHandler("buy")'>
                     {{ $t('trade.buyText') }}
                 </van-button>
             </div>
-            <div v-if='!customerInfo' class='login-bar'>
+            <LoginMask class='loginMaskPop' />
+            <!-- <div v-if='!customerInfo' class='login-bar'>
                 <router-link to='login'>
                     {{ $t('c.login') }}
                 </router-link> {{ $t('c.or') }}
                 <router-link to='register'>
                     {{ $t('c.register') }}
                 </router-link>
-            </div>
+            </div> -->
         </div>
         <div class='sell-wrap'>
             <!-- 挂单设置 -->
@@ -196,19 +214,12 @@
                 :volume='sell.volume'
             />
 
-            <div v-if='customerInfo && product.tradeEnable === 1' class='footerBtn sell'>
-                <van-button block :disabled='sell.loading' :loading='sell.loading' size='normal' @click='submitHandler("sell")'>
+            <div class='footerBtn sell'>
+                <van-button block :disabled='sell.loading || product.tradeEnable === 2' :loading='sell.loading' size='normal' @click='submitHandler("sell")'>
                     {{ $t('trade.sellText') }}
                 </van-button>
             </div>
-            <div v-if='!customerInfo' class='login-bar'>
-                <router-link to='login'>
-                    {{ $t('c.login') }}
-                </router-link> {{ $t('c.or') }}
-                <router-link to='register'>
-                    {{ $t('c.register') }}
-                </router-link>
-            </div>
+            <LoginMask class='loginMaskPop' />
         </div>
     </div>
 </template>
@@ -232,6 +243,8 @@ import PendingBarCFD from './components/pendingBar_CFD'
 import LoanBar from './components/loanBar'
 import Assets from './components/assets.vue'
 import MultipleSet from '@planspc/components/multipleSet.vue'
+import LoginMask from '@planspc/components/loginMask.vue'
+import { findFundPage } from '@/api/fund'
 
 export default {
     components: {
@@ -243,6 +256,7 @@ export default {
         PendingBarCFD,
         LoanBar,
         Assets,
+        LoginMask,
         MultipleSet
     },
     emits: ['update:modelValue', 'selected', 'update:multipleVal'],
@@ -286,7 +300,9 @@ export default {
             }],
             submitType: '',
             multipleVal: '', // 杠杆倍数初始值
-            multipleSetVisible: false
+            multipleSetVisible: false,
+            showFundPopover: false, // 基金代币切换按钮popover提示
+            findFundPageList: [], // 基金产品列表
         })
 
         const { bizType, account, findProductInCategory, switchProduct } = hooks(state)
@@ -308,6 +324,20 @@ export default {
         })
 
         const showLeverage = computed(() => Number(product.value.tradeType) === 2 && product.value.marginInfo?.type !== '1')
+
+        // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
+        const fundtoken = computed(() => {
+            return state.findFundPageList.find(el => el.shareTokenCode === product.value?.baseCurrency)
+        })
+
+        // 获取基金产品列表，
+        const getFundPage = () => {
+            findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
+                if (res.check()) {
+                    state.findFundPageList = res.data.records
+                }
+            })
+        }
 
         // 点击提交按钮
         const submitHandler = (type) => {
@@ -452,6 +482,14 @@ export default {
             state.sell.pendingPrice = ''
         }
 
+        // 跳转到基金的产品详情
+        const fundtokenLink = () => {
+            if (!unref(fundtoken)) {
+                return Toast(t('trade.noFeature'))
+            }
+            router.push('/fund?fundId=' + fundtoken.value.fundId)
+        }
+
         // 初始化设置
         const init = () => {
             resetForm()
@@ -484,6 +522,7 @@ export default {
         )
 
         init()
+        getFundPage()
 
         return {
             orderType: 1, // 订单类型
@@ -495,7 +534,9 @@ export default {
             profitLossRef,
             changeOrderType,
             customerInfo,
+            fundtoken,
             mVal,
+            fundtokenLink,
             showLeverage,
             ...toRefs(state),
         }
@@ -543,7 +584,7 @@ export default {
         }
     }
     .right-wrap{
-        .multipleBtn{
+        .multipleBtn,.fundtokenLink{
             vertical-align: middle;
             display: inline-block;
             height: 24px;
@@ -564,6 +605,9 @@ export default {
                 font-size: 12px;
             }
         }
+        .fundtokenLink{
+            cursor: pointer;
+        }
     }
 }
 
@@ -571,13 +615,24 @@ export default {
     display: flex;
     width: 100%;
     .buy-wrap{
+        position: relative;
         flex: 1;
         padding-right: 15px;
         margin-right: 15px;
         border-right: dashed 1px var(--placeholdColor);
+        &:hover .loginMaskPop{
+            display: flex;
+        }
     }
     .sell-wrap{
+        position: relative;
         flex: 1;
+        &:hover .loginMaskPop{
+            display: flex;
+        }
+    }
+    .loginMaskPop{
+        display: none;
     }
     .form-item{
         color: var(--minorColor);
@@ -606,6 +661,7 @@ export default {
         height: 40px;
         border-radius: 4px;
         font-weight: bold;
+        margin-bottom: 5px;
         &:hover{
             opacity: 0.7;
         }
@@ -624,18 +680,6 @@ export default {
                 border-color: var(--fallColor);
                 border-radius: 4px;
             }
-        }
-    }
-    .login-bar{
-        margin-top: 16px;
-        height: 40px;
-        line-height: 40px;
-        text-align: center;
-        border-radius: 4px;
-        color: var(--normalColor);
-        background: var(--lineColor);
-        >a{
-            color: var(--primary);
         }
     }
 }

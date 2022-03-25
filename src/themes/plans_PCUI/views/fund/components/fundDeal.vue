@@ -9,6 +9,7 @@
                 <fundRedeem :fund='fund' />
             </el-tab-pane>
         </el-tabs>
+        <!-- <LoginMask /> -->
     </div>
 </template>
 
@@ -16,6 +17,7 @@
 import { ref, defineProps } from 'vue'
 import fundApply from './fundApply.vue'
 import fundRedeem from './fundRedeem.vue'
+// import LoginMask from '@planspc/components/loginMask.vue'
 
 defineProps({
     fund: {
@@ -30,10 +32,11 @@ const activeName = ref('apply')
 
 <style lang="scss" scoped>
 .fund-deal {
+    position: relative;
+    padding-bottom: 20px;
     &:deep {
         .el-tabs {
             padding: 0 20px;
-            height: 40px;
         }
         .el-tabs__header {
             margin: 0;

@@ -140,6 +140,7 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const originTitle = document.title
         const { t } = useI18n({ useScope: 'global' })
         const { symbolId, direction, tradeType } = route.query
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
@@ -393,9 +394,23 @@ export default {
                 })
         }
 
+        // 价格跳动修改页面title
+        const unWatchPrice = watch(
+            () => product.value?.cur_price,
+            (newval, oldval) => {
+                if (newval) {
+                    document.title = `${newval} | ${product.value.symbolCode} | ${originTitle}`
+                }
+            },
+            { immediate: true }
+        )
+
         init()
 
         onBeforeUnmount(() => {
+            unWatchPrice()
+            document.title = originTitle
+
             QuoteSocket.cancel_subscribe(1)
             store.commit('_quote/Delete_dealList')
         })

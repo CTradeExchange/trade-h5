@@ -109,6 +109,7 @@ export function genBaseConfig () {
             'dont_show_boolean_study_arguments',
             // 阻止滚动到第一个历史 K 线的左侧
             'fix_left_edge',
+            'hide_left_toolbar_by_default',
             'chart_zoom'
         ],
 
