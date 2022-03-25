@@ -4,48 +4,43 @@
             <img alt='' class='logo' src='/images/vitamin_logo.png' srcset='' />
             <div class='text'>
                 <p>Vitatoken APP</p>
-                <p>Secure, fast and elegant.</p>
+                <p>{{ $t('vitaHome.app') }}</p>
             </div>
         </div>
 
         <div class='icons'>
             <div class='dowonload' @click='download'>
-                <img alt='' src='/images/download.png' srcset='' />
+                <svg class='dowonload-img' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+                    <path d='M19 20H5v2h14v-2zM13 14.5l4.6-4.7 1.5 1.4-7.1 7.1-7.1-7.1 1.4-1.4 4.7 4.7V2h2v12.5z' fill='currentColor' />
+                </svg>
             </div>
             <van-icon class='close' color='#fff' name='cross' size='18' @click='downloadVis=false' />
         </div>
     </div>
     <div class='nav-wrap'>
         <div class='logo' @click="$router.push('/')">
-            <img alt='' src='/images/logo_top.png' srcset='' />
+            <img alt='' src='/images/logo_vitamin.png' srcset='' />
         </div>
         <div class='right'>
-            <div class='user' @click='userVis = true'>
-                <van-icon name='manager' size='20' />
-            </div>
             <div class='menu' @click='menuVis=true'>
-                <van-icon name='wap-nav' size='20' />
+                <svg class='icon-svg' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                    <use xlink:href='#menu-hamburger-f' />
+                    <symbol id='menu-hamburger-f' viewBox='0 0 24 24'>
+                        <path clip-rule='evenodd' d='M4 4H20V7H4V4ZM4 10.5H20V13.5H4V10.5ZM20 17H4V20H20V17Z' fill='currentColor' fill-rule='evenodd' />
+                    </symbol>
+                </svg>
             </div>
         </div>
     </div>
 
     <van-popup
-        v-model:show='userVis'
-        class='menu-wrap'
-        closeable
-        position='right'
-        :style="{ height: '100%',width: '100%',paddingTop: '60px' }"
-    >
-        <minePerson :data='minePersonData' />
-        <menuList :data='menuListData' />
-    </van-popup>
-
-    <van-popup
         v-model:show='menuVis'
         class='menu-wrap'
+        close-on-popstate
         closeable
         position='right'
-        :style="{ height: '100%',width: '100%',paddingTop: '60px' }"
+        :style="{ height: '100%',width: '100%',paddingTop: '50px' }"
+        teleport='body'
     >
         <div v-if='!customerInfo' class='menu-list'>
             <router-link class='btn' to='/login'>
@@ -55,7 +50,58 @@
                 {{ $t('register.registerBtn') }}
             </router-link>
         </div>
+        <div v-else>
+            <minePerson :data='minePersonData' />
+        </div>
         <van-cell-group class='cellGroup'>
+            <van-cell class='cellItem' is-link :title='$t("cRoute.msg")' @click="routerTo('msg')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#notification-f' />
+                            <symbol id='notification-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M12 3C8.13401 3 5 6.13401 5 10L5 13L4 14V16H5L19 16H20L20 14L19 13V10C19 6.13401 15.866 3 12 3ZM12 21C9.94965 21 8.18757 19.7659 7.41602 18H16.5839C15.8124 19.7659 14.0503 21 12 21Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
+            <van-cell class='cellItem' is-link :title='$t("cRoute.regKyc")' @click="routerTo('authentication')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#id-f' />
+                            <symbol id='id-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M3 5H21V19H3V5ZM10 10.0003C10 11.1048 9.10457 12.0003 8 12.0003C6.89543 12.0003 6 11.1048 6 10.0003C6 8.8957 6.89543 8.00027 8 8.00027C9.10457 8.00027 10 8.8957 10 10.0003ZM13 9.00027H19V11.5003H13V9.00027ZM19 13.4997H13V15.9997H19V13.4997ZM11 13.4997V15.9997H5V13.4997H11Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
+            <van-cell class='cellItem' is-link :title='$t("cRoute.securitySetting")' @click="routerTo('securitySetting')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#security-f' />
+                            <symbol id='security-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M4 4V16L12 21L20 16V4H4ZM12 8L8.5 11.5L12 15L15.5 11.5L12 8Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
+            <van-cell class='cellItem' is-link :title='$t("cRoute.commonSetting")' @click="routerTo('commonSetting')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#task-center-f' />
+                            <symbol id='task-center-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M15 2H9V4H5V21H19V4H15V2ZM16 9H8V11.5H16V9ZM16 14.5H8V17H16V14.5Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
             <van-cell class='cellItem' is-link :title='$t("fundInfo.fund")' @click="routerTo('fundProductList')">
                 <template #icon>
                     <div class='icon-wrap'>
@@ -104,7 +150,73 @@
                     </div>
                 </template>
             </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("common.lang")'
+                @click='langShow=true'
+            >
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='css-mykl4n' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#language-f' />
+                            <symbol id='language-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M15.2307 20.4027C18.2316 19.2481 20.4577 16.5321 20.9137 13.25H16.9718C16.8248 16.1102 16.1791 18.638 15.2307 20.4027ZM14.473 13.25C14.2952 17.3518 13.2556 20.5 11.9998 20.5C10.744 20.5 9.70447 17.3518 9.52667 13.25H14.473ZM14.473 10.75H9.52667C9.70447 6.64821 10.744 3.5 11.9998 3.5C13.2556 3.5 14.2952 6.64821 14.473 10.75ZM16.9718 10.75H20.9137C20.4577 7.46786 18.2316 4.75191 15.2307 3.59731C16.1791 5.36198 16.8248 7.88979 16.9718 10.75ZM7.03566 10.75C7.18282 7.88774 7.82928 5.35836 8.77882 3.59353C5.77291 4.74598 3.54249 7.46427 3.08594 10.75H7.03566ZM7.03566 13.25H3.08594C3.54249 16.5357 5.77291 19.254 8.77882 20.4065C7.82928 18.6416 7.18282 16.1123 7.03566 13.25Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+                <template #right-icon>
+                    <img alt='' class='lang-icon' :src="'/images/country_icon/'+ lang + '.png'" />
+                    <van-icon class='right-arrow' name='arrow' />
+                </template>
+            </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("common.dark")'
+            >
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='css-mykl4n' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#language-f' />
+                            <symbol id='language-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M15.2307 20.4027C18.2316 19.2481 20.4577 16.5321 20.9137 13.25H16.9718C16.8248 16.1102 16.1791 18.638 15.2307 20.4027ZM14.473 13.25C14.2952 17.3518 13.2556 20.5 11.9998 20.5C10.744 20.5 9.70447 17.3518 9.52667 13.25H14.473ZM14.473 10.75H9.52667C9.70447 6.64821 10.744 3.5 11.9998 3.5C13.2556 3.5 14.2952 6.64821 14.473 10.75ZM16.9718 10.75H20.9137C20.4577 7.46786 18.2316 4.75191 15.2307 3.59731C16.1791 5.36198 16.8248 7.88979 16.9718 10.75ZM7.03566 10.75C7.18282 7.88774 7.82928 5.35836 8.77882 3.59353C5.77291 4.74598 3.54249 7.46427 3.08594 10.75H7.03566ZM7.03566 13.25H3.08594C3.54249 16.5357 5.77291 19.254 8.77882 20.4065C7.82928 18.6416 7.18282 16.1123 7.03566 13.25Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+                <template #right-icon>
+                    <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
+                </template>
+            </van-cell>
         </van-cell-group>
+    </van-popup>
+
+    <van-popup
+        v-model:show='langShow'
+        class='custom-popup lang-popup'
+        position='bottom'
+        round
+    >
+        <div class='header'>
+            <div class='header-title'>
+                {{ $t('common.lang') }}
+            </div>
+            <i class='icon_guanbi' @click='langShow=false'></i>
+        </div>
+
+        <div class='popup-wrap'>
+            <div
+                v-for='(item, index) in supportLanguages'
+                :key='index'
+                class='lang-item'
+                :class='{ active: lang === item.val }'
+                @click='langSelect(item)'
+            >
+                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png?555'" />
+            </div>
+        </div>
     </van-popup>
 </template>
 
@@ -116,20 +228,25 @@ import { changeLang } from '@/api/base'
 import i18n, { loadLocaleMessages } from '@/themeCommon/i18n/i18n.js'
 import { setCookie, getCookie, isEmpty, localGet, localSet, getDevice } from '@/utils/util'
 import Colors, { setRootVariable } from '@plans/colorVariables'
-import menuList from '@plans/modules/menulist/menulist.vue'
 import minePerson from '@plans/modules/minePerson/minePerson.vue'
+import { isIOS } from 'vant/lib/utils'
+import { useI18n } from 'vue-i18n'
 
 const store = useStore()
 const router = useRouter()
 const route = useRoute()
 
 const downloadVis = ref(true)
+const langShow = ref(false)
 const menuVis = ref(false)
-const userVis = ref(false)
 const menuListData = ref([])
 const minePersonData = ref([])
+const themeVal = ref(localGet('invertColor') === 'night')
+const lang = ref(getCookie('lang') || store.state._base.wpCompanyInfo.language)
+const { t, locale } = useI18n({ useScope: 'global' })
 
 const customerInfo = computed(() => store.state._user.customerInfo)
+const supportLanguages = computed(() => store.state.supportLanguages)
 
 const routerTo = path => {
     router.push(path)
@@ -137,13 +254,9 @@ const routerTo = path => {
 }
 
 const download = () => {
-    const device = getDevice()
-    if (device === 2) {
-        window.open('https://play.google.com/store/apps/details?id=uni.UNI8B7D0E0')
-    } else if (device === 3) {
-        // 苹果端
-        window.open('https://starapp016.com:1888/i7qq.app')
-    }
+    const downloadUrl = isIOS() ? 'https://starapp016.com:1888/i7qq.app' : 'https://play.google.com/store/apps/details?id=uni.UNI8B7D0E0'
+
+    window.open(downloadUrl)
 }
 
 watch(() => route.path, val => {
@@ -154,6 +267,59 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
     menuListData.value = res.find(el => el.tag === 'menulist')?.data
     minePersonData.value = res.find(el => el.tag === 'minePerson')?.data
 })
+
+// 选择语言
+const langSelect = (action) => {
+    new Promise((resolve, reject) => {
+        if (customerInfo.value) {
+            return changeLang(action.val).then(res => {
+                return res.check() ? resolve() : reject()
+            })
+        } else {
+            resolve()
+        }
+    }).then(() => {
+        lang.value = action.val
+
+        // 替换URL
+        const str = location.pathname
+        const firstSlash = str.indexOf('/') + 1
+        const twoSlash = str.indexOf('/', firstSlash) // 第二个斜杠下标
+        const pathTemp = str.substring(twoSlash).substring(1, str.length)
+        location.pathname = action.val + '/' + pathTemp
+
+        loadLocaleMessages(i18n, action.val).then(() => {
+            locale.value = action.val // change!
+            store.commit('del_cacheViews', 'Home')
+            store.commit('del_cacheViews', 'Layout')
+        })
+
+        setCookie('lang', action.val, 'y10')
+    }).catch(err => {})
+}
+
+// 选择颜色
+const colorSelect = (action) => {
+    const themeColor = action ? 'night' : 'light'
+    // 设置全局变量
+    store.commit('Update_invertColor', themeColor)
+    setRootVariable(themeColor)
+
+    let themeColors = sessionStorage.getItem('themeColors')
+    if (!isEmpty(themeColors)) {
+        themeColors = JSON.parse(themeColors)
+
+        document.body.style.setProperty('--color', themeColors[themeColor].color)
+        document.body.style.setProperty('--contentColor', themeColors[themeColor].contentColor)
+        document.body.style.setProperty('--primaryAssistColor', themeColors[themeColor].primaryAssistColor)
+        document.body.style.setProperty('--bgColor', themeColors[themeColor].bgColor)
+        document.body.style.setProperty('--normalColor', themeColors[themeColor].normalColor)
+        document.body.style.setProperty('--minorColor', themeColors[themeColor].minorColor)
+        document.body.style.setProperty('--lineColor', themeColors[themeColor].lineColor)
+        document.body.style.setProperty('--assistColor', themeColors[themeColor].assistColor)
+        document.body.style.setProperty('--placeholdColor', themeColors[themeColor].placeholdColor)
+    }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -161,22 +327,22 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: rem(26px) 0;
     height: 60px;
+    padding: rem(26px) 0;
     background: rgba(18, 22, 28, 0.9);
     .brand {
         .logo {
-            margin-left: 16px;
-            margin-right: 12px;
             display: inline-block;
-            vertical-align: middle;
-            height: 34px;
             width: 34px;
+            height: 34px;
+            margin-right: 12px;
+            margin-left: 16px;
+            vertical-align: middle;
         }
         .text {
-            vertical-align: middle;
             display: inline-block;
             color: #FFF;
+            vertical-align: middle;
         }
     }
     .icons {
@@ -188,12 +354,12 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             margin-right: 12px;
             margin-left: 12px;
             padding: 8px rem(10px);
+            text-align: center;
             background-color: #F0B90B;
             border-radius: 50%;
-            text-align: center;
-            img {
-                width: 16px;
-                height: 18px;
+            .dowonload-img {
+                width: 20px;
+                height: 20px;
             }
         }
         .close {
@@ -209,17 +375,22 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
     background: var(--contentColor);
     .logo {
         display: inline-block;
+        display: flex;
+        align-items: center;
         height: 64px;
         padding-left: rem(30px);
-        line-height: rem(144px);
         img {
-            height: rem(40px);
+            height: rem(48px);
         }
     }
     .right {
         >div {
             display: inline-block;
             margin-right: rem(30px);
+        }
+        .icon-svg {
+            width: rem(40px);
+            height: rem(40px);
         }
     }
 }
@@ -232,6 +403,8 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             width: 100%;
             height: rem(96px);
             margin-left: 0;
+            color: rgb(24, 26, 32);
+            font-size: 16px;
             line-height: rem(96px);
             text-align: center;
             background-color: #FCD535;
@@ -241,7 +414,8 @@ store.dispatch('_base/getPageConfig', 'Mine').then(res => {
             display: inline-block;
             width: 100%;
             margin-bottom: rem(30px);
-            color: var(--pirmary);
+            color: rgb(30, 35, 41);
+            font-size: 14px;
             text-align: center;
         }
     }

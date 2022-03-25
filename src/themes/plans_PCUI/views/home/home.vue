@@ -5,15 +5,19 @@
         <swiper />
         <div class='relativeFloor'>
             <!-- 产品模块 -->
-            <product @update='setProductKeys' />
+            <!-- <product @update='setProductKeys' /> -->
+
             <!-- 公告模块 -->
-            <notice />
+            <!-- <notice /> -->
+
             <!-- 内容模块 -->
             <div class='content-module'>
                 <!-- 快速注册模块 -->
                 <quick />
+                <FundDesc />
+
                 <!-- 指引模块 -->
-                <guide />
+                <!-- <guide /> -->
                 <!-- 交易模块 -->
                 <trade @update='setProductKeys' />
                 <!-- 信息流模块 -->
@@ -33,6 +37,9 @@
                         <seven />
                     </div>
                 </div>
+
+                <portfolio />
+
                 <!-- why模块 -->
                 <why />
             </div>
@@ -52,6 +59,8 @@ import trade from './components/trade.vue'
 import news from './components/news.vue'
 import seven from './components/seven.vue'
 import why from './components/why.vue'
+import portfolio from './components/portfolio.vue'
+import FundDesc from './components/fundDesc.vue'
 
 // 当前页面的产品symbolKey
 const productKeys = ref([])
@@ -77,7 +86,7 @@ onUnmounted(() => {
 @import '@/sass/mixin.scss';
 .homePage {
     position: relative;
-    padding-top: 490px;
+    padding-top: 540px;
     .relativeFloor {
         position: relative;
         z-index: 101;

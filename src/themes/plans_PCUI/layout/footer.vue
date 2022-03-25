@@ -63,7 +63,7 @@
                 </div>
                 <div class='nav-right'>
                     <h4 class='title'>
-                        {{ $t('newHomeFooter.community') }}
+                        关注我们
                     </h4>
                     <ul>
                         <li @click='jumpUrl("fb")'>

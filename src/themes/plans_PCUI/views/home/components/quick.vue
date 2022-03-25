@@ -1,16 +1,21 @@
 <template>
-    <div class='quick-module auto-width'>
-        <h3 class='title'>
-            {{ $t('home.quick.title') }}
-        </h3>
-        <p class='describe'>
-            {{ $t('home.quick.describe') }}
-        </p>
-        <div class='register-box'>
-            <input v-model.trim='registerAccount' :placeholder="$t('home.quick.placeholder')" />
-            <button @click='goRegister'>
-                {{ $t('home.quick.register') }}
-            </button>
+    <div class='full'>
+        <div class='quick-module auto-width'>
+            <!-- <h3 class='title'>
+                {{ $t('home.quick.title') }}
+            </h3>
+            <p class='describe'>
+                {{ $t('home.quick.describe') }}
+            </p> -->
+            <div class='register-box'>
+                <span class='labelText'>
+                    我们在东南亚地区始终保持领先
+                </span>
+                <input v-model.trim='registerAccount' :placeholder="$t('home.quick.placeholder')" />
+                <button @click='goRegister'>
+                    开始使用
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -41,8 +46,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.full{
+    background: #181A20;
+    color: #fff;
+}
 .quick-module {
-    padding-top: 50px;
+    padding: 24px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -60,12 +69,15 @@ export default {
     .register-box {
         display: flex;
         align-items: center;
-        margin-top: 30px;
+        .labelText{
+            margin-right: 30px;
+            font-size: 16px;
+        }
         input {
             width: 400px;
-            height: 48px;
+            height: 40px;
             padding: 0 19px;
-            margin-right: 8px;
+            margin-right: 30px;
             font-size: 16px;
             background: var(--bgColor);
             border-radius: 4px;
@@ -74,9 +86,9 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 104px;
-            height: 48px;
-            font-size: 20px;
+            width: 128px;
+            height: 40px;
+            font-size: 16px;
             color: #fff;
             background: var(--primary);
             border-radius: 4px;

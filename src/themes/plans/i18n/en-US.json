@@ -744,6 +744,7 @@
     "vitaHome": {
         "trend": "Market Trend",
         "trade": "Trade Spot",
+        "app": "Secure, fast and elegant.",
         "why": {
             "title": "Why trade with Us?",
             "describe": "Choose Vitatoken as Your Cryptocurrency Trading Platform",
@@ -755,6 +756,11 @@
             "text3": "Reduce Human Biases in Trading, to Avoid Unintentional Loss",
             "title4": "Blockchain Circulation",
             "text4": "Track Real Time Underlying Asset Price, Examine Trades on Blockchain"
-        }
+        },
+        "getProfit": "Start earning today",
+        "toReg":"Sign Up Now",
+        "start": "Get Started",
+        "upDown": "24h chg%",
+        "follow": "Follow Us"
     }
 }
