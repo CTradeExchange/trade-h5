@@ -11,7 +11,7 @@
                 <span class='labelText'>
                     我们在东南亚地区始终保持领先
                 </span>
-                <input v-model.trim='registerAccount' :placeholder="$t('home.quick.placeholder')" />
+                <input v-model.trim='registerAccount' :placeholder="$t('signIn.mobileEmailPlaceholder')" />
                 <button @click='goRegister'>
                     开始使用
                 </button>

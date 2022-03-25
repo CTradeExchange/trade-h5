@@ -41,7 +41,7 @@ export const getColumns = tradeType => {
     }
     /** 添加自选逻辑 */
 
-    // 切换当前选中产品
+    // 去交易
     const gotoOrder = (event, product) => {
         event.stopPropagation()
         router.push({
@@ -53,13 +53,24 @@ export const getColumns = tradeType => {
         })
     }
 
+    // 去基金
+    const gotoFund = (event, product) => {
+        event.stopPropagation()
+        router.push({
+            name: 'Fund',
+            query: {
+                fundId: product.fundId
+            }
+        })
+    }
+
     const commonBtns = ({ row }) => (
         <>
-            <span class='btn' onclick={(event) => gotoOrder(event, row)}>
-                { t('trade.buy') }
+            <span class='btn active' onclick={(event) => gotoFund(event, row)} v-show={row.etf}>
+                { t('fundInfo.buy') }
             </span>
             <span class='btn' onclick={(event) => gotoOrder(event, row)}>
-                { t('trade.sell') }
+                { t('route.trade') }
             </span>
         </>
     )

@@ -32,7 +32,7 @@
                 </p>
                 <!-- <img alt='' class='jingzhiImg' src='../../../images/home/jingzhi.png' /> -->
                 <div class='btnBox'>
-                    <button class='btn'>
+                    <button class='btn' @click="openPDF('https://www.vitatoken.com/site/V10%20Fund%20Whitepaper.pdf')">
                         阅读V10 ETF基金白皮书（PDF）
                     </button>
                 </div>
@@ -87,8 +87,15 @@ export default {
                 ratio: '1.74%'
             },
         ])
+
+        // 打开pdf
+        const openPDF = url => {
+            window.open(url)
+        }
+
         return {
             fundList,
+            openPDF
         }
     }
 }
@@ -96,7 +103,7 @@ export default {
 
 <style lang="scss" scoped>
 .full{
-    background: #fff;
+    background: var(--contentColor);
 }
 .fundDesc{
     width: 1200px;
@@ -155,6 +162,7 @@ export default {
            color: #181A20;
            background-color: #FCD535;
            border-radius: 4px;
+           cursor: pointer;
         }
     }
 

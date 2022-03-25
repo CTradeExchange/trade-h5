@@ -166,6 +166,7 @@ export default {
                 display: block;
                 width: 200px;
                 height: 120px;
+                object-fit: cover;
             }
         }
     }

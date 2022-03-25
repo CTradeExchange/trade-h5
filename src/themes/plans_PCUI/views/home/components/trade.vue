@@ -29,10 +29,13 @@
                 </li>
             </ul>
             <ul class='product-list'>
-                <li v-for='item in productList' :key='item.symbolKey' @click='toOrder(item)'>
-                    <div class='name'>
+                <li v-for='item in productList' :key='item.symbolKey'>
+                    <div class='row'>
                         <currency-icon class='currency-icon' :currency='item.baseCurrency' :size='36' />
-                        <span>{{ item.symbolName }}</span>
+                        <div class='name'>
+                            <span>{{ item.symbolName }}</span>
+                            <etf-icon v-if='item.etf' />
+                        </div>
                     </div>
                     <div>
                         <span>
@@ -50,18 +53,12 @@
                         </span>
                     </div>
                     <div class='handle'>
-                        <button v-if='item.etf' class='trade active'>
+                        <button v-if='item.etf' class='trade active' @click='toFund(item)'>
                             {{ $t('fundInfo.buy') }}
                         </button>
-                        <button class='trade'>
+                        <button class='trade' @click='toOrder(item)'>
                             {{ $t('route.trade') }}
                         </button>
-                        <!-- <button class='buy'>
-                            {{ $t('trade.buy') }}
-                        </button>
-                        <button class='sale'>
-                            {{ $t('trade.sell') }}
-                        </button> -->
                     </div>
                 </li>
             </ul>
@@ -74,10 +71,12 @@ import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import currencyIcon from '@/components/currencyIcon.vue'
+import etfIcon from '@planspc/components/etfIcon.vue'
 
 export default {
     components: {
-        currencyIcon
+        currencyIcon,
+        etfIcon
     },
     emits: ['update'],
     setup (props, context) {
@@ -104,6 +103,11 @@ export default {
             router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
         }
 
+        // 去基金页面
+        const toFund = item => {
+            router.push(`/fund?fundId=${item.fundId}`)
+        }
+
         // 查看更多
         const examineMore = () => {
             const item = productList.value[0]
@@ -117,6 +121,7 @@ export default {
         return {
             productList,
             toOrder,
+            toFund,
             examineMore
         }
     }
@@ -206,11 +211,18 @@ export default {
                 }
             }
         }
-        .name {
+        .row {
             display: inline-flex;
             align-items: center;
             .currency-icon {
                 margin-left: 10px;
+            }
+            .name {
+                display: inline-flex;
+                flex-direction: column;
+                :deep(.etfIcon) {
+                    font-size: 10px;
+                }
             }
         }
         .handle {
