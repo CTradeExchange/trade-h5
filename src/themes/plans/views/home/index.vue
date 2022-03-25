@@ -155,6 +155,17 @@
             <div class='footer-wrap'>
                 <div class='menu'>
                     <div class='main' @click="expand('product')">
+                        <span>关于我们</span>
+                        <van-icon :name='productVis ? "minus" : "plus"' />
+                    </div>
+                    <div v-show='productVis' class='sub'>
+                        <p class='link' @click='jumpUrl("trading")'>
+                            关于我们
+                        </p>
+                    </div>
+                </div>
+                <div class='menu'>
+                    <div class='main' @click="expand('product')">
                         <span>{{ $t('newHomeFooter.product') }}</span>
                         <van-icon :name='productVis ? "minus" : "plus"' />
                     </div>
@@ -238,7 +249,8 @@
             </div>
         </div>
         <a class='serviceIcon' href='javascript:;' @click='toService'>
-            <img alt='' src='/images/serviceIcon.png' />
+            <!-- <img alt='' src='/images/serviceIcon.png' /> -->
+            <i class='icon icon_xiaoxizhongxin'></i>
         </a>
 
         <LangPop v-model='langShow' />
@@ -331,7 +343,7 @@ const jumpUrl = (index) => {
         fb: 'https://www.facebook.com/Vitatoken-100578379186941',
         ig: 'https://www.instagram.com/vitatoken_official/',
         twitter: 'https://twitter.com/Vitatoken_',
-        telegram: 'https://t.me/vitatoke',
+        telegram: 'https://t.me/VitatokenEnglish',
         yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
     }
     const newLinkList = { ...linkList, ...community }
@@ -642,5 +654,16 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     position: fixed;
     right: 24px;
     bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: rem(80px);
+    height: rem(80px);
+    background: #FCD535;
+    border-radius: 50%;
+    .icon {
+        color: #1E2329;
+        font-size: rem(40px);
+    }
 }
 </style>
