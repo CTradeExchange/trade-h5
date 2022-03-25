@@ -15,6 +15,6 @@ import Content from './components/Content'
 @import '@/sass/mixin.scss';
 .quote{
     width: 1200px;
-    margin: 20px auto;
+    margin: 40px auto;
 }
 </style>
