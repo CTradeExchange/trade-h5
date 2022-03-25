@@ -1,37 +1,37 @@
 <template>
     <div class='portfolio'>
         <h2 class='h2title'>
-            立即创建您的加密货币投资组合
+            {{ $t('home.portfolio.text1') }}
         </h2>
         <p class='titleDesc'>
-            我们具有多种功能，使其成为开始交易的最佳场所
+            {{ $t('home.portfolio.text2') }}
         </p>
         <div class='list'>
             <div class='row'>
                 <i class='icon icon1'></i>
                 <p class='title'>
-                    简洁高效
+                    {{ $t('home.portfolio.text3') }}
                 </p>
                 <p class='desc'>
-                    买卖流行的数字货币，在一个地方跟踪它们。
+                    {{ $t('home.portfolio.text4') }}
                 </p>
             </div>
             <div class='row'>
                 <i class='icon icon2'></i>
                 <p class='title'>
-                    美观大方
+                    {{ $t('home.portfolio.text5') }}
                 </p>
                 <p class='desc'>
-                    清爽的界面始终将内容清晰地呈现给您。
+                    {{ $t('home.portfolio.text6') }}
                 </p>
             </div>
             <div class='row'>
                 <i class='icon icon3'></i>
                 <p class='title'>
-                    无处不在
+                    {{ $t('home.portfolio.text7') }}
                 </p>
                 <p class='desc'>
-                    使用适用于 Android 或 iOS 设备，随时随地让您保持市场领先地位。
+                    {{ $t('home.portfolio.text8') }}
                 </p>
             </div>
         </div>

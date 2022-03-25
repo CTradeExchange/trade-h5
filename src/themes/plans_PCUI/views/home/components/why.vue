@@ -1,80 +1,43 @@
 <template>
     <div class='why-module auto-width'>
-        <!-- <h3 class='title'>
-            {{ $t('home.why.title') }}
-        </h3>
-        <p class='subhead'>
-            {{ $t('home.why.describe') }}
-        </p>
-        <ul class='why-ul'>
-            <li>
-                <img src='@planspc/images/home/why-icon1.png' />
-                <p class='name'>
-                    {{ $t('home.why.title1') }}
-                </p>
-                <p class='describe' v-html="$t('home.why.text1')"></p>
-            </li>
-            <li>
-                <img src='@planspc/images/home/why-icon2.png' />
-                <p class='name'>
-                    {{ $t('home.why.title2') }}
-                </p>
-                <p class='describe' v-html="$t('home.why.text2')"></p>
-            </li>
-            <li>
-                <img src='@planspc/images/home/why-icon3.png' />
-                <p class='name'>
-                    {{ $t('home.why.title3') }}
-                </p>
-                <p class='describe' v-html="$t('home.why.text3')"></p>
-            </li>
-            <li>
-                <img src='@planspc/images/home/why-icon4.png' />
-                <p class='name'>
-                    {{ $t('home.why.title4') }}
-                </p>
-                <p class='describe' v-html="$t('home.why.text4')"></p>
-            </li>
-        </ul> -->
-
         <p class='descTitle'>
-            安全始终是我们的优先考虑
+            {{ $t('home.why.text1') }}
         </p>
         <div class='descList'>
             <div class='row'>
                 <img alt='' class='icon' src='~@planspc/images/home/moneyBox.png' />
                 <p class='descTitle'>
-                    用户安全资产基金(SAFU)
+                    {{ $t('home.why.text2') }}
                 </p>
                 <p class='descContent'>
-                    我们将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。
+                    {{ $t('home.why.text3') }}
                 </p>
             </div>
             <div class='row'>
                 <img alt='' class='icon' src='~@planspc/images/home/trafficLight.png' />
                 <p class='descTitle'>
-                    个性化访问控制
+                    {{ $t('home.why.text4') }}
                 </p>
                 <p class='descContent'>
-                    高级访问控制限制访问个人账户的设备和地址，让用户无后顾之忧。
+                    {{ $t('home.why.text5') }}
                 </p>
             </div>
             <div class='row'>
                 <img alt='' class='icon' src='~@planspc/images/home/lock.png' />
                 <p class='descTitle'>
-                    先进数据加密
+                    {{ $t('home.why.text6') }}
                 </p>
                 <p class='descContent'>
-                    个人交易数据通过端到端加密获得保障，仅限本人访问个人信息。
+                    {{ $t('home.why.text7') }}
                 </p>
             </div>
             <div class='row last'>
                 <img alt='' class='icon' src='~@planspc/images/home/check.png' />
                 <p class='descTitle'>
-                    账户异常实时监控
+                    {{ $t('home.why.text8') }}
                 </p>
                 <p class='descContent'>
-                    我们的风险管理系统会分析每次提款尝试、密码重置、双重身份验证重置和电子邮件地址更改。异常活动会触发至少 24-48 小时的暂停提款。
+                    {{ $t('home.why.text9') }}
                 </p>
             </div>
         </div>

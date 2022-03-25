@@ -1,19 +1,13 @@
 <template>
     <div class='full'>
         <div class='quick-module auto-width'>
-            <!-- <h3 class='title'>
-                {{ $t('home.quick.title') }}
-            </h3>
-            <p class='describe'>
-                {{ $t('home.quick.describe') }}
-            </p> -->
             <div class='register-box'>
                 <span class='labelText'>
-                    我们在东南亚地区始终保持领先
+                    {{ $t('home.quick.title') }}
                 </span>
                 <input v-model.trim='registerAccount' :placeholder="$t('signIn.mobileEmailPlaceholder')" />
                 <button @click='goRegister'>
-                    开始使用
+                    {{ $t('home.quick.btnText') }}
                 </button>
             </div>
         </div>

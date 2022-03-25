@@ -15,7 +15,7 @@
             </p>
             <p class='line'></p>
             <button class='handle-btn' @click='toDownload'>
-                更多下载选择
+                {{ $t('header.moreDownload') }}
             </button>
         </div>
     </el-popover>

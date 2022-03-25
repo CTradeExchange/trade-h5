@@ -10,7 +10,7 @@
                             </h4>
                             <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("about")'>
-                                    关于我们
+                                    {{ $t('newHomeFooter.aboutus') }}
                                 </a>
                             </p>
                             <p class='name'>
@@ -68,7 +68,7 @@
                 </div>
                 <div class='nav-right'>
                     <h4 class='title'>
-                        关注我们
+                        {{ $t('newHomeFooter.followus') }}
                     </h4>
                     <ul>
                         <li @click='jumpUrl("fb")'>
