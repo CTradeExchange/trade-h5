@@ -128,7 +128,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .news-list {
     @include scroll-pc();
-    height: 600px;
+    height: 440px;
     overflow-y: auto;
     .item {
         display: flex;

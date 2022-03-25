@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class='block'>
-            <img alt='' class='img-download' src='/images/download.png' srcset='' />
+            <img alt='' class='img-download' src='/images/download.jpg' srcset='' />
         </div>
     </div>
 </template>
@@ -85,7 +85,7 @@ const openDownload = value => {
                 display: flex;
                 width: rem(300px);
                 height: rem(100px);
-                margin-top: 16px;
+                margin-bottom: 16px;
                 margin-right: 16px;
                 padding-top: 8px;
                 padding-right: 16px;

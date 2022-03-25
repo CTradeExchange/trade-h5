@@ -20,6 +20,9 @@
                 <!-- <guide /> -->
                 <!-- 交易模块 -->
                 <trade @update='setProductKeys' />
+
+                <protfolio-create />
+
                 <!-- 信息流模块 -->
                 <div class='flow-module auto-width'>
                     <div class='flow-left'>
@@ -63,6 +66,7 @@ import trade from './components/trade.vue'
 import news from './components/news.vue'
 import seven from './components/seven.vue'
 import why from './components/why.vue'
+import protfolioCreate from './components/protfolio-create.vue'
 import portfolio from './components/portfolio.vue'
 import FundDesc from './components/fundDesc.vue'
 import service from './components/service.vue'

@@ -103,7 +103,7 @@ export default {
 @import '~@/sass/mixin.scss';
 .seven-list {
     @include scroll-pc();
-    height: 600px;
+    height: 440px;
     padding-right: 20px;
     overflow-y: auto;
     .today {

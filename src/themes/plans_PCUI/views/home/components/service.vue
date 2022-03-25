@@ -1,6 +1,6 @@
 <template>
     <a v-if='onlineService' class='service' :href='onlineService' target='_blank'>
-        <i class='icon icon_xiaoxizhongxin' :title="$t('header.service')"></i>
+        <i class='icon icon_xiaoxizhongxin' :title="$t('newHomeFooter.customer')"></i>
     </a>
 </template>
 

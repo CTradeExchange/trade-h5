@@ -112,7 +112,7 @@
             <div class='handle-feature'>
                 <div v-if='onlineService' class='item'>
                     <a :href='onlineService' target='_blank'>
-                        <i class='icon icon_kefu' :title="$t('header.service')"></i>
+                        <i class='icon icon_kefu' :title="$t('newHomeFooter.customer')"></i>
                     </a>
                 </div>
                 <div class='item'>

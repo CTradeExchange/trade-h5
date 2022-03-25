@@ -6,13 +6,18 @@
                     <ul>
                         <li>
                             <h4 class='title'>
-                                {{ $t('newHomeFooter.product') }}
+                                {{ $t('newHomeFooter.aboutus') }}
                             </h4>
                             <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("about")'>
                                     {{ $t('newHomeFooter.aboutus') }}
                                 </a>
                             </p>
+                        </li>
+                        <li>
+                            <h4 class='title'>
+                                {{ $t('newHomeFooter.product') }}
+                            </h4>
                             <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("trading")'>
                                     {{ $t('newHomeFooter.trading') }}
@@ -220,7 +225,7 @@ export default {
             display: flex;
         }
         li {
-            margin-right: 150px;
+            margin-right: 125px;
             &:last-of-type {
                 margin-right: 0;
             }
