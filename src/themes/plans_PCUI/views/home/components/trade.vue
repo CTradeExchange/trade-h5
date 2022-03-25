@@ -258,7 +258,7 @@ export default {
                 width: 80px;
                 height: 32px;
                 margin-right: 16px;
-                font-size: 14px;
+                font-size: 16px;
                 color: #fff;
                 border-radius: 4px;
                 cursor: pointer;
