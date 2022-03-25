@@ -164,12 +164,12 @@
             <div class='footer-wrap'>
                 <div class='menu'>
                     <div class='main' @click="expand('product')">
-                        <span>关于我们</span>
+                        <span>{{ $t('vitaHome.about') }}</span>
                         <van-icon :name='productVis ? "minus" : "plus"' />
                     </div>
                     <div v-show='productVis' class='sub'>
                         <p class='link' @click='jumpUrl("trading")'>
-                            关于我们
+                            {{ $t('vitaHome.about') }}
                         </p>
                     </div>
                 </div>
@@ -257,6 +257,32 @@
                 Vitatoken © 2022
             </div>
         </div>
+
+        <div v-if='privacyVis' class='privacy'>
+            <div class='close-wrap'>
+                <div class='close' @click='privacyVis=false'>
+                    <svg class='icon-svg' height='10' viewBox='0 0 20 20' width='10' xmlns='http://www.w3.org/2000/svg'>
+                        <g><polygon points='18.096 19.174 19.497 17.747 1.7 .286 .3 1.714' /><polygon points='19.497 1.714 18.096 .286 .3 17.747 1.7 19.174' /></g>
+                    </svg>
+                </div>
+            </div>
+
+            <div class='content'>
+                We use our own and third-party cookies on our websites to enhance your experience, analyze traffic, and for security and marketing. For more info or to modify cookies, see our
+                <a class='sc-AxiKw cJlLNA' color='light' href='https://www.vitatoken.com/site/privacy-policy' rel='noopener' target='_blank'>
+                    Cookie Policy
+                </a>
+            </div>
+            <div class='footer'>
+                <span class='agree' @click='agree'>
+                    同意
+                </span>
+                <div class='close-btn' @click='privacyVis=false'>
+                    关闭
+                </div>
+            </div>
+        </div>
+
         <a class='serviceIcon' href='javascript:;' @click='toService'>
             <!-- <img alt='' src='/images/serviceIcon.png' /> -->
             <i class='icon icon_xiaoxizhongxin'></i>
@@ -293,6 +319,7 @@ const newsData = ref({ orgid: 1, newsArea: 1 })
 const serviceVis = ref(false)
 const productVis = ref(false)
 const helpVis = ref(false)
+const privacyVis = ref(false)
 // const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5']
 // const symbolKeys = ['1_5', '21_5', '22_5', '23_5', '26_5', '28_5']
 const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5', '717_5']
@@ -373,6 +400,15 @@ const toService = () => {
             query: { pageTitle: t('route.onlineService'), url: onlineService }
         })
     }
+}
+
+const agree = () => {
+    localSet('privacyFlag', true)
+    privacyVis.value = false
+}
+
+if (!localGet('privacyFlag')) {
+    privacyVis.value = true
 }
 
 QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
@@ -657,6 +693,68 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         font-size: 14px;
         text-align: center;
         border-top: 1px solid #555;
+    }
+}
+.privacy {
+    position: sticky;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 999;
+    padding: rem(30px);
+    overflow: hidden;
+    font-size: rem(28px);
+    line-height: rem(50px);
+    background-color: rgb(250, 251, 252);
+    .close-wrap {
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: rem(10px);
+        .close {
+            display: flex;
+            flex-shrink: 0;
+            align-items: center;
+            align-self: flex-end;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            background-color: rgb(112, 133, 153);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0.5;
+            -webkit-box-align: center;
+            -webkit-box-pack: center;
+            .icon-svg {
+                cursor: pointer;
+                transition: fill 0.15s ease 0s;
+                fill: rgb(255, 255, 255);
+            }
+        }
+    }
+    .content {
+        padding: 10px 0;
+    }
+    .footer {
+        text-align: center;
+        .close-btn {
+            display: inline-block;
+            width: fit-content;
+            margin-left: rem(20px);
+            padding: 0 24px;
+            color: rgb(255, 255, 255);
+            font-size: 14px;
+            white-space: nowrap;
+            background-color: rgb(22, 82, 240);
+            border: 1px solid rgb(22, 82, 240);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .agree {
+            color: var(--primary);
+            cursor: pointer;
+        }
     }
 }
 .serviceIcon {
