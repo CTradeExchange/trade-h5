@@ -47,6 +47,8 @@
     </div>
     <!-- 客服 -->
     <service />
+    <!-- 底部隐私协议 -->
+    <privacy-tip />
 </template>
 
 <script setup>
@@ -64,6 +66,7 @@ import why from './components/why.vue'
 import portfolio from './components/portfolio.vue'
 import FundDesc from './components/fundDesc.vue'
 import service from './components/service.vue'
+import privacyTip from './components/privacy-tip.vue'
 
 // 当前页面的产品symbolKey
 const productKeys = ref([])

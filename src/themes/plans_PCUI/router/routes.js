@@ -441,7 +441,14 @@ const routes = [
                 },
                 children: h5Children
             },
-
+            {
+                path: '/download',
+                name: 'Download',
+                component: () => import(/* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
+                meta: {
+                    title: ''
+                }
+            }
         ],
     },
     // {

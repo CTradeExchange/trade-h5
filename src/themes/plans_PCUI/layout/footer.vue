@@ -9,6 +9,11 @@
                                 {{ $t('newHomeFooter.product') }}
                             </h4>
                             <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("about")'>
+                                    关于我们
+                                </a>
+                            </p>
+                            <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("trading")'>
                                     {{ $t('newHomeFooter.trading') }}
                                 </a>
@@ -134,7 +139,8 @@ export default {
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
                     faqs: 'https://www.vitatoken.com/site/faqs',
                     terms: 'https://www.vitatoken.com/site/terms-conditions',
-                    policy: 'https://www.vitatoken.com/site/privacy-policy'
+                    policy: 'https://www.vitatoken.com/site/privacy-policy',
+                    abount: ''
                 }
             } else {
                 linkList = {
@@ -145,7 +151,8 @@ export default {
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
                     faqs: 'https://www.vitatoken.com/site/faqs',
                     terms: 'https://www.vitatoken.com/site/terms-conditions',
-                    policy: 'https://www.vitatoken.com/site/privacy-policy'
+                    policy: 'https://www.vitatoken.com/site/privacy-policy',
+                    abount: ''
                 }
             }
             const community = {
@@ -173,12 +180,19 @@ export default {
                     if (customerInfo.value) {
                         router.push({ path: '/assets' })
                     } else {
-                        router.push({ path: '/register' })
+                        router.push({
+                            path: '/register',
+                            query: {
+                                openAccountType: 1
+                            }
+                        })
                     }
                     break
                 default:
                     const newLinkList = { ...linkList, ...community }
-                    window.open(newLinkList[index])
+                    if (newLinkList[index]) {
+                        window.open(newLinkList[index])
+                    }
             }
         }
 

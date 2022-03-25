@@ -130,8 +130,7 @@ export default {
 
         // 查看更多
         const examineMore = () => {
-            const item = productList.value[0]
-            router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
+            router.push('/quote')
         }
 
         onMounted(() => {

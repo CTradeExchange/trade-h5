@@ -8,26 +8,26 @@
             <i class='icon icon_xiazai' :title="$t('header.download')"></i>
         </template>
         <div class='download-dialog'>
-            <!-- <img src='@planspc/images/home/download-code.png' /> -->
-            <div ref='qrCode' class='qrcode'></div>
+            <img src='/images/qrcode.png' />
+            <!-- <div ref='qrCode' class='qrcode'></div> -->
             <p class='tip'>
                 {{ $t('header.downloadTip') }}
             </p>
             <p class='line'></p>
-            <div class='handle'>
-                <button class='btn'>
-                    更多下载选择
-                </button>
-            </div>
+            <button class='handle-btn' @click='toDownload'>
+                更多下载选择
+            </button>
         </div>
     </el-popover>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { localGet } from '@/utils/util.js'
 import QRCode from 'qrcodejs2'
 
+const router = useRouter()
 // 二维码对象
 const qrCode = ref(null)
 
@@ -46,9 +46,14 @@ const creatQrCode = () => {
     }, 100)
 }
 
+// 跳转到下载页面
+const toDownload = () => {
+    router.push({ path: '/download' })
+}
+
 onMounted(() => {
     // 创建二维码
-    creatQrCode()
+    // creatQrCode()
 })
 </script>
 
@@ -88,18 +93,16 @@ onMounted(() => {
         background: var(--lineColor);
         transform: scaleY(.5);
     }
-    .handle {
+    .handle-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
-        .btn {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 6px 0;
-            font-size: 12px;
-            color: #fff;
-            background: var(--primary);
-        }
+        padding: 6px 0;
+        font-size: 12px;
+        color: #fff;
+        background: var(--primary);
+        cursor: pointer;
     }
 }
 </style>

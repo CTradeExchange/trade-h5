@@ -21,7 +21,7 @@
                 <el-input
                     v-model='amountPay'
                     clearable
-                    :disabled='fund.canPurchase !== 1'
+                    :disabled='fund.canPurchase !== 1 || !customerInfo'
                     :placeholder='payPlaceholder'
                     type='number'
                     @input='onInput'
@@ -63,6 +63,7 @@
                 @click='submitHandler'
             >
                 <span>{{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}</span>
+                <em v-if="lang === 'en-US'"></em>
                 <span v-if='fund.canPurchase === 1'>
                     {{ fund.shareTokenCode }}
                 </span>
@@ -91,13 +92,15 @@ import CurrencyIcon from '@/components/currencyIcon.vue'
 import applyRulesDialog from './applyRulesDialog.vue'
 import { computed, unref, ref, defineProps, inject } from 'vue'
 import { useRouter } from 'vue-router'
+import { useStore } from 'vuex'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal } from '@/utils/calculation'
-import { debounce } from '@/utils/util'
+import { debounce, getCookie } from '@/utils/util'
 
 const router = useRouter()
+const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
 const props = defineProps({
     fund: {
@@ -105,6 +108,10 @@ const props = defineProps({
         default: () => {}
     }
 })
+// 客户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
+// 当前语言
+const lang = getCookie('lang')
 // 申购成功后更新列表数据
 const updateRecord = inject('updateRecord')
 // 组件ref
@@ -267,6 +274,9 @@ const openRules = () => {
                 opacity: 1;
             }
         }
+        em {
+            margin-right: 4px;
+        }
     }
     .handle-not {
         margin-top: 30px;
@@ -278,7 +288,6 @@ const openRules = () => {
             height: 50px;
             margin-bottom: 20px;
             font-size: 14px;
-            letter-spacing: 2px;
             border-radius: 5px;
             cursor: pointer;
             &.register-btn {
