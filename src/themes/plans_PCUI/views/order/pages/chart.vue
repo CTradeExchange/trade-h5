@@ -31,18 +31,42 @@
             </p>
         </div>
         <div class='item ohlc'>
-            <p>{{ $t('trade.todayOpen') }} {{ product?.open_price || '--' }}</p>
-            <p>{{ $t('trade.yesterdayClosed') }} {{ product?.yesterday_close_price || '--' }}</p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.todayOpen') }}
+                </span> {{ product?.open_price || '--' }}
+            </p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.yesterdayClosed') }}
+                </span> {{ product?.yesterday_close_price || '--' }}
+            </p>
         </div>
 
         <div class='item ohlc'>
-            <p>{{ $t('trade.high') }} {{ product?.high_price || '--' }}</p>
-            <p>{{ $t('trade.low') }} {{ product?.low_price || '--' }}</p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.high') }}
+                </span>  {{ product?.high_price || '--' }}
+            </p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.low') }}
+                </span>  {{ product?.low_price || '--' }}
+            </p>
         </div>
 
         <div v-if='product.etf' class='item ohlc'>
-            <p>{{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }}) {{ product.currentNav || '--' }}</p>
-            <p>{{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }}) {{ product.premiumRate || '--' }}</p>
+            <p>
+                <span class='muted'>
+                    {{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }})
+                </span>  {{ product.currentNav || '--' }}
+            </p>
+            <p>
+                <span class='muted'>
+                    {{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }})
+                </span>  {{ product.premiumRate || '--' }}
+            </p>
         </div>
 
         <div class='item collect'>
@@ -1313,7 +1337,7 @@ export default {
     }
 }
 .chart {
-    height: 275px;
+    height: 405px;
 }
 
 </style>

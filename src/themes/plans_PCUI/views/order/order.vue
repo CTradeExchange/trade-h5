@@ -128,7 +128,7 @@ export default {
             if (Number(product.value?.tradeType) === 3) {
                 return '785px'
             } else if (Number(product.value?.tradeType) === 5) {
-                return '710px'
+                return '840px'
             } else {
                 return '874px'
             }

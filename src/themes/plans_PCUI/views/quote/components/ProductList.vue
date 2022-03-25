@@ -102,13 +102,14 @@ onUnmounted(() => {
             width: 80px;
             color: var(--primary);
             border: 1px solid var(--primary);
-            height: 32px;
-            line-height: 32px;
+            height: 30px;
+            line-height: 28px;
             border-radius: 4px;
             text-align: center;
             margin-right: 10px;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 400;
+            vertical-align: middle;
             cursor: pointer;
             overflow: hidden;
             &.active {

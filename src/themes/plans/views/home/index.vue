@@ -151,6 +151,9 @@
                 </li>
             </ul>
 
+            <div class='descBarTitle'>
+                安全始终是我们的优先考虑
+            </div>
             <div class='descList'>
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/moneyBox.png' />
@@ -464,6 +467,17 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 </script>
 
 <style lang="scss">
+.descBarTitle{
+    box-sizing: border-box;
+    margin-top: 80px;
+    padding-bottom: 10px;
+    text-align: center;
+    min-width: 0;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #1E2329;
+}
 .descList {
     padding-top: 40px;
     padding-right: 16px;

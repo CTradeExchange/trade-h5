@@ -297,6 +297,7 @@ export default {
     position: relative;
     height: 24px;
     padding: 0 24px 0 10px;
+    font-size: 12px;
     color: var(--minorColor);
     line-height: 24px;
     background: var(--assistColor);
@@ -319,6 +320,7 @@ export default {
 <style lang="scss">
 .handicapDigitsOptions {
     --van-popover-light-background-color: var(--assistColor);
+    --van-popover-action-font-size: 12px;
     //width: 72px;
 }
 </style>
