@@ -9,7 +9,7 @@
         </div>
 
         <div class='icons'>
-            <div class='dowonload' @click='download'>
+            <div class='dowonload' @click='$router.push("/download")'>
                 <svg class='dowonload-img' fill='none' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
                     <path d='M19 20H5v2h14v-2zM13 14.5l4.6-4.7 1.5 1.4-7.1 7.1-7.1-7.1 1.4-1.4 4.7 4.7V2h2v12.5z' fill='currentColor' />
                 </svg>
@@ -354,11 +354,12 @@ const colorSelect = (action) => {
         }
     }
     .icons {
+        display: flex;
+        align-items: center;
         .dowonload {
             display: inline-block;
             width: 36px;
             height: 36px;
-            margin-top: -2px;
             margin-right: 12px;
             margin-left: 12px;
             padding: 8px rem(10px);
@@ -366,13 +367,14 @@ const colorSelect = (action) => {
             background-color: #F0B90B;
             border-radius: 50%;
             .dowonload-img {
-                width: 20px;
-                height: 20px;
+                //width: 20px;
+                //height: 20px;
+                margin-top: -3px;
             }
         }
         .close {
+            margin-top: -5px;
             margin-right: rem(30px);
-            vertical-align: rem(10px);
         }
     }
 }

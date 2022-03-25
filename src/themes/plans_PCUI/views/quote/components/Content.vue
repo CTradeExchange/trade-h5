@@ -19,7 +19,7 @@ import Autocomplete from './Autocomplete'
 const tradeType = ref('')
 
 // 获取板块列表和所选板块的产品列表
-const categoryType = ref('0')
+const categoryType = ref(1)
 const { categoryList, productList } = useProduct({
     tradeType, categoryType
 })
@@ -42,7 +42,7 @@ const computedCategoryList = computed((el) => {
 })
 
 watch(() => unref(tradeType), () => {
-    categoryType.value = '0'
+    categoryType.value = 1
 })
 </script>
 

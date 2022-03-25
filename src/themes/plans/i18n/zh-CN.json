@@ -487,7 +487,7 @@
     "saveSetting": "保存设置",
     "noFeature": "暂不支持该功能",
     "purchaseRedeemBtn": "申/赎",
-    "productEtfTip": "ETF是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖ETF基金份额；同时，投资者也可向基金管理公司申购或赎回ETF份额",
+    "productEtfTip": "ETF是Exchange Traded Funds简称，是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖基金份额；同时，投资者也可向基金管理公司申购或赎回基金份额",
     "quantity": "数量(手)"
   },
   "bizType": {

@@ -161,6 +161,9 @@ onUnmounted(() => {
         }
     }
     .fund-list {
+        @media screen and (max-width: 1560px){
+            font-size: 12px;
+        }
         .item {
             display: flex;
             align-items: center;
@@ -180,6 +183,9 @@ onUnmounted(() => {
                     flex-direction: column;
                     .name {
                         font-size: 15px;
+                        @media screen and (max-width: 1560px){
+                            font-size: 12px;
+                        }
                     }
                     .type {
                         line-height: 1;

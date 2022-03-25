@@ -122,4 +122,12 @@ onMounted(() => {
         background-color: var(--bgColor);
     }
 }
+
+@media screen and (max-width: 1560px) {
+    .page-content{
+        .left-module,.right-module{
+            width: 320px;
+        }
+    }
+}
 </style>

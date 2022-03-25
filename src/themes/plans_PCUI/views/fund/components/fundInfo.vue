@@ -134,10 +134,16 @@ const toOrderFund = () => {
             margin-left: 25px;
             margin-right: 20px;
             font-size: 45px;
+            @media screen and (max-width: 1560px) {
+                font-size: 38px;
+            }
         }
         .type, .title {
             font-size: 18px;
             color: var(--normalColor);
+            @media screen and (max-width: 1560px) {
+                font-size: 14px;
+            }
         }
         .type {
             margin-right: 10px;
