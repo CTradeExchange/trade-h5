@@ -31,7 +31,7 @@
                 />
             </div>
             <!-- 基金代币产品 -->
-            <van-popover v-model:show='showFundPopover' theme='dark'>
+            <van-popover v-model:show='showFundPopover' placement='left' theme='dark'>
                 <p style='padding:10px; width:300px;'>
                     {{ $t('trade.purchaseOrRedemptionTip') }}
                 </p>

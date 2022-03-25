@@ -2,17 +2,17 @@
     <div class='footerBtnBox'>
         <div v-if='fund' class='trade-btn-wrap'>
             <div class='buy fallColorBg' :class='{ disabled:fund.canPurchase!==1 }' @click="toOrder('buy')">
-                <span class='text'>
+                <span class='text' :class='{ small: fund.canPurchase!==1 }'>
                     {{ fund.canPurchase===1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
                 </span>
             </div>
             <div class='sell riseColorBg' :class='{ disabled:fund.canRedemption!==1 }' @click="toOrder('sell')">
-                <span class='text'>
+                <span class='text' :class='{ small: fund.canRedemption!==1 }'>
                     {{ fund.canRedemption===1 ? $t('fundInfo.sell'):$t('fundInfo.disabledSell') }}
                 </span>
             </div>
             <div class='tradeBtn' @click='toOrderFund'>
-                <span class='text'>
+                <span class='text' :class='{ small: fund.canPurchase!==1 && fund.canRedemption!==1 }'>
                     {{ $t('route.trade') }}
                 </span>
             </div>
@@ -115,6 +115,9 @@ const toOrderFund = () => {
         .text {
             font-size: rem(34px);
             vertical-align: middle;
+        }
+        .small{
+            font-size: 12px;
         }
     }
     .sell::after {
