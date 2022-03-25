@@ -2,7 +2,7 @@
     <div class='portfolio auto-width'>
         <div class='case'>
             <p class='t1'>
-                只需三步，开始加密货币投资
+                只需三步，开始加密基金投资
             </p>
             <!-- <p class='t2'>
                 Start your first trade with these easy steps.
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <!-- 只需三步，开始加密货币投资
+    <!-- 只需三步，开始加密基金投资
     Start Trading in three steps
 
     开户并完成身份认证
@@ -85,7 +85,7 @@
         line-height: 1;
         color: #1E2329;
         font-weight: 600;
-        font-size: 40px;
+        font-size: 30px;
     }
     .t2 {
         margin-top: 6px;
@@ -109,19 +109,18 @@
                 height: 80px;
             }
             .text {
-                margin-left: 40px;
+                margin-left: 30px;
             }
             .t3 {
                 margin-bottom: 12px;
                 color: #1E2329;
-                font-weight: 600;
-                font-size: 24px;
+                font-size: 20px;
                 line-height: 28px;
             }
             .t4 {
                 color: #474D57;
                 font-weight: 400;
-                font-size: 16px;
+                font-size: 14px;
                 line-height: 20px;
             }
         }

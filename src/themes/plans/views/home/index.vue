@@ -152,7 +152,7 @@
             </ul> -->
 
             <div class='descBarTitle'>
-                安全始终是我们的优先考虑
+                安全始终是我们的首要考虑
             </div>
             <div class='descList'>
                 <div class='row'>
@@ -585,6 +585,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             }
         }
         .pro-list {
+            text-align: center;
             .pro-item {
                 margin-bottom: 40px;
                 .icon-img {

@@ -49,7 +49,7 @@
     background: url('../../../images/home/portfolio.png') no-repeat right 160px;
     .h2title{
         font-family: "Microsoft Yahei";
-        font-size: 32px;
+        font-size: 30px;
         font-weight: bold;
         text-align: center;
         padding-bottom: 20px;
