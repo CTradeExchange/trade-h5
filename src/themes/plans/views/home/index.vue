@@ -26,8 +26,14 @@
                         <currency-icon class='icon' :currency='item.baseCurrency' :size='36' />
                         <div class='symbol'>
                             <p class='symbol-name'>
-                                {{ item.symbolName }}
+                                <span class='sn-text'>
+                                    {{ item.symbolName }}
+                                </span>
+                                <span v-if='item.etf' class='etf'>
+                                    ETF
+                                </span>
                             </p>
+
                             <p class='symbol-code'>
                                 {{ item.symbolCode }}
                             </p>
@@ -167,9 +173,9 @@
                         <van-icon :name='serviceVis ? "minus" : "plus"' />
                     </div>
                     <div v-show='serviceVis' class='sub'>
-                        <p class='link' @click='jumpUrl("program")'>
+                        <!-- <p class='link' @click='jumpUrl("program")'>
                             {{ $t('newHomeFooter.program') }}
-                        </p>
+                        </p> -->
                         <p class='link' @click='jumpUrl("vip")'>
                             {{ $t('newHomeFooter.vip') }}
                         </p>
@@ -228,7 +234,7 @@
             </div>
 
             <div class='copyright'>
-                Vitamin © 2022
+                Vitatoken © 2022
             </div>
         </div>
         <a class='serviceIcon' href='javascript:;' @click='toService'>
@@ -473,14 +479,29 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                     }
                     .symbol {
                         .symbol-name {
-                            width: rem(320px);
+                            width: rem(290px);
                             margin-bottom: rem(10px);
-                            overflow: hidden;
-                            color: var(--color);
-                            font-weight: bold;
-                            font-size: rem(28px);
                             white-space: nowrap;
                             text-overflow: ellipsis;
+                            .sn-text {
+                                display: inline-block;
+                                margin-right: rem(10px);
+                                overflow: hidden;
+                                color: var(--color);
+                                font-weight: bold;
+                                font-size: rem(28px);
+                                vertical-align: middle;
+                            }
+                            .etf {
+                                display: inline-block;
+                                padding: rem(4px) rem(10px);
+                                color: var(--contentColor);
+                                font-size: rem(20px);
+                                text-align: center;
+                                vertical-align: middle;
+                                background: var(--primary);
+                                border-radius: rem(10px);
+                            }
                         }
                         .symbol-code {
                             width: rem(320px);
@@ -594,22 +615,21 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             }
         }
     }
-    .langWrap{
+    .langWrap {
         margin: 10px 20%;
-        .langBtn{
+        .langBtn {
+            height: 40px;
+            color: #333;
             background: #999;
             border-color: #999;
-            color: #333;
-            height: 40px;
         }
-
-        .van-button__text{
-            width: 100%;
+        .van-button__text {
             display: flex;
             justify-content: space-between;
+            width: 100%;
         }
     }
-    .copyright{
+    .copyright {
         margin-top: rem(30px);
         padding-top: rem(30px);
         color: rgb(234, 236, 239);

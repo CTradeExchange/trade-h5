@@ -54,6 +54,55 @@
             <minePerson :data='minePersonData' />
         </div>
         <van-cell-group class='cellGroup'>
+            <van-cell class='cellItem' is-link :title='$t("fundInfo.fund")' @click="routerTo('fundProductList')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#piggy-bank-f' />
+                            <symbol id='piggy-bank-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M12.0135 1C9.30088 1 7.10183 3.19905 7.10183 5.91171C7.10183 6.83267 7.3553 7.69443 7.79628 8.43103C5.55306 9.4109 3.95023 11.5837 3.7896 14.1476H2V15.9337H3.91462C4.26878 17.6501 5.27957 19.1265 6.67276 20.0888L5.02451 21.7371L6.28746 23L8.3573 20.9302C9.023 21.1518 9.73515 21.2719 10.4753 21.2719H15.7789L17.3705 22.8635L18.6334 21.6006L17.2935 20.2606L21.6429 15.9112L21.6429 13.2243H19.7091C19.5089 12.122 19.0149 11.1221 18.311 10.3087L20.7459 7.87386H16.5177C16.7798 7.27288 16.9252 6.60927 16.9252 5.91171C16.9252 3.19905 14.7262 1 12.0135 1ZM8.88791 5.91171C8.88791 4.18547 10.2873 2.78608 12.0135 2.78608C13.7398 2.78608 15.1392 4.18547 15.1392 5.91171C15.1392 7.63795 13.7398 9.03734 12.0135 9.03734C10.2873 9.03734 8.88791 7.63795 8.88791 5.91171ZM10.674 5.91171L12.0135 4.57215L13.3531 5.91171L12.0135 7.25127L10.674 5.91171ZM9.7484 13.2344H14.2787V11.4484H9.7484V13.2344Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
+            <van-cell class='cellItem' is-link :title='$t("vitaHome.trade")' @click="routerTo('order')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#trade-f' />
+                            <symbol id='trade-f' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M15.0002 3.5C12.471 3.5 10.3406 5.20717 9.6983 7.53206C13.2833 7.86295 16.1373 10.7169 16.4682 14.3019C18.7931 13.6597 20.5002 11.5292 20.5002 9C20.5002 5.96243 18.0378 3.5 15.0002 3.5ZM14.5 15C14.5 11.9624 12.0376 9.5 9 9.5C5.96243 9.5 3.5 11.9624 3.5 15C3.5 18.0376 5.96243 20.5 9 20.5C12.0376 20.5 14.5 18.0376 14.5 15ZM6.5 15L9 17.5L11.5 15L9 12.5L6.5 15Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
+            <van-cell class='cellItem' is-link :title='$t("route.quote")' @click="routerTo('quote')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#icon-h-market' />
+                            <symbol id='icon-h-market' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M9.5 4H14.5V19H9.5V4ZM3 11H7.5V19H3V11ZM21 9H16.5V19H21V9Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
+
+            <van-cell class='cellItem' is-link :title='$t("route.assets")' @click="routerTo('assets')">
+                <template #icon>
+                    <div class='icon-wrap'>
+                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#earn-s24' />
+                            <symbol id='earn-s24' viewBox='0 0 24 24'>
+                                <path d='M11.3363 8.57657C10.5672 8.72738 10.2354 9.13457 10.2354 9.72274C10.2354 10.2958 10.5672 10.5974 11.3363 10.8086V8.57657Z' fill='currentColor' /><path d='M12.6785 15.3933C13.3873 15.1972 13.7191 14.7297 13.7191 14.1566C13.7191 13.7193 13.5382 13.2668 12.6785 13.0104V15.3933Z' fill='currentColor' /><path clip-rule='evenodd' d='M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM12.8595 17.0522V18.5H11.1402V17.1125C9.61705 16.9768 8.60661 16.3585 7.85255 15.529L9.20985 14.2923C9.78294 14.8956 10.4918 15.3028 11.3363 15.4234V12.7088C9.07412 12.2413 8.15417 11.2459 8.15417 9.78306C8.15417 8.19954 9.19477 7.14385 11.1402 6.91763V5.5H12.8595V6.91763C14.066 7.05336 14.9558 7.52088 15.6194 8.27494L14.247 9.5116C13.885 9.10441 13.4024 8.77262 12.6785 8.60673V11.1102C14.7899 11.5928 15.8003 12.4524 15.8003 13.9907C15.8003 15.4687 14.8653 16.7204 12.8595 17.0522Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                    </div>
+                </template>
+            </van-cell>
             <van-cell class='cellItem' is-link :title='$t("cRoute.msg")' @click="routerTo('msg')">
                 <template #icon>
                     <div class='icon-wrap'>
@@ -102,54 +151,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("fundInfo.fund")' @click="routerTo('fundProductList')">
-                <template #icon>
-                    <div class='icon-wrap'>
-                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-                            <use xlink:href='#piggy-bank-f' />
-                            <symbol id='piggy-bank-f' viewBox='0 0 24 24'>
-                                <path clip-rule='evenodd' d='M12.0135 1C9.30088 1 7.10183 3.19905 7.10183 5.91171C7.10183 6.83267 7.3553 7.69443 7.79628 8.43103C5.55306 9.4109 3.95023 11.5837 3.7896 14.1476H2V15.9337H3.91462C4.26878 17.6501 5.27957 19.1265 6.67276 20.0888L5.02451 21.7371L6.28746 23L8.3573 20.9302C9.023 21.1518 9.73515 21.2719 10.4753 21.2719H15.7789L17.3705 22.8635L18.6334 21.6006L17.2935 20.2606L21.6429 15.9112L21.6429 13.2243H19.7091C19.5089 12.122 19.0149 11.1221 18.311 10.3087L20.7459 7.87386H16.5177C16.7798 7.27288 16.9252 6.60927 16.9252 5.91171C16.9252 3.19905 14.7262 1 12.0135 1ZM8.88791 5.91171C8.88791 4.18547 10.2873 2.78608 12.0135 2.78608C13.7398 2.78608 15.1392 4.18547 15.1392 5.91171C15.1392 7.63795 13.7398 9.03734 12.0135 9.03734C10.2873 9.03734 8.88791 7.63795 8.88791 5.91171ZM10.674 5.91171L12.0135 4.57215L13.3531 5.91171L12.0135 7.25127L10.674 5.91171ZM9.7484 13.2344H14.2787V11.4484H9.7484V13.2344Z' fill='currentColor' fill-rule='evenodd' />
-                            </symbol>
-                        </svg>
-                    </div>
-                </template>
-            </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("route.quote")' @click="routerTo('quote')">
-                <template #icon>
-                    <div class='icon-wrap'>
-                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-                            <use xlink:href='#icon-h-market' />
-                            <symbol id='icon-h-market' viewBox='0 0 24 24'>
-                                <path clip-rule='evenodd' d='M9.5 4H14.5V19H9.5V4ZM3 11H7.5V19H3V11ZM21 9H16.5V19H21V9Z' fill='currentColor' fill-rule='evenodd' />
-                            </symbol>
-                        </svg>
-                    </div>
-                </template>
-            </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("vitaHome.trade")' @click="routerTo('order')">
-                <template #icon>
-                    <div class='icon-wrap'>
-                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-                            <use xlink:href='#trade-f' />
-                            <symbol id='trade-f' viewBox='0 0 24 24'>
-                                <path clip-rule='evenodd' d='M15.0002 3.5C12.471 3.5 10.3406 5.20717 9.6983 7.53206C13.2833 7.86295 16.1373 10.7169 16.4682 14.3019C18.7931 13.6597 20.5002 11.5292 20.5002 9C20.5002 5.96243 18.0378 3.5 15.0002 3.5ZM14.5 15C14.5 11.9624 12.0376 9.5 9 9.5C5.96243 9.5 3.5 11.9624 3.5 15C3.5 18.0376 5.96243 20.5 9 20.5C12.0376 20.5 14.5 18.0376 14.5 15ZM6.5 15L9 17.5L11.5 15L9 12.5L6.5 15Z' fill='currentColor' fill-rule='evenodd' />
-                            </symbol>
-                        </svg>
-                    </div>
-                </template>
-            </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("route.assets")' @click="routerTo('assets')">
-                <template #icon>
-                    <div class='icon-wrap'>
-                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-                            <use xlink:href='#earn-s24' />
-                            <symbol id='earn-s24' viewBox='0 0 24 24'>
-                                <path d='M11.3363 8.57657C10.5672 8.72738 10.2354 9.13457 10.2354 9.72274C10.2354 10.2958 10.5672 10.5974 11.3363 10.8086V8.57657Z' fill='currentColor' /><path d='M12.6785 15.3933C13.3873 15.1972 13.7191 14.7297 13.7191 14.1566C13.7191 13.7193 13.5382 13.2668 12.6785 13.0104V15.3933Z' fill='currentColor' /><path clip-rule='evenodd' d='M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21ZM12.8595 17.0522V18.5H11.1402V17.1125C9.61705 16.9768 8.60661 16.3585 7.85255 15.529L9.20985 14.2923C9.78294 14.8956 10.4918 15.3028 11.3363 15.4234V12.7088C9.07412 12.2413 8.15417 11.2459 8.15417 9.78306C8.15417 8.19954 9.19477 7.14385 11.1402 6.91763V5.5H12.8595V6.91763C14.066 7.05336 14.9558 7.52088 15.6194 8.27494L14.247 9.5116C13.885 9.10441 13.4024 8.77262 12.6785 8.60673V11.1102C14.7899 11.5928 15.8003 12.4524 15.8003 13.9907C15.8003 15.4687 14.8653 16.7204 12.8595 17.0522Z' fill='currentColor' fill-rule='evenodd' />
-                            </symbol>
-                        </svg>
-                    </div>
-                </template>
-            </van-cell>
+
             <van-cell
                 class='cellItem'
                 is-link
@@ -178,10 +180,16 @@
             >
                 <template #icon>
                     <div class='icon-wrap'>
-                        <svg class='css-mykl4n' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-                            <use xlink:href='#language-f' />
-                            <symbol id='language-f' viewBox='0 0 24 24'>
-                                <path clip-rule='evenodd' d='M15.2307 20.4027C18.2316 19.2481 20.4577 16.5321 20.9137 13.25H16.9718C16.8248 16.1102 16.1791 18.638 15.2307 20.4027ZM14.473 13.25C14.2952 17.3518 13.2556 20.5 11.9998 20.5C10.744 20.5 9.70447 17.3518 9.52667 13.25H14.473ZM14.473 10.75H9.52667C9.70447 6.64821 10.744 3.5 11.9998 3.5C13.2556 3.5 14.2952 6.64821 14.473 10.75ZM16.9718 10.75H20.9137C20.4577 7.46786 18.2316 4.75191 15.2307 3.59731C16.1791 5.36198 16.8248 7.88979 16.9718 10.75ZM7.03566 10.75C7.18282 7.88774 7.82928 5.35836 8.77882 3.59353C5.77291 4.74598 3.54249 7.46427 3.08594 10.75H7.03566ZM7.03566 13.25H3.08594C3.54249 16.5357 5.77291 19.254 8.77882 20.4065C7.82928 18.6416 7.18282 16.1123 7.03566 13.25Z' fill='currentColor' fill-rule='evenodd' />
+                        <svg v-if='!themeVal' class='css-41qi6t' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#mode-light' />
+                            <symbol id='mode-light' viewBox='0 0 24 24'>
+                                <path clip-rule='evenodd' d='M10.5 2H13.5V5H10.5V2ZM16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12ZM5.98948 3.86891L3.86816 5.99023L5.98948 8.11155L8.1108 5.99023L5.98948 3.86891ZM2 13.5V10.5H5V13.5H2ZM3.86794 18.0095L5.98926 20.1309L8.11058 18.0095L5.98926 15.8882L3.86794 18.0095ZM13.5 19V22H10.5V19H13.5ZM18.01 15.8884L15.8887 18.0098L18.01 20.1311L20.1313 18.0098L18.01 15.8884ZM19 10.5H22V13.5H19V10.5ZM15.8894 5.99001L18.0107 8.11133L20.1321 5.99001L18.0107 3.86869L15.8894 5.99001Z' fill='currentColor' fill-rule='evenodd' />
+                            </symbol>
+                        </svg>
+                        <svg v-else class='css-1biqlx6' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                            <use xlink:href='#mode-dark' />
+                            <symbol id='mode-dark' viewBox='0 0 24 24'>
+                                <path d='M20.9677 12.7676C19.84 13.5449 18.4732 13.9999 17 13.9999C13.134 13.9999 10 10.8659 10 6.99994C10 5.52678 10.4551 4.15991 11.2323 3.03223C6.62108 3.42175 3 7.28797 3 11.9999C3 16.9705 7.02944 20.9999 12 20.9999C16.712 20.9999 20.5782 17.3789 20.9677 12.7676Z' fill='currentColor' />
                             </symbol>
                         </svg>
                     </div>

@@ -136,6 +136,7 @@ const config = {
     devServer: {
         port: isAdminMode ? 8080 : 8090,
         open: false,
+        host: '0.0.0.0',
         overlay: {
             warnings: false,
             errors: true
