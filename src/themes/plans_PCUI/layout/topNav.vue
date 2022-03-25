@@ -377,6 +377,7 @@ export default {
             height: 100%;
             .item {
                 margin-right: 20px;
+                line-height: 1;
                 &:last-of-type {
                     margin-right: 0;
                 }
@@ -387,7 +388,6 @@ export default {
                 }
                 &:deep(.icon_yuyan) {
                     display: inline-flex;
-                    margin-top: 2px;
                 }
             }
         }

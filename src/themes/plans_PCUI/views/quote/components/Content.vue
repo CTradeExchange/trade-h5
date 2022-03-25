@@ -56,6 +56,8 @@ watch(() => unref(tradeType), () => {
     width: 100%;
     background: var(--contentColor);
     border-radius: 10px;
+    padding-bottom: 20px;
+    margin-bottom: 80px;
     .header{
         position: relative;
         flex: 0 0 56px;

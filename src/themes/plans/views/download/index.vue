@@ -1,7 +1,7 @@
 <template>
     <div class='page-wrap'>
         <h2>随时随地开启交易</h2>
-        <img alt='' class='img-download' src='/images/download.png' srcset='' />
+        <img alt='' class='img-download' src='/images/download.jpg' srcset='' />
         <h4>下载币安客户端，所有交易尽在手中。</h4>
         <div class='content'>
             <div class='btn-wrap'>
@@ -30,7 +30,7 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .page-wrap {
     padding: rem(50px) rem(30px);
     .img-download {
@@ -57,7 +57,7 @@
     }
     .content {
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
         .btn-wrap {
             margin-right: rem(30px);
             .btn {

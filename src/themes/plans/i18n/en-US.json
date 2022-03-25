@@ -759,12 +759,21 @@
             "title3": "Track & Compare",
             "text3": "Reduce Human Biases in Trading, to Avoid Unintentional Loss",
             "title4": "Blockchain Circulation",
-            "text4": "Track Real Time Underlying Asset Price, Examine Trades on Blockchain"
+            "text4": "Track Real Time Underlying Asset Price, Examine Trades on Blockchain",
+            "title5": "Secure Asset Fund for Users (SAFU)",
+            "text5": "We stores 10% of all trading fees in a secure asset fund to protect a share of user funds.",
+            "title6": "Personalised Access Control",
+            "text6": "Advanced access control allows you to restrict devices and addresses that can access your account, for greater ease of mind.",
+            "title7": "Advanced Data Encryption",
+            "text7": "Your transaction data is secured via end-to-end encryption, ensuring that only you have access to your personal information.",
+            "title8": "Real time monitoring",
+            "text8": "Our risk management system analyzes each unusual activity, triggering an unusual suspension of withdrawals."
         },
         "getProfit": "Start earning today",
         "toReg":"Sign Up Now",
         "start": "Get Started",
         "upDown": "24h chg%",
-        "follow": "Follow Us"
+        "follow": "Follow Us",
+        "about": "Abount us"
     }
 }

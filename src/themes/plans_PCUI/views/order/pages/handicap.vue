@@ -240,12 +240,9 @@ export default {
 }
 .priceMultiGear {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 20px;
     height: 114px;
-    @media screen and (max-width: 1560px){
-        font-size: 12px;
-    }
     &.sell {
         color: var(--riseColor);
         margin-top: 0;

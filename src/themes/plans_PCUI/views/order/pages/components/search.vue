@@ -80,7 +80,7 @@ export default {
     width: 100%;
     overflow: hidden;
     .search-input {
-        width: 328px;
+        width: 298px;
         height: 40px;
         :deep{
             .el-input__inner{

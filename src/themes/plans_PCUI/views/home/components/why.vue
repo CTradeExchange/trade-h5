@@ -37,6 +37,9 @@
             </li>
         </ul> -->
 
+        <p class='descTitle'>
+            安全始终是我们的优先考虑
+        </p>
         <div class='descList'>
             <div class='row'>
                 <img alt='' class='icon' src='~@planspc/images/home/moneyBox.png' />
@@ -68,7 +71,7 @@
             <div class='row last'>
                 <img alt='' class='icon' src='~@planspc/images/home/check.png' />
                 <p class='descTitle'>
-                    实时监控
+                    账户异常实时监控
                 </p>
                 <p class='descContent'>
                     我们的风险管理系统会分析每次提款尝试、密码重置、双重身份验证重置和电子邮件地址更改。异常活动会触发至少 24-48 小时的暂停提款。
@@ -87,7 +90,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .why-module {
-    margin-top: 90px;
+    margin-top: 45px;
     color: var(--color);
     .title {
         @include font();
@@ -129,6 +132,13 @@ export default {
             }
         }
     }
+}
+.descTitle{
+    font-family: "Microsoft Yahei";
+    font-size: 32px;
+    font-weight: bold;
+    text-align: center;
+    padding-bottom: 20px;
 }
 .descList{
     padding-top: 40px;
