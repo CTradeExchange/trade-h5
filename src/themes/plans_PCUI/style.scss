@@ -769,24 +769,24 @@ body {
 }
 
 /* 滚动条 */
-::-webkit-scrollbar {
-	width: 7px;
-	height: 7px;
-}
-::-webkit-scrollbar-track {
-	background: var(--bgColor);
-	border-radius: 10px;
-	outline: 1px solid var(--lineColor);
-	outline-offset: -1px;
-	border: 1px solid var(--lineColor);
-}
-::-webkit-scrollbar-thumb {
-	background: #C2C2C2;
-	border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:hover {
-	background: #7D7D7D;
-}
+// ::-webkit-scrollbar {
+// 	width: 7px;
+// 	height: 7px;
+// }
+// ::-webkit-scrollbar-track {
+// 	background: var(--bgColor);
+// 	border-radius: 10px;
+// 	outline: 1px solid var(--lineColor);
+// 	outline-offset: -1px;
+// 	border: 1px solid var(--lineColor);
+// }
+// ::-webkit-scrollbar-thumb {
+// 	background: #C2C2C2;
+// 	border-radius: 10px;
+// }
+// ::-webkit-scrollbar-thumb:hover {
+// 	background: #7D7D7D;
+// }
 
 
 // element-plus

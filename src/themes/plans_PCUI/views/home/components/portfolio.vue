@@ -74,7 +74,6 @@
             height: 78px;
             background-size: contain;
             background-repeat: no-repeat;
-            border-radius: 50%;
         }
         .icon1{
             background-image: url('../../../images/home/portfolio-icon1.png');
