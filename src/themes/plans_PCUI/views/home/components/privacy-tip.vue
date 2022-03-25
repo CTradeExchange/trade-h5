@@ -2,18 +2,18 @@
     <div v-if='showPrivacy' class='privacy-module'>
         <p class='tip'>
             <span>
-                我们使用 cookie 来增强您的体验、分析我们的流量以及用于安全和营销。访问我们的网站即表示您同意我们使用 cookie。
+                {{ $t('home.privacy.text1') }}
             </span>
             <a class='link' href='javascript:;' @click='openPrivacy'>
-                阅读有关 cookie 的更多信息
+                {{ $t('home.privacy.text2') }}
             </a>
         </p>
         <div class='buttons'>
             <button class='btn state-1' @click='onAgree'>
-                同意
+                {{ $t('home.privacy.agree') }}
             </button>
             <button class='btn state-2' @click='onClose'>
-                关闭
+                {{ $t('home.privacy.close') }}
             </button>
         </div>
     </div>

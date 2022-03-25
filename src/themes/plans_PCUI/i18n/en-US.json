@@ -112,7 +112,8 @@
         "transRecords": "Trade record",
         "MFA_status": "Google Authenticator",
         "MFA_bind": "Bind Google Authenticator",
-        "MFA_close": "Close Google Authenticator"
+        "MFA_close": "Close Google Authenticator",
+        "download": "Download"
     },
     "historyList": {
         "noMore": "No more"
@@ -170,52 +171,13 @@
         "language": "Language",
         "theme": "Theme",
 		"fund": "Funds",
-        "fundManager": "Fund Operation Area"
-    },
-    "footer": {
-        "about": {
-            "1": "CATS2.0",
-            "2": "Opportunties",
-            "3": "Fees",
-            "4": "Partner",
-            "title": "Aboout"
-        },
-        "tool": {
-            "1": "Client terminal download",
-            "2": "API specifications",
-            "3": "Digital asset introduction",
-            "4": "Official verification",
-            "5": "Historical data",
-            "title": "Tools"
-        },
-        "serve": {
-            "1": "Fee",
-            "2": "Coin loan amount",
-            "3": "Help",
-            "4": "Beginner's Guide ",
-            "5": "Contract lesson",
-            "title": "Service"
-        },
-        "support": {
-            "1": "Partnership",
-            "2": "Institutional",
-            "3": "Large shareholder",
-            "4": "Advertising",
-            "title": "Support"
-        },
-        "terms": {
-            "1": "User agreement",
-            "2": "Privacy",
-            "3": "Trading Rule",
-            "title": "Terms"
-        }
+        "fundManager": "Fund Operation Area",
+        "moreDownload": "更多下载选择"
     },
     "home": {
         "quick": {
-            "title": "Reach Financial Freedom",
-            "describe": "Invest in Cryptocurrency Index Fund & Mainstream Spots Effortlessly",
-            "placeholder": "Insert Your Email or Phone Number",
-            "register": "Register"
+            "title": "我们在东南亚地区始终保持领先",
+			"btnText": "开始使用"
         },
         "download": {
             "title": "Trade 7x24 with no boundary",
@@ -231,16 +193,39 @@
             "text3": "Which crypto is suitable for beginner"
         },
         "why": {
-            "title": "Why trade with Us?",
-            "describe": "Choose Vitatoken as Your Cryptocurrency Trading Platform",
-            "title1": "Lowest Fee",
-            "text1": "0.5% Handling Fee for Index Fund Trading, More Funds Are Coming Soon",
-            "title2": "Data & Technical Support",
-            "text2": "Machine Learning & Testing to Optimize the Parameter",
-            "title3": "Track & Compare",
-            "text3": "Reduce Human Biases in Trading, to Avoid Unintentional Loss",
-            "title4": "Blockchain Circulation",
-            "text4": "Track Real Time Underlying Asset Price, Examine Trades on Blockchain"
+			"text1": "安全始终是我们的优先考虑",
+            "text2": "用户安全资产基金(SAFU)",
+            "text3": "我们将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。",
+            "text4": "个性化访问控制",
+            "text5": "高级访问控制限制访问个人账户的设备和地址，让用户无后顾之忧。",
+            "text6": "先进数据加密",
+            "text7": "个人交易数据通过端到端加密获得保障，仅限本人访问个人信息。",
+            "text8": "账户异常实时监控",
+            "text9": "我们的风险管理系统会分析每次提款尝试、密码重置、双重身份验证重置和电子邮件地址更改。异常活动会触发至少 24-48 小时的暂停提款。"
+		},
+        "fundDesc": {
+            "text1": "探索V10指数",
+            "text2": "投资者可以利用V10指数轻松跟踪加密资产的整体市场表现，并且在超过70%的时间中保持领先",
+            "text3": "阅读V10指数白皮书（PDF）",
+            "text4": "V10 ETF基金",
+            "text5": "降低门槛、分散投资、优化配置、动态调整...... <br />您所需要的一切均由专业的基金经理打理，而您只需要坐享其成",
+            "text6": "阅读V10 ETF基金白皮书（PDF）"
+        },
+        "portfolio": {
+            "text1": "立即创建您的加密货币投资组合",
+            "text2": "我们具有多种功能，使其成为开始交易的最佳场所",
+            "text3": "简洁高效",
+            "text4": "买卖流行的数字货币，在一个地方跟踪它们。",
+            "text5": "美观大方",
+            "text6": "清爽的界面始终将内容清晰地呈现给您。",
+            "text7": "无处不在",
+            "text8": "使用适用于 Android 或 iOS 设备，随时随地让您保持市场领先地位。"
+        },
+        "privacy": {
+            "agree": "同意",
+            "close": "关闭",
+            "text1": "我们使用 cookie 来增强您的体验、分析我们的流量以及用于安全和营销。访问我们的网站即表示您同意我们使用 cookie。",
+            "text2": "阅读有关 cookie 的更多信息"
         },
         "marketTrend": "Market Trend"
     },

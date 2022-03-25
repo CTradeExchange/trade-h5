@@ -446,7 +446,7 @@ const routes = [
                 name: 'Download',
                 component: () => import(/* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
                 meta: {
-                    title: ''
+                    title: 'route.download'
                 }
             }
         ],

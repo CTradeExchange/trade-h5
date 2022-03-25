@@ -3,10 +3,10 @@
         <div class='fundDesc'>
             <div class='column rightLine'>
                 <p class='title'>
-                    探索V10指数
+                    {{ $t('home.fundDesc.text1') }}
                 </p>
                 <p class='desc'>
-                    投资者可以利用V10指数轻松跟踪加密资产的整体市场表现，并且在超过70%的时间中保持领先
+                    {{ $t('home.fundDesc.text2') }}
                 </p>
                 <!-- <ul class='fundList'>
                     <li v-for='item in fundList' :key='item.ratio' class='item'>
@@ -18,22 +18,19 @@
                 </ul> -->
                 <div class='btnBox'>
                     <button class='btn'>
-                        阅读V10指数白皮书（PDF）
+                        {{ $t('home.fundDesc.text3') }}
                     </button>
                 </div>
             </div>
             <div class='column'>
                 <p class='title'>
-                    V10 ETF基金
+                    {{ $t('home.fundDesc.text4') }}
                 </p>
-                <p class='desc'>
-                    降低门槛、分散投资、优化配置、动态调整...... <br />
-                    您所需要的一切均由专业的基金经理打理，而您只需要坐享其成
-                </p>
+                <p class='desc' v-html="$t('home.fundDesc.text5')"></p>
                 <!-- <img alt='' class='jingzhiImg' src='../../../images/home/jingzhi.png' /> -->
                 <div class='btnBox'>
                     <button class='btn' @click="openPDF('https://www.vitatoken.com/site/V10%20Fund%20Whitepaper.pdf')">
-                        阅读V10 ETF基金白皮书（PDF）
+                        {{ $t('home.fundDesc.text6') }}
                     </button>
                 </div>
             </div>
