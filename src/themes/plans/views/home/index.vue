@@ -568,6 +568,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             font-weight: 600;
             font-size: 24px;
             line-height: 32px;
+            text-align: center;
         }
         .t2 {
             margin-top: 8px;
