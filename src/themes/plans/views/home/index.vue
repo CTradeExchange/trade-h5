@@ -208,11 +208,11 @@
             <!-- 页脚 -->
             <div class='footer-wrap'>
                 <div class='menu'>
-                    <div class='main' @click="expand('product')">
+                    <div class='main' @click="expand('about')">
                         <span>{{ $t('vitaHome.about') }}</span>
-                        <van-icon :name='productVis ? "minus" : "plus"' />
+                        <van-icon :name='aboutVis ? "minus" : "plus"' />
                     </div>
-                    <div v-show='productVis' class='sub'>
+                    <div v-show='aboutVis' class='sub'>
                         <p class='link' @click='jumpUrl("trading")'>
                             {{ $t('vitaHome.about') }}
                         </p>
@@ -361,6 +361,7 @@ const langObj = ref({
 const regVal = ref('')
 const lang = ref(getCookie('lang') || 'zh-CN')
 const newsData = ref({ orgid: 1, newsArea: 1 })
+const aboutVis = ref(false)
 const serviceVis = ref(false)
 const productVis = ref(false)
 const helpVis = ref(false)
@@ -390,6 +391,8 @@ const expand = module => {
         serviceVis.value = !serviceVis.value
     } else if (module === 'help') {
         helpVis.value = !helpVis.value
+    } else if (module === 'about') {
+        aboutVis.value = !aboutVis.value
     }
 }
 
@@ -744,6 +747,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                 }
             }
             .sub {
+                padding-bottom: 20px;
                 .link {
                     padding: rem(15px) 0;
                     color: var(--normalColor);
@@ -844,9 +848,14 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     .footer {
         text-align: center;
         .close-btn {
+            color: var(--primary);
+            cursor: pointer;
+            display: inline-block;
+        }
+        .agree {
             display: inline-block;
             width: fit-content;
-            margin-left: rem(80px);
+            margin-right: rem(20px);
             padding: 0 24px;
             color: rgb(255, 255, 255);
             font-size: 14px;
@@ -854,10 +863,6 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             background-color: rgb(22, 82, 240);
             border: 1px solid rgb(22, 82, 240);
             border-radius: 4px;
-            cursor: pointer;
-        }
-        .agree {
-            color: var(--primary);
             cursor: pointer;
         }
     }

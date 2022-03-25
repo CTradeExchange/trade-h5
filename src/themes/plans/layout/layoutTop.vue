@@ -339,6 +339,7 @@ const colorSelect = (action) => {
     padding: rem(26px) 0;
     background: rgba(18, 22, 28, 0.9);
     .brand {
+        font-size: 12px;
         .logo {
             display: inline-block;
             width: 34px;
