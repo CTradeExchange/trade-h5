@@ -8,7 +8,9 @@
 
 <script setup>
 import { getCookie } from '@/utils/util.js'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 // 当前语言
 const lang = getCookie('lang')
 // 轮播图列表
@@ -25,7 +27,7 @@ const bannerList = [
 ]
 // 点击轮播图
 const bannerClick = (item) => {
-    window.open('https://www.vitatoken.com/site/new')
+    router.push({ path: '/fund' })
 }
 </script>
 

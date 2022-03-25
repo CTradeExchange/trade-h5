@@ -67,11 +67,14 @@
 </template>
 
 <script>
-import { computed, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { Toast } from 'vant'
 import currencyIcon from '@/components/currencyIcon.vue'
 import etfIcon from '@planspc/components/etfIcon.vue'
+import { findFundPage } from '@/api/fund.js'
 
 export default {
     components: {
@@ -82,6 +85,7 @@ export default {
     setup (props, context) {
         const router = useRouter()
         const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
         // 产品列表map数据
         const productMap = computed(() => store.state._quote.productMap)
         // 当前要显示的产品keys
@@ -97,6 +101,17 @@ export default {
             })
             return result
         })
+        // 基金列表
+        const fundList = ref([])
+
+        // 获取基金产品列表，
+        const getFundPage = () => {
+            findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
+                if (res.check()) {
+                    fundList.value = res.data.records
+                }
+            })
+        }
 
         // 去交易
         const toOrder = item => {
@@ -105,7 +120,12 @@ export default {
 
         // 去基金页面
         const toFund = item => {
-            router.push(`/fund?fundId=${item.fundId}`)
+            const fund = fundList.value.find(el => el.shareTokenCode === item.baseCurrency)
+            if (fund) {
+                router.push(`/fund?fundId=${item.fundId}`)
+            } else {
+                Toast(t('trade.noFeature'))
+            }
         }
 
         // 查看更多
@@ -116,6 +136,8 @@ export default {
 
         onMounted(() => {
             context.emit('update', productKeys)
+            // 获取基金列表
+            getFundPage()
         })
 
         return {

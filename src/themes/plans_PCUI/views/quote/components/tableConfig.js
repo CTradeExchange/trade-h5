@@ -1,18 +1,21 @@
 import ETF from '@planspc/components/etfIcon'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import { computed, unref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
+import { findFundPage } from '@/api/fund.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { Toast } from 'vant'
 
 export const getColumns = tradeType => {
     const store = useStore()
     const router = useRouter()
     const { t } = useI18n({ useScope: 'global' })
     const productMap = computed(() => store.state._quote.productMap)
-
     const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '--'
+    // 基金列表
+    const fundList = ref([])
 
     /** 添加自选逻辑 */
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
@@ -41,6 +44,16 @@ export const getColumns = tradeType => {
     }
     /** 添加自选逻辑 */
 
+    // 获取基金产品列表，
+    const getFundPage = () => {
+        findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
+            if (res.check()) {
+                fundList.value = res.data.records
+            }
+        })
+    }
+    getFundPage()
+
     // 去交易
     const gotoOrder = (event, product) => {
         event.stopPropagation()
@@ -56,12 +69,17 @@ export const getColumns = tradeType => {
     // 去基金
     const gotoFund = (event, product) => {
         event.stopPropagation()
-        router.push({
-            name: 'Fund',
-            query: {
-                fundId: product.fundId
-            }
-        })
+        const fund = fundList.value.find(el => el.shareTokenCode === product.baseCurrency)
+        if (fund) {
+            router.push({
+                name: 'Fund',
+                query: {
+                    fundId: product.fundId
+                }
+            })
+        } else {
+            Toast(t('trade.noFeature'))
+        }
     }
 
     const commonBtns = ({ row }) => (
