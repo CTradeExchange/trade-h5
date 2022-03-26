@@ -76,7 +76,7 @@ export default {
                     return Object.assign({}, el, { dataKey })
                 })
             }
-            debugger
+
             return []
         }
     },

@@ -379,12 +379,10 @@ const productList = symbolKeys.map(key => store.state._quote.productMap[key]).fi
 
 const start = () => {
     const param = regVal.value.includes('@') ? { email: regVal.value } : { mobile: regVal.value }
-    debugger
     router.push({
         path: 'register',
         query: param
     })
-    // register?email=545665@32.add
 }
 
 const expand = module => {
@@ -859,7 +857,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         }
     }
     .content {
-        padding: 10px 0;
+        padding: 0 0 10px;
     }
     .footer {
         text-align: center;
