@@ -293,6 +293,9 @@ export default {
                 text-align:center;
                 background-color: var(--contentColor);
                 cursor:pointer;
+                &:hover {
+                    color: var(--primary);
+                }
             }
         }
         .activeLi{

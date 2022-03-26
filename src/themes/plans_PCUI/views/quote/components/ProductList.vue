@@ -99,6 +99,7 @@ onUnmounted(() => {
             color: var(--primary);
         }
         .btn{
+            @include hover();
             position: relative;
             z-index: 0;
             display: inline-block;

@@ -44,6 +44,7 @@ const activeName = computed({
         .el-tabs__header{
             margin: 0;
             .el-tabs__item{
+                @include hover();
                 height: 40px;
                 line-height: 40px;
                 padding: 0 18px;

@@ -2,7 +2,7 @@
     <div class='header'>
         <div v-for='symbolKey in symbolKeys' :key='symbolKey' class='item' @click='gotoOrder(symbolKey)'>
             <span class='name'>
-                {{ productMap[symbolKey]?.symbolCode || '- -' }}
+                {{ productMap[symbolKey]?.symbolName || '- -' }}
             </span>
             <span class='price'>
                 {{ productMap[symbolKey]?.price || '- -' }}
