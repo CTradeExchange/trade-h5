@@ -434,6 +434,9 @@ export default {
         overflow: auto;
     }
     .footerBtn {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
         height: rem(100px);
     }
 }
