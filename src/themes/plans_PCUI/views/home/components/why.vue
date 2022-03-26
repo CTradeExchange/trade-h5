@@ -1,44 +1,46 @@
 <template>
-    <div class='why-module auto-width'>
-        <p class='descTitle'>
-            {{ $t('home.why.text1') }}
-        </p>
-        <div class='descList'>
-            <div class='row'>
-                <img alt='' class='icon' src='~@planspc/images/home/moneyBox.png' />
-                <p class='descTitle'>
-                    {{ $t('home.why.text2') }}
-                </p>
-                <p class='descContent'>
-                    {{ $t('home.why.text3') }}
-                </p>
-            </div>
-            <div class='row'>
-                <img alt='' class='icon' src='~@planspc/images/home/trafficLight.png' />
-                <p class='descTitle'>
-                    {{ $t('home.why.text4') }}
-                </p>
-                <p class='descContent'>
-                    {{ $t('home.why.text5') }}
-                </p>
-            </div>
-            <div class='row'>
-                <img alt='' class='icon' src='~@planspc/images/home/lock.png' />
-                <p class='descTitle'>
-                    {{ $t('home.why.text6') }}
-                </p>
-                <p class='descContent'>
-                    {{ $t('home.why.text7') }}
-                </p>
-            </div>
-            <div class='row last'>
-                <img alt='' class='icon' src='~@planspc/images/home/check.png' />
-                <p class='descTitle'>
-                    {{ $t('home.why.text8') }}
-                </p>
-                <p class='descContent'>
-                    {{ $t('home.why.text9') }}
-                </p>
+    <div class='fullWidth'>
+        <div class='why-module auto-width'>
+            <p class='descTitle'>
+                {{ $t('home.why.text1') }}
+            </p>
+            <div class='descList'>
+                <div class='row'>
+                    <img alt='' class='icon' src='~@planspc/images/home/moneyBox.png' />
+                    <p class='descTitle'>
+                        {{ $t('home.why.text2') }}
+                    </p>
+                    <p class='descContent'>
+                        {{ $t('home.why.text3') }}
+                    </p>
+                </div>
+                <div class='row'>
+                    <img alt='' class='icon' src='~@planspc/images/home/trafficLight.png' />
+                    <p class='descTitle'>
+                        {{ $t('home.why.text4') }}
+                    </p>
+                    <p class='descContent'>
+                        {{ $t('home.why.text5') }}
+                    </p>
+                </div>
+                <div class='row'>
+                    <img alt='' class='icon' src='~@planspc/images/home/lock.png' />
+                    <p class='descTitle'>
+                        {{ $t('home.why.text6') }}
+                    </p>
+                    <p class='descContent'>
+                        {{ $t('home.why.text7') }}
+                    </p>
+                </div>
+                <div class='row last'>
+                    <img alt='' class='icon' src='~@planspc/images/home/check.png' />
+                    <p class='descTitle'>
+                        {{ $t('home.why.text8') }}
+                    </p>
+                    <p class='descContent'>
+                        {{ $t('home.why.text9') }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -52,8 +54,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.fullWidth{
+    margin-top: 20px;
+    padding: 50px 0;
+}
 .why-module {
-    margin-top: 45px;
     color: var(--color);
     .title {
         @include font();
@@ -108,13 +113,11 @@ export default {
     padding-left: 16px;
     padding-right: 16px;
     padding-bottom: 16px;
-    background: var(--contentColor);
     text-align: center;
     display: flex;
     justify-content: space-between;
     .row{
         margin-right: 64px;
-        margin-bottom: 40px;
         width: 245px;
         &.last{
             margin-right: 0;

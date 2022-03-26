@@ -106,8 +106,8 @@ export default {
     width: 1200px;
     margin: 0 auto;
     display: flex;
-    margin-top: 45px;
-    margin-bottom: 40px;
+    padding-top: 45px;
+    padding-bottom: 40px;
     .column{
         flex: 1;
         padding-right: 50px;

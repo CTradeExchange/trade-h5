@@ -28,8 +28,8 @@ export const colors = {
         minorColor: '#999999',
         placeholdColor: '#c2c2c2',
         contentColor: '#ffffff',
-        bgColor: '#f8f8f8',
-        assistColor: '#f8f8f8',
+        bgColor: '#f4f4f4',
+        assistColor: '#f4f4f4',
         lineColor: '#eeeeee'
     },
     // disable: '#eeeeee'

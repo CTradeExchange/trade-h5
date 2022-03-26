@@ -1,67 +1,69 @@
 <template>
-    <div class='trade-module auto-width'>
-        <div class='trade-header'>
-            <strong class='title'>
-                {{ $t('home.marketTrend') }}
-            </strong>
-            <a class='more' href='javascript:;' @click='examineMore'>
-                <span>{{ $t('examineMore') }}</span>
-                <i class='el-icon-arrow-right'></i>
-            </a>
-        </div>
-        <!-- 产品列表 -->
-        <div class='product-module'>
-            <ul class='header-block'>
-                <li>
-                    <span>{{ $t('trade.name') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('trade.newPrice') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('trade.changePrice') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('trade.changePercent') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('c.handle') }}</span>
-                </li>
-            </ul>
-            <ul class='product-list'>
-                <li v-for='item in productList' :key='item.symbolKey'>
-                    <div class='row'>
-                        <currency-icon class='currency-icon' :currency='item.baseCurrency' :size='32' />
-                        <div class='name'>
-                            <span>{{ item.symbolName }}</span>
-                            <etf-icon v-if='item.etf' />
+    <div class='fullWidth'>
+        <div class='trade-module auto-width'>
+            <div class='trade-header'>
+                <strong class='title'>
+                    {{ $t('home.marketTrend') }}
+                </strong>
+                <a class='more' href='javascript:;' @click='examineMore'>
+                    <span>{{ $t('examineMore') }}</span>
+                    <i class='el-icon-arrow-right'></i>
+                </a>
+            </div>
+            <!-- 产品列表 -->
+            <div class='product-module'>
+                <ul class='header-block'>
+                    <li>
+                        <span>{{ $t('trade.name') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('trade.newPrice') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('trade.changePrice') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('trade.changePercent') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('c.handle') }}</span>
+                    </li>
+                </ul>
+                <ul class='product-list'>
+                    <li v-for='item in productList' :key='item.symbolKey'>
+                        <div class='row'>
+                            <currency-icon class='currency-icon' :currency='item.baseCurrency' :size='32' />
+                            <div class='name'>
+                                <span>{{ item.symbolName }}</span>
+                                <etf-icon v-if='item.etf' />
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <span>
-                            {{ item.cur_price || '--' }}
-                        </span>
-                    </div>
-                    <div>
-                        <span>
-                            {{ item.upDownAmount || '--' }}
-                        </span>
-                    </div>
-                    <div class='upDownWidth'>
-                        <strong>
-                            {{ item.upDownWidth || '--' }}
-                        </strong>
-                    </div>
-                    <div class='handle'>
-                        <button v-if='item.etf' class='trade active' @click='toFund(item)'>
-                            {{ $t('fundInfo.buy') }}
-                        </button>
-                        <button class='trade' @click='toOrder(item)'>
-                            {{ $t('route.trade') }}
-                        </button>
-                    </div>
-                </li>
-            </ul>
+                        <div>
+                            <span>
+                                {{ item.cur_price || '--' }}
+                            </span>
+                        </div>
+                        <div>
+                            <span>
+                                {{ item.upDownAmount || '--' }}
+                            </span>
+                        </div>
+                        <div class='upDownWidth'>
+                            <strong>
+                                {{ item.upDownWidth || '--' }}
+                            </strong>
+                        </div>
+                        <div class='handle'>
+                            <button v-if='item.etf' class='trade active' @click='toFund(item)'>
+                                {{ $t('fundInfo.buy') }}
+                            </button>
+                            <button class='trade' @click='toOrder(item)'>
+                                {{ $t('route.trade') }}
+                            </button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </template>
@@ -152,8 +154,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 
-.trade-module {
-    margin-top: 96px;
+.fullWidth {
+    margin-top: 20px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background: #fff;
 }
 .trade-header {
     display: flex;

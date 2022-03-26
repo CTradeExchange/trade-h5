@@ -1,38 +1,40 @@
 <template>
-    <div class='portfolio'>
-        <h2 class='h2title'>
-            {{ $t('home.portfolio.text1') }}
-        </h2>
-        <p class='titleDesc'>
-            {{ $t('home.portfolio.text2') }}
-        </p>
-        <div class='list'>
-            <div class='row'>
-                <i class='icon icon1'></i>
-                <p class='title'>
-                    {{ $t('home.portfolio.text3') }}
-                </p>
-                <p class='desc'>
-                    {{ $t('home.portfolio.text4') }}
-                </p>
-            </div>
-            <div class='row'>
-                <i class='icon icon2'></i>
-                <p class='title'>
-                    {{ $t('home.portfolio.text5') }}
-                </p>
-                <p class='desc'>
-                    {{ $t('home.portfolio.text6') }}
-                </p>
-            </div>
-            <div class='row'>
-                <i class='icon icon3'></i>
-                <p class='title'>
-                    {{ $t('home.portfolio.text7') }}
-                </p>
-                <p class='desc'>
-                    {{ $t('home.portfolio.text8') }}
-                </p>
+    <div class='fullWidth'>
+        <div class='portfolio'>
+            <h2 class='h2title'>
+                {{ $t('home.portfolio.text1') }}
+            </h2>
+            <p class='titleDesc'>
+                {{ $t('home.portfolio.text2') }}
+            </p>
+            <div class='list'>
+                <div class='row'>
+                    <i class='icon icon1'></i>
+                    <p class='title'>
+                        {{ $t('home.portfolio.text3') }}
+                    </p>
+                    <p class='desc'>
+                        {{ $t('home.portfolio.text4') }}
+                    </p>
+                </div>
+                <div class='row'>
+                    <i class='icon icon2'></i>
+                    <p class='title'>
+                        {{ $t('home.portfolio.text5') }}
+                    </p>
+                    <p class='desc'>
+                        {{ $t('home.portfolio.text6') }}
+                    </p>
+                </div>
+                <div class='row'>
+                    <i class='icon icon3'></i>
+                    <p class='title'>
+                        {{ $t('home.portfolio.text7') }}
+                    </p>
+                    <p class='desc'>
+                        {{ $t('home.portfolio.text8') }}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -43,9 +45,14 @@
 </script>
 
 <style lang="scss" scoped>
+.fullWidth{
+    margin-top: 20px;
+    padding: 50px 0;
+    background: var(--contentColor);
+}
 .portfolio{
     width: 1200px;
-    margin: 110px auto 40px;
+    margin: 0 auto;
     background: url('../../../images/home/portfolio.png') no-repeat right 160px;
     .h2title{
         font-family: "Microsoft Yahei";

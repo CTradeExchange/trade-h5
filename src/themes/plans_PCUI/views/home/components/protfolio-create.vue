@@ -1,50 +1,52 @@
 <template>
-    <div class='portfolio auto-width'>
-        <div class='case'>
-            <p class='t1'>
-                {{ $t('home.portfolioCreate.text1') }}
-            </p>
-            <ul class='pro-list'>
-                <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/threeStep_img2.png' srcset='' />
-                    <div class='text'>
-                        <p class='t3'>
-                            {{ $t('home.portfolioCreate.text2') }}
-                        </p>
-                        <p class='t4'>
-                            {{ $t('home.portfolioCreate.text3') }}
-                        </p>
-                    </div>
-                </li>
-                <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
-                    <div class='text'>
-                        <p class='t3'>
-                            {{ $t('home.portfolioCreate.text4') }}
-                        </p>
-                        <p class='t4'>
-                            {{ $t('home.portfolioCreate.text5') }}
-                        </p>
-                    </div>
-                </li>
-                <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/threeStep_img4.png' srcset='' />
-                    <div class='text'>
-                        <p class='t3'>
-                            {{ $t('home.portfolioCreate.text6') }}
-                        </p>
-                        <p class='t4'>
-                            {{ $t('home.portfolioCreate.text7') }}
-                        </p>
-                    </div>
-                </li>
-            </ul>
-            <router-link class='start-btn' to='/register'>
-                {{ $t('home.getStarted') }}
-            </router-link>
-        </div>
-        <div class='case img-wrap'>
-            <img alt='' class='pro-img' src='/images/portfolio-section.png' srcset='' />
+    <div class='fullWidth'>
+        <div class='portfolio auto-width'>
+            <div class='case'>
+                <p class='t1'>
+                    {{ $t('home.portfolioCreate.text1') }}
+                </p>
+                <ul class='pro-list'>
+                    <li class='pro-item'>
+                        <img alt='' class='icon-img' src='/images/threeStep_img2.png' srcset='' />
+                        <div class='text'>
+                            <p class='t3'>
+                                {{ $t('home.portfolioCreate.text2') }}
+                            </p>
+                            <p class='t4'>
+                                {{ $t('home.portfolioCreate.text3') }}
+                            </p>
+                        </div>
+                    </li>
+                    <li class='pro-item'>
+                        <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
+                        <div class='text'>
+                            <p class='t3'>
+                                {{ $t('home.portfolioCreate.text4') }}
+                            </p>
+                            <p class='t4'>
+                                {{ $t('home.portfolioCreate.text5') }}
+                            </p>
+                        </div>
+                    </li>
+                    <li class='pro-item'>
+                        <img alt='' class='icon-img' src='/images/threeStep_img4.png' srcset='' />
+                        <div class='text'>
+                            <p class='t3'>
+                                {{ $t('home.portfolioCreate.text6') }}
+                            </p>
+                            <p class='t4'>
+                                {{ $t('home.portfolioCreate.text7') }}
+                            </p>
+                        </div>
+                    </li>
+                </ul>
+                <router-link class='start-btn' to='/register'>
+                    {{ $t('home.getStarted') }}
+                </router-link>
+            </div>
+            <div class='case img-wrap'>
+                <img alt='' class='pro-img' src='/images/portfolio-section.png' srcset='' />
+            </div>
         </div>
     </div>
 </template>
@@ -54,9 +56,13 @@
 
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
+.fullWidth{
+    margin-top: 20px;
+    background: var(--contentColor);
+    padding-top: 60px;
+}
 .portfolio {
     display: flex;
-    margin-top: 80px;
     .case {
         flex: 1;
     }
@@ -79,7 +85,7 @@
         }
     }
     .pro-list {
-        margin-top: 80px;
+        margin-top: 60px;
         .pro-item {
             display: flex;
             margin-bottom: 64px;
@@ -107,11 +113,11 @@
     .start-btn {
         display: inline-block;
         width: 180px;
-        color: #181A20;
+        color: #fff;
         font-weight: bold;
         line-height: 40px;
         text-align: center;
-        background-color: #FCD535;
+        background-color: var(--primary);
         border-radius: 5px;
         cursor: pointer;
     }

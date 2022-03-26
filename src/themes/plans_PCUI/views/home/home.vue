@@ -24,20 +24,22 @@
                 <protfolio-create />
 
                 <!-- 信息流模块 -->
-                <div class='flow-module auto-width'>
-                    <div class='flow-left'>
-                        <h3 class='title'>
-                            {{ $t('information.focusNews') }}
-                        </h3>
-                        <!-- 新闻 -->
-                        <news />
-                    </div>
-                    <div class='flow-right'>
-                        <h3 class='title'>
-                            {{ $t('information.newsFlash') }}
-                        </h3>
-                        <!-- 7x24 -->
-                        <seven />
+                <div class='newsFullWidth'>
+                    <div class='flow-module auto-width'>
+                        <div class='flow-left'>
+                            <h3 class='title'>
+                                {{ $t('information.focusNews') }}
+                            </h3>
+                            <!-- 新闻 -->
+                            <news />
+                        </div>
+                        <div class='flow-right'>
+                            <h3 class='title'>
+                                {{ $t('information.newsFlash') }}
+                            </h3>
+                            <!-- 7x24 -->
+                            <seven />
+                        </div>
                     </div>
                 </div>
 
@@ -106,12 +108,17 @@ onUnmounted(() => {
 .content-module {
     padding-bottom: 80px;
     overflow: auto;
+    background-color: var(--bgColor);
+}
+
+// 信息流模块
+.newsFullWidth{
+    margin-top: 20px;
+    padding: 50px 0;
     background-color: var(--contentColor);
 }
-// 信息流模块
 .flow-module {
     display: flex;
-    margin-top: 90px;
     .flow-left {
         flex: 1;
     }

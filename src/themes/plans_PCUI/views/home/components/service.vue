@@ -20,7 +20,7 @@ const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
     align-items: center;
     width: 40px;
     height: 40px;
-    background: #FCD535;
+    background: var(--primary);
     border-radius: 50%;
     position: fixed;
     right: 10px;
@@ -29,7 +29,7 @@ const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
     cursor: pointer;
     .icon {
         font-size: 18px;
-        color: #181A20;
+        color: #fff;
     }
 }
 </style>
