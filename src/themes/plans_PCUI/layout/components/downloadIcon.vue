@@ -2,7 +2,7 @@
     <el-popover
         placement='bottom'
         trigger='hover'
-        :width='160'
+        :width='180'
     >
         <template #reference>
             <i class='icon icon_xiazai' :title="$t('header.download')"></i>
@@ -37,8 +37,8 @@ const creatQrCode = () => {
         qrCode.value.innerHTML = ''
         new QRCode(qrCode.value, {
             text: 'https://play.google.com/store/apps/details?id=uni.UNI8B7D0E0',
-            width: 120,
-            height: 120,
+            width: 160,
+            height: 160,
             colorDark: localGet('invertColor') === 'light' ? '#000000' : '#ffffff',
             colorLight: localGet('invertColor') === 'light' ? '#ffffff' : '#000000',
             correctLevel: QRCode.CorrectLevel.H
@@ -68,13 +68,13 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 120px;
+    width: 140px;
     padding: 5px 0;
     margin: 0 auto;
     img, .qrcode {
         display: block;
-        width: 120px;
-        height: 120px;
+        width: 140px;
+        height: 140px;
     }
     .tip {
         text-align: center;
