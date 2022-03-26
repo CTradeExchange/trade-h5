@@ -24,6 +24,8 @@
             </div>
         </div>
 
+        <FundDesc />
+
         <div class='product-wrap'>
             <h1>{{ $t('vitaHome.trend') }}</h1>
 
@@ -108,10 +110,12 @@
                     </p>
                 </li>
             </ul>
-            <router-link class='start-btn' to='/registe'>
+            <router-link class='start-btn' to='/register'>
                 {{ $t('vitaHome.start') }}
             </router-link>
         </div>
+
+        <Portfolio />
 
         <!-- 信息流 屏蔽-->
         <!-- <div class='news-wrap'>
@@ -120,48 +124,6 @@
 
         <!-- why模块 -->
         <div class='why-wrap'>
-            <!-- <h2>{{ $t('vitaHome.why.title') }}</h2>
-            <h4>{{ $t('vitaHome.why.describe') }}</h4>
-            <ul class='reason-list'>
-                <li class='reason-item'>
-                    <img alt='' class='ri-img' src='../../images/low-fee-100.jpg' srcset='' />
-                    <p class='t1'>
-                        {{ $t('vitaHome.why.title1') }}
-                    </p>
-                    <p class='t2'>
-                        {{ $t('vitaHome.why.text1') }}
-                    </p>
-                </li>
-                <li class='reason-item'>
-                    <img alt='' class='ri-img' src='../../images/support-100.jpg' srcset='' />
-                    <p class='t1'>
-                        {{ $t('vitaHome.why.title2') }}
-                    </p>
-                    <p class='t2'>
-                        {{ $t('vitaHome.why.text2') }}
-                    </p>
-                </li>
-                <li class='reason-item'>
-                    <img alt='' class='ri-img' src='../../images/Tracking-100.jpg' srcset='' />
-                    <p class='t1'>
-                        {{ $t('vitaHome.why.title3') }}
-                    </p>
-                    <p class='t2'>
-                        {{ $t('vitaHome.why.text3') }}
-                    </p>
-                </li>
-
-                <li class='reason-item'>
-                    <img alt='' class='ri-img' src='../../images/Clock-chain-100.jpg' srcset='' />
-                    <p class='t1'>
-                        {{ $t('vitaHome.why.title4') }}
-                    </p>
-                    <p class='t2'>
-                        {{ $t('vitaHome.why.text4') }}
-                    </p>
-                </li>
-            </ul> -->
-
             <div class='descBarTitle'>
                 安全始终是我们的首要考虑
             </div>
@@ -212,7 +174,7 @@
                     <div class='css-1r4nzjd'>
                         <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
                         </a>
-                        <van-button block class='lijiRegister' type='primary'>
+                        <van-button block class='lijiRegister' type='primary' @click="$router.push('/register')">
                             {{ $t('vitaHome.toReg') }}
                         </van-button>
                     </div>
@@ -357,6 +319,8 @@ import { useRouter } from 'vue-router'
 import { setCookie, getCookie, isEmpty, localGet, localSet } from '@/utils/util'
 import News from '@plans/modules/news/news.vue'
 import LangPop from './components/langPop.vue'
+import FundDesc from './components/fundDesc.vue'
+import Portfolio from './components/portfolio.vue'
 import { useStore } from 'vuex'
 import currencyIcon from '@/components/currencyIcon.vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -517,6 +481,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     }
 }
 .registerFooter {
+    margin-top: rem(40px);
     padding: 40px 16px 16px;
     text-align: center;
     .immediatelyText {
@@ -535,18 +500,16 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 }
 .page-wrap {
     .banner {
-        height: rem(450px);
         //background-image: linear-gradient(120deg, #84FAB0 0%, #8FD3F4 100%);
         img {
             width: 100%;
         }
     }
     .reg-wrap {
-        margin-top: rem(80px);
-        padding: 0 rem(30px);
+        padding: rem(50px) rem(30px) 0;
         .input-wrap {
             height: rem(76px);
-            margin-bottom: rem(32px);
+            margin-bottom: 16px;
             line-height: rem(76px);
             background-color: #FFF;
             border: 1px solid transparent;
@@ -568,7 +531,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         }
     }
     .portfolio {
-        //margin-top: rem(30px);
+        margin-top: rem(40px);
         margin-bottom: rem(30px);
         padding: rem(60px) rem(30px);
         background: var(--contentColor);
@@ -730,28 +693,6 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         margin: rem(50px) 0;
         padding: rem(50px) 0;
         background: var(--contentColor);
-        h2 {
-            margin-bottom: rem(20px);
-            padding: 0 rem(30px);
-        }
-        h4 {
-            padding: 0 rem(30px);
-        }
-        .reason-list {
-            text-align: center;
-            .reason-item {
-                margin-top: rem(60px);
-                .ri-img {
-                    width: 100%;
-                }
-            }
-            .t1 {
-                margin-top: rem(30px);
-                margin-bottom: rem(20px);
-                font-weight: bold;
-                font-size: rem(38px);
-            }
-        }
     }
     .footer-wrap {
         margin-top: rem(50px);

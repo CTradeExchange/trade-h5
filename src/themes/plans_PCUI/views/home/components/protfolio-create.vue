@@ -28,7 +28,7 @@
                     </div>
                 </li>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img4.png' srcset='' />
                     <div class='text'>
                         <p class='t3'>
                             {{ $t('home.portfolioCreate.text6') }}
@@ -44,7 +44,7 @@
             </router-link>
         </div>
         <div class='case img-wrap'>
-            <img alt='' class='pro-img' src='/images/portfolio-section_w330.png' srcset='' />
+            <img alt='' class='pro-img' src='/images/portfolio-section.png' srcset='' />
         </div>
     </div>
 </template>
@@ -61,10 +61,10 @@
         flex: 1;
     }
     .t1 {
-        line-height: 1;
         color: #1E2329;
         font-weight: 600;
         font-size: 30px;
+        line-height: 1;
     }
     .t2 {
         margin-top: 6px;
@@ -74,8 +74,8 @@
     }
     .img-wrap {
         .pro-img {
-            margin-left: 150px;
             width: 335px;
+            margin-left: 150px;
         }
     }
     .pro-list {
