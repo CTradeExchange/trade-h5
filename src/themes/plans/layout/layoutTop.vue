@@ -427,7 +427,7 @@ const colorSelect = (action) => {
             width: 100%;
             margin-bottom: rem(30px);
             color: rgb(30, 35, 41);
-            font-size: 14px;
+            font-size: 16px;
             text-align: center;
         }
     }
