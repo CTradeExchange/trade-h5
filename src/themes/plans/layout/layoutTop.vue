@@ -1,7 +1,7 @@
 <template>
     <div v-show='downloadVis' class='download-app'>
         <div class='brand'>
-            <img alt='' class='logo' src='/images/vitamin_logo.png?vt=2' srcset='' />
+            <img alt='' class='logo' src='/images/vitamin_logo.png?vt=33' srcset='' />
             <div class='text'>
                 <p>Vitatoken APP</p>
                 <p>{{ $t('home.app') }}</p>
@@ -14,7 +14,7 @@
                     <path d='M19 20H5v2h14v-2zM13 14.5l4.6-4.7 1.5 1.4-7.1 7.1-7.1-7.1 1.4-1.4 4.7 4.7V2h2v12.5z' fill='currentColor' />
                 </svg>
             </div>
-            <van-icon class='close' color='#fff' name='cross' size='18' @click='downloadVis=false' />
+            <van-icon class='close' color='#333' name='cross' size='18' @click='downloadVis=false' />
         </div>
     </div>
     <div class='nav-wrap'>
@@ -337,9 +337,10 @@ const colorSelect = (action) => {
     justify-content: space-between;
     height: 60px;
     padding: rem(26px) 0;
-    background: #001d6a;
+    background: #fff;
     .brand {
         font-size: 12px;
+        color: var(--color);
         .logo {
             display: inline-block;
             width: 34px;
@@ -350,7 +351,6 @@ const colorSelect = (action) => {
         }
         .text {
             display: inline-block;
-            color: #FFF;
             vertical-align: middle;
         }
     }
@@ -365,12 +365,13 @@ const colorSelect = (action) => {
             margin-left: 12px;
             padding: 8px rem(10px);
             text-align: center;
-            background-color: #F0B90B;
+            background-color: var(--primary);
             border-radius: 50%;
             .dowonload-img {
                 //width: 20px;
                 //height: 20px;
                 margin-top: -3px;
+                color: #fff;
             }
         }
         .close {

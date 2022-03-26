@@ -254,7 +254,7 @@ export default {
             display: flex;
         }
         li {
-            margin-right: 125px;
+            margin-right: 120px;
             &:last-of-type {
                 margin-right: 0;
             }
@@ -266,6 +266,20 @@ export default {
             }
             .name {
                 margin-top: 10px;
+                position: relative;
+                padding-left: 26px;
+                color: var(--normalColor);
+                &::before {
+                    position: absolute;
+                    top: -3px;
+                    line-height: 1;
+                    display: inline-block;
+                    margin-left: -20px;
+                    color: #959595;
+                    font-size: 24px;
+                    font-family: Arial, sans-serif;
+                    content: '\2022';
+                }
                 a {
                     color: #515366;
                     font-size: 14px;
