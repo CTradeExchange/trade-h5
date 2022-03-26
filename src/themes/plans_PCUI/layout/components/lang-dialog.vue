@@ -4,13 +4,13 @@
             v-model='show'
             :before-close='close'
             :close-on-click-modal='false'
-            title='语言和地区'
+            :title="$t('compLang.languageAreas')"
             width='800px'
             @close='close'
         >
             <div class='lang-body'>
                 <p class='title'>
-                    选择语言和地区
+                    {{ $t('compLang.SelectLanguageAreas') }}
                 </p>
                 <div class='list'>
                     <ul>

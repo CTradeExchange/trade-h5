@@ -943,19 +943,20 @@
         "commited": "您的认证申请已提交成功，请耐心等待审核结果"
     },
     "newHomeFooter": {
-        "product": "產品",
-        "trading": "現貨交易",
-        "fund": "指數基金",
+        "product": "产品",
+        "trading": "现货交易",
+        "fund": "指数基金",
         "service": "服务",
-        "program": "新客活動",
-        "vip": "機構及VIP",
-        "customer": "在線客服",
-        "help": "幫助",
+        "program": "新客活动",
+        "vip": "机构及VIP",
+        "customer": "在线客服",
+        "help": "帮助",
         "faqs": "FAQs",
-        "terms": "條款条例",
-        "policy": "隱私政策",
+        "terms": "条款条例",
+        "policy": "隐私政策",
         "community": "社媒",
         "aboutus": "关于我们",
+        "about": "关于我们",
         "followus": "关注我们"
     }
 }

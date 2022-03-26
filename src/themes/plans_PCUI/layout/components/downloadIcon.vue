@@ -11,11 +11,11 @@
             <img src='/images/qrcode.png' />
             <!-- <div ref='qrCode' class='qrcode'></div> -->
             <p class='tip'>
-                {{ $t('header.downloadTip') }}
+                {{ $t('download.downloadTip') }}
             </p>
             <p class='line'></p>
             <button class='handle-btn' @click='toDownload'>
-                {{ $t('header.moreDownload') }}
+                {{ $t('download.moreDownload') }}
             </button>
         </div>
     </el-popover>

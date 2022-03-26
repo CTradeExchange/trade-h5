@@ -7,7 +7,7 @@
                 </span>
                 <input v-model.trim='registerAccount' :placeholder="$t('signIn.mobileEmailPlaceholder')" />
                 <button @click='goRegister'>
-                    {{ $t('home.quick.btnText') }}
+                    {{ $t('home.getStarted') }}
                 </button>
             </div>
         </div>

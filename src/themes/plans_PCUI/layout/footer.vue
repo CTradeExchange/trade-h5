@@ -10,7 +10,7 @@
                             </h4>
                             <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("about")'>
-                                    {{ $t('newHomeFooter.aboutus') }}
+                                    {{ $t('newHomeFooter.about') }}
                                 </a>
                             </p>
                         </li>

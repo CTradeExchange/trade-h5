@@ -19,7 +19,7 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     const userProductCategory = computed(() => store.getters.userProductCategory)
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList)
     // 产品排序顺序
-    const currencys = ['V10/USDT', 'BTC/USDT', 'ETH/USDT', 'BNB/USDT', 'SOL/USDT', 'ADA/USDT', 'XRP/USDT', 'LUNA/USDT', 'DOT/USDT', 'AVAX/USDT', 'DOGE/USDT', 'MATIC/USDT', 'SHIB/USDT', 'LINK/USDT', 'NEAR/USDT', 'UNI/USDT', 'ALGO/USDT', 'LTC/USDT', 'ATOM/USDT', 'ICP/USDT', 'BCH/USDT', 'TRX/USDT', 'XLM/USDT', 'FTM/USDT', 'FTT/USDT', 'MANA/USDT', 'HBAR/USDT', 'VET/USDT', 'AXS/USDT', 'FIL/USDT', 'SAND/USDT']
+    const currencys = ['V10', 'BTC', 'ETH', 'BNB', 'SOL', 'ADA', 'XRP', 'LUNA', 'DOT', 'AVAX', 'DOGE', 'MATIC', 'SHIB', 'LINK', 'NEAR', 'UNI', 'ALGO', 'LTC', 'ATOM', 'ICP', 'BCH', 'TRX', 'XLM', 'FTM', 'FTT', 'MANA', 'HBAR', 'VET', 'AXS', 'FIL', 'SAND']
 
     // 所选玩法的板块列表
     const categoryList = computed(() => {
@@ -50,7 +50,7 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
         // 产品排序
         currencys.map(currency => {
             arr.map(elem => {
-                if (elem.baseCurrency + '/' + elem.profitCurrency === currency) {
+                if (elem.baseCurrency === currency) {
                     result.push(elem)
                     arr = arr.filter(el => el.symbolId !== elem.symbolId)
                 }

@@ -30,7 +30,9 @@
 		"search": "搜索",
 		"add": "添加",
 		"startTime": "开始时间",
-		"endTime": "结束时间"
+		"endTime": "结束时间",
+        "languageAreas": "语言和地区",
+        "SelectLanguageAreas": "选择语言和地区"
 	},
 	"c": {
 		"login": "登录",
@@ -168,17 +170,14 @@
 		"set": "设置",
 		"service": "客服",
 		"download": "下载",
-		"downloadTip": "iOS & Android扫码下载APP",
 		"language": "语言",
 		"theme": "主题",
 		"fund": "基金",
-		"fundManager": "基金操作专区",
-        "moreDownload": "更多下载选择"
+		"fundManager": "基金操作专区"
 	},
 	"home": {
 		"quick": {
-			"title": "我们在东南亚地区始终保持领先",
-			"btnText": "开始使用"
+			"title": "我们在东南亚地区始终保持领先"
 		},
 		"download": {
 			"title": "交易随时随地",
@@ -222,13 +221,23 @@
             "text7": "无处不在",
             "text8": "使用适用于 Android 或 iOS 设备，随时随地让您保持市场领先地位。"
         },
+        "portfolioCreate": {
+            "text1": "只需三步，开始加密基金投资",
+            "text2": "开户并完成身份认证",
+            "text3": "完成身份验证流程以保护您的帐户和交易",
+            "text4": "新增资金至你的帐户",
+            "text5": "将资金添加到您的加密货币帐户以开始交易加密货币。",
+            "text6": "开始交易",
+            "text7": "买卖基金或加密货币，并了解Vitatoken提供的服务。"
+        },
         "privacy": {
             "agree": "同意",
             "close": "关闭",
             "text1": "我们使用 cookie 来增强您的体验、分析我们的流量以及用于安全和营销。访问我们的网站即表示您同意我们使用 cookie。",
             "text2": "阅读有关 cookie 的更多信息"
         },
-        "marketTrend": "市场趋势"
+        "marketTrend": "市场趋势",
+        "getStarted": "开始使用"
 	},
 	"chart": {
 		"high": "高",
@@ -951,5 +960,13 @@
 		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击前往",
 		"fundTokenTrade": "现货交易",
 		"noTradeMarket": "暂无交易市场"
-	}
+	},
+    "download": {
+        "downloadTip": "iOS & Android扫码下载APP",
+        "moreDownload": "更多下载选择",
+        "title": "随时随地开启交易",
+        "subTitle": "下载Vitatoken客户端，所有交易尽在手中。",
+        "android": "下载安卓端",
+        "ios": "下载苹果端"
+    }
 }

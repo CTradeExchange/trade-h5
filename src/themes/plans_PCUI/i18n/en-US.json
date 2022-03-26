@@ -30,7 +30,9 @@
         "search": "Search",
         "add": "Add",
         "startTime": "Start Time",
-        "endTime": "End Time"
+        "endTime": "End Time",
+        "languageAreas": "语言和地区",
+        "SelectLanguageAreas": "选择语言和地区"
     },
     "c": {
         "login": "Login",
@@ -167,17 +169,14 @@
         "set": "Setting",
         "service": "Customer Service",
         "download": "Download",
-        "downloadTip": "iOS & Android QR code download",
         "language": "Language",
         "theme": "Theme",
 		"fund": "Funds",
-        "fundManager": "Fund Operation Area",
-        "moreDownload": "更多下载选择"
+        "fundManager": "Fund Operation Area"
     },
     "home": {
         "quick": {
-            "title": "我们在东南亚地区始终保持领先",
-			"btnText": "开始使用"
+            "title": "我们在东南亚地区始终保持领先"
         },
         "download": {
             "title": "Trade 7x24 with no boundary",
@@ -221,13 +220,23 @@
             "text7": "无处不在",
             "text8": "使用适用于 Android 或 iOS 设备，随时随地让您保持市场领先地位。"
         },
+        "portfolioCreate": {
+            "text1": "Start Trading in three steps",
+            "text2": "Register & Complete Identity Verification",
+            "text3": "Complete Identity Verification to Secure Your Account & Transactions",
+            "text4": "Deposit",
+            "text5": "Deposit Funds to Start Cryptocurrency Trading",
+            "text6": "Start Trading",
+            "text7": "Buy and Sell Funds and Cryptocurrency, Find out More Vitatoken Service"
+        },
         "privacy": {
             "agree": "同意",
             "close": "关闭",
             "text1": "我们使用 cookie 来增强您的体验、分析我们的流量以及用于安全和营销。访问我们的网站即表示您同意我们使用 cookie。",
             "text2": "阅读有关 cookie 的更多信息"
         },
-        "marketTrend": "Market Trend"
+        "marketTrend": "Market Trend",
+        "getStarted": "开始使用"
     },
     "chart": {
         "high": "High",
@@ -563,7 +572,7 @@
         "inputVolume": "Please input order volume",
         "volumeError": "Order volume is incorrect",
         "pendingPriceError": "Order price is incorrect",
-        "handicap": "Quote",
+        "handicap": "Order Book",
         "nullAssets": "No such {0} asset account",
         "yi": "Use",
         "huan": "Repay",
@@ -642,10 +651,12 @@
         "multilpRange": "Leverage ratio range：",
         "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
         "saveSetting": "Save",
+        "offer": "Quote",
         "etfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
 		"purchaseOrRedemptionTip": "Purchase / Redemption: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to",
 		"purchaseOrRedemption": "Purchase / Redemption",
-		"noFeature": "This feature is not currently supported"
+		"noFeature": "This feature is not currently supported",
+        "material": "Fund Facts"
     },
     "contract": {
         "advance": "Prepay",
@@ -947,6 +958,13 @@
 		"fundTokenTradeTip": "When the fund token is listed, investors can buy and sell fund shares in the open spot market just like buying and selling cryptocurrencies. Click to go to",
 		"fundTokenTrade": "Spot trade",
 		"noTradeMarket": "No trading market"
-	}
-    
+	},
+    "download": {
+        "downloadTip": "iOS & Android扫码下载APP",
+        "moreDownload": "更多下载选择",
+        "title": "随时随地开启交易",
+        "subTitle": "下载Vitatoken客户端，所有交易尽在手中。",
+        "android": "下载安卓端",
+        "ios": "下载苹果端"
+    }
 }

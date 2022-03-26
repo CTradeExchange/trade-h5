@@ -2,20 +2,17 @@
     <div class='portfolio auto-width'>
         <div class='case'>
             <p class='t1'>
-                只需三步，开始加密基金投资
+                {{ $t('home.portfolioCreate.text1') }}
             </p>
-            <!-- <p class='t2'>
-                Start your first trade with these easy steps.
-            </p> -->
             <ul class='pro-list'>
                 <li class='pro-item'>
                     <img alt='' class='icon-img' src='/images/threeStep_img2.png' srcset='' />
                     <div class='text'>
                         <p class='t3'>
-                            开户并完成身份认证
+                            {{ $t('home.portfolioCreate.text2') }}
                         </p>
                         <p class='t4'>
-                            完成身份验证流程以保护您的帐户和交易
+                            {{ $t('home.portfolioCreate.text3') }}
                         </p>
                     </div>
                 </li>
@@ -23,10 +20,10 @@
                     <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
                     <div class='text'>
                         <p class='t3'>
-                            新增资金至你的帐户
+                            {{ $t('home.portfolioCreate.text4') }}
                         </p>
                         <p class='t4'>
-                            将资金添加到您的加密货币帐户以开始交易加密货币。
+                            {{ $t('home.portfolioCreate.text5') }}
                         </p>
                     </div>
                 </li>
@@ -34,40 +31,22 @@
                     <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
                     <div class='text'>
                         <p class='t3'>
-                            开始交易
+                            {{ $t('home.portfolioCreate.text6') }}
                         </p>
                         <p class='t4'>
-                            买卖基金或加密货币，并了解Vitatoken提供的服务。
+                            {{ $t('home.portfolioCreate.text7') }}
                         </p>
                     </div>
                 </li>
             </ul>
             <router-link class='start-btn' to='/register'>
-                开始使用
+                {{ $t('home.getStarted') }}
             </router-link>
         </div>
         <div class='case img-wrap'>
             <img alt='' class='pro-img' src='/images/portfolio-section_w330.png' srcset='' />
         </div>
     </div>
-
-    <!-- 只需三步，开始加密基金投资
-    Start Trading in three steps
-
-    开户并完成身份认证
-    完成身份验证流程以保护您的帐户和交易
-    Register & Complete Identity Verification
-    Complete Identity Verification to Secure Your Account & Transactions
-
-    新增资金至你的帐户
-    将资金添加到您的加密货币帐户以开始交易加密货币。
-    Deposit
-    Deposit Funds to Start Cryptocurrency Trading
-
-    开始交易
-    买卖基金或加密货币，并了解Vitatoken提供的服务。
-    Start Trading
-    Buy and Sell Funds and Cryptocurrency, Find out More Vitatoken Service -->
 </template>
 
 <script setup>
