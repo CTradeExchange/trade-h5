@@ -337,7 +337,7 @@ const colorSelect = (action) => {
     justify-content: space-between;
     height: 60px;
     padding: rem(26px) 0;
-    background: rgba(18, 22, 28, 0.9);
+    background: #001d6a;
     .brand {
         font-size: 12px;
         .logo {
@@ -384,7 +384,7 @@ const colorSelect = (action) => {
     align-items: center;
     justify-content: space-between;
     height: 64px;
-    background: var(--contentColor);
+    background: #181a20;
     .logo {
         display: inline-block;
         display: flex;
@@ -404,6 +404,7 @@ const colorSelect = (action) => {
             width: 24px;
             height: 24px;
             line-height: 1;
+            color: #fff;
         }
     }
 }

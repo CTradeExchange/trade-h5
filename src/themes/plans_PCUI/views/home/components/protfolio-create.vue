@@ -120,6 +120,7 @@
         background-color: var(--primary);
         border-radius: 5px;
         cursor: pointer;
+        @include hover();
     }
 }
 </style>

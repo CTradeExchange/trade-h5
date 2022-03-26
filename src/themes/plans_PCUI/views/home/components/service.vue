@@ -27,6 +27,7 @@ const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
     bottom: 16px;
     z-index: 102;
     cursor: pointer;
+    @include hover();
     .icon {
         font-size: 18px;
         color: #fff;
