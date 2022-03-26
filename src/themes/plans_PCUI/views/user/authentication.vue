@@ -13,7 +13,7 @@
                     </p>
                     <div class='auth-list'>
                         <div v-for='(item,index) in kycList' :key='index' class='auth-item'>
-                            <img alt='' class='auth-img' :src="require('@/themes/mt4/images/'+ item.levelCode +'.png')" />
+                            <img alt='' class='auth-img' :src="require('@/themes/plans/images/'+ item.levelCode +'.png')" />
                             <div class='content'>
                                 <p class='t1'>
                                     {{ kycMap[item.levelCode] }}
