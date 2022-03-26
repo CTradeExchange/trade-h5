@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class='block'>
-            <img alt='' class='img-download' src='/images/download.jpg' srcset='' />
+            <img alt='' class='img-download' src='/images/download.png' srcset='' />
         </div>
     </div>
 </template>
@@ -86,16 +86,16 @@ const openDownload = value => {
                 display: flex;
                 width: rem(300px);
                 height: rem(100px);
-                margin-bottom: 16px;
                 margin-right: 16px;
+                margin-bottom: 16px;
                 padding-top: 8px;
                 padding-right: 16px;
                 padding-bottom: 8px;
                 padding-left: 16px;
                 background-color: #1E2329;
                 border-radius: 4px;
-                opacity: 0.8;
                 cursor: pointer;
+                opacity: 0.8;
                 .icon-svg {
                     width: rem(48px);
                     margin-right: rem(20px);
