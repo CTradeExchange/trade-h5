@@ -400,8 +400,9 @@ const colorSelect = (action) => {
             margin-right: rem(30px);
         }
         .icon-svg {
-            width: rem(40px);
-            height: rem(40px);
+            width: 24px;
+            height: 24px;
+            line-height: 1;
         }
     }
 }
