@@ -3,7 +3,7 @@ import store from './store'
 
 export const colors = {
     common: {
-        primary: '#477fd3',
+        primary: '#0062FF',
         riseColor: '#ef5353',
         fallColor: '#26a69a',
         warn: '#ef5353',

@@ -4,7 +4,7 @@
             <img alt='' class='logo' src='/images/vitamin_logo.png' srcset='' />
             <div class='text'>
                 <p>Vitatoken APP</p>
-                <p>{{ $t('vitaHome.app') }}</p>
+                <p>{{ $t('home.app') }}</p>
             </div>
         </div>
 
@@ -66,7 +66,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("vitaHome.trade")' @click="routerTo('order')">
+            <van-cell class='cellItem' is-link :title='$t("route.spotTrade")' @click="routerTo('order')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -173,7 +173,7 @@
                     <van-icon class='right-arrow' name='arrow' />
                 </template>
             </van-cell>
-            <van-cell
+            <!-- <van-cell
                 class='cellItem'
                 is-link
                 :title='$t("common.dark")'
@@ -197,7 +197,7 @@
                 <template #right-icon>
                     <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
                 </template>
-            </van-cell>
+            </van-cell> -->
         </van-cell-group>
     </van-popup>
 
@@ -415,11 +415,11 @@ const colorSelect = (action) => {
             width: 100%;
             height: rem(96px);
             margin-left: 0;
-            color: rgb(24, 26, 32);
+            color: #fff;
             font-size: 16px;
             line-height: rem(96px);
             text-align: center;
-            background-color: #FCD535;
+            background-color: var(--primary);
             border-radius: rem(10px);
         }
         .btn {

@@ -5,7 +5,7 @@
                 <span class='labelText'>
                     {{ $t('home.quick.title') }}
                 </span>
-                <input v-model.trim='registerAccount' :placeholder="$t('signIn.mobileEmailPlaceholder')" />
+                <input v-model.trim='registerAccount' :placeholder="$t('register.input')" />
                 <button @click='goRegister'>
                     {{ $t('home.getStarted') }}
                 </button>

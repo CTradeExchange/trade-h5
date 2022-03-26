@@ -3,10 +3,10 @@
         <div class='fundDesc'>
             <div class='column rightLine'>
                 <p class='title'>
-                    {{ $t('vitaHome.fundDesc.text1') }}
+                    {{ $t('home.fundDesc.text1') }}
                 </p>
                 <p class='desc'>
-                    {{ $t('vitaHome.fundDesc.text2') }}
+                    {{ $t('home.fundDesc.text2') }}
                 </p>
                 <!-- <ul class='fundList'>
                     <li v-for='item in fundList' :key='item.ratio' class='item'>
@@ -18,19 +18,19 @@
                 </ul> -->
                 <div class='btnBox'>
                     <button class='btn' @click="openPDF('https://www.vitatoken.com/site/V10%20Whitepaper.pdf')">
-                        {{ $t('vitaHome.fundDesc.text3') }}
+                        {{ $t('home.fundDesc.text3') }}
                     </button>
                 </div>
             </div>
             <div class='column'>
                 <p class='title'>
-                    {{ $t('vitaHome.fundDesc.text4') }}
+                    {{ $t('home.fundDesc.text4') }}
                 </p>
-                <p class='desc' v-html="$t('vitaHome.fundDesc.text5')"></p>
+                <p class='desc' v-html="$t('home.fundDesc.text5')"></p>
                 <!-- <img alt='' class='jingzhiImg' src='../../../images/home/jingzhi.png' /> -->
                 <div class='btnBox'>
                     <button class='btn' @click="openPDF('https://www.vitatoken.com/site/V10%20Fund%20Whitepaper.pdf')">
-                        {{ $t('vitaHome.fundDesc.text6') }}
+                        {{ $t('home.fundDesc.text6') }}
                     </button>
                 </div>
             </div>
