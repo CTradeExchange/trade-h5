@@ -57,6 +57,7 @@ export default {
 .fullWidth{
     margin-top: 20px;
     padding: 50px 0;
+    background: var(--contentColor);
 }
 .why-module {
     color: var(--color);

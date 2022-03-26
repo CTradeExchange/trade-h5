@@ -5,7 +5,7 @@ export const colors = {
     common: {
         primary: '#0062FF',
         riseColor: '#ef5353',
-        fallColor: '#26a69a',
+        fallColor: '#0062FF',
         warn: '#ef5353',
         success: '#26a69a',
         focusColor: '#f2a11b'

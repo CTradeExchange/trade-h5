@@ -39,17 +39,17 @@
                             </div>
                         </div>
                         <div>
-                            <span>
+                            <span :class='item.cur_color'>
                                 {{ item.cur_price || '--' }}
                             </span>
                         </div>
                         <div>
-                            <span>
+                            <span :class='item.upDownColor'>
                                 {{ item.upDownAmount || '--' }}
                             </span>
                         </div>
                         <div class='upDownWidth'>
-                            <strong>
+                            <strong :class='item.upDownColor'>
                                 {{ item.upDownWidth || '--' }}
                             </strong>
                         </div>
