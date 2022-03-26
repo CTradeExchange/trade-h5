@@ -200,6 +200,7 @@
                                     v-model='form.supportLanguage'
                                     multiple
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='val'
                                     @change='changeSupportLanguage'
                                 >
@@ -218,6 +219,7 @@
                                 <el-select
                                     v-model='form.language'
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='name'
                                 >
                                     <el-option
@@ -367,7 +369,7 @@
                                 </el-col>
                                 <el-col v-for='(val,key,index) in tradeTypesTemplate' :span='3'>
                                     <el-form-item label-width='0'>
-                                        <p style='text-align:center;'>
+                                        <p style='text-align: center;'>
                                             {{ $t('channelSetting.tradeTypes'+key) }}
                                         </p>
                                     </el-form-item>
@@ -668,12 +670,13 @@ export default {
                 if (content.instructions) {
                     content.instructions = unescape(content.instructions)
                 }
+
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-                // debugger
+                //
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -880,7 +883,7 @@ export default {
                         if (_formData.instructions) {
                             _formData.instructions = escape(_formData.instructions)
                         }
-                        // debugger
+                        //
                         // const aa = this.$refs['editor'].getContent()
                         // _formData.instructions = aa
                         if (_formData.registList.length > 0) {
@@ -1184,17 +1187,17 @@ export default {
 <style lang="scss" scoped>
 .m-setting {
     height: calc(100vh);
-        overflow-y: scroll;
+    overflow-y: scroll;
     .setting-header {
         padding: 20px;
         .btns {
             text-align: right;
         }
-         .toPages{
-            line-height: 40px;
+        .toPages {
             font-size: 14px;
+            line-height: 40px;
             cursor: pointer;
-            span{
+            span {
                 color: #2B70AE;
             }
         }
@@ -1202,14 +1205,14 @@ export default {
     .row {
         padding-bottom: 30px;
     }
-    .checkBox{
+    .checkBox {
         vertical-align: middle;
     }
-    .img-tip{
-        cursor: pointer;
+    .img-tip {
         width: 18px;
-        vertical-align: middle;
         margin-left: 10px;
+        vertical-align: middle;
+        cursor: pointer;
     }
     .tradeType-row {
         display: flex;
@@ -1224,7 +1227,7 @@ export default {
                 margin-bottom: 20px;
             }
         }
-        .notice{
+        .notice {
             color: #F00;
         }
     }
@@ -1269,13 +1272,13 @@ export default {
             }
         }
     }
-    .box-card{
-        .tip{
+    .box-card {
+        .tip {
             color: red;
         }
     }
-    .registerBanner{
-                .upload {
+    .registerBanner {
+        .upload {
             position: relative;
             display: flex;
             align-items: center;
@@ -1308,10 +1311,10 @@ export default {
         }
     }
 }
-#pane-fourth{
-    .el-form-item{
-        display:block;
-        .el-form-item__content{
+#pane-fourth {
+    .el-form-item {
+        display: block;
+        .el-form-item__content {
             margin-left: none;
         }
     }

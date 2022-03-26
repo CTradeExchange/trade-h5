@@ -144,7 +144,7 @@ export default {
             protocol: true,
             visited: false, // 是否已点击过获取验证码
             companyCountryList: [], // 获取白标后台配置的企业开户国家
-            openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
+            openAccountType: Number(route.query.openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
             countrySheetVisible: false,
             country: {},
             allCountry: [] // 所有国家列表

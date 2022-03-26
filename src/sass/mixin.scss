@@ -60,6 +60,11 @@
         box-shadow: 0 0 999px rgba(0, 0, 0, 0.05) inset;
     }
 }
+@mixin hover() {
+    &:hover{
+        box-shadow: 0 0 0 999px rgba($color: #000000, $alpha: .2) inset;
+    }
+}
 
 @mixin single-line-clamp() {
     @include text_wrap;

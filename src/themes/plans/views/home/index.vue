@@ -190,7 +190,7 @@
                     <van-icon :name='aboutVis ? "minus" : "plus"' />
                 </div>
                 <div v-show='aboutVis' class='sub'>
-                    <p class='link' @click='jumpUrl("trading")'>
+                    <p class='link' @click='jumpUrl("abount")'>
                         {{ $t('newHomeFooter.about') }}
                     </p>
                 </div>
@@ -372,8 +372,8 @@ const expand = module => {
     }
 }
 
+// 底部nav跳转
 const jumpUrl = (index) => {
-    console.log('=======', index, getCookie('lang'))
     const lang = getCookie('lang') || 'zh-CN'
     let linkList = {}
     if (lang === 'zh-CN') {
@@ -385,7 +385,8 @@ const jumpUrl = (index) => {
             customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
             faqs: 'https://www.vitatoken.com/site/faqs',
             terms: 'https://www.vitatoken.com/site/terms-conditions',
-            policy: 'https://www.vitatoken.com/site/privacy-policy'
+            policy: 'https://www.vitatoken.com/site/privacy-policy',
+            abount: 'https://www.vitatoken.io/site/about-us'
         }
     } else {
         linkList = {
@@ -396,7 +397,8 @@ const jumpUrl = (index) => {
             customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
             faqs: 'https://www.vitatoken.com/site/faqs',
             terms: 'https://www.vitatoken.com/site/terms-conditions',
-            policy: 'https://www.vitatoken.com/site/privacy-policy'
+            policy: 'https://www.vitatoken.com/site/privacy-policy',
+            abount: 'https://www.vitatoken.io/site/about-us'
         }
     }
     const community = {
@@ -406,8 +408,38 @@ const jumpUrl = (index) => {
         telegram: 'https://t.me/VitatokenEnglish',
         yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
     }
-    const newLinkList = { ...linkList, ...community }
-    window.open(newLinkList[index])
+    const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === 5 && el.symbolName)?.symbolId
+    switch (index) {
+        case 'trading':
+            router.push({
+                path: '/order',
+                query: {
+                    symbolId,
+                    tradeType: 5
+                }
+            })
+            break
+        case 'fund':
+            router.push({ path: '/fundProductList' })
+            break
+        case 'vip':
+            if (customerInfo.value) {
+                router.push({ path: '/assets' })
+            } else {
+                router.push({
+                    path: '/register',
+                    query: {
+                        openAccountType: 1
+                    }
+                })
+            }
+            break
+        default:
+            const newLinkList = { ...linkList, ...community }
+            if (newLinkList[index]) {
+                window.open(newLinkList[index])
+            }
+    }
 }
 
 const openProduct = (data) => {
@@ -493,9 +525,9 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     .lijiRegister {
         height: 48px;
         margin-top: 24px;
-        background-color: #0062ff;
-        border-color: #0062ff;
         font-size: 16px;
+        background-color: #0062FF;
+        border-color: #0062FF;
         border-radius: rem(10px);
     }
 }
@@ -524,11 +556,11 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             width: 100%;
             height: rem(96px);
             margin-left: 0;
+            color: #FFF;
             font-size: 16px;
             line-height: rem(96px);
             text-align: center;
-            color: #fff;
-            background-color: #0062ff;
+            background-color: #0062FF;
             border-radius: rem(10px);
         }
     }
@@ -585,11 +617,11 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         .start-btn {
             display: inline-block;
             width: 100%;
-            color: #fff;
-            line-height: 48px;
+            color: #FFF;
             font-size: 16px;
+            line-height: 48px;
             text-align: center;
-            background-color: #0062ff;
+            background-color: #0062FF;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -670,14 +702,14 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                         flex: 1;
                         font-size: 14px;
                         .cur-price {
-                            text-align: right;
                             color: var(--primary);
+                            text-align: right;
                         }
                         .up-down {
-                            font-weight: 500;
-                            text-align: right;
                             color: var(--primary);
+                            font-weight: 500;
                             font-weight: bold;
+                            text-align: right;
                         }
                     }
                     &:last-child {
@@ -701,9 +733,9 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     .footer-wrap {
         margin-top: rem(50px);
         padding: rem(30px);
+        color: #FFF;
         font-size: rem(28px);
-        background: #12161c;
-        color: #fff;
+        background: #12161C;
         .menu {
             .main {
                 display: flex;
@@ -723,15 +755,15 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                     position: relative;
                     padding: rem(15px) 0 rem(15px) 28px;
                     color: var(--normalColor);
-                    &::before{
-                        color: #959595;
-                        content: '\2022';
-                        display: inline-block;
-                        font-family: Arial,sans-serif;
-                        font-size: 24px;
-                        margin-left: -20px;
+                    &::before {
                         position: absolute;
                         top: 2px;
+                        display: inline-block;
+                        margin-left: -20px;
+                        color: #959595;
+                        font-size: 24px;
+                        font-family: Arial, sans-serif;
+                        content: '\2022';
                     }
                 }
             }
@@ -862,10 +894,10 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     justify-content: center;
     width: rem(80px);
     height: rem(80px);
-    background: #0062ff;
+    background: #0062FF;
     border-radius: 50%;
     .icon {
-        color: #fff;
+        color: #FFF;
         font-size: rem(40px);
     }
 }

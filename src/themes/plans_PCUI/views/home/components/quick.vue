@@ -87,9 +87,7 @@ export default {
             background: var(--primary);
             border-radius: 4px;
             cursor: pointer;
-            &:hover {
-                opacity: .7;
-            }
+            @include hover();
         }
     }
 }
