@@ -383,6 +383,7 @@ const colorSelect = (action) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 64px;
     background: var(--contentColor);
     .logo {
         display: inline-block;
@@ -415,7 +416,7 @@ const colorSelect = (action) => {
             width: 100%;
             height: rem(96px);
             margin-left: 0;
-            color: #fff;
+            color: #FFF;
             font-size: 16px;
             line-height: rem(96px);
             text-align: center;

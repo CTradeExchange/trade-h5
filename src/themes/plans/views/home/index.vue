@@ -304,10 +304,10 @@
             </div>
         </div>
 
-        <a class='serviceIcon' href='javascript:;' @click='toService'>
+        <div class='serviceIcon' @click='toService'>
             <!-- <img alt='' src='/images/serviceIcon.png' /> -->
             <i class='icon icon_xiaoxizhongxin'></i>
-        </a>
+        </div>
 
         <LangPop v-model='langShow' />
     </div>
@@ -549,6 +549,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             border-color: var(--lineColor);
             border-radius: 4px;
             input {
+                width: 100%;
                 padding-left: rem(20px);
             }
         }

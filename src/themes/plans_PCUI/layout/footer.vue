@@ -170,7 +170,7 @@ export default {
                     faqs: 'https://www.vitatoken.com/site/faqs',
                     terms: 'https://www.vitatoken.com/site/terms-conditions',
                     policy: 'https://www.vitatoken.com/site/privacy-policy',
-                    abount: ''
+                    about: 'https://www.vitatoken.io/site/about-us'
                 }
             } else {
                 linkList = {
@@ -182,7 +182,7 @@ export default {
                     faqs: 'https://www.vitatoken.com/site/faqs',
                     terms: 'https://www.vitatoken.com/site/terms-conditions',
                     policy: 'https://www.vitatoken.com/site/privacy-policy',
-                    abount: ''
+                    about: 'https://www.vitatoken.io/site/about-us'
                 }
             }
             const community = {

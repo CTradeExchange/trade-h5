@@ -31,8 +31,8 @@
         "add": "Add",
         "startTime": "Start Time",
         "endTime": "End Time",
-        "languageAreas": "语言和地区",
-        "SelectLanguageAreas": "选择语言和地区"
+        "languageAreas": "Language and Region",
+        "SelectLanguageAreas": "Language and Region"
     },
     "c": {
         "login": "Login",
@@ -897,77 +897,77 @@
 	},
     "home": {
         "quick": {
-            "title": "我们在东南亚地区始终保持领先"
+            "title": "We are the leader in Southeast Asia"
         },
         "download": {
-            "title": "交易随时随地",
-            "describe": "多终端，多设备，随时随地开启交易",
-            "tip1": "iOS & Android 扫码下载APP",
-            "tip2": "开启移动交易"
+            "title": "Trade. Anywhere.",
+            "describe": "Multi-terminal, multi-device, trading anytime, anywhere",
+            "tip1": "iOS & Android Scan Code To Download APP",
+            "tip2": "Start mobile trading"
         },
         "guide": {
-            "title": "新手指引",
-            "describe": "开启数字货币交易学习",
-            "text1": "如何购买数字货币",
-            "text2": "急速了解交易规则",
-            "text3": "小白进场适合买什么数字货币"
+            "title": "Beginner's Guide",
+            "describe": "Start cryptocurrency trading learning",
+            "text1": "How to buy cryptocurrency",
+            "text2": "Quickly understand the trading rules",
+            "text3": "Which cryptocurrency are suitable for beginners"
         },
         "why": {
-            "text1": "安全始终是我们的首要考虑",
-            "text2": "用户安全资产基金(SAFU)",
-            "text3": "我们将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。",
-            "text4": "个性化访问控制",
-            "text5": "高级访问控制限制访问个人账户的设备和地址，让用户无后顾之忧。",
-            "text6": "先进数据加密",
-            "text7": "个人交易数据通过端到端加密获得保障，仅限本人访问个人信息。",
-            "text8": "账户异常实时监控",
-            "text9": "我们的风险管理系统会分析每次异常活动，触发异常暂停提款。"
+            "text1": "Safety is the First Priority",
+            "text2": "Secure Asset Fund for Users (SAFU)",
+            "text3": "Vitatoken allocates 10% of all trading fees in order to grow it to a sizable level to safeguard users’ interests.",
+            "text4": "Personalized Access Control",
+            "text5": "Advanced access control restricts access of personal account or IP address, in order to protect users.",
+            "text6": "Advanced Data Encryption",
+            "text7": "Personal transaction data is secured through end-to-end encryption, only individuals shall have the right to access their personal information.",
+            "text8": "Real-time Account Supervision",
+            "text9": "Risk management system will analyze every unusual activity; withdrawal will be disable if suspicious activities were spotted."
         },
         "fundDesc": {
-            "text1": "探索V10指数",
-            "text2": "投资者可以利用V10指数轻松跟踪加密资产的整体市场表现，并且在超过70%的时间中保持领先",
-            "text3": "阅读白皮书（PDF）",
-            "text4": "V10 ETF基金",
-            "text5": "降低门槛、分散投资、优化配置、动态调整...... <br />您所需要的一切均由专业的基金经理打理，而您只需要坐享其成",
-            "text6": "阅读白皮书（PDF）"
+            "text1": "Explore V10 Index",
+            "text2": "Investors can keep track of Cryptocurrency market performance by V10 Index, being ahead of time by 70%.",
+            "text3": "Browse White Paper (PDF)",
+            "text4": "VV10 Index Fund",
+            "text5": "Our fund manager will take care of everything from lowering the passing standard, diversification, configuration optimization, dynamic adjustment and more, all you need to do is to sit back and earn.",
+            "text6": "Browse White Paper (PDF)"
         },
         "portfolio": {
-            "text1": "立即创建您的加密货币投资组合",
-            "text2": "我们具有多种功能，使其成为开始交易的最佳场所。",
-            "text3": "简洁高效",
-            "text4": "买卖流行的数字货币，在一个地方跟踪它们。",
-            "text5": "美观大方",
-            "text6": "清爽的界面始终将内容清晰地呈现给您。",
-            "text7": "无处不在",
-            "text8": "使用适用于 Android 或 iOS 设备，随时随地让您保持市场领先地位。"
+            "text1": "Start Building Your Cryptocurrency Portfolio",
+            "text2": "Our Features & Tools Make Us the Best Trading Platform.",
+            "text3": "High Effectiveness",
+            "text4": "One-stop to buy, sell and track Cryptocurrency.",
+            "text5": "Clear Layout and Design",
+            "text6": "Transparent & intelligible Interface.",
+            "text7": "Ubiquity",
+            "text8": "Available on Android and iOS, connect to the market anytime and anywhere."
         },
         "portfolioCreate": {
-            "text1": "只需三步，开始加密基金投资",
-            "text2": "开户并完成身份认证",
-            "text3": "完成身份验证流程以保护您的帐户和交易。",
-            "text4": "新增资金至你的帐户",
-            "text5": "将资金添加到您的加密货币帐户以开始交易加密货币。",
-            "text6": "开始交易",
-            "text7": "买卖基金或加密货币，并了解Vitatoken提供的服务。"
+            "text1": "3 Steps to Start Cryptocurrency Trading",
+            "text2": "Register & Complete Identity Verification",
+            "text3": "Complete Identity Verification to Secure Your Account & Transactions.",
+            "text4": "Deposit",
+            "text5": "Deposit Funds to Start Cryptocurrency Trading.",
+            "text6": "Start Trading",
+            "text7": "Buy and Sell Cryptocurrency and Fund, Find out More Vitatoken Service."
         },
         "privacy": {
-            "agree": "同意",
-            "close": "关闭",
-            "text1": "我们使用 cookie 来增强您的体验、分析我们的流量以及用于安全和营销。访问我们的网站即表示您同意我们使用 cookie。",
-            "text2": "阅读有关 cookie 的更多信息"
+            "agree": "Agree",
+            "close": "Close",
+            "text1": "We use cookies to enhance your experience, analyze our traffic, and for security and marketing. By visiting our website you agree to our use of cookies.",
+            "text2": "Read more about cookies。"
         },
-        "marketTrend": "市场趋势",
-        "getStarted": "开始使用",
-        "getProfit": "立即赚取收益",
-        "toReg": "立即注册",
-        "app": "安全、快速和简洁"
+        "marketTrend": "market Trend",
+        "getStarted": "Get Started",
+        "getProfit": "Start earning today",
+        "toReg": "Sign Up Now",
+        "app": "Safe, fast and concise"
     },
     "download": {
-        "downloadTip": "iOS & Android扫码下载APP",
-        "moreDownload": "更多下载选择",
-        "title": "随时随地开启交易",
-        "subTitle": "下载Vitatoken客户端，所有交易尽在手中。",
-        "android": "下载安卓端",
-        "ios": "下载苹果端"
+        "downloadTip": "iOS & Android Scan Code To Download APP",
+        "moreDownload": "More download options",
+        "title": "Trade.Anywhere.",
+        "subTitle": "All the power of Vitatoken's cryptocurrency exchange, in the palm of your hand. Download the Vitatoken mobile crypto trading app today.",
+        "android": "Download for Android",
+        "ios": "Download for iphone"
     }
 }
