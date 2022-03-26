@@ -120,9 +120,9 @@
                 <div class='item'>
                     <LangIcon />
                 </div>
-                <div class='item'>
+                <!-- <div class='item'>
                     <ThemeIcon />
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -315,7 +315,7 @@ export default {
                 width: 64px;
                 height: 28px;
                 color: #FFF;
-                background: #477FD3;
+                background: var(--primary);
                 border-radius: 4px;
             }
         }

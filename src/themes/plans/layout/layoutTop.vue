@@ -173,7 +173,7 @@
                     <van-icon class='right-arrow' name='arrow' />
                 </template>
             </van-cell>
-            <van-cell
+            <!-- <van-cell
                 class='cellItem'
                 is-link
                 :title='$t("common.dark")'
@@ -197,7 +197,7 @@
                 <template #right-icon>
                     <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
                 </template>
-            </van-cell>
+            </van-cell> -->
         </van-cell-group>
     </van-popup>
 
