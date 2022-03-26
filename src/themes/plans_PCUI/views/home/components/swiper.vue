@@ -18,9 +18,9 @@ const bannerList = [
     {
         url: require('@planspc/images/' + lang + '/banner5.jpg')
     },
-    // {
-    //     url: require('@planspc/images/' + lang + '/banner-2.png')
-    // },
+    {
+        url: require('@planspc/images/' + lang + '/banner3.jpg')
+    },
     // {
     //     url: require('@planspc/images/' + lang + '/banner-3.png')
     // }

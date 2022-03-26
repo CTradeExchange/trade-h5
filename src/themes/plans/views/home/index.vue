@@ -9,7 +9,7 @@
                 </van-swipe-item>
                 <van-swipe-item>
                     <router-link to='fundProductList'>
-                        <img alt='' :src='require("../../images/banner/h5banner5-"+ lang +".jpg")' srcset='' />
+                        <img alt='' :src='require("../../images/banner/h5banner3-"+ lang +".png")' srcset='' />
                     </router-link>
                 </van-swipe-item>
             </van-swipe>
