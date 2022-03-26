@@ -1,5 +1,5 @@
 <template>
-    <div class='full'>
+    <div v-if='!$store.state._user.customerInfo' class='full'>
         <div class='quick-module auto-width'>
             <div class='register-box'>
                 <span class='labelText'>

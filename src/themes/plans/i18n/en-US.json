@@ -769,6 +769,15 @@
             "title8": "Real time monitoring",
             "text8": "Our risk management system analyzes each unusual activity, triggering an unusual suspension of withdrawals."
         },
+        "startThreeStep":{
+            "title":"Start Trading in three steps",
+            "step1_title":"Register & Complete Identity Verification",
+            "step1_desc":"Complete Identity Verification to Secure Your Account & Transactions",
+            "step2_title":"Deposit",
+            "step2_desc":"Deposit Funds to Start Cryptocurrency Trading",
+            "step3_title":"Start Trading",
+            "step3_desc":"Buy and Sell Funds and Cryptocurrency, Find out More Vitatoken Service"
+        },
         "getProfit": "Start earning today",
         "toReg":"Sign Up Now",
         "start": "Get Started",

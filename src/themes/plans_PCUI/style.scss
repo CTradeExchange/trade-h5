@@ -22,9 +22,9 @@ body,
     height: 100%;
     color: var(--color);
     background-color: var(--bgColor);
-	@include scroll-pc();
-    scrollbar-color:var(--lineColor) var(--bgColor);
-    scrollbar-width:thin;
+	// @include scroll-pc();
+    // scrollbar-color:var(--lineColor) var(--bgColor);
+    // scrollbar-width:thin;
 }
 body {
     font-size: 14px;

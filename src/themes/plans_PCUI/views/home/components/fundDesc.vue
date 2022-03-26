@@ -17,7 +17,7 @@
                     </li>
                 </ul> -->
                 <div class='btnBox'>
-                    <button class='btn'>
+                    <button class='btn' @click="openPDF('https://www.vitatoken.com/site/V10%20Whitepaper.pdf')">
                         {{ $t('home.fundDesc.text3') }}
                     </button>
                 </div>
@@ -123,7 +123,7 @@ export default {
         margin-right: 40px;
         &::after{
             content: "";
-            height: 80%;
+            height: 100%;
             width: 1px;
             background: var(--placeholdColor);
             position: absolute;

@@ -33,6 +33,7 @@
 <style lang="scss" scoped>
 .page-wrap {
     padding: rem(50px) rem(30px);
+    background: var(--contentColor);
     .img-download {
         width: 100%;
     }

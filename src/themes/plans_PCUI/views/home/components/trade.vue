@@ -255,9 +255,9 @@ export default {
                 justify-content: center;
                 align-items: center;
                 width: 80px;
-                height: 32px;
+                height: 30px;
                 margin-right: 16px;
-                font-size: 16px;
+                font-size: 14px;
                 color: #fff;
                 border-radius: 4px;
                 cursor: pointer;

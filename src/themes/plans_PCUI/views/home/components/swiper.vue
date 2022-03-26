@@ -43,6 +43,7 @@ const bannerClick = (item) => {
         width: 100%;
         background-size: cover;
         background-position: center;
+        cursor: pointer;
     }
     img {
         display: block;

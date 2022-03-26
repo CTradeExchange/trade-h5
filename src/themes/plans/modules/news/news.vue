@@ -426,7 +426,7 @@ export default {
                     // } else {
                     //     state.newsFlash.list = [...tempData]
                     // }
-                    debugger
+
                     state.newsFlash.list = [...tempData]
                     state.newsFlash.timeAxis = data[0].addtime
                 }

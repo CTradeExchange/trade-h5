@@ -194,8 +194,25 @@ export default {
 .page-wrap {
     padding: 8px;
     font-size: 14px;
-    background: var(--bgColor);
+    // background: var(--bgColor);
+    background-color: #FBF9F8;
+    position: relative;
+    // &::before{
+    //     content: "";
+    //     position: absolute;
+    //     left: 0;
+    //     top: 0;
+    //     z-index: 0;
+    //     width: 100%;
+    //     height: 100%;
+    //     opacity: .4;
+    //     mix-blend-mode: initial;
+    //     filter: opacity(0.08);
+    //     background: url('../../images/rw-pattern4.png') repeat;
+    // }
+
     .content-top {
+        position: relative;
         display: flex;
         justify-content: space-between;
         max-height: 874px;

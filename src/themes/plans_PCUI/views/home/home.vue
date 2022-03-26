@@ -123,7 +123,7 @@ onUnmounted(() => {
         margin-bottom: 38px;
         color: var(--color);
         font-weight: bold;
-        font-size: 32px;
+        font-size: 30px;
     }
     .case {
         height: 600px;

@@ -60,56 +60,56 @@
 
         <div class='portfolio'>
             <p class='t1'>
-                Build your crypto portfolio
+                {{ $t('vitaHome.startThreeStep.title') }}
             </p>
-            <p class='t2'>
+            <!-- <p class='t2'>
                 Start your first trade with these easy steps.
-            </p>
+            </p> -->
             <div class='img-wrap'>
                 <img alt='' class='pro-img' src='/images/portfolio-section.png' srcset='' />
             </div>
             <ul class='pro-list'>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/user.svg' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img2.png' srcset='' />
                     <p class='t3'>
-                        Fund your account
+                        {{ $t('vitaHome.startThreeStep.step1_title') }}
                     </p>
                     <p class='t4'>
-                        Add funds to your crypto account to start trading crypto. You can add funds with a variety of payment methods.
+                        {{ $t('vitaHome.startThreeStep.step1_desc') }}
                     </p>
                 </li>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/kyc.svg' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
                     <p class='t3'>
-                        Verify your identity
+                        {{ $t('vitaHome.startThreeStep.step2_title') }}
                     </p>
                     <p class='t4'>
-                        Complete the identity verification process to secure your account and transactions.
+                        {{ $t('vitaHome.startThreeStep.step2_desc') }}
                     </p>
                 </li>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/spot.svg' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img4.png' srcset='' />
                     <p class='t3'>
-                        Start trading
+                        {{ $t('vitaHome.startThreeStep.step3_title') }}
                     </p>
                     <p class='t4'>
-                        You're good to go! Buy/sell crypto, set up recurring buys for your investments, and discover what Binance has to offer.
+                        {{ $t('vitaHome.startThreeStep.step3_desc') }}
                     </p>
                 </li>
             </ul>
             <router-link class='start-btn' to='/registe'>
-                Get Started
+                {{ $t('vitaHome.start') }}
             </router-link>
         </div>
 
-        <!-- 信息流 -->
-        <div class='news-wrap'>
+        <!-- 信息流 屏蔽-->
+        <!-- <div class='news-wrap'>
             <News :data='newsData' />
-        </div>
+        </div> -->
 
         <!-- why模块 -->
         <div class='why-wrap'>
-            <h2>{{ $t('vitaHome.why.title') }}</h2>
+            <!-- <h2>{{ $t('vitaHome.why.title') }}</h2>
             <h4>{{ $t('vitaHome.why.describe') }}</h4>
             <ul class='reason-list'>
                 <li class='reason-item'>
@@ -149,10 +149,10 @@
                         {{ $t('vitaHome.why.text4') }}
                     </p>
                 </li>
-            </ul>
+            </ul> -->
 
             <div class='descBarTitle'>
-                安全始终是我们的优先考虑
+                安全始终是我们的首要考虑
             </div>
             <div class='descList'>
                 <div class='row'>
@@ -379,12 +379,10 @@ const productList = symbolKeys.map(key => store.state._quote.productMap[key]).fi
 
 const start = () => {
     const param = regVal.value.includes('@') ? { email: regVal.value } : { mobile: regVal.value }
-    debugger
     router.push({
         path: 'register',
         query: param
     })
-    // register?email=545665@32.add
 }
 
 const expand = module => {
@@ -467,16 +465,16 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 </script>
 
 <style lang="scss">
-.descBarTitle{
+.descBarTitle {
     box-sizing: border-box;
-    margin-top: 80px;
-    padding-bottom: 10px;
-    text-align: center;
     min-width: 0;
+    // margin-top: 80px;
+    padding-bottom: 10px;
+    color: #1E2329;
     font-weight: 600;
     font-size: 24px;
     line-height: 32px;
-    color: #1E2329;
+    text-align: center;
 }
 .descList {
     padding-top: 40px;
@@ -568,6 +566,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             font-weight: 600;
             font-size: 24px;
             line-height: 32px;
+            text-align: center;
         }
         .t2 {
             margin-top: 8px;
@@ -581,10 +580,11 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             margin-bottom: 40px;
             text-align: center;
             .pro-img {
-                width: 190px;
+                width: 220px;
             }
         }
         .pro-list {
+            text-align: center;
             .pro-item {
                 margin-bottom: 40px;
                 .icon-img {
@@ -857,19 +857,22 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         }
     }
     .content {
-        padding: 10px 0;
+        padding: 0 0 10px;
     }
     .footer {
         text-align: center;
         .close-btn {
-            color: var(--primary);
-            cursor: pointer;
             display: inline-block;
+            padding: 0 24px;
+            color: var(--primary);
+            border: solid 1px var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
         }
         .agree {
             display: inline-block;
             width: fit-content;
-            margin-right: rem(20px);
+            margin-right: rem(40px);
             padding: 0 24px;
             color: rgb(255, 255, 255);
             font-size: 14px;

@@ -12,8 +12,7 @@
                         <span class='link'>
                             {{ $t('header.fund') }}
                         </span>
-                        <!-- <span class='symbolUp icon_mairu'></span> -->
-                        <van-icon class='symbolUp' name='arrow-up' />
+                        <span class='symbolUp'></span>
                     </router-link>
                 </div>
                 <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
@@ -282,10 +281,14 @@ export default {
                 }
             }
             .symbolUp{
+                display: inline-block;
                 margin-left: 4px;
-                font-size: 14px;
-                font-weight: bold;
-                color: #EE0A24;
+                vertical-align: middle;
+                margin-top: -2px;
+                width: 14px;
+                height: 14px;
+                background: url('/images/arrowUp.png') no-repeat;
+                background-size: cover;
             }
         }
     }
