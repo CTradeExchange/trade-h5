@@ -315,7 +315,8 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    // <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    <span className="primary">
                         {getVal(row.symbolKey, 'price')}
                     </span>
                 )
@@ -325,7 +326,8 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    // <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    <span className="primary">
                         { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }
                     </span>
                 )
@@ -337,9 +339,10 @@ export const getColumns = tradeType => {
                 minWidth: 150,
                 className: 'upDownWidth',
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    // <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    <strong className="primary">
                         {getVal(row.symbolKey, 'upDownWidth')}
-                    </span>
+                    </strong>
                 )
 
             },
@@ -347,12 +350,14 @@ export const getColumns = tradeType => {
                 name: t('trade.24highPrice'),
                 align: 'left',
                 minWidth: 150,
+                className: 'primaryText',
                 formatter: row => getVal(row.symbolKey, 'high_price')
             },
             {
                 name: t('trade.24lowPrice'),
                 align: 'left',
                 minWidth: 150,
+                className: 'primaryText',
                 formatter: row => getVal(row.symbolKey, 'low_price')
             },
             {
