@@ -110,7 +110,7 @@
                     </p>
                 </li>
             </ul>
-            <router-link class='start-btn' to='/registe'>
+            <router-link class='start-btn' to='/register'>
                 {{ $t('vitaHome.start') }}
             </router-link>
         </div>
@@ -174,7 +174,7 @@
                     <div class='css-1r4nzjd'>
                         <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
                         </a>
-                        <van-button block class='lijiRegister' type='primary'>
+                        <van-button block class='lijiRegister' type='primary' @click="$router.push('/register')">
                             {{ $t('vitaHome.toReg') }}
                         </van-button>
                     </div>
