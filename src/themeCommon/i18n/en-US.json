@@ -295,7 +295,7 @@
         "pleaseEnter": "Please enter ",
         "businessOpen": "Create Corporate Account",
         "reGet": "Get again",
-        "input":"Insert Your Email or Phone Number"
+        "input":"Please input your email / mobile"
     },
     "chart": {
         "candleStick": "Candle Stick",
@@ -954,6 +954,6 @@
         "community": "Community",
         "aboutus": "About Us",
         "about": "About",
-        "followus": "Follow us"
+        "followus": "Follow Us"
     }
 }

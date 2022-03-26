@@ -4,7 +4,7 @@
             <img alt='' class='logo' src='/images/vitamin_logo.png' srcset='' />
             <div class='text'>
                 <p>Vitatoken APP</p>
-                <p>{{ $t('vitaHome.app') }}</p>
+                <p>{{ $t('home.app') }}</p>
             </div>
         </div>
 
@@ -66,7 +66,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("vitaHome.trade")' @click="routerTo('order')">
+            <van-cell class='cellItem' is-link :title='$t("route.spotTrade")' @click="routerTo('order')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>

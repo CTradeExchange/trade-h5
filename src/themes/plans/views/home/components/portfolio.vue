@@ -1,37 +1,37 @@
 <template>
     <div class='portfolio'>
         <h2 class='h2title'>
-            {{ $t('vitaHome.portfolio.text1') }}
+            {{ $t('home.portfolio.text1') }}
         </h2>
         <p class='titleDesc'>
-            {{ $t('vitaHome.portfolio.text2') }}
+            {{ $t('home.portfolio.text2') }}
         </p>
         <div class='list'>
             <div class='row'>
                 <i class='icon icon1'></i>
                 <p class='title'>
-                    {{ $t('vitaHome.portfolio.text3') }}
+                    {{ $t('home.portfolio.text3') }}
                 </p>
                 <p class='desc'>
-                    {{ $t('vitaHome.portfolio.text4') }}
+                    {{ $t('home.portfolio.text4') }}
                 </p>
             </div>
             <div class='row'>
                 <i class='icon icon2'></i>
                 <p class='title'>
-                    {{ $t('vitaHome.portfolio.text5') }}
+                    {{ $t('home.portfolio.text5') }}
                 </p>
                 <p class='desc'>
-                    {{ $t('vitaHome.portfolio.text6') }}
+                    {{ $t('home.portfolio.text6') }}
                 </p>
             </div>
             <div class='row'>
                 <i class='icon icon3'></i>
                 <p class='title'>
-                    {{ $t('vitaHome.portfolio.text7') }}
+                    {{ $t('home.portfolio.text7') }}
                 </p>
                 <p class='desc'>
-                    {{ $t('vitaHome.portfolio.text8') }}
+                    {{ $t('home.portfolio.text8') }}
                 </p>
             </div>
         </div>

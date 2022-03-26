@@ -17,23 +17,23 @@
 
         <div v-if='!customerInfo' class='reg-wrap'>
             <div class='input-wrap'>
-                <input v-model='regVal' :placeholder='$t("register.input")' type='text' />
+                <input v-model='regVal' :placeholder="$t('register.input')" type='text' />
             </div>
             <div class='btn' @click='start'>
-                {{ $t('vitaHome.start') }}
+                {{ $t('home.getStarted') }}
             </div>
         </div>
 
         <FundDesc />
 
         <div class='product-wrap'>
-            <h1>{{ $t('vitaHome.trend') }}</h1>
+            <h1>{{ $t('home.marketTrend') }}</h1>
 
             <div class='list'>
                 <div class='header'>
                     <span>{{ $t('trade.symbol') }}</span>
                     <span>{{ $t('trade.positionLastPrice') }}</span>
-                    <span>{{ $t('vitaHome.upDown') }} </span>
+                    <span>{{ $t('trade.upDown') }} </span>
                 </div>
                 <ul class='content'>
                     <li v-for='item in productList' :key='item.symbolKey' class='product' @click='openProduct(item)'>
@@ -73,7 +73,7 @@
 
         <div class='portfolio'>
             <p class='t1'>
-                {{ $t('vitaHome.startThreeStep.title') }}
+                {{ $t('home.portfolioCreate.text1') }}
             </p>
             <!-- <p class='t2'>
                 Start your first trade with these easy steps.
@@ -85,33 +85,33 @@
                 <li class='pro-item'>
                     <img alt='' class='icon-img' src='/images/threeStep_img2.png' srcset='' />
                     <p class='t3'>
-                        {{ $t('vitaHome.startThreeStep.step1_title') }}
+                        {{ $t('home.portfolioCreate.text2') }}
                     </p>
                     <p class='t4'>
-                        {{ $t('vitaHome.startThreeStep.step1_desc') }}
+                        {{ $t('home.portfolioCreate.text3') }}
                     </p>
                 </li>
                 <li class='pro-item'>
                     <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
                     <p class='t3'>
-                        {{ $t('vitaHome.startThreeStep.step2_title') }}
+                        {{ $t('home.portfolioCreate.text4') }}
                     </p>
                     <p class='t4'>
-                        {{ $t('vitaHome.startThreeStep.step2_desc') }}
+                        {{ $t('home.portfolioCreate.text5') }}
                     </p>
                 </li>
                 <li class='pro-item'>
                     <img alt='' class='icon-img' src='/images/threeStep_img4.png' srcset='' />
                     <p class='t3'>
-                        {{ $t('vitaHome.startThreeStep.step3_title') }}
+                        {{ $t('home.portfolioCreate.text6') }}
                     </p>
                     <p class='t4'>
-                        {{ $t('vitaHome.startThreeStep.step3_desc') }}
+                        {{ $t('home.portfolioCreate.text7') }}
                     </p>
                 </li>
             </ul>
             <router-link class='start-btn' to='/register'>
-                {{ $t('vitaHome.start') }}
+                {{ $t('home.getStarted') }}
             </router-link>
         </div>
 
@@ -125,43 +125,43 @@
         <!-- why模块 -->
         <div class='why-wrap'>
             <div class='descBarTitle'>
-                安全始终是我们的首要考虑
+                {{ $t('home.why.text1') }}
             </div>
             <div class='descList'>
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/moneyBox.png' />
                     <p class='descTitle'>
-                        {{ $t('vitaHome.why.title5') }}
+                        {{ $t('home.why.text2') }}
                     </p>
                     <p class='descContent'>
-                        {{ $t('vitaHome.why.text5') }}
+                        {{ $t('home.why.text3') }}
                     </p>
                 </div>
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/trafficLight.png' />
                     <p class='descTitle'>
-                        {{ $t('vitaHome.why.title6') }}
+                        {{ $t('home.why.text4') }}
                     </p>
                     <p class='descContent'>
-                        {{ $t('vitaHome.why.text6') }}
+                        {{ $t('home.why.text5') }}
                     </p>
                 </div>
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/lock.png' />
                     <p class='descTitle'>
-                        {{ $t('vitaHome.why.title7') }}
+                        {{ $t('home.why.text6') }}
                     </p>
                     <p class='descContent'>
-                        {{ $t('vitaHome.why.text7') }}
+                        {{ $t('home.why.text7') }}
                     </p>
                 </div>
                 <div class='row'>
                     <img alt='' class='icon' src='~@plans/images/check.png' />
                     <p class='descTitle'>
-                        {{ $t('vitaHome.why.title8') }}
+                        {{ $t('home.why.text8') }}
                     </p>
                     <p class='descContent'>
-                        {{ $t('vitaHome.why.text8') }}
+                        {{ $t('home.why.text9') }}
                     </p>
                 </div>
             </div>
@@ -169,13 +169,13 @@
             <div class='registerFooter'>
                 <div class='css-128y11d'>
                     <div class='immediatelyText'>
-                        {{ $t('vitaHome.getProfit') }}
+                        {{ $t('home.getProfit') }}
                     </div>
                     <div class='css-1r4nzjd'>
                         <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
                         </a>
                         <van-button block class='lijiRegister' type='primary' @click="$router.push('/register')">
-                            {{ $t('vitaHome.toReg') }}
+                            {{ $t('home.toReg') }}
                         </van-button>
                     </div>
                 </div>
@@ -185,12 +185,12 @@
             <div class='footer-wrap'>
                 <div class='menu'>
                     <div class='main' @click="expand('about')">
-                        <span>{{ $t('vitaHome.about') }}</span>
+                        <span>{{ $t('newHomeFooter.aboutus') }}</span>
                         <van-icon :name='aboutVis ? "minus" : "plus"' />
                     </div>
                     <div v-show='aboutVis' class='sub'>
                         <p class='link' @click='jumpUrl("trading")'>
-                            {{ $t('vitaHome.about') }}
+                            {{ $t('newHomeFooter.about') }}
                         </p>
                     </div>
                 </div>
@@ -247,7 +247,7 @@
 
         <div class='social'>
             <p class='nav-dt'>
-                {{ $t('vitaHome.follow') }}
+                {{ $t('newHomeFooter.followus') }}
             </p>
             <ul class='community-box f-b-t'>
                 <li class='box-item' @click='jumpUrl("fb")'>
@@ -289,17 +289,17 @@
             </div>
 
             <div class='content'>
-                We use our own and third-party cookies on our websites to enhance your experience, analyze traffic, and for security and marketing. For more info or to modify cookies, see our
+                {{ $t('home.privacy.text1') }}
                 <a class='sc-AxiKw cJlLNA' color='light' href='https://www.vitatoken.com/site/privacy-policy' rel='noopener' target='_blank'>
-                    Cookie Policy
+                    {{ $t('home.privacy.text2') }}
                 </a>
             </div>
             <div class='footer'>
                 <span class='agree' @click='agree'>
-                    同意
+                    {{ $t('home.privacy.agree') }}
                 </span>
                 <div class='close-btn' @click='privacyVis=false'>
-                    关闭
+                    {{ $t('home.privacy.close') }}
                 </div>
             </div>
         </div>
