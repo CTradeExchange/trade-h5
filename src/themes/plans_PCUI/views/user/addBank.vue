@@ -9,6 +9,7 @@
                     <van-field v-model='bankNo' :label='$t("bank.bankNo")' :placeholder='$t("bank.inputBankNo")' type='number' />
                     <van-field
                         v-model='bankName'
+                        class='select'
                         :label='$t("bank.bankName")'
                         :placeholder='$t("bank.inputBankName")'
                         readonly
@@ -27,6 +28,7 @@
 
                     <van-field
                         v-model='area'
+                        class='select'
                         :label='$t("bank.openAddress")'
                         :placeholder='$t("bank.inputOpenAddressText")'
                         readonly
@@ -292,16 +294,19 @@ export default {
     display: flex;
     flex-direction: column;
     .filed-wrap{
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    :deep{
-        .van-cell-group{
-            height: 100%;
-    flex: 1;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        .select, .cellRow {
+            cursor: pointer;
+        }
+        :deep{
+            .van-cell-group{
+                height: 100%;
+                flex: 1;
+            }
         }
     }
-}
     .confirm-btn {
         @include hover();
         position: absolute;
@@ -318,19 +323,19 @@ export default {
             position: absolute !important;
         }
         .van-overlay{
-position: absolute;
+            position: absolute;
         }
-            .popup-area{
+        .popup-area{
             right: 0;
-    bottom: 0;
-    width: 100%;
-    }
-    .van-action-sheet{
-                    right: 0;
-    bottom: 0 ;
-    width: 100%;
-    position: absolute;
-    }
+            bottom: 0;
+            width: 100%;
+        }
+        .van-action-sheet{
+            right: 0;
+            bottom: 0 ;
+            width: 100%;
+            position: absolute;
+        }
     }
 
 }
@@ -348,6 +353,7 @@ position: absolute;
         overflow-y: auto;
         background-color: var(--contentColor);
         .bank-item {
+            @include hover();
             position: relative;
             padding: rem(15px) 0 rem(15px) 0;
             color: var(--color);
@@ -355,6 +361,7 @@ position: absolute;
             line-height: rem(80px);
             line-height: rem(60px);
             text-align: left;
+            cursor: pointer;
             &::after {
                 position: absolute;
                 top: 0;

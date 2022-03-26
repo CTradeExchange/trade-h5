@@ -191,6 +191,7 @@ export default {
         font-size: rem(50px);
     }
     .confirmBtn {
+        @include hover();
         position: absolute;
         bottom: 0;
         width: 100%;
