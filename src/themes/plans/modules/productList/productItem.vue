@@ -15,7 +15,7 @@
             <div class='ft'>
                 <span
                     class='buy_price'
-                    :class='["digits"+product.price_digits]'
+                    :class='[product.cur_color, "digits"+product.price_digits]'
                 >
                     {{ !product.cur_price && product.cur_price != 0 ? '- -' : product.cur_price }}
                     <!-- {{ !product.buy_price && product.buy_price != 0 ? '- -' : product.buy_price }} -->
@@ -24,7 +24,7 @@
             <div class='tb'>
                 <span
                     class='sell_price'
-                    :class='["digits"+product.price_digits]'
+                    :class='[product.upDownColor,"digits"+product.price_digits]'
                 >
                     {{ !product.upDownWidth && product.upDownWidth != 0 ? '- -' : product.upDownWidth }}
                     <!-- {{ !product.sell_price && product.sell_price != 0 ? '- -' : product.sell_price }} -->
@@ -168,7 +168,6 @@ export default {
     .sell_price,
     .buy_price {
         font-size: rem(30px);
-        color: var(--primary);
         &.digits11,
         &.digits12,
         &.digits13 {

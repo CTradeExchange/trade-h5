@@ -48,7 +48,7 @@
                 <!-- why模块 -->
                 <why />
 
-                <div class='registerFooter'>
+                <div v-if='!$store.state._user.customerInfo' class='registerFooter'>
                     <div class='css-128y11d'>
                         <div class='immediatelyText'>
                             {{ $t('home.getProfit') }}
