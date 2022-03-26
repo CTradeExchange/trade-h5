@@ -254,7 +254,7 @@ export default {
             display: flex;
         }
         li {
-            margin-right: 120px;
+            margin-right: 100px;
             &:last-of-type {
                 margin-right: 0;
             }
