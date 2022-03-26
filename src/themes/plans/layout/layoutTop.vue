@@ -1,7 +1,7 @@
 <template>
     <div v-show='downloadVis' class='download-app'>
         <div class='brand'>
-            <img alt='' class='logo' src='/images/vitamin_logo.png' srcset='' />
+            <img alt='' class='logo' src='/images/vitamin_logo.png?vt=2' srcset='' />
             <div class='text'>
                 <p>Vitatoken APP</p>
                 <p>{{ $t('home.app') }}</p>
