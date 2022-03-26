@@ -3,10 +3,10 @@
         <div class='fundDesc'>
             <div class='column rightLine'>
                 <p class='title'>
-                    {{ $t('home.fundDesc.text1') }}
+                    {{ $t('vitaHome.fundDesc.text1') }}
                 </p>
                 <p class='desc'>
-                    {{ $t('home.fundDesc.text2') }}
+                    {{ $t('vitaHome.fundDesc.text2') }}
                 </p>
                 <!-- <ul class='fundList'>
                     <li v-for='item in fundList' :key='item.ratio' class='item'>
@@ -18,19 +18,19 @@
                 </ul> -->
                 <div class='btnBox'>
                     <button class='btn' @click="openPDF('https://www.vitatoken.com/site/V10%20Whitepaper.pdf')">
-                        {{ $t('home.fundDesc.text3') }}
+                        {{ $t('vitaHome.fundDesc.text3') }}
                     </button>
                 </div>
             </div>
             <div class='column'>
                 <p class='title'>
-                    {{ $t('home.fundDesc.text4') }}
+                    {{ $t('vitaHome.fundDesc.text4') }}
                 </p>
-                <p class='desc' v-html="$t('home.fundDesc.text5')"></p>
+                <p class='desc' v-html="$t('vitaHome.fundDesc.text5')"></p>
                 <!-- <img alt='' class='jingzhiImg' src='../../../images/home/jingzhi.png' /> -->
                 <div class='btnBox'>
                     <button class='btn' @click="openPDF('https://www.vitatoken.com/site/V10%20Fund%20Whitepaper.pdf')">
-                        {{ $t('home.fundDesc.text6') }}
+                        {{ $t('vitaHome.fundDesc.text6') }}
                     </button>
                 </div>
             </div>
@@ -99,18 +99,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.full{
-    background: var(--contentColor);
-}
 .fundDesc{
-    width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    margin-top: 45px;
-    margin-bottom: 40px;
+    background: var(--contentColor);
+    padding: rem(40px) rem(30px);
+    margin-top: rem(50px);
+    margin-bottom: rem(50px);
+    text-align: center;
     .column{
-        flex: 1;
-        padding-right: 50px;
         line-height: 1.4;
         .title{
             font-weight: 700;
@@ -120,15 +115,16 @@ export default {
     }
     .rightLine{
         position: relative;
-        margin-right: 40px;
+        padding-bottom: rem(60px);
+        margin-bottom: rem(60px);
         &::after{
             content: "";
-            height: 100%;
-            width: 1px;
-            background: var(--placeholdColor);
+            height: 1px;
+            width: 100%;
+            background: var(--lineColor);
             position: absolute;
             right:0;
-            top: 0;
+            bottom: 0;
         }
     }
     .fundList{
@@ -153,14 +149,14 @@ export default {
     .btnBox{
         margin-top: 20px;
         .btn{
-            width: 300px;
-            height: 48px;
-            padding: 0 15px;
-            font-size: 16px;
-            color: #181A20;
-            background-color: #FCD535;
-            border-radius: 4px;
-            cursor: pointer;
+           width: 100%;
+           height: 48px;
+           padding: 0 15px;
+           font-size: 16px;
+           color: #181A20;
+           background-color: #FCD535;
+           border-radius: 4px;
+           cursor: pointer;
         }
     }
 

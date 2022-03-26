@@ -31,7 +31,7 @@
                     </div>
                 </li>
                 <li class='pro-item'>
-                    <img alt='' class='icon-img' src='/images/threeStep_img3.png' srcset='' />
+                    <img alt='' class='icon-img' src='/images/threeStep_img4.png' srcset='' />
                     <div class='text'>
                         <p class='t3'>
                             开始交易

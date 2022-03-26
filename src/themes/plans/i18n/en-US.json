@@ -769,6 +769,24 @@
             "title8": "Real time monitoring",
             "text8": "Our risk management system analyzes each unusual activity, triggering an unusual suspension of withdrawals."
         },
+        "fundDesc": {
+            "text1": "探索V10指数",
+            "text2": "投资者可以利用V10指数轻松跟踪加密资产的整体市场表现，并且在超过70%的时间中保持领先",
+            "text3": "阅读V10指数白皮书（PDF）",
+            "text4": "V10 ETF基金",
+            "text5": "降低门槛、分散投资、优化配置、动态调整...... <br />您所需要的一切均由专业的基金经理打理，而您只需要坐享其成",
+            "text6": "阅读V10 ETF基金白皮书（PDF）"
+        },
+        "portfolio": {
+            "text1": "立即创建您的加密货币投资组合",
+            "text2": "我们具有多种功能，使其成为开始交易的最佳场所",
+            "text3": "简洁高效",
+            "text4": "买卖流行的数字货币，在一个地方跟踪它们。",
+            "text5": "美观大方",
+            "text6": "清爽的界面始终将内容清晰地呈现给您。",
+            "text7": "无处不在",
+            "text8": "使用适用于 Android 或 iOS 设备，随时随地让您保持市场领先地位。"
+        },
         "startThreeStep":{
             "title":"Start Trading in three steps",
             "step1_title":"Register & Complete Identity Verification",
