@@ -28,10 +28,10 @@
                 {{ $t('trade.nameCode') }}
             </span>
             <span class='item'>
-                {{ $t('trade.buyPrice') }}
+                {{ $t('trade.positionLastPrice') }}
             </span>
             <span class='item'>
-                {{ $t('trade.sellPrice') }}
+                {{ $t('vitaHome.upDown') }}
             </span>
         </div>
         <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />

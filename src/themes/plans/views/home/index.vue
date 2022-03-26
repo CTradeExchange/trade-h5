@@ -165,19 +165,19 @@
                     </p>
                 </div>
             </div>
+        </div>
 
-            <div class='registerFooter'>
-                <div class='css-128y11d'>
-                    <div class='immediatelyText'>
-                        {{ $t('vitaHome.getProfit') }}
-                    </div>
-                    <div class='css-1r4nzjd'>
-                        <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
-                        </a>
-                        <van-button block class='lijiRegister' type='primary' @click="$router.push('/register')">
-                            {{ $t('vitaHome.toReg') }}
-                        </van-button>
-                    </div>
+        <div class='registerFooter'>
+            <div class='css-128y11d'>
+                <div class='immediatelyText'>
+                    {{ $t('vitaHome.getProfit') }}
+                </div>
+                <div class='css-1r4nzjd'>
+                    <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
+                    </a>
+                    <van-button block class='lijiRegister' type='primary' @click="$router.push('/register')">
+                        {{ $t('vitaHome.toReg') }}
+                    </van-button>
                 </div>
             </div>
         </div>
@@ -481,7 +481,6 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     }
 }
 .registerFooter {
-    margin-top: rem(40px);
     padding: 40px 16px 16px;
     text-align: center;
     .immediatelyText {
@@ -599,8 +598,6 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         margin-top: rem(50px);
         padding: rem(60px) rem(30px);
         background: var(--contentColor);
-        border-top-left-radius: 40px;
-        border-top-right-radius: 40px;
         h1 {
             padding-bottom: 24px;
             font-size: 24px;
@@ -650,12 +647,13 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                             }
                             .etf {
                                 display: inline-block;
-                                padding: rem(4px) rem(10px);
-                                color: var(--contentColor);
+                                padding: 0 rem(6px);
+                                color: var(--primary);
                                 font-size: rem(20px);
                                 text-align: center;
                                 vertical-align: middle;
-                                background: var(--primary);
+                                background: none;
+                                border: 1px solid var(--primary);
                                 border-radius: rem(10px);
                             }
                         }
@@ -673,10 +671,13 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                         font-size: 14px;
                         .cur-price {
                             text-align: right;
+                            color: var(--primary);
                         }
                         .up-down {
                             font-weight: 500;
                             text-align: right;
+                            color: var(--primary);
+                            font-weight: bold;
                         }
                     }
                     &:last-child {

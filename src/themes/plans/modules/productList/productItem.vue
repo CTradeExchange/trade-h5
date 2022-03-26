@@ -15,17 +15,19 @@
             <div class='ft'>
                 <span
                     class='buy_price'
-                    :class='[product.buy_color, "digits"+product.price_digits]'
+                    :class='["digits"+product.price_digits]'
                 >
-                    {{ !product.buy_price && product.buy_price != 0 ? '- -' : product.buy_price }}
+                    {{ !product.cur_price && product.cur_price != 0 ? '- -' : product.cur_price }}
+                    <!-- {{ !product.buy_price && product.buy_price != 0 ? '- -' : product.buy_price }} -->
                 </span>
             </div>
             <div class='tb'>
                 <span
                     class='sell_price'
-                    :class='[product.sell_color, "digits"+product.price_digits]'
+                    :class='["digits"+product.price_digits]'
                 >
-                    {{ !product.sell_price && product.sell_price != 0 ? '- -' : product.sell_price }}
+                    {{ !product.upDownWidth && product.upDownWidth != 0 ? '- -' : product.upDownWidth }}
+                    <!-- {{ !product.sell_price && product.sell_price != 0 ? '- -' : product.sell_price }} -->
                 </span>
             </div>
         </div>
@@ -166,6 +168,7 @@ export default {
     .sell_price,
     .buy_price {
         font-size: rem(30px);
+        color: var(--primary);
         &.digits11,
         &.digits12,
         &.digits13 {
@@ -176,6 +179,9 @@ export default {
         &.digits16 {
             font-size: rem(22px);
         }
+    }
+    .sell_price{
+        font-weight: bold;
     }
     .col {
         width: rem(280px);

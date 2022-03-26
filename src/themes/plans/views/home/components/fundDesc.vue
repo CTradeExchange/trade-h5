@@ -149,10 +149,9 @@ export default {
     .btnBox{
         margin-top: 20px;
         .btn{
-           width: 100%;
-           height: 48px;
+           height: 40px;
            padding: 0 15px;
-           font-size: 16px;
+           font-size: 14px;
            color: #fff;
            background-color: #0062ff;
            border-radius: 4px;
