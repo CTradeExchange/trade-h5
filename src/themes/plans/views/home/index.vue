@@ -467,16 +467,16 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
 </script>
 
 <style lang="scss">
-.descBarTitle{
+.descBarTitle {
     box-sizing: border-box;
+    min-width: 0;
     // margin-top: 80px;
     padding-bottom: 10px;
-    text-align: center;
-    min-width: 0;
+    color: #1E2329;
     font-weight: 600;
     font-size: 24px;
     line-height: 32px;
-    color: #1E2329;
+    text-align: center;
 }
 .descList {
     padding-top: 40px;
@@ -864,14 +864,17 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     .footer {
         text-align: center;
         .close-btn {
-            color: var(--primary);
-            cursor: pointer;
             display: inline-block;
+            padding: 0 24px;
+            color: var(--primary);
+            border: solid 1px var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
         }
         .agree {
             display: inline-block;
             width: fit-content;
-            margin-right: rem(20px);
+            margin-right: rem(40px);
             padding: 0 24px;
             color: rgb(255, 255, 255);
             font-size: 14px;
