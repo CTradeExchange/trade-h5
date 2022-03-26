@@ -595,6 +595,7 @@ export default {
             margin-right: rem(24px);
             border: solid 1px var(--color);
             @include active();
+            @include hover();
             .text{
                 display: inline-block;
                 padding-right: 10px;
@@ -607,6 +608,10 @@ export default {
         }
         .fundtokenLink{
             cursor: pointer;
+            background: none;
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            color: var(--primary);
         }
     }
 }

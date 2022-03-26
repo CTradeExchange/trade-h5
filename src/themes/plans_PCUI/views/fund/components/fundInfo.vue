@@ -156,12 +156,14 @@ const toOrderFund = () => {
     .immediatTrade{
         display: inline-block;
         height: 24px;
-        color: var(--color);
-        background: var(--assistColor);
         padding: 0 rem(16px);
-        border-radius: 4px;
         margin-right: rem(24px);
-        border: solid 1px var(--color);
+        cursor: pointer;
+        background: none;
+        border: 1px solid var(--primary);
+        border-radius: 5px;
+        color: var(--primary);
+        @include hover();
         @include active();
     }
     .desc {

@@ -315,8 +315,7 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 formatter: row => (
-                    // <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                    <span className="primary">
+                    <span className={unref(productMap)[row.symbolKey]?.cur_color}>
                         {getVal(row.symbolKey, 'price')}
                     </span>
                 )
@@ -326,8 +325,7 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 formatter: row => (
-                    // <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                    <span className="primary">
+                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }
                     </span>
                 )
@@ -339,8 +337,7 @@ export const getColumns = tradeType => {
                 minWidth: 150,
                 className: 'upDownWidth',
                 formatter: row => (
-                    // <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                    <strong className="primary">
+                    <strong className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         {getVal(row.symbolKey, 'upDownWidth')}
                     </strong>
                 )
