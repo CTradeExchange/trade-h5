@@ -28,10 +28,10 @@
                 {{ $t('trade.nameCode') }}
             </span>
             <span class='item'>
-                {{ $t('trade.buyPrice') }}
+                {{ $t('trade.positionLastPrice') }}
             </span>
             <span class='item'>
-                {{ $t('trade.sellPrice') }}
+                {{ $t('vitaHome.upDown') }}
             </span>
         </div>
         <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
@@ -74,7 +74,7 @@ export default {
         // 1.玩法类型
         const tradeType = ref(unref(productTradeType))
         // 2.板块类型
-        const categoryType = ref(0)
+        const categoryType = ref(1)
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
             tradeType, categoryType

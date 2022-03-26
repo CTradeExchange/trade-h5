@@ -165,82 +165,82 @@
                     </p>
                 </div>
             </div>
+        </div>
 
-            <div class='registerFooter'>
-                <div class='css-128y11d'>
-                    <div class='immediatelyText'>
-                        {{ $t('home.getProfit') }}
-                    </div>
-                    <div class='css-1r4nzjd'>
-                        <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
-                        </a>
-                        <van-button block class='lijiRegister' type='primary' @click="$router.push('/register')">
-                            {{ $t('home.toReg') }}
-                        </van-button>
-                    </div>
+        <div class='registerFooter'>
+            <div class='css-128y11d'>
+                <div class='immediatelyText'>
+                    {{ $t('home.getProfit') }}
+                </div>
+                <div class='css-1r4nzjd'>
+                    <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
+                    </a>
+                    <van-button block class='lijiRegister' type='primary' @click="$router.push('/register')">
+                        {{ $t('home.toReg') }}
+                    </van-button>
                 </div>
             </div>
+        </div>
 
-            <!-- 页脚 -->
-            <div class='footer-wrap'>
-                <div class='menu'>
-                    <div class='main' @click="expand('about')">
-                        <span>{{ $t('newHomeFooter.aboutus') }}</span>
-                        <van-icon :name='aboutVis ? "minus" : "plus"' />
-                    </div>
-                    <div v-show='aboutVis' class='sub'>
-                        <p class='link' @click='jumpUrl("trading")'>
-                            {{ $t('newHomeFooter.about') }}
-                        </p>
-                    </div>
+        <!-- 页脚 -->
+        <div class='footer-wrap'>
+            <div class='menu'>
+                <div class='main' @click="expand('about')">
+                    <span>{{ $t('newHomeFooter.aboutus') }}</span>
+                    <van-icon :name='aboutVis ? "minus" : "plus"' />
                 </div>
-                <div class='menu'>
-                    <div class='main' @click="expand('product')">
-                        <span>{{ $t('newHomeFooter.product') }}</span>
-                        <van-icon :name='productVis ? "minus" : "plus"' />
-                    </div>
-                    <div v-show='productVis' class='sub'>
-                        <p class='link' @click='jumpUrl("trading")'>
-                            {{ $t('newHomeFooter.trading') }}
-                        </p>
-                        <p class='link' @click='jumpUrl("fund")'>
-                            {{ $t('newHomeFooter.fund') }}
-                        </p>
-                    </div>
+                <div v-show='aboutVis' class='sub'>
+                    <p class='link' @click='jumpUrl("trading")'>
+                        {{ $t('newHomeFooter.about') }}
+                    </p>
                 </div>
-                <div class='menu'>
-                    <div class='main' @click="expand('service')">
-                        <span>{{ $t('newHomeFooter.service') }}</span>
-                        <van-icon :name='serviceVis ? "minus" : "plus"' />
-                    </div>
-                    <div v-show='serviceVis' class='sub'>
-                        <!-- <p class='link' @click='jumpUrl("program")'>
-                            {{ $t('newHomeFooter.program') }}
-                        </p> -->
-                        <p class='link' @click='jumpUrl("vip")'>
-                            {{ $t('newHomeFooter.vip') }}
-                        </p>
-                        <p class='link' @click='jumpUrl("customer")'>
-                            {{ $t('newHomeFooter.customer') }}
-                        </p>
-                    </div>
+            </div>
+            <div class='menu'>
+                <div class='main' @click="expand('product')">
+                    <span>{{ $t('newHomeFooter.product') }}</span>
+                    <van-icon :name='productVis ? "minus" : "plus"' />
                 </div>
-                <div class='menu'>
-                    <div class='main' @click="expand('help')">
-                        <span>{{ $t('newHomeFooter.help') }}</span>
-                        <van-icon :name='helpVis ? "minus" : "plus"' />
-                    </div>
-                    <div v-show='helpVis' class='sub'>
-                        <p class='link' @click='jumpUrl("faqs")'>
-                            {{ $t('newHomeFooter.faqs') }}
-                        </p>
-                        <p class='link' @click='jumpUrl("terms")'>
-                            {{ $t('newHomeFooter.terms') }}
-                        </p>
-                        <p class='link' @click='jumpUrl("policy")'>
-                            {{ $t('newHomeFooter.policy') }}
-                        </p>
-                    </div>
+                <div v-show='productVis' class='sub'>
+                    <p class='link' @click='jumpUrl("trading")'>
+                        {{ $t('newHomeFooter.trading') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("fund")'>
+                        {{ $t('newHomeFooter.fund') }}
+                    </p>
+                </div>
+            </div>
+            <div class='menu'>
+                <div class='main' @click="expand('service')">
+                    <span>{{ $t('newHomeFooter.service') }}</span>
+                    <van-icon :name='serviceVis ? "minus" : "plus"' />
+                </div>
+                <div v-show='serviceVis' class='sub'>
+                    <!-- <p class='link' @click='jumpUrl("program")'>
+                        {{ $t('newHomeFooter.program') }}
+                    </p> -->
+                    <p class='link' @click='jumpUrl("vip")'>
+                        {{ $t('newHomeFooter.vip') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("customer")'>
+                        {{ $t('newHomeFooter.customer') }}
+                    </p>
+                </div>
+            </div>
+            <div class='menu'>
+                <div class='main' @click="expand('help')">
+                    <span>{{ $t('newHomeFooter.help') }}</span>
+                    <van-icon :name='helpVis ? "minus" : "plus"' />
+                </div>
+                <div v-show='helpVis' class='sub'>
+                    <p class='link' @click='jumpUrl("faqs")'>
+                        {{ $t('newHomeFooter.faqs') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("terms")'>
+                        {{ $t('newHomeFooter.terms') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("policy")'>
+                        {{ $t('newHomeFooter.policy') }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -481,7 +481,6 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     }
 }
 .registerFooter {
-    margin-top: rem(40px);
     padding: 40px 16px 16px;
     text-align: center;
     .immediatelyText {
@@ -492,10 +491,12 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         text-align: center;
     }
     .lijiRegister {
-        height: 40px;
+        height: 48px;
         margin-top: 24px;
-        background-color: #FCD535;
-        border-color: #FCD535;
+        background-color: #0062ff;
+        border-color: #0062ff;
+        font-size: 16px;
+        border-radius: rem(10px);
     }
 }
 .page-wrap {
@@ -526,7 +527,8 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             font-size: 16px;
             line-height: rem(96px);
             text-align: center;
-            background-color: #FCD535;
+            color: #fff;
+            background-color: #0062ff;
             border-radius: rem(10px);
         }
     }
@@ -583,11 +585,11 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         .start-btn {
             display: inline-block;
             width: 100%;
-            color: #181A20;
-            font-weight: bold;
-            line-height: 40px;
+            color: #fff;
+            line-height: 48px;
+            font-size: 16px;
             text-align: center;
-            background-color: #FCD535;
+            background-color: #0062ff;
             border-radius: 5px;
             cursor: pointer;
         }
@@ -596,8 +598,6 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         margin-top: rem(50px);
         padding: rem(60px) rem(30px);
         background: var(--contentColor);
-        border-top-left-radius: 40px;
-        border-top-right-radius: 40px;
         h1 {
             padding-bottom: 24px;
             font-size: 24px;
@@ -647,12 +647,13 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                             }
                             .etf {
                                 display: inline-block;
-                                padding: rem(4px) rem(10px);
-                                color: var(--contentColor);
+                                padding: 0 rem(6px);
+                                color: var(--primary);
                                 font-size: rem(20px);
                                 text-align: center;
                                 vertical-align: middle;
-                                background: var(--primary);
+                                background: none;
+                                border: 1px solid var(--primary);
                                 border-radius: rem(10px);
                             }
                         }
@@ -670,10 +671,13 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                         font-size: 14px;
                         .cur-price {
                             text-align: right;
+                            color: var(--primary);
                         }
                         .up-down {
                             font-weight: 500;
                             text-align: right;
+                            color: var(--primary);
+                            font-weight: bold;
                         }
                     }
                     &:last-child {
@@ -690,7 +694,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         }
     }
     .why-wrap {
-        margin: rem(50px) 0;
+        margin: rem(50px) 0 0;
         padding: rem(50px) 0;
         background: var(--contentColor);
     }
@@ -698,7 +702,8 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
         margin-top: rem(50px);
         padding: rem(30px);
         font-size: rem(28px);
-        background: var(--contentColor);
+        background: #12161c;
+        color: #fff;
         .menu {
             .main {
                 display: flex;
@@ -715,8 +720,19 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             .sub {
                 padding-bottom: 20px;
                 .link {
-                    padding: rem(15px) 0;
+                    position: relative;
+                    padding: rem(15px) 0 rem(15px) 28px;
                     color: var(--normalColor);
+                    &::before{
+                        color: #959595;
+                        content: '\2022';
+                        display: inline-block;
+                        font-family: Arial,sans-serif;
+                        font-size: 24px;
+                        margin-left: -20px;
+                        position: absolute;
+                        top: 2px;
+                    }
                 }
             }
         }
@@ -829,8 +845,8 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             color: rgb(255, 255, 255);
             font-size: 14px;
             white-space: nowrap;
-            background-color: rgb(22, 82, 240);
-            border: 1px solid rgb(22, 82, 240);
+            background-color: var(--primary);
+            border: 1px solid var(--primary);
             border-radius: 4px;
             cursor: pointer;
         }
@@ -846,10 +862,10 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
     justify-content: center;
     width: rem(80px);
     height: rem(80px);
-    background: #FCD535;
+    background: #0062ff;
     border-radius: 50%;
     .icon {
-        color: #1E2329;
+        color: #fff;
         font-size: rem(40px);
     }
 }
