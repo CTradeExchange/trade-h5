@@ -177,7 +177,7 @@ onUnmounted(() => {
     .immediatelyText {
         color: #1E2329;
         font-weight: 600;
-        font-size: 40px;
+        font-size: 30px;
         line-height: 48px;
         text-align: center;
     }
