@@ -143,10 +143,10 @@ const config = {
         },
         proxy: {
             '/wp-content/uploads': {
-                target: 'https://prewpadmin_9.cats-trade.com',
+                target: 'https://prewpadmin.cats-trade.com',
             },
             '/wp-json/wp': {
-                target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
+                target: 'http://uatwpadmin_5.cats-trade.com', // http://prewpadmin.cats-trade.com/
                 // changeOrigin: false,
                 disableHostCheck: true,
                 onProxyReq: function (proxyReq, req, res, options) { // 由于vue中使用了body-parser 导致http中的body被序列化两次，从而使得配置代理后后端无法获取body中的数据

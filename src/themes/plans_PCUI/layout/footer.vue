@@ -170,7 +170,7 @@ export default {
                     faqs: 'https://www.vitatoken.com/site/faqs',
                     terms: 'https://www.vitatoken.com/site/terms-conditions',
                     policy: 'https://www.vitatoken.com/site/privacy-policy',
-                    about: 'https://www.vitatoken.io/site/about-us'
+                    // about: 'https://www.vitatoken.io/site/about-us'
                 }
             } else {
                 linkList = {
@@ -182,7 +182,7 @@ export default {
                     faqs: 'https://www.vitatoken.com/site/faqs',
                     terms: 'https://www.vitatoken.com/site/terms-conditions',
                     policy: 'https://www.vitatoken.com/site/privacy-policy',
-                    about: 'https://www.vitatoken.io/site/about-us'
+                    // about: 'https://www.vitatoken.io/site/about-us'
                 }
             }
             const community = {
@@ -218,6 +218,9 @@ export default {
                         })
                     }
                     break
+                case 'about':
+                    router.push('/about')
+                    break
                 default:
                     const newLinkList = { ...linkList, ...community }
                     if (newLinkList[index]) {
@@ -239,17 +242,17 @@ export default {
 
 <style lang="scss" scoped>
 .footer-nav {
+    position: relative;
     min-width: 1200px;
     height: 380px;
     background: #15191E;
-    position: relative;
     .footer-auto {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         padding-top: 90px;
     }
-     .nav-left {
+    .nav-left {
         ul {
             display: flex;
         }
@@ -261,23 +264,23 @@ export default {
             .title {
                 margin-bottom: 20px;
                 color: #9293A3;
-                font-size: 20px;
                 font-weight: 500;
+                font-size: 20px;
             }
             .name {
-                margin-top: 10px;
                 position: relative;
+                margin-top: 10px;
                 padding-left: 26px;
                 color: var(--normalColor);
                 &::before {
                     position: absolute;
                     top: -3px;
-                    line-height: 1;
                     display: inline-block;
                     margin-left: -20px;
                     color: #959595;
                     font-size: 24px;
                     font-family: Arial, sans-serif;
+                    line-height: 1;
                     content: '\2022';
                 }
                 a {
@@ -294,11 +297,11 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
-       .title {
+        .title {
             margin-bottom: 20px;
             color: #9293A3;
-            font-size: 20px;
             font-weight: 500;
+            font-size: 20px;
         }
         ul {
             display: flex;
@@ -325,28 +328,28 @@ export default {
 }
 .lang-select {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     width: 170px;
     height: 36px;
-    padding: 0 20px;
     margin-top: 20px;
-    border-radius: 4px;
-    background: #f8f8f8;
-    border: 1px solid #e6e6e6;
-    cursor: pointer;
+    padding: 0 20px;
     color: #1E2329;
+    background: #F8F8F8;
+    border: 1px solid #E6E6E6;
+    border-radius: 4px;
+    cursor: pointer;
     &:hover {
-        opacity: .9;
+        opacity: 0.9;
     }
     span {
         font-size: 14px;
     }
     .icon {
-        font-size: 10px;
         color: #707A8A;
-        transform: scale(.9);
-        transition: .2s;
+        font-size: 10px;
+        transform: scale(0.9);
+        transition: 0.2s;
         &.rotate {
             transform: rotate(180deg);
         }
@@ -354,8 +357,8 @@ export default {
 }
 .footer-last {
     position: absolute;
-    left: 50%;
     bottom: 40px;
+    left: 50%;
     transform: translateX(-50%);
     .year {
         color: #9293A3;

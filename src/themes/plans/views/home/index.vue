@@ -386,7 +386,7 @@ const jumpUrl = (index) => {
             faqs: 'https://www.vitatoken.com/site/faqs',
             terms: 'https://www.vitatoken.com/site/terms-conditions',
             policy: 'https://www.vitatoken.com/site/privacy-policy',
-            abount: 'https://www.vitatoken.io/site/about-us'
+            // abount: 'https://www.vitatoken.io/site/about-us'
         }
     } else {
         linkList = {
@@ -398,7 +398,7 @@ const jumpUrl = (index) => {
             faqs: 'https://www.vitatoken.com/site/faqs',
             terms: 'https://www.vitatoken.com/site/terms-conditions',
             policy: 'https://www.vitatoken.com/site/privacy-policy',
-            abount: 'https://www.vitatoken.io/site/about-us'
+            // abount: 'https://www.vitatoken.io/site/about-us'
         }
     }
     const community = {
@@ -433,6 +433,9 @@ const jumpUrl = (index) => {
                     }
                 })
             }
+            break
+        case 'about':
+            router.push('/about')
             break
         default:
             const newLinkList = { ...linkList, ...community }

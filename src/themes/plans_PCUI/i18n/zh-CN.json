@@ -116,7 +116,8 @@
         "MFA_status": "谷歌验证器",
         "MFA_bind": "绑定谷歌验证器",
         "MFA_close": "关闭谷歌验证器",
-        "download": "下载"
+        "download": "下载",
+        "about": "关于我们"
 	},
     "historyList": {
         "noMore": "没有更多了"
@@ -971,5 +972,18 @@
         "subTitle": "下载Vitatoken客户端，所有交易尽在手中。",
         "android": "下载安卓端",
         "ios": "下载苹果端"
+    },
+    "about": {
+        "aboutUs": "關於我們",
+        "desc": "在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 於2021年9月6日成立，提供金融科技解決方案，有加密貨幣交易牌照。2022年一季度將實現如下功能：加密貨幣現貨交易，ETF基金二级市场交易，基金申购、赎回，支持基金实时净值及报表发布，APP上线，全面支持eth主链及代币，全面支持trx主链及代币，交易所钱包升级，将符合FIPS 140-2 level 3标准。更多功能敬請期待。",
+        "base": "基礎服務",
+        "hope": "願景",
+        "hopeT1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場",
+        "hopeT2": "我們像維他命那樣",
+        "hopeT3": "是重要組成部分",
+        "hopeT4": "使用我們平台發行或者買賣加密貨幣基金",
+        "hopeT5": "降低参与门槛",
+        "hopeT6": "提高獲利概率",
+        "hopeT7": "從而在這個快速變化的市場中賺錢"
     }
 }

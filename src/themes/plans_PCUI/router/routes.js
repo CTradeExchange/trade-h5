@@ -329,6 +329,14 @@ const routes = [
         }
     },
     {
+        path: '/about',
+        name: 'About',
+        component: () => import(/* webpackChunkName: "resetFail" */ '../views/about/about.vue'),
+        meta: {
+            title: 'route.about'
+        }
+    },
+    {
         path: '/',
         redirect: '/home',
         name: 'Layout',
@@ -449,6 +457,7 @@ const routes = [
                     title: 'route.download'
                 }
             }
+
         ],
     },
     // {
