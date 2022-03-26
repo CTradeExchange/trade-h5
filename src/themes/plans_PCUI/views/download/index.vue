@@ -54,7 +54,8 @@ const openDownload = value => {
         flex: 1;
     }
     .img-download {
-        width: 100%;
+        width: 450px;
+        height: 430px;
     }
     h2 {
         box-sizing: border-box;

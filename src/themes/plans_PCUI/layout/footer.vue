@@ -107,6 +107,12 @@
                             </p>
                         </li>
                     </ul>
+                    <div class='lang-select' @click='openLangDialog'>
+                        <span>
+                            {{ currentLang.name }}
+                        </span>
+                        <i class='icon icon_icon_arrow'></i>
+                    </div>
                 </div>
             </div>
             <div class='footer-last'>
@@ -116,20 +122,37 @@
             </div>
         </div>
     </div>
+    <!-- 语言弹窗 -->
+    <lang-dialog ref='langDialogRef' />
 </template>
 
 <script>
-import { getCookie } from '@/utils/util.js'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { getCookie } from '@/utils/util.js'
+import langDialog from './components/lang-dialog.vue'
 export default {
+    components: {
+        langDialog
+    },
     setup () {
         const store = useStore()
         const router = useRouter()
 
         // 用户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
+        // 语言列表
+        const langActions = store.state.supportLanguages
+        // 当前语言
+        const currentLang = langActions.find(el => el.val === getCookie('lang'))
+        // 组件ref
+        const langDialogRef = ref(null)
+
+        // 打开语言弹窗
+        const openLangDialog = () => {
+            langDialogRef.value.open()
+        }
 
         // 底部nav跳转
         const jumpUrl = (index) => {
@@ -202,7 +225,10 @@ export default {
         }
 
         return {
-            jumpUrl
+            jumpUrl,
+            currentLang,
+            langDialogRef,
+            openLangDialog
         }
     }
 }
@@ -278,6 +304,31 @@ export default {
                 }
             }
         }
+    }
+}
+.lang-select {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 170px;
+    height: 36px;
+    padding: 0 20px;
+    margin-top: 20px;
+    border-radius: 4px;
+    background: #f8f8f8;
+    border: 1px solid #e6e6e6;
+    cursor: pointer;
+    color: #1E2329;
+    &:hover {
+        opacity: .9;
+    }
+    span {
+        font-size: 14px;
+    }
+    .icon {
+        font-size: 10px;
+        color: #707A8A;
+        transform: scale(.9);
     }
 }
 .footer-last {
