@@ -415,11 +415,11 @@ const colorSelect = (action) => {
             width: 100%;
             height: rem(96px);
             margin-left: 0;
-            color: rgb(24, 26, 32);
+            color: #fff;
             font-size: 16px;
             line-height: rem(96px);
             text-align: center;
-            background-color: #FCD535;
+            background-color: var(--primary);
             border-radius: rem(10px);
         }
         .btn {
