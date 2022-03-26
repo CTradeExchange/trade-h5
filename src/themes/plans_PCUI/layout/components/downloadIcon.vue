@@ -94,6 +94,7 @@ onMounted(() => {
         transform: scaleY(.5);
     }
     .handle-btn {
+        @include hover();
         display: flex;
         justify-content: center;
         align-items: center;

@@ -32,7 +32,7 @@
         "startTime": "Start Time",
         "endTime": "End Time",
         "languageAreas": "Language and Region",
-        "SelectLanguageAreas": "Language and Region"
+        "SelectLanguageAreas": "Choose a language and region"
     },
     "c": {
         "login": "Login",
@@ -589,7 +589,7 @@
         "saveSetting": "Save",
         "offer": "Quote",
         "etfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
-		"purchaseOrRedemptionTip": "Purchase / Redemption: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to",
+		"purchaseOrRedemptionTip": "Purchase / Redemption: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to.",
 		"purchaseOrRedemption": "Purchase / Redemption",
 		"noFeature": "This feature is not currently supported",
         "material": "Fund Facts"
@@ -927,7 +927,7 @@
             "text1": "Explore V10 Index",
             "text2": "Investors can keep track of Cryptocurrency market performance by V10 Index, being ahead of time by 70%.",
             "text3": "Browse White Paper (PDF)",
-            "text4": "VV10 Index Fund",
+            "text4": "V10 Index Fund",
             "text5": "Our fund manager will take care of everything from lowering the passing standard, diversification, configuration optimization, dynamic adjustment and more, all you need to do is to sit back and earn.",
             "text6": "Browse White Paper (PDF)"
         },
@@ -954,9 +954,9 @@
             "agree": "Agree",
             "close": "Close",
             "text1": "We use cookies to enhance your experience, analyze our traffic, and for security and marketing. By visiting our website you agree to our use of cookies.",
-            "text2": "Read more about cookies。"
+            "text2": "Read more about cookies"
         },
-        "marketTrend": "market Trend",
+        "marketTrend": "Market trend",
         "getStarted": "Get Started",
         "getProfit": "Start earning today",
         "toReg": "Sign Up Now",

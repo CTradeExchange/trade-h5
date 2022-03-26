@@ -98,6 +98,7 @@ export default {
             line-height: 32px;
         }
         .el-tabs__item{
+            @include hover();
             height: 32px;
             line-height: 32px;
             padding: 0 11px!important;

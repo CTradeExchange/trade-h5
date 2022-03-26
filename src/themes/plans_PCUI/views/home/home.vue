@@ -47,6 +47,21 @@
 
                 <!-- why模块 -->
                 <why />
+
+                <div class='registerFooter'>
+                    <div class='css-128y11d'>
+                        <div class='immediatelyText'>
+                            {{ $t('home.getProfit') }}
+                        </div>
+                        <div class='css-1r4nzjd'>
+                            <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
+                            </a>
+                            <van-button class='lijiRegister' type='primary' @click="$router.push('/register')">
+                                {{ $t('home.toReg') }}
+                            </van-button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -106,7 +121,7 @@ onUnmounted(() => {
 }
 // 内容模块
 .content-module {
-    padding-bottom: 80px;
+    padding-bottom: 20px;
     overflow: auto;
     background-color: var(--bgColor);
 }
@@ -154,6 +169,27 @@ onUnmounted(() => {
             color: var(--color);
             border-bottom: 3px solid var(--primary);
         }
+    }
+}
+.registerFooter {
+    padding: 86px 16px 60px;
+    text-align: center;
+    .immediatelyText {
+        color: #1E2329;
+        font-weight: 600;
+        font-size: 40px;
+        line-height: 48px;
+        text-align: center;
+    }
+    .lijiRegister {
+        padding: 0 50px;
+        height: 44px;
+        margin-top: 30px;
+        font-size: 16px;
+        background-color: #0062FF;
+        border-color: #0062FF;
+        border-radius: 5px;
+        @include hover();
     }
 }
 </style>

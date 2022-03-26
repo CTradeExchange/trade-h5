@@ -70,9 +70,6 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     setI18nLanguage(I18n, langLocal)
     await loadLocaleMessages(I18n, langLocal)
 
-    // 设置页码title
-    document.title = langLocal === 'zh-CN' ? '加密资产、加密基金交易所' : 'Crypto Assets, Crypto Funds Exchange'
-
     // 设置玩法别名
     const { tm } = I18n.global
     const tradeTypesConfig = store.state._base.wpCompanyInfo?.tradeTypesConfig || {}

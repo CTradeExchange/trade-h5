@@ -303,6 +303,7 @@ export default {
     }
 }
     .confirm-btn {
+        @include hover();
         position: absolute;
         bottom: 0;
         background: var(--lineColor);
