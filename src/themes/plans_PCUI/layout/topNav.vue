@@ -317,6 +317,7 @@ export default {
                 color: #FFF;
                 background: var(--primary);
                 border-radius: 4px;
+                @include hover();
             }
         }
         .handle-have {

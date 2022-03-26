@@ -153,14 +153,15 @@ export default {
     .btnBox{
         margin-top: 20px;
         .btn{
-            width: 300px;
-            height: 48px;
+            width: 200px;
+            height: 40px;
             padding: 0 15px;
-            font-size: 16px;
-            color: #181A20;
-            background-color: #FCD535;
+            font-size: 14px;
+            color: #fff;
+            background-color: var(--primary);
             border-radius: 4px;
             cursor: pointer;
+            @include hover();
         }
     }
 

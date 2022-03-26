@@ -47,10 +47,10 @@
                             {{ item.upDownAmount || '--' }}
                         </span>
                     </div>
-                    <div>
-                        <span :class='item.upDownColor'>
+                    <div class='upDownWidth'>
+                        <strong>
                             {{ item.upDownWidth || '--' }}
-                        </span>
+                        </strong>
                     </div>
                     <div class='handle'>
                         <button v-if='item.etf' class='trade active' @click='toFund(item)'>
@@ -196,7 +196,7 @@ export default {
                 color: var(--minorColor);
             }
             &:first-child {
-                min-width: 300px;
+                min-width: 320px;
                 span {
                     margin-left: 16px;
                 }
@@ -219,9 +219,9 @@ export default {
         cursor: pointer;
         div {
             flex: 1;
-            color: var(--color);
+            color: var(--primary);
             &:first-of-type {
-                min-width: 300px;
+                min-width: 320px;
             }
             span {
                 font-size: 16px;
@@ -242,6 +242,7 @@ export default {
             .name {
                 display: inline-flex;
                 flex-direction: column;
+                color: var(--color);
                 :deep(.etfIcon) {
                     font-size: 10px;
                 }
@@ -261,6 +262,7 @@ export default {
                 color: #fff;
                 border-radius: 4px;
                 cursor: pointer;
+                @include hover();
                 &.buy {
                     background: var(--riseColor);
                 }
@@ -276,9 +278,6 @@ export default {
                         background: var(--primary);
                         color: #fff;
                     }
-                }
-                &:hover {
-                    opacity: .7;
                 }
             }
         }
