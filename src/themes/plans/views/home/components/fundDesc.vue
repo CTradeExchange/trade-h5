@@ -153,8 +153,8 @@ export default {
            height: 48px;
            padding: 0 15px;
            font-size: 16px;
-           color: #181A20;
-           background-color: #FCD535;
+           color: #fff;
+           background-color: #0062ff;
            border-radius: 4px;
            cursor: pointer;
         }

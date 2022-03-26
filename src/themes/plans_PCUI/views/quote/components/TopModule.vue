@@ -7,6 +7,7 @@
             <span class='price'>
                 {{ productMap[symbolKey]?.price || '- -' }}
             </span>
+            <currency-icon v-if='productMap[symbolKey]' class='currency-icon' :currency='productMap[symbolKey].baseCurrency' :size='32' />
             <div class='change'>
                 <span class='upDownAmount'>
                     {{ productMap[symbolKey]?.upDownAmount || '- -' }}
@@ -24,6 +25,7 @@ import { computed, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import currencyIcon from '@/components/currencyIcon.vue'
 const store = useStore()
 const router = useRouter()
 const gotoOrder = (symbolKey) => {
@@ -55,6 +57,7 @@ onUnmounted(() => {
     justify-content: space-between;
     margin-bottom: 40px;
     .item{
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -80,6 +83,11 @@ onUnmounted(() => {
             .upDownAmount{
                 margin-right: 10px;
             }
+        }
+        .currency-icon{
+            position: absolute;
+            right: 14px;
+            top: 11px;
         }
     }
 }
