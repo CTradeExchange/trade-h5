@@ -111,7 +111,7 @@
                         <span>
                             {{ currentLang.name }}
                         </span>
-                        <i class='icon icon_icon_arrow'></i>
+                        <i :class="['icon', 'icon_icon_arrow', { 'rotate': langDialogShow }]"></i>
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
         </div>
     </div>
     <!-- 语言弹窗 -->
-    <lang-dialog ref='langDialogRef' />
+    <lang-dialog ref='langDialogRef' v-model='langDialogShow' />
 </template>
 
 <script>
@@ -148,6 +148,8 @@ export default {
         const currentLang = langActions.find(el => el.val === getCookie('lang'))
         // 组件ref
         const langDialogRef = ref(null)
+        // 是否显示语言弹窗
+        const langDialogShow = ref(false)
 
         // 打开语言弹窗
         const openLangDialog = () => {
@@ -228,7 +230,8 @@ export default {
             jumpUrl,
             currentLang,
             langDialogRef,
-            openLangDialog
+            openLangDialog,
+            langDialogShow
         }
     }
 }
@@ -329,6 +332,10 @@ export default {
         font-size: 10px;
         color: #707A8A;
         transform: scale(.9);
+        transition: .2s;
+        &.rotate {
+            transform: rotate(180deg);
+        }
     }
 }
 .footer-last {

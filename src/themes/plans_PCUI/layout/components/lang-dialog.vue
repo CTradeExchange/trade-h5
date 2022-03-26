@@ -6,6 +6,7 @@
             :close-on-click-modal='false'
             title='语言和地区'
             width='800px'
+            @close='close'
         >
             <div class='lang-body'>
                 <p class='title'>
@@ -29,12 +30,21 @@
 </template>
 
 <script setup>
-import { ref, computed, defineExpose } from 'vue'
+import { ref, computed, defineProps, defineEmits, defineExpose } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import i18n, { loadLocaleMessages } from '@planspc/i18n/i18n.js'
 import { getCookie, setCookie } from '@/utils/util.js'
 import { changeLang } from '@/api/base'
+
+defineProps({
+    // 是否显示弹窗
+    modelValue: {
+        type: Boolean,
+        default: false
+    }
+})
+const emits = defineEmits(['update:modelValue'])
 
 const store = useStore()
 const { locale } = useI18n({ useScope: 'global' })
@@ -50,6 +60,13 @@ const currentLang = getCookie('lang')
 // 打开弹窗
 const open = () => {
     show.value = true
+    emits('update:modelValue', true)
+}
+
+// 关闭弹窗
+const close = () => {
+    show.value = false
+    emits('update:modelValue', false)
 }
 
 // 切换语言
@@ -64,7 +81,7 @@ const changeLangHandler = lang => {
             resolve()
         }
     }).then(() => {
-        show.value = false
+        close()
 
         // 替换URL
         const str = location.pathname
@@ -81,7 +98,7 @@ const changeLangHandler = lang => {
 
         setCookie('lang', lang, 'y10')
     }).catch(() => {
-        show.value = false
+        close()
     })
 }
 
