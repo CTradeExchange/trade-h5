@@ -123,6 +123,7 @@ export default {
         color: var(--color);
         font-size: rem(26px);
         background: none;
+        cursor: pointer;
         &:disabled {
             color: var(--minorColor);
         }

@@ -48,7 +48,7 @@
                 <!-- why模块 -->
                 <why />
 
-                <div class='registerFooter'>
+                <div v-if='!$store.state._user.customerInfo' class='registerFooter'>
                     <div class='css-128y11d'>
                         <div class='immediatelyText'>
                             {{ $t('home.getProfit') }}
@@ -177,7 +177,7 @@ onUnmounted(() => {
     .immediatelyText {
         color: #1E2329;
         font-weight: 600;
-        font-size: 40px;
+        font-size: 30px;
         line-height: 48px;
         text-align: center;
     }

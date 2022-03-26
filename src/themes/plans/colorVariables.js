@@ -24,7 +24,7 @@ const colors = {
     },
     light: {
         riseColor: '#B72122',
-        fallColor: '#2B70AE',
+        fallColor: '#0062FF',
         primaryAssistColor: '#f4f7fc',
         color: '#333333',
         normalColor: '#656667',

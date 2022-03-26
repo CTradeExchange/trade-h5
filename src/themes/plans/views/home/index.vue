@@ -110,7 +110,7 @@
                     </p>
                 </li>
             </ul>
-            <router-link class='start-btn' to='/register'>
+            <router-link v-if='!customerInfo' class='start-btn' to='/register'>
                 {{ $t('home.getStarted') }}
             </router-link>
         </div>
@@ -167,7 +167,7 @@
             </div>
         </div>
 
-        <div class='registerFooter'>
+        <div v-if='!customerInfo' class='registerFooter'>
             <div class='css-128y11d'>
                 <div class='immediatelyText'>
                     {{ $t('home.getProfit') }}
@@ -699,11 +699,9 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
                         flex: 1;
                         font-size: 14px;
                         .cur-price {
-                            color: var(--primary);
                             text-align: right;
                         }
                         .up-down {
-                            color: var(--primary);
                             font-weight: 500;
                             font-weight: bold;
                             text-align: right;

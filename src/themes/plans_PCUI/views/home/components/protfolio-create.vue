@@ -40,7 +40,7 @@
                         </div>
                     </li>
                 </ul>
-                <router-link class='start-btn' to='/register'>
+                <router-link v-if='!$store.state._user.customerInfo' class='start-btn' to='/register'>
                     {{ $t('home.getStarted') }}
                 </router-link>
             </div>
