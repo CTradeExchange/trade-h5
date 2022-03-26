@@ -95,6 +95,9 @@ onUnmounted(() => {
             margin-right: 5px;
             align-self: self-start;
         }
+        tbody td.el-table__cell.primaryText{
+            color: var(--primary);
+        }
         .btn{
             position: relative;
             z-index: 0;
