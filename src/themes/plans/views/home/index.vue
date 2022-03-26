@@ -190,7 +190,7 @@
                     <van-icon :name='aboutVis ? "minus" : "plus"' />
                 </div>
                 <div v-show='aboutVis' class='sub'>
-                    <p class='link' @click='jumpUrl("trading")'>
+                    <p class='link' @click='jumpUrl("abount")'>
                         {{ $t('newHomeFooter.about') }}
                     </p>
                 </div>
@@ -386,7 +386,7 @@ const jumpUrl = (index) => {
             faqs: 'https://www.vitatoken.com/site/faqs',
             terms: 'https://www.vitatoken.com/site/terms-conditions',
             policy: 'https://www.vitatoken.com/site/privacy-policy',
-            abount: ''
+            abount: 'https://www.vitatoken.io/site/about-us'
         }
     } else {
         linkList = {
@@ -398,7 +398,7 @@ const jumpUrl = (index) => {
             faqs: 'https://www.vitatoken.com/site/faqs',
             terms: 'https://www.vitatoken.com/site/terms-conditions',
             policy: 'https://www.vitatoken.com/site/privacy-policy',
-            abount: ''
+            abount: 'https://www.vitatoken.io/site/about-us'
         }
     }
     const community = {
