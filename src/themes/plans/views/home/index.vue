@@ -1,7 +1,18 @@
 <template>
     <div class='page-wrap'>
         <div class='banner'>
-            <img alt='' :src='require("../../images/banner/h5banner5-"+ lang +".jpg")' srcset='' />
+            <van-swipe :autoplay='3000' class='my-swipe' indicator-color='white'>
+                <van-swipe-item>
+                    <router-link to='fundProductList'>
+                        <img alt='' :src='require("../../images/banner/h5banner5-"+ lang +".jpg")' srcset='' />
+                    </router-link>
+                </van-swipe-item>
+                <van-swipe-item>
+                    <router-link to='fundProductList'>
+                        <img alt='' :src='require("../../images/banner/h5banner5-"+ lang +".jpg")' srcset='' />
+                    </router-link>
+                </van-swipe-item>
+            </van-swipe>
         </div>
 
         <div v-if='!customerInfo' class='reg-wrap'>
