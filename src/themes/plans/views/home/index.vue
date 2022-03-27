@@ -53,7 +53,7 @@
                             </p>
                         </div>
                         <div class='price'>
-                            <p class='cur-price' :class='item.upDownColor'>
+                            <p class='cur-price' :class='item.cur_color'>
                                 {{ item.cur_price }}
                             </p>
                         </div>
