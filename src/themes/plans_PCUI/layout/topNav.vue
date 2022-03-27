@@ -42,7 +42,7 @@
                 <div :class="['item', { 'active': $route.path === '/quote' }]">
                     <router-link to='/quote'>
                         <span class='link'>
-                            {{ $t('header.quote') }}
+                            {{ $t('trade.markets') }}
                         </span>
                     </router-link>
                 </div>
