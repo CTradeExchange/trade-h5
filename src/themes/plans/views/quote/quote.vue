@@ -31,7 +31,7 @@
                 {{ $t('trade.positionLastPrice') }}
             </span>
             <span class='item'>
-                {{ $t('vitaHome.upDown') }}
+                {{ $t('trade.upDown') }}
             </span>
         </div>
         <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
