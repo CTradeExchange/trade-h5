@@ -490,7 +490,7 @@
         "purchaseRedeemBtn": "Purchase Redeem",
         "productEtfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
 		"quantity": "QTY(Lots)",
-        "upDown": "24H chg%"
+        "upDown": "24h Change%"
 	},
 	"bizType": {
 		"2": "Market close",
@@ -765,42 +765,42 @@
             "text3": "Which cryptocurrency are suitable for beginners"
         },
         "why": {
-            "text1": "Safety is the First Priority",
+            "text1": "Safety is the priority",
             "text2": "Secure Asset Fund for Users (SAFU)",
-            "text3": "Vitatoken allocates 10% of all trading fees in order to grow it to a sizable level to safeguard users’ interests.",
-            "text4": "Personalized Access Control",
-            "text5": "Advanced access control restricts access of personal account or IP address, in order to protect users.",
+            "text3": "Vitatoken stores 10% of all trading fees in a secure asset fund to protect a share of user funds.",
+            "text4": "Personalised Access Control",
+            "text5": "Advanced access control allows you to restrict devices and addresses that can access your account, for greater ease of mind.",
             "text6": "Advanced Data Encryption",
-            "text7": "Personal transaction data is secured through end-to-end encryption, only individuals shall have the right to access their personal information.",
+            "text7": "Your transaction data is secured via end-to-end encryption, ensuring that only you have access to your personal information.",
             "text8": "Real-time Account Supervision",
-            "text9": "Risk management system will analyze every unusual activity; withdrawal will be disable if suspicious activities were spotted."
+            "text9": "Withdrawal will be rejected if suspicious activities were spotted by our risk management system."
         },
         "fundDesc": {
-            "text1": "Explore V10 Index",
-            "text2": "Investors can keep track of Cryptocurrency market performance by V10 Index, being ahead of time by 70%.",
+            "text1": "V10 Index",
+            "text2": "The tracking index of the V10 Crypto Index Fund，has outperformed Bitcoin 71% of the time since its",
             "text3": "Browse White Paper (PDF)",
-            "text4": "V10 Index Fund",
-            "text5": "Our fund manager will take care of everything from lowering the passing standard, diversification, configuration optimization, dynamic adjustment and more, all you need to do is to sit back and earn.",
+            "text4": "V10 Crypto Index Fund",
+            "text5": "V10 is an autonomous, high-performing, low-cost ",
             "text6": "Browse White Paper (PDF)"
         },
         "portfolio": {
-            "text1": "Start Building Your Cryptocurrency Portfolio",
-            "text2": "Our Features & Tools Make Us the Best Trading Platform.",
-            "text3": "High Effectiveness",
-            "text4": "One-stop to buy, sell and track Cryptocurrency.",
-            "text5": "Clear Layout and Design",
-            "text6": "Transparent & intelligible Interface.",
-            "text7": "Ubiquity",
-            "text8": "Available on Android and iOS, connect to the market anytime and anywhere."
+            "text1": "Create your cryptocurrency portfolio today",
+            "text2": "Vitatoken has a variety of features that make it the best place to start trading",
+            "text3": "High efficient",
+            "text4": "Buy and sell cryptocurrencies and track them all in one place.",
+            "text5": "Clear and easy",
+            "text6": "Enjoy streamlined interface displays and market updates.",
+            "text7": "Trade anywhere",
+            "text8": "Use for Android or iOS devices to keep you ahead of the market anywhere."
         },
         "portfolioCreate": {
-            "text1": "3 Steps to Start Cryptocurrency Trading",
-            "text2": "Register & Complete Identity Verification",
-            "text3": "Complete Identity Verification to Secure Your Account & Transactions.",
-            "text4": "Deposit",
-            "text5": "Deposit Funds to Start Cryptocurrency Trading.",
-            "text6": "Start Trading",
-            "text7": "Buy and Sell Cryptocurrency and Fund, Find out More Vitatoken Service."
+            "text1": "Start your cryptocurrency trading with 3 easy steps",
+            "text2": "Verify your identity",
+            "text3": "Complete the identity verification process to secure your account and transactions.",
+            "text4": "Fund your account",
+            "text5": "Add funds to your crypto account to start trading crypto.",
+            "text6": "Start trading",
+            "text7": "Ready to go! Trading V10 or cryptocurrencies and discover what Vitatoken has to offer."
         },
         "privacy": {
             "agree": "Agree",
@@ -811,6 +811,7 @@
         "marketTrend": "Market trend",
         "getStarted": "Get Started",
         "getProfit": "Start earning today",
+        "emailOrPhone": "Email/Phone number",
         "toReg": "Sign Up Now",
         "app": "Safe, fast and concise"
     },

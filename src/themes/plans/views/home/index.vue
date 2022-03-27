@@ -17,7 +17,7 @@
 
         <div v-if='!customerInfo' class='reg-wrap'>
             <div class='input-wrap'>
-                <input v-model='regVal' :placeholder="$t('register.input')" type='text' />
+                <input v-model='regVal' :placeholder="$t('home.emailOrPhone')" type='text' />
             </div>
             <div class='btn' @click='start'>
                 {{ $t('home.getStarted') }}
