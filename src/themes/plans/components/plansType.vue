@@ -11,7 +11,6 @@ import { computed, ref, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { getCookie } from '@/utils/util'
-import { deepClone } from '@utils/deepClone'
 export default {
     props: {
         value: {
