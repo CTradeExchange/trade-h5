@@ -501,7 +501,7 @@
 		"availableLoanContent5": "可借额度=系统最大可借-已借未还",
 		"availableLoanContent6": "您的账户若有即将获得的币种借款未还，下单时系统在完成交易后自动帮您还款",
 		"availableLoanContent7": "指个人最大杠杆借款额度",
-		"availableLoanContent8": "可借额度=最小值（[全仓杠杆账户內净资产*(最大杠杆倍数-1)- 未还借入资产],币种最大可借限额)",
+		"availableLoanContent8": "可借额度=最小值（[全仓杠杆账户内净资产*(最大杠杆倍数-1)- 未还借入资产],币种最大可借限额)",
 		"availableLoanAgent": "代理可借",
 		"availableLoanAmount": "可借额度",
 		"autoLoan": "自动借款",
@@ -592,7 +592,7 @@
         "saveSetting": "保存设置",
 		"offer": "报价",
 		"etfTip": "ETF是Exchange Traded Funds简称，是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖基金份额；同时，投资者也可向基金管理公司申购或赎回基金份额",
-		"purchaseOrRedemptionTip": "申购/赎回：指投资者可向基金管理公司申购或者赎回基金份额代币，点击前往。",
+		"purchaseOrRedemptionTip": "申购/赎回：指投资者可向基金管理公司申购或者赎回基金份额代币，点击转至。",
 		"purchaseOrRedemption": "申购/赎回",
 		"noFeature": "暂不支持该功能",
 		"material": "资料"
@@ -600,7 +600,7 @@
 	"contract": {
 		"advance": "预付款",
 		"amount": "金额",
-		"contractSize": "合约大小",
+		"contractSize": "合约尺寸",
 		"eodTime": "结算时间",
 		"feeType": "手续费类型",
 		"float": "浮动",
@@ -894,7 +894,7 @@
 		"assetIndexQquestionTip":"图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
 		"assetQquestionTip":"图表为基金投资组合所含资产在近24小时内的市场表现(报价单位:USDT)",
         "fundTrade": "申购/赎回",
-		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击前往",
+		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击转至",
 		"fundTokenTrade": "现货交易",
 		"noTradeMarket": "暂无交易市场"
 	},
@@ -931,7 +931,7 @@
             "text2": "投资者可以利用V10指数轻松跟踪加密资产的整体市场表现，并且在超过70%的时间中保持领先",
             "text3": "阅读白皮书（PDF）",
             "text4": "V10 指数基金",
-            "text5": "降低门槛、分散投资、优化配置、动态调整...... <br />您所需要的一切均由专业的基金经理打理，而您只需要坐享其成",
+            "text5": "降低门槛、分布投资、优化分配、动态调整...... <br />您所需要的一切均由专业的基金经理打理，而您只需要坐享其成",
             "text6": "阅读白皮书（PDF）"
         },
         "portfolio": {
@@ -974,16 +974,16 @@
         "ios": "下载苹果端"
     },
     "about": {
-        "aboutUs": "關於我們",
-        "desc": "在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 於2021年9月6日成立，提供金融科技解決方案，有加密貨幣交易牌照。2022年一季度將實現如下功能：加密貨幣現貨交易，ETF基金二级市场交易，基金申购、赎回，支持基金实时净值及报表发布，APP上线，全面支持eth主链及代币，全面支持trx主链及代币，交易所钱包升级，将符合FIPS 140-2 level 3标准。更多功能敬請期待。",
-        "base": "基礎服務",
-        "hope": "願景",
-        "hopeT1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場",
-        "hopeT2": "我們像維他命那樣",
-        "hopeT3": "是重要組成部分",
-        "hopeT4": "使用我們平台發行或者買賣加密貨幣基金",
+        "aboutUs": "关于我们",
+        "desc": "在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 于2021年9月6日成立，提供金融科技解决方案，有加密货币交易牌照。2022年一季度将实现如下功能：加密货币现货交易，ETF基金二级市场交易，基金申购、赎回，支持基金实时净值及报表发布，APP上线，全面支持eth主链及代币，全面支持trx主链及代币，交易所钱包升级，将符合FIPS 140-2 level 3标准。更多功能敬请期待。",
+        "base": "基础服务",
+        "hope": "愿景",
+        "hopeT1": "我们的愿景是帮助所有人轻松参与加密货币市场",
+        "hopeT2": "我们像维他命那样",
+        "hopeT3": "是重要组成部分",
+        "hopeT4": "使用我们平台发行或者买卖加密货币基金",
         "hopeT5": "降低参与门槛",
-        "hopeT6": "提高獲利概率",
-        "hopeT7": "從而在這個快速變化的市場中賺錢"
+        "hopeT6": "提高获利概率",
+        "hopeT7": "从而在这个快速变化的市场中赚钱"
     }
 }
