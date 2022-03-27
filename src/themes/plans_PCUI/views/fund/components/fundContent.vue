@@ -68,6 +68,7 @@ const fundInformation = defineAsyncComponent({
                 flex-wrap: wrap;
                 .item {
                     width: calc(50% - 20px);
+                    font-size: 14px;
                 }
             }
         }

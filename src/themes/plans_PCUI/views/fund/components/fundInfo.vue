@@ -155,17 +155,18 @@ const toOrderFund = () => {
         padding: 0 rem(16px);
         margin-right: rem(24px);
         cursor: pointer;
-        background: none;
         border: 1px solid var(--primary);
         border-radius: 5px;
-        color: var(--primary);
+        background: var(--primary);
+        color: #fff;
+        font-size: 14px;
         @include hover();
         @include active();
     }
     .desc {
         margin-top: 20px;
         line-height: 26px;
-        font-size: 18px;
+        font-size: 14px;
         color: var(--normalColor);
         word-wrap: break-word;
     }
@@ -177,7 +178,7 @@ const toOrderFund = () => {
             border-radius: rem(10px);
             flex: 1;
             line-height: 1.6;
-            font-size: 16px;
+            font-size: 14px;
             .hours24 {
                 position: relative;
                 margin-left: 5px;

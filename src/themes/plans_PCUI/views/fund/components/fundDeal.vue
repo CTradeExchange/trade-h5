@@ -60,6 +60,7 @@ const activeName = ref('apply')
             height: 40px;
             text-align: center;
             line-height: 40px;
+            font-weight: bold;
             &.is-active {
                 color: var(--primary);
             }
