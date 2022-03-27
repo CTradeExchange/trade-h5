@@ -13,16 +13,16 @@
                         </p>
                         <p class='bd'>
                             {{ $t('fundInfo.ranking') }}
-                            <br />
+                            <br v-if='symbolId' />
                             <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
                             </span>
                         </p>
                         <p class='ft'>
                             {{ $t('fundInfo.weight') }}
-                            <br />
+                            <br v-if='symbolId' />
                             <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
                             </span>
                         </p>
                     </div>
@@ -201,7 +201,7 @@ onMounted(async () => {
     margin-bottom: rem(20px);
     font-size: rem(28px);
     li{
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
 }
 .cellflex{
