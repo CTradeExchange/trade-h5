@@ -870,6 +870,8 @@ export default {
             &.ohlc {
                 color: var(--normalColor);
                 white-space: nowrap;
+                font-size: 12px;
+                line-height: 2;
             }
             &.collect {
                 flex: 1;

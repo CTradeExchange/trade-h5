@@ -21,7 +21,7 @@
                     </span>
                     <ETF v-if='productMap[item.symbolKey].etf' />
                 </div>
-                <span class='price' :class='[productMap[item.symbolKey]?.upDownColor]'>
+                <span class='price' :class='[productMap[item.symbolKey]?.cur_color]'>
                     {{ productMap[item.symbolKey]?.cur_price || '- -' }}
                 </span>
                 <span class='change' :class='[productMap[item.symbolKey]?.upDownColor]'>

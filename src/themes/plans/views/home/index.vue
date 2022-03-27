@@ -344,9 +344,9 @@ const serviceVis = ref(false)
 const productVis = ref(false)
 const helpVis = ref(false)
 const privacyVis = ref(false)
-// const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5']
+const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5', '323_5'] // prd
 // const symbolKeys = ['1_5', '21_5', '22_5', '23_5', '26_5', '28_5']
-const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5', '717_5']
+// const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5', '717_5'] // pre
 // uat 测试 1 、 21 、22、23、26、28
 
 // 产品列表数据

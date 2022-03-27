@@ -35,7 +35,7 @@
                     :class="{ 'item': true, 'active': item.fundId === fund.fundId }"
                     @click='selectFund(item)'
                 >
-                    <CurrencyIcon :currency='item.shareTokenCode' size='36' />
+                    <CurrencyIcon :currency='item.shareTokenCode' size='32' />
                     <div class='col-1'>
                         <div class='row'>
                             <span class='name'>

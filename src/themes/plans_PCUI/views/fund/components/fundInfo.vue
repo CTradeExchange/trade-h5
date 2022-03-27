@@ -1,7 +1,7 @@
 <template>
     <div class='fund-info width-limit'>
         <div class='header'>
-            <CurrencyIcon :currency='fund.shareTokenCode' size='100' />
+            <CurrencyIcon :currency='fund.shareTokenCode' size='64' />
             <span class='name'>
                 {{ fund.fundName }}
             </span>
@@ -130,20 +130,15 @@ const toOrderFund = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
+            line-height: 1;
         .name {
             margin-left: 25px;
             margin-right: 20px;
-            font-size: 45px;
-            @media screen and (max-width: 1560px) {
-                font-size: 38px;
-            }
+            font-size: 30px;
         }
         .type, .title {
             font-size: 18px;
             color: var(--normalColor);
-            @media screen and (max-width: 1560px) {
-                font-size: 14px;
-            }
         }
         .type {
             margin-right: 10px;
@@ -156,6 +151,7 @@ const toOrderFund = () => {
     .immediatTrade{
         display: inline-block;
         height: 24px;
+        line-height: 22px;
         padding: 0 rem(16px);
         margin-right: rem(24px);
         cursor: pointer;

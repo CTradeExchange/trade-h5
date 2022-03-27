@@ -4,12 +4,12 @@
             <span class='name'>
                 {{ productMap[symbolKey]?.symbolName || '- -' }}
             </span>
-            <span class='price'>
+            <span class='price' :class='[productMap[symbolKey]?.cur_color]'>
                 {{ productMap[symbolKey]?.price || '- -' }}
             </span>
             <currency-icon v-if='productMap[symbolKey]' class='currency-icon' :currency='productMap[symbolKey].baseCurrency' :size='32' />
             <div class='change'>
-                <span class='upDownAmount'>
+                <span class='upDownAmount' :class='[productMap[symbolKey]?.upDownColor]'>
                     {{ productMap[symbolKey]?.upDownAmount || '- -' }}
                 </span>
                 <span class='upDownWidth' :class='[productMap[symbolKey]?.upDownColor]'>
@@ -40,7 +40,8 @@ const gotoOrder = (symbolKey) => {
 }
 // 产品列表
 const productMap = computed(() => store.state._quote.productMap)
-const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5']
+// const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5'] // pre
+const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5'] // prd
 const unSubscribe = QuoteSocket.add_subscribe({ moduleId: 'topQuote', symbolKeys })
 
 onUnmounted(() => {
@@ -68,6 +69,9 @@ onUnmounted(() => {
         border-radius: 10px;
         padding: 20px;
         cursor: pointer;
+        &:hover{
+            box-shadow: 0 0 0 999px rgba($color: #000000, $alpha: .097) inset;
+        }
         .name{
             font-size: 16px;
             font-weight: 400;

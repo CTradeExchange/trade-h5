@@ -325,9 +325,9 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    <strong className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }
-                    </span>
+                    </strong>
                 )
 
             },
