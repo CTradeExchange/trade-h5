@@ -84,14 +84,14 @@ const fundInformation = defineAsyncComponent({
             background: var(--contentColor);
             border-radius: 10px;
             .assetsTitle {
-                font-size: 16px;
+                font-size: 14px;
                 .small {
-                    font-size: 14px;
+                    font-size: 12px;
                 }
             }
             .assetsList {
                 .cellflex {
-                    font-size: 14px;
+                    font-size: 12px;
                 }
                 .currencyIcon {
                     width: 32px;
