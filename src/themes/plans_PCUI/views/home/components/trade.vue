@@ -228,7 +228,7 @@ export default {
             &:first-of-type {
                 min-width: 320px;
             }
-            span {
+            span,strong {
                 font-size: 16px;
             }
             &:first-of-type {
