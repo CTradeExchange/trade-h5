@@ -91,10 +91,10 @@ const fundInformation = defineAsyncComponent({
             }
             .assetsList {
                 .cellflex {
-                    font-size: 15px;
+                    font-size: 14px;
                 }
                 .currencyIcon {
-                    width: 30px;
+                    width: 32px;
                 }
             }
             .merge-case {

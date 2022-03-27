@@ -1743,6 +1743,9 @@ export default {
                 white-space: normal;
                 word-break: break-word;
                 text-align: center;
+                background: none;
+                color: var(--primary);
+                border: 1px solid var(--primary);
                 &.en-US{
                     padding-top: rem(18px);
                     line-height: 1.2;

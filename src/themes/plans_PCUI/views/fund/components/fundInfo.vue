@@ -137,8 +137,14 @@ const toOrderFund = () => {
             font-size: 30px;
         }
         .type, .title {
-            font-size: 18px;
-            color: var(--normalColor);
+            font-size: 12px;
+            color: var(--primary);
+            height: 18px;
+            line-height: 16px;
+            border: 1px solid var(--primary);
+            padding: 0 4px;
+            border-radius: 4px;
+            background: none;
         }
         .type {
             margin-right: 10px;
@@ -150,9 +156,9 @@ const toOrderFund = () => {
     }
     .immediatTrade{
         display: inline-block;
-        height: 24px;
-        line-height: 22px;
-        padding: 0 rem(16px);
+        height: 40px;
+        line-height: 38px;
+        padding: 0 12px;
         margin-right: rem(24px);
         cursor: pointer;
         border: 1px solid var(--primary);

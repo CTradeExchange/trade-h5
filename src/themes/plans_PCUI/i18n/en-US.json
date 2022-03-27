@@ -893,7 +893,7 @@
 		"assetQquestionTip": "The chart refers to the most recent 24H market performance of the assets included in the fund's portfolio(Quotation unit:USDT)",
         "fundTrade": "Purchase/Redemption",
 		"fundTokenTradeTip": "When the fund token is listed, investors can buy and sell fund shares in the open spot market just like buying and selling cryptocurrencies. Click to go to",
-		"fundTokenTrade": "Spot trade",
+		"fundTokenTrade": "Buy / Sell in Spots Market",
 		"noTradeMarket": "No trading market"
 	},
     "home": {
