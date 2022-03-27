@@ -1,5 +1,5 @@
 <template>
-    <div class='page-wrap auto-width'>
+    <div class='downloadPage-wrap auto-width'>
         <div class='block'>
             <h2>{{ $t('download.title') }}</h2>
             <h4>{{ $t('download.subTitle') }}</h4>
@@ -47,7 +47,7 @@ const openDownload = value => {
 </script>
 
 <style lang="scss">
-.page-wrap {
+.downloadPage-wrap {
     display: flex;
     padding: rem(50px) rem(30px);
     .block {

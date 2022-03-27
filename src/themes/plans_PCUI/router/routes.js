@@ -331,7 +331,7 @@ const routes = [
     {
         path: '/about',
         name: 'About',
-        component: () => import(/* webpackChunkName: "resetFail" */ '../views/about/about.vue'),
+        component: () => import(/* webpackChunkName: "about" */ '../views/about/about.vue'),
         meta: {
             title: 'route.about'
         }
