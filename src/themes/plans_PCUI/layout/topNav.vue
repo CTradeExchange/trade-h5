@@ -89,7 +89,7 @@
                                 <el-dropdown-item v-if='Number(customerInfo.openAccountType) === 1' @click="$router.push('/businessKYC')">
                                     {{ $t('businessKYC.enterpriseKYC') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item v-if='Number(customerInfo.companyKycStatus)===1 && Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
+                                <el-dropdown-item v-if='Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
                                     {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
                                 <!-- <el-dropdown-item @click="handRoutTo('/bankList')">
