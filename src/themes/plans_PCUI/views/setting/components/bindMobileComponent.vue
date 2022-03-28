@@ -13,7 +13,14 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")' />
+                <areaInput
+                    v-model='mobile'
+                    v-model:zone='zoneText'
+                    :all-country='true'
+                    clear
+                    :disabled='true'
+                    :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")'
+                />
             </div>
 
             <div v-if='type === "change"' class='field'>
