@@ -54,6 +54,9 @@ function getI18nLang () {
     case 'zh-CN':
         result = 'zh-cn'
         break
+    case 'zh-HK':
+        result = 'zh-tw'
+        break
     case 'en-US':
         result = 'en'
         break

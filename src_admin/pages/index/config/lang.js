@@ -5,6 +5,10 @@ export const lang = [
         isDefault: true
     },
     {
+        name: '中文繁体',
+        val: 'zh-HK',
+    },
+    {
         name: 'English',
         val: 'en-US'
     }

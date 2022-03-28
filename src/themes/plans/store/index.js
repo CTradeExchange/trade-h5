@@ -12,7 +12,8 @@ const style = {
 }
 const supportLanguages = [
     { val: 'zh-CN', name: '中文' },
-    { val: 'en-US', name: 'English' },
+    { val: 'zh-HK', name: '中文繁体' },
+    { val: 'en-US', name: 'English' }
 ]
 
 export default createStore({
