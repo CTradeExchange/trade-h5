@@ -10,7 +10,12 @@
                             </h4>
                             <p class='name'>
                                 <a href='javascript:;' @click='jumpUrl("about")'>
-                                    {{ $t('newHomeFooter.about') }}
+                                    {{ $t('newHomeFooter.aboutus') }}
+                                </a>
+                            </p>
+                            <p class='name'>
+                                <a href='javascript:;' @click='jumpUrl("fees")'>
+                                    {{ $t('newHomeFooter.fees') }}
                                 </a>
                             </p>
                         </li>
@@ -205,6 +210,9 @@ export default {
                     break
                 case 'fund':
                     router.push({ path: '/fund' })
+                    break
+                case 'fees':
+                    router.push({ path: '/fees' })
                     break
                 case 'vip':
                     if (customerInfo.value) {

@@ -329,12 +329,22 @@ const routes = [
         }
     },
     {
+        path: '/fees',
+        name: 'Fees',
+        component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+        meta: {
+            title: '',
+        },
+        children: h5Children
+    },
+    {
         path: '/about',
         name: 'About',
-        component: () => import(/* webpackChunkName: "about" */ '../views/about/about.vue'),
+        component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
         meta: {
-            title: 'route.about'
-        }
+            title: '',
+        },
+        children: h5Children
     },
     {
         path: '/',
