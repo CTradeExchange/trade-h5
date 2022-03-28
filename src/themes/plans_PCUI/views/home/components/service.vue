@@ -10,7 +10,7 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 // 在线客服地址
-const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
+const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 </script>
 
 <style lang='scss' scoped>

@@ -253,10 +253,15 @@ const themeVal = ref(localGet('invertColor') === 'night')
 const lang = ref(getCookie('lang') || store.state._base.wpCompanyInfo.language)
 const { t, locale } = useI18n({ useScope: 'global' })
 
+const symbolKey = computed(() => store.state._quote.productActivedID)
 const customerInfo = computed(() => store.state._user.customerInfo)
 const supportLanguages = computed(() => store.state.supportLanguages)
 
 const routerTo = path => {
+    if (path === 'order') {
+        const [symbolId, tradeType] = symbolKey.value?.split('_')
+        path = `/order?symbolId=${symbolId}&tradeType=${tradeType}`
+    }
     router.push(path)
     menuVis.value = false
 }
@@ -335,6 +340,7 @@ const colorSelect = (action) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
     height: 60px;
     padding: rem(26px) 0;
     background: #fff;
@@ -384,6 +390,7 @@ const colorSelect = (action) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-shrink: 0;
     height: 64px;
     background: #181a20;
     .logo {

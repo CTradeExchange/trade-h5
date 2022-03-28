@@ -451,7 +451,14 @@ const openProduct = (data) => {
 }
 
 const toService = () => {
-    window.open('https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en')
+    const onlineService = store.state._base.wpCompanyInfo?.onlineService
+    if (onlineService) {
+        router.push({
+            name: 'Otherpage',
+            params: { type: 'page' },
+            query: { title: t('route.onlineService'), url: onlineService }
+        })
+    }
 }
 
 const agree = () => {
