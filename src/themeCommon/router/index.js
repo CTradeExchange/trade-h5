@@ -118,6 +118,16 @@ const routes = [
         }
     },
     {
+        path: '/withdrawRedeem',
+        name: 'WithdrawRedeem',
+        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdrawRedeem.vue'),
+        meta: {
+            title: 'cRoute.withdraw',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
         path: '/withdrawRecord',
         name: 'WithdrawRecord',
         component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdraw/withdrawRecord.vue'),

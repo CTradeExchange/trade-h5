@@ -704,7 +704,9 @@
     "hint_6": "可取资金不足",
     "hint_7": "24小时内取款次数不超过",
     "bankTips": "该银行卡币种与到账币种不同，不支持该笔交易",
-    "digitsTip": "最多4位小数"
+    "digitsTip": "最多4位小数",
+    "receiptAddress": "收款地址",
+    "inputReceiptAddress": "请输入收款地址"
   },
   "withdrawRecord": {
     "noneHint": "暂无数据",
