@@ -71,7 +71,7 @@ export default {
     },
     computed: {
         countryList () {
-            if (!this.allCountry) {
+            if (this.allCountry) {
                 return this.allCountryList
             } else {
                 const countryList = this.$store.state.countryList || []
@@ -101,7 +101,6 @@ export default {
     emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],
     mounted () {
         this.$store.dispatch('getCountryListByParentCode').then(res => {
-            debugger
             if (res.data.length > 0) {
                 const tempArr = []
                 res.data.forEach(item => {
