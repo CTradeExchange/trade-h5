@@ -290,7 +290,7 @@
 
             <div class='content'>
                 {{ $t('home.privacy.text1') }}
-                <a class='sc-AxiKw cJlLNA' color='light' href='https://www.vitatoken.com/site/privacy-policy' rel='noopener' target='_blank'>
+                <a class='sc-AxiKw cJlLNA' color='light' href='https://www.vitatoken.io/site/privacy-policy' rel='noopener' target='_blank'>
                     {{ $t('home.privacy.text2') }}
                 </a>
             </div>
@@ -383,9 +383,9 @@ const jumpUrl = (index) => {
             program: 'https://www.vitatoken.com/zh-CN/new1',
             vip: 'https://www.vitatoken.com/zh-CN/vip',
             customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-            faqs: 'https://www.vitatoken.com/site/faqs',
-            terms: 'https://www.vitatoken.com/site/terms-conditions',
-            policy: 'https://www.vitatoken.com/site/privacy-policy',
+            faqs: 'https://www.vitatoken.io/site/faqs',
+            terms: 'https://www.vitatoken.io/site/terms-conditions',
+            policy: 'https://www.vitatoken.io/site/privacy-policy',
             // abount: 'https://www.vitatoken.io/site/about-us'
         }
     } else {
@@ -395,9 +395,9 @@ const jumpUrl = (index) => {
             program: 'https://www.vitatoken.com/en-US/new1',
             vip: 'https://www.vitatoken.com/en-US/vip',
             customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-            faqs: 'https://www.vitatoken.com/site/faqs',
-            terms: 'https://www.vitatoken.com/site/terms-conditions',
-            policy: 'https://www.vitatoken.com/site/privacy-policy',
+            faqs: 'https://www.vitatoken.io/site/faqs',
+            terms: 'https://www.vitatoken.io/site/terms-conditions',
+            policy: 'https://www.vitatoken.io/site/privacy-policy',
             // abount: 'https://www.vitatoken.io/site/about-us'
         }
     }

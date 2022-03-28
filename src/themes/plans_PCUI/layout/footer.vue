@@ -172,9 +172,9 @@ export default {
                     program: 'https://www.vitatoken.com/zh-CN/new1',
                     vip: 'https://www.vitatoken.com/zh-CN/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.com/site/faqs',
-                    terms: 'https://www.vitatoken.com/site/terms-conditions',
-                    policy: 'https://www.vitatoken.com/site/privacy-policy',
+                    faqs: 'https://www.vitatoken.io/site/faqs',
+                    terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    policy: 'https://www.vitatoken.io/site/privacy-policy',
                     // about: 'https://www.vitatoken.io/site/about-us'
                 }
             } else {
@@ -184,9 +184,9 @@ export default {
                     program: 'https://www.vitatoken.com/en-US/new1',
                     vip: 'https://www.vitatoken.com/en-US/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.com/site/faqs',
-                    terms: 'https://www.vitatoken.com/site/terms-conditions',
-                    policy: 'https://www.vitatoken.com/site/privacy-policy',
+                    faqs: 'https://www.vitatoken.io/site/faqs',
+                    terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    policy: 'https://www.vitatoken.io/site/privacy-policy',
                     // about: 'https://www.vitatoken.io/site/about-us'
                 }
             }

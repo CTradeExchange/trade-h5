@@ -244,7 +244,7 @@ const store = useStore()
 const router = useRouter()
 const route = useRoute()
 
-const downloadVis = ref(true)
+const downloadVis = ref(route.path === '/home')
 const langShow = ref(false)
 const menuVis = ref(false)
 const menuListData = ref([])
