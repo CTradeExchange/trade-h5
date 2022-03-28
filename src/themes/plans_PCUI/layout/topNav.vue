@@ -92,9 +92,9 @@
                                 <el-dropdown-item v-if='Number(customerInfo.companyKycStatus)===1 && Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
                                     {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item @click="handRoutTo('/bankList')">
+                                <!-- <el-dropdown-item @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
-                                </el-dropdown-item>
+                                </el-dropdown-item> -->
                                 <el-dropdown-item @click="handRoutTo('/googleMFA/status')">
                                     {{ $t('mfa.routeTitile') }}
                                 </el-dropdown-item>

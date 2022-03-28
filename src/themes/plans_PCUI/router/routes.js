@@ -328,24 +328,7 @@ const routes = [
             title: 'cRoute.resetPwdFaid'
         }
     },
-    {
-        path: '/fees',
-        name: 'Fees',
-        component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
-        meta: {
-            title: '',
-        },
-        children: h5Children
-    },
-    {
-        path: '/about',
-        name: 'About',
-        component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
-        meta: {
-            title: '',
-        },
-        children: h5Children
-    },
+
     {
         path: '/',
         redirect: '/home',
@@ -401,6 +384,24 @@ const routes = [
                 meta: {
                     title: 'route.transRecords',
                     roles: [],
+                },
+                children: h5Children
+            },
+            {
+                path: 'fees',
+                name: 'Fees',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
+                path: 'about',
+                name: 'About',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
+                meta: {
+                    title: '',
                 },
                 children: h5Children
             },
