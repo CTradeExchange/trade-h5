@@ -190,8 +190,8 @@
                     <van-icon :name='aboutVis ? "minus" : "plus"' />
                 </div>
                 <div v-show='aboutVis' class='sub'>
-                    <p class='link' @click='jumpUrl("abount")'>
-                        {{ $t('newHomeFooter.about') }}
+                    <p class='link' @click='jumpUrl("about")'>
+                        {{ $t('newHomeFooter.aboutus') }}
                     </p>
                 </div>
             </div>
