@@ -701,8 +701,8 @@
         "hint_7": "Within 24 hours no of Withdrawal should not be more than",
         "bankTips": "This transaction is not support because the bank card currency is different with account currency",
         "digitsTip": "Max 4 decimal place",
-        "receiptAddress": "收款地址",
-        "inputReceiptAddress": "请输入收款地址"
+        "receiptAddress": "Payout Address",
+        "inputReceiptAddress": "Please enter payout address"
     },
     "withdrawRecord": {
         "noneHint": "No data",

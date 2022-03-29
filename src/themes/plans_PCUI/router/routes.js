@@ -166,7 +166,15 @@ const h5Children = [
         }
     },
     {
-        path: 'withdrawRecord', // 选择提现币种
+        path: 'withdrawRedeem', // 提现Payredeem
+        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRedeem.vue'),
+        meta: {
+            title: 'cRoute.withdraw',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'withdrawRecord',
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRecord.vue'),
         meta: {
             title: 'cRoute.withdrawRecord',

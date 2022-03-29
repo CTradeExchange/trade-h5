@@ -698,7 +698,9 @@
     "hint_6": "可取資金不足",
     "hint_7": "24小時內取款次數不超過",
     "bankTips": "該銀行卡幣種與到賬幣種不同，不支援該筆交易",
-    "digitsTip": "最多4位小數"
+    "digitsTip": "最多4位小數",
+    "receiptAddress": "收款地址",
+    "inputReceiptAddress": "請輸入收款地址"
   },
   "withdrawRecord": {
     "noneHint": "暫無資料",

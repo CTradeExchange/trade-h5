@@ -1,75 +1,133 @@
 <template>
-    <div class='pageWrap'>
-        <Loading :show='loading' />
-        <!-- 头部导航 -->
-        <Top
-            back
-            left-icon='arrow-left'
-            :right-action='rightAction'
-            :show-center='true'
-            @rightClick='rightClick'
-        />
-        <div class='wrap'>
-            <p class='header-text'>
-                {{ $t('withdrawMoney.moneyName') }}
-            </p>
-            <div class='field-wrap'>
-                <input
-                    v-model='amount'
-                    :placeholder='amountPlaceholder'
-                    type='number'
-                    @change='changeAmount'
-                    @input='changeAmount'
-                />
-                <button class='get-btn' plain round size='small' @click='getAll'>
-                    {{ $t('withdrawMoney.allBtn') }}
-                </button>
-            </div>
-            <div class='money-info'>
-                <div class='row'>
-                    <span>{{ $t('withdrawMoney.canName') }}</span>
-                    <span>{{ withdrawAmount }} {{ accountCurrency?.currency }}</span>
-                </div>
-                <div class='row'>
-                    <span>{{ $t('withdrawMoney.serviceName') }}</span>
-                    <span>{{ fee }} {{ accountCurrency?.currency }}</span>
-                </div>
-                <div class='row'>
-                    <span>{{ $t('withdrawMoney.predictName') }}</span>
-                    <span>{{ computePre }} {{ currency }}</span>
-                </div>
-                <div class='row'>
-                    <span>{{ $t('withdrawCoin.minus') }}</span>
-                    <span>{{ minusCount }}  {{ accountCurrency?.currency }}</span>
-                </div>
-            </div>
-            <!-- 收款地址 -->
-            <div class='receipt-address'>
-                <p class='name'>
-                    {{ $t('withdrawMoney.receiptAddress') }}
+    <centerViewDialog>
+        <div class='pageWrap'>
+            <Loading :show='loading' />
+            <!-- 头部导航 -->
+            <LayoutTop>
+                <template #right>
+                    <span @click='rightClick'>
+                        {{ rightAction.title }}
+                    </span>
+                </template>
+            </LayoutTop>
+            <div class='wrap'>
+                <p class='header-text'>
+                    {{ $t('withdrawMoney.moneyName') }}
                 </p>
-                <input v-model='receiptAddress' :placeholder="$t('withdrawMoney.inputReceiptAddress')" />
+                <div class='field-wrap'>
+                    <input v-model='amount' :placeholder='amountPlaceholder' type='number' @change='changeAmount' @input='changeAmount' />
+                    <button class='get-btn' plain round size='small' @click='getAll'>
+                        {{ $t('withdrawMoney.allBtn') }}
+                    </button>
+                </div>
+                <div class='notice'>
+                    <span class='can-name'>
+                        {{ $t('withdrawMoney.canName') }} {{ withdrawAmount }} {{ accountCurrency?.currency }}
+                    </span>
+                    <span>{{ $t('withdrawMoney.serviceName') }} {{ fee }} {{ accountCurrency?.currency }}</span>
+                </div>
+                <div class='bank-wrap'>
+                    <p class='bw-t'>
+                        {{ $t('withdrawMoney.bankName') }}
+                    </p>
+                    <div v-if='!isEmpty(checkedBank)' class='bank bank-flex' @click='openSheet'>
+                        <i class='bank-icons-sm' :class="'bk-'+ checkedBank?.bankCode"></i>
+                        <span class='bank-no'>
+                            {{ checkedBank?.bankName }} {{ hideMiddle(checkedBank?.bankCardNumber) }}
+                        </span>
+                        <van-icon name='arrow-down' />
+                    </div>
+                    <div v-else class='bank no-data' @click='openSheet'>
+                        <span>{{ $t('withdrawMoney.bankNone') }}</span>
+                        <van-icon name='arrow-down' />
+                        <!-- <van-button plain round size='mini' type='success' @click='toAddBank'>
+                            {{ $t('withdrawMoney.addBtn') }}
+                        </van-button> -->
+                    </div>
+                    <p class='bw-t2'>
+                        {{ $t('withdrawMoney.predictName') }} {{ computePre }} {{ currency }}
+                    </p>
+                </div>
+
+                <div class='fund'>
+                    <p class='bw-t'>
+                        {{ $t('common.fundPwd') }}
+                    </p>
+                    <div class='fund-input'>
+                        <InputComp
+                            v-model='pwd'
+                            class='input-comp'
+                            clear
+                            :label="$t('common.inputFundPwd')"
+                            :max-length='6'
+                            pwd
+                        />
+                        <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/assets/setFundPwd'>
+                            {{ $t('login.goSet') }}
+                        </router-link>
+                        <span v-else class='href' @click='goFundForgot'>
+                            {{ $t('login.forgotFundPwd') }}
+                        </span>
+                    </div>
+                </div>
+                <div v-if='googleCodeVis' class='field-google'>
+                    <p class='bw-t'>
+                        {{ $t('common.googleCode') }}
+                    </p>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+                </div>
             </div>
         </div>
-    </div>
 
-    <van-button block class='confirm-btn' type='primary' @click='confirm'>
-        <span>{{ $t('withdraw.confirm') }}</span>
-    </van-button>
+        <van-button block class='confirm-btn' type='primary' @click='confirm'>
+            <span>{{ $t('withdraw.confirm') }}</span>
+        </van-button>
+    </centerViewDialog>
+
+    <!-- 选择银行卡弹窗 -->
+    <van-dialog v-model:show='show' :round='false' :title="$t('withdrawMoney.bankPopupTitle')">
+        <div class='bank-list'>
+            <div
+                v-for='(item, index) in bankList'
+                :key='index'
+                class='bank'
+                :class='{ disabled: item.bankCurrency !== currency }'
+                @click='chooseBank(item)'
+            >
+                <div class='bank-item'>
+                    <i class='bank-icons-sm' :class="'bk-'+ item.bankCode"></i>
+                    <div class='bank-no'>
+                        <p>{{ item.bankName }} {{ hideMiddle(item.bankCardNumber) }}</p>
+                        <p v-if='item.bankCurrency !== currency' class='tips'>
+                            {{ $t('withdrawMoney.bankTips') }}
+                        </p>
+                    </div>
+                    <van-icon v-if='item.checked' class='icon-success' color='#53C51A' name='success' />
+                </div>
+            </div>
+            <div class='add-bank' @click='toAddBank'>
+                <van-icon class='icon-plus' name='plus' size='13' />
+                <span>{{ $t('withdrawMoney.bankPopupBtn') }}</span>
+                <van-icon class='icon-arrow' name='arrow' size='13' />
+            </div>
+        </div>
+    </van-dialog>
 
     <!-- 提交成功弹窗 -->
-    <van-dialog v-model:show='withdrawSuccess' class-name='add-success' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
-        <i class='icon_success'></i>
-        <p class='title'>
-            {{ $t('withdraw.successText') }}
-        </p>
-        <p class='content'>
-            {{ $t('withdraw.moneySuccessMsg') }}
-        </p>
+    <van-dialog v-model:show='withdrawSuccess' :confirm-button-text="$t('common.sure')" :show-cancel-button='false' @confirm='$router.push("/assets")'>
+        <div class='add-success'>
+            <i class='icon_success'></i>
+            <p class='title'>
+                {{ $t('withdraw.successText') }}
+            </p>
+            <p class='content'>
+                {{ $t('withdraw.moneySuccessMsg') }}
+            </p>
+        </div>
     </van-dialog>
 
     <!-- 取款时间弹窗 -->
-    <van-dialog v-model:show='timeShow' :confirm-button-text="$t('common.sure')" :title="$t('withdraw.hint')">
+    <van-dialog v-model:show='timeShow' :title="$t('withdraw.hint')">
         <div class='time-wrap'>
             <h4>{{ $t('withdraw.timeHint') }} </h4>
             <p v-if='timeList.length > 0'>
@@ -90,37 +148,63 @@
         </div>
     </van-dialog>
 
-    <DialogFundPwd v-model:show='fundPwdVis' @confirmWithdraw='confirmWithdraw' />
+    <!-- 补充资料弹窗 -->
+    <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '500px' }">
+        <div class='append-wrap'>
+            <p class='title'>
+                {{ $t('deposit.appendFiled') }}
+            </p>
+            <van-cell-group inset>
+                <van-field
+                    v-for='(item, key) in extend'
+                    :key='key'
+                    v-model='item.value'
+                    :data='item'
+                    :label='item[lang]'
+                    label-width='70'
+                    :placeholder="$t('common.input') + item[lang]"
+                    :required='true'
+                />
+            </van-cell-group>
+            <van-button class='btn' size='large' type='primary' @click='handleAppendField'>
+                {{ $t('common.sure') }}
+            </van-button>
+        </div>
+    </van-popup>
 </template>
 
 <script>
-// components
-import Top from '@/components/top'
-// vue
-import { reactive, computed, toRefs, onBeforeMount } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { useStore } from 'vuex'
-// utils
-import { isEmpty, debounce, getCookie } from '@/utils/util'
-// api
+import centerViewDialog from '@planspc/layout/centerViewDialog'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import {
-    checkKycApply,
+    reactive,
+    computed,
+    toRefs,
+    onBeforeMount
+} from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { Toast, Dialog } from 'vant'
+import { isEmpty, debounce, getCookie } from '@/utils/util'
+import { retainDecimal, getDecimalNum } from '@/utils/calculation'
+import { useStore } from 'vuex'
+import {
     handleWithdraw,
     queryWithdrawConfig,
     queryWithdrawRate,
+    queryBankList,
     computeWithdrawFee,
-    getWithdrawMethodList,
-    findCustomerExtend
+    checkKycApply,
+    getWithdrawMethodList
 } from '@/api/user'
-// vant
-import { Toast, Dialog } from 'vant'
-import DialogFundPwd from '@/themeCommon/components/dialogFundPwd'
+import { useI18n } from 'vue-i18n'
+import InputComp from '@/components/form/input'
 import md5 from 'js-md5'
+
 export default {
     components: {
-        Top,
-        DialogFundPwd
+        centerViewDialog,
+        InputComp,
+        googleVerifyCode
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
@@ -128,7 +212,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
 
-        const { currentTab, currency, accountId, tradeType } = route.query
+        const { currency, accountId, tradeType, currentTab } = route.query
 
         const weekdayMap = {
             1: t('weekdayMap.1'),
@@ -142,7 +226,7 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
+        const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
         // 账户币种
         const { value: accountCurrency } = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId)))
@@ -172,30 +256,31 @@ export default {
             lang: getCookie('lang') || 'zh-CN', // 当前语言
             rightAction: { // 头部导航栏右侧
                 title: t('withdraw.moneyRecordText'),
-                path: '/withdrawRecord?withdrawType=1'
+                path: '/assets/withdrawRecord?withdrawType=1'
             },
             withdrawAmount: '0.00', // 可提金额
             amountPlaceholder: currentTab !== 'otc365_cny' ? t('withdrawMoney.moneyPlaceholder') : t('withdrawMoney.moneyPlaceholder') + `(${t('withdrawMoney.digitsTip')})`, // 提现金额输入框提示
             amount: '', // 提现金额
             fee: '--', // 手续费
             computePre: '--', // 预计到账
-            minusCount: '--', // 账户减扣
             singleHighAmount: 0, // 最高可提金额
             singleLowAmount: 0, // 最低可提金额
             loading: false,
             show: false,
+            checkedBank: {},
             withdrawRate: null,
             withdrawConfig: '',
+            bankList: [],
             fun: null,
             withdrawSuccess: false,
             withdrawCurrency: '',
             timeShow: false,
             withdrawTimeConfigMap: {}, // 处理后的时区
+            appendVis: false, // 是否显示补充资料弹窗
             extend: {}, // 需要补充资料的数据
-            fundPwdVis: false,
-            fundPwd: '',
-            googleCode: '',
-            receiptAddress: '' // 收款地址
+            paramsExtens: {}, // 补充完整的资料数据
+            pwd: '',
+            googleCode: ''
         })
 
         // 初始化数据
@@ -203,7 +288,6 @@ export default {
             state.amount = ''
             state.fee = '--'
             state.computePre = '--'
-            state.minusCount = '--'
         }
 
         // 导航栏右侧标题点击跳转
@@ -211,13 +295,21 @@ export default {
             router.push(state.rightAction.path)
         }
 
+        // 跳转到忘记资金密码页面
+        const goFundForgot = () => {
+            router.push({
+                name: 'Forgot',
+                query: {
+                    type: 'fund'
+                }
+            })
+        }
+
         // 获取取款手续费
         const getWithdrawFee = debounce(() => {
             const amount = parseFloat(state.amount)
             if (!state.withdrawRate) return
-            if (state.amount === '') {
-                return init()
-            }
+            if (state.amount === '') return
             if (!amount) {
                 return Toast(t('withdrawMoney.hint_1'))
             }
@@ -233,6 +325,10 @@ export default {
                 accountCurrency: accountCurrency.currency,
                 amount: state.amount.toString(),
                 tradeType,
+                // companyId: customInfo.value.companyId,
+                // customerNo: customInfo.value.customerNo,
+                // customerGroupId: customInfo.value.customerGroupId,
+                // country: customInfo.value.country,
                 withdrawCurrency: currency,
                 withdrawType: 1,
                 withdrawMethod: currentTab,
@@ -243,7 +339,6 @@ export default {
                     const { data } = res
                     state.fee = data.withdrawFee
                     state.computePre = data.finalAmount
-                    state.minusCount = data.amount
                 }
             })
         }, 1000)
@@ -326,19 +421,46 @@ export default {
             state.show = true
         }
 
+        // 选择银行卡
+        const chooseBank = (item) => {
+            state.withdrawCurrency = item.bankCurrency
+            state.checkedBank = item
+            state.bankList.map(item => {
+                item.checked = false
+            })
+            item.checked = true
+            state.show = false
+
+            // 数据初始化
+            init()
+            // 获取取款汇率
+            getWithdrawRate()
+        }
+
         const toAddBank = () => {
-            router.push('/addBank')
+            router.push('addBank')
         }
 
         // 全部取出
         const getAll = () => {
-            state.amount = state.withdrawConfig.withdrawAmount
+            // otc365_cny限制最多输入4位小数位
+            if (currentTab === 'otc365_cny') {
+                state.amount = retainDecimal(state.withdrawConfig.withdrawAmount, 4)
+            } else {
+                state.amount = state.withdrawConfig.withdrawAmount
+            }
             // 获取取款手续费
             getWithdrawFee()
         }
 
         // 改变取款金额
         const changeAmount = () => {
+            // otc365_cny限制最多输入4位小数位
+            if (currentTab === 'otc365_cny') {
+                if (getDecimalNum(state.amount) > 4) {
+                    state.amount = retainDecimal(state.amount, 4)
+                }
+            }
             // 获取取款手续费
             getWithdrawFee()
         }
@@ -377,7 +499,6 @@ export default {
             }
 
             queryWithdrawConfig(params).then(res => {
-                state.loading = false
                 if (res.check()) {
                     const { data } = res
                     state.withdrawConfig = data
@@ -404,12 +525,37 @@ export default {
                 } else {
                     Toast(res.msg)
                 }
+            })
+        }
+
+        const getBankList = async () => {
+            state.loading = true
+            await queryBankList().then(res => {
+                state.loading = false
+                if (res.check()) {
+                    if (res.data && res.data.length > 0) {
+                        state.bankList = res.data // .filter(el => el.bankCurrency === currency)
+                        state.checkedBank = state.bankList.filter(el => el.bankCurrency === currency)[0]
+                        state.checkedBank.checked = true
+                        state.withdrawCurrency = state.checkedBank.bankCurrency
+                        // 获取取款汇率
+                        getWithdrawRate()
+                    }
+                }
             }).catch(err => {
                 state.loading = false
             })
         }
 
-        // kyc验证
+        // 处理银行卡号显示
+        const hideMiddle = (value) => {
+            if (!isEmpty(value)) { return `${value.substring(0, 4)} ${'*'.repeat(value.length - 8).replace(/(.{4})/g, '$1 ')}${value.length % 4 ? ' ' : ''}${value.slice(-4)}` }
+        }
+
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
         const checkKyc = () => {
             state.loading = true
             checkKycApply({
@@ -423,12 +569,18 @@ export default {
                         confirmButtonText: Number(res.data) === 1 ? t('withdraw.kycBtn_1') : t('withdraw.kycBtn_2'),
                         message: Number(res.data) === 2 ? t('withdraw.kycMsg_1') : t('withdraw.kycMsg_2'),
                     }).then(() => {
-                        router.replace({
-                            name: 'Authentication',
-                            query: {
-                                businessCode: 'withdraw'
-                            }
-                        })
+                        if (customInfo.value.openAccountType === 0) {
+                            router.replace({
+                                path: '/assets/authentication',
+                                query: {
+                                    businessCode: 'withdraw'
+                                }
+                            })
+                        } else {
+                            router.replace({
+                                path: '/businessKYC'
+                            })
+                        }
                     })
                 } else {
                     if (!state.withdrawConfig.accountActiveEnable) {
@@ -487,15 +639,44 @@ export default {
                         }
                     })
                 }
-            }).catch(err => {
-                state.loading = false
             })
         }
 
-        // 获取资金密码
-        const confirmWithdraw = (val) => {
-            state.fundPwd = val[0]
-            state.googleCode = val[1] ? val[1] : ''
+        // 补充资料是否全部填写完成
+        const checkAllComplete = () => {
+            let flag = true
+            const extend = state.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        flag = false
+                    }
+                }
+            }
+            return flag
+        }
+
+        // 补充资料确定事件
+        const handleAppendField = () => {
+            const extend = state.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        return Toast(t('deposit.allInputRequire'))
+                    }
+                    if (!isEmpty(element.regex)) {
+                        const valueReg = new RegExp(element.regex)
+                        if (!valueReg.test(element.value)) {
+                            return Toast(`${element[state.lang]}` + t('register.incorrectlyFormed'))
+                        }
+                    }
+                    state.paramsExtens[key] = element.value
+                }
+            }
+            state.appendVis = false
+
             // 发起提现
             launchHandleWithdraw()
         }
@@ -507,6 +688,9 @@ export default {
             const amountDigitsLength = state.amount.toString().split('.')[1] ? state.amount.toString().split('.')[1].length : 0
             if (!amount) {
                 return Toast(t('withdrawMoney.hint_1'))
+            }
+            if (isEmpty(state.checkedBank)) {
+                return Toast(t('withdrawMoney.hint_2'))
             }
             if (amount < parseFloat(state.singleLowAmount)) {
                 return Toast(`${t('withdrawMoney.hint_3')}${state.singleLowAmount}`)
@@ -521,12 +705,21 @@ export default {
             if (amount > withdrawAmount) {
                 return Toast(t('withdrawMoney.hint_5'))
             }
-            if (isEmpty(state.receiptAddress)) {
-                return Toast(t('withdrawMoney.inputReceiptAddress'))
+            if (!state.pwd) {
+                return Toast(t('common.inputFundPwd'))
+            }
+            if (googleCodeVis.value && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
             }
 
-            // 判断资金密码
-            state.fundPwdVis = true
+            // 取款方式为otc365_cny判断是否需要填写补充资料
+            if (currentTab === 'otc365_cny' && !isEmpty(state.extend) && !checkAllComplete()) {
+                state.appendVis = true
+                return
+            }
+
+            // 发起提现
+            launchHandleWithdraw()
         }
 
         // 创建取款提案
@@ -539,13 +732,13 @@ export default {
                 amount: state.amount,
                 rate: state.withdrawRate.exchangeRate,
                 withdrawRateSerialNo: state.withdrawRate.withdrawRateSerialNo,
-                bankAccountName: (state.extend['last_name'][state.lang]) + (state.extend['first_name'][state.lang]),
-                bankName: '法币钱包',
-                bankCardNo: state.receiptAddress,
+                bankAccountName: state.checkedBank.lastName + state.checkedBank.firstName,
+                bankName: state.checkedBank.bankName,
+                bankCardNo: state.checkedBank.bankCardNumber,
                 withdrawType: 1,
                 withdrawMethod: currentTab,
                 tradeType,
-                fundPwd: md5(state.fundPwd),
+                fundPwd: md5(state.pwd),
                 googleCode: state.googleCode
             }
             if (!isEmpty(state.paramsExtens)) {
@@ -562,24 +755,17 @@ export default {
             })
         }
 
-        // 查询用户扩展信息
-        const getCustomerExtend = () => {
-            findCustomerExtend({
-                type: 1
-            }).then(res => {
-
-            })
-        }
-
         onBeforeMount(() => {
             // 获取提现方式
             getWithdrawMethods()
-            // 获取取款限制配置
-            getWithdrawConfig()
-            // 获取取款汇率
-            getWithdrawRate()
-            // 查询用户扩展信息
-            getCustomerExtend()
+            new Promise(resolve => {
+                // 获取银行卡列表
+                getBankList()
+                resolve()
+            }).then(() => {
+                // 获取取款限制配置
+                getWithdrawConfig()
+            })
             store.commit('_user/Update_account', accountId)
         })
 
@@ -587,18 +773,23 @@ export default {
             ...toRefs(state),
             rightClick,
             openSheet,
+            chooseBank,
             getAll,
             toAddBank,
+            goFundForgot,
             changeAmount,
             confirm,
             currency,
             customInfo,
+            hideMiddle,
             getWithdrawFee,
             timeList,
             onlineServices,
             isEmpty,
             accountCurrency,
-            confirmWithdraw
+            handleAppendField,
+            googleCodeVis,
+            getGooleVerifyCode
         }
     }
 
@@ -608,6 +799,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .pageWrap {
+    padding-top: rem(90px);
     background: var(--contentColor);
     .empty {
         height: rem(20px);
@@ -647,41 +839,60 @@ export default {
                 height: rem(60px);
                 font-size: rem(24px);
                 line-height: rem(60px);
-                background-color: var(--bgColor);
+                background-color: var(--primaryAssistColor);
                 border: 1px solid var(--lineColor);
                 border-radius: rem(30px);
+                cursor: pointer;
             }
         }
-        .money-info {
+        .notice {
+            display: flex;
+            margin-top: rem(30px);
+            margin-bottom: rem(40px);
+            .can-name {
+                flex: 1;
+            }
+            span {
+                color: var(--minorColor);
+                font-size: rem(24px);
+            }
+        }
+        .bank-wrap {
             margin-top: rem(20px);
-            .row {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: rem(12px);
-                &:last-of-type {
-                    margin-bottom: 0;
-                }
-                span {
-                    color: var(--minorColor);
-                    font-size: rem(24px);
-                }
+            .bw-t {
+                color: var(--color);
+                font-size: rem(28px);
+                line-height: rem(72px);
+            }
+            .bw-t2 {
+                color: var(--minorColor);
+                font-size: rem(24px);
+                line-height: rem(60px);
             }
         }
-        .receipt-address {
-            margin-top: rem(50px);
-            .name {
+        .fund,
+        .field-google {
+            margin-top: rem(20px);
+            .bw-t {
                 color: var(--color);
                 font-size: rem(28px);
             }
-            input {
-                display: block;
-                width: 100%;
-                height: rem(90px);
-                padding: 0 rem(25px);
-                margin-top: rem(15px);
-                background-color: var(--bgColor);
-                border: 1px solid var(--lineColor);
-                border-radius: rem(5px);
+            .fund-input {
+                display: flex;
+                align-items: center;
+                .input-comp {
+                    flex: 1;
+                }
+                .href {
+                    color: var(--primary);
+                    vertical-align: middle;
+                    cursor: pointer;
+                }
+            }
+        }
+        .field-google :deep() {
+            .paste {
+                display: none;
             }
         }
     }
@@ -698,9 +909,81 @@ export default {
         font-size: rem(30px);
     }
 }
+.bank {
+    align-items: center;
+    margin: rem(10px) rem(10px) rem(10px) 0;
+    border: rem(1px) solid var(--lineColor);
+    cursor: pointer;
+    &.disabled {
+        pointer-events: none;
+        .bank-no {
+            color: var(--placeholdColor);
+        }
+    }
+    &.bank-flex {
+        display: flex;
+        justify-content: center;
+    }
+    .bank-item {
+        display: flex;
+        align-items: center;
+        border-radius: rem(4px);
+    }
+    .tips {
+        //padding: 0 rem(90px) rem(20px);
+        color: var(--placeholdColor);
+    }
+    .bank-no {
+        flex: 1;
+    }
+    .bank-icons-sm {
+        margin: rem(30px) rem(15px) rem(30px) rem(30px);
+    }
+    .van-icon {
+        height: rem(40px);
+        margin-right: rem(20px);
+    }
+    &.no-data {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        line-height: rem(90px);
+        span {
+            margin-left: rem(30px);
+            color: var(--minorColor);
+            vertical-align: middle;
+        }
+        .van-button {
+            padding: 0 rem(20px);
+            vertical-align: middle;
+        }
+    }
+}
+.bank-list .bank {
+    border-color: var(--lineColor);
+    border-style: solid;
+    border-width: 0 0 1px;
+}
+.add-bank {
+    display: flex;
+    align-items: center;
+    height: rem(96px);
+    .icon-plus {
+        margin: rem(20px) rem(20px) rem(20px) rem(45px);
+        vertical-align: middle;
+    }
+    span {
+        flex: 1;
+        vertical-align: middle;
+    }
+    .icon-arrow {
+        margin-right: rem(30px);
+    }
+}
 </style>
 
 <style lang="scss">
+
 .add-success {
     padding: rem(30px) rem(30px) 0 rem(30px);
     text-align: center;
@@ -737,6 +1020,22 @@ export default {
                     flex: 3;
                 }
             }
+        }
+    }
+}
+// 补充资料弹窗
+.append-popup {
+    .append-wrap {
+        text-align: center;
+        .title {
+            padding: rem(60px) 0;
+            color: var(--color);
+            font-size: rem(32px);
+            text-align: center;
+        }
+        .btn {
+            width: 80%;
+            margin: rem(50px) auto;
         }
     }
 }

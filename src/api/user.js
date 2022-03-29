@@ -1024,3 +1024,15 @@ export function enableOrForbidMFA (data) {
         data
     })
 }
+
+/* 查询用户扩展信息 */
+export function findCustomerExtend (data) {
+    return request({
+        url: '/global/customer.app.CustomerExtendWebApiService.findCustomerExtend',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
