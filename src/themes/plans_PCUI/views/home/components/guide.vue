@@ -17,15 +17,15 @@ const lang = getCookie('lang')
 const list = [
     {
         url: require('@planspc/images/' + lang + '/guide-1.png'),
-        link: 'https://www.vitatoken.com/site/about-us'
+        link: 'https://www.vitatoken.io/site/about-us'
     },
     {
         url: require('@planspc/images/' + lang + '/guide-2.png'),
-        link: 'https://www.vitatoken.com/site/v10'
+        link: 'https://www.vitatoken.io/site/v10'
     },
     {
         url: require('@planspc/images/' + lang + '/guide-3.png'),
-        link: 'https://www.vitatoken.com/site/tutorial'
+        link: 'https://www.vitatoken.io/site/tutorial'
     },
     {
         url: require('@planspc/images/' + lang + '/guide-4.png'),
