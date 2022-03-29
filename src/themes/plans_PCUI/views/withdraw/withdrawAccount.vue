@@ -192,6 +192,11 @@ export default {
                     path: '/assets/withdrawMoney',
                     query
                 })
+            } else if (['payredeem'].includes(state.currentTab)) {
+                router.push({
+                    path: '/assets/withdrawRedeem',
+                    query
+                })
             } else {
                 // 跳转到提币页面
                 router.push({

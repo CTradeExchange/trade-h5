@@ -48,7 +48,10 @@
                 <p class='name'>
                     {{ $t('withdrawMoney.receiptAddress') }}
                 </p>
-                <input v-model='receiptAddress' :placeholder="$t('withdrawMoney.inputReceiptAddress')" />
+                <div class='box'>
+                    <input v-model='receiptAddress' :placeholder="$t('withdrawMoney.inputReceiptAddress')" />
+                    <a v-if='receiptAddress' class='van-icon van-icon-clear' href='javascript:;' @click="receiptAddress = ''"></a>
+                </div>
             </div>
         </div>
     </div>
@@ -111,7 +114,8 @@ import {
     queryWithdrawRate,
     computeWithdrawFee,
     getWithdrawMethodList,
-    findCustomerExtend
+    findCustomerExtend,
+    saveCustomerExtend
 } from '@/api/user'
 // vant
 import { Toast, Dialog } from 'vant'
@@ -175,7 +179,7 @@ export default {
                 path: '/withdrawRecord?withdrawType=1'
             },
             withdrawAmount: '0.00', // 可提金额
-            amountPlaceholder: currentTab !== 'otc365_cny' ? t('withdrawMoney.moneyPlaceholder') : t('withdrawMoney.moneyPlaceholder') + `(${t('withdrawMoney.digitsTip')})`, // 提现金额输入框提示
+            amountPlaceholder: t('withdrawMoney.moneyPlaceholder'), // 提现金额输入框提示
             amount: '', // 提现金额
             fee: '--', // 手续费
             computePre: '--', // 预计到账
@@ -195,6 +199,7 @@ export default {
             fundPwdVis: false,
             fundPwd: '',
             googleCode: '',
+            defaultReceiptAddress: '', // 默认收款地址
             receiptAddress: '' // 收款地址
         })
 
@@ -546,7 +551,8 @@ export default {
                 withdrawMethod: currentTab,
                 tradeType,
                 fundPwd: md5(state.fundPwd),
-                googleCode: state.googleCode
+                googleCode: state.googleCode,
+                extend: JSON.stringify(state.extend)
             }
             if (!isEmpty(state.paramsExtens)) {
                 params.extend = JSON.stringify(state.paramsExtens)
@@ -556,6 +562,8 @@ export default {
                 if (res.check()) {
                     state.amount = ''
                     state.withdrawSuccess = true
+                    // 保存用户扩展信息
+                    keepCustomerExtend()
                 }
             }).catch(err => {
                 state.loading = false
@@ -567,7 +575,19 @@ export default {
             findCustomerExtend({
                 type: 1
             }).then(res => {
+                if (res.check()) {
+                    state.defaultReceiptAddress = res.data
+                    state.receiptAddress = res.data
+                }
+            })
+        }
 
+        // 保存用户扩展信息
+        const keepCustomerExtend = () => {
+            if (state.defaultReceiptAddress === state.receiptAddress) return
+            saveCustomerExtend({
+                type: 1,
+                value: state.receiptAddress
             })
         }
 
@@ -673,8 +693,9 @@ export default {
                 color: var(--color);
                 font-size: rem(28px);
             }
-            input {
-                display: block;
+            .box {
+                display: flex;
+                align-items: center;
                 width: 100%;
                 height: rem(90px);
                 padding: 0 rem(25px);
@@ -682,6 +703,15 @@ export default {
                 background-color: var(--bgColor);
                 border: 1px solid var(--lineColor);
                 border-radius: rem(5px);
+                input {
+                    flex: 1;
+                    height: 100%;
+                }
+                .van-icon-clear {
+                    margin-left: rem(20px);
+                    color: var(--minorColor);
+                    font-size: rem(36px);
+                }
             }
         }
     }
