@@ -1030,6 +1030,7 @@ export function findCustomerExtend (data) {
     return request({
         url: '/global/customer.app.CustomerExtendWebApiService.findCustomerExtend',
         method: 'post',
+        toastErr: false,
         headers: {
             version: '0.0.1'
         },

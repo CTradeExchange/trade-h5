@@ -48,7 +48,10 @@
                 <p class='name'>
                     {{ $t('withdrawMoney.receiptAddress') }}
                 </p>
-                <input v-model='receiptAddress' :placeholder="$t('withdrawMoney.inputReceiptAddress')" />
+                <div class='box'>
+                    <input v-model='receiptAddress' :placeholder="$t('withdrawMoney.inputReceiptAddress')" />
+                    <a v-if='receiptAddress' class='van-icon van-icon-clear' href='javascript:;' @click="receiptAddress = ''"></a>
+                </div>
             </div>
         </div>
     </div>
@@ -175,7 +178,7 @@ export default {
                 path: '/withdrawRecord?withdrawType=1'
             },
             withdrawAmount: '0.00', // 可提金额
-            amountPlaceholder: currentTab !== 'otc365_cny' ? t('withdrawMoney.moneyPlaceholder') : t('withdrawMoney.moneyPlaceholder') + `(${t('withdrawMoney.digitsTip')})`, // 提现金额输入框提示
+            amountPlaceholder: t('withdrawMoney.moneyPlaceholder'), // 提现金额输入框提示
             amount: '', // 提现金额
             fee: '--', // 手续费
             computePre: '--', // 预计到账
@@ -500,6 +503,17 @@ export default {
             launchHandleWithdraw()
         }
 
+        // 查询用户扩展信息
+        const getCustomerExtend = () => {
+            findCustomerExtend({
+                type: 1
+            }).then(res => {
+                if (res.check()) {
+                    state.receiptAddress = res.data
+                }
+            })
+        }
+
         // 点击确定提现
         const confirm = () => {
             const amount = parseFloat(state.amount)
@@ -559,15 +573,6 @@ export default {
                 }
             }).catch(err => {
                 state.loading = false
-            })
-        }
-
-        // 查询用户扩展信息
-        const getCustomerExtend = () => {
-            findCustomerExtend({
-                type: 1
-            }).then(res => {
-
             })
         }
 
@@ -673,8 +678,9 @@ export default {
                 color: var(--color);
                 font-size: rem(28px);
             }
-            input {
-                display: block;
+            .box {
+                display: flex;
+                align-items: center;
                 width: 100%;
                 height: rem(90px);
                 padding: 0 rem(25px);
@@ -682,6 +688,15 @@ export default {
                 background-color: var(--bgColor);
                 border: 1px solid var(--lineColor);
                 border-radius: rem(5px);
+                input {
+                    flex: 1;
+                    height: 100%;
+                }
+                .van-icon-clear {
+                    margin-left: rem(20px);
+                    color: var(--minorColor);
+                    font-size: rem(36px);
+                }
             }
         }
     }
