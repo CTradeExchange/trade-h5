@@ -424,6 +424,15 @@ const routes = [
                 children: h5Children
             },
             {
+                path: 'funds',
+                name: 'Funds',
+                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
                 path: 'fundManager', // 基金操作专区
                 name: 'FundManager',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fundManager/index.vue'),
