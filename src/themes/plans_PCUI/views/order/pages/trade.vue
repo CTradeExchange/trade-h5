@@ -50,8 +50,14 @@
         </div>
     </div>
     <!-- 杠杆设置 -->
+    <MultipleSetCross
+        v-if="product && [1].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
+        v-model='multipleSetVisible'
+        v-model:multipleVal='multipleVal'
+        :product='product'
+    />
     <MultipleSet
-        v-if="product && [1,2].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
+        v-if="product && [2].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
         v-model:multipleVal='multipleVal'
         :product='product'
@@ -243,6 +249,7 @@ import PendingBarCFD from './components/pendingBar_CFD'
 import LoanBar from './components/loanBar'
 import Assets from './components/assets.vue'
 import MultipleSet from '@planspc/components/multipleSet.vue'
+import MultipleSetCross from '@planspc/components/multipleSetCross.vue'
 import LoginMask from '@planspc/components/loginMask.vue'
 import { findFundPage } from '@/api/fund'
 
@@ -257,7 +264,8 @@ export default {
         LoanBar,
         Assets,
         LoginMask,
-        MultipleSet
+        MultipleSet,
+        MultipleSetCross
     },
     emits: ['update:modelValue', 'selected', 'update:multipleVal'],
     setup (props, { emit }) {
@@ -498,7 +506,18 @@ export default {
             const [symbolId, tradeType] = symbolKey.value.split('_')
             store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
             state.operationType = parseFloat(tradeType) !== 3 // 杠杆玩法默认是普通类型
+            state.multipleVal = tradeType === '1' ? 20 : 1 // 全仓默认20倍
             setVolumeType() // 设置按额或者按手数交易
+            if (tradeType === '1') {
+                store.dispatch('_trade/queryPositionPage', { tradeType }).then(res => {
+                    if (res.check() && res.data?.length) {
+                        const position = res.data.find(el => el.tradeType === parseInt(tradeType) && el.symbolId === parseInt(symbolId))
+                        if (position && position.crossLevelNum) {
+                            state.multipleVal = position.crossLevelNum
+                        }
+                    }
+                })
+            }
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 state.sell.volume = ''
                 if (!isEmpty(customerInfo.value)) {
