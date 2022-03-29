@@ -3,7 +3,7 @@
         <van-tabs v-model:active='orderType' class='orderTypeTab' @change='changeOrderType'>
             <van-tab v-for='(item,i) in btnList' :key='i' :name='item.val' :title='item.title' />
         </van-tabs>
-        <a v-if="product.tradeType===2 && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
+        <a v-if="[1,2].includes(product.tradeType) && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
             <span class='text'>
                 {{ mVal }}x
             </span>
@@ -11,7 +11,7 @@
         </a>
     </div>
     <MultipleSet
-        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-if="product && [1,2].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
         v-model:multipleVal='mVal'
         :product='product'

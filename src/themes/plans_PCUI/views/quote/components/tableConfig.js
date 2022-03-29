@@ -1,8 +1,9 @@
 import ETF from '@planspc/components/etfIcon'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import { computed, unref } from 'vue'
+import { computed, unref, ref } from 'vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
+import { findFundPage } from '@/api/fund.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 
@@ -13,6 +14,8 @@ export const getColumns = tradeType => {
     const productMap = computed(() => store.state._quote.productMap)
 
     const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '--'
+    // 基金列表
+    const fundList = ref([])
 
     /** 添加自选逻辑 */
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
@@ -41,6 +44,16 @@ export const getColumns = tradeType => {
     }
     /** 添加自选逻辑 */
 
+    // 获取基金产品列表，
+    const getFundPage = () => {
+        findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
+            if (res.check()) {
+                fundList.value = res.data.records
+            }
+        })
+    }
+    getFundPage()
+
     // 切换当前选中产品
     const gotoOrder = (event, product) => {
         event.stopPropagation()
@@ -53,13 +66,35 @@ export const getColumns = tradeType => {
         })
     }
 
+    // 去基金
+    const gotoFund = (event, product) => {
+        event.stopPropagation()
+        const fund = fundList.value.find(el => el.shareTokenCode === product.baseCurrency)
+        if (fund) {
+            router.push({
+                name: 'Fund',
+                query: {
+                    fundId: product.fundId
+                }
+            })
+        } else {
+            Toast(t('trade.noFeature'))
+        }
+    }
+
     const commonBtns = ({ row }) => (
         <>
-            <span class='btn' onclick={(event) => gotoOrder(event, row)}>
+            {/* <span class='btn' onclick={(event) => gotoOrder(event, row)}>
                 { t('trade.buy') }
             </span>
             <span class='btn' onclick={(event) => gotoOrder(event, row)}>
                 { t('trade.sell') }
+            </span> */}
+            <span class='btn active' onclick={(event) => gotoFund(event, row)} v-show={row.etf}>
+                { t('fundInfo.buy') }
+            </span>
+            <span class='btn' onclick={(event) => gotoOrder(event, row)}>
+                { t('route.trade') }
             </span>
         </>
     )
@@ -83,19 +118,19 @@ export const getColumns = tradeType => {
                 </div>)
             },
             {
-                name: t('trade.sellPrice'),
+                name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'sell_price')
+                formatter: row => getVal(row.symbolKey, 'cur_price')
             },
             {
-                name: t('trade.buyPrice'),
+                name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'buy_price')
+                formatter: row => getVal(row.symbolKey, 'upDownAmount')
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 160,
                 className: 'upDownWidth',
@@ -146,19 +181,19 @@ export const getColumns = tradeType => {
                 </div>)
             },
             {
-                name: t('trade.sellPrice'),
+                name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'sell_price')
+                formatter: row => getVal(row.symbolKey, 'cur_price')
             },
             {
-                name: t('trade.buyPrice'),
+                name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'buy_price')
+                formatter: row => getVal(row.symbolKey, 'upDownAmount')
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 160,
                 className: 'upDownWidth',
@@ -214,7 +249,7 @@ export const getColumns = tradeType => {
                 minWidth: 160,
                 formatter: row => (
                     <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        {getVal(row.symbolKey, 'price')}
+                        {getVal(row.symbolKey, 'cur_price')}
                     </span>
                 )
             },
@@ -230,7 +265,7 @@ export const getColumns = tradeType => {
 
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 160,
                 className: 'upDownWidth',
@@ -287,7 +322,7 @@ export const getColumns = tradeType => {
                 minWidth: 160,
                 formatter: row => (
                     <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        {getVal(row.symbolKey, 'price')}
+                        {getVal(row.symbolKey, 'cur_price')}
                     </span>
                 )
             },
@@ -303,7 +338,7 @@ export const getColumns = tradeType => {
 
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 160,
                 className: 'upDownWidth',

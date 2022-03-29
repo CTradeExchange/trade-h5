@@ -353,7 +353,7 @@ export default {
                 expireType: state.expireType,
                 entryType: state.entryType
             }
-            if (tradeType === '2' && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
+            if (['1', '2'].includes(tradeType) && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
             return params
         }
 

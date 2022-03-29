@@ -139,6 +139,9 @@
   "trade": {
     "advance": "预付款",
     "advanceRatio": "预付款比率",
+    "newPrice": "最新价",
+    "changePrice": "24H涨跌额",
+    "changePercent": "24H涨跌幅",
     "chart": "图表",
     "closeOrder": "平仓",
     "contract": "交易品种属性",

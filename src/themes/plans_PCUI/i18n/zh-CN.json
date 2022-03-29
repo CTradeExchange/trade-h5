@@ -281,8 +281,8 @@
 	"trade": {
 		"name": "名称",
 		"newPrice": "最新价",
-		"changePrice": "涨跌额",
-		"changePercent": "涨跌幅",
+		"changePrice": "24H涨跌额",
+		"changePercent": "24H涨跌幅",
 		"sale": "卖出",
 		"advance": "预付款",
 		"advanceRatio": "预付款比率",

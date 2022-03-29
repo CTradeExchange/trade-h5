@@ -279,9 +279,9 @@
     },
     "trade": {
         "name": "Name",
-        "newPrice": "New price",
-        "changePrice": "Price change",
-        "changePercent": "change %",
+        "newPrice": "Last price",
+        "changePrice": "24h Change",
+        "changePercent": "24h Change%",
         "sale": "Sell",
         "advance": "Prepay",
         "advanceRatio": "Prepay ratio",

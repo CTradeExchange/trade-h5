@@ -92,42 +92,33 @@ onUnmounted(() => {
             margin-right: 5px;
         }
         .btn{
+            @include hover();
             position: relative;
             z-index: 0;
             display: inline-block;
             width: 80px;
-            color: #fff;
-            height: 32px;
-            line-height: 32px;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            height: 30px;
+            line-height: 28px;
             border-radius: 4px;
             text-align: center;
-            font-size: 16px;
+            margin-right: 10px;
+            font-size: 14px;
             font-weight: 400;
+            vertical-align: middle;
             cursor: pointer;
             overflow: hidden;
-            &::before{
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: -1;
-                width: 100%;
-                height: 100%;
-                display: block;
-                content: '';
-                background: var(--riseColor);
+            &.active {
+                color: #fff;
+                background: var(--primary);
             }
-
             &:last-child{
-                margin-left: 20px;
-                &::before{
-                    background: var(--fallColor);
-                }
+                margin-right: 0;
             }
-
             &:hover{
-                &::before{
-                    opacity: 0.7;
-                }
+                color: #fff;
+                background: var(--primary);
             }
         }
     }

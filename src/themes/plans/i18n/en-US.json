@@ -139,6 +139,9 @@
 	"trade": {
 		"advance": "Prepayment",
 		"advanceRatio": "Prepayment ratio",
+        "newPrice": "Last price",
+        "changePrice": "24h Change",
+        "changePercent": "24h Change%",
 		"chart": "Chart",
 		"closeOrder": "Close Position",
 		"contract": "Symbol Properties",

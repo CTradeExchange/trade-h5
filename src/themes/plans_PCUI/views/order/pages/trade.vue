@@ -51,7 +51,7 @@
     </div>
     <!-- 杠杆设置 -->
     <MultipleSet
-        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-if="product && [1,2].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
         v-model:multipleVal='multipleVal'
         :product='product'
@@ -323,7 +323,7 @@ export default {
             }
         })
 
-        const showLeverage = computed(() => Number(product.value.tradeType) === 2 && product.value.marginInfo?.type !== '1')
+        const showLeverage = computed(() => [1, 2].includes(Number(product.value.tradeType)) && product.value.marginInfo?.type !== '1')
 
         // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
         const fundtoken = computed(() => {
@@ -429,7 +429,7 @@ export default {
                 expireType: state[state.submitType].expireType,
                 entryType: state[state.submitType].entryType
             }
-            if (tradeType === '2' && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
+            if (['1', '2'].includes(tradeType) && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
             return params
         }
 
