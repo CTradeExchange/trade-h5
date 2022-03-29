@@ -139,7 +139,8 @@ import {
     computeWithdrawFee,
     checkKycApply,
     getWithdrawMethodList,
-    findCustomerExtend
+    findCustomerExtend,
+    saveCustomerExtend
 } from '@/api/user'
 import { useI18n } from 'vue-i18n'
 import InputComp from '@/components/form/input'
@@ -223,6 +224,7 @@ export default {
             extend: {}, // 需要补充资料的数据
             pwd: '',
             googleCode: '',
+            defaultReceiptAddress: '', // 默认收款地址
             receiptAddress: '' // 收款地址
         })
 
@@ -534,17 +536,6 @@ export default {
             })
         }
 
-        // 查询用户扩展信息
-        const getCustomerExtend = () => {
-            findCustomerExtend({
-                type: 1
-            }).then(res => {
-                if (res.check()) {
-                    state.receiptAddress = res.data
-                }
-            })
-        }
-
         // 点击确定提现
         const confirm = () => {
             const amount = parseFloat(state.amount)
@@ -597,7 +588,8 @@ export default {
                 withdrawMethod: currentTab,
                 tradeType,
                 fundPwd: md5(state.pwd),
-                googleCode: state.googleCode
+                googleCode: state.googleCode,
+                extend: JSON.stringify(state.extend)
             }
             if (!isEmpty(state.paramsExtens)) {
                 params.extend = JSON.stringify(state.paramsExtens)
@@ -607,9 +599,32 @@ export default {
                 if (res.check()) {
                     state.amount = ''
                     state.withdrawSuccess = true
+                    // 保存用户扩展信息
+                    keepCustomerExtend()
                 }
             }).catch(err => {
                 state.loading = false
+            })
+        }
+
+        // 查询用户扩展信息
+        const getCustomerExtend = () => {
+            findCustomerExtend({
+                type: 1
+            }).then(res => {
+                if (res.check()) {
+                    state.defaultReceiptAddress = res.data
+                    state.receiptAddress = res.data
+                }
+            })
+        }
+
+        // 保存用户扩展信息
+        const keepCustomerExtend = () => {
+            if (state.defaultReceiptAddress === state.receiptAddress) return
+            saveCustomerExtend({
+                type: 1,
+                value: state.receiptAddress
             })
         }
 

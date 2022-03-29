@@ -1025,6 +1025,18 @@ export function enableOrForbidMFA (data) {
     })
 }
 
+/* 保存用户扩展信息 */
+export function saveCustomerExtend (data) {
+    return request({
+        url: '/global/customer.app.CustomerExtendWebApiService.saveCustomerExtend',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 查询用户扩展信息 */
 export function findCustomerExtend (data) {
     return request({
