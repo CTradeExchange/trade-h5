@@ -588,8 +588,7 @@ export default {
                 withdrawMethod: currentTab,
                 tradeType,
                 fundPwd: md5(state.pwd),
-                googleCode: state.googleCode,
-                extend: JSON.stringify(state.extend)
+                googleCode: state.googleCode
             }
             if (!isEmpty(state.paramsExtens)) {
                 params.extend = JSON.stringify(state.paramsExtens)
