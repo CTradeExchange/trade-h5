@@ -640,9 +640,8 @@ export default {
                 }
             }
             state.appendVis = false
-
-            // 发起提现
-            launchHandleWithdraw()
+            // 判断资金密码
+            state.fundPwdVis = true
         }
 
         // 点击确定提现

@@ -117,6 +117,30 @@
             </div>
         </div>
     </van-dialog>
+
+    <!-- 补充资料弹窗 -->
+    <van-popup v-model:show='appendVis' class='append-popup' position='right' :style="{ height: '100%', width: '80%' }">
+        <div class='append-wrap'>
+            <p class='title'>
+                {{ $t('deposit.appendFiled') }}
+            </p>
+            <van-cell-group inset>
+                <van-field
+                    v-for='(item, key) in extend'
+                    :key='key'
+                    v-model='item.value'
+                    :data='item'
+                    :label='item[lang]'
+                    label-width='70'
+                    :placeholder="$t('common.input') + item[lang]"
+                    :required='true'
+                />
+            </van-cell-group>
+            <van-button class='btn' size='large' type='primary' @click='handleAppendField'>
+                {{ $t('common.sure') }}
+            </van-button>
+        </div>
+    </van-popup>
 </template>
 
 <script>
@@ -221,7 +245,9 @@ export default {
             withdrawCurrency: '',
             timeShow: false,
             withdrawTimeConfigMap: {}, // 处理后的时区
+            appendVis: false, // 是否显示补充资料弹窗
             extend: {}, // 需要补充资料的数据
+            paramsExtens: {}, // 补充完整的资料数据
             pwd: '',
             googleCode: '',
             defaultReceiptAddress: '', // 默认收款地址
@@ -536,6 +562,45 @@ export default {
             })
         }
 
+        // 补充资料是否全部填写完成
+        const checkAllComplete = () => {
+            let flag = true
+            const extend = state.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        flag = false
+                    }
+                }
+            }
+            return flag
+        }
+
+        // 补充资料确定事件
+        const handleAppendField = () => {
+            const extend = state.extend
+            for (const key in extend) {
+                if (Object.hasOwnProperty.call(extend, key)) {
+                    const element = extend[key]
+                    if (isEmpty(element.value)) {
+                        return Toast(t('deposit.allInputRequire'))
+                    }
+                    if (!isEmpty(element.regex)) {
+                        const valueReg = new RegExp(element.regex)
+                        if (!valueReg.test(element.value)) {
+                            return Toast(`${element[state.lang]}` + t('register.incorrectlyFormed'))
+                        }
+                    }
+                    state.paramsExtens[key] = element.value
+                }
+            }
+            state.appendVis = false
+
+            // 创建取款提案
+            launchHandleWithdraw()
+        }
+
         // 点击确定提现
         const confirm = () => {
             const amount = parseFloat(state.amount)
@@ -566,6 +631,11 @@ export default {
             if (googleCodeVis.value && isEmpty(state.googleCode)) {
                 return Toast(t('common.inputGoogleCode'))
             }
+            // 判断是否需要填写补充资料
+            if (!isEmpty(state.extend) && !checkAllComplete()) {
+                state.appendVis = true
+                return
+            }
 
             // 发起提现
             launchHandleWithdraw()
@@ -595,11 +665,11 @@ export default {
             }
             handleWithdraw(params).then(res => {
                 state.loading = false
+                // 保存用户扩展信息
+                keepCustomerExtend()
                 if (res.check()) {
                     state.amount = ''
                     state.withdrawSuccess = true
-                    // 保存用户扩展信息
-                    keepCustomerExtend()
                 }
             }).catch(err => {
                 state.loading = false
@@ -654,6 +724,7 @@ export default {
             onlineServices,
             isEmpty,
             accountCurrency,
+            handleAppendField,
             googleCodeVis,
             getGooleVerifyCode
         }
@@ -832,6 +903,22 @@ export default {
                     flex: 3;
                 }
             }
+        }
+    }
+}
+// 补充资料弹窗
+.append-popup {
+    .append-wrap {
+        text-align: center;
+        .title {
+            padding: rem(60px) 0;
+            color: var(--color);
+            font-size: rem(32px);
+            text-align: center;
+        }
+        .btn {
+            width: 80%;
+            margin: rem(50px) auto;
         }
     }
 }
