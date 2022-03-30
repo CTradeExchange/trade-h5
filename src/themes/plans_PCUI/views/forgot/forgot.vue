@@ -362,6 +362,10 @@ export default {
             if (state.googleCodeVis && isEmpty(state.googleCode)) {
                 return Toast(t('common.inputGoogleCode'))
             }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+
             if (type === 'login') {
                 resetLoginPwd()
             } else if (type === 'fund') {

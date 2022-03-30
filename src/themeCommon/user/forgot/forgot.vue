@@ -304,9 +304,9 @@ export default {
             if ((isEmpty(state.checkCode) && state.curTab === 0) || (isEmpty(state.emailCode) && state.curTab === 1)) {
                 return Toast(t('common.inputVerifyCode'))
             }
-            // if (isEmpty(state.sendToken)) {
-            //     return Toast(t('common.getVerifyCode'))
-            // }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
             handleVerifyCode()
         }
 
@@ -441,10 +441,10 @@ export default {
         &.toolWrap {
             justify-content: space-between;
         }
-        &.field-google{
-            padding: 0 rem(10px)
+        &.field-google {
+            padding: 0 rem(10px);
         }
-        .title{
+        .title {
             padding-left: rem(10px);
             color: var(--normalColor);
         }
