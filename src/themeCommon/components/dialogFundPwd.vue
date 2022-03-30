@@ -16,8 +16,11 @@
             <i class='icon_guanbi' @click='$emit("update:show",false)'></i>
         </div>
         <div class='dialog-body'>
-            <InputComp v-model='pwd' clear :label="$t('common.inputFundPwd')" :max-length='6' pwd />
             <div class='pwd-oper'>
+                <InputComp v-model='pwd' clear :label="$t('common.inputFundPwd')" :max-length='6' pwd />
+            </div>
+
+            <div class='oper'>
                 <router-link v-if='Number(customInfo.assertPassStatus) === 1' class='href' to='/setFundPwd'>
                     {{ $t('login.goSet') }}
                 </router-link>
@@ -28,6 +31,8 @@
             <div class='pwd-oper'>
                 <googleVerifyCode
                     v-if='googleCodeVis'
+                    ref='googleVerifyCodeComp'
+                    @clear='clear'
                     @getGooleVerifyCode='getGooleVerifyCode'
                 />
             </div>
@@ -47,7 +52,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, watchEffect, onMounted } from 'vue'
+import { reactive, toRefs, computed, watchEffect, onMounted, ref } from 'vue'
 import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 import { useStore } from 'vuex'
 import BigNumber from 'bignumber.js'
@@ -67,6 +72,8 @@ export default {
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
 
+        const googleVerifyCodeComp = ref(null)
+
         const customInfo = computed(() => store.state._user.customerInfo)
         const googleCodeVis = computed(() => customInfo.value.googleId > 0)
 
@@ -80,6 +87,7 @@ export default {
         const closed = () => { // 关闭弹出层且动画结束后触发
             state.pwd = ''
             context.emit('update:show', false)
+            googleVerifyCodeComp.value.clear()
         }
         const formatter = value => {
             // 过滤输入的非数字
@@ -112,6 +120,7 @@ export default {
             formatter,
             googleCodeVis,
             getGooleVerifyCode,
+            googleVerifyCodeComp,
             ...toRefs(state)
 
         }
@@ -121,29 +130,38 @@ export default {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-
 .dialog-header {
 
 }
-.dialog-body{
-    .pwd-oper{
-        padding: rem(30px) 0 0 0;
+.dialog-body {
+    .pwd-oper {
+        //padding: rem(30px) 0 0 0;
         text-align: right;
-        .href{
-            color: var(--primary);
+        background-color: var(--contentColor);
+        .href {
             width: 100%;
+            color: var(--primary);
             font-size: rem(24px);
         }
-        .form-item{
-            :deep(.van-cell){
-                background-color: var(--bgColor);
+        :deep(.inputWrapper) {
+            input {
+                padding-left: rem(20px);
             }
-
+        }
+        .form-item {
+            :deep(.van-cell) {
+                //background-color: var(--bgColor);
+                input {
+                    padding-left: rem(20px);
+                }
+            }
         }
     }
-
+    .oper {
+        padding: rem(20px) 0;
+        text-align: right;
+    }
 }
-
 .dialog-footer {
     width: 100%;
     padding: rem(30px) 0;
