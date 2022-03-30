@@ -221,6 +221,7 @@ export default {
     z-index: 100;
     display: flex;
     justify-content: space-between;
+    flex-shrink: 0;
     min-width: 1200px;
     height: 50px;
     padding: 0 16px;

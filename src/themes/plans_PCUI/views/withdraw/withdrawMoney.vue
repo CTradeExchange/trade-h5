@@ -161,7 +161,7 @@
                     v-model='item.value'
                     :data='item'
                     :label='item[lang]'
-                    label-width='70'
+                    label-width='80'
                     :placeholder="$t('common.input') + item[lang]"
                     :required='true'
                 />
