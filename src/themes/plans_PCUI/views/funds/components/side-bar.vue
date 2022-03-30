@@ -52,27 +52,29 @@ onMounted(() => {
     li {
         a {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-decoration: none;
-            border-radius: 8px;
+            align-items: center;
             height: 52px;
             margin: 8px;
             padding: 4px;
             font-weight: 400;
+            border-radius: 8px;
             &:hover {
                 background-color: var(--bgColor);
             }
         }
-        .currency {
-
-        }
         .text {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 10px;
             .tag {
-
+                font-size: 10px;
+                color: var(--minorColor);
             }
             .name {
-
+                font-size: 16px;
+                font-weight: 500;
+                color: var(--color);
             }
         }
     }
