@@ -296,8 +296,19 @@ export default {
             // 获取产品详情
             const [symbolId, tradeType] = symbolKey.value.split('_')
             state.operationType = parseFloat(tradeType) === 3 ? 1 : 2 // 杠杆玩法默认是普通类型
+            state.multipleVal = tradeType === '1' ? 20 : 1 // 全仓默认20倍
             setVolumeType() // 设置按额或者按手数交易
             productSwitchHistory[tradeType] = symbolKey.value
+            if (tradeType === '1') {
+                store.dispatch('_trade/queryPositionPage', { tradeType }).then(res => {
+                    if (res.check() && res.data?.length) {
+                        const position = res.data.find(el => el.tradeType === parseInt(tradeType) && el.symbolId === parseInt(symbolId))
+                        if (position && position.crossLevelNum) {
+                            state.multipleVal = position.crossLevelNum
+                        }
+                    }
+                })
+            }
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 // state.volume = product.minVolume  不需要设置默认手数
                 state.volume = ''

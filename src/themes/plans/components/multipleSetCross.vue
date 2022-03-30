@@ -1,5 +1,5 @@
 <template>
-    <!-- 杠杆倍数设置 合约逐仓 -->
+    <!-- 杠杆倍数设置 合约全仓 -->
     <van-popup
         v-model:show='show'
         class='custom-popup leverage-popup'
@@ -67,7 +67,7 @@
 <script>
 import { computed, onMounted, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { updateCrossLevelNum } from '@/api/trade'
+import { updateCrossLevelNum, setCrossLevelNum } from '@/api/trade'
 import StepperComp from '@plans/components/stepper'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -156,8 +156,9 @@ export default {
             Promise.resolve().then(() => {
                 if (props.position) {
                     return savePosition(state.multipleValue)
+                } else {
+                    return saveCrossLevelNum(state.multipleValue)
                 }
-                return true
             }).then((result) => {
                 if (result) {
                     emit('update:multipleVal', state.multipleValue)
@@ -166,6 +167,24 @@ export default {
                 }
             })
         }
+
+        // 下单保存杠杆倍数
+        const saveCrossLevelNum = (val) => {
+            state.loading = true
+            return setCrossLevelNum({
+                tradeType: 1,
+                symbolId: props.product.symbolId,
+                crossLevelNum: val
+            }).then(res => {
+                if (res.check()) {
+                    return true
+                }
+                return false
+            }).finally(() => {
+                state.loading = false
+            })
+        }
+
         // 修改仓位杠杆倍数
         const savePosition = (val) => {
             state.loading = true
