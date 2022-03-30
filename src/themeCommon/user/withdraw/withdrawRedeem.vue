@@ -627,7 +627,6 @@ export default {
             }
             handleWithdraw(params).then(res => {
                 state.loading = false
-                state.fundPwdVis = false
                 // 保存用户扩展信息
                 keepCustomerExtend()
                 if (res.check()) {
@@ -636,7 +635,6 @@ export default {
                 }
             }).catch(err => {
                 state.loading = false
-                state.fundPwdVis = false
             })
         }
 
