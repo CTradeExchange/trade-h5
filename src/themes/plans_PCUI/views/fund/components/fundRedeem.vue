@@ -63,6 +63,7 @@
                 @click='submitHandler'
             >
                 <span>{{ fund.canRedemption === 1 ? $t('fundInfo.sell') : $t('fundInfo.disabledSell') }}</span>
+                <em v-if="lang === 'en-US'"></em>
                 <span v-if='fund.canRedemption === 1'>
                     {{ fund.shareTokenCode }}
                 </span>
@@ -95,6 +96,7 @@ import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal, toFixed } from '@/utils/calculation'
+import { getCookie } from '@/utils/util'
 
 const router = useRouter()
 const { t } = useI18n({ useScope: 'global' })
@@ -104,6 +106,8 @@ const props = defineProps({
         default: () => {}
     }
 })
+// 当前语言
+const lang = getCookie('lang')
 // 赎回成功后更新列表数据
 const updateRecord = inject('updateRecord')
 // 组件ref
@@ -254,6 +258,9 @@ const openRules = () => {
             &:hover {
                 opacity: 1;
             }
+        }
+        em {
+            margin-right: 4px;
         }
     }
     .handle-not {

@@ -71,7 +71,9 @@ provide('updateRecord', (value) => {
 // 选择基金产品
 const selectFund = item => {
     fund.value = item
-    fundDealKey.value = Date.now()
+    if (fund.value.fundId !== item.fundId) {
+        fundDealKey.value = Date.now()
+    }
     getFundValue(item.fundId).then(() => {
         fund.value = Object.assign({}, fund.value, fundInfo.value)
     })
