@@ -3,16 +3,16 @@
         <section>
             <div>
                 <ul class='nav-menu'>
-                    <li v-for='(item, index) in fundProductList' :key='index' class='item'>
+                    <li v-for='(item, index) in fundProductList' :key='index'>
                         <a href='javascript:;'>
-                            <currency-icon class='item-icon' :currency='item.shareTokenCode' />
-                            <div class='item-text'>
-                                <p class='item-tag'>
+                            <currency-icon class='currency' :currency='item.shareTokenCode' size='32px' />
+                            <div class='text'>
+                                <span class='tag'>
                                     CRYPTO
-                                </p>
-                                <p class='item-name'>
+                                </span>
+                                <span class='name'>
                                     {{ item.shareTokenCode }}
-                                </p>
+                                </span>
                             </div>
                         </a>
                     </li>
@@ -47,5 +47,34 @@ onMounted(() => {
     width: 256px;
     height: 100%;
     background: var(--contentColor);
+}
+.nav-menu {
+    li {
+        a {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-decoration: none;
+            border-radius: 8px;
+            height: 52px;
+            margin: 8px;
+            padding: 4px;
+            font-weight: 400;
+            &:hover {
+                background-color: var(--bgColor);
+            }
+        }
+        .currency {
+
+        }
+        .text {
+            .tag {
+
+            }
+            .name {
+
+            }
+        }
+    }
 }
 </style>
