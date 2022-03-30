@@ -56,6 +56,14 @@
         :product='product'
         @save='saveMultiple'
     />
+    <MultipleSetCross
+        v-if="product && product.tradeType===1 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-model='multipleSetVisible'
+        v-model:multipleVal='mVal'
+        :position='positionData'
+        :product='product'
+        @save='saveMultiple'
+    />
 </template>
 
 <script>
@@ -67,10 +75,12 @@ import DialogClosePosition from '@plans/components/dialogClosePosition'
 import DialogAdjustMargin from '@plans/components/dialogAdjustMargin'
 import DialogSLTP from '@plans/components/dialogSLTP'
 import MultipleSet from '@plans/components/multipleSet'
+import MultipleSetCross from '@plans/components/multipleSetCross'
 export default {
     components: {
         positionItem,
         MultipleSet,
+        MultipleSetCross,
         DialogClosePosition,
         DialogAdjustMargin,
         DialogSLTP

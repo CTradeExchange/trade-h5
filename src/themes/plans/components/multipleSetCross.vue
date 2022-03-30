@@ -67,7 +67,7 @@
 <script>
 import { computed, onMounted, reactive, toRefs } from 'vue'
 import { useStore } from 'vuex'
-import { updateCrossLevelNum, setCrossLevelNum } from '@/api/trade'
+import { setCrossLevelNum } from '@/api/trade'
 import StepperComp from '@plans/components/stepper'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -154,16 +154,16 @@ export default {
                 return false
             }
             Promise.resolve().then(() => {
-                if (props.position) {
-                    return savePosition(state.multipleValue)
-                } else {
-                    return saveCrossLevelNum(state.multipleValue)
-                }
+                return saveCrossLevelNum(state.multipleValue)
             }).then((result) => {
                 if (result) {
                     emit('update:multipleVal', state.multipleValue)
                     emit('update:modelValue', false)
                     emit('save', state.multipleValue)
+                    if (props.position) {
+                        Toast(t('trade.modifySuccess'))
+                        store.dispatch('_trade/queryPositionPage', { tradeType: props.position.tradeType })
+                    }
                 }
             })
         }
@@ -171,9 +171,10 @@ export default {
         // 下单保存杠杆倍数
         const saveCrossLevelNum = (val) => {
             state.loading = true
+            const symbolId = props.position ? props.position.symbolId : props.product.symbolId
             return setCrossLevelNum({
                 tradeType: 1,
-                symbolId: props.product.symbolId,
+                symbolId,
                 crossLevelNum: val
             }).then(res => {
                 if (res.check()) {
@@ -181,29 +182,6 @@ export default {
                 }
                 return false
             }).finally(() => {
-                state.loading = false
-            })
-        }
-
-        // 修改仓位杠杆倍数
-        const savePosition = (val) => {
-            state.loading = true
-            return updateCrossLevelNum({
-                positionId: props.position.positionId,
-                symbolId: props.product.symbolId,
-                orderId: props.position.orderId,
-                tradeType: props.position.tradeType,
-                accountDigits: accountInfo.value.digits,
-                accountId: accountInfo.value.accountId,
-                crossLevelNum: parseInt(val),
-            }).then(res => {
-                if (res.check()) {
-                    Toast(t('trade.modifySuccess'))
-                    store.dispatch('_trade/queryPositionPage', { tradeType: props.position.tradeType })
-                    return true
-                }
-                return false
-            }).finally(err => {
                 state.loading = false
             })
         }
@@ -227,7 +205,6 @@ export default {
             // multipleValue,
             multipleRange,
             warn,
-            savePosition,
             firstChange,
             saveClick,
         }

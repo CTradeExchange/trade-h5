@@ -65,7 +65,7 @@
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
-import { updateCrossLevelNum, setCrossLevelNum } from '@/api/trade'
+import { setCrossLevelNum } from '@/api/trade'
 import { Toast } from 'vant'
 import StepperComp from '@planspc/components/stepper'
 import { onBeforeMount, onMounted, computed, reactive, toRefs, onUnmounted, watch } from 'vue'
@@ -146,6 +146,7 @@ export default {
 
         const close = () => {
             show.value = false
+            state.position = null
         }
 
         const firstChange = () => {}
@@ -156,16 +157,17 @@ export default {
                 return false
             }
             Promise.resolve().then(() => {
-                if (state.position) {
-                    return savePosition(state.multipleValue)
-                } else {
-                    return saveCrossLevelNum(state.multipleValue)
-                }
+                return saveCrossLevelNum(state.multipleValue)
             }).then((result) => {
                 if (result) {
                     emit('update:multipleVal', state.multipleValue)
                     emit('update:modelValue', false)
                     emit('save', state.multipleValue)
+                    if (state.position) {
+                        Toast(t('trade.modifySuccess'))
+                        show.value = false
+                        store.dispatch('_trade/queryPositionPage', { tradeType: state.position.tradeType })
+                    }
                 }
             })
         }
@@ -173,9 +175,10 @@ export default {
         // 下单保存杠杆倍数
         const saveCrossLevelNum = (val) => {
             state.loading = true
+            const symbolId = state.position ? state.position.symbolId : props.product.symbolId
             return setCrossLevelNum({
                 tradeType: 1,
-                symbolId: props.product.symbolId,
+                symbolId,
                 crossLevelNum: val
             }).then(res => {
                 if (res.check()) {
@@ -183,30 +186,6 @@ export default {
                 }
                 return false
             }).finally(() => {
-                state.loading = false
-            })
-        }
-
-        // 修改仓位杠杆倍数
-        const savePosition = (val) => {
-            state.loading = true
-            return updateCrossLevelNum({
-                positionId: state.position.positionId,
-                symbolId: props.product.symbolId,
-                orderId: state.position.orderId,
-                tradeType: state.position.tradeType,
-                accountDigits: accountInfo.value.digits,
-                accountId: accountInfo.value.accountId,
-                crossLevelNum: parseInt(val),
-            }).then(res => {
-                if (res.check()) {
-                    Toast(t('trade.modifySuccess'))
-                    show.value = false
-                    store.dispatch('_trade/queryPositionPage', { tradeType: state.position.tradeType })
-                    return true
-                }
-                return false
-            }).finally(err => {
                 state.loading = false
             })
         }
@@ -235,7 +214,6 @@ export default {
             multipleList,
             multipleRange,
             warn,
-            savePosition,
             firstChange,
             saveClick,
             close
