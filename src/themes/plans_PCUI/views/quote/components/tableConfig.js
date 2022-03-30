@@ -112,7 +112,7 @@ export const getColumns = tradeType => {
                     }
                     <div>
                         <span class='name'>
-                            { row.symbolCode }
+                            { row.symbolName }
                         </span>
                     </div>
                 </div>)
@@ -175,7 +175,7 @@ export const getColumns = tradeType => {
                     }
                     <div>
                         <span class='name'>
-                            { row.symbolCode }
+                            { row.symbolName }
                         </span>
                     </div>
                 </div>)
@@ -238,7 +238,7 @@ export const getColumns = tradeType => {
                     }
                     <div>
                         <span class='name'>
-                            { row.symbolCode }
+                            { row.symbolName }
                         </span>
                     </div>
                 </div>)
@@ -310,7 +310,7 @@ export const getColumns = tradeType => {
                     }
                     <div>
                         <span class='name'>
-                            { row.symbolCode }
+                            { row.symbolName }
                         </span>
                         <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
                     </div>
