@@ -374,7 +374,11 @@ export default {
 
         // 是否显示企业开户的入口
         const companyCountryVisible = computed(() => {
-            return state.companyCountryList.includes(state.country.code)
+            if (state.openAccountType === 0) {
+                return state.companyCountryList.includes(state.country.code)
+            } else {
+                return store.state.countryList.find(el => el.code === state.country.code)
+            }
         })
 
         // 选择国家
