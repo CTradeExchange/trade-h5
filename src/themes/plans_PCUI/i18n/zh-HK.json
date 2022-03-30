@@ -281,8 +281,8 @@
 	"trade": {
 		"name": "名稱",
 		"newPrice": "最新價",
-		"changePrice": "漲跌額",
-		"changePercent": "漲跌幅",
+		"changePrice": "24H漲跌額",
+		"changePercent": "24H漲跌幅",
 		"sale": "賣出",
 		"advance": "預付款",
 		"advanceRatio": "預付款比率",
@@ -655,6 +655,10 @@
         "multilpSettingTip1": "過高的杠杆會增加倉位強平風險，請注意自身風險承受級別，合理設定杠杆",
         "saveSetting": "儲存設定",
 		"offer": "報價",
+        "etfTip": "ETF是一種特殊的開放式基金，投資者可以像買賣加密貨幣一樣，在現貨市場買賣ETF基金份額；同時，投資者也可向基金管理公司申購或贖回ETF份額",
+		"purchaseOrRedemptionTip": "申購/贖回：指投資者可向基金管理公司申購或者贖回基金份額代幣，點擊前往",
+		"purchaseOrRedemption": "申購/贖回",
+		"noFeature": "暫不支持該功能",
 		"material": "資料"
 	},
 	"contract": {
@@ -952,6 +956,9 @@
 		"redeem_tip2": "贖回價格釆用“未知價”原則，預計按T+2日當天確認份額結束后的淨值價格執行",
 		"redeem_tip3": "贖回流程結束，那你所贖回的基金代幣將以選取的接收資產匯入您的現貨錢包",
 		"assetIndexQquestionTip":"圖表為指數樣本所含資產在近24小時內的市場表現(報價單位:USDT)",
-		"assetQquestionTip":"圖表為基金投資組合所含資產在近24小時內的市場表現(報價單位:USDT)"
+		"assetQquestionTip":"圖表為基金投資組合所含資產在近24小時內的市場表現(報價單位:USDT)",
+		"fundTokenTradeTip": "基金代幣在上市的情況下，投資者可以如買賣加密貨幣一樣，在公開的現貨市場買賣基金份額，點擊前往",
+		"fundTokenTrade": "現貨交易",
+		"noTradeMarket": "暫無交易市場"
 	}
 }

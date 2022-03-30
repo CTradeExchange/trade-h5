@@ -20,7 +20,7 @@
 
         <!-- etf banner -->
         <a v-if='String(categoryType)===fundBannerPosition[1] && tradeType===fundBannerPosition[0]' class='etfBanner' href='javascript:;' @click='toETF'>
-            <img alt='' :src='locale==="en-US" ?"/images/ETF_banner2.png":"/images/ETF_banner.png"' />
+            <img alt='' :src='"/images/ETF_banner_"+locale+".png"' />
         </a>
 
         <div class='titleBar van-hairline--bottom'>

@@ -78,7 +78,9 @@
     "inputCountry": "請補充您所在國家資訊",
     "loginOrRegist": "登入 / 註冊",
     "loginSuccess": "登入成功",
-    "loginIng": "登入中..."
+    "loginIng": "登入中...",
+    "loginByPersonal": "個人登錄",
+    "loginByCorporate": "企業登錄"
   },
   "common": {
     "tip": "輔助說明",
@@ -212,8 +214,9 @@
     "sendCode": "傳送驗證碼",
     "smsCodeInput": "請匯入短信驗證碼",
     "emailCodeInput": "請匯入郵箱驗證碼",
-    "invite": "邀請"
-   
+    "invite": "邀請",
+    "remove": "删除",
+    "add": "添加"
   },
   "faceAuth": {
     "faceDetectTip": "請正對手機，保持光線充足",
@@ -241,7 +244,8 @@
     "tips0": "資料已成功提交",
     "tips1": "感謝您的配合，我們將儘快完成審核！",
     "tips2": "資料審核通過前您可以通過註冊時填寫的【手機號/郵箱+驗證碼】登入系統檢視審核進度",
-    "personValid": "身份驗證"
+    "personValid": "身份驗證",
+    "authToPC": "請在PC進行企業KYC認證"
   },
   "forgot": {
     "forgot": "找回登入密碼",
@@ -358,7 +362,8 @@
     "limit": "額度",
     "payType": "支付類別",
     "inputPIN": "請匯入pin碼",
-    "payRedeemSuccess": "充值申請已提交，系統處理中，請留意您的賬戶資金情況，以實際到賬金額為准。如未到賬，請聯繫客服。"
+    "payRedeemSuccess": "充值申請已提交，系統處理中，請留意您的賬戶資金情況，以實際到賬金額為准。如未到賬，請聯繫客服。",
+    "appendVisDesc": "請確保所填資料真實有效，否則可能導致充值失敗"
   },
   "fund": {
     "marginLevel": "保證金水平",

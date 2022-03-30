@@ -139,6 +139,9 @@
   "trade": {
     "advance": "預付款",
     "advanceRatio": "預付款比率",
+    "newPrice": "最新價",
+    "changePrice": "24H漲跌額",
+    "changePercent": "24H漲跌幅",
     "chart": "圖表",
     "closeOrder": "平倉",
     "contract": "交易品種屬性",
@@ -485,6 +488,9 @@
     "multilpRange": "杠杆範圍：",
     "multilpSettingTip1": "過高的杠杆會增加倉位強平風險，請注意自身風險承受級別，合理設定杠杆",
     "saveSetting": "儲存設定",
+    "noFeature": "暫不支持該功能",
+    "purchaseRedeemBtn": "申/贖",
+    "productEtfTip": "ETF是一種特殊的開放式基金，投資者可以像買賣加密貨幣一樣，在現貨市場買賣ETF基金份額；同時，投資者也可向基金管理公司申購或贖回ETF份額",
     "quantity": "數量(手)"
   },
   "bizType": {
