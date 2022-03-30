@@ -87,7 +87,6 @@ export default {
                 query
             })
         }
-        const btnBg = style.value.primary + '0D'
 
         // 跳转充值页面
         const toDesposit = () => {
@@ -140,7 +139,6 @@ export default {
             toInfo,
             tradeType,
             plus,
-            btnBg,
             toDesposit,
             toWithdraw,
             toLoan,
@@ -178,14 +176,23 @@ export default {
         display: flex;
         justify-content: space-between;
         .assets-item-btn{
+            position: relative;
             height: rem(56px);
             line-height: rem(56px);
             border-radius: rem(6px);
-            background: v-bind(btnBg);
             color: var(--primary);
             flex: 1;
             text-align: center;
             margin-right: rem(25px);
+            &::after{
+                content: '';
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                left: 0;
+                background: var(--primary);
+                opacity: 0.05;
+            }
             &:last-child{
                 margin-right: 0;
             }

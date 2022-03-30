@@ -378,10 +378,10 @@ const jumpUrl = (index) => {
     let linkList = {}
     if (lang === 'zh-CN') {
         linkList = {
-            trading: 'https://www.vitatoken.com/zh-CN/order?symbolId=364&tradeType=5',
-            fund: 'https://www.vitatoken.com/zh-CN/fund',
-            program: 'https://www.vitatoken.com/zh-CN/new1',
-            vip: 'https://www.vitatoken.com/zh-CN/vip',
+            trading: 'https://www.vitatoken.io/zh-CN/order?symbolId=364&tradeType=5',
+            fund: 'https://www.vitatoken.io/zh-CN/fund',
+            program: 'https://www.vitatoken.io/zh-CN/new1',
+            vip: 'https://www.vitatoken.io/zh-CN/vip',
             customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
             faqs: 'https://www.vitatoken.io/site/faqs',
             terms: 'https://www.vitatoken.io/site/terms-conditions',
@@ -390,10 +390,10 @@ const jumpUrl = (index) => {
         }
     } else {
         linkList = {
-            trading: 'https://www.vitatoken.com/en-US/order?symbolId=364&tradeType=5',
-            fund: 'https://www.vitatoken.com/en-US/fund',
-            program: 'https://www.vitatoken.com/en-US/new1',
-            vip: 'https://www.vitatoken.com/en-US/vip',
+            trading: 'https://www.vitatoken.io/en-US/order?symbolId=364&tradeType=5',
+            fund: 'https://www.vitatoken.io/en-US/fund',
+            program: 'https://www.vitatoken.io/en-US/new1',
+            vip: 'https://www.vitatoken.io/en-US/vip',
             customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
             faqs: 'https://www.vitatoken.io/site/faqs',
             terms: 'https://www.vitatoken.io/site/terms-conditions',
