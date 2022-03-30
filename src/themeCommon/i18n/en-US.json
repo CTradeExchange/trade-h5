@@ -937,6 +937,11 @@
         "think": "let me think again",
         "mainAccount": "I am the primary account holder/trader",
         "declaration": "Declaration",
-        "commited": "Your application for certification has been submitted successfully, please be patient and wait for the result of the examination"
+        "commited": "Your application for certification has been submitted successfully, please be patient and wait for the result of the examination",
+        "directorTips": "Certified Director's identificationFile and portraitPhoto",
+        "verifyTips": "verify's identificationFile and portraitPhoto",
+        "tradersTips": "traders's identificationFile and portraitPhoto",
+        "mainTradersTips": "Main Verify's identificationFile and portraitPhoto",
+        "infoList": "Before starting your enterprise verification, please prepare the following documents:"
     }
 }
