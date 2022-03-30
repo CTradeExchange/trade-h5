@@ -122,7 +122,9 @@ const switchAction = async () => {
     showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
     if (showBlock.value === 'chart') {
         await nextTick()
-        newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        if (chartPieDOM.value) {
+            newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        }
     }
 }
 
@@ -158,7 +160,9 @@ onMounted(async () => {
             return el
         })
         await nextTick()
-        newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        if (chartPieDOM.value) {
+            newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        }
     })
 
     // 单资产表现柱状图
@@ -175,7 +179,9 @@ onMounted(async () => {
             chartXData.push(el.xAxisName)
         })
         assetPerformanceList.value = data
-        newBarChart(chartBarDOM.value, [chartXData, chartYData], props)
+        if (chartBarDOM.value) {
+            newBarChart(chartBarDOM.value, [chartXData, chartYData], props)
+        }
     })
 })
 </script>
