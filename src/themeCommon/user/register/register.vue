@@ -35,6 +35,7 @@
                     <areaInput
                         v-model.trim='mobile'
                         v-model:zone='zone'
+                        :all-country='true'
                         clear
                         :placeholder='$t("register.phoneNo")'
                         :show-select='false'
