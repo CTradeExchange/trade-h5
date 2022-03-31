@@ -666,7 +666,7 @@
 		"fundType": "Fund Category",
 		"fundChart1": "Market Price vs Fund NAV",
 		"fundChart2": "Market Performance",
-        "fundChartTitle": "Fund rise % vs Index rise %",
+        "fundChartTitle": "Fund chg % vs Index chg %",
 		"realtimeInvestCompose": "Fund Composition",
 		"assets": "Asset",
 		"ranking": "Rank",
