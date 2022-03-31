@@ -191,7 +191,7 @@ export default {
         }
 
         onMounted(() => {
-            if (marginInfo?.value?.type === '2') {
+            if (marginInfo?.value?.type === '2' && !props.multipleVal) {
                 const val = multipleRange.value[0]
                 state.multipleValue = val
                 emit('update:multipleVal', val)

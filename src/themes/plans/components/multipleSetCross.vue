@@ -187,7 +187,7 @@ export default {
         }
 
         onMounted(() => {
-            if (marginInfo?.value?.type === '2') {
+            if (marginInfo?.value?.type === '2' && !props.multipleVal) {
                 emit('update:multipleVal', multipleRange.value[0])
             } else if (marginInfo?.value?.type === '3') {
                 const val = multipleList.value[0]

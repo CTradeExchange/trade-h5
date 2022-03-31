@@ -323,6 +323,16 @@ export default {
                 const accountIds = accountList.value?.filter(el => el.tradeType === Number(product.tradeType)).map(el => el.accountId)
 
                 if ([3, 5, 9].includes(product.tradeType)) queryAccountInfo()
+
+                if (product.tradeType === 1 && product.marginInfo?.type === '2') {
+                    // 默认显示20x杠杆，若后台设置的产品最大杠杆小于20x，则取最大杠杆；若后台设置最小杠杆大于20x，则取最小杠杆
+                    const [min, max] = product.marginInfo?.values?.split('-') || [1, 1]
+                    if (max < 20) {
+                        state.multipleVal = max
+                    } else if (min > 20) {
+                        state.multipleVal = min
+                    }
+                }
             })
         }
 

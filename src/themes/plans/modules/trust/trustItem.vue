@@ -9,6 +9,9 @@
                     {{ product.symbolName }}
                 </span>
                 <ETF v-if='curProduct.etf' />
+                <span v-if='product.crossLevelNum' class='crossLevelNum'>
+                    {{ product.crossLevelNum }}x
+                </span>
             </div>
 
             <div class='t-right'>
@@ -289,6 +292,18 @@ export default {
                 border-radius: rem(6px);
             }
         }
+    }
+    .crossLevelNum{
+        vertical-align: middle;
+        position: relative;
+        height: 16px;
+        line-height: 14px;
+        padding-left: 5px;
+        padding-right: 7px;
+        font-size: 12px;
+        color: var(--color);
+        border-radius: 3px;
+        border: 1px solid var(--color);
     }
     .directionCell {
         display: flex;
