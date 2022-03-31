@@ -149,7 +149,10 @@
             "3": "杠杆",
             "5": "现货",
             "9": "ABCC杠杆"
-        }
+        },
+        "zhCN": "Chinese Simplified",
+        "zhHK": "Chinese Traditional",
+        "enUS": "English"
     },
     "setting":{
         "save":"Save",

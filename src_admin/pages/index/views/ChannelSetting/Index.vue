@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='210px' :model='form' :rules='rules'>
+                <el-form ref='form' label-width='180px' :model='form' :rules='rules'>
                     <el-tabs v-model='optionName' type='border-card' @tab-click='changeTabs'>
                         <el-tab-pane class='tab' :label="$t('channelSetting.basicSetting')" name='first'>
                             <el-form-item
@@ -334,7 +334,7 @@
                                                 </template>
                                                 <div class='lang-wrap'>
                                                     <el-row v-for='(l, i) in lang' :key='i' align='middle' :gutter='20'>
-                                                        <el-col :offset='0' :span='2'>
+                                                        <el-col :offset='0' :span='3'>
                                                             <h4>{{ l.name }}</h4>
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
@@ -369,11 +369,11 @@
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
                         <el-tab-pane v-loading='fourthLoading' class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;'>
-                            <el-row :gutter='20' style='justify-content: center;'>
+                            <el-row :gutter='24' style='justify-content: flex-start;'>
                                 <el-col :span='3'>
                                     <el-form-item />
                                 </el-col>
-                                <el-col v-for='(val,key,index) in tradeTypesTemplate' :span='3'>
+                                <el-col v-for='(val,key,index) in tradeTypesTemplate' :key='index' :span='4'>
                                     <el-form-item label-width='0'>
                                         <p style='text-align: center;'>
                                             {{ $t('channelSetting.tradeTypes'+key) }}
@@ -381,13 +381,13 @@
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-row v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :gutter='20' style='justify-content: center;'>
+                            <el-row v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :key='outIndex' :gutter='24' style='justify-content: justify-content;'>
                                 <el-col :span='3'>
-                                    <el-form-item>
+                                    <p class='lang-label'>
                                         {{ outKey }}
-                                    </el-form-item>
+                                    </p>
                                 </el-col>
-                                <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :span='3'>
+                                <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :key='innerIndex' :span='4'>
                                     <el-form-item label-width='0' :prop='innerVal'>
                                         <el-input
                                             v-model='form.tradeTypesConfig[outKey][innerKey]'
@@ -523,12 +523,9 @@ export default {
                 isWallet: false,
                 paymentIconList: {}, // 支付通道图标列表
                 tradeTypesConfig: {
-                    'zh-CN': {
-
-                    },
-                    'en-US': {
-
-                    },
+                    'zh-CN': {},
+                    'en-US': {},
+                    'zh-HK': {}
                 }
             },
             tradeTypesTemplate: {},
@@ -637,6 +634,7 @@ export default {
                     // 根据获取到得玩法过滤回显得数据
                     const targetKeys = Object.keys(that.tradeTypesTemplate)
                     const langKeys = Object.keys(that.form.tradeTypesConfig)
+
                     langKeys.forEach(el => {
                         if (Object.keys(that.form.tradeTypesConfig[el]).length) {
                             // tradeTypesConfig中多于配置返回的玩法删除
@@ -682,10 +680,10 @@ export default {
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-                // debugger
+
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
-                that.form = Object.assign(that.form, content, { other })
+                that.form = Object.assign(content, that.form, { other })
 
                 if (that.form.googleAnalytics) { that.form.googleAnalytics = window.unzip(that.form.googleAnalytics) }
 
@@ -889,7 +887,7 @@ export default {
                         if (_formData.instructions) {
                             _formData.instructions = escape(_formData.instructions)
                         }
-                        // debugger
+
                         // const aa = this.$refs['editor'].getContent()
                         // _formData.instructions = aa
                         if (_formData.registList.length > 0) {
@@ -1318,6 +1316,10 @@ export default {
     }
 }
 #pane-fourth {
+    .lang-label {
+        line-height: 40px;
+        text-align: center;
+    }
     .el-form-item {
         display: block;
         .el-form-item__content {
