@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='110px' :model='form' :rules='rules'>
+                <el-form ref='form' label-width='210px' :model='form' :rules='rules'>
                     <el-tabs v-model='optionName' type='border-card' @tab-click='changeTabs'>
                         <el-tab-pane class='tab' :label="$t('channelSetting.basicSetting')" name='first'>
                             <el-form-item
@@ -245,6 +245,14 @@
                                     :width='800'
                                 />
                             </el-form-item>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice3')" prop='instructions'>
+                                <Tinymce
+                                    v-model='form.instructions_hk'
+                                    :height='120'
+                                    :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
+                                    :width='800'
+                                />
+                            </el-form-item>
                             <el-form-item :label="$t('channelSetting.worthMentioning')">
                                 <el-checkbox-group v-model='form.thirdLogin'>
                                     <el-checkbox label='google'>
@@ -367,7 +375,7 @@
                                 </el-col>
                                 <el-col v-for='(val,key,index) in tradeTypesTemplate' :span='3'>
                                     <el-form-item label-width='0'>
-                                        <p style='text-align:center;'>
+                                        <p style='text-align: center;'>
                                             {{ $t('channelSetting.tradeTypes'+key) }}
                                         </p>
                                     </el-form-item>
@@ -501,6 +509,7 @@ export default {
                 // registerBanner: '',
                 instructions_zh: '', // 开户须知
                 instructions_en: '', // 开户须知
+                instructions_hk: '',
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
@@ -1184,17 +1193,17 @@ export default {
 <style lang="scss" scoped>
 .m-setting {
     height: calc(100vh);
-        overflow-y: scroll;
+    overflow-y: scroll;
     .setting-header {
         padding: 20px;
         .btns {
             text-align: right;
         }
-         .toPages{
-            line-height: 40px;
+        .toPages {
             font-size: 14px;
+            line-height: 40px;
             cursor: pointer;
-            span{
+            span {
                 color: #2B70AE;
             }
         }
@@ -1202,14 +1211,14 @@ export default {
     .row {
         padding-bottom: 30px;
     }
-    .checkBox{
+    .checkBox {
         vertical-align: middle;
     }
-    .img-tip{
-        cursor: pointer;
+    .img-tip {
         width: 18px;
-        vertical-align: middle;
         margin-left: 10px;
+        vertical-align: middle;
+        cursor: pointer;
     }
     .tradeType-row {
         display: flex;
@@ -1224,7 +1233,7 @@ export default {
                 margin-bottom: 20px;
             }
         }
-        .notice{
+        .notice {
             color: #F00;
         }
     }
@@ -1269,13 +1278,13 @@ export default {
             }
         }
     }
-    .box-card{
-        .tip{
+    .box-card {
+        .tip {
             color: red;
         }
     }
-    .registerBanner{
-                .upload {
+    .registerBanner {
+        .upload {
             position: relative;
             display: flex;
             align-items: center;
@@ -1308,10 +1317,10 @@ export default {
         }
     }
 }
-#pane-fourth{
-    .el-form-item{
-        display:block;
-        .el-form-item__content{
+#pane-fourth {
+    .el-form-item {
+        display: block;
+        .el-form-item__content {
             margin-left: none;
         }
     }
