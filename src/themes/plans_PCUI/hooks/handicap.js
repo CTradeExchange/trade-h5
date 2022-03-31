@@ -39,15 +39,14 @@ export default function ({ showPending }) {
             }
 
             const maxValue = Math.max(...tempArr)
-            const minValue = Math.min(...tempArr)
 
-            const diff = maxValue - minValue
             // 计算买入报价长度
             if (result?.ask_deep.length > 0) {
                 const buyPendingList = deepClone(pendingList.value && pendingList.value.filter(item => Number(item.direction === 2)))
 
                 result.ask_deep.forEach(ask => {
-                    ask.width = diff === 0 ? 0 : (parseFloat(ask.volume_ask) - parseFloat(minValue)) / diff * 100
+                    // 盘口每一档量的长度 barLength = 当前档量/max(盘口所有档) *100%
+                    ask.width = maxValue === 0 ? 0 : parseFloat(ask.volume_ask) / maxValue * 100
                     ask.unitNum = 0
                     // 计算合并挂单数量
                     if (buyPendingList?.length > 0 && showPending) {
@@ -71,7 +70,8 @@ export default function ({ showPending }) {
             if (result?.bid_deep.length > 0) {
                 const sellPendingList = deepClone(pendingList.value && pendingList.value.filter(item => Number(item.direction === 1)))
                 result.bid_deep.forEach(bid => {
-                    bid.width = diff === 0 ? 0 : (parseFloat(bid.volume_bid) - parseFloat(minValue)) / diff * 100
+                    // 盘口每一档量的长度 barLength = 当前档量/max(盘口所有档) *100%
+                    bid.width = maxValue === 0 ? 0 : parseFloat(bid.volume_bid) / maxValue * 100
                     bid.unitNum = 0
                     // 计算合并挂单数量
                     if (sellPendingList?.length > 0 && showPending) {
