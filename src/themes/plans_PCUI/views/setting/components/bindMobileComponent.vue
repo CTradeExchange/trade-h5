@@ -13,7 +13,14 @@
         <Loading :show='loading' />
         <form class='form'>
             <div class='field'>
-                <areaInput v-model='mobile' v-model:zone='zoneText' clear :disabled='true' :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")' />
+                <areaInput
+                    v-model='mobile'
+                    v-model:zone='zoneText'
+                    :all-country='true'
+                    clear
+                    :disabled='true'
+                    :placeholder='type === "bind" ? $t("common.inputPhone"): $t("common.inputNewPhone")'
+                />
             </div>
 
             <div v-if='type === "change"' class='field'>
@@ -88,17 +95,22 @@ export default {
             checkCode: '',
             checkCodeOld: '',
             loading: false,
-            googleCode: ''
+            googleCode: '',
+            allCountryList: []
         })
 
-        store.dispatch('getCountryListByParentCode')
+        store.dispatch('getCountryListByParentCode').then(res => {
+            if (res.data.length > 0) {
+                state.allCountryList = res.data
+            }
+        })
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const countryList = computed(() => store.state.countryList)
         const customInfo = computed(() => store.state._user.customerInfo)
         const googleCodeVis = computed(() => customInfo.value.googleId > 0)
         const zoneText = computed(() => {
-            const countryObj = getArrayObj(countryList.value, 'code', customInfo.value.country)
+            const countryObj = getArrayObj(state.allCountryList, 'code', customInfo.value.country)
             if (countryObj) state.zone = countryObj.countryCode
             return countryObj.name + ' (' + countryObj.countryCode + ')'
         })

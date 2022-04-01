@@ -71,6 +71,7 @@ export default {
     },
     computed: {
         countryList () {
+            debugger
             if (this.allCountry) {
                 return this.allCountryList
             } else {
