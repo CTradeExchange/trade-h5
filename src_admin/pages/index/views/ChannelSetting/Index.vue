@@ -605,8 +605,6 @@ export default {
         await this.queryAccountGroupTradeList()
         await this.getPageConfig()
         await this.getPaymentArray()
-
-        console.log('asdasd', this.form)
     },
     methods: {
         changeTabs (val) {
@@ -635,23 +633,30 @@ export default {
                     const targetKeys = Object.keys(that.tradeTypesTemplate)
                     const langKeys = Object.keys(that.form.tradeTypesConfig)
 
-                    langKeys.forEach(el => {
-                        if (Object.keys(that.form.tradeTypesConfig[el]).length) {
+                    // 动态添加语言对应的玩法别名
+                    that.lang.forEach(el => {
+                        if (!langKeys.includes(el.val)) {
+                            that.form.tradeTypesConfig[el.val] = {}
+                        }
+                    })
+
+                    that.lang.forEach(el => {
+                        if (Object.keys(that.form.tradeTypesConfig[el.val]).length) {
                             // tradeTypesConfig中多于配置返回的玩法删除
-                            for (const key in that.form.tradeTypesConfig[el]) {
+                            for (const key in that.form.tradeTypesConfig[el.val]) {
                                 if (!targetKeys.includes(key)) {
-                                    delete that.form.tradeTypesConfig[el][key]
+                                    delete that.form.tradeTypesConfig[el.val][key]
                                 }
                             }
                             // tradeTypesConfig中没有的配置返回的玩法加上
-                            const tradeTypesConfigChildKeys = Object.keys(that.form.tradeTypesConfig[el])
+                            const tradeTypesConfigChildKeys = Object.keys(that.form.tradeTypesConfig[el.val])
                             targetKeys.forEach(item => {
                                 if (!tradeTypesConfigChildKeys.includes(item)) {
-                                    that.form.tradeTypesConfig[el][item] = ''
+                                    that.form.tradeTypesConfig[el.val][item] = ''
                                 }
                             })
                         } else {
-                            that.form.tradeTypesConfig[el] = JSON.parse(JSON.stringify(that.tradeTypesTemplate))
+                            that.form.tradeTypesConfig[el.val] = JSON.parse(JSON.stringify(that.tradeTypesTemplate))
                         }
                     })
                     this.fourthLoading = false
@@ -683,7 +688,7 @@ export default {
 
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
-                that.form = Object.assign(content, that.form, { other })
+                that.form = Object.assign(that.form, content, { other })
 
                 if (that.form.googleAnalytics) { that.form.googleAnalytics = window.unzip(that.form.googleAnalytics) }
 
