@@ -74,7 +74,7 @@ export default {
     },
     mounted () {
         // 初始化数据
-        this.initData()
+        // this.initData()
     },
     methods: {
         // 初始化数据
@@ -97,7 +97,29 @@ export default {
 
         // 设置存款数据
         setData (content) {
+            const that = this
             if (content.depositData) {
+                // 判断是否有新加语言
+                for (const key in content.depositData) {
+                    if (Object.hasOwnProperty.call(content.depositData, key)) {
+                        if (['already', 'default', 'not'].includes(key)) {
+                            const element = content.depositData[key]
+                            for (const el in element) {
+                                if (Object.hasOwnProperty.call(element, el)) {
+                                    const obj = element[el]
+                                    that.langList.forEach(lang => {
+                                        if (!obj.hasOwnProperty(lang.val)) {
+                                            obj[lang.val] = {
+                                                describe: ''
+                                            }
+                                        }
+                                    })
+                                }
+                            }
+                        }
+                    }
+                }
+
                 this.depositData = cloneDeep(content.depositData)
             }
         },
@@ -115,6 +137,7 @@ export default {
                     }
                 }
             })
+
             return depositData
         }
     }

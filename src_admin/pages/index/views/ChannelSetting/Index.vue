@@ -339,8 +339,8 @@
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
                                                             <div class='upload' @click='uploadFile(item,l)'>
-                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].imgUrl' class='img-wrap'>
-                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].imgUrl' />
+                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val]?.imgUrl' class='img-wrap'>
+                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val]?.imgUrl' />
                                                                 </div>
                                                                 <div v-else>
                                                                     <i class='el-icon-plus'></i>
@@ -605,6 +605,7 @@ export default {
         await this.queryAccountGroupTradeList()
         await this.getPageConfig()
         await this.getPaymentArray()
+        await this.$refs['amountSet'].initData()
     },
     methods: {
         changeTabs (val) {
@@ -763,12 +764,23 @@ export default {
                     if (that.pyamentList.length > 0) {
                         that.pyamentList.forEach(el => {
                             const uniqueKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
+                            console.log('that.form.paymentIconList====', that.form.paymentIconList)
+
                             if (isEmpty(that.form.paymentIconList[uniqueKey])) {
                                 that.form.paymentIconList[uniqueKey] = {}
                                 that.lang.forEach(lang => {
                                     that.form.paymentIconList[uniqueKey][lang.val] = {
                                         alias: '',
                                         imgUrl: ''
+                                    }
+                                })
+                                console.log('paymentIconList====', that.form.paymentIconList)
+                            } else {
+                                // 动态添加语言对应的玩法别名
+                                const langKeys = Object.keys(that.form.paymentIconList[uniqueKey])
+                                that.lang.forEach(el => {
+                                    if (!langKeys.includes(el.val)) {
+                                        that.form.paymentIconList[uniqueKey][el.val] = {}
                                     }
                                 })
                             }
@@ -949,6 +961,7 @@ export default {
                         }
 
                         // 设置存款数据
+
                         _formData.depositData = this.$refs['amountSet'].getData()
 
                         // _formData.paymentIconList = {}
@@ -971,6 +984,8 @@ export default {
                                 }
                             }
                         }
+                        // const aa = '{\"tradeTypeCurrencyList\":[{\"id\":\"5\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"5\",\"name\":\"现货\"},{\"id\":\"3\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"3\",\"name\":\"杠杆\"},{\"id\":\"1\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"1\",\"name\":\"合约全仓\"},{\"id\":\"2\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"2\",\"name\":\"合约逐仓\"}],\"thirdLogin\":[],\"registerTypes\":[],\"instructions_zh\":\"<p>dsaf</p>\",\"instructions_en\":\"<p>dga</p>\",\"instructions_hk\":\"\",\"googleAnalytics\":\"H4sIAAAAAAAAAwMAAAAAAAAAAAA=\",\"h5Address\":\"\",\"h5PreviewAddress\":\"\",\"defaultZone\":{\"id\":\"2\",\"name\":\"阿富汗\",\"name_tw\":\"阿富汗\",\"name_en\":\"Afghanistan\",\"country_code\":\"+93\",\"national_code\":\"AF\",\"code\":\"AF\",\"extend\":\"\",\"create_time\":\"1618881547731\",\"update_time\":\"1618881547731\",\"status\":\"1\",\"enable\":\"0\",\"sync_time\":\"1646881363\"},\"themeColor\":\"#2B70AE\",\"registList\":[{\"registCountry\":{\"id\":9999,\"isOther\":true,\"name\":\"全部\"},\"customerGroupId\":\"1\",\"plans\":[{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"现货\",\"id\":\"5\",\"tradeType\":\"5\",\"allCurrency\":\"USDT,BTC,ETH,ADA,AVAX,DOGE,EUR,USD,BNB,SOL,XRP6,LUNA,DOT,XRP,V10,qa001,XEC,qa002,cathytest\"},{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"杠杆\",\"id\":\"3\",\"tradeType\":\"3\",\"allCurrency\":\"USDT,BTC,ETH,USD\"},{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"合约全仓\",\"id\":\"1\",\"tradeType\":\"1\",\"allCurrency\":\"USDT\"},{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"合约逐仓\",\"id\":\"2\",\"tradeType\":\"2\",\"allCurrency\":\"USDT\"}]}],\"onlineService\":\"\",\"supportLanguage\":[{\"name\":\"中文\",\"val\":\"zh-CN\",\"isDefault\":true},{\"name\":\"English\",\"val\":\"en-US\"},{\"name\":\"中文繁体\",\"val\":\"zh-HK\"}],\"customerGroupId\":\"2\",\"registrable\":[{\"id\":\"2\",\"name\":\"阿富汗\",\"name_tw\":\"阿富汗\",\"name_en\":\"Afghanistan\",\"country_code\":\"+93\",\"national_code\":\"AF\",\"code\":\"AF\",\"extend\":\"\",\"create_time\":\"1618881547731\",\"update_time\":\"1618881547731\",\"status\":\"1\",\"enable\":\"0\",\"sync_time\":\"1646881363\"}],\"isWallet\":false,\"paymentIconList\":{\"mdpay_bank_0001201701100001\":{\"zh-CN\":{\"alias\":\"\",\"imgUrl\":\"\"},\"zh-HK\":{\"alias\":\"\",\"imgUrl\":\"\"},\"en-US\":{\"alias\":\"\",\"imgUrl\":\"\"}},\"micropay_bank_6966696699\":{\"zh-CN\":{\"alias\":\"\",\"imgUrl\":\"\"},\"zh-HK\":{\"alias\":\"\",\"imgUrl\":\"\"},\"en-US\":{\"alias\":\"\",\"imgUrl\":\"\"}},\"coinbridge_coinbridge_aabd8071bff64b969d23b8fa3f7ae481\":{\"zh-CN\":{\"alias\":\"\",\"imgUrl\":\"\"},\"zh-HK\":{\"alias\":\"\",\"imgUrl\":\"\"},\"en-US\":{\"alias\":\"\",\"imgUrl\":\"\"}}},\"tradeTypesConfig\":{\"zh-CN\":{\"1\":\"\",\"2\":\"\",\"3\":\"\",\"5\":\"\"},\"en-US\":{\"1\":\"\",\"2\":\"\",\"3\":\"\",\"5\":\"\"},\"zh-HK\":{\"1\":\"\",\"2\":\"\",\"3\":\"\",\"5\":\"\"}},\"other\":{},\"language\":{\"name\":\"中文\",\"val\":\"zh-CN\",\"isDefault\":true},\"depositData\":{\"default\":{\"1\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"2\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"3\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"4\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"5\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}}},\"not\":{\"1\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"2\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"3\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"4\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"5\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}}},\"already\":{\"1\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"2\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"3\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"4\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"5\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}}},\"isDefault\":false,\"isNot\":false,\"isAlready\":false},\"defaultPlans\":{\"1\":[{\"id\":\"5\",\"tradeType\":\"5\",\"name\":\"现货\"},{\"id\":\"3\",\"tradeType\":\"3\",\"name\":\"杠杆\"},{\"id\":\"1\",\"tradeType\":\"1\",\"name\":\"合约全仓\"},{\"id\":\"2\",\"tradeType\":\"2\",\"name\":\"合约逐仓\"}],\"2\":[{\"id\":\"5\",\"tradeType\":\"5\",\"name\":\"现货\"},{\"id\":\"3\",\"tradeType\":\"3\",\"name\":\"杠杆\"},{\"id\":\"1\",\"tradeType\":\"1\",\"name\":\"合约全仓\"},{\"id\":\"2\",\"tradeType\":\"2\",\"name\":\"合约逐仓\"}]}}'
+
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: that.pageId,
