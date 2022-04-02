@@ -1,9 +1,9 @@
 <template>
     <div class='realtimeInvestCompose'>
         <div class='width-limit'>
-            <h4 class='title'>
+            <h4 class='title switch-title'>
+                <span>{{ title || $t('fundInfo.realtimeInvestCompose') }}</span>
                 <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
-                {{ title || $t('fundInfo.realtimeInvestCompose') }}
             </h4>
             <div class='merge-case'>
                 <div v-if="showBlock==='list' || allShow" class='case-list'>
@@ -66,7 +66,7 @@
             </div>
 
             <div class='block'>
-                <h4 class='singleAssetTitle'>
+                <h4 class='title singleAssetTitle'>
                     <span>{{ $t('fundInfo.singleAsset') }}</span>
                     <el-tooltip
                         :content="symbolId ? $t('fundInfo.assetIndexQquestionTip') : $t('fundInfo.assetQquestionTip')"
@@ -122,7 +122,9 @@ const switchAction = async () => {
     showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
     if (showBlock.value === 'chart') {
         await nextTick()
-        newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        if (chartPieDOM.value) {
+            newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        }
     }
 }
 
@@ -158,7 +160,9 @@ onMounted(async () => {
             return el
         })
         await nextTick()
-        newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        if (chartPieDOM.value) {
+            newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        }
     })
 
     // 单资产表现柱状图
@@ -175,7 +179,9 @@ onMounted(async () => {
             chartXData.push(el.xAxisName)
         })
         assetPerformanceList.value = data
-        newBarChart(chartBarDOM.value, [chartXData, chartYData], props)
+        if (chartBarDOM.value) {
+            newBarChart(chartBarDOM.value, [chartXData, chartYData], props)
+        }
     })
 })
 </script>
@@ -183,10 +189,14 @@ onMounted(async () => {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .title{
+    display: flex;
+    align-items: center;
     font-size: rem(32px);
 }
+.switch-title {
+    justify-content: space-between;
+}
 .rightSwitch{
-    float: right;
     font-size: rem(28px);
     line-height: 1.5;
     cursor: pointer;

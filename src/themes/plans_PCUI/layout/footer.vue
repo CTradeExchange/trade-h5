@@ -1,5 +1,5 @@
 <template>
-    <div class='footer-nav'>
+    <div class='footer-nav' :class='[$route.name]'>
         <div class='auto-width'>
             <div class='footer-auto'>
                 <div class='nav-left'>

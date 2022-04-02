@@ -897,10 +897,30 @@
         "fundTrade": "申购/赎回",
 		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击转至",
 		"fundTokenTrade": "现货直接交易",
-		"noTradeMarket": "暂无交易市场",
-        "fundsAccount": "基金账户",
-        "fundsList": "基金列表"
+		"noTradeMarket": "暂无交易市场"
 	},
+    "funds": {
+        "fundShare": "基金份额",
+        "fundsAccount": "基金账户",
+        "fundsList": "基金列表",
+        "title": "基金金选",
+        "subTitle": "让我们帮助您更加轻松地进行加密资产投资",
+        "buyRedeem": "基金申购赎回",
+        "label1": "分散风险",
+        "label2": "动态调整",
+        "label3": "轻松投资",
+        "trend": "走势",
+        "offerTrend": "报价走势",
+        "applyStatus": "申购状态",
+        "canApply": "可申购",
+        "notApply": "不可申购",
+        "redeemStatus": "赎回状态",
+        "canRedeem": "可赎回",
+        "notRedeem": "不可赎回",
+        "tradeFee": "申赎手续费",
+        "deal": "买卖",
+        "cashDeal": "现货买卖"
+    },
     "home": {
         "quick": {
             "title": "帮助所有人轻松参与加密货币市场",

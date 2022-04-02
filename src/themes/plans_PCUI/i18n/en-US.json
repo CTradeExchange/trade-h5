@@ -896,6 +896,16 @@
 		"fundTokenTrade": "Buy / Sell in Spots Market",
 		"noTradeMarket": "No trading market"
 	},
+    "funds": {
+        "fundShare": "Fund Share",
+        "fundsAccount": "FUNDS ACCOUNT",
+        "fundsList": "FUNDS LIST",
+        "title": "Fund Picks",
+        "subTitle": "Let us help you invest in crypto assets more easily",
+        "label1": "Diversify risk",
+        "label2": "Dynamic adjustment",
+        "label3": "Easy investment"
+    },
     "home": {
         "quick": {
             "title": "We make your cryptocurrency journey easier",

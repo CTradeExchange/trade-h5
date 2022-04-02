@@ -95,6 +95,7 @@ const fundInformation = defineAsyncComponent({
                 }
                 .currencyIcon {
                     width: 32px;
+                    height: 32px;
                 }
             }
             .merge-case {
