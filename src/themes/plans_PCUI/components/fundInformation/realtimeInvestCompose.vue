@@ -4,7 +4,11 @@
             <div class='block'>
                 <h4 class='title switch-title'>
                     <span>{{ title || $t('fundInfo.realtimeInvestCompose') }}</span>
-                    <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
+                    <span v-if='!allShow && showSwitch' class='rightSwitch icon_chouti1' @click='switchAction'></span>
+                    <div v-if='!showSwitch' class='more-tabs'>
+                        <img :class="['icon', { 'active': showBlock === 'chart' }]" src='../../images/chart-icon2.png' @click="switchAction('chart')" />
+                        <img :class="['icon', { 'active': showBlock === 'list' }]" src='../../images/chart-icon1.png' @click="switchAction('list')" />
+                    </div>
                 </h4>
                 <div class='merge-case'>
                     <div v-if="showBlock==='list' || allShow" class='case-list'>
@@ -114,14 +118,23 @@ const props = defineProps({
     rotate: {
         type: Number,
         default: 90
+    },
+    // 是否显示切换按钮
+    showSwitch: {
+        type: Boolean,
+        default: true
     }
 })
 
 // 显示数据列表还是显示环形图
 const showBlock = ref('chart')
 // 切换数据列表和环形图的显示
-const switchAction = async () => {
-    showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
+const switchAction = async (value) => {
+    if (value) {
+        showBlock.value = value
+    } else {
+        showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
+    }
     if (showBlock.value === 'chart') {
         await nextTick()
         if (chartPieDOM.value) {
@@ -197,6 +210,22 @@ onMounted(async () => {
 }
 .switch-title {
     justify-content: space-between;
+    .more-tabs {
+        .icon {
+            width: 36px;
+            height: 36px;
+            padding: 6px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            &.active {
+                background: var(--lineColor);
+            }
+            &:hover {
+                background: var(--lineColor);
+            }
+        }
+    }
 }
 .rightSwitch{
     font-size: rem(28px);

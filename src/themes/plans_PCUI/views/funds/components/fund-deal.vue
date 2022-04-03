@@ -82,7 +82,8 @@ const switchTab = value => {
             border: 1px solid var(--primary);
         }
         i {
-            font-size: 48px;
+            margin-top: -4px;
+            font-size: 40px;
         }
         span {
             margin-top: 8px;

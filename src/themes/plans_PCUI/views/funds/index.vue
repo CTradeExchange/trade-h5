@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, provide } from 'vue'
+import { ref, onMounted, onUnmounted, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { useFund } from './hooks.js'
@@ -97,6 +97,7 @@ provide('selectFund', selectFund)
 provide('changeShowModel', changeShowModel)
 
 onMounted(() => {
+    document.body.style.overflow = 'hidden'
     // 有基金id默认显示基金详情模块
     if (fundId.value) {
         showModel.value = 'fundDetail'
@@ -107,6 +108,9 @@ onMounted(() => {
     if (customerInfo.value) {
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
     }
+})
+onUnmounted(() => {
+    document.body.style.overflow = 'visible'
 })
 </script>
 
@@ -128,7 +132,7 @@ onMounted(() => {
 }
 .page-main {
     flex: 1;
-    padding: 16px;
+    padding: 16px 32px;
     overflow-y: auto;
 }
 .page-module {

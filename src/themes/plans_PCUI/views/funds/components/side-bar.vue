@@ -20,7 +20,7 @@
                 </a>
             </div>
             <p class='nav-sub-title'>
-                Investment Funds
+                Fund-Token Balance
             </p>
             <ul class='nav-assets'>
                 <li v-for='(item, index) in fundAccounts' :key='index'>
@@ -205,7 +205,7 @@ const showTransRecords = () => {
             .total {
                 line-height: 1.2;
                 text-align: right;
-                font-size: 10px;
+                font-size: 12px;
                 color: var(--normalColor);
             }
         }

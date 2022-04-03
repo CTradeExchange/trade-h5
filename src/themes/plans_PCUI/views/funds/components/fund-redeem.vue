@@ -32,6 +32,9 @@
                     :placeholder="$t('fundInfo.redeemAssets')"
                     @change='onSelect'
                 >
+                    <template #prefix>
+                        <CurrencyIcon :currency='activeCurrency' :size='24' />
+                    </template>
                     <el-option
                         v-for='(item, index) in selectActions'
                         :key='index'
@@ -208,7 +211,7 @@ const openRules = () => {
             .label {
                 display: inline-flex;
                 align-items: center;
-                width: 100px;
+                width: 120px;
                 height: 100%;
                 padding: 0 12px;
                 .name {
@@ -225,7 +228,13 @@ const openRules = () => {
         }
         &:deep {
             .el-select {
-                width: 100px;
+                width: 120px;
+                .el-input__inner {
+                    padding-left: 40px !important;
+                }
+                .currencyIcon {
+                    margin-left: 5px;
+                }
             }
             .el-input {
                 flex: 1;

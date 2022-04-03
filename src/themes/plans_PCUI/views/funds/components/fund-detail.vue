@@ -15,7 +15,7 @@
         </div>
         <!-- 投资组件 -->
         <div class='fund-chart'>
-            <realtimeInvestCompose />
+            <realtimeInvestCompose :show-switch='false' />
         </div>
     </div>
 </template>
