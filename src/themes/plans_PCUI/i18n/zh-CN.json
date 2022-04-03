@@ -32,7 +32,8 @@
 		"startTime": "开始时间",
 		"endTime": "结束时间",
         "languageAreas": "语言和地区",
-        "SelectLanguageAreas": "选择语言和地区"
+        "SelectLanguageAreas": "选择语言和地区",
+        "records": "记录"
 	},
 	"c": {
 		"login": "登录",
@@ -903,12 +904,9 @@
         "fundShare": "基金份额",
         "fundsAccount": "基金账户",
         "fundsList": "基金列表",
-        "title": "基金金选",
+        "title": "基金精选",
         "subTitle": "让我们帮助您更加轻松地进行加密资产投资",
         "buyRedeem": "基金申购赎回",
-        "label1": "分散风险",
-        "label2": "动态调整",
-        "label3": "轻松投资",
         "trend": "走势",
         "offerTrend": "报价走势",
         "applyStatus": "申购状态",
@@ -919,6 +917,7 @@
         "notRedeem": "不可赎回",
         "tradeFee": "申赎手续费",
         "deal": "买卖",
+        "spot": "现货",
         "cashDeal": "现货买卖"
     },
     "home": {

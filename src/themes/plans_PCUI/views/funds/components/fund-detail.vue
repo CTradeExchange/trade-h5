@@ -4,18 +4,18 @@
             <div class='fund-left'>
                 <!-- 基金信息 -->
                 <fund-info :fund='fund' />
-                <!-- 市场表现 -->
-                <div class='fund-chart'>
-                    <performance />
-                </div>
-                <!-- 投资组件 -->
-                <div class='fund-chart'>
-                    <realtimeInvestCompose />
-                </div>
             </div>
             <div class='fund-right'>
                 <fund-deal :fund='fund' />
             </div>
+        </div>
+        <!-- 市场表现 -->
+        <div class='fund-chart'>
+            <performance />
+        </div>
+        <!-- 投资组件 -->
+        <div class='fund-chart'>
+            <realtimeInvestCompose />
         </div>
     </div>
 </template>
@@ -51,8 +51,8 @@ watchEffect(() => {
 
 <style lang='scss' scoped>
 .fund-detail {
-    display: flex;
-    justify-content: center;
+    max-width: 800px;
+    margin: 0 auto;
     padding: 32px 0 64px;
 }
 .fund-block {
@@ -68,9 +68,16 @@ watchEffect(() => {
     width: 392px;
 }
 .fund-chart {
-    margin-top: 30px;
     &:deep {
+        .block {
+            margin-top: 30px;
+            padding: 30px;
+            background: var(--contentColor);
+            box-shadow: 3px 3px 20px rgb(0 0 0 / 9%);
+        }
         .title {
+            margin-top: 0;
+            padding-top: 0;
             font-size: 28px;
         }
     }

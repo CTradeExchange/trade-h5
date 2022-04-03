@@ -424,7 +424,7 @@ const routes = [
                 children: h5Children
             },
             {
-                path: 'funds',
+                path: 'fund2',
                 name: 'Funds',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
                 meta: {

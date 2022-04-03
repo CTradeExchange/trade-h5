@@ -63,7 +63,7 @@
                 @click='submitHandler'
             >
                 <span>{{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}</span>
-                <em v-if="lang === 'en-US'"></em>
+                <em></em>
                 <span v-if='fund.canPurchase === 1'>
                     {{ fund.shareTokenCode }}
                 </span>

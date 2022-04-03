@@ -1,12 +1,14 @@
 <template>
     <div class='fund-list'>
         <el-table :cell-style="{ background:'none' }" :data='fundProductList'>
-            <el-table-column :label="$t('fundInfo.fundName')" :min-width='minWidth' prop='fundName' />
-            <el-table-column :label="$t('fundInfo.fundIcon')" :min-width='minWidth'>
-                <template #default='scope'>
-                    <currency-icon class='currency' :currency='scope.row.shareTokenCode' size='20px' />
-                    <span>{{ scope.row.shareTokenCode }}</span>
-                </template>
+            <el-table-column>
+                <el-table-column :label="$t('fundInfo.fundName')" :min-width='minWidth' prop='fundName' />
+                <el-table-column :label="$t('fundInfo.fundIcon')" :min-width='minWidth'>
+                    <template #default='scope'>
+                        <currency-icon class='currency' :currency='scope.row.shareTokenCode' size='20px' />
+                        <span>{{ scope.row.shareTokenCode }}</span>
+                    </template>
+                </el-table-column>
             </el-table-column>
             <!-- 基金申购赎回 -->
             <el-table-column align='center' :label="$t('funds.buyRedeem')">
@@ -21,7 +23,7 @@
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.realtimeJZ')" prop='netValue' />
                 <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='marketPriceChangeQuote' />
-                <el-table-column :label="$t('funds.applyStatus')" :min-width='minWidth'>
+                <el-table-column :label="$t('funds.applyStatus')" :min-width='120'>
                     <template #default='scope'>
                         <span v-if='scope.row.canPurchase === 1'>
                             {{ $t('funds.canApply') }}
@@ -31,7 +33,7 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('funds.redeemStatus')" :min-width='minWidth'>
+                <el-table-column :label="$t('funds.redeemStatus')" :min-width='120'>
                     <template #default='scope'>
                         <span v-if='scope.row.canRedemption === 1'>
                             {{ $t('funds.canRedeem') }}
@@ -41,7 +43,7 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.operating')" :min-width='minWidth'>
+                <el-table-column :label="$t('trade.operating')" :min-width='160'>
                     <template #default='scope'>
                         <div class='handle'>
                             <span @click="goDeal(scope.row.fundId, 'apply')">
@@ -56,7 +58,7 @@
             </el-table-column>
             <!-- 现货买卖 -->
             <el-table-column align='center' :label="$t('funds.cashDeal')">
-                <el-table-column :label="$t('funds.offerTrend')" :min-width='minWidth'>
+                <el-table-column :label="$t('funds.trend')" :min-width='minWidth'>
                     <template #default='scope'>
                         <kline-svg
                             :data='klineData'
@@ -186,8 +188,8 @@ onMounted(() => {
     }
     thead {
         tr {
-            font-size: 12px;
-            color: var(--minorColor);
+            font-size: 13px;
+            color: var(--color);
             background: transparent;
             th {
                 font-weight: normal;

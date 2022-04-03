@@ -14,24 +14,24 @@
             <el-table-column :label="$t('fundInfo.shareCurrency')" :min-width='100' prop='currencyShares' />
             <el-table-column :label="$t('fundInfo.redeemShare')" :min-width='minWidth'>
                 <template #default='scope'>
-                    <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
+                    <span>{{ scope.row.shares }} {{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
             <el-table-column v-if='params.sharesStatus === 0' :label="$t('fundInfo.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
             <template v-if='params.sharesStatus === 1'>
                 <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth' prop='sharesNet'>
                     <template #default='scope'>
-                        <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
+                        <span>{{ scope.row.sharesNet }} {{ scope.row.currencyNet }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.redeemFee')" :min-width='minWidth' prop='fees'>
                     <template #default='scope'>
-                        <span>{{ scope.row.fees }}{{ scope.row.currencyRedeem }}</span>
+                        <span>{{ scope.row.fees }} {{ scope.row.currencyRedeem }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.redeemMoney')" :min-width='minWidth' prop='amountRedeem'>
                     <template #default='scope'>
-                        <span>{{ scope.row.amountRedeem }}{{ scope.row.currencyRedeem }}</span>
+                        <span>{{ scope.row.amountRedeem }} {{ scope.row.currencyRedeem }}</span>
                     </template>
                 </el-table-column>
             </template>

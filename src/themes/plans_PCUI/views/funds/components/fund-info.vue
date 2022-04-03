@@ -7,7 +7,10 @@
                     {{ fund.fundType }}
                 </span>
                 <span class='name'>
-                    {{ fund.shareTokenCode }}
+                    {{ fund.fundName }}
+                </span>
+                <span class='by'>
+                    By <span>VITATOKEN</span> Capital
                 </span>
             </div>
         </div>
@@ -20,22 +23,22 @@
         <div class='info-block'>
             <div class='info-row'>
                 <div class='col'>
-                    <span>{{ $t('fundInfo.realtimeJZ') }}</span>
-                    <strong>{{ fund.netValue }}</strong>
+                    <span>{{ $t('fundInfo.fundCreateTime') }}</span>
+                    <strong>{{ fund.upDate }}</strong>
                 </div>
                 <div class='col'>
-                    <span>{{ $t('trade.offer') }}</span>
-                    <strong>{{ fund.marketPrice }}</strong>
+                    <span>{{ $t('fundInfo.realtimeJZ') }}</span>
+                    <strong>{{ toFixed(fund.netValue) }}</strong>
                 </div>
             </div>
             <div class='info-row'>
                 <div class='col'>
-                    <span>{{ $t('funds.fundShare') }}</span>
-                    <strong>{{ fund.newShare }}</strong>
+                    <span>{{ $t('trade.offer') }}</span>
+                    <strong>{{ toFixed(fund.marketPrice) }}</strong>
                 </div>
                 <div class='col'>
-                    <span>{{ $t('fundInfo.fundCreateTime') }}</span>
-                    <strong>{{ fund.upDate }}</strong>
+                    <span>{{ $t('funds.fundShare') }}</span>
+                    <strong>{{ toFixed(fund.newShare) }}</strong>
                 </div>
             </div>
         </div>
@@ -44,6 +47,7 @@
 
 <script setup>
 import { defineProps } from 'vue'
+import { toFixed } from '@/utils/calculation.js'
 import currencyIcon from '@/components/currencyIcon.vue'
 
 defineProps({
@@ -64,17 +68,26 @@ defineProps({
         .text {
             display: inline-flex;
             flex-direction: column;
-            padding-left: 20px;
+            padding-left: 28px;
             .tag {
                 font-size: 14px;
                 font-weight: 300;
-                color: #676767;
+                color: var(--normalColor);
             }
             .name {
+                margin-bottom: 5px;
                 letter-spacing: .15px;
                 font-size: 24px;
                 font-weight: 700;
-                color: #000;
+                color: var(--mainColor);
+            }
+            .by {
+                font-size: 16px;
+                font-weight: 600;
+                color: var(--mainColor);
+                span {
+                    color: #FCD535;
+                }
             }
         }
     }
@@ -83,38 +96,35 @@ defineProps({
         line-height: 48px;
         font-size: 40px;
         font-weight: 700;
-        color: #000;
+        color: var(--mainColor);
     }
     .info-introduction {
         line-height: 28px;
         font-size: 20px;
         font-weight: 400;
-        color: #676767;
+        color: var(--normalColor);
     }
     .info-block {
         margin-top: 32px;
     }
     .info-row {
         display: flex;
-        justify-content: space-between;
         .col {
             display: inline-flex;
             flex-direction: column;
+            flex: 1;
             margin-right: 16px;
             margin-bottom: 16px;
             span {
                 letter-spacing: 1px;
                 font-size: 14px;
                 font-weight: 300;
-                color: #676767;
+                color: var(--normalColor);
             }
             strong {
                 font-size: 28px;
                 font-weight: 700;
-                color: #000;
-            }
-            &:last-of-type {
-                text-align: right;
+                color: var(--mainColor);
             }
         }
     }

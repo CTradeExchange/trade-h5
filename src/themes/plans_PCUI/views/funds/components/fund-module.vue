@@ -3,6 +3,9 @@
         <h2 class='title'>
             {{ $t('funds.title') }}
         </h2>
+        <p class='by'>
+            By <span>VITATOKEN</span> Capital
+        </p>
         <p class='subTitle'>
             {{ $t('funds.subTitle') }}
         </p>
@@ -44,14 +47,23 @@ const fundModel = ref('card')
         font-size: 40px;
         font-weight: 700;
         letter-spacing: .15px;
-        color: #000;
+        color: var(--mainColor);
+    }
+    .by {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--mainColor);
+        span {
+            color: #FCD535;
+        }
     }
     .subTitle {
         text-align: center;
         margin: 16px 0;
         font-size: 16px;
         font-weight: 400;
-        color: #000;
+        color: var(--mainColor);
     }
 }
 .fund-tabs {
@@ -61,20 +73,24 @@ const fundModel = ref('card')
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        width: 72px;
-        height: 75px;
+        width: 64px;
+        height: 64px;
         line-height: 1;
-        margin: 16px 8px;
+        margin: 16px;
         font-size: 40px;
-        color: #000;
+        color: var(--mainColor);
+        background: var(--contentColor);
         border-radius: 15px;
+        box-shadow: 3px 3px 20px rgb(0 0 0 / 9%);
         transition: all .2s ease-in-out;
         cursor: pointer;
         &.active {
-            background: var(--contentColor);
+            color: var(--primary);
+            border: 1px solid var(--primary);
         }
         &:hover {
-            background: var(--contentColor);
+            color: var(--primary);
+            border: 1px solid var(--primary);
             transform: scale(1.05);
         }
     }

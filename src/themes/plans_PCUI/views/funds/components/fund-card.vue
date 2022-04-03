@@ -1,13 +1,13 @@
 <template>
     <div class='card' @click='onCard'>
         <div class='card-header'>
-            <currency-icon class='currency' :currency='fund.shareTokenCode' size='42px' />
+            <currency-icon class='currency' :currency='fund.shareTokenCode' size='64px' />
             <div class='text'>
-                <span class='tag'>
+                <span class='key'>
                     {{ fund.fundType }}
                 </span>
-                <span class='name'>
-                    {{ fund.shareTokenCode }}
+                <span class='value'>
+                    {{ fund.fundName }}
                 </span>
             </div>
             <div class='row'>
@@ -15,7 +15,7 @@
                     {{ $t('fundInfo.realtimeJZ') }}
                 </span>
                 <span class='value'>
-                    {{ fund.netValue }}
+                    {{ toFixed(fund.netValue) }}
                 </span>
             </div>
             <div class='row'>
@@ -23,7 +23,7 @@
                     {{ $t('trade.priceLabel') }}
                 </span>
                 <span class='value'>
-                    {{ fund.marketPrice }}
+                    {{ toFixed(fund.marketPrice) }}
                 </span>
             </div>
         </div>
@@ -35,9 +35,7 @@
             />
         </div>
         <div class='card-lable'>
-            <span>{{ $t('funds.label1') }}</span>
-            <span>{{ $t('funds.label2') }}</span>
-            <span>{{ $t('funds.label3') }}</span>
+            Invest in the top 10 cryptocurrencies
         </div>
     </div>
 </template>
@@ -45,6 +43,7 @@
 <script setup>
 import { onMounted, ref, defineProps, inject } from 'vue'
 import { marketPerformance } from '@/api/trade'
+import { toFixed } from '@/utils/calculation.js'
 import currencyIcon from '@/components/currencyIcon.vue'
 import klineSvg from '@planspc/components/klineSvg.vue'
 
@@ -104,11 +103,11 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 600px;
+    width: 640px;
     height: 300px;
-    padding: 58px 32px;
+    padding: 48px;
     margin: 16px;
-    background: #fff;
+    background: var(--contentColor);
     border-radius: 20px;
     box-shadow: 3px 3px 20px rgb(0 0 0 / 9%);
     transition: all .2s ease-in-out;
@@ -123,40 +122,29 @@ onMounted(() => {
     .currency {
         margin-right: 18px;
     }
-    .text {
-        flex: 1;
+    .text, .row {
         display: inline-flex;
         flex-direction: column;
         justify-content: center;
-        .tag {
+        .key {
             line-height: 18px;
             letter-spacing: .5px;
             font-size: 12px;
-            color: #676767;
-        }
-        .name {
-            line-height: 20px;
-            font-size: 20px;
-            font-weight: 700;
-            color: #000;
-        }
-    }
-    .row {
-        display: inline-flex;
-        flex-direction: column;
-        justify-content: center;
-        margin-left: 20px;
-        .key {
-            line-height: 18px;
-            font-size: 12px;
-            color: #676767;
+            color: var(--normalColor);
         }
         .value {
-            line-height: 20px;
-            font-size: 20px;
+            line-height: 36px;
+            font-size: 30px;
             font-weight: 700;
-            color: #000;
+            color: var(--mainColor);
         }
+    }
+    .text {
+        flex: 1;
+    }
+    .row {
+        text-align: right;
+        margin-left: 20px;
     }
 }
 .card-kline {

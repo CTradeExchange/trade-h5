@@ -32,7 +32,8 @@
         "startTime": "Start Time",
         "endTime": "End Time",
         "languageAreas": "Language and Region",
-        "SelectLanguageAreas": "Choose a language and region"
+        "SelectLanguageAreas": "Choose a language and region",
+        "records": "Records"
     },
     "c": {
         "login": "Login",
@@ -902,9 +903,16 @@
         "fundsList": "FUNDS LIST",
         "title": "Fund Picks",
         "subTitle": "Let us help you invest in crypto assets more easily",
-        "label1": "Diversify risk",
-        "label2": "Dynamic adjustment",
-        "label3": "Easy investment"
+        "trend": "Trend",
+        "applyStatus": "purchase status",
+        "canApply": "Yes",
+        "notApply": "No",
+        "redeemStatus": "redemption status",
+        "canRedeem": "Yes",
+        "notRedeem": "No",
+        "deal": "Buy/Sell",
+        "spot": "Spot",
+        "cashDeal": "Spot"
     },
     "home": {
         "quick": {
