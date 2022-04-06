@@ -901,7 +901,8 @@
 	},
     "home": {
         "quick": {
-            "title": "帮助所有人轻松参与加密货币市场",
+            "title": "讓財富更自由",
+            "describe": "轻松投资加密货币基金，30种主流现货",
             "emailOrPhone": "邮箱/电话"
         },
         "download": {
