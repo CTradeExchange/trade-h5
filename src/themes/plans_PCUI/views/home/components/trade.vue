@@ -1,143 +1,118 @@
 <template>
-    <div class='trade-module auto-width'>
-        <!-- 玩法选项 -->
-        <div class='play-tabs'>
-            <ul>
-                <li
-                    v-for='item in plansList'
-                    :key='item.tradeType'
-                    :class="{ 'active': Number(item.tradeType) === tradeType }"
-                    @click='switchPlan(Number(item.tradeType))'
-                >
-                    <span>{{ $t('tradeType.' + item.tradeType) }}</span>
-                </li>
-            </ul>
-        </div>
-        <!-- 分类选项 -->
-        <div class='category-tabs'>
-            <ul>
-                <li
-                    v-for='(item, index) in categoryList'
-                    :key='index'
-                    :class="{ 'active': index === categoryType }"
-                    @click='switchCategory(index)'
-                >
-                    <span>{{ item.title }}</span>
-                </li>
-            </ul>
-        </div>
-        <!-- 产品列表 -->
-        <div class='product-module'>
-            <ul class='header-block'>
-                <li>
-                    <span>{{ $t('trade.name') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('trade.newPrice') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('trade.changePrice') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('trade.changePercent') }}</span>
-                </li>
-                <li>
-                    <span>{{ $t('c.handle') }}</span>
-                </li>
-            </ul>
-            <ul class='product-list'>
-                <li v-for='item in filterProductList' :key='item.symbolKey' @click='toOrder(item)'>
-                    <div>
-                        <span>{{ item.symbolName }}</span>
-                    </div>
-                    <div>
-                        <span>
-                            {{ item.cur_price || '--' }}
-                        </span>
-                    </div>
-                    <div>
-                        <span>
-                            {{ item.upDownAmount || '--' }}
-                        </span>
-                    </div>
-                    <div>
-                        <span :class='item.upDownColor'>
-                            {{ item.upDownWidth || '--' }}
-                        </span>
-                    </div>
-                    <div class='handle'>
-                        <button class='buy'>
-                            {{ $t('trade.buy') }}
-                        </button>
-                        <button class='sale'>
-                            {{ $t('trade.sell') }}
-                        </button>
-                    </div>
-                </li>
-            </ul>
-            <div class='view-more'>
-                <a href='javascript:;' @click='examineMore'>
+    <div class='fullWidth'>
+        <div class='trade-module auto-width'>
+            <div class='trade-header'>
+                <strong class='title'>
+                    {{ $t('home.marketTrend') }}
+                </strong>
+                <a class='more' href='javascript:;' @click='examineMore'>
                     <span>{{ $t('examineMore') }}</span>
                     <i class='el-icon-arrow-right'></i>
                 </a>
+            </div>
+            <!-- 产品列表 -->
+            <div class='product-module'>
+                <ul class='header-block'>
+                    <li>
+                        <span>{{ $t('trade.name') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('trade.newPrice') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('trade.changePrice') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('trade.changePercent') }}</span>
+                    </li>
+                    <li>
+                        <span>{{ $t('c.handle') }}</span>
+                    </li>
+                </ul>
+                <ul class='product-list'>
+                    <li v-for='item in productList' :key='item.symbolKey'>
+                        <div class='row'>
+                            <currency-icon class='currency-icon' :currency='item.baseCurrency' :size='32' />
+                            <div class='name'>
+                                <span>{{ item.symbolName }}</span>
+                                <etf-icon v-if='item.etf' />
+                            </div>
+                        </div>
+                        <div>
+                            <span :class='item.cur_color'>
+                                {{ item.cur_price || '--' }}
+                            </span>
+                        </div>
+                        <div>
+                            <strong :class='item.upDownColor'>
+                                {{ item.upDownAmount || '--' }}
+                            </strong>
+                        </div>
+                        <div class='upDownWidth'>
+                            <strong :class='item.upDownColor'>
+                                {{ item.upDownWidth || '--' }}
+                            </strong>
+                        </div>
+                        <div class='handle'>
+                            <button v-if='item.etf' class='trade active' @click='toFund(item)'>
+                                {{ $t('fundInfo.buy') }}
+                            </button>
+                            <button class='trade' @click='toOrder(item)'>
+                                {{ $t('route.trade') }}
+                            </button>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { computed, ref, watch, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import useProduct from '@planspc/hooks/useProduct'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { Toast } from 'vant'
+import currencyIcon from '@/components/currencyIcon.vue'
+import etfIcon from '@planspc/components/etfIcon.vue'
+import { findFundPage } from '@/api/fund.js'
 
 export default {
+    components: {
+        currencyIcon,
+        etfIcon
+    },
     emits: ['update'],
     setup (props, context) {
         const router = useRouter()
         const store = useStore()
-        // 玩法列表
-        const plansList = computed(() => store.state._base.plans)
-        // 玩法类型
-        const tradeType = ref(Number(plansList.value[0].tradeType))
-        // 分类类型
-        const categoryType = ref(0)
-        // 过滤后的产品列表数据
-        const filterProductList = ref([])
-
-        // 获取板块列表和所选板块的产品列表
-        const { categoryList, productList } = useProduct({
-            tradeType, categoryType, isSelfSymbol: false
-        })
-
-        // 切换玩法
-        const switchPlan = (val) => {
-            if (tradeType.value !== val) {
-                tradeType.value = val
-            }
-        }
-
-        // 切换分类
-        const switchCategory = (index) => {
-            if (categoryType.value !== index) {
-                categoryType.value = index
-            }
-        }
-
-        // 设置产品数据
-        const setProducts = () => {
-            // 只显示指定数量数据
-            const list = []
-            const keys = []
-            for (let i = 0; i < 6; i++) {
-                const item = productList.value[i]
-                if (item) {
-                    list.push(item)
-                    keys.push(item.symbolKey)
+        const { t } = useI18n({ useScope: 'global' })
+        // 产品列表map数据
+        const productMap = computed(() => store.state._quote.productMap)
+        // 当前要显示的产品keys
+        // const productKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5', '717_5'] // pre
+        const productKeys = ['368_5', '328_5', '329_5', '331_5', '332_5', '323_5'] // prd
+        // 产品列表数据
+        const productList = computed(() => {
+            const result = []
+            productKeys.map(key => {
+                if (productMap.value[key]) {
+                    result.push(productMap.value[key])
                 }
-            }
-            filterProductList.value = list
-            context.emit('update', keys)
+            })
+            return result
+        })
+        // 基金列表
+        const fundList = ref([])
+
+        // 获取基金产品列表，
+        const getFundPage = () => {
+            findFundPage({ customerGroupId: store.getters.customerGroupId, size: 1000 }).then(res => {
+                if (res.check()) {
+                    fundList.value = res.data.records
+                }
+            })
         }
 
         // 去交易
@@ -145,32 +120,32 @@ export default {
             router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
         }
 
-        // 查看更多
-        const examineMore = () => {
-            const symbolId = productList.value[0].symbolId
-            router.push(`/order?symbolId=${symbolId}&tradeType=${tradeType.value}`)
+        // 去基金页面
+        const toFund = item => {
+            const fund = fundList.value.find(el => el.shareTokenCode === item.baseCurrency)
+            if (fund) {
+                router.push(`/fund?fundId=${item.fundId}`)
+            } else {
+                Toast(t('trade.noFeature'))
+            }
         }
 
-        // 监听玩法类型、分类类型
-        watch([tradeType, categoryType, productList], () => {
-            setProducts()
-        })
+        // 查看更多
+        const examineMore = () => {
+            router.push('/quote')
+        }
 
         onMounted(() => {
-            setProducts()
+            context.emit('update', productKeys)
+            // 获取基金列表
+            getFundPage()
         })
 
         return {
-            plansList,
-            tradeType,
-            categoryType,
-            categoryList,
             productList,
-            filterProductList,
-            switchPlan,
             toOrder,
-            examineMore,
-            switchCategory
+            toFund,
+            examineMore
         }
     }
 }
@@ -179,74 +154,36 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 
-.trade-module {
-    margin-top: 96px;
+.fullWidth {
+    margin-top: 20px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    background: #fff;
 }
-
-// 玩法选项
-.play-tabs {
-    ul {
-        display: flex;
-    }
-    li {
-        margin-right: 47px;
-        padding-bottom: 4px;
-        cursor: pointer;
-        &:last-of-type {
-            margin-right: 0;
-        }
-        span {
-            @include font();
-            font-size: 32px;
-            font-weight: bold;
-            color: var(--minorColor);
-        }
-    }
-    li:hover {
-        span {
-            color: var(--color);
-        }
-    }
-    .active {
-        border-bottom: 3px solid var(--primary);
-        span {
-            color: var(--color);
-        }
-    }
-}
-
-// 分类选项
-.category-tabs {
-    margin-top: 38px;
-    ul {
-        display: flex;
-    }
-    li {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        height: 32px;
-        padding: 0 22px;
-        margin-right: 10px;
-        font-size: 14px;
+.trade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title {
+        letter-spacing: 2px;
+        font-size: 30px;
+        font-weight: bold;
         color: var(--color);
-        background: var(--bgColor);
-        border-radius: 4px;
-        cursor: pointer;
-        &:last-of-type {
-            margin-right: 0;
-        }
-        &:hover {
-            color: var(--primary);
-        }
     }
-    .active {
-        color: var(--primary);
-        background: var(--primaryAssistColor);
+    .more {
+        display: inline-flex;
+        align-items: center;
+        color: var(--minorColor);
+        i {
+            font-weight: bold;
+        }
+        span {
+            font-size: 14px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
     }
 }
-
-// 产品模块
 .product-module {
     margin-top: 30px;
     .header-block {
@@ -264,7 +201,7 @@ export default {
                 color: var(--minorColor);
             }
             &:first-child {
-                min-width: 300px;
+                min-width: 320px;
                 span {
                     margin-left: 16px;
                 }
@@ -287,17 +224,32 @@ export default {
         cursor: pointer;
         div {
             flex: 1;
-            color: var(--color);
+            color: var(--primary);
             &:first-of-type {
-                min-width: 300px;
+                min-width: 320px;
             }
-            span {
-                font-size: 20px;
-                font-weight: bold;
+            span,strong {
+                font-size: 16px;
             }
             &:first-of-type {
                 span {
                     margin-left: 16px;
+                }
+            }
+        }
+        .row {
+            display: inline-flex;
+            align-items: center;
+            .currency-icon {
+                margin-left: 10px;
+
+            }
+            .name {
+                display: inline-flex;
+                flex-direction: column;
+                color: var(--color);
+                :deep(.etfIcon) {
+                    font-size: 10px;
                 }
             }
         }
@@ -309,20 +261,28 @@ export default {
                 justify-content: center;
                 align-items: center;
                 width: 80px;
-                height: 32px;
+                height: 30px;
                 margin-right: 16px;
-                font-size: 16px;
+                font-size: 14px;
                 color: #fff;
                 border-radius: 4px;
                 cursor: pointer;
+                @include hover();
                 &.buy {
                     background: var(--riseColor);
                 }
                 &.sale {
                     background: var(--fallColor);
                 }
-                &:hover {
-                    opacity: .7;
+                &.trade {
+                    background: none;
+                    border: 1px solid var(--primary);
+                    border-radius: 5px;
+                    color: var(--primary);
+                    &:hover,&.active{
+                        background: var(--primary);
+                        color: #fff;
+                    }
                 }
             }
         }
@@ -330,22 +290,6 @@ export default {
             background: var(--bgColor);
             border-radius: 10px;
         }
-    }
-}
-.view-more {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50px;
-    cursor: pointer;
-    a {
-        display: inline-flex;
-        align-items: center;
-        height: 100%;
-        color: var(--minorColor);
-    }
-    span {
-        font-size: 14px;
     }
 }
 </style>

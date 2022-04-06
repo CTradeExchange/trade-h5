@@ -30,7 +30,9 @@
 		"search": "搜索",
 		"add": "添加",
 		"startTime": "开始时间",
-		"endTime": "结束时间"
+		"endTime": "结束时间",
+        "languageAreas": "语言和地区",
+        "SelectLanguageAreas": "选择语言和地区"
 	},
 	"c": {
 		"login": "登录",
@@ -113,7 +115,9 @@
 		"fundManager": "基金操作专区",
         "MFA_status": "谷歌验证器",
         "MFA_bind": "绑定谷歌验证器",
-        "MFA_close": "关闭谷歌验证器"
+        "MFA_close": "关闭谷歌验证器",
+        "download": "下载",
+        "about": "关于我们"
 	},
     "historyList": {
         "noMore": "没有更多了"
@@ -167,80 +171,10 @@
 		"set": "设置",
 		"service": "客服",
 		"download": "下载",
-		"downloadTip": "iOS & Android扫码下载APP",
 		"language": "语言",
 		"theme": "主题",
 		"fund": "基金",
 		"fundManager": "基金操作专区"
-	},
-	"footer": {
-		"about": {
-			"title": "关于",
-			"1": "Cats 2.0",
-			"2": "职业机会",
-			"3": "费率标准",
-			"4": "合作伙伴"
-		},
-		"tool": {
-			"title": "工具",
-			"1": "客户端下载",
-			"2": "API文档",
-			"3": "数字资产介绍",
-			"4": "官方验证通道",
-			"5": "历史数据下载"
-		},
-		"serve": {
-			"title": "服务",
-			"1": "费率",
-			"2": "借币额度",
-			"3": "帮助中心",
-			"4": "新手指南",
-			"5": "合约课堂"
-		},
-		"support": {
-			"title": "支持",
-			"1": "合作申请",
-			"2": "机构服务",
-			"3": "大客户权益",
-			"4": "广告权限申请"
-		},
-		"terms": {
-			"title": "条款",
-			"1": "用户协议",
-			"2": "隐私条款",
-			"3": "交易规则"
-		}
-	},
-	"home": {
-		"quick": {
-			"title": "讓財富更自由",
-			"describe": "輕鬆投資加密貨幣基金，30種主流現貨"
-		},
-		"download": {
-			"title": "交易随时随地",
-			"describe": "多终端，多设备，随时随地开启交易",
-			"tip1": "iOS & Android 扫码下载APP",
-			"tip2": "开启移动交易"
-		},
-		"guide": {
-			"title": "新手指引",
-			"describe": "开启数字货币交易学习",
-			"text1": "如何购买数字货币",
-			"text2": "急速了解交易规则",
-			"text3": "小白进场适合买什么数字货币"
-		},
-		"why": {
-			"title": "为什么选择我们？",
-			"describe": "选择CATS作为交易加密数字货币的原因",
-			"title1": "0手续费买卖数字货币",
-			"text1": "使用多种支付方式交易数字货币，0手续费，安全快捷",
-			"title2": "最优的交易费率",
-			"text2": "优惠的交易费率，富有竞争力的VIP权益，享受最优品质的服务",
-			"title3": "可信赖的安全保障",
-			"text3": "优惠的交易费率，富有竞争力的VIP权益，享受最优品质的服务",
-			"title4": "24*7小时客服支持",
-			"text4": "24*7小时全天候、全日制运营模式，第一时间为您解答相关咨询。"
-		}
 	},
 	"chart": {
 		"high": "高",
@@ -279,6 +213,7 @@
 		"baseLine": "基准线"
 	},
 	"trade": {
+		"markets": "市场",
 		"name": "名称",
 		"newPrice": "最新价",
 		"changePrice": "24H涨跌额",
@@ -567,7 +502,7 @@
 		"availableLoanContent5": "可借额度=系统最大可借-已借未还",
 		"availableLoanContent6": "您的账户若有即将获得的币种借款未还，下单时系统在完成交易后自动帮您还款",
 		"availableLoanContent7": "指个人最大杠杆借款额度",
-		"availableLoanContent8": "可借额度=最小值（[全仓杠杆账户內净资产*(最大杠杆倍数-1)- 未还借入资产],币种最大可借限额)",
+		"availableLoanContent8": "可借额度=最小值（[全仓杠杆账户内净资产*(最大杠杆倍数-1)- 未还借入资产],币种最大可借限额)",
 		"availableLoanAgent": "代理可借",
 		"availableLoanAmount": "可借额度",
 		"autoLoan": "自动借款",
@@ -644,8 +579,10 @@
         "bestPriceBuy": "市场最优价买入",
         "bestPriceSell": "市场最优价卖出",
         "favorites": "自选",
-        "upDownWidth": "涨跌幅",
+        "upDownWidth": "24H涨跌幅",
+        "24highPrice": "24H最高价",
         "highPrice": "最高价",
+        "24lowPrice": "24H最低价",
         "lowPrice": "最低价",
         "allTransaction": "所有成交记录",
         "positionAmount": "持仓量",
@@ -655,8 +592,8 @@
         "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
         "saveSetting": "保存设置",
 		"offer": "报价",
-		"etfTip": "ETF是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖ETF基金份额；同时，投资者也可向基金管理公司申购或赎回ETF份额",
-		"purchaseOrRedemptionTip": "申购/赎回：指投资者可向基金管理公司申购或者赎回基金份额代币，点击前往",
+		"etfTip": "ETF是Exchange Traded Funds简称，是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖基金份额；同时，投资者也可向基金管理公司申购或赎回基金份额",
+		"purchaseOrRedemptionTip": "申购/赎回：指投资者可向基金管理公司申购或者赎回基金份额代币，点击转至。",
 		"purchaseOrRedemption": "申购/赎回",
 		"noFeature": "暂不支持该功能",
 		"material": "资料"
@@ -664,7 +601,7 @@
 	"contract": {
 		"advance": "预付款",
 		"amount": "金额",
-		"contractSize": "合约大小",
+		"contractSize": "合约尺寸",
 		"eodTime": "结算时间",
 		"feeType": "手续费类型",
 		"float": "浮动",
@@ -957,8 +894,98 @@
 		"redeem_tip3": "赎回流程结束，那你所赎回的基金代币将以选择的接收资产汇入您的现货钱包",
 		"assetIndexQquestionTip":"图表为指数样本所含资产在近24小时内的市场表现(报价单位:USDT)",
 		"assetQquestionTip":"图表为基金投资组合所含资产在近24小时内的市场表现(报价单位:USDT)",
-		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击前往",
-		"fundTokenTrade": "现货交易",
+        "fundTrade": "申购/赎回",
+		"fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击转至",
+		"fundTokenTrade": "现货直接交易",
 		"noTradeMarket": "暂无交易市场"
-	}
+	},
+    "home": {
+        "quick": {
+            "title": "帮助所有人轻松参与加密货币市场",
+            "emailOrPhone": "邮箱/电话"
+        },
+        "download": {
+            "title": "交易随时随地",
+            "describe": "多终端，多设备，随时随地开启交易",
+            "tip1": "iOS & Android 扫码下载APP",
+            "tip2": "开启移动交易"
+        },
+        "guide": {
+            "title": "新手指引",
+            "describe": "开启数字货币交易学习",
+            "text1": "如何购买数字货币",
+            "text2": "急速了解交易规则",
+            "text3": "小白进场适合买什么数字货币"
+        },
+        "why": {
+            "text1": "安全始终是我们的首要考虑",
+            "text2": "用户安全资产基金(SAFU)",
+            "text3": "我们将所有交易费用的10%存储于安全资产基金，为用户资金提供部分保障。",
+            "text4": "个性化访问控制",
+            "text5": "高级访问控制限制访问个人账户的设备和地址，让用户无后顾之忧。",
+            "text6": "先进数据加密",
+            "text7": "个人交易数据通过端到端加密获得保障，仅限本人访问个人信息。",
+            "text8": "账户异常实时监控",
+            "text9": "我们的风险管理系统会分析每次异常活动，触发异常暂停提款。"
+        },
+        "fundDesc": {
+            "text1": "V10指数",
+            "text2": "V10加密指数基金的跟踪指数，成立来71%的时间走势优于比特币。",
+            "text3": "阅读白皮书（PDF）",
+            "text4": "V10加密指数基金",
+            "text5": "V10是一种自主性、高绩效、低成本加密货币指数基金，由10种领先加密货币组成。",
+            "text6": "阅读白皮书（PDF）"
+        },
+        "portfolio": {
+            "text1": "立即创建您的加密货币投资组合",
+            "text2": "我们具有多种功能，使其成为开始交易的最佳场所。",
+            "text3": "简洁高效",
+            "text4": "买卖流行的数字货币，在一个地方跟踪它们。",
+            "text5": "美观大方",
+            "text6": "清爽的界面始终将内容清晰地呈现给您。",
+            "text7": "无处不在",
+            "text8": "使用适用于 Android 或 iOS 设备，随时随地让您保持市场领先地位。"
+        },
+        "portfolioCreate": {
+            "text1": "只需三步，开始加密基金投资",
+            "text2": "开户并完成身份认证",
+            "text3": "完成身份验证流程以保护您的帐户和交易。",
+            "text4": "新增资金至你的帐户",
+            "text5": "将资金添加到您的加密货币帐户以开始交易加密货币。",
+            "text6": "开始交易",
+            "text7": "买卖基金或加密货币，并了解Vitatoken提供的服务。"
+        },
+        "privacy": {
+            "agree": "同意",
+            "close": "关闭",
+            "text1": "我们使用 cookie 来增强您的体验、分析我们的流量以及用于安全和营销。访问我们的网站即表示您同意我们使用 cookie。",
+            "text2": "阅读有关 cookie 的更多信息"
+        },
+        "marketTrend": "市场趋势",
+        "getStarted": "开始使用",
+        "getProfit": "立即赚取收益",
+        "toReg": "立即注册",
+        "app": "安全、快速和简洁"
+    },
+    "download": {
+        "downloadTip": "iOS & Android扫码下载APP",
+        "moreDownload": "更多下载选择",
+        "title": "随时随地开启交易",
+        "subTitle": "下载Vitatoken客户端，所有交易尽在手中。",
+        "android": "下载安卓端",
+        "ios": "下载苹果端"
+    },
+    "about": {
+        "aboutUs": "关于我们",
+        "desc": "在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 于2021年9月6日成立，提供金融科技解决方案，有加密货币交易牌照。2022年一季度将实现如下功能：加密货币现货交易，ETF基金二级市场交易，基金申购、赎回，支持基金实时净值及报表发布，APP上线，全面支持eth主链及代币，全面支持trx主链及代币，交易所钱包升级，将符合FIPS 140-2 level 3标准。更多功能敬请期待。",
+        "base": "基础服务",
+        "hope": "愿景",
+        "hopeT1": "我们的愿景是帮助所有人轻松参与加密货币市场",
+        "hopeT2": "我们像维他命那样",
+        "hopeT3": "是重要组成部分",
+        "hopeT4": "使用我们平台发行或者买卖加密货币基金",
+        "hopeT5": "降低参与门槛",
+        "hopeT6": "提高获利概率",
+        "hopeT7": "从而在这个快速变化的市场中赚钱"
+    }
 }

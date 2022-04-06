@@ -39,18 +39,19 @@ const activeName = computed({
 
 <style lang="scss" scoped>
 .categoryList{
-    padding: 20px 20px 0;
+    padding: 30px 20px 12px;
     :deep{
         .el-tabs__header{
             margin: 0;
             .el-tabs__item{
+                @include hover();
                 height: 40px;
                 line-height: 40px;
                 padding: 0 18px;
                 background: var(--assistColor);
                 color: var(--color);
                 border-radius: 4px;
-                margin-right: 10px;
+                margin-right: 20px;
                 font-size: 14px;
                 font-weight: 400;
                 &.is-active{

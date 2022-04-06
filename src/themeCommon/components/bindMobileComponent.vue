@@ -2,6 +2,7 @@
     <div class='pageWrap'>
         <Top back show-center />
         <Loading :show='loading' />
+
         <form class='form'>
             <div class='field'>
                 <areaInput

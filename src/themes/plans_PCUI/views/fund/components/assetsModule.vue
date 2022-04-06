@@ -161,6 +161,7 @@ export default {
         }
     }
     .btn {
+        @include hover();
         min-width: 80px;
         height: 32px;
         margin-left: 10px;

@@ -3,18 +3,24 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' src='@planspc/images/logo.png' />
+                    <img alt='' height='24' src='/images/logo_vitamin.png' />
                 </h1>
             </router-link>
             <div class='menus'>
-                <div :class="['item', { 'active': $route.path === '/quote' }]">
-                    <router-link to='/quote'>
+                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
+                    <router-link to='/fund'>
                         <span class='link'>
-                            {{ $t('header.quote') }}
+                            {{ $t('header.fund') }}
                         </span>
+                        <span class='symbolUp'></span>
                     </router-link>
                 </div>
-                <div :class="['item', { 'active': $route.path === '/order' }]">
+                <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
+                    <span class='link'>
+                        {{ $t('tradeType.5') }}
+                    </span>
+                </div>
+                <!-- <div :class="['item', { 'active': $route.path === '/order' }]">
                     <el-dropdown @command='changePlans'>
                         <span class='link'>
                             {{ plansName }}
@@ -32,11 +38,11 @@
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                </div>
-                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
-                    <router-link to='/fund'>
+                </div> -->
+                <div :class="['item', { 'active': $route.path === '/quote' }]">
+                    <router-link to='/quote'>
                         <span class='link'>
-                            {{ $t('header.fund') }}
+                            {{ $t('header.quote') }}
                         </span>
                     </router-link>
                 </div>
@@ -86,9 +92,9 @@
                                 <el-dropdown-item v-if='Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
                                     {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item @click="handRoutTo('/bankList')">
+                                <!-- <el-dropdown-item @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
-                                </el-dropdown-item>
+                                </el-dropdown-item> -->
                                 <el-dropdown-item @click="handRoutTo('/googleMFA/status')">
                                     {{ $t('mfa.routeTitile') }}
                                 </el-dropdown-item>
@@ -105,18 +111,18 @@
             <div class='handle-feature'>
                 <div v-if='onlineService' class='item'>
                     <a :href='onlineService' target='_blank'>
-                        <i class='icon icon_kefu' :title="$t('header.service')"></i>
+                        <i class='icon icon_kefu' :title="$t('newHomeFooter.customer')"></i>
                     </a>
                 </div>
-                <!-- <div class='item'>
+                <div class='item'>
                     <DownloadIcon />
-                </div> -->
+                </div>
                 <div class='item'>
                     <LangIcon />
                 </div>
-                <div class='item'>
+                <!-- <div class='item'>
                     <ThemeIcon />
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -163,7 +169,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         // 在线客服地址
-        const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
 
         onBeforeMount(() => {
 
@@ -182,7 +188,7 @@ export default {
 
         const changePlans = (item) => {
             state.plansName = item.name
-            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id))?.symbolId
+            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id) && el.symbolName)?.symbolId
             store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
 
             router.push({
@@ -192,6 +198,11 @@ export default {
                     tradeType: item.id
                 }
             })
+        }
+
+        // 跳转到现货交易页面
+        const toOrder = () => {
+            changePlans({ name: t('tradeType.5'), id: '5' })
         }
 
         // 路由跳转
@@ -205,6 +216,7 @@ export default {
             handRoutTo,
             customInfo,
             formatTime,
+            toOrder,
             changePlans,
             plansName,
             ...toRefs(state),
@@ -223,15 +235,15 @@ export default {
     justify-content: space-between;
     flex-shrink: 0;
     min-width: 1200px;
-    height: 50px;
+    height: 64px;
     padding: 0 16px;
-    background-color: rgba(21, 25, 30, 1);
+    background-color: #181A20;
     &.Home {
         position: sticky;
         top: 0;
         left: 0;
         width: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: #181A20;
     }
     .nav-left {
         display: flex;
@@ -246,7 +258,9 @@ export default {
             display: flex;
             align-items: center;
             height: 100%;
+            font-weight: bold;
             .item {
+                position: relative;
                 margin-right: 30px;
                 cursor: pointer;
                 &:last-of-type {
@@ -265,6 +279,16 @@ export default {
                 .link {
                     color: var(--primary);
                 }
+            }
+            .symbolUp{
+                display: inline-block;
+                margin-left: 4px;
+                vertical-align: middle;
+                margin-top: -2px;
+                width: 14px;
+                height: 14px;
+                background: url('/images/arrowUp.png') no-repeat;
+                background-size: cover;
             }
         }
     }
@@ -291,8 +315,9 @@ export default {
                 width: 64px;
                 height: 28px;
                 color: #FFF;
-                background: #477FD3;
+                background: var(--primary);
                 border-radius: 4px;
+                @include hover();
             }
         }
         .handle-have {
@@ -339,7 +364,7 @@ export default {
                 }
                 .icon {
                     color: #D6DAE1;
-                    font-size: 20px;
+                    font-size: 16px;
                     cursor: pointer;
                 }
             }
@@ -356,17 +381,17 @@ export default {
             height: 100%;
             .item {
                 margin-right: 20px;
+                line-height: 1;
                 &:last-of-type {
                     margin-right: 0;
                 }
                 .icon {
                     color: #D6DAE1;
-                    font-size: 20px;
+                    font-size: 16px;
                     cursor: pointer;
                 }
                 &:deep(.icon_yuyan) {
                     display: inline-flex;
-                    margin-top: 2px;
                 }
             }
         }

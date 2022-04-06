@@ -76,6 +76,7 @@ export default {
                     return Object.assign({}, el, { dataKey })
                 })
             }
+
             return []
         }
     },
@@ -96,46 +97,43 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-
 .title {
     padding: 10px 20px;
     font-size: 14px;
     line-height: 1;
-    vertical-align: middle;;
+    vertical-align: middle;
 }
 .icon {
     display: inline-block;
-    margin-right: rem(24px);
-    vertical-align: middle;
     //font-size: rem(32px);
     width: rem(40px);
     height: rem(40px);
+    margin-right: rem(24px);
+    vertical-align: middle;
 }
-.cellGroup{
+.cellGroup {
     .cellItem {
-        font-size: rem(32px);
-        line-height: rem(120px);
-        height: rem(120px);
-        background: var(--contentColor);
-        border-top: solid rem(10px) var(--bgColor);
         display: flex;
         align-items: center;
-        &::after{
+        height: rem(120px);
+        font-size: rem(32px);
+        line-height: rem(120px);
+        background: var(--contentColor);
+        border-top: solid rem(10px) var(--bgColor);
+        &::after {
             border: none;
         }
-        :deep(.van-icon-arrow){
+        :deep(.van-icon-arrow) {
             margin-top: -2px;
         }
-        :deep(.van-cell__title){
+        :deep(.van-cell__title) {
             color: var(--color);
         }
-        :deep(.van-cell__value){
+        :deep(.van-cell__value) {
             flex: none;
         }
-
+    }
 }
-}
-
 :deep(.van-tag--none) {
     color: #969799;
 }

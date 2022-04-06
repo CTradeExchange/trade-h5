@@ -306,6 +306,7 @@ export default {
             display: none;
         }
         .item {
+            @include hover();
             display: flex;
             justify-content: center;
             align-items: center;
@@ -391,6 +392,7 @@ export default {
         }
     }
     .address-box {
+        @include hover();
         display: flex;
         flex-direction: column;
         align-items: center;

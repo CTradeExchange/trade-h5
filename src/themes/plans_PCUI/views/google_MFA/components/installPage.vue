@@ -94,6 +94,7 @@ const routerTo = (path) => {
         left: 0;
         width: 100%;
         .nobd {
+            @include hover();
             background: none;
             border: 0;
         }

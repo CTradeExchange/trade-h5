@@ -487,7 +487,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100%;
-    margin-bottom: rem(100px);
+    //margin-bottom: rem(100px);
     overflow-y: auto;
     color: var(--color);
     background: var(--bgColor);
@@ -528,20 +528,20 @@ export default {
 }
 .footerBtn {
     width: 100%;
-    padding: rem(50px) rem(30px) rem(30px);
     margin-bottom: rem(20px);
-    background: var(--contentColor);
+    padding: rem(50px) rem(30px) rem(30px);
     font-weight: bold;
-    .icon{
+    background: var(--contentColor);
+    .icon {
+        margin-right: rem(20px);
         font-size: rem(20px);
         vertical-align: middle;
-        margin-right: rem(20px);
         opacity: 0.5;
     }
     &.buy {
         .van-button {
-            font-size: rem(30px);
             color: #FFF;
+            font-size: rem(30px);
             background: var(--riseColor);
             border-color: var(--riseColor);
             border-radius: rem(6px);
@@ -549,8 +549,8 @@ export default {
     }
     &.sell {
         .van-button {
-            font-size: rem(30px);
             color: #FFF;
+            font-size: rem(30px);
             background: var(--fallColor);
             border-color: var(--fallColor);
         }
