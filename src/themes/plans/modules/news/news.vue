@@ -237,10 +237,10 @@ export default {
                 id: 8,
                 name: t('information.newsFlash')
             },
-            // {
-            //     id: 10,
-            //     name: t('information.calendar')
-            // }
+            {
+                id: 10,
+                name: t('information.calendar')
+            }
         ]
 
         state.firstFocusNewsParams = {
