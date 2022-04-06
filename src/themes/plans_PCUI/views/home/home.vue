@@ -1,139 +1,316 @@
 <template>
     <div class='homePage'>
         <router-view />
+
         <!-- 轮播模块 -->
-        <swiper />
+        <FullBanner v-if='fullBannerData' :data='fullBannerData.data' />
+
         <div class='relativeFloor'>
             <!-- 产品模块 -->
-            <!-- <product @update='setProductKeys' /> -->
-
-            <!-- 公告模块 -->
-            <!-- <notice /> -->
-
+            <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' />
+            <!-- 公共模块 -->
+            <HomeNotice v-if='homeNoticeData' :data='homeNoticeData.data' />
             <!-- 内容模块 -->
-            <div class='content-module'>
-                <!-- 快速注册模块 -->
-                <quick />
-                <FundDesc />
+            <div v-if='pageModules.length>0' class='content-module'>
+                <PageComp class='homePageComp' :data='pageModulesList' />
 
                 <!-- 指引模块 -->
                 <!-- <guide /> -->
-                <!-- 交易模块 -->
-                <trade @update='setProductKeys' />
-
-                <protfolio-create />
-
-                <!-- 信息流模块 -->
-                <div class='newsFullWidth'>
-                    <div class='flow-module auto-width'>
-                        <div class='flow-left'>
-                            <h3 class='title'>
-                                {{ $t('information.focusNews') }}
-                            </h3>
-                            <!-- 新闻 -->
-                            <news />
-                        </div>
-                        <div class='flow-right'>
-                            <h3 class='title'>
-                                {{ $t('information.newsFlash') }}
-                            </h3>
-                            <!-- 7x24 -->
-                            <seven />
-                        </div>
-                    </div>
-                </div>
-
-                <portfolio />
-
-                <!-- why模块 -->
-                <why />
-
-                <div v-if='!$store.state._user.customerInfo' class='registerFooter'>
-                    <div class='css-128y11d'>
-                        <div class='immediatelyText'>
-                            {{ $t('home.getProfit') }}
-                        </div>
-                        <div class='css-1r4nzjd'>
-                            <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
-                            </a>
-                            <van-button class='lijiRegister' type='primary' @click="$router.push('/register')">
-                                {{ $t('home.toReg') }}
-                            </van-button>
-                        </div>
-                    </div>
-                </div>
+                <!-- 为什么选择模块 -->
+                <!-- <why /> -->
             </div>
         </div>
+
+        <!-- WL--start -->
+        <div class='new-index-footer'>
+            <ul class='footer-nav f-b-t'>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.product') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("trading")'>
+                        {{ $t('newHomeFooter.trading') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("fund")'>
+                        {{ $t('newHomeFooter.fund') }}
+                    </p>
+                </li>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.service') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("program")'>
+                        {{ $t('newHomeFooter.program') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("vip")'>
+                        {{ $t('newHomeFooter.vip') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("customer")'>
+                        {{ $t('newHomeFooter.customer') }}
+                    </p>
+                </li>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.help') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("faqs")'>
+                        {{ $t('newHomeFooter.faqs') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("terms")'>
+                        {{ $t('newHomeFooter.terms') }}
+                    </p>
+                    <p class='link' @click='jumpUrl("policy")'>
+                        {{ $t('newHomeFooter.policy') }}
+                    </p>
+                </li>
+                <li>
+                    <p class='nav-dt'>
+                        {{ $t('newHomeFooter.community') }}
+                    </p>
+                    <ul class='community-box f-b-t'>
+                        <li class='box-item' @click='jumpUrl("fb")'>
+                            <img alt='facebook' class='item-icon' src='../../images/home/facebook.png' />
+                            <p class='icon-label'>
+                                Facebook
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("ig")'>
+                            <img alt='instagram' class='item-icon' src='../../images/home/instagram.png' />
+                            <p class='icon-label'>
+                                Instagram
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("twitter")'>
+                            <img alt='twitter' class='item-icon' src='../../images/home/twitter.png' />
+                            <p class='icon-label'>
+                                Twitter
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("telegram")'>
+                            <img alt='telegram' class='item-icon' src='../../images/home/telegram.png' />
+                            <p class='icon-label'>
+                                Telegram
+                            </p>
+                        </li>
+                        <li class='box-item' @click='jumpUrl("yt")'>
+                            <img alt='youtube' class='item-icon' src='../../images/home/youtube.png' />
+                            <p class='icon-label'>
+                                Youtube
+                            </p>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <!-- WL--end -->
     </div>
-    <!-- 客服 -->
-    <service />
-    <!-- 底部隐私协议 -->
-    <privacy-tip />
 </template>
 
-<script setup>
-import { ref, onUnmounted } from 'vue'
-import { QuoteSocket } from '@/plugins/socket/socket'
-import swiper from './components/swiper.vue'
-import product from './components/product.vue'
-import notice from './components/notice.vue'
-import quick from './components/quick.vue'
-import guide from './components/guide.vue'
+<script>
+// components
+import ad from './components/ad.vue'
 import trade from './components/trade.vue'
-import news from './components/news.vue'
-import seven from './components/seven.vue'
+import download from './components/download.vue'
+import guide from './components/guide.vue'
 import why from './components/why.vue'
-import protfolioCreate from './components/protfolio-create.vue'
-import portfolio from './components/portfolio.vue'
-import FundDesc from './components/fundDesc.vue'
-import service from './components/service.vue'
-import privacyTip from './components/privacy-tip.vue'
+import seven from './components/seven.vue'
+import FullBanner from '../../modules/fullBanner/fullBanner'
+import BannerProducts from '../../modules/bannerProducts/bannerProducts'
+import HomeNotice from '../../modules/homeNotice/homeNotice'
 
-// 当前页面的产品symbolKey
-const productKeys = ref([])
+import { reactive, toRefs, onMounted, onUnmounted, computed, watch } from 'vue'
+import { QuoteSocket } from '@/plugins/socket/socket'
+import { useStore } from 'vuex'
+import { getCookie } from '@/utils/util'
+export default {
+    name: 'Home',
+    components: {
+        ad,
+        trade,
+        download,
+        guide,
+        why,
+        seven,
+        HomeNotice,
+        FullBanner,
+        BannerProducts,
+    },
+    setup () {
+        const store = useStore()
+        const state = reactive({
+            // 当前信息流选项卡
+            currentFlow: 1,
+            // 页面
+            pageModules: [],
+            // 产品组件symbolKey
+            productKeys: [],
+            // 行情组件symbolKey
+            tradeKeys: [],
+            // 需要订阅产品的symbolKey
+            allProductKeys: []
+        })
 
-// 发起行情订阅
-const sendSubscribe = () => {
-    QuoteSocket.send_subscribe(productKeys.value)
+        const fullBannerData = computed(() => state.pageModules.find(el => el.tag === 'fullBanner'))
+        const bannerProductsData = computed(() => state.pageModules.find(el => el.tag === 'bannerProducts'))
+        const homeNoticeData = computed(() => state.pageModules.find(el => el.tag === 'homeNotice'))
+        const pageModulesList = computed(() => state.pageModules.filter(el => ['homeNotice', 'bannerProducts', 'fullBanner'].indexOf(el.tag) === -1))
+        const subscribeList = computed(() => store.state.home.subscribeBannerList.concat(store.state.home.subscribeQuoteList))
+
+        // 切换信息流
+        const switchFlow = (num) => {
+            state.currentFlow = num
+        }
+
+        // 发送行情订阅
+        watch(
+            () => subscribeList.value,
+            (newval, oldval) => {
+                QuoteSocket.send_subscribe(newval)
+            },
+            { immediate: true }
+        )
+
+        // 获取首页配置
+        store.dispatch('_base/getPageConfig', 'Home').then(res => {
+            console.log('首页配置', res)
+            state.pageModules = res
+        })
+
+        // WL--start 底部nav跳转
+        const jumpUrl = (index) => {
+            console.log('=======', index, getCookie('lang'))
+            const lang = getCookie('lang') || 'zh-CN'
+            let linkList = {}
+            if (lang === 'zh-CN') {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/zh-CN/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/zh-CN/fund',
+                    program: 'https://www.vitatoken.com/zh-CN/new1',
+                    vip: 'https://www.vitatoken.com/zh-CN/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.io/site/faqs',
+                    terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    policy: 'https://www.vitatoken.io/site/privacy-policy'
+                }
+            } else {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/en-US/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/en-US/fund',
+                    program: 'https://www.vitatoken.com/en-US/new1',
+                    vip: 'https://www.vitatoken.com/en-US/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.io/site/faqs',
+                    terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    policy: 'https://www.vitatoken.io/site/privacy-policy'
+                }
+            }
+            const community = {
+                fb: 'https://www.facebook.com/Vitatoken-100578379186941',
+                ig: 'https://www.instagram.com/vitatoken_official/',
+                twitter: 'https://twitter.com/Vitatoken_',
+                telegram: 'https://t.me/vitatoke',
+                yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
+            }
+            const newLinkList = { ...linkList, ...community }
+            window.open(newLinkList[index])
+        }
+
+        // 发送行情订阅
+        onMounted(() => {
+            // 头部固定
+            const headerEl = document.querySelector('.header-nav')
+            if (headerEl) headerEl.classList.add('fixedHeader')
+        })
+
+        // 取消行情订阅
+        onUnmounted(() => {
+            const headerEl = document.querySelector('.header-nav')
+            if (headerEl) headerEl.classList.remove('fixedHeader')
+            QuoteSocket.cancel_subscribe()
+        })
+
+        return {
+            ...toRefs(state),
+            jumpUrl,
+            pageModulesList,
+            fullBannerData,
+            homeNoticeData,
+            bannerProductsData,
+            switchFlow,
+        }
+    }
 }
-// 设置页面产品的symbolKey
-const setProductKeys = (arr) => {
-    const list = productKeys.value.concat(arr)
-    productKeys.value = Array.from(new Set(list))
-    sendSubscribe()
-}
-
-onUnmounted(() => {
-    // 取消行情订阅
-    QuoteSocket.cancel_subscribe()
-})
 </script>
 
-<style lang='scss' scoped>
-@import '@/sass/mixin.scss';
+<style lang="scss" scoped>
+
+// WL--start
+.f-b-t {
+    display: flex;
+    justify-content: space-between;
+}
+.new-index-footer {
+    position: relative;
+    z-index: 101;
+    box-sizing: border-box;
+    min-width: 1200px;
+    padding: 30px 60px;
+    color: #333;
+    font-size: 14px;
+    line-height: 32px;
+    text-align: center;
+    background: #FFF !important;
+    .footer-nav {
+        width: 1200px;
+        margin: 0 auto 15px;
+        .link {
+            color: #333;
+            cursor: pointer;
+        }
+    }
+    .nav-dt {
+        margin-bottom: 14px;
+        font-size: 16px;
+    }
+    .community-box {
+        .box-item {
+            margin: 5px 18px;
+            text-align: center;
+            cursor: pointer;
+            .item-icon {
+                display: block;
+                width: 36px;
+                height: 36px;
+                margin: 5px auto;
+            }
+            .icon-label {
+                color: #999;
+                font-size: 14px;
+            }
+        }
+    }
+}
+// WL--end
 .homePage {
     position: relative;
-    padding-top: 540px;
+    padding-top: 490px;
     .relativeFloor {
         position: relative;
         z-index: 101;
     }
 }
+
 // 内容模块
 .content-module {
-    padding-bottom: 20px;
+    padding-bottom: 80px;
     overflow: auto;
-    background-color: var(--bgColor);
+    background-color: var(--contentColor);
 }
 
 // 信息流模块
-.newsFullWidth{
-    margin-top: 20px;
-    padding: 50px 0;
-    background-color: var(--contentColor);
-}
 .flow-module {
     display: flex;
+    margin-top: 90px;
     .flow-left {
         flex: 1;
     }
@@ -142,18 +319,21 @@ onUnmounted(() => {
         padding-left: 30px;
     }
     .title {
+        @include font();
         margin-bottom: 38px;
         color: var(--color);
         font-weight: bold;
-        font-size: 30px;
+        font-size: 32px;
     }
     .case {
         height: 600px;
     }
     .tabs {
+        @include font();
         margin-bottom: 38px;
         span {
             margin-right: 45px;
+            padding-bottom: 6px;
             color: var(--minorColor);
             font-weight: bold;
             font-size: 32px;
@@ -171,25 +351,6 @@ onUnmounted(() => {
         }
     }
 }
-.registerFooter {
-    padding: 86px 16px 60px;
-    text-align: center;
-    .immediatelyText {
-        color: #1E2329;
-        font-weight: 600;
-        font-size: 30px;
-        line-height: 48px;
-        text-align: center;
-    }
-    .lijiRegister {
-        padding: 0 50px;
-        height: 44px;
-        margin-top: 30px;
-        font-size: 16px;
-        background-color: #0062FF;
-        border-color: #0062FF;
-        border-radius: 5px;
-        @include hover();
-    }
-}
+
+@import '@/sass/mixin.scss';
 </style>

@@ -7,20 +7,14 @@
                 </h1>
             </router-link>
             <div class='menus'>
-                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
-                    <router-link to='/fund'>
+                <div :class="['item', { 'active': $route.path === '/quote' }]">
+                    <router-link to='/quote'>
                         <span class='link'>
-                            {{ $t('header.fund') }}
+                            {{ $t('header.quote') }}
                         </span>
-                        <span class='symbolUp'></span>
                     </router-link>
                 </div>
-                <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
-                    <span class='link'>
-                        {{ $t('tradeType.5') }}
-                    </span>
-                </div>
-                <!-- <div :class="['item', { 'active': $route.path === '/order' }]">
+                <div :class="['item', { 'active': $route.path === '/order' }]">
                     <el-dropdown @command='changePlans'>
                         <span class='link'>
                             {{ plansName }}
@@ -38,12 +32,13 @@
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                </div> -->
-                <div :class="['item', { 'active': $route.path === '/quote' }]">
-                    <router-link to='/quote'>
+                </div>
+                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
+                    <router-link to='/fund'>
                         <span class='link'>
-                            {{ $t('header.quote') }}
+                            {{ $t('header.fund') }}
                         </span>
+                        <span class='symbolUp'></span>
                     </router-link>
                 </div>
                 <div v-if='customerInfo.isFund === 1' :class="['item', { 'active': $route.path === '/fundManager' }]">
