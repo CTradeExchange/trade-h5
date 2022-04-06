@@ -3,7 +3,7 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' height='24' src='/images/logo_vitamin.png' />
+                    <img alt='' height='18' src='@planspc/images/logo.png' />
                 </h1>
             </router-link>
             <div class='menus'>
