@@ -109,11 +109,11 @@
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
-                <div v-if='onlineService' class='item'>
+                <!-- <div v-if='onlineService' class='item'>
                     <a :href='onlineService' target='_blank'>
                         <i class='icon icon_kefu' :title="$t('newHomeFooter.customer')"></i>
                     </a>
-                </div>
+                </div> -->
                 <div class='item'>
                     <DownloadIcon />
                 </div>
