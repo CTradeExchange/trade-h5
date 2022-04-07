@@ -229,7 +229,7 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice1')" prop='instructions_zh'>
                                 <Tinymce
                                     v-model='form.instructions_zh'
                                     :height='120'
@@ -237,7 +237,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice2')" prop='instructions_en'>
                                 <Tinymce
                                     v-model='form.instructions_en'
                                     :height='120'
@@ -245,7 +245,7 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice3')" prop='instructions'>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice3')" prop='instructions_hk'>
                                 <Tinymce
                                     v-model='form.instructions_hk'
                                     :height='120'
@@ -678,8 +678,14 @@ export default {
                 that.configLoaded = true
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-                if (content.instructions) {
-                    content.instructions = unescape(content.instructions)
+                if (content.instructions_zh) {
+                    content.instructions_zh = unescape(content.instructions_zh)
+                }
+                if (content.instructions_en) {
+                    content.instructions_en = unescape(content.instructions_en)
+                }
+                if (content.instructions_hk) {
+                    content.instructions_hk = unescape(content.instructions_hk)
                 }
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
@@ -904,12 +910,17 @@ export default {
                         // 表单验证通过
                         that.submitLoading = true
                         const _formData = cloneDeep(this.form)
-                        if (_formData.instructions) {
-                            _formData.instructions = escape(_formData.instructions)
+
+                        if (_formData.instructions_zh) {
+                            _formData.instructions_zh = escape(_formData.instructions_zh)
+                        }
+                        if (_formData.instructions_hk) {
+                            _formData.instructions_hk = escape(_formData.instructions_hk)
+                        }
+                        if (_formData.instructions_en) {
+                            _formData.instructions_en = escape(_formData.instructions_en)
                         }
 
-                        // const aa = this.$refs['editor'].getContent()
-                        // _formData.instructions = aa
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
                                 if (isEmpty(el.registCountry)) {
