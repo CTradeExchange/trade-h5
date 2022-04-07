@@ -60,13 +60,13 @@
                     <van-icon name='arrow' />
                 </template>
             </van-cell>
-            <!-- <van-cell
+            <van-cell
                 class='cellItem'
                 is-link
                 :title='$t("bank.bankList")'
                 to='/bankList'
                 value=''
-            /> -->
+            />
             <van-cell
                 class='cellItem'
                 is-link

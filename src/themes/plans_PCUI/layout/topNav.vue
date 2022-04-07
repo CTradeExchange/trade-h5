@@ -87,9 +87,9 @@
                                 <el-dropdown-item v-if='Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
                                     {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
-                                <!-- <el-dropdown-item @click="handRoutTo('/bankList')">
+                                <el-dropdown-item @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
-                                </el-dropdown-item> -->
+                                </el-dropdown-item>
                                 <el-dropdown-item @click="handRoutTo('/googleMFA/status')">
                                     {{ $t('mfa.routeTitile') }}
                                 </el-dropdown-item>
@@ -109,9 +109,9 @@
                         <i class='icon icon_kefu' :title="$t('newHomeFooter.customer')"></i>
                     </a>
                 </div>
-                <div class='item'>
+                <!-- <div class='item'>
                     <DownloadIcon />
-                </div>
+                </div> -->
                 <div class='item'>
                     <LangIcon />
                 </div>
@@ -164,7 +164,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         // 在线客服地址
-        const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
+        const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         onBeforeMount(() => {
 
