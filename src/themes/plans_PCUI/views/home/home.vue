@@ -38,6 +38,7 @@ import HomeNotice from '../../modules/homeNotice/homeNotice'
 import { reactive, toRefs, onMounted, onUnmounted, computed, watch } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useStore } from 'vuex'
+import { getCookie } from '@/utils/util'
 export default {
     name: 'Home',
     components: {
@@ -92,6 +93,45 @@ export default {
             state.pageModules = res
         })
 
+        // WL--start 底部nav跳转
+        const jumpUrl = (index) => {
+            console.log('=======', index, getCookie('lang'))
+            const lang = getCookie('lang') || 'zh-CN'
+            let linkList = {}
+            if (lang === 'zh-CN') {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/zh-CN/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/zh-CN/fund',
+                    program: 'https://www.vitatoken.com/zh-CN/new1',
+                    vip: 'https://www.vitatoken.com/zh-CN/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.io/site/faqs',
+                    terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    policy: 'https://www.vitatoken.io/site/privacy-policy'
+                }
+            } else {
+                linkList = {
+                    trading: 'https://www.vitatoken.com/en-US/order?symbolId=364&tradeType=5',
+                    fund: 'https://www.vitatoken.com/en-US/fund',
+                    program: 'https://www.vitatoken.com/en-US/new1',
+                    vip: 'https://www.vitatoken.com/en-US/vip',
+                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
+                    faqs: 'https://www.vitatoken.io/site/faqs',
+                    terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    policy: 'https://www.vitatoken.io/site/privacy-policy'
+                }
+            }
+            const community = {
+                fb: 'https://www.facebook.com/Vitatoken-100578379186941',
+                ig: 'https://www.instagram.com/vitatoken_official/',
+                twitter: 'https://twitter.com/Vitatoken_',
+                telegram: 'https://t.me/vitatoke',
+                yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
+            }
+            const newLinkList = { ...linkList, ...community }
+            window.open(newLinkList[index])
+        }
+
         // 发送行情订阅
         onMounted(() => {
             // 头部固定
@@ -108,6 +148,7 @@ export default {
 
         return {
             ...toRefs(state),
+            jumpUrl,
             pageModulesList,
             fullBannerData,
             homeNoticeData,
@@ -119,12 +160,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/sass/mixin.scss';
 
-.homePage{
+// WL--end
+.homePage {
     position: relative;
     padding-top: 490px;
-    .relativeFloor{
+    .relativeFloor {
         position: relative;
         z-index: 101;
     }
@@ -151,9 +192,9 @@ export default {
     .title {
         @include font();
         margin-bottom: 38px;
-        font-size: 32px;
-        font-weight: bold;
         color: var(--color);
+        font-weight: bold;
+        font-size: 32px;
     }
     .case {
         height: 600px;
@@ -162,11 +203,11 @@ export default {
         @include font();
         margin-bottom: 38px;
         span {
-            padding-bottom: 6px;
             margin-right: 45px;
-            font-size: 32px;
-            font-weight: bold;
+            padding-bottom: 6px;
             color: var(--minorColor);
+            font-weight: bold;
+            font-size: 32px;
             cursor: pointer;
             &:last-of-type {
                 margin-right: 0;
@@ -181,4 +222,6 @@ export default {
         }
     }
 }
+
+@import '@/sass/mixin.scss';
 </style>

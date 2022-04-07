@@ -140,7 +140,7 @@
                     {{ $t('trade.buyText') }}
                 </van-button>
             </div>
-            <LoginMask />
+            <LoginMask class='loginMaskPop' />
             <!-- <div v-if='!customerInfo' class='login-bar'>
                 <router-link to='login'>
                     {{ $t('c.login') }}
@@ -225,7 +225,7 @@
                     {{ $t('trade.sellText') }}
                 </van-button>
             </div>
-            <LoginMask />
+            <LoginMask class='loginMaskPop' />
         </div>
     </div>
 </template>
@@ -623,6 +623,7 @@ export default {
             margin-right: rem(24px);
             border: solid 1px var(--color);
             @include active();
+            @include hover();
             .text{
                 display: inline-block;
                 padding-right: 10px;
@@ -635,6 +636,10 @@ export default {
         }
         .fundtokenLink{
             cursor: pointer;
+            background: none;
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            color: var(--primary);
         }
     }
 }
@@ -648,10 +653,19 @@ export default {
         padding-right: 15px;
         margin-right: 15px;
         border-right: dashed 1px var(--placeholdColor);
+        &:hover .loginMaskPop{
+            display: flex;
+        }
     }
     .sell-wrap{
         position: relative;
         flex: 1;
+        &:hover .loginMaskPop{
+            display: flex;
+        }
+    }
+    .loginMaskPop{
+        display: none;
     }
     .form-item{
         color: var(--minorColor);

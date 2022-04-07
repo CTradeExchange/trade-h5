@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26639948",
+      "name": "卖出",
+      "font_class": "maichu",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
+      "icon_id": "26639949",
+      "name": "买入",
+      "font_class": "mairu",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
       "icon_id": "10392612",
       "name": "盾牌",
       "font_class": "dunpai",

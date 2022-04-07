@@ -420,6 +420,7 @@ export default {
         justify-content: space-evenly;
         width: 100%;
         .returnBtn {
+            @include hover();
             margin: rem(20px);
             color: #FFF;
             font-size: rem(30px);

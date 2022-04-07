@@ -80,8 +80,8 @@ export default {
     height: 100%;
     //overflow: auto;
     background: var(--contentColor);
-    &.hasNav{
-        margin-bottom: rem(80px);
+    &.hasNav {
+        //margin-bottom: rem(80px);
     }
 }
 .noticeBar,

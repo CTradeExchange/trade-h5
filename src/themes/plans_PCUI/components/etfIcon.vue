@@ -18,8 +18,7 @@
     height: 16px;
     line-height: 1;
     font-size: 10px;
-    color: #fff;
-    background: var(--primary);
+    color: var(--primary);
     border: 1px solid var(--primary);
     border-radius: 3px;
     text-transform: uppercase;

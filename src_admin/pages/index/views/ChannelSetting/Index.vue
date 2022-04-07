@@ -200,6 +200,7 @@
                                     v-model='form.supportLanguage'
                                     multiple
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='val'
                                     @change='changeSupportLanguage'
                                 >
@@ -218,6 +219,7 @@
                                 <el-select
                                     v-model='form.language'
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='name'
                                 >
                                     <el-option
@@ -687,12 +689,12 @@ export default {
                 if (content.instructions_hk) {
                     content.instructions_hk = unescape(content.instructions_hk)
                 }
+
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -920,7 +922,6 @@ export default {
                         if (_formData.instructions_en) {
                             _formData.instructions_en = escape(_formData.instructions_en)
                         }
-
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
                                 if (isEmpty(el.registCountry)) {

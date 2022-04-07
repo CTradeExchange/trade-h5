@@ -294,6 +294,7 @@ export default {
             }
         }
         .add-wrap {
+            @include hover();
             display: flex;
             align-items: center;
             padding: rem(34px);

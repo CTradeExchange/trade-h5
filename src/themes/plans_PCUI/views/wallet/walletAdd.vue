@@ -49,7 +49,7 @@
                     </div>
                     <div class='box'>
                         <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
-                        <span v-if='countDown === 0' class='get' @click='getCode'>
+                        <span v-if='countDown === 0' class='get' style='cursor: pointer;' @click='getCode'>
                             {{ $t('walletAdd.codeBtn') }}
                         </span>
                         <span v-else class='time'>
@@ -377,12 +377,14 @@ export default {
     }
 }
 .footer-btn {
+    @include hover;
     display: flex;
     align-items: center;
     justify-content: center;
     height: rem(104px);
     background-color: var(--contentColor);
     border-top: 1px solid var(--lineColor);
+    cursor: pointer;
     span {
         color: var(--color);
         font-weight: bold;

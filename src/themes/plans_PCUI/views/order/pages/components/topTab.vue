@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model:active='active' class='tabs' @tab-click='updataActive'>
+    <el-tabs v-model:active='active' class='tabs' :model-value='active' @tab-click='updataActive'>
         <el-tab-pane v-for='(item, index) in list' :key='index' class='tab' :label='item.title' :name='String(index)' />
     </el-tabs>
 </template>
@@ -98,6 +98,7 @@ export default {
             line-height: 32px;
         }
         .el-tabs__item{
+            @include hover();
             height: 32px;
             line-height: 32px;
             padding: 0 11px!important;

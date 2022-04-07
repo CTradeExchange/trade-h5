@@ -178,8 +178,8 @@
     "account": "账户",
     "copy": "复制",
     "copySuccess": "复制成功",
-    "redUp": "红涨绿跌",
-    "redDown": "绿涨红跌",
+    "redUp": "红涨蓝跌",
+    "redDown": "蓝涨红跌",
     "chartColor": "涨跌颜色",
     "noLogin": "请登录",
     "kycLevel1": "LV1认证",
@@ -217,7 +217,8 @@
     "emailCodeInput": "请输入邮箱验证码",
     "invite": "邀请",
     "remove": "删除",
-    "add": "添加"
+    "add": "添加",
+    "viewMore": "查看更多"
   },
   "faceAuth": {
     "faceDetectTip": "请正对手机，保持光线充足",
@@ -297,7 +298,8 @@
     "incorrectlyFormed": "格式不正确",
     "pleaseEnter": "请输入",
     "businessOpen": "企业开户",
-    "reGet": "重新获取"
+    "reGet": "重新获取",
+    "input":"輸入你的郵箱和手機號"
   },
   "chart": {
     "candleStick": "阴阳烛",
@@ -948,5 +950,35 @@
       "tradersTips": "账户持有人/交易员身份证件证明文件及个人肖像照",
       "mainTradersTips": "主账户持有人/交易员手持证件照",
       "infoList": "开始企业认证前，请准备以下文件"
+  },
+  "newHomeFooter":{ 
+    "product": "產品",
+    "trading": "現貨交易",
+    "fund": "指數基金",
+    "service": "服务",
+    "program": "新客活動",
+    "vip": "機構及VIP",
+    "customer": "在線客服",
+    "help": "幫助",
+    "faqs": "FAQs",
+    "terms": "條款条例",
+    "policy": "隱私政策",
+    "community": "社媒",
+    "aboutus": "關於我們",
+    "followus": "关注我们",
+    "fees": "費用"
+  },
+  "aboutUs": {
+    "title": "關於我們",
+    "introduce": "Vitatoken在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 於2021年9月6日成立，提供金融科技解決方案，有加密貨幣交易牌照。 2022年一季度將實現如下功能：加密貨幣現貨交易，ETF基金二級市場交易，基金申購、贖回，支持基金實時淨值及報表發布，APP上線，全面支持eth主鍊及代幣，全面支持trx主鍊及代幣，交易所錢包升級，將符合FIPS 140-2 level 3標準。更多功能敬請期待。",
+    "servicesTitle": "基礎服務",
+    "visionsTitle": "願景",
+    "visionsTextCell1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場",
+    "visionsTextCell2": "我們像維他命那樣",
+    "visionsTextCell3": "是重要組成部分",
+    "visionsTextCell4": "使用我們平台發行或者買賣加密貨幣基金",
+    "visionsTextCell5": "降低參與門檻",
+    "visionsTextCell6": "提高獲利概率",
+    "visionsTextCell7": "從而在這個快速變化的市場中賺錢"
   }
 }

@@ -86,6 +86,7 @@ export default {
     top: rem(110px);
     overflow-y: auto;
     li{
+        @include hover();
         position: relative;
         padding-left: rem(30px);
         flex: 0 0 48%;

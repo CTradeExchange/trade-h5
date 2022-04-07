@@ -341,6 +341,7 @@ export default {
             justify-content: space-evenly;
             width: 100%;
             .van-button {
+                @include hover();
                 //width: 45%;
                 flex: 1;
                 height: rem(80px);

@@ -33,6 +33,7 @@ const activeName = ref('apply')
 <style lang="scss" scoped>
 .fund-deal {
     position: relative;
+    padding-top: 10px;
     padding-bottom: 20px;
     &:deep {
         .el-tabs {
@@ -54,11 +55,12 @@ const activeName = ref('apply')
         }
         .el-tabs__item {
             flex: 1;
-            font-size: 14px;
+            font-size: 20px;
             color: var(--normalColor);
             height: 40px;
             text-align: center;
             line-height: 40px;
+            font-weight: bold;
             &.is-active {
                 color: var(--primary);
             }

@@ -214,7 +214,8 @@
 	"home": {
 		"quick": {
 			"title": "讓財富更自由",
-			"describe": "輕鬆投資加密貨幣基金，30種主流現貨"
+			"describe": "輕鬆投資加密貨幣基金，30種主流現貨",
+            "emailOrPhone": "郵箱/電話"
 		},
 		"download": {
 			"title": "交易隨時隨地",

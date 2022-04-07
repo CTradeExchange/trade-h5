@@ -336,6 +336,7 @@ const routes = [
             title: 'cRoute.resetPwdFaid'
         }
     },
+
     {
         path: '/',
         redirect: '/home',
@@ -395,6 +396,24 @@ const routes = [
                 children: h5Children
             },
             {
+                path: 'fees',
+                name: 'Fees',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
+                path: 'about',
+                name: 'About',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
                 path: 'fund',
                 name: 'Fund',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/index.vue'),
@@ -449,6 +468,14 @@ const routes = [
                 },
                 children: h5Children
             },
+            {
+                path: '/download',
+                name: 'Download',
+                component: () => import(/* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
+                meta: {
+                    title: 'route.download'
+                }
+            }
 
         ],
     },

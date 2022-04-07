@@ -3,9 +3,9 @@ import store from './store'
 
 export const colors = {
     common: {
-        primary: '#477fd3',
+        primary: '#0062FF',
         riseColor: '#ef5353',
-        fallColor: '#26a69a',
+        fallColor: '#0062FF',
         warn: '#ef5353',
         success: '#26a69a',
         focusColor: '#f2a11b'
@@ -28,8 +28,8 @@ export const colors = {
         minorColor: '#999999',
         placeholdColor: '#c2c2c2',
         contentColor: '#ffffff',
-        bgColor: '#f8f8f8',
-        assistColor: '#f8f8f8',
+        bgColor: '#f4f4f4',
+        assistColor: '#f4f4f4',
         lineColor: '#eeeeee'
     },
     // disable: '#eeeeee'

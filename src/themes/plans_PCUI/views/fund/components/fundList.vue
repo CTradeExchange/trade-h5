@@ -35,7 +35,7 @@
                     :class="{ 'item': true, 'active': item.fundId === fund.fundId }"
                     @click='selectFund(item)'
                 >
-                    <CurrencyIcon :currency='item.shareTokenCode' size='36' />
+                    <CurrencyIcon :currency='item.shareTokenCode' size='32' />
                     <div class='col-1'>
                         <div class='row'>
                             <span class='name'>
@@ -155,6 +155,9 @@ onUnmounted(() => {
         }
     }
     .fund-list {
+        @media screen and (max-width: 1560px){
+            font-size: 12px;
+        }
         .item {
             display: flex;
             align-items: center;
@@ -176,13 +179,20 @@ onUnmounted(() => {
                 .row {
                     display: inline-flex;
                     flex-direction: column;
+                    align-items: start;
                     .name {
-                        font-size: 15px;
+                        font-size: 14px;
                     }
                     .type {
-                        line-height: 1;
+                        display: inline-block;
                         font-size: 12px;
-                        color: var(--normalColor);
+                        color: var(--primary);
+                        height: 18px;
+                        line-height: 16px;
+                        border: 1px solid var(--primary);
+                        padding: 0 4px;
+                        border-radius: 4px;
+                        background: none;
                     }
                 }
             }
