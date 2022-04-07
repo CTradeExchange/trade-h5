@@ -782,7 +782,10 @@ export default {
                                 const langKeys = Object.keys(that.form.paymentIconList[uniqueKey])
                                 that.lang.forEach(el => {
                                     if (!langKeys.includes(el.val)) {
-                                        that.form.paymentIconList[uniqueKey][el.val] = {}
+                                        that.form.paymentIconList[uniqueKey][el.val] = {
+                                            alias: '',
+                                            imgUrl: ''
+                                        }
                                     }
                                 })
                             }
