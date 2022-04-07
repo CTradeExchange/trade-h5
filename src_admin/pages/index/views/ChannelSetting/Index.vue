@@ -681,13 +681,13 @@ export default {
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
                 if (content.instructions_zh) {
-                    content.instructions_zh = unescape(content.instructions_zh)
+                    content.instructions_zh = decodeURIComponent(content.instructions_zh)
                 }
                 if (content.instructions_en) {
-                    content.instructions_en = unescape(content.instructions_en)
+                    content.instructions_en = decodeURIComponent(content.instructions_en)
                 }
                 if (content.instructions_hk) {
-                    content.instructions_hk = unescape(content.instructions_hk)
+                    content.instructions_hk = decodeURIComponent(content.instructions_hk)
                 }
 
                 that.filterLang = content.supportLanguage
@@ -914,13 +914,13 @@ export default {
                         const _formData = cloneDeep(this.form)
 
                         if (_formData.instructions_zh) {
-                            _formData.instructions_zh = escape(_formData.instructions_zh)
+                            _formData.instructions_zh = encodeURIComponent(_formData.instructions_zh)
                         }
                         if (_formData.instructions_hk) {
-                            _formData.instructions_hk = escape(_formData.instructions_hk)
+                            _formData.instructions_hk = encodeURIComponent(_formData.instructions_hk)
                         }
                         if (_formData.instructions_en) {
-                            _formData.instructions_en = escape(_formData.instructions_en)
+                            _formData.instructions_en = encodeURIComponent(_formData.instructions_en)
                         }
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
