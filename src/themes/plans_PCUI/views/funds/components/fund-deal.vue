@@ -4,17 +4,17 @@
         <div class='deal-tabs'>
             <div class='group'>
                 <div :class="['item', { 'active': activeName === 'apply' }]" @click="switchTab('apply')">
-                    <van-icon name='plus' />
+                    <img src='../../../images/deal-icon1.png' />
                     <span>{{ $t('fundInfo.buy') }}</span>
                 </div>
                 <div :class="['item', { 'active': activeName === 'redeem' }]" @click="switchTab('redeem')">
-                    <van-icon name='minus' />
+                    <img src='../../../images/deal-icon2.png' />
                     <span>{{ $t('fundInfo.sell') }}</span>
                 </div>
             </div>
             <div class='group'>
                 <div :class="['item', { 'active': activeName === 'trade' }]" @click="switchTab('trade')">
-                    <van-icon name='exchange' />
+                    <img src='../../../images/deal-icon3.png' />
                     <span>{{ $t('funds.cashDeal') }}</span>
                 </div>
             </div>
@@ -73,20 +73,17 @@ const switchTab = value => {
         transition: all .2s ease-in-out;
         cursor: pointer;
         &.active {
-            color: var(--primary);
             border: 1px solid var(--primary);
         }
         &:hover {
             transform: scale(1.05);
-            color: var(--primary);
             border: 1px solid var(--primary);
         }
-        i {
-            margin-top: -4px;
-            font-size: 40px;
+        img {
+            width: 42px;
+            height: 42px;
         }
         span {
-            margin-top: 8px;
             font-size: 14px;
             font-weight: 400;
         }
@@ -98,7 +95,10 @@ const switchTab = value => {
     }
 }
 .deal-case {
+    display: flex;
+    flex-direction: column;
     width: 100%;
+    min-height: 400px;
     padding: 32px;
     background-color: var(--contentColor);
     border-radius: 12px;

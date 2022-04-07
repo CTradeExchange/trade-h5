@@ -34,7 +34,7 @@
                         </span>
                     </a>
                     <p class='total'>
-                        ≈ 100215.456662 {{ assetsInfo?.currency }}
+                        ≈ {{ item.wholeWarehouseBalance }} {{ assetsInfo?.currency }}
                     </p>
                 </li>
             </ul>
@@ -139,6 +139,9 @@ const showTransRecords = () => {
 
 <style lang='scss' scoped>
 @import "@/sass/mixin.scss";
+.side-bar {
+    padding-bottom: 10px;
+}
 // 标题
 .nav-title {
     a {
@@ -217,9 +220,6 @@ const showTransRecords = () => {
     li {
         height: 52px;
         margin-bottom: 8px;
-        &:last-of-type {
-            margin-bottom: 0;
-        }
         a {
             display: flex;
             align-items: center;

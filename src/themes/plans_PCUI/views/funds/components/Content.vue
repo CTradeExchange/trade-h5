@@ -1,5 +1,5 @@
 <template>
-    <div class='content' :style='{ height: contentHeight + "px" }'>
+    <div class='content'>
         <customTable
             v-model:currentPage='currentPage'
             :data='tableData'
@@ -85,6 +85,9 @@ watch(() => [props.params, unref(currentPage)], queryData, { deep: true, immedia
     :deep{
         td.el-table__cell{
             padding: 20px 0!important;
+        }
+        .el-table__body-wrapper {
+            height: auto !important;
         }
     }
 }

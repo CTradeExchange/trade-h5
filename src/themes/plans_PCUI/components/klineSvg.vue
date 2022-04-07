@@ -3,10 +3,6 @@
         <svg :height='height' :width='width'>
             <polyline :points='points' :stroke='$style.primary' stroke-width='1' style='fill: none;' />
         </svg>
-
-        <!-- <svg fill='none' height='26' width='80' xmlns='http://www.w3.org/2000/svg'>
-            <path :d='svgData[product.symbolKey]' :stroke='$style[color] || "#333"' stroke-width='1.5' />
-        </svg> -->
     </div>
 </template>
 
@@ -44,12 +40,13 @@ export default {
                 let points = ''
                 // 统一处理y坐标，垂直向上偏移，也即是y坐标最高点归零
                 rawData.forEach(y => {
-                    points += x + ' ' + ((max - y) * rodio) + ' '
+                    points += x + ' ' + (isNaN((max - y) * rodio) ? 0 : (max - y) * rodio) + ','
                     x += s
                 })
+                points = points.substring(0, points.length - 1)
                 return points
             }
-            return []
+            return ''
         })
 
         return {

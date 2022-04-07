@@ -33,7 +33,9 @@
 		"endTime": "结束时间",
         "languageAreas": "语言和地区",
         "SelectLanguageAreas": "选择语言和地区",
-        "records": "记录"
+        "records": "记录",
+        "lastBox": "上一个",
+        "nextBox": "下一个"
 	},
 	"c": {
 		"login": "登录",
@@ -918,7 +920,8 @@
         "tradeFee": "申赎手续费",
         "deal": "买卖",
         "spot": "现货",
-        "cashDeal": "现货买卖"
+        "cashDeal": "现货买卖",
+        "spotTip": "此界面仅提供现货市价买卖，更多下单类型，请前往更专业的<span data-index=order>现货交易</span>界面"
     },
     "home": {
         "quick": {

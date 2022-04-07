@@ -86,7 +86,7 @@ defineProps({
                 font-weight: 600;
                 color: var(--mainColor);
                 span {
-                    color: #FCD535;
+                    color: #ebb650;
                 }
             }
         }
@@ -103,6 +103,7 @@ defineProps({
         font-size: 20px;
         font-weight: 400;
         color: var(--normalColor);
+        word-break: break-word;
     }
     .info-block {
         margin-top: 32px;

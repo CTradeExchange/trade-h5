@@ -19,6 +19,7 @@
                 v-for='(item, index) in fundProductList'
                 :key='index'
                 :fund='item'
+                :index='index'
             />
         </div>
         <!-- 列表模式 -->
@@ -55,7 +56,7 @@ const fundModel = ref('card')
         font-weight: 600;
         color: var(--mainColor);
         span {
-            color: #FCD535;
+            color: #ebb650;
         }
     }
     .subTitle {
@@ -73,14 +74,14 @@ const fundModel = ref('card')
         display: inline-flex;
         justify-content: center;
         align-items: center;
-        width: 64px;
-        height: 64px;
+        width: 48px;
+        height: 48px;
         line-height: 1;
         margin: 16px;
-        font-size: 40px;
+        font-size: 32px;
         color: var(--mainColor);
         background: var(--contentColor);
-        border-radius: 15px;
+        border-radius: 10px;
         box-shadow: 3px 3px 20px rgb(0 0 0 / 9%);
         transition: all .2s ease-in-out;
         cursor: pointer;

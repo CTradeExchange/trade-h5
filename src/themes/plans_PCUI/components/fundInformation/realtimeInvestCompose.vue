@@ -6,8 +6,12 @@
                     <span>{{ title || $t('fundInfo.realtimeInvestCompose') }}</span>
                     <span v-if='!allShow && showSwitch' class='rightSwitch icon_chouti1' @click='switchAction'></span>
                     <div v-if='!showSwitch' class='more-tabs'>
-                        <img :class="['icon', { 'active': showBlock === 'chart' }]" src='../../images/chart-icon2.png' @click="switchAction('chart')" />
-                        <img :class="['icon', { 'active': showBlock === 'list' }]" src='../../images/chart-icon1.png' @click="switchAction('list')" />
+                        <div class='box' :class="{ 'active': showBlock === 'chart' }">
+                            <img class='icon icon2' src='../../images/chart-icon2.png' @click="switchAction('chart')" />
+                        </div>
+                        <div class='box' :class="{ 'active': showBlock === 'list' }">
+                            <img class='icon icon1' src='../../images/chart-icon1.png' @click="switchAction('list')" />
+                        </div>
                     </div>
                 </h4>
                 <div class='merge-case'>
@@ -211,10 +215,13 @@ onMounted(async () => {
 .switch-title {
     justify-content: space-between;
     .more-tabs {
-        .icon {
-            width: 36px;
-            height: 36px;
-            padding: 6px;
+        display: flex;
+        .box {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 42px;
+            height: 42px;
             margin-left: 10px;
             border-radius: 5px;
             cursor: pointer;
@@ -223,6 +230,16 @@ onMounted(async () => {
             }
             &:hover {
                 background: var(--lineColor);
+            }
+        }
+        .icon {
+            &.icon1 {
+                width: 36px;
+                height: 36px;
+            }
+            &.icon2 {
+                width: 28px;
+                height: 28px;
             }
         }
     }

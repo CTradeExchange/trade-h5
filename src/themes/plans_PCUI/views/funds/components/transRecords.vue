@@ -29,6 +29,5 @@ watch(() => params.value.tradeType, async () => {
     background: var(--contentColor);
     margin: 8px;
     border-radius: 10px;
-    min-width: 1300px;
 }
 </style>

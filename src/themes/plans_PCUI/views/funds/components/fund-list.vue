@@ -15,10 +15,14 @@
                 <el-table-column :label="$t('funds.trend')" :min-width='minWidth'>
                     <template #default='scope'>
                         <kline-svg
-                            :data='klineData'
-                            :height='30'
+                            v-if='netValueArrs[scope.$index].length > 0'
+                            :data='netValueArrs[scope.$index]'
+                            :height='20'
                             :width='80'
                         />
+                        <span v-else>
+                            -
+                        </span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.realtimeJZ')" prop='netValue' />
@@ -61,20 +65,24 @@
                 <el-table-column :label="$t('funds.trend')" :min-width='minWidth'>
                     <template #default='scope'>
                         <kline-svg
-                            :data='klineData'
-                            :height='30'
+                            v-if='marketPriceArrs[scope.$index].length > 0'
+                            :data='marketPriceArrs[scope.$index]'
+                            :height='20'
                             :width='80'
                         />
+                        <span v-else>
+                            -
+                        </span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('trade.newPrice')" :min-width='minWidth'>
                     <template #default='scope'>
-                        <span>233.5546</span>
+                        <span>{{ curProductList[scope.$index].cur_price ? curProductList[scope.$index].cur_price : '-' }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth'>
                     <template #default='scope'>
-                        <span>0.00</span>
+                        <span>{{ curProductList[scope.$index].upDownWidth ? curProductList[scope.$index].upDownWidth : '-' }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('trade.operating')" :min-width='minWidth'>
@@ -92,63 +100,33 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, inject } from 'vue'
-import { useStore } from 'vuex'
+import { ref, inject } from 'vue'
 import { useFund } from '../hooks.js'
 import currencyIcon from '@/components/currencyIcon.vue'
 import klineSvg from '@planspc/components/klineSvg.vue'
 
-const store = useStore()
 const selectFund = inject('selectFund')
-// 产品列表数据
-const productList = computed(() => store.state._quote.productList)
+// 当前基金列表对应的产品
+const curProductList = inject('curProductList')
+// 基金列表基金净值数据
+const netValueArrs = inject('netValueArrs')
+// 基金列表市场价格数据
+const marketPriceArrs = inject('marketPriceArrs')
 // 基金产品列表
 const { fundProductList } = useFund()
-// 当前订阅的产品symbolKey
-const productKes = ref([])
-// 当前基金列表产品
-const currentProducts = computed(() => {
-    const result = []
-    fundProductList.value.map(fund => {
-        productList.value.map(product => {
-            if (Number(product.tradeType) === 5 && product.fundId === fund.fundId) {
-                productKes.value.push(product.symbolKey)
-                result.push(product)
-            }
-        })
-    })
-    return result
-})
-
 // 列表最小宽度
 const minWidth = ref(100)
-// 基金净值数据
-const klineData = ref([])
-
-// 随机生成基金净值数据
-const randomData = () => {
-    const result = []
-    for (let i = 0; i < 30; i++) {
-        const num = Math.floor(Math.random() * 100)
-        result.push(num)
-    }
-    klineData.value = result
-}
 
 // 去交易
 const goDeal = (fundId, active) => {
     selectFund(fundId, active)
 }
-
-onMounted(() => {
-    randomData()
-})
 </script>
 
 <style lang='scss' scoped>
 @import "@/sass/mixin.scss";
 .fund-list {
-    margin-top: 16px;
+    margin: 16px 0;
     background: var(--contentColor);
     .currency {
         margin-right: 10px;

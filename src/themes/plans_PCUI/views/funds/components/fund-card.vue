@@ -29,7 +29,8 @@
         </div>
         <div class='card-kline'>
             <kline-svg
-                :data='klineData'
+                v-if='netValueArrs[index].length > 0'
+                :data='netValueArrs[index]'
                 :height='40'
                 :width='360'
             />
@@ -41,8 +42,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, defineProps, inject } from 'vue'
-import { marketPerformance } from '@/api/trade'
+import { defineProps, inject } from 'vue'
 import { toFixed } from '@/utils/calculation.js'
 import currencyIcon from '@/components/currencyIcon.vue'
 import klineSvg from '@planspc/components/klineSvg.vue'
@@ -52,50 +52,20 @@ const props = defineProps({
     fund: {
         type: Object,
         default: () => {}
+    },
+    // 当前基金产品索引
+    index: {
+        type: [Number, String],
+        default: ''
     }
 })
 const selectFund = inject('selectFund')
-
-// 基金净值数据
-const klineData = ref([])
-// 随机生成基金净值数据
-const randomData = () => {
-    const result = []
-    for (let i = 0; i < 30; i++) {
-        const num = Math.floor(Math.random() * 100)
-        result.push(num)
-    }
-    klineData.value = result
-}
-
-// 市场表现走势图
-const getMarketPerformanceData = () => {
-    return marketPerformance({
-        fundId: props.fund.fundId,
-        days: 60,
-        type: 1
-    }).then(res => {
-        if (res.check()) {
-            // const keysArr = Object.keys(res.data)
-            // const key = keysArr.length > 1 ? keysArr[1] : keysArr[0]
-            // const result = []
-            // res.data[key].map(elem => {
-            //     result.push(elem.value)
-            // })
-            // klineData.value = result
-        }
-    })
-}
+const netValueArrs = inject('netValueArrs')
 
 // 点击基金产品
 const onCard = () => {
     selectFund(props.fund.fundId)
 }
-
-onMounted(() => {
-    randomData()
-    // getMarketPerformanceData()
-})
 </script>
 
 <style lang='scss' scoped>
