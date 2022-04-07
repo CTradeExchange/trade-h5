@@ -678,9 +678,16 @@ export default {
                 that.configLoaded = true
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-                if (content.instructions) {
-                    content.instructions = unescape(content.instructions)
+                if (content.instructions_zh) {
+                    content.instructions_zh = decodeURIComponent(content.instructions_zh)
                 }
+                if (content.instructions_en) {
+                    content.instructions_en = decodeURIComponent(content.instructions_en)
+                }
+                if (content.instructions_hk) {
+                    content.instructions_hk = decodeURIComponent(content.instructions_hk)
+                }
+
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
@@ -904,8 +911,14 @@ export default {
                         // 表单验证通过
                         that.submitLoading = true
                         const _formData = cloneDeep(this.form)
-                        if (_formData.instructions) {
-                            _formData.instructions = escape(_formData.instructions)
+                        if (_formData.instructions_zh) {
+                            _formData.instructions_zh = encodeURIComponent(_formData.instructions_zh)
+                        }
+                        if (_formData.instructions_hk) {
+                            _formData.instructions_hk = encodeURIComponent(_formData.instructions_hk)
+                        }
+                        if (_formData.instructions_en) {
+                            _formData.instructions_en = encodeURIComponent(_formData.instructions_en)
                         }
 
                         // const aa = this.$refs['editor'].getContent()
