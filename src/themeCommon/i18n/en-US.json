@@ -76,6 +76,8 @@
         "registered": "Your email has registered an account, please login.",
         "inputCountry": "Please add your country information.",
         "loginOrRegist": "Log In / Register",
+        "loginSuccess": "Log In Success",
+		"loginIng": "Log In...",
         "loginByPersonal": "Personal",
         "loginByCorporate": "Enterprise"
     },
