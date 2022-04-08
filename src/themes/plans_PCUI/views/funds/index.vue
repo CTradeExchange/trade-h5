@@ -194,6 +194,14 @@ onMounted(() => {
     if (customerInfo.value) {
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
     }
+
+    // marketPerformance({
+    //     fundIds: '2',
+    //     days: 36,
+    //     type: 1
+    // }).then(res => {
+    //     console.log('res', res)
+    // })
 })
 onUnmounted(() => {
     document.body.style.overflow = 'visible'
