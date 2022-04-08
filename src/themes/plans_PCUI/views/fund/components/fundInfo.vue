@@ -1,7 +1,7 @@
 <template>
     <div class='fund-info width-limit'>
         <div class='header'>
-            <CurrencyIcon :currency='fund.shareTokenCode' size='100' />
+            <CurrencyIcon :currency='fund.shareTokenCode' size='64' />
             <span class='name'>
                 {{ fund.fundName }}
             </span>
@@ -130,14 +130,21 @@ const toOrderFund = () => {
         display: flex;
         align-items: center;
         justify-content: space-between;
+            line-height: 1;
         .name {
             margin-left: 25px;
             margin-right: 20px;
-            font-size: 45px;
+            font-size: 30px;
         }
         .type, .title {
-            font-size: 18px;
-            color: var(--normalColor);
+            font-size: 12px;
+            color: var(--primary);
+            height: 18px;
+            line-height: 16px;
+            border: 1px solid var(--primary);
+            padding: 0 4px;
+            border-radius: 4px;
+            background: none;
         }
         .type {
             margin-right: 10px;
@@ -149,19 +156,23 @@ const toOrderFund = () => {
     }
     .immediatTrade{
         display: inline-block;
-        height: 24px;
-        color: var(--color);
-        background: var(--assistColor);
-        padding: 0 rem(16px);
-        border-radius: 4px;
+        height: 40px;
+        line-height: 38px;
+        padding: 0 12px;
         margin-right: rem(24px);
-        border: solid 1px var(--color);
+        cursor: pointer;
+        border: 1px solid var(--primary);
+        border-radius: 5px;
+        background: var(--primary);
+        color: #fff;
+        font-size: 14px;
+        @include hover();
         @include active();
     }
     .desc {
         margin-top: 20px;
         line-height: 26px;
-        font-size: 18px;
+        font-size: 14px;
         color: var(--normalColor);
         word-wrap: break-word;
     }
@@ -173,7 +184,7 @@ const toOrderFund = () => {
             border-radius: rem(10px);
             flex: 1;
             line-height: 1.6;
-            font-size: 16px;
+            font-size: 14px;
             .hours24 {
                 position: relative;
                 margin-left: 5px;

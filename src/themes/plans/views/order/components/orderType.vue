@@ -3,7 +3,7 @@
         <van-tabs v-model:active='orderType' class='orderTypeTab' @change='changeOrderType'>
             <van-tab v-for='(item,i) in btnList' :key='i' :name='item.val' :title='item.title' />
         </van-tabs>
-        <a v-if="[1,2].includes(product.tradeType) && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
+        <a v-if="product.tradeType===2 && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
             <span class='text'>
                 {{ mVal }}x
             </span>
@@ -11,13 +11,7 @@
         </a>
     </div>
     <MultipleSet
-        v-if="product && [2].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
-        v-model='multipleSetVisible'
-        v-model:multipleVal='mVal'
-        :product='product'
-    />
-    <MultipleSetCross
-        v-if="product && [1].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
+        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
         v-model:multipleVal='mVal'
         :product='product'
@@ -28,12 +22,10 @@
 import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useI18n } from 'vue-i18n'
 import MultipleSet from '@plans/components/multipleSet'
-import MultipleSetCross from '@plans/components/multipleSetCross'
 import { toolHooks } from '@plans/hooks/handicap'
 export default {
     components: {
         MultipleSet,
-        MultipleSetCross,
     },
     props: ['modelValue', 'tradeType', 'multipleVal', 'product', 'tradeMode'],
     emits: ['update:modelValue', 'selected', 'update:multipleVal'],

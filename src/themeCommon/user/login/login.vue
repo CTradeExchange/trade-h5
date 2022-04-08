@@ -1,21 +1,11 @@
 <template>
     <div class='pageWrap'>
         <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
-        <van-tabs
-            v-model:active='active'
-            :color='$style.primary'
-            shrink
-            :title-active-color='$style.primary'
-        >
-            <van-tab :title='$t("login.loginByPersonal")' />
-            <van-tab :title='$t("login.loginByCorporate")' />
-        </van-tabs>
         <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
             </h1>
         </header>
-
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
                 <InputComp
@@ -422,14 +412,14 @@ export default {
     .support {
         position: absolute;
         bottom: rem(30px);
-        left: 50%;
         width: rem(300px);
+        left: 50%;
         margin-left: rem(-150px);
         color: var(--placeholdColor);
         font-size: rem(20px);
         line-height: rem(32px);
         text-align: center;
-        img {
+        img{
             width: 100%;
         }
     }
@@ -488,10 +478,10 @@ export default {
             color: var(--lineColor);
             font-size: rem(36px);
         }
-        &.field-google {
-            :deep(.van-cell) {
+        &.field-google{
+            :deep(.van-cell){
                 padding-left: 0;
-                input {
+                input{
                     padding: 0 rem(10px);
                 }
             }
@@ -523,21 +513,22 @@ export default {
         color: var(--minorColor);
     }
 }
-.three-way-login {
+.three-way-login{
     margin-top: rem(200px);
-    .title {
-        margin-bottom: rem(20px);
-        color: var(--placeholdColor);
+    .title{
         text-align: center;
+        color: var(--placeholdColor);
+        margin-bottom: rem(20px);
     }
     .otherLogin {
+        text-align: center;
         display: flex;
         justify-content: space-evenly;
         width: rem(470px);
         margin: rem(30px) auto 0;
-        text-align: center;
     }
 }
+
 .footer {
     position: absolute;
     bottom: 20px;

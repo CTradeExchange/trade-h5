@@ -2,13 +2,14 @@
     <div class='header'>
         <div v-for='symbolKey in symbolKeys' :key='symbolKey' class='item' @click='gotoOrder(symbolKey)'>
             <span class='name'>
-                {{ productMap[symbolKey]?.symbolCode || '- -' }}
+                {{ productMap[symbolKey]?.symbolName || '- -' }}
             </span>
-            <span class='price'>
+            <span class='price' :class='[productMap[symbolKey]?.cur_color]'>
                 {{ productMap[symbolKey]?.price || '- -' }}
             </span>
+            <currency-icon v-if='productMap[symbolKey]' class='currency-icon' :currency='productMap[symbolKey].baseCurrency' :size='32' />
             <div class='change'>
-                <span class='upDownAmount'>
+                <span class='upDownAmount' :class='[productMap[symbolKey]?.upDownColor]'>
                     {{ productMap[symbolKey]?.upDownAmount || '- -' }}
                 </span>
                 <span class='upDownWidth' :class='[productMap[symbolKey]?.upDownColor]'>
@@ -24,6 +25,7 @@ import { computed, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import currencyIcon from '@/components/currencyIcon.vue'
 const store = useStore()
 const router = useRouter()
 const gotoOrder = (symbolKey) => {
@@ -38,7 +40,8 @@ const gotoOrder = (symbolKey) => {
 }
 // 产品列表
 const productMap = computed(() => store.state._quote.productMap)
-const symbolKeys = ['27_1', '4_1', '7_1', '33_2', '12_2']
+// const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5'] // pre
+const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5'] // prd
 const unSubscribe = QuoteSocket.add_subscribe({ moduleId: 'topQuote', symbolKeys })
 
 onUnmounted(() => {
@@ -53,8 +56,9 @@ onUnmounted(() => {
     flex-direction: row;
     flex-wrap: nowrap;
     justify-content: space-between;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     .item{
+        position: relative;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -65,6 +69,9 @@ onUnmounted(() => {
         border-radius: 10px;
         padding: 20px;
         cursor: pointer;
+        &:hover{
+            box-shadow: 0 0 0 999px rgba($color: #000000, $alpha: .097) inset;
+        }
         .name{
             font-size: 16px;
             font-weight: 400;
@@ -80,6 +87,11 @@ onUnmounted(() => {
             .upDownAmount{
                 margin-right: 10px;
             }
+        }
+        .currency-icon{
+            position: absolute;
+            right: 14px;
+            top: 11px;
         }
     }
 }

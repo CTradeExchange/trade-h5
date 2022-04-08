@@ -188,11 +188,6 @@ export default {
                     path: '/withdrawMoney',
                     query
                 })
-            } else if (['payredeem'].includes(state.currentTab)) {
-                router.push({
-                    path: '/withdrawRedeem',
-                    query
-                })
             } else {
                 // 跳转到提币页面
                 router.push({

@@ -127,16 +127,7 @@ export const getPendingColumns = tradeType => {
 
     const columnsMap = computed(() => ({
         1: [
-            {
-                name: t('trade.name'),
-                prop: 'symbolName',
-                align: 'left',
-                minWidth: 150,
-                formatter: row => <span >
-                    {row.symbolName }
-                    {row.crossLevelNum ? <><span class="crossLevelNum">{ row.crossLevelNum }x</span></> : <></>}
-                </span>
-            },
+            { name: t('trade.name'), prop: 'symbolName', align: 'left', minWidth: 100 },
             {
                 name: t('trade.direction'),
                 prop: 'direction',
@@ -817,30 +808,7 @@ export const getAssetColumns = (tradeType) => {
 
     const columnsMap = computed(() => ({
         1: [
-            {
-                name: t('trade.name'),
-                prop: 'symbolName',
-                align: 'left',
-                minWidth: 120,
-                slots: {
-                    default: ({ row, onGetComponentRefs }) => {
-                        const refs = onGetComponentRefs()
-                        return (
-
-                            <>
-                                {row.symbolName}
-                                { row.crossLevelNum ? <span class='multipleVal' onclick={
-                                    openMultipleSet.bind(null, row, refs.multipleSetCross)
-                                }>
-                                    <i>{ row.crossLevelNum }x</i>
-                                    {Number(row.marginSetType) === 2 ? <i class='icon_icon_arrow'></i> : ''}
-                                </span> : '' }
-
-                            </>
-                        )
-                    }
-                }
-            },
+            { name: t('trade.name'), prop: 'symbolName', align: 'left', minWidth: 120 },
             {
                 name: t('trade.profit') + '(' + unref(assetsInfo).currency + ')',
                 align: 'right',

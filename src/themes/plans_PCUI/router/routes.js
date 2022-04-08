@@ -166,15 +166,7 @@ const h5Children = [
         }
     },
     {
-        path: 'withdrawRedeem', // 提现Payredeem
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRedeem.vue'),
-        meta: {
-            title: 'cRoute.withdraw',
-            roles: ['User']
-        }
-    },
-    {
-        path: 'withdrawRecord',
+        path: 'withdrawRecord', // 选择提现币种
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRecord.vue'),
         meta: {
             title: 'cRoute.withdrawRecord',
@@ -336,6 +328,7 @@ const routes = [
             title: 'cRoute.resetPwdFaid'
         }
     },
+
     {
         path: '/',
         redirect: '/home',
@@ -395,9 +388,36 @@ const routes = [
                 children: h5Children
             },
             {
+                path: 'fees',
+                name: 'Fees',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
+                path: 'about',
+                name: 'About',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
                 path: 'fund',
                 name: 'Fund',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
+                path: 'cookies-policy',
+                name: 'CookiesPolicy',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/cookiesPolicy/index.vue'),
                 meta: {
                     title: '',
                 },
@@ -446,6 +466,41 @@ const routes = [
                 component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
                 meta: {
                     title: '企业KYC',
+                },
+                children: h5Children
+            },
+            {
+                path: '/download',
+                name: 'Download',
+                component: () => import(/* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
+                meta: {
+                    title: 'route.download'
+                }
+            },
+            {
+                path: 'faqs', // faqs
+                name: 'Faqs',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/faqs/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
+                path: 'privacy-policy',
+                name: 'privacy-policy',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/privacyPolicy/index.vue'),
+                meta: {
+                    title: '',
+                },
+                children: h5Children
+            },
+            {
+                path: 'terms-conditions',
+                name: 'terms-conditions',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/terms/index.vue'),
+                meta: {
+                    title: '',
                 },
                 children: h5Children
             },

@@ -84,13 +84,20 @@ onUnmounted(() => {
         .el-table__row{
             cursor: pointer;
         }
+        .el-table td.el-table__cell{
+            padding: 12px 0;
+        }
         .el-table__empty-block{
             margin-top: 80px;
         }
         .star{
             cursor: pointer;
             margin-right: 5px;
+            align-self: self-start;
         }
+        // tbody td.el-table__cell.primaryText{
+        //     color: var(--primary);
+        // }
         .btn{
             @include hover();
             position: relative;

@@ -121,7 +121,8 @@
 		"fundPurchase": "Fun Purchase",
 		"fundRedemption": "Fund Redemption",
 		"transfer": "Transfer",
-		"fundRules": "Trading Rule"
+		"fundRules": "Trading Rule",
+        "spotTrade": "Spot"
 	},
 	"search": {
 		"keywords": "Name/Symbol/Phonics",
@@ -139,9 +140,6 @@
 	"trade": {
 		"advance": "Prepayment",
 		"advanceRatio": "Prepayment ratio",
-        "newPrice": "Last price",
-        "changePrice": "24h Change",
-        "changePercent": "24h Change%",
 		"chart": "Chart",
 		"closeOrder": "Close Position",
 		"contract": "Symbol Properties",
@@ -260,7 +258,7 @@
 		"marketIsClosed": "Market closed",
 		"morePosition": "More positions",
 		"todayOpen": "Open Today",
-		"yesterdayClosed": "Previous Closed",
+		"yesterdayClosed": "Last Close",
 		"sortTime": "Time",
 		"filterToday": "Today",
 		"filterweek": "Last week",
@@ -333,8 +331,8 @@
 		"noPositions": "No positions",
 		"noPendings": "No pending orders",
 		"positionForGuestTip": "You can view positions after logging in",
-		"high": "Highest",
-		"low": "Lowest",
+		"high": "High",
+		"low": "Low",
 		"update": "Update",
 		"nameCode": "Name / Code",
 		"watch": "Watch",
@@ -490,8 +488,9 @@
 		"saveSetting": "Save",
         "noFeature": "This feature is not currently supported",
         "purchaseRedeemBtn": "Purchase Redeem",
-        "productEtfTip": "ETF is a special open-end fund. Investors can buy and sell ETF shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem ETF shares from fund management companies.",
-		"quantity": "QTY(Lots)"
+        "productEtfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
+		"quantity": "QTY(Lots)",
+        "upDown": "24h Change%"
 	},
 	"bizType": {
 		"2": "Market close",
@@ -658,16 +657,16 @@
 		"fundSurvey": "Overview",
 		"fundName": "Fund Name",
 		"fundCreateTime": "Fund Inception Date",
-		"latestPart": "Latest Shares",
+		"latestPart": "Latest No. of Share(s)",
 		"fundManager": "Fund Manager",
 		"followIndex": "Benchmark",
 		"operationMode": "Mode Of Operation",
-		"operationModeValue1": "Closed-end fund",
-		"operationModeValue2": "Open-end fund",
-		"fundType": "Fund Type",
-		"fundChart1": "Market Price vs Fund Nav",
+		"operationModeValue1": "Closed-end",
+		"operationModeValue2": "Open-end",
+		"fundType": "Fund Category",
+		"fundChart1": "Market Price vs Fund NAV",
 		"fundChart2": "Market Performance",
-        "fundChartTitle": "Fund rise % vs Index rise %",
+        "fundChartTitle": "Fund chg % vs Index chg %",
 		"realtimeInvestCompose": "Fund Composition",
 		"assets": "Asset",
 		"ranking": "Rank",
@@ -678,7 +677,7 @@
 		"totalManager": "{0} people in total",
 		"fundChartTip": "The data is for reference only, past performance does not represent future performance!",
 		"marketPrice": "Market Price",
-		"totalMarketValue": "Fund Value",
+		"totalMarketValue": "Fund Size",
 		"fund": "Fund",
 		"fundApplyFeeCalc": "Estimated fees",
 		"choosePayAsset": "Select payment asset",
@@ -746,6 +745,105 @@
         "redeemTipRemark": "赎回费指赎回基金的时候产生的手续费，一次性收取。",
         "applyRule_tipRemark1": "基金管理费指基金管理人管理基金资产所收取的报酬。",
         "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
-		"noTradeMarket": "No trading market"
-	}
+        "noTradeMarket": "No trading market"
+	},
+    "home": {
+        "quick": {
+            "title": "We are the leader in Southeast Asia"
+        },
+        "download": {
+            "title": "Trade. Anywhere.",
+            "describe": "Multi-terminal, multi-device, trading anytime, anywhere",
+            "tip1": "iOS & Android Scan Code To Download APP",
+            "tip2": "Start mobile trading"
+        },
+        "guide": {
+            "title": "Beginner's Guide",
+            "describe": "Start cryptocurrency trading learning",
+            "text1": "How to buy cryptocurrency",
+            "text2": "Quickly understand the trading rules",
+            "text3": "Which cryptocurrency are suitable for beginners"
+        },
+        "why": {
+            "text1": "Safety is the priority",
+            "text2": "Secure Asset Fund for Users (SAFU)",
+            "text3": "Vitatoken stores 10% of all trading fees in a secure asset fund to protect a share of user funds.",
+            "text4": "Personalised Access Control",
+            "text5": "Advanced access control allows you to restrict devices and addresses that can access your account, for greater ease of mind.",
+            "text6": "Advanced Data Encryption",
+            "text7": "Your transaction data is secured via end-to-end encryption, ensuring that only you have access to your personal information.",
+            "text8": "Real-time Account Supervision",
+            "text9": "Withdrawal will be rejected if suspicious activities were spotted by our risk management system."
+        },
+        "fundDesc": {
+            "text1": "V10 Index",
+            "text2": "The tracking index of the V10 Crypto Index Fund，has outperformed Bitcoin 71% of the time since its establishment",
+            "text3": "White Paper (PDF)",
+            "text4": "V10 Crypto Index Fund",
+            "text5": "V10 is an autonomous, high-performing, low-cost cryptocurrency index fund. Consists of 10 leading cryptocurrencies.",
+            "text6": "White Paper (PDF)"
+        },
+        "portfolio": {
+            "text1": "Create your cryptocurrency portfolio today",
+            "text2": "Vitatoken has a variety of features that make it the best place to start trading",
+            "text3": "High efficient",
+            "text4": "Buy and sell cryptocurrencies and track them all in one place.",
+            "text5": "Clear and easy",
+            "text6": "Enjoy streamlined interface displays and market updates.",
+            "text7": "Trade anywhere",
+            "text8": "Use for Android or iOS devices to keep you ahead of the market anywhere."
+        },
+        "portfolioCreate": {
+            "text1": "Start your cryptocurrency trading with 3 easy steps",
+            "text2": "Verify your identity",
+            "text3": "Complete the identity verification process to secure your account and transactions.",
+            "text4": "Fund your account",
+            "text5": "Add funds to your crypto account to start trading crypto.",
+            "text6": "Start trading",
+            "text7": "Ready to go! Trading V10 or cryptocurrencies and discover what Vitatoken has to offer."
+        },
+        "privacy": {
+            "agree": "Agree",
+            "close": "Close",
+            "text1": "We use cookies to enhance your experience, analyze our traffic, and for security and marketing. By visiting our website you agree to our use of cookies.",
+            "text2": "Read more about cookies"
+        },
+        "marketTrend": "Market trend",
+        "getStarted": "Get Started",
+        "getProfit": "Start earning today",
+        "emailOrPhone": "Email/Phone number",
+        "toReg": "Sign Up Now",
+        "app": "Safe, fast and concise"
+    },
+    "download": {
+        "downloadTip": "iOS & Android Scan Code To Download APP",
+        "moreDownload": "More download options",
+        "title": "Trade Anywhere",
+        "subTitle": "All the power of Vitatoken's cryptocurrency exchange, in the palm of your hand. Download the Vitatoken mobile crypto trading app today.",
+        "android": "Download for Android",
+        "ios": "Download for iphone"
+    },
+    "aboutUs": {
+        "introduceTitle": {
+            "about": "About ",
+            "us": " Us"
+        },
+        "introduce1": "Vitatoken is licensed in CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) under the legal entity of Dragon Empire Developments Limited in 6th September, 2021, for fintech solution and cryptocurrency exchange regulations. ",
+        "introduce2": "Vitatoken is the world first-ever cryptocurrency fund trading platform. In the future, Vitatoken will be supporting different fund managers issuing fund on the platform, which allow users to purchase fund as needed.",
+        "introduce3": "Aims to make everyone’s cryptocurrency journey easier. Vitatoken offers crypto trading and cryptocurrency funds. They target to raise user’s probability of returns and lower the risk on cryptocurrency investment. More functions and supports are coming soon.",
+        "our": "Our ",
+        "servicesTitle": " Services",
+        "guide": "Beginners’Guide",
+        "trading": "Spot Trading",
+        "issuance": "Fund Issuance",
+        "ETFTrade": "ETF Trade",
+        "indexFund": "Index Fund",
+        "assistingTools": "Assisting Tools", 
+        "newsUpdates": "News & Updates",
+        "visionsTitle": " Visions",
+        "visionsTextCell1": "Entering cryptocurrency is challenging.",
+        "visionsTextCell2": "Our mission is to create an opportunity for everyone to participle in the crypto market. ",
+        "visionsTextCell3": "Vitamin is vital, just like Vitatoken.",
+        "visionsTextCell4": "We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
+    }
 }

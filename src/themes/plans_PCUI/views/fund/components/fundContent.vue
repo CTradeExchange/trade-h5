@@ -68,6 +68,7 @@ const fundInformation = defineAsyncComponent({
                 flex-wrap: wrap;
                 .item {
                     width: calc(50% - 20px);
+                    font-size: 14px;
                 }
             }
         }
@@ -83,17 +84,17 @@ const fundInformation = defineAsyncComponent({
             background: var(--contentColor);
             border-radius: 10px;
             .assetsTitle {
-                font-size: 16px;
+                font-size: 14px;
                 .small {
-                    font-size: 14px;
+                    font-size: 12px;
                 }
             }
             .assetsList {
                 .cellflex {
-                    font-size: 15px;
+                    font-size: 12px;
                 }
                 .currencyIcon {
-                    width: 30px;
+                    width: 32px;
                 }
             }
             .merge-case {

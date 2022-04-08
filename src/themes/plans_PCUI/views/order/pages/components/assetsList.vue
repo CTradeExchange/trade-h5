@@ -13,10 +13,6 @@
                 :ref='el => componentRefs.multipleSet = el'
                 :product='product'
             />
-            <MultipleSetCross
-                :ref='el => componentRefs.multipleSetCross = el'
-                :product='product'
-            />
         </template>
     </customTable>
 </template>
@@ -31,7 +27,6 @@ import AdjustMargin from '@planspc/views/assets/components/adjust-margin.vue'
 import ClosePosition from '@planspc/views/assets/components/close-position.vue'
 import Sltp from '@planspc/views/assets/components/sltp.vue'
 import MultipleSet from '@planspc/components/multipleSet.vue'
-import MultipleSetCross from '@planspc/components/multipleSetCross.vue'
 const componentRefs = ref({})
 const props = defineProps({
     tradeType: {

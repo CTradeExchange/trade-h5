@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2890191 */
-  src: url('iconfont.woff2?t=1646789544188') format('woff2'),
-       url('iconfont.woff?t=1646789544188') format('woff'),
-       url('iconfont.ttf?t=1646789544188') format('truetype');
+  src: url('iconfont.woff2?t=1648136563026') format('woff2'),
+       url('iconfont.woff?t=1648136563026') format('woff'),
+       url('iconfont.ttf?t=1648136563026') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon_maichu:before {
+  content: "\e6ad";
+}
+
+.icon_mairu:before {
+  content: "\e6ae";
 }
 
 .icon_dunpai:before {

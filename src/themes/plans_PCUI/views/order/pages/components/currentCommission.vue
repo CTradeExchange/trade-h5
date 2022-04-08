@@ -46,19 +46,5 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-:deep(){
-    .crossLevelNum{
-        margin-left: 4px;
-        vertical-align: middle;
-        position: relative;
-        height: 16px;
-        line-height: 14px;
-        padding-left: 3px;
-        padding-right: 5px;
-        font-size: 12px;
-        color: var(--color);
-        border-radius: 3px;
-        border: 1px solid var(--color);
-    }
-}
+
 </style>

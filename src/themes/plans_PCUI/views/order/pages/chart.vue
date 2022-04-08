@@ -31,18 +31,42 @@
             </p>
         </div>
         <div class='item ohlc'>
-            <p>{{ $t('trade.todayOpen') }} {{ product?.open_price || '--' }}</p>
-            <p>{{ $t('trade.yesterdayClosed') }} {{ product?.yesterday_close_price || '--' }}</p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.todayOpen') }}
+                </span> {{ product?.open_price || '--' }}
+            </p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.yesterdayClosed') }}
+                </span> {{ product?.yesterday_close_price || '--' }}
+            </p>
         </div>
 
         <div class='item ohlc'>
-            <p>{{ $t('trade.high') }} {{ product?.high_price || '--' }}</p>
-            <p>{{ $t('trade.low') }} {{ product?.low_price || '--' }}</p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.high') }}
+                </span>  {{ product?.high_price || '--' }}
+            </p>
+            <p>
+                <span class='muted'>
+                    {{ $t('trade.low') }}
+                </span>  {{ product?.low_price || '--' }}
+            </p>
         </div>
 
         <div v-if='product.etf' class='item ohlc'>
-            <p>{{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }}) {{ product.currentNav || '--' }}</p>
-            <p>{{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }}) {{ product.premiumRate || '--' }}</p>
+            <p>
+                <span class='muted'>
+                    {{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }})
+                </span>  {{ product.currentNav || '--' }}
+            </p>
+            <p>
+                <span class='muted'>
+                    {{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }})
+                </span>  {{ product.premiumRate || '--' }}
+            </p>
         </div>
 
         <div class='item collect'>
@@ -845,6 +869,9 @@ export default {
             }
             &.ohlc {
                 color: var(--normalColor);
+                white-space: nowrap;
+                font-size: 12px;
+                line-height: 2;
             }
             &.collect {
                 flex: 1;
@@ -889,7 +916,7 @@ export default {
             flex-basis: auto !important;
             padding: 0;
             padding-bottom: 5px;
-            font-size: 14px;
+            font-size: 12px;
             white-space: nowrap;
         }
         :deep(.van-tabs__wrap) {
@@ -900,7 +927,7 @@ export default {
             .van-tabs__line {
                 bottom: 0;
                 width: 27px !important;
-                height: 3px !important;
+                height: 2px !important;
             }
         }
     }
@@ -1084,6 +1111,7 @@ export default {
     .main-study,
     .side-study {
         width: 100%;
+        font-size: 12px;
         .content {
             display: flex;
             flex: 1;
@@ -1312,7 +1340,7 @@ export default {
     }
 }
 .chart {
-    height: 275px;
+    height: 405px;
 }
 
 </style>

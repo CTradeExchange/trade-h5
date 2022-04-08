@@ -16,11 +16,10 @@
 </template>
 
 <script setup>
-import { ref, watch, unref, computed, defineEmits, defineExpose } from 'vue'
+import { ref, watch, unref, computed, defineEmits } from 'vue'
 import { Dialog, Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
-
-const emit = defineEmits(['getGooleVerifyCode', 'clear'])
+const emit = defineEmits(['getGooleVerifyCode'])
 const googleCode = ref('')
 const { t } = useI18n({ useScope: 'global' })
 const handlePaste = async (e) => {
@@ -37,49 +36,41 @@ const handlePaste = async (e) => {
 const handleInput = () => {
     emit('getGooleVerifyCode', googleCode.value)
 }
-const formatter = (value) => {
+function formatter (value) {
     // 过滤输入的非数字
     return value.replace(/[^\d]/g, '')
 }
-const clear = () => {
-    googleCode.value = ''
-}
-
-defineExpose({
-    clear
-})
-
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .form-item {
     position: relative;
-    display: flex;
     flex: 1;
+    display: flex;
     align-items: center;
     //padding: 0 rem(30px);
     margin-bottom: rem(20px);
     background: var(--contentColor);
-    :deep(.van-cell) {
-        padding-right: 0;
+    :deep(.van-cell){
         padding-left: 0;
-        input {
+        padding-right: 0;
+        input{
             //padding: 0 5px;
         }
     }
-    .title {
-        padding: rem(20px) rem(30px);
+    .title{
         color: var(--normalColor);
+        padding: rem(20px) rem(30px);
     }
-    .paste {
+    .paste{
         width: rem(100px);
-        color: var(--primary);
-        text-align: center;
         cursor: pointer;
+        text-align: center;
         &::before {
             font-size: rem(30px);
         }
+        color: var(--primary);
     }
 }
 </style>

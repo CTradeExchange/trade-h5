@@ -13,16 +13,16 @@
                         </p>
                         <p class='bd'>
                             {{ $t('fundInfo.ranking') }}
-                            <br />
+                            <br v-if='symbolId' />
                             <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
                             </span>
                         </p>
                         <p class='ft'>
                             {{ $t('fundInfo.weight') }}
-                            <br />
+                            <br v-if='symbolId' />
                             <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : $t('fundInfo.comparePrev24') }})
+                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
                             </span>
                         </p>
                     </div>
@@ -122,9 +122,7 @@ const switchAction = async () => {
     showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
     if (showBlock.value === 'chart') {
         await nextTick()
-        if (chartPieDOM.value) {
-            newPieDoughnutChart(chartPieDOM.value, chartData.value)
-        }
+        newPieDoughnutChart(chartPieDOM.value, chartData.value)
     }
 }
 
@@ -160,9 +158,7 @@ onMounted(async () => {
             return el
         })
         await nextTick()
-        if (chartPieDOM.value) {
-            newPieDoughnutChart(chartPieDOM.value, chartData.value)
-        }
+        newPieDoughnutChart(chartPieDOM.value, chartData.value)
     })
 
     // 单资产表现柱状图
@@ -179,9 +175,7 @@ onMounted(async () => {
             chartXData.push(el.xAxisName)
         })
         assetPerformanceList.value = data
-        if (chartBarDOM.value) {
-            newBarChart(chartBarDOM.value, [chartXData, chartYData], props)
-        }
+        newBarChart(chartBarDOM.value, [chartXData, chartYData], props)
     })
 })
 </script>
@@ -207,7 +201,7 @@ onMounted(async () => {
     margin-bottom: rem(20px);
     font-size: rem(28px);
     li{
-        margin-bottom: 5px;
+        margin-bottom: 10px;
     }
 }
 .cellflex{

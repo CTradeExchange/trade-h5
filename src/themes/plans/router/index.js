@@ -14,9 +14,18 @@ const routes = [
         keepAlive: true,
         children: [
             {
+                path: 'home1',
+                name: 'Home1',
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/home.vue'),
+                meta: {
+                    title: 'route.home',
+                    keepAlive: true,
+                }
+            },
+            {
                 path: 'home',
                 name: 'Home',
-                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/home.vue'),
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/index.vue'),
                 meta: {
                     title: 'route.home',
                     keepAlive: true,
@@ -39,14 +48,14 @@ const routes = [
                     keepAlive: true,
                 }
             },
-            {
-                path: 'mine',
-                name: 'Mine',
-                component: () => import(/* webpackChunkName: "Mine" */ '../views/mine/mine.vue'),
-                meta: {
-                    title: 'route.mine',
-                }
-            },
+            // {
+            //     path: 'mine',
+            //     name: 'Mine',
+            //     component: () => import(/* webpackChunkName: "Mine" */ '../views/mine/mine.vue'),
+            //     meta: {
+            //         title: 'route.mine',
+            //     }
+            // },
             {
                 path: 'assets',
                 name: 'Assets',
@@ -80,6 +89,62 @@ const routes = [
                 meta: {
                     title: 'route.productSearch',
                     roles: ['User'],
+                }
+            },
+            {
+                path: 'download',
+                name: 'Download',
+                component: () => import(/* webpackChunkName: "fundProduct" */ '../views/download/index.vue'),
+                meta: {
+                    title: 'route.download',
+                }
+            },
+            {
+                path: 'about',
+                name: 'About',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
+                meta: {
+                    title: 'route.about'
+                }
+            },
+            {
+                path: 'fees',
+                name: 'Fees',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+                meta: {
+                    title: 'route.fees'
+                }
+            },
+            {
+                path: 'cookies-policy',
+                name: 'CookiesPolicy',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/cookiesPolicy/index.vue'),
+                meta: {
+                    title: 'route.cookies',
+                }
+            },
+            {
+                path: 'faqs',
+                name: 'Faqs',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/faqs/index.vue'),
+                meta: {
+                    title: 'route.faqs',
+                }
+            },
+            {
+                path: 'privacy-policy',
+                name: 'privacy-policy',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/privacyPolicy/index.vue'),
+                meta: {
+                    title: 'route.privacy',
+                }
+            },
+            {
+                path: 'terms-conditions',
+                name: 'terms-conditions',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/terms/index.vue'),
+                meta: {
+                    title: 'route.terms',
                 }
             },
         ]

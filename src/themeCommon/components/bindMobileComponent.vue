@@ -2,6 +2,7 @@
     <div class='pageWrap'>
         <Top back show-center />
         <Loading :show='loading' />
+
         <form class='form'>
             <div class='field'>
                 <areaInput
@@ -90,6 +91,7 @@ export default {
                 state.allCountryList = res.data
             }
         })
+
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const countryList = computed(() => store.state.countryList)

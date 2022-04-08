@@ -35,7 +35,7 @@
                     :class="{ 'item': true, 'active': item.fundId === fund.fundId }"
                     @click='selectFund(item)'
                 >
-                    <CurrencyIcon :currency='item.shareTokenCode' size='36' />
+                    <CurrencyIcon :currency='item.shareTokenCode' size='32' />
                     <div class='col-1'>
                         <div class='row'>
                             <span class='name'>
@@ -68,29 +68,35 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, defineEmits } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { Search } from '@element-plus/icons'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import { useFund } from '../hooks.js'
 import { debounce } from '@/utils/util'
 import { useRoute } from 'vue-router'
 
-const emits = defineEmits(['select'])
 const route = useRoute()
 
 // 搜索内容
 const searchValue = ref('')
 // 获取基金产品列表
-const { getFundList, fundProductList } = useFund()
+const { getFundList, fundProductList, getFundValue, getFundInfo } = useFund()
 // 当前选中基金
 const fund = ref('')
 // 定时器
 let timer = null
 
+// 更新基金信息
+const updateFundInfo = () => {
+    const fundId = fund.value.fundId
+    getFundValue(fundId)
+    getFundInfo(fundId)
+}
+
 // 选择基金产品
 const selectFund = (item) => {
     fund.value = item
-    emits('select', item)
+    updateFundInfo()
 }
 
 // 输入事件，防抖
@@ -109,7 +115,7 @@ const getProductList = () => {
             if (!fund.value) {
                 fund.value = findFund || fundProductList.value[0]
             }
-            emits('select', fund.value)
+            updateFundInfo()
         }
     })
 }
@@ -155,15 +161,14 @@ onUnmounted(() => {
         }
     }
     .fund-list {
+        @media screen and (max-width: 1560px){
+            font-size: 12px;
+        }
         .item {
             display: flex;
             align-items: center;
             cursor: pointer;
             padding: 8px 16px;
-            margin-bottom: 6px;
-            &:last-of-type {
-                margin-bottom: 0;
-            }
             &:hover {
                 background: var(--primaryAssistColor);
             }
@@ -176,13 +181,20 @@ onUnmounted(() => {
                 .row {
                     display: inline-flex;
                     flex-direction: column;
+                    align-items: start;
                     .name {
-                        font-size: 15px;
+                        font-size: 14px;
                     }
                     .type {
-                        line-height: 1;
+                        display: inline-block;
                         font-size: 12px;
-                        color: var(--normalColor);
+                        color: var(--primary);
+                        height: 18px;
+                        line-height: 16px;
+                        border: 1px solid var(--primary);
+                        padding: 0 4px;
+                        border-radius: 4px;
+                        background: none;
                     }
                 }
             }

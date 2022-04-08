@@ -192,11 +192,6 @@ export default {
                     path: '/assets/withdrawMoney',
                     query
                 })
-            } else if (['payredeem'].includes(state.currentTab)) {
-                router.push({
-                    path: '/assets/withdrawRedeem',
-                    query
-                })
             } else {
                 // 跳转到提币页面
                 router.push({
@@ -341,6 +336,7 @@ export default {
             justify-content: space-evenly;
             width: 100%;
             .van-button {
+                @include hover();
                 //width: 45%;
                 flex: 1;
                 height: rem(80px);

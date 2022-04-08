@@ -173,8 +173,8 @@
         "account": "Account",
         "copy": "Copy",
         "copySuccess": "Copy succeeded",
-        "redUp": "Red up and green down",
-        "redDown": "Green up and red down",
+        "redUp": "Red up and Blue down",
+        "redDown": "Blue up and red down",
         "chartColor": "Color Preference",
         "noLogin": "Please log in",
         "kycLevel1": "LV1 certification",
@@ -212,7 +212,8 @@
         "emailCodeInput": "Please enter email verification code",
         "invite": "invite",
         "remove": "Remove",
-        "add": "Add "
+        "add": "Add ",
+        "viewMore": "View more markets"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",
@@ -277,7 +278,7 @@
         "openAccount": "Create Personal Account",
         "hasAccount": "Log In",
         "protocol": "Continue to open an account means that you have confirmed you are at least 18 years old and have read and agreed to \"Client Privacy Protection Policy、Investment Risk Disclosure and Disclaimer\"",
-        "openSuccess": "Congratulations！You account is opened succesfully",
+        "openSuccess": "Congratulations！Your account has been created successfully",
         "openHandler": "Your account opening application has been received",
         "servicePlease": "We will deal with it as soon as possible, if you have any questions, please contact customer service",
         "tips1": "For first time login, please login with Mobile / Email + verification code you entered via Registration",
@@ -293,7 +294,8 @@
         "incorrectlyFormed": "Incorrect format",
         "pleaseEnter": "Please enter ",
         "businessOpen": "Create Corporate Account",
-        "reGet": "Get again"
+        "reGet": "Get again",
+        "input":"Please input your email / mobile"
     },
     "chart": {
         "candleStick": "Candle Stick",
@@ -700,9 +702,7 @@
         "hint_6": "Insuffient balance to withdraw",
         "hint_7": "Within 24 hours no of Withdrawal should not be more than",
         "bankTips": "This transaction is not support because the bank card currency is different with account currency",
-        "digitsTip": "Max 4 decimal place",
-        "receiptAddress": "Payout Address",
-        "inputReceiptAddress": "Please enter payout address"
+        "digitsTip": "Max 4 decimal place"
     },
     "withdrawRecord": {
         "noneHint": "No data",
@@ -937,11 +937,24 @@
         "think": "let me think again",
         "mainAccount": "I am the primary account holder/trader",
         "declaration": "Declaration",
-        "commited": "Your application for certification has been submitted successfully, please be patient and wait for the result of the examination",
-        "directorTips": "Certified Director's identificationFile and portraitPhoto",
-        "verifyTips": "verify's identificationFile and portraitPhoto",
-        "tradersTips": "traders's identificationFile and portraitPhoto",
-        "mainTradersTips": "Main Verify's identificationFile and portraitPhoto",
-        "infoList": "Before starting your enterprise verification, please prepare the following documents:"
+        "commited": "Your application for certification has been submitted successfully, please be patient and wait for the result of the examination"
+    },
+    "newHomeFooter":{ 
+        "product": "Products",
+        "trading": "Spot Trading",
+        "fund": "Index Fund",
+        "service": "Services",
+        "program": "Program for New Clients",
+        "vip": "Institutional & VIP",
+        "customer": "Customer Service",
+        "help": "Support",
+        "faqs": "FAQs",
+        "terms": "Terms & Conditions ",
+        "policy": "Privacy Policy ",
+        "community": "Community",
+        "aboutus": "About Us",
+        "about": "About",
+        "followus": "Follow Us",
+        "fees": "Fees"
     }
 }

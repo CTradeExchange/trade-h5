@@ -166,6 +166,7 @@ export default {
     .plans-list {
         padding: 0 20px;
         li {
+            @include hover();
             display: flex;
             align-items: center;
             height: 56px;

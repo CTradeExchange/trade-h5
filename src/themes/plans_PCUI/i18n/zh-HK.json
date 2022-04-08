@@ -30,7 +30,9 @@
 		"search": "搜索",
 		"add": "添加",
 		"startTime": "開始時間",
-		"endTime": "結束時間"
+		"endTime": "結束時間",
+        "languageAreas": "語言和地區",
+        "SelectLanguageAreas": "選取語言和地區"
 	},
 	"c": {
 		"login": "登入",
@@ -113,7 +115,9 @@
 		"fundManager": "基金作業專區",
         "MFA_status": "谷歌驗證器",
         "MFA_bind": "連結谷歌驗證器",
-        "MFA_close": "關閉谷歌驗證器"
+        "MFA_close": "關閉谷歌驗證器",
+        "download": "下載",
+        "about": "關於我們"
 	},
     "historyList": {
         "noMore": "沒有更多了"
@@ -167,80 +171,10 @@
 		"set": "設定",
 		"service": "客服",
 		"download": "下載",
-		"downloadTip": "iOS & Android掃碼下載APP",
 		"language": "語言",
 		"theme": "主題",
 		"fund": "基金",
 		"fundManager": "基金作業專區"
-	},
-	"footer": {
-		"about": {
-			"title": "關於",
-			"1": "Cats 2.0",
-			"2": "職業機會",
-			"3": "費率標准",
-			"4": "合作伙伴"
-		},
-		"tool": {
-			"title": "工具",
-			"1": "用戶端下載",
-			"2": "API文件",
-			"3": "數字資產介紹",
-			"4": "官方驗證通道",
-			"5": "曆史資料下載"
-		},
-		"serve": {
-			"title": "服務",
-			"1": "費率",
-			"2": "借幣額度",
-			"3": "輔助說明中心",
-			"4": "新手指南",
-			"5": "合約課堂"
-		},
-		"support": {
-			"title": "支援",
-			"1": "合作申請",
-			"2": "機搆服務",
-			"3": "大用戶權益",
-			"4": "廣告許可權申請"
-		},
-		"terms": {
-			"title": "條款",
-			"1": "用戶協定",
-			"2": "隱私條款",
-			"3": "交易規則"
-		}
-	},
-	"home": {
-		"quick": {
-			"title": "讓財富更自由",
-			"describe": "輕鬆投資加密貨幣基金，30種主流現貨"
-		},
-		"download": {
-			"title": "交易隨時隨地",
-			"describe": "多終端機，多裝置，隨時隨地開啟交易",
-			"tip1": "iOS & Android 掃碼下載APP",
-			"tip2": "開啟移動交易"
-		},
-		"guide": {
-			"title": "新手指引",
-			"describe": "開啟數字貨幣交易學習",
-			"text1": "如何購買數字貨幣",
-			"text2": "急速了解交易規則",
-			"text3": "小白進場適合買什么數字貨幣"
-		},
-		"why": {
-			"title": "為什么選取我們？",
-			"describe": "選取CATS作為交易加密數字貨幣的原因",
-			"title1": "0手續費買賣數字貨幣",
-			"text1": "使用多種支付方式交易數字貨幣，0手續費，安全快捷",
-			"title2": "最優的交易費率",
-			"text2": "優惠的交易費率，富有競爭力的VIP權益，享受最優品質的服務",
-			"title3": "可信賴的安全保障",
-			"text3": "優惠的交易費率，富有競爭力的VIP權益，享受最優品質的服務",
-			"title4": "24*7小時客服支援",
-			"text4": "24*7小時全天候、全日制運營型態，第一時間為您解答相關咨詢。"
-		}
 	},
 	"chart": {
 		"high": "高",
@@ -644,8 +578,10 @@
         "bestPriceBuy": "市場最優價買入",
         "bestPriceSell": "市場最優價賣出",
         "favorites": "自選",
-        "upDownWidth": "漲跌幅",
+        "upDownWidth": "24H漲跌幅",
+        "24highPrice": "24H最高價",
         "highPrice": "最高價",
+        "24lowPrice": "24H最低價",
         "lowPrice": "最低價",
         "allTransaction": "所有成交記錄",
         "positionAmount": "持倉量",
@@ -655,10 +591,10 @@
         "multilpSettingTip1": "過高的杠杆會增加倉位強平風險，請注意自身風險承受級別，合理設定杠杆",
         "saveSetting": "儲存設定",
 		"offer": "報價",
-        "etfTip": "ETF是一種特殊的開放式基金，投資者可以像買賣加密貨幣一樣，在現貨市場買賣ETF基金份額；同時，投資者也可向基金管理公司申購或贖回ETF份額",
-		"purchaseOrRedemptionTip": "申購/贖回：指投資者可向基金管理公司申購或者贖回基金份額代幣，點擊前往",
+		"etfTip": "ETF是Exchange Traded Funds簡稱，是一種特殊的開放式基金，投資者可以像買賣加密貨幣一樣，在現貨市場買賣基金份額；同時，投資者也可向基金管理公司申購或贖回基金份額",
+		"purchaseOrRedemptionTip": "申購/贖回：指投資者可向基金管理公司申購或者贖回基金份額代幣，點擊前往。",
 		"purchaseOrRedemption": "申購/贖回",
-		"noFeature": "暫不支持該功能",
+		"noFeature": "暫不支援該功能",
 		"material": "資料"
 	},
 	"contract": {
@@ -957,8 +893,106 @@
 		"redeem_tip3": "贖回流程結束，那你所贖回的基金代幣將以選取的接收資產匯入您的現貨錢包",
 		"assetIndexQquestionTip":"圖表為指數樣本所含資產在近24小時內的市場表現(報價單位:USDT)",
 		"assetQquestionTip":"圖表為基金投資組合所含資產在近24小時內的市場表現(報價單位:USDT)",
+        "fundTrade": "申購/贖回",
 		"fundTokenTradeTip": "基金代幣在上市的情況下，投資者可以如買賣加密貨幣一樣，在公開的現貨市場買賣基金份額，點擊前往",
 		"fundTokenTrade": "現貨交易",
 		"noTradeMarket": "暫無交易市場"
-	}
+	},
+    "home": {
+        "quick": {
+            "title": "幫助所有人輕鬆參與加密貨幣市場"
+        },
+        "download": {
+            "title": "交易隨時隨地",
+            "describe": "多終端機，多裝置，隨時隨地開啟交易",
+            "tip1": "iOS & Android 掃碼下載APP",
+            "tip2": "開啟移動交易"
+        },
+        "guide": {
+            "title": "新手指引",
+            "describe": "開啟數字貨幣交易學習",
+            "text1": "如何購買數字貨幣",
+            "text2": "急速了解交易規則",
+            "text3": "小白進場適合買什么數字貨幣"
+        },
+        "why": {
+            "text1": "安全始終是我們的首要考慮",
+            "text2": "用戶安全資產基金(SAFU)",
+            "text3": "我們將所有交易費用的10%儲存於安全資產基金，為用戶資金提供部分保障。",
+            "text4": "個性化存取控制",
+            "text5": "進階存取控制限制存取個人賬戶的裝置和位址，讓用戶無后顧之憂。",
+            "text6": "先進資料加密",
+            "text7": "個人交易資料通過端到端加密獲得保障，僅限本人存取個人資訊。",
+            "text8": "賬戶不規則實時監控",
+            "text9": "我們的風險管理系統會解析每次不規則現行，觸發不規則暫停提款。"
+        },
+        "fundDesc": {
+            "text1": "探索V10指數",
+            "text2": "投資者可以利用V10指數輕松追蹤加密資產的整體市場表現，并且在超過70%的時間中保持領先",
+            "text3": "閱讀白皮書（PDF）",
+            "text4": "V10 指數基金",
+            "text5": "降低門檻、分散投資、優化配置、動態調整...... <br />您所需要的一切均由專業的基金經理打理，而您只需要坐享其成",
+            "text6": "閱讀白皮書（PDF）"
+        },
+        "portfolio": {
+            "text1": "立即建立您的加密貨幣投資組合",
+            "text2": "我們具有多種功能，使其成為開始交易的最佳場所。",
+            "text3": "簡潔高效",
+            "text4": "買賣流行的數字貨幣，在一個地方追蹤它們。",
+            "text5": "美觀大方",
+            "text6": "清爽的介面始終將內容清晰地呈現給您。",
+            "text7": "無處不在",
+            "text8": "使用適用於 Android 或 iOS 裝置，隨時隨地讓您保持市場領先地位。"
+        },
+        "portfolioCreate": {
+            "text1": "只需三步，開始加密基金投資",
+            "text2": "開戶并完成身份認證",
+            "text3": "完成身份驗證流程以保護您的帳戶和交易。",
+            "text4": "新增資金至你的帳戶",
+            "text5": "將資金添加到您的加密貨幣帳戶以開始交易加密貨幣。",
+            "text6": "開始交易",
+            "text7": "買賣基金或加密貨幣，并了解Vitatoken提供的服務。"
+        },
+        "privacy": {
+            "agree": "同意",
+            "close": "關閉",
+            "text1": "我們使用 cookie 來增強您的體驗、解析我們的流量以及用於安全和營銷。存取我們的網站即表示您同意我們使用 cookie。",
+            "text2": "閱讀有關 cookie 的更多資訊"
+        },
+        "marketTrend": "市場趨勢",
+        "getStarted": "開始使用",
+        "getProfit": "立即賺取收益",
+        "toReg": "立即註冊",
+        "app": "安全、快速和簡潔"
+    },
+    "download": {
+        "downloadTip": "iOS & Android掃碼下載APP",
+        "moreDownload": "更多下載選取",
+        "title": "隨時隨地開啟交易",
+        "subTitle": "下載Vitatoken用戶端，所有交易盡在手中。",
+        "android": "下載安卓端",
+        "ios": "下載蘋果端"
+    },
+    "aboutUs": {
+        "introduceTitle":  {
+            "about": "關於",
+            "us": "我們"
+        },
+        "introduce1": "Vitatoken於2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 獲得許可，有金融科技解決方案和加密貨幣交易牌照。",
+        "introduce2": "Vitatoken是全球首個加密貨幣基金交易平台。Vitatoken未來將支持不同的基金管理人在平台上發行基金，讓用戶可以按需購買基金。",
+        "introduce3": "旨在讓每個人的加密貨幣之旅更輕鬆。 Vitatoken 提供加密貨幣交易和加密貨幣基金。目標是提高用戶的回報概率並降低加密貨幣投資的風險。更多功能和支持即將推出。",
+        "servicesTitle": "基礎服務",
+        "guide": "新手教學",
+        "trading": "現貨交易",
+        "issuance": "基金發行",
+        "ETFTrade": "ETF交易",
+        "indexFund": "指數基金",
+        "assistingTools": "輔助工具", 
+        "newsUpdates": "最新資訊",
+        "visionsTitle": "願景",
+        "visionsTextCell1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場，",
+        "visionsTextCell2": "我們像維他命那樣，是重要組成部分，",
+        "visionsTextCell3": "使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，",
+        "visionsTextCell4": "提高獲利概率，從而在這個快速變化的市場中賺錢。"
+    }
 }

@@ -240,12 +240,9 @@ export default {
 }
 .priceMultiGear {
     margin-top: 20px;
-    font-size: 14px;
+    font-size: 12px;
     line-height: 20px;
     height: 114px;
-    @media screen and (max-width: 1560px){
-        font-size: 12px;
-    }
     &.sell {
         color: var(--riseColor);
         margin-top: 0;
@@ -300,6 +297,7 @@ export default {
     position: relative;
     height: 24px;
     padding: 0 24px 0 10px;
+    font-size: 12px;
     color: var(--minorColor);
     line-height: 24px;
     background: var(--assistColor);
@@ -322,6 +320,7 @@ export default {
 <style lang="scss">
 .handicapDigitsOptions {
     --van-popover-light-background-color: var(--assistColor);
+    --van-popover-action-font-size: 12px;
     //width: 72px;
 }
 </style>

@@ -1,32 +1,24 @@
 <template>
     <div class='notice-module'>
         <ul>
-            <li>
-                <a href='https://tradeswitcher.com/' target='_blank'>
-                    关于CATS2支持HUSD进行主网升级的公告
-                </a>
-            </li>
-            <li>
-                <a href='https://tradeswitcher.com/' target='_blank'>
-                    CATS2将于9月23日20:00开放GAL币币交易
-                </a>
-            </li>
-            <li>
-                <a href='https://tradeswitcher.com/' target='_blank'>
-                    关于CATS2支持HUSD进行主网升级的公告
-                </a>
-            </li>
-            <li>
-                <a href='https://tradeswitcher.com/' target='_blank'>
-                    关于CATS2支持HUSD进行主网升级的公告
+            <li v-for='(item, index) in noticeList' :key='index' @click='onNoticeItem(item)'>
+                <a href='javascript:;'>
+                    {{ item.text }}
                 </a>
             </li>
         </ul>
     </div>
 </template>
 
-<script>
-export default {
+<script setup>
+// 公告列表
+const noticeList = [
+    {
+        text: ''
+    }
+]
+// 点击公告
+const onNoticeItem = (item) => {
 
 }
 </script>

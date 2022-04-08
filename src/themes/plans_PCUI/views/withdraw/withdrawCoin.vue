@@ -948,6 +948,7 @@ export default {
                 font-size: rem(28px);
             }
             button {
+                @include hover();
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -1045,6 +1046,7 @@ export default {
     }
     // 无钱包地址
     .wallet-not {
+        @include hover();
         display: flex;
         align-items: center;
         height: rem(120px);
@@ -1064,6 +1066,7 @@ export default {
     }
     // 有钱包地址
     .wallet-address {
+        @include hover();
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -1120,6 +1123,7 @@ export default {
         .href {
             color: var(--primary);
             vertical-align: middle;
+            cursor: pointer;
         }
     }
 }
@@ -1178,6 +1182,7 @@ export default {
     }
 }
 .footer-btn {
+    @include hover();
     display: flex;
     align-items: center;
     justify-content: center;
