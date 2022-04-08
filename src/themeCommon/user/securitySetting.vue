@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.mine")' @back='$router.push("/mine")' />
+        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.mine")' @back='$router.push("/")' />
         <p class='header'>
             {{ $t('cRoute.securitySetting') }}
         </p>
@@ -131,7 +131,7 @@ export default {
                 instance.appContext.config.globalProperties.$MsgSocket.logout()
                 return store.dispatch('_user/logout')
             }).then(() => {
-                return router.push('/mine')
+                return router.push('/')
             }).then(() => {
                 location.reload()
             }).catch(() => {
@@ -152,46 +152,45 @@ export default {
 .page-wrap {
     padding-top: rem(110px);
     background: var(--bgColor);
-    .header{
-        background: var(--contentColor);
-        font-size: rem(48px);
-        padding-left: rem(30px);
+    .header {
         padding-bottom: rem(30px);
+        padding-left: rem(30px);
+        font-size: rem(48px);
+        background: var(--contentColor);
     }
-    .cellGroup{
+    .cellGroup {
         .cellItem {
-            background: var(--contentColor);
-            font-size: rem(32px);
-            line-height: rem(120px);
-            height: rem(120px);
-            border-top: solid rem(10px) var(--bgColor);
-            background: var(--contentColor);
             display: flex;
             align-items: center;
+            height: rem(120px);
+            font-size: rem(32px);
+            line-height: rem(120px);
+            background: var(--contentColor);
+            background: var(--contentColor);
+            border-top: solid rem(10px) var(--bgColor);
             //margin-top: rem(10px);
-            &::after{
+            &::after {
                 border: none;
             }
-            :deep(.van-cell__title){
+            :deep(.van-cell__title) {
                 color: var(--color);
             }
-            :deep(.van-icon-arrow){
+            :deep(.van-icon-arrow) {
                 margin-top: -2px;
             }
-            .right-val{
-                font-size: rem(28px);
-                color: var(--minorColor);
-                vertical-align: middle;
+            .right-val {
                 margin-right: rem(10px);
-                &.none{
+                color: var(--minorColor);
+                font-size: rem(28px);
+                vertical-align: middle;
+                &.none {
                     color: var(--warn);
                 }
             }
-            .van-icon{
+            .van-icon {
                 margin-top: -2px;
                 color: var(--minorColor);
             }
-
         }
     }
 }

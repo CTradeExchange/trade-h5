@@ -213,7 +213,7 @@ export default {
             flex: 1;
             text-align: center;
             margin-right: rem(25px);
-             &::after{
+            &::after{
                 content: '';
                 position: absolute;
                 width: 100%;

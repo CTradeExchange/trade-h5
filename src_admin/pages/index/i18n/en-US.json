@@ -97,8 +97,9 @@
         "h5SupportLang":"H5 support language",
         "h5DefaultLang":"H5 default language",
         "worthMentioning":"3rd party login",
-        "openAccountNotice1":"Account opening Notice[中文]",
+        "openAccountNotice1":"Account popening[简体中文]",
         "openAccountNotice2":"Account popening[Eng]",
+        "openAccountNotice2":"Account popening[繁體中文]",
         "registerTypes":"Account opening type",
         "mobile":"Mobile",
         "email":"Email",
@@ -148,7 +149,10 @@
             "3": "杠杆",
             "5": "现货",
             "9": "ABCC杠杆"
-        }
+        },
+        "zhCN": "Chinese Simplified",
+        "zhHK": "Chinese Traditional",
+        "enUS": "English"
     },
     "setting":{
         "save":"Save",

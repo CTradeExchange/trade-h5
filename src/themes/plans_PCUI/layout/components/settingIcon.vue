@@ -127,7 +127,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .icon {
-    font-size: 20px;
+    font-size: 16px;
     color: #D6DAE1;
     cursor: pointer;
 }

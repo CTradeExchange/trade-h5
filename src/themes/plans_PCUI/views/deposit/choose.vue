@@ -450,6 +450,7 @@ export default {
     }
     .recharge-way {
         .item {
+            @include hover();
             position: relative;
             display: flex;
             align-items: center;
@@ -507,6 +508,9 @@ export default {
         .disable {
             background: var(--lineColor);
             opacity: 0.5;
+            &:hover {
+                box-shadow: none;
+            }
         }
     }
 }
@@ -516,6 +520,7 @@ export default {
     width: 100%;
     padding: 0 rem(30px);
     .recharge-btn {
+        @include hover();
         display: flex;
         align-items: center;
         justify-content: center;
@@ -536,6 +541,9 @@ export default {
         }
         &.disable {
             opacity: 0.5;
+            &:hover {
+                box-shadow: none;
+            }
         }
     }
 }

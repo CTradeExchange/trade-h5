@@ -6,13 +6,13 @@ import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import { findFundPage } from '@/api/fund.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { Toast } from 'vant'
 
 export const getColumns = tradeType => {
     const store = useStore()
     const router = useRouter()
     const { t } = useI18n({ useScope: 'global' })
     const productMap = computed(() => store.state._quote.productMap)
-
     const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '--'
     // 基金列表
     const fundList = ref([])
@@ -54,7 +54,7 @@ export const getColumns = tradeType => {
     }
     getFundPage()
 
-    // 切换当前选中产品
+    // 去交易
     const gotoOrder = (event, product) => {
         event.stopPropagation()
         router.push({
@@ -302,7 +302,7 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.name'),
                 align: 'left',
-                minWidth: 160,
+                minWidth: 220,
                 className: 'name',
                 formatter: row => (<div class='chunk'>
                     {
@@ -319,7 +319,7 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.newPrice'),
                 align: 'left',
-                minWidth: 160,
+                minWidth: 150,
                 formatter: row => (
                     <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         {getVal(row.symbolKey, 'cur_price')}
@@ -329,36 +329,38 @@ export const getColumns = tradeType => {
             {
                 name: t('trade.changePrice'),
                 align: 'left',
-                minWidth: 160,
+                minWidth: 150,
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    <strong className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }
-                    </span>
+                    </strong>
                 )
 
             },
             {
                 name: t('trade.changePercent'),
                 align: 'left',
-                minWidth: 160,
+                minWidth: 150,
                 className: 'upDownWidth',
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
+                    <strong className={unref(productMap)[row.symbolKey]?.upDownColor}>
                         {getVal(row.symbolKey, 'upDownWidth')}
-                    </span>
+                    </strong>
                 )
 
             },
             {
-                name: t('trade.highPrice'),
+                name: t('trade.24highPrice'),
                 align: 'left',
-                minWidth: 160,
+                minWidth: 150,
+                className: 'primaryText',
                 formatter: row => getVal(row.symbolKey, 'high_price')
             },
             {
-                name: t('trade.lowPrice'),
+                name: t('trade.24lowPrice'),
                 align: 'left',
-                minWidth: 160,
+                minWidth: 150,
+                className: 'primaryText',
                 formatter: row => getVal(row.symbolKey, 'low_price')
             },
             {

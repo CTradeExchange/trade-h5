@@ -34,7 +34,7 @@
         </el-row>
         <el-row>
             <el-col class='btns' :span='24'>
-                <el-form ref='form' label-width='110px' :model='form' :rules='rules'>
+                <el-form ref='form' label-width='180px' :model='form' :rules='rules'>
                     <el-tabs v-model='optionName' type='border-card' @tab-click='changeTabs'>
                         <el-tab-pane class='tab' :label="$t('channelSetting.basicSetting')" name='first'>
                             <el-form-item
@@ -200,6 +200,7 @@
                                     v-model='form.supportLanguage'
                                     multiple
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='val'
                                     @change='changeSupportLanguage'
                                 >
@@ -218,6 +219,7 @@
                                 <el-select
                                     v-model='form.language'
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='name'
                                 >
                                     <el-option
@@ -229,7 +231,7 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice1')" prop='instructions'>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice1')" prop='instructions_zh'>
                                 <Tinymce
                                     v-model='form.instructions_zh'
                                     :height='120'
@@ -237,9 +239,17 @@
                                     :width='800'
                                 />
                             </el-form-item>
-                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice2')" prop='instructions'>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice2')" prop='instructions_en'>
                                 <Tinymce
                                     v-model='form.instructions_en'
+                                    :height='120'
+                                    :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
+                                    :width='800'
+                                />
+                            </el-form-item>
+                            <el-form-item v-if='configLoaded ' :label="$t('channelSetting.openAccountNotice3')" prop='instructions_hk'>
+                                <Tinymce
+                                    v-model='form.instructions_hk'
                                     :height='120'
                                     :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
                                     :width='800'
@@ -326,13 +336,13 @@
                                                 </template>
                                                 <div class='lang-wrap'>
                                                     <el-row v-for='(l, i) in lang' :key='i' align='middle' :gutter='20'>
-                                                        <el-col :offset='0' :span='2'>
+                                                        <el-col :offset='0' :span='3'>
                                                             <h4>{{ l.name }}</h4>
                                                         </el-col>
                                                         <el-col :offset='0' :span='6'>
                                                             <div class='upload' @click='uploadFile(item,l)'>
-                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].imgUrl' class='img-wrap'>
-                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val].imgUrl' />
+                                                                <div v-if='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val]?.imgUrl' class='img-wrap'>
+                                                                    <img alt='' :src='form.paymentIconList[item.paymentCode+"_"+item.paymentType+"_"+item.merchantNo][l.val]?.imgUrl' />
                                                                 </div>
                                                                 <div v-else>
                                                                     <i class='el-icon-plus'></i>
@@ -361,25 +371,25 @@
                             <amount-set ref='amountSet' />
                         </el-tab-pane>
                         <el-tab-pane v-loading='fourthLoading' class='tab' :label="$t('channelSetting.tradeTypeNameSetting')" name='fourth' style='padding-right: 100px;'>
-                            <el-row :gutter='20' style='justify-content: center;'>
+                            <el-row :gutter='24' style='justify-content: flex-start;'>
                                 <el-col :span='3'>
                                     <el-form-item />
                                 </el-col>
-                                <el-col v-for='(val,key,index) in tradeTypesTemplate' :span='3'>
+                                <el-col v-for='(val,key,index) in tradeTypesTemplate' :key='index' :span='4'>
                                     <el-form-item label-width='0'>
-                                        <p style='text-align:center;'>
+                                        <p style='text-align: center;'>
                                             {{ $t('channelSetting.tradeTypes'+key) }}
                                         </p>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
-                            <el-row v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :gutter='20' style='justify-content: center;'>
+                            <el-row v-for='(outVal,outKey,outIndex) in form.tradeTypesConfig' :key='outIndex' :gutter='24' style='justify-content: justify-content;'>
                                 <el-col :span='3'>
-                                    <el-form-item>
+                                    <p class='lang-label'>
                                         {{ outKey }}
-                                    </el-form-item>
+                                    </p>
                                 </el-col>
-                                <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :span='3'>
+                                <el-col v-for='(innerVal,innerKey,innerIndex) in outVal' :key='innerIndex' :span='4'>
                                     <el-form-item label-width='0' :prop='innerVal'>
                                         <el-input
                                             v-model='form.tradeTypesConfig[outKey][innerKey]'
@@ -501,6 +511,7 @@ export default {
                 // registerBanner: '',
                 instructions_zh: '', // 开户须知
                 instructions_en: '', // 开户须知
+                instructions_hk: '',
                 googleAnalytics: '',
                 h5Address: '',
                 h5PreviewAddress: '',
@@ -514,12 +525,9 @@ export default {
                 isWallet: false,
                 paymentIconList: {}, // 支付通道图标列表
                 tradeTypesConfig: {
-                    'zh-CN': {
-
-                    },
-                    'en-US': {
-
-                    },
+                    'zh-CN': {},
+                    'en-US': {},
+                    'zh-HK': {}
                 }
             },
             tradeTypesTemplate: {},
@@ -599,8 +607,7 @@ export default {
         await this.queryAccountGroupTradeList()
         await this.getPageConfig()
         await this.getPaymentArray()
-
-        console.log('asdasd', this.form)
+        await this.$refs['amountSet'].initData()
     },
     methods: {
         changeTabs (val) {
@@ -628,23 +635,31 @@ export default {
                     // 根据获取到得玩法过滤回显得数据
                     const targetKeys = Object.keys(that.tradeTypesTemplate)
                     const langKeys = Object.keys(that.form.tradeTypesConfig)
-                    langKeys.forEach(el => {
-                        if (Object.keys(that.form.tradeTypesConfig[el]).length) {
+
+                    // 动态添加语言对应的玩法别名
+                    that.lang.forEach(el => {
+                        if (!langKeys.includes(el.val)) {
+                            that.form.tradeTypesConfig[el.val] = {}
+                        }
+                    })
+
+                    that.lang.forEach(el => {
+                        if (Object.keys(that.form.tradeTypesConfig[el.val]).length) {
                             // tradeTypesConfig中多于配置返回的玩法删除
-                            for (const key in that.form.tradeTypesConfig[el]) {
+                            for (const key in that.form.tradeTypesConfig[el.val]) {
                                 if (!targetKeys.includes(key)) {
-                                    delete that.form.tradeTypesConfig[el][key]
+                                    delete that.form.tradeTypesConfig[el.val][key]
                                 }
                             }
                             // tradeTypesConfig中没有的配置返回的玩法加上
-                            const tradeTypesConfigChildKeys = Object.keys(that.form.tradeTypesConfig[el])
+                            const tradeTypesConfigChildKeys = Object.keys(that.form.tradeTypesConfig[el.val])
                             targetKeys.forEach(item => {
                                 if (!tradeTypesConfigChildKeys.includes(item)) {
-                                    that.form.tradeTypesConfig[el][item] = ''
+                                    that.form.tradeTypesConfig[el.val][item] = ''
                                 }
                             })
                         } else {
-                            that.form.tradeTypesConfig[el] = JSON.parse(JSON.stringify(that.tradeTypesTemplate))
+                            that.form.tradeTypesConfig[el.val] = JSON.parse(JSON.stringify(that.tradeTypesTemplate))
                         }
                     })
                     this.fourthLoading = false
@@ -665,15 +680,21 @@ export default {
                 that.configLoaded = true
                 let content = res.data.content ? JSON.parse(res.data.content) : {}
                 content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-                if (content.instructions) {
-                    content.instructions = unescape(content.instructions)
+                if (content.instructions_zh) {
+                    content.instructions_zh = decodeURIComponent(content.instructions_zh)
                 }
+                if (content.instructions_en) {
+                    content.instructions_en = decodeURIComponent(content.instructions_en)
+                }
+                if (content.instructions_hk) {
+                    content.instructions_hk = decodeURIComponent(content.instructions_hk)
+                }
+
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
-                // debugger
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -751,12 +772,26 @@ export default {
                     if (that.pyamentList.length > 0) {
                         that.pyamentList.forEach(el => {
                             const uniqueKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
+                            console.log('that.form.paymentIconList====', that.form.paymentIconList)
+
                             if (isEmpty(that.form.paymentIconList[uniqueKey])) {
                                 that.form.paymentIconList[uniqueKey] = {}
                                 that.lang.forEach(lang => {
                                     that.form.paymentIconList[uniqueKey][lang.val] = {
                                         alias: '',
                                         imgUrl: ''
+                                    }
+                                })
+                                console.log('paymentIconList====', that.form.paymentIconList)
+                            } else {
+                                // 动态添加语言对应的玩法别名
+                                const langKeys = Object.keys(that.form.paymentIconList[uniqueKey])
+                                that.lang.forEach(el => {
+                                    if (!langKeys.includes(el.val)) {
+                                        that.form.paymentIconList[uniqueKey][el.val] = {
+                                            alias: '',
+                                            imgUrl: ''
+                                        }
                                     }
                                 })
                             }
@@ -877,12 +912,16 @@ export default {
                         // 表单验证通过
                         that.submitLoading = true
                         const _formData = cloneDeep(this.form)
-                        if (_formData.instructions) {
-                            _formData.instructions = escape(_formData.instructions)
+
+                        if (_formData.instructions_zh) {
+                            _formData.instructions_zh = encodeURIComponent(_formData.instructions_zh)
                         }
-                        // debugger
-                        // const aa = this.$refs['editor'].getContent()
-                        // _formData.instructions = aa
+                        if (_formData.instructions_hk) {
+                            _formData.instructions_hk = encodeURIComponent(_formData.instructions_hk)
+                        }
+                        if (_formData.instructions_en) {
+                            _formData.instructions_en = encodeURIComponent(_formData.instructions_en)
+                        }
                         if (_formData.registList.length > 0) {
                             _formData.registList.forEach(el => {
                                 if (isEmpty(el.registCountry)) {
@@ -937,6 +976,7 @@ export default {
                         }
 
                         // 设置存款数据
+
                         _formData.depositData = this.$refs['amountSet'].getData()
 
                         // _formData.paymentIconList = {}
@@ -959,6 +999,8 @@ export default {
                                 }
                             }
                         }
+                        // const aa = '{\"tradeTypeCurrencyList\":[{\"id\":\"5\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"5\",\"name\":\"现货\"},{\"id\":\"3\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"3\",\"name\":\"杠杆\"},{\"id\":\"1\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"1\",\"name\":\"合约全仓\"},{\"id\":\"2\",\"alias\":\"\",\"isWallet\":\"\",\"sort\":0,\"tradeType\":\"2\",\"name\":\"合约逐仓\"}],\"thirdLogin\":[],\"registerTypes\":[],\"instructions_zh\":\"<p>dsaf</p>\",\"instructions_en\":\"<p>dga</p>\",\"instructions_hk\":\"\",\"googleAnalytics\":\"H4sIAAAAAAAAAwMAAAAAAAAAAAA=\",\"h5Address\":\"\",\"h5PreviewAddress\":\"\",\"defaultZone\":{\"id\":\"2\",\"name\":\"阿富汗\",\"name_tw\":\"阿富汗\",\"name_en\":\"Afghanistan\",\"country_code\":\"+93\",\"national_code\":\"AF\",\"code\":\"AF\",\"extend\":\"\",\"create_time\":\"1618881547731\",\"update_time\":\"1618881547731\",\"status\":\"1\",\"enable\":\"0\",\"sync_time\":\"1646881363\"},\"themeColor\":\"#2B70AE\",\"registList\":[{\"registCountry\":{\"id\":9999,\"isOther\":true,\"name\":\"全部\"},\"customerGroupId\":\"1\",\"plans\":[{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"现货\",\"id\":\"5\",\"tradeType\":\"5\",\"allCurrency\":\"USDT,BTC,ETH,ADA,AVAX,DOGE,EUR,USD,BNB,SOL,XRP6,LUNA,DOT,XRP,V10,qa001,XEC,qa002,cathytest\"},{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"杠杆\",\"id\":\"3\",\"tradeType\":\"3\",\"allCurrency\":\"USDT,BTC,ETH,USD\"},{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"合约全仓\",\"id\":\"1\",\"tradeType\":\"1\",\"allCurrency\":\"USDT\"},{\"isWallet\":\"\",\"alias\":\"\",\"name\":\"合约逐仓\",\"id\":\"2\",\"tradeType\":\"2\",\"allCurrency\":\"USDT\"}]}],\"onlineService\":\"\",\"supportLanguage\":[{\"name\":\"中文\",\"val\":\"zh-CN\",\"isDefault\":true},{\"name\":\"English\",\"val\":\"en-US\"},{\"name\":\"中文繁体\",\"val\":\"zh-HK\"}],\"customerGroupId\":\"2\",\"registrable\":[{\"id\":\"2\",\"name\":\"阿富汗\",\"name_tw\":\"阿富汗\",\"name_en\":\"Afghanistan\",\"country_code\":\"+93\",\"national_code\":\"AF\",\"code\":\"AF\",\"extend\":\"\",\"create_time\":\"1618881547731\",\"update_time\":\"1618881547731\",\"status\":\"1\",\"enable\":\"0\",\"sync_time\":\"1646881363\"}],\"isWallet\":false,\"paymentIconList\":{\"mdpay_bank_0001201701100001\":{\"zh-CN\":{\"alias\":\"\",\"imgUrl\":\"\"},\"zh-HK\":{\"alias\":\"\",\"imgUrl\":\"\"},\"en-US\":{\"alias\":\"\",\"imgUrl\":\"\"}},\"micropay_bank_6966696699\":{\"zh-CN\":{\"alias\":\"\",\"imgUrl\":\"\"},\"zh-HK\":{\"alias\":\"\",\"imgUrl\":\"\"},\"en-US\":{\"alias\":\"\",\"imgUrl\":\"\"}},\"coinbridge_coinbridge_aabd8071bff64b969d23b8fa3f7ae481\":{\"zh-CN\":{\"alias\":\"\",\"imgUrl\":\"\"},\"zh-HK\":{\"alias\":\"\",\"imgUrl\":\"\"},\"en-US\":{\"alias\":\"\",\"imgUrl\":\"\"}}},\"tradeTypesConfig\":{\"zh-CN\":{\"1\":\"\",\"2\":\"\",\"3\":\"\",\"5\":\"\"},\"en-US\":{\"1\":\"\",\"2\":\"\",\"3\":\"\",\"5\":\"\"},\"zh-HK\":{\"1\":\"\",\"2\":\"\",\"3\":\"\",\"5\":\"\"}},\"other\":{},\"language\":{\"name\":\"中文\",\"val\":\"zh-CN\",\"isDefault\":true},\"depositData\":{\"default\":{\"1\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"2\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"3\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"4\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"5\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}}},\"not\":{\"1\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"2\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"3\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"4\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"5\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}}},\"already\":{\"1\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"2\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"3\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"4\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}},\"5\":{\"amount\":\"\",\"zh-CN\":{\"describe\":\"\"},\"en-US\":{\"describe\":\"\"},\"zh-HK\":{\"describe\":\"\"}}},\"isDefault\":false,\"isNot\":false,\"isAlready\":false},\"defaultPlans\":{\"1\":[{\"id\":\"5\",\"tradeType\":\"5\",\"name\":\"现货\"},{\"id\":\"3\",\"tradeType\":\"3\",\"name\":\"杠杆\"},{\"id\":\"1\",\"tradeType\":\"1\",\"name\":\"合约全仓\"},{\"id\":\"2\",\"tradeType\":\"2\",\"name\":\"合约逐仓\"}],\"2\":[{\"id\":\"5\",\"tradeType\":\"5\",\"name\":\"现货\"},{\"id\":\"3\",\"tradeType\":\"3\",\"name\":\"杠杆\"},{\"id\":\"1\",\"tradeType\":\"1\",\"name\":\"合约全仓\"},{\"id\":\"2\",\"tradeType\":\"2\",\"name\":\"合约逐仓\"}]}}'
+
                         saveViChannel({
                             content: JSON.stringify(_formData), // '{"supportLanguage":[{"name":"中文","val":"zh-CN","isDefault":true}]}', //
                             id: that.pageId,
@@ -1184,17 +1226,17 @@ export default {
 <style lang="scss" scoped>
 .m-setting {
     height: calc(100vh);
-        overflow-y: scroll;
+    overflow-y: scroll;
     .setting-header {
         padding: 20px;
         .btns {
             text-align: right;
         }
-         .toPages{
-            line-height: 40px;
+        .toPages {
             font-size: 14px;
+            line-height: 40px;
             cursor: pointer;
-            span{
+            span {
                 color: #2B70AE;
             }
         }
@@ -1202,14 +1244,14 @@ export default {
     .row {
         padding-bottom: 30px;
     }
-    .checkBox{
+    .checkBox {
         vertical-align: middle;
     }
-    .img-tip{
-        cursor: pointer;
+    .img-tip {
         width: 18px;
-        vertical-align: middle;
         margin-left: 10px;
+        vertical-align: middle;
+        cursor: pointer;
     }
     .tradeType-row {
         display: flex;
@@ -1224,7 +1266,7 @@ export default {
                 margin-bottom: 20px;
             }
         }
-        .notice{
+        .notice {
             color: #F00;
         }
     }
@@ -1269,13 +1311,13 @@ export default {
             }
         }
     }
-    .box-card{
-        .tip{
+    .box-card {
+        .tip {
             color: red;
         }
     }
-    .registerBanner{
-                .upload {
+    .registerBanner {
+        .upload {
             position: relative;
             display: flex;
             align-items: center;
@@ -1308,10 +1350,14 @@ export default {
         }
     }
 }
-#pane-fourth{
-    .el-form-item{
-        display:block;
-        .el-form-item__content{
+#pane-fourth {
+    .lang-label {
+        line-height: 40px;
+        text-align: center;
+    }
+    .el-form-item {
+        display: block;
+        .el-form-item__content {
             margin-left: none;
         }
     }

@@ -911,6 +911,7 @@ export default {
         display: flex;
         flex-wrap: wrap;
         .item {
+            @include hover();
             position: relative;
             display: flex;
             flex-direction: column;
@@ -1120,6 +1121,7 @@ export default {
     flex-shrink: 0;
     padding: rem(30px);
     .next-btn {
+        @include hover();
         height: rem(80px);
         background: var(--primary);
         border-radius: rem(10px);

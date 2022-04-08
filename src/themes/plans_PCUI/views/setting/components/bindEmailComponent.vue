@@ -281,6 +281,7 @@ export default {
             }
         }
         .confirm-btn {
+            @include hover();
             position: absolute;
             bottom: 0;
             height: rem(90px);

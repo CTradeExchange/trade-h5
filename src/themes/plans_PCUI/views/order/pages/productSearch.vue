@@ -45,7 +45,7 @@ const productActived = computed(() => store.getters.productActived)
 // 玩法类型
 const tradeType = computed(() => props.tradeType || String(unref(productActived).tradeType))
 // 板块类型
-const categoryType = ref(0)
+const categoryType = ref('1')
 // 获取板块列表和所选板块的产品列表
 const { categoryList, productList } = useProduct({
     tradeType, categoryType

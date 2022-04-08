@@ -1,24 +1,33 @@
 <template>
     <el-carousel arrow='never' class='swiper-module' height='540px'>
-        <el-carousel-item v-for='(item, index) in 2' :key='index'>
-            <!-- <img src='@planspc/images/home/banner.png' /> -->
-            <div class='bannerImg' :style='{ backgroundImage: "url("+bannerImg+")" }' @click='bannerClick'></div>
+        <el-carousel-item v-for='(item, index) in bannerList' :key='index'>
+            <div class='bannerImg' :style='{ backgroundImage: "url("+ item.url +")" }' @click='bannerClick(item)'></div>
         </el-carousel-item>
     </el-carousel>
 </template>
 
-<script>
-import bannerImg from '@planspc/images/home/banner.png'
-export default {
-    setup () {
-        const bannerClick = () => {
-            window.open('https://tradeswitcher.com/')
-        }
-        return {
-            bannerClick,
-            bannerImg
-        }
-    }
+<script setup>
+import { getCookie } from '@/utils/util.js'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+// 当前语言
+const lang = getCookie('lang')
+// 轮播图列表
+const bannerList = [
+    {
+        url: require('@planspc/images/' + lang + '/banner5.jpg')
+    },
+    {
+        url: require('@planspc/images/' + lang + '/banner3.jpg')
+    },
+    // {
+    //     url: require('@planspc/images/' + lang + '/banner-3.png')
+    // }
+]
+// 点击轮播图
+const bannerClick = (item) => {
+    router.push({ path: '/fund' })
 }
 </script>
 
@@ -27,13 +36,14 @@ export default {
     position: fixed;
     z-index: 0;
     left: 0;
-    top: 0;
+    top: 64px;
     width: 100%;
     .bannerImg{
         height: 100%;
         width: 100%;
         background-size: cover;
         background-position: center;
+        cursor: pointer;
     }
     img {
         display: block;

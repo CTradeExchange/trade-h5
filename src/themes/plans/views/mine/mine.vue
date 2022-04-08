@@ -31,19 +31,19 @@ export default {
     height: 100%;
     overflow: auto;
     background: var(--bgColor);
-    .minePageComp{
+    .minePageComp {
         min-height: 100%;
         padding-bottom: rem(110px);
     }
-    &.hasNav{
-        padding-bottom: rem(100px);
+    &.hasNav {
+        //padding-bottom: rem(100px);
     }
     .support {
-        margin: rem(-70px) auto rem(10px);
         width: rem(300px);
+        margin: rem(-70px) auto rem(10px);
         line-height: rem(32px);
         text-align: center;
-        img{
+        img {
             width: 100%;
         }
     }

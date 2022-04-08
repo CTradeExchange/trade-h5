@@ -25,7 +25,7 @@ export default {
     setup (props) {
         const router = useRouter()
         const back = () => {
-            router.replace('/mine')
+            router.replace('/')
         }
         const faceDetectSuccess = localGet('faceDetectSuccess')
         const toFaceDetect = () => {
@@ -47,7 +47,7 @@ export default {
 .page-wrap {
     height: 100%;
     background-color: var(--bgColor);
-    .right-icon{
+    .right-icon {
         font-size: rem(29px);
     }
 }

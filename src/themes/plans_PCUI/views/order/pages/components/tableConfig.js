@@ -127,7 +127,16 @@ export const getPendingColumns = tradeType => {
 
     const columnsMap = computed(() => ({
         1: [
-            { name: t('trade.name'), prop: 'symbolName', align: 'left', minWidth: 100 },
+            {
+                name: t('trade.name'),
+                prop: 'symbolName',
+                align: 'left',
+                minWidth: 150,
+                formatter: row => <span >
+                    {row.symbolName }
+                    {row.crossLevelNum ? <><span class="crossLevelNum">{ row.crossLevelNum }x</span></> : <></>}
+                </span>
+            },
             {
                 name: t('trade.direction'),
                 prop: 'direction',

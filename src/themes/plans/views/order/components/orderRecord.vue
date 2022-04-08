@@ -115,7 +115,7 @@ export default {
             accountList.value.map(el => {
                 accountIds.push(el.accountId)
             })
-            state.current = tabList[0].value
+            state.current = tabList[0]?.value
             state.tabList = tabList
             state.accountIds = accountIds
             init()
@@ -248,18 +248,19 @@ export default {
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
 .header-case {
+    position: sticky;
+    top: -1px;
+    z-index: 100;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     height: rem(78px);
     padding: 0 rem(30px);
     background: var(--contentColor);
     border-bottom: rem(1px) solid var(--lineColor);
-    position: sticky;
-    top: -1px;
-    z-index: 100;
     .tabs {
         height: 100%;
+
         --van-tabs-bottom-bar-width: 11vw;
         --van-tabs-bottom-bar-color: var(--primary);
         :deep(.van-tabs__wrap) {
@@ -276,14 +277,14 @@ export default {
         }
     }
     .link {
-        line-height: 1;
-        font-size: rem(34px);
         color: var(--normalColor);
+        font-size: rem(34px);
+        line-height: 1;
     }
 }
 .assets-list {
-    padding: 0 rem(20px);
     margin-top: rem(20px);
+    padding: 0 rem(20px);
     .block {
         margin-bottom: rem(20px);
         border-radius: 4px;

@@ -153,6 +153,7 @@ export default {
         const route = useRoute()
         const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
+        const { openAccountType } = route.query
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
             zone: '',
@@ -171,7 +172,7 @@ export default {
             visited: false, // 是否已点击过获取验证码
             countryVal: '',
             companyCountryList: [], // 获取白标后台配置的企业开户国家
-            openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
+            openAccountType: Number(openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
             allCountry: [] // 所有国家列表
         })
         let token = ''
@@ -212,9 +213,14 @@ export default {
         )
         // 开户须知内容
         const instructions = computed(() => {
-            const lang = locale.value
+            const lang = locale.value || 'zh-CN'
+            const instructionMap = {
+                'zh-CN': 'instructions_zh',
+                'en-US': 'instructions_en',
+                'zh-HK': 'instructions_hk'
+            }
             const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
-            const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
+            const protocol = wpCompanyInfo[instructionMap[lang]]
             return protocol ? decodeURIComponent(unescape(protocol)) : ''
         })
         // 是否显示企业开户的入口

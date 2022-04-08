@@ -101,7 +101,7 @@ import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
 import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { Toast } from 'vant'
 import { unescape } from 'lodash'
 import RuleFn, { checkCustomerExistRule } from './rule'
@@ -125,6 +125,7 @@ export default {
         const delayer = null
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
         const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const state = reactive({
@@ -144,7 +145,7 @@ export default {
             protocol: true,
             visited: false, // 是否已点击过获取验证码
             companyCountryList: [], // 获取白标后台配置的企业开户国家
-            openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
+            openAccountType: Number(route.query.openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
             countrySheetVisible: false,
             country: {},
             allCountry: [] // 所有国家列表
@@ -187,9 +188,14 @@ export default {
         // 开户须知内容
 
         const instructions = computed(() => {
-            const lang = locale.value
+            const lang = locale.value || 'zh-CN'
+            const instructionMap = {
+                'zh-CN': 'instructions_zh',
+                'en-US': 'instructions_en',
+                'zh-HK': 'instructions_hk'
+            }
             const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
-            const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
+            const protocol = wpCompanyInfo[instructionMap[lang]]
             return protocol ? decodeURIComponent(unescape(protocol)) : ''
         })
         // 注册页banner
@@ -391,6 +397,15 @@ export default {
         }
 
         onMounted(() => {
+            const { mobile, email } = route.query
+            if (mobile) {
+                state.mobile = mobile
+                state.openType = 'mobile'
+            } else if (email) {
+                state.email = email
+                state.openType = 'email'
+            }
+
             getAllCountry()
             queryCompanyCountry()
         })
@@ -429,6 +444,9 @@ export default {
         overflow: auto;
     }
     .footerBtn {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
         height: rem(100px);
     }
 }

@@ -74,7 +74,7 @@ export default {
         // 1.玩法类型
         const tradeType = ref(unref(productTradeType))
         // 2.板块类型
-        const categoryType = ref(0)
+        const categoryType = ref(1)
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
             tradeType, categoryType
@@ -148,15 +148,15 @@ export default {
 .quoteWrap {
     display: flex;
     flex: 1;
-    height: 100%;
     flex-direction: column;
     justify-content: flex-start;
     width: 100%;
+    height: 100%;
     // margin-top: rem(90px);
     overflow: auto;
     background: var(--bgColor);
-    &.hasNav{
-        padding-bottom: rem(100px);
+    &.hasNav {
+        //padding-bottom: rem(100px);
     }
     .productListWrap {
         flex: 1;
@@ -208,11 +208,11 @@ export default {
         }
     }
 }
-.etfBanner{
+.etfBanner {
     display: block;
     padding: 4px 0;
     background: var(--contentColor);
-    img{
+    img {
         display: block;
         width: 100%;
     }

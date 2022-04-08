@@ -88,6 +88,22 @@ class SocketEvent {
         })
     }
 
+    /* 24小时滚动报价订阅 支持两种数据格式，
+    * symbolKey的形式：['1_2','2_2']
+    * object的形式：[{symbol_id: "37", trade_type: 3}]
+    */
+    send_subscribe24H (productIds = []) {
+        if (!productIds || productIds.length === 0) return false
+        const productMap = this.$store.state._quote.productMap
+
+        // 拿到产品精简信息后，根据交易模式进行订阅产品行情
+        this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then((res) => {
+            this.subscribedList = productIds
+            const subscribeList = formatSubscribe(productIds, productMap)
+            this.send(14018, { symbol_list: subscribeList })
+        })
+    }
+
     /** 增量订阅产品
         @param Object {} 需要订阅的数据, moduleId 模块ID，symbolKeys 模块ID里面需要订阅的产品
      */

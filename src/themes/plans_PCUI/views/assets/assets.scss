@@ -57,6 +57,7 @@
         top: 20px;
         right: 22px;
         .btn {
+            @include hover();
             display: inline-flex;
             justify-content: center;
             align-items: center;
