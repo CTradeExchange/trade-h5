@@ -100,7 +100,7 @@ class SocketEvent {
         this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then((res) => {
             this.subscribedList = productIds
             const subscribeList = formatSubscribe(productIds, productMap)
-            this.send(14018, { symbol_list: subscribeList })
+            this.send(14016, { symbol_list: subscribeList, update_speed: 1000 })
         })
     }
 
@@ -175,6 +175,14 @@ class SocketEvent {
 
     // 处理报价快照
     ['cmd_id_14001'] (data) {
+        const list = data.data?.tick_list ?? []
+        const $store = this.$store
+        const newData = list.map(el => tickFormat(el))
+        $store.commit('_quote/Update_productTick', newData)
+    }
+
+    // 处理24H报价快照
+    ['cmd_id_14017'] (data) {
         const list = data.data?.tick_list ?? []
         const $store = this.$store
         const newData = list.map(el => tickFormat(el))

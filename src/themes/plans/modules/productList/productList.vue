@@ -53,8 +53,8 @@ export default {
             () => props.productList.length,
             async () => {
                 await nextTick()
-                const subscribList = calcSubscribeProducts()
-                if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
+                // const subscribList = calcSubscribeProducts()
+                // if (subscribList.length > 0) QuoteSocket.send_subscribe(subscribList)
 
                 if (props.productList.length) {
                     stop()
@@ -68,8 +68,16 @@ export default {
             router.push(`/product?symbolId=${data.symbolId}&tradeType=${data.tradeType}`)
         }
 
+        // 全量订阅产品报价
+        const subscribeAll = () => {
+            const list = props.productList.map(({ symbolKey }) => symbolKey)
+            console.log('subscribeAll ', list)
+            if (list.length > 0) QuoteSocket.send_subscribe24H(list)
+        }
+
         onMounted(() => {
-            productListEl.value.addEventListener('scroll', calcProductsDebounce, false)
+            subscribeAll()
+            // productListEl.value.addEventListener('scroll', calcProductsDebounce, false)
         })
 
         return {
