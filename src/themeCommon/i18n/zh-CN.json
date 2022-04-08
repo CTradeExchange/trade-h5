@@ -814,7 +814,7 @@
     "inputOpenAddressText": "请输入开户地址",
     "branchAddress": "支行地址",
     "inputBranchAddress": "请输入支行地址（选填）",
-    "submitSuccessTips": "您的资料已提交成功",
+    "submitSuccessTips": "添加成功",
     "noBanks": "暂无银行卡",
     "addBank": "新增银行卡",
     "bankList": "银行卡管理",

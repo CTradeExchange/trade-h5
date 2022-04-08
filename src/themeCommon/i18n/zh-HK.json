@@ -811,7 +811,7 @@
     "inputOpenAddressText": "請匯入開戶位址",
     "branchAddress": "支行位址",
     "inputBranchAddress": "請匯入支行位址（選填）",
-    "submitSuccessTips": "您的資料已提交成功",
+    "submitSuccessTips": "添加成功",
     "noBanks": "暫無銀行卡",
     "addBank": "新增銀行卡",
     "bankList": "銀行卡管理",
