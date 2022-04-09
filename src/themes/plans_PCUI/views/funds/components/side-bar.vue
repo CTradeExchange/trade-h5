@@ -16,7 +16,20 @@
                     <span class='name'>
                         {{ $t('funds.fundsAccount') }}
                     </span>
-                    <i class='record-link icon_zijinjilu' @click='showTransRecords'></i>
+                    <van-popover v-model:show='showPopover' theme='dark'>
+                        <p style='padding: 10px;'>
+                            {{ $t('fundInfo.buyRedeemRecords') }}
+                        </p>
+                        <template #reference>
+                            <i
+                                class='record-link icon_zijinjilu'
+                                @click='showRecords'
+                                @mouseenter='showPopover=true'
+                                @mouseleave='showPopover=false'
+                            >
+                            </i>
+                        </template>
+                    </van-popover>
                 </a>
             </div>
             <p class='nav-sub-title'>
@@ -83,19 +96,13 @@
 </template>
 
 <script setup>
-import { computed, defineProps, defineEmits, inject } from 'vue'
+import { ref, computed, defineEmits, inject } from 'vue'
 import { useStore } from 'vuex'
 import { useFund } from '../hooks.js'
 import currencyIcon from '@/components/currencyIcon.vue'
 
-const props = defineProps({
-    // 当前基金id
-    fundId: {
-        type: [String, Number],
-        default: ''
-    }
-})
 const emits = defineEmits(['select'])
+const fundId = inject('fundId')
 const changeShowModel = inject('changeShowModel')
 
 const store = useStore()
@@ -106,7 +113,7 @@ const assetsInfo = computed(() => store.state._user.assetsInfo[5])
 // 账户列表
 const accountList = computed(() => {
     if (customerInfo.value) {
-        return customerInfo.value?.accountList.filter(el => Number(el.tradeType) === 5)
+        return customerInfo.value.accountList?.filter(el => Number(el.tradeType) === 5) || []
     } else {
         return []
     }
@@ -125,15 +132,17 @@ const fundAccounts = computed(() => {
 })
 // 基金产品列表
 const { fundProductList } = useFund()
+// 是否显示弹出层
+const showPopover = ref(false)
 
 // 切换基金产品
 const switchFundItem = (value) => {
     emits('select', value)
 }
 
-// 显示成交记录模块
-const showTransRecords = () => {
-    changeShowModel('transRecords')
+// 显示申购赎回记录模块
+const showRecords = () => {
+    changeShowModel('fundRecord')
 }
 </script>
 

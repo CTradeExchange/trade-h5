@@ -23,7 +23,7 @@
         </div>
         <!-- 投资组件 -->
         <div class='fund-chart'>
-            <realtimeInvestCompose :rotate='0' :show-switch='false' />
+            <realtimeInvestCompose :rotate='0' :show-bottom-tip='false' :show-switch='false' />
         </div>
         <!-- 基金pdf -->
         <div class='fund-pdf'>
@@ -33,12 +33,29 @@
                     <strong>{{ fund.fundName }}</strong>
                 </div>
                 <div class='col'>
-                    <span>{{ $t('fundInfo.fundType') }}</span>
-                    <strong>{{ fund.fundType }}</strong>
+                    <span>{{ $t('fundInfo.shareCurrency') }}</span>
+                    <div class='box'>
+                        <currency-icon class='currency' :currency='fund.shareTokenCode' size='23px' />
+                        <strong>{{ fund.shareTokenCode }}</strong>
+                    </div>
+                </div>
+                <div v-if='fund.managerName' class='col'>
+                    <span>{{ $t('fundInfo.fundManager') }}</span>
+                    <strong>{{ fund.managerName }}</strong>
+                </div>
+                <div v-if='fund.trackProduct || fund.trackIndexOut' class='col'>
+                    <span>{{ $t('fundInfo.followIndex') }}</span>
+                    <strong>{{ (fund.trackProduct ? fund.trackProduct.symbolName : fund.trackIndexOut) }}</strong>
                 </div>
                 <div class='col'>
-                    <span>{{ $t('fundInfo.followIndex') }}</span>
-                    <strong>{{ fund.trackProduct ? fund.trackProduct.symbolName : fund.trackIndexOut }}</strong>
+                    <span>{{ $t('fundInfo.operationMode') }}</span>
+                    <strong>
+                        {{ fund.operationMode === 1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
+                    </strong>
+                </div>
+                <div v-if='fund.fundType' class='col'>
+                    <span>{{ $t('fundInfo.fundType') }}</span>
+                    <strong>{{ fund.fundType }}</strong>
                 </div>
             </div>
             <div class='btnBox'>
@@ -47,28 +64,24 @@
                 </button>
             </div>
         </div>
+        <!-- 底部提示 -->
+        <bottomTip />
     </div>
 </template>
 
 <script setup>
-import { ref, watchEffect, defineProps, provide, inject } from 'vue'
+import { ref, watchEffect, provide, inject } from 'vue'
 import { useFund } from '../hooks.js'
 import fundInfo from './fund-info.vue'
 import fundDeal from './fund-deal.vue'
+import currencyIcon from '@/components/currencyIcon.vue'
 import performance from '@planspc/components/fundInformation/performance.vue'
 import realtimeInvestCompose from '@planspc/components/fundInformation/realtimeInvestCompose.vue'
+import bottomTip from '@planspc/components/fundInformation/bottomTip.vue'
 
-const props = defineProps({
-    // 基金id
-    fundId: {
-        type: [String, Number],
-        default: ''
-    }
-})
-provide('fundId', props.fundId)
-
-// 选择基金产品
+const fundId = inject('fundId')
 const selectFund = inject('selectFund')
+provide('fundId', fundId.value)
 // 基金产品列表
 const { fundProductList } = useFund()
 // 当前基金
@@ -78,8 +91,8 @@ const fundIndex = ref('')
 
 // 监听基金id
 watchEffect(() => {
-    const result = fundProductList.value.find(el => el.fundId === props.fundId)
-    const index = fundProductList.value.findIndex(el => el.fundId === props.fundId)
+    const result = fundProductList.value.find(el => el.fundId === fundId.value)
+    const index = fundProductList.value.findIndex(el => el.fundId === fundId.value)
     fund.value = result || {}
     fundIndex.value = index
 })
@@ -117,7 +130,7 @@ const openPDF = url => {
     justify-content: space-between;
     align-items: center;
     .item {
-        font-size: 13px;
+        font-size: 14px;
         color: var(--primary);
         &.disable {
             color: var(--minorColor);
@@ -154,30 +167,39 @@ const openPDF = url => {
 }
 .fund-pdf {
     margin-top: 30px;
-    padding: 30px;
-    background: var(--contentColor);
-    box-shadow: 3px 3px 20px rgb(0 0 0 / 9%);
     .fund-row {
         display: flex;
-        justify-content: center;
+        flex-wrap: wrap;
         .col {
             display: inline-flex;
             flex-direction: column;
-            margin: 0 60px;
+            padding: 0 32px;
+            margin-bottom: 15px;
+            .box {
+                display: inline-flex;
+                align-items: center;
+                .currency {
+                    margin-right: 5px;
+                }
+            }
             span {
-                font-size: 12px;
+                font-size: 14px;
+                font-weight: 300;
                 color: var(--normalColor);
+                letter-spacing: 1px;
+                margin-bottom: 5px;
             }
             strong {
-                font-size: 16px;
+                font-size: 28px;
+                font-weight: 700;
                 color: var(--mainColor);
             }
         }
     }
     .btnBox{
         display: flex;
-        justify-content: center;
-        margin-top: 20px;
+        padding-left: 32px;
+        margin-top: 10px;
         .btn{
             width: 200px;
             height: 40px;

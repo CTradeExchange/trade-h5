@@ -916,7 +916,8 @@
         "deal": "Buy/Sell",
         "spot": "Spot",
         "cashDeal": "Spot",
-        "spotTip": "This page is used for Spot - Market order trading only.For more order types, please go to <span data-index=order>Professional</span> interface"
+        "spotTip": "This page is used for Spot - Market order trading only.For more order types, please go to <span data-index=order>Professional</span> interface",
+        "newPrice": "Price"
     },
     "home": {
         "quick": {

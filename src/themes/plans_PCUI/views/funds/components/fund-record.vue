@@ -111,7 +111,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .history-record {
-    margin: 8px;
+    min-height: 100%;
     background: var(--contentColor);
     border-radius: 10px;
     .header {

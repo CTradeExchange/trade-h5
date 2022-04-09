@@ -26,8 +26,8 @@ watch(() => params.value.tradeType, async () => {
 .transRecords{
     display: flex;
     flex-direction: column;
+    min-height: 100%;
     background: var(--contentColor);
-    margin: 8px;
     border-radius: 10px;
 }
 </style>

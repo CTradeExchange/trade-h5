@@ -4,7 +4,7 @@
         <div class='page-content'>
             <!-- 侧边栏 -->
             <div class='page-side'>
-                <side-bar :fund-id='fundId' @select='selectFund' />
+                <side-bar @select='selectFund' />
             </div>
             <!-- 主体内容 -->
             <div id='page-main' class='page-main'>
@@ -12,7 +12,7 @@
                     <!-- 基金模块 -->
                     <fund-module v-if="showModel === 'fundModule'" />
                     <!-- 基金详情 -->
-                    <fund-detail v-if="showModel === 'fundDetail'" :key='fundId' :fund-id='fundId' />
+                    <fund-detail v-if="showModel === 'fundDetail'" :key='fundId' />
                     <!-- 基金记录 -->
                     <fund-record v-if="showModel === 'fundRecord'" />
                     <!-- 现货成交记录 -->
@@ -28,14 +28,13 @@ import { ref, onMounted, onUnmounted, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { useFund } from './hooks.js'
-import { marketPerformance } from '@/api/trade'
+import { batchMarketPerformance } from '@/api/trade'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import sideBar from './components/side-bar.vue'
 import fundModule from './components/fund-module.vue'
 import fundDetail from './components/fund-detail.vue'
 import fundRecord from './components/fund-record.vue'
 import transRecords from './components/transRecords.vue'
-import { reject } from '@/components/tradingview/datafeeds/udf/dist/polyfills.js'
 
 const store = useStore()
 const route = useRoute()
@@ -88,38 +87,35 @@ const netValueArrs = ref([])
 // 基金列表市场价格数据
 const marketPriceArrs = ref([])
 
-// 获取市场表现走势图
-const getMarketPerformanceData = (param) => {
-    return new Promise(resolve => {
-        marketPerformance({
-            fundId: param.fundId,
-            days: 36,
-            type: 1
-        }).then(res => {
-            if (res.check()) {
-                const keysArr = Object.keys(res.data)
-                const netValueKey = keysArr[0]
-                const netValueList = []
-                const marketPriceKey = keysArr[1]
-                const marketPriceList = []
-                // 净值数据
-                if (netValueKey) {
-                    res.data[netValueKey].map(elem => {
-                        netValueList.push(Number(elem.value))
-                    })
-                }
-                // 市场价格数据
-                if (marketPriceKey) {
-                    res.data[marketPriceKey].map(elem => {
-                        marketPriceList.push(Number(elem.value))
-                    })
-                }
-                resolve({
-                    netValueList,
-                    marketPriceList
+// 批量获取市场表现走势图
+const batchMarketPerformanceData = () => {
+    const fundIds = (fundProductList.value.map(el => el.fundId)).toString()
+    batchMarketPerformance({
+        fundIds,
+        days: 36,
+        type: 1
+    }).then(res => {
+        const list = Object.values(res.data)
+        const valueArrs = []
+        const priceArrs = []
+        list.map(arr => {
+            const valueArr = []
+            const priceArr = []
+            arr.map(elem => {
+                elem.columnList.map(sub => {
+                    if (elem.type === 2) {
+                        valueArr.push(Number(sub.value))
+                    }
+                    if (elem.type === 1) {
+                        priceArr.push(Number(sub.value))
+                    }
                 })
-            }
+            })
+            valueArrs.push(valueArr)
+            priceArrs.push(priceArr)
         })
+        netValueArrs.value = valueArrs
+        marketPriceArrs.value = priceArrs
     })
 }
 
@@ -136,18 +132,8 @@ const getProductList = () => {
         // 发起行情订阅
         QuoteSocket.send_subscribe(productKeys)
 
-        // 获取市场表现走势图
-        const arr1 = []
-        const arr2 = []
-        fundProductList.value.map(async (fund, index) => {
-            const result = await getMarketPerformanceData(fund)
-            arr1.push(result.netValueList)
-            arr2.push(result.marketPriceList)
-            if (fundProductList.value.length - 1 === index) {
-                netValueArrs.value = arr1
-                marketPriceArrs.value = arr2
-            }
-        })
+        // 批量获取市场表现走势图
+        batchMarketPerformanceData()
     })
 }
 
@@ -194,14 +180,6 @@ onMounted(() => {
     if (customerInfo.value) {
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
     }
-
-    // marketPerformance({
-    //     fundIds: '2',
-    //     days: 36,
-    //     type: 1
-    // }).then(res => {
-    //     console.log('res', res)
-    // })
 })
 onUnmounted(() => {
     document.body.style.overflow = 'visible'
@@ -227,12 +205,13 @@ onUnmounted(() => {
     overflow-y: auto;
 }
 .page-main {
+    display: flex;
     flex: 1;
     padding: 16px 32px;
     overflow-y: auto;
 }
 .page-module {
-    max-width: 1024px;
+    flex: 1;
     min-width: 800px;
     margin: 0 auto;
 }

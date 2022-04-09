@@ -23,22 +23,24 @@
         <div class='info-block'>
             <div class='info-row'>
                 <div class='col'>
-                    <span>{{ $t('fundInfo.fundCreateTime') }}</span>
-                    <strong>{{ fund.upDate }}</strong>
-                </div>
-                <div class='col'>
-                    <span>{{ $t('fundInfo.realtimeJZ') }}</span>
+                    <span>{{ $t('fundInfo.realtimeJZ') }}({{ fund.currencyCode }})</span>
                     <strong>{{ toFixed(fund.netValue) }}</strong>
                 </div>
-            </div>
-            <div class='info-row'>
                 <div class='col'>
-                    <span>{{ $t('trade.offer') }}</span>
+                    <span>{{ $t('trade.offer') }}({{ fund.currencyCode }})</span>
                     <strong>{{ toFixed(fund.marketPrice) }}</strong>
                 </div>
                 <div class='col'>
-                    <span>{{ $t('funds.fundShare') }}</span>
-                    <strong>{{ toFixed(fund.newShare) }}</strong>
+                    <span>{{ $t('fundInfo.totalMarketValue') }}({{ fund.currencyCode }})</span>
+                    <strong>{{ calculate(fund.totalBalance) }}</strong>
+                </div>
+                <div class='col'>
+                    <span>{{ $t('fundInfo.latestPart') }}</span>
+                    <strong>{{ calculate(fund.newShare) }}</strong>
+                </div>
+                <div class='col'>
+                    <span>{{ $t('fundInfo.fundCreateTime') }}</span>
+                    <strong>{{ fund.upDate ? fund.upDate.substring(0, fund.upDate.length - 3) : '' }}</strong>
                 </div>
             </div>
         </div>
@@ -57,6 +59,21 @@ defineProps({
         default: () => {}
     }
 })
+
+// 计算显示的数值
+const calculate = (num) => {
+    let result = ''
+    if (num >= 1000 && num < 1000000) {
+        num = toFixed((num / 1000), 1)
+        result = num + 'K'
+    } else if (num >= 1000000) {
+        num = toFixed((num / 1000000), 1)
+        result = num + 'M'
+    } else {
+        result = num
+    }
+    return result
+}
 </script>
 
 <style lang='scss' scoped>
@@ -110,11 +127,11 @@ defineProps({
     }
     .info-row {
         display: flex;
+        flex-wrap: wrap;
         .col {
             display: inline-flex;
             flex-direction: column;
-            flex: 1;
-            margin-right: 16px;
+            width: calc(100% / 3);
             margin-bottom: 16px;
             span {
                 letter-spacing: 1px;

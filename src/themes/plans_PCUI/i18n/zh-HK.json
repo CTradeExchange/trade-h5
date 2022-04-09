@@ -892,7 +892,7 @@
 		"fundArrive": "資金到賬",
 		"redeem_tip1": "贖回以份額申請，即贖回基金時，只要填寫贖回多少份額即可",
 		"redeem_tip2": "贖回價格釆用“未知價”原則，預計按T+2日當天確認份額結束后的淨值價格執行",
-		"redeem_tip3": "贖回流程結束，那你所贖回的基金代幣將以選取的接收資產匯入您的現貨錢包",
+		"redeem_tip3": "贖回流程結束，贖回的基金代幣將以你選擇的接收資產匯入您的現貨錢包",
 		"assetIndexQquestionTip":"圖表為指數樣本所含資產在近24小時內的市場表現(報價單位:USDT)",
 		"assetQquestionTip":"圖表為基金投資組合所含資產在近24小時內的市場表現(報價單位:USDT)",
         "fundTrade": "申購/贖回",
@@ -919,7 +919,8 @@
         "deal": "買賣",
         "spot": "現貨",
         "cashDeal": "現貨買賣",
-        "spotTip": "此界面僅提供現貨市價買賣，更多下單類型，請前往更專業的<span data-index=order>現貨交易</span>界面"
+        "spotTip": "此界面僅提供現貨市價買賣，更多下單類型，請前往更專業的<span data-index=order>現貨交易</span>界面",
+        "newPrice": "最新價"
     },
     "home": {
         "quick": {

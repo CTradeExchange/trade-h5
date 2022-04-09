@@ -29,7 +29,7 @@
         </div>
         <div class='card-kline'>
             <kline-svg
-                v-if='netValueArrs[index].length > 0'
+                v-if='netValueArrs[index]'
                 :data='netValueArrs[index]'
                 :height='40'
                 :width='360'

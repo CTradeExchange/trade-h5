@@ -75,7 +75,7 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('trade.newPrice')" :min-width='minWidth'>
+                <el-table-column :label="$t('funds.newPrice')" :min-width='minWidth'>
                     <template #default='scope'>
                         <span>{{ curProductList[scope.$index].cur_price ? curProductList[scope.$index].cur_price : '-' }}</span>
                     </template>
@@ -129,7 +129,7 @@ const goDeal = (fundId, active) => {
     margin: 16px 0;
     background: var(--contentColor);
     .currency {
-        margin-right: 10px;
+        margin-right: 5px;
     }
     .handle {
         display: flex;

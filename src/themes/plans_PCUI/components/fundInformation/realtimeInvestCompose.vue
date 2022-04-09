@@ -6,11 +6,11 @@
                     <span>{{ title || $t('fundInfo.realtimeInvestCompose') }}</span>
                     <span v-if='!allShow && showSwitch' class='rightSwitch icon_chouti1' @click='switchAction'></span>
                     <div v-if='!showSwitch' class='more-tabs'>
-                        <div class='box' :class="{ 'active': showBlock === 'chart' }">
-                            <img class='icon icon2' src='../../images/chart-icon2.png' @click="switchAction('chart')" />
-                        </div>
                         <div class='box' :class="{ 'active': showBlock === 'list' }">
                             <img class='icon icon1' src='../../images/chart-icon1.png' @click="switchAction('list')" />
+                        </div>
+                        <div class='box' :class="{ 'active': showBlock === 'chart' }">
+                            <img class='icon icon2' src='../../images/chart-icon2.png' @click="switchAction('chart')" />
                         </div>
                     </div>
                 </h4>
@@ -90,7 +90,7 @@
                 <div ref='chartBarDOM' class='chartBarDOM'></div>
             </div>
 
-            <BottomTip />
+            <BottomTip v-if='showBottomTip' />
         </div>
     </div>
 </template>
@@ -127,11 +127,16 @@ const props = defineProps({
     showSwitch: {
         type: Boolean,
         default: true
+    },
+    // 是否显示底部提示
+    showBottomTip: {
+        type: Boolean,
+        default: true
     }
 })
 
 // 显示数据列表还是显示环形图
-const showBlock = ref('chart')
+const showBlock = ref('list')
 // 切换数据列表和环形图的显示
 const switchAction = async (value) => {
     if (value) {
