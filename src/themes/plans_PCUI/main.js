@@ -15,7 +15,7 @@ import PageComp from '@planspc/components/PageComp'
 import LayoutTop from '@planspc/layout/centerViewTop'
 import { setRootVariable } from './colorVariables'
 import { setRouter, modifybaseURL } from '@/utils/request'
-import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie } from '@/utils/util'
+import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie, sessionSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
@@ -25,6 +25,8 @@ import Setup from './setup'
 const isProduction = process.env.NODE_ENV === 'production'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
+
+sessionSet('entrySearch', location.search) // 缓存入口url的参数，给注册开会来源使用
 
 // 调试工具
 // import VConsole from 'vconsole'
