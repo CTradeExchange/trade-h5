@@ -83,6 +83,7 @@ export default {
         return {
             ...toRefs(state),
             productListEl,
+            subscribeAll,
             calcProductsDebounce,
             calcSubscribeProducts,
             productMap,

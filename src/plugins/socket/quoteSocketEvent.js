@@ -186,7 +186,7 @@ class SocketEvent {
         const list = data.data?.tick_list ?? []
         const $store = this.$store
         const newData = list.map(el => tickFormat(el))
-        $store.commit('_quote/Update_productTick', newData)
+        $store.commit('_quote/Update_productTick24H', newData)
     }
 
     // 处理盘口成交数据快照
@@ -233,6 +233,33 @@ class SocketEvent {
     tick (p) {
         // p(symbol_id,trade_type,trade_mode,seq,tick_time,price,price_bid1,price_ask1,volume_bid1,volume_ask1);
         // p(产品ID，报价交易类型，成交模式，报价序号，报价时间戳，当前价，第一档bid价，第一档ask价, 第一档bid量, 第一档ask量);
+
+        if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
+        const $store = this.$store
+        const curPriceData = tickToObj(p)
+        const now = new Date().getTime()
+        if (this.preSetTime + 125 <= now) {
+            this.preSetTime = now
+            this.newPrice.push(curPriceData)
+            $store.commit('_quote/Update_productTick', this.newPrice)
+            this.newPrice = []
+        } else {
+            this.newPrice.push(curPriceData)
+        }
+
+        // 500毫秒后更新最后一组报价数据
+        this.newPriceTimer = setTimeout(() => {
+            if (this.newPrice.length > 0) {
+                $store.commit('_quote/Update_productTick', this.newPrice)
+                this.newPrice = []
+            }
+        }, 500)
+    }
+
+    // 24H实时报价
+    tick24H (p) {
+        // pr(symbol_id,trade_type,trade_mode,rolling_last_price,rolling_first_price,rolling_high_price,rolling_low_price,rolling_transactions_number,rolling_amount);
+        // pr(产品ID，报价交易类型，成交模式，24小时里最后一口价，24小时里第一口价，24小时里最高价，24小时里最低价，24小时成交量，24小时成交金额);
 
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const $store = this.$store

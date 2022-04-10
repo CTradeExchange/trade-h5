@@ -200,24 +200,53 @@ export default {
                 product.sell_color = BigNumber(data.sell_price).eq(product.sell_price_pre) ? product.sell_color : BigNumber(data.sell_price).lt(product.sell_price_pre) ? 'fallColor' : 'riseColor'
 
                 const upDownAmount = BigNumber(data.cur_price).minus(product.yesterday_close_price).toFixed(product.price_digits) // 涨跌额
-                const rolling_upDownAmount = BigNumber(data.rolling_last_price).minus(product.rolling_first_price).toFixed(product.price_digits) // 24H涨跌额
                 const upDownAmount_pip = priceToPip(upDownAmount, product) // 涨跌额(点)
                 const upDownWidthTemp = BigNumber(upDownAmount).div(product.yesterday_close_price).times(100).toFixed(2)
                 const upDownWidth = upDownWidthTemp > 0 ? '+' + upDownWidthTemp + '%' : upDownWidthTemp + '%' // 涨跌幅
-                const rolling_upDownWidthTemp = BigNumber(rolling_upDownAmount).div(product.rolling_first_price).times(100).toFixed(2)
-                const rolling_upDownWidth = rolling_upDownWidthTemp > 0 ? '+' + upDownWidthTemp + '%' : upDownWidthTemp + '%' // 涨跌幅
                 const upDownColor = parseFloat(upDownAmount) === 0 ? 'grayColor' : (parseFloat(upDownAmount) > 0 ? 'riseColor' : 'fallColor')
                 vue_set(product, 'upDownAmount', upDownAmount)
-                vue_set(product, 'rolling_upDownAmount', rolling_upDownAmount)
                 vue_set(product, 'upDownAmount_pip', upDownAmount_pip)
                 vue_set(product, 'upDownWidth', product.yesterday_close_price ? upDownWidth : '--')
-                vue_set(product, 'rolling_upDownWidth', product.rolling_first_price ? rolling_upDownWidth : '--')
                 vue_set(product, 'upDownColor', upDownColor)
 
                 // 更新上一口价的裸行情
                 product.cur_price_pre = data.cur_price
                 product.buy_price_pre = data.buy_price
                 product.sell_price_pre = data.sell_price
+                assign(product, data)
+                if (dealMode === 1) price_spread(product, data)
+            })
+        },
+        // 更新某个产品24H报价
+        Update_productTick24H (state, dataArr = []) {
+            console.log('Update_productTick24H', dataArr)
+            const productMap = state.productMap
+            dataArr.forEach(data => {
+                const product = productMap[data.symbolKey]
+                if (!product) return false
+                const digits = data.price_digits || product.price_digits || product.symbolDigits
+                const dealMode = product.dealMode || data.dealMode
+                // data.rolling_last_price = toFixed(data.rolling_last_price, digits) // 最新价补0操作，接口已经处理了补0
+                if (BigNumber(data.rolling_last_price).gt(product.rolling_high_price)) data.rolling_high_price = data.rolling_last_price
+                if (BigNumber(data.rolling_last_price).lt(product.rolling_low_price)) data.rolling_low_price = data.rolling_last_price
+                if (!product.rolling_last_price_pre) { // 缓存上一口价的裸行情
+                    vue_set(product, 'rolling_last_price_pre', data.rolling_last_price)
+                    vue_set(product, 'rolling_first_price', data.rolling_first_price)
+                    vue_set(product, 'last_color', 'grayColor')
+                }
+                // 计算涨跌颜色
+                product.last_color = BigNumber(data.rolling_last_price).eq(product.rolling_last_price_pre) ? product.last_color : BigNumber(data.rolling_last_price).lt(product.rolling_last_price_pre) ? 'fallColor' : 'riseColor'
+
+                const rolling_upDownAmount = BigNumber(data.rolling_last_price).minus(product.rolling_first_price).toFixed(digits) // 24H涨跌额
+                const rolling_upDownWidthTemp = BigNumber(rolling_upDownAmount).div(product.rolling_first_price).times(100).toFixed(2)
+                const rolling_upDownWidth = rolling_upDownWidthTemp > 0 ? '+' + rolling_upDownWidthTemp + '%' : rolling_upDownWidthTemp + '%' // 涨跌幅
+                const rolling_upDownColor = parseFloat(rolling_upDownAmount) === 0 ? 'grayColor' : (parseFloat(rolling_upDownAmount) > 0 ? 'riseColor' : 'fallColor')
+                vue_set(product, 'rolling_upDownAmount', rolling_upDownAmount)
+                vue_set(product, 'rolling_upDownWidth', product.rolling_first_price ? rolling_upDownWidth : '--')
+                vue_set(product, 'rolling_upDownColor', rolling_upDownColor)
+
+                // 更新上一口价的裸行情
+                product.rolling_last_price_pre = data.rolling_last_price
                 assign(product, data)
                 if (dealMode === 1) price_spread(product, data)
             })

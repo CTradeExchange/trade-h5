@@ -3,23 +3,26 @@ import { toFixed } from '@/utils/calculation'
 import { priceFormat } from '@/utils/util'
 
 export function tickFormat (data) {
-    const digits = data.price_digits
-    const tick_deep = data.tick_deep || []
-    tick_deep.forEach(el => {
-        el.price_ask = toFixed(el.price_ask, digits)
-        el.price_bid = toFixed(el.price_bid, digits)
-    })
-    const firstTick = tick_deep[0] || {}
     data.symbolKey = `${data.symbol_id}_${data.trade_type}`
     data.symbolId = parseInt(data.symbol_id)
-    data.close_price = toFixed(data.close_price, digits)
-    data.high_price = toFixed(data.high_price, digits)
-    data.low_price = toFixed(data.low_price, digits)
-    data.open_price = toFixed(data.open_price, digits)
-    data.cur_price = toFixed(data.price, digits)
-    data.sell_price = toFixed(firstTick.price_bid, digits)
-    data.buy_price = toFixed(firstTick.price_ask, digits)
-    data.yesterday_close_price = toFixed(data.yesterday_close_price, digits)
+    const digits = data.price_digits
+    if (digits) {
+        const tick_deep = data.tick_deep || []
+        tick_deep.forEach(el => {
+            el.price_ask = toFixed(el.price_ask, digits)
+            el.price_bid = toFixed(el.price_bid, digits)
+        })
+        const firstTick = tick_deep[0] || {}
+        data.close_price = toFixed(data.close_price, digits)
+        data.high_price = toFixed(data.high_price, digits)
+        data.low_price = toFixed(data.low_price, digits)
+        data.open_price = toFixed(data.open_price, digits)
+        data.cur_price = toFixed(data.price, digits)
+        data.sell_price = toFixed(firstTick.price_bid, digits)
+        data.buy_price = toFixed(firstTick.price_ask, digits)
+        data.yesterday_close_price = toFixed(data.yesterday_close_price, digits)
+    }
+
     return data
 }
 
