@@ -281,7 +281,8 @@ export default {
             const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
             commit('Updata_planMap', { plans: rootState._base.plans, planMap })
-            const firstTradeType = rootState._base.plans[0]?.tradeType
+            const isWallet = rootState._base.wpCompanyInfo.isWallet // 现货玩法是否当钱包使用
+            const firstTradeType = rootState._base.plans.find(el => !(el.tradeType === '5' && isWallet))?.tradeType
             const firstProductSymbolId = firstTradeType && planMap[firstTradeType] ? planMap[firstTradeType][0] : ''
             const firstProductSymbolKey = firstProductSymbolId + '_' + firstTradeType
             if (symbolList.length) commit('Update_productActivedID', firstProductSymbolKey)
