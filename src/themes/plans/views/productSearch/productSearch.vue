@@ -63,7 +63,14 @@ export default {
         const router = useRouter()
         const store = useStore()
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans)
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
+        const plansList = computed(() =>
+            store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
+                .map(el => {
+                    el.name = t('tradeType.' + el.tradeType)
+                    return el
+                })
+        )
         const productMap = computed(() => store.state._quote.productMap)
 
         // 1.玩法类型

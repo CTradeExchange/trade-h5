@@ -93,6 +93,7 @@ import { computed, ref, watch, onMounted, getCurrentInstance } from 'vue'
 import { useStore } from 'vuex'
 import useProduct from '@planspc/hooks/useProduct'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import globalData from '@h5/hooks/globalData'
 
 export default {
@@ -117,10 +118,18 @@ export default {
         const { h5Preview } = globalData()
         const router = useRouter()
         const store = useStore()
+        const { t, locale } = useI18n({ useScope: 'global' })
         const curInstance = getCurrentInstance()
 
         // 玩法列表
-        const plansList = computed(() => store.state._base?.plans || [])
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
+        const plansList = computed(() =>
+            store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
+                .map(el => {
+                    el.name = t('tradeType.' + el.tradeType)
+                    return el
+                })
+        )
         // 玩法类型
         const tradeType = ref(h5Preview ? '' : Number(plansList.value[0]?.tradeType))
         // 分类类型
