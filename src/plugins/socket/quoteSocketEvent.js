@@ -100,7 +100,7 @@ class SocketEvent {
 
         // 拿到产品精简信息后，根据交易模式进行订阅产品行情
         this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then((res) => {
-            this.subscribedList = productIds
+            this.subscribed24HList = productIds
             const subscribeList = formatSubscribe(productIds, productMap)
             this.send(14016, { symbol_list: subscribeList, update_speed: 1000 })
         })
@@ -181,6 +181,7 @@ class SocketEvent {
     // websocket连接成功
     onOpen () {
         if (this.subscribedList.length) this.send_subscribe(this.subscribedList)
+        if (this.subscribed24HList.length) this.send_subscribe24H(this.subscribed24HList)
         if (this.subscribeDeal.length) {
             const { symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode } = this.subscribeDeal[0]
             this.deal_subscribe(symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode)
