@@ -1,4 +1,4 @@
-import { tickFormat, tickToObj, formatSubscribe } from './socketUtil'
+import { tickFormat, tickToObj, tick24HToObj, formatSubscribe } from './socketUtil'
 import { guid } from '@/utils/util'
 import { mul } from '@/utils/calculation'
 
@@ -12,7 +12,9 @@ class SocketEvent {
         this.$store = null
         this.requests = new Map()
         this.subscribedMap = {} // 根据不同模块增量订阅
+        this.subscribed24HMap = {} // 根据不同模块增量订阅24H
         this.subscribedList = [] // 上一次报价订阅记录
+        this.subscribed24HList = [] // 上一次报价订阅记录
         this.subscribeDeal = [] // 上一次盘口订阅记录
         this.preSetTime = 1 // 上一次保存价格的时间
         this.newPrice = []
@@ -119,11 +121,36 @@ class SocketEvent {
         return del_subscribe
     }
 
+    /** 增量订阅24H的产品
+        @param Object {} 需要订阅的数据, moduleId 模块ID，symbolKeys 模块ID里面需要订阅的产品
+     */
+    add_subscribe24H ({ moduleId, symbolKeys }) {
+        this.subscribed24HMap[moduleId] = symbolKeys
+        const symbolkeyAll = Object.values(this.subscribed24HMap).flat()
+        this.send_subscribe24H(symbolkeyAll)
+
+        // 返回取消改模块订阅的方法
+        const del_subscribe = () => {
+            delete this.subscribed24HMap[moduleId]
+            if (Object.keys(this.subscribed24HMap).length === 0) {
+                this.cancel_subscribe(3)
+            }
+        }
+        return del_subscribe
+    }
+
     /** 删除订阅产品
         @param Object {} 需要删除订阅的数据, moduleId 模块ID
      */
     del_subscribe (moduleId) {
         return delete this.subscribedMap[moduleId]
+    }
+
+    /** 删除订阅24H的产品
+        @param Object {} 需要删除订阅的数据, moduleId 模块ID
+     */
+    del_subscribe24H (moduleId) {
+        return delete this.subscribed24HMap[moduleId]
     }
 
     // 盘口成交报价订阅
@@ -261,26 +288,9 @@ class SocketEvent {
         // pr(symbol_id,trade_type,trade_mode,rolling_last_price,rolling_first_price,rolling_high_price,rolling_low_price,rolling_transactions_number,rolling_amount);
         // pr(产品ID，报价交易类型，成交模式，24小时里最后一口价，24小时里第一口价，24小时里最高价，24小时里最低价，24小时成交量，24小时成交金额);
 
-        if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const $store = this.$store
-        const curPriceData = tickToObj(p)
-        const now = new Date().getTime()
-        if (this.preSetTime + 125 <= now) {
-            this.preSetTime = now
-            this.newPrice.push(curPriceData)
-            $store.commit('_quote/Update_productTick', this.newPrice)
-            this.newPrice = []
-        } else {
-            this.newPrice.push(curPriceData)
-        }
-
-        // 500毫秒后更新最后一组报价数据
-        this.newPriceTimer = setTimeout(() => {
-            if (this.newPrice.length > 0) {
-                $store.commit('_quote/Update_productTick', this.newPrice)
-                this.newPrice = []
-            }
-        }, 500)
+        const curPriceData = tick24HToObj(p)
+        $store.commit('_quote/Update_productTick24H', curPriceData)
     }
 
     // 实时成交数据

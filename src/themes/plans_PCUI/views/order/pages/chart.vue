@@ -774,7 +774,7 @@ export default {
 
         // 监听路由变化
         const changeRoute = () => {
-            // QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
+            QuoteSocket.add_subscribe({ moduleId: 'order_productActivited', symbolKeys: [`${product.value.symbolId}_${product.value.tradeType}`] })
             // const invertColor = localGet('invertColor')
             initChartData()
             chartRef.value && chartRef.value.reset({

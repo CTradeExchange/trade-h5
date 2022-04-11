@@ -219,7 +219,6 @@ export default {
         },
         // 更新某个产品24H报价
         Update_productTick24H (state, dataArr = []) {
-            console.log('Update_productTick24H', dataArr)
             const productMap = state.productMap
             dataArr.forEach(data => {
                 const product = productMap[data.symbolKey]

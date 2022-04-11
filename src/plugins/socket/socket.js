@@ -47,6 +47,8 @@ function quoteWSEvent (quoteWS) {
     quoteWS.addEventListener('message', evt => {
         if (typeof evt.data === 'string' && evt.data.startsWith('p(')) {
             return QuoteSocket.tick(evt.data)
+        } else if (typeof evt.data === 'string' && evt.data.startsWith('pr(')) {
+            return QuoteSocket.tick24H(evt.data)
         } else if (typeof evt.data === 'string' && evt.data.startsWith('pt(')) {
             const event = new CustomEvent('GotMsg_updateChart', { detail: evt.data })
             document.body.dispatchEvent(event)

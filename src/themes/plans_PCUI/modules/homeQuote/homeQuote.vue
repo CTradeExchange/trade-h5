@@ -55,17 +55,17 @@
                     </div>
                     <div>
                         <span>
-                            {{ item.cur_price || '--' }}
+                            {{ item.rolling_last_price || '--' }}
                         </span>
                     </div>
                     <div>
                         <span>
-                            {{ item.upDownAmount || '--' }}
+                            {{ item.rolling_upDownAmount || '--' }}
                         </span>
                     </div>
                     <div>
-                        <span :class='item.upDownColor'>
-                            {{ item.upDownWidth || '--' }}
+                        <span :class='item.rolling_upDownColor'>
+                            {{ item.rolling_upDownWidth || '--' }}
                         </span>
                     </div>
                     <div class='handle'>
@@ -95,6 +95,7 @@ import useProduct from '@planspc/hooks/useProduct'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import globalData from '@h5/hooks/globalData'
+import { QuoteSocket } from '@/plugins/socket/socket'
 
 export default {
     props: {
@@ -170,7 +171,7 @@ export default {
                     }
                 }
                 filterProductList.value = list
-                store.commit('home/Update_subscribeQuoteList', keys)
+                if (list.length > 0) QuoteSocket.send_subscribe24H(list)
             }
         }
 

@@ -60,7 +60,7 @@ let unSubscribe = () => {}
 
 watch(() => unref(computedList), () => {
     const symbolKeys = unref(computedList).map(e => e.symbolKey)
-    unSubscribe = QuoteSocket.add_subscribe({ moduleId, symbolKeys })
+    unSubscribe = QuoteSocket.add_subscribe24H({ moduleId, symbolKeys })
 }, {
     immediate: true
 })
