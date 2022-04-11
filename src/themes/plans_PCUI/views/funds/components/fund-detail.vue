@@ -57,6 +57,10 @@
                     <span>{{ $t('fundInfo.fundType') }}</span>
                     <strong>{{ fund.fundType }}</strong>
                 </div>
+                <div class='col'>
+                    <span>{{ $t('fundInfo.latestPart') }}</span>
+                    <strong>{{ calculate(fund.newShare) }}</strong>
+                </div>
             </div>
             <div class='btnBox'>
                 <button class='btn' @click="openPDF('https://www.vitatoken.io/site/v10-whitepaper.pdf')">
@@ -72,6 +76,7 @@
 <script setup>
 import { ref, watchEffect, provide, inject } from 'vue'
 import { useFund } from '../hooks.js'
+import { toFixed } from '@/utils/calculation.js'
 import fundInfo from './fund-info.vue'
 import fundDeal from './fund-deal.vue'
 import currencyIcon from '@/components/currencyIcon.vue'
@@ -116,6 +121,21 @@ const switchNext = () => {
 // 打开pdf
 const openPDF = url => {
     window.open(url)
+}
+
+// 计算显示的数值
+const calculate = (num) => {
+    let result = ''
+    if (num >= 1000 && num < 1000000) {
+        num = toFixed((num / 1000))
+        result = num + 'K'
+    } else if (num >= 1000000) {
+        num = toFixed((num / 1000000))
+        result = num + 'M'
+    } else {
+        result = num
+    }
+    return result
 }
 </script>
 

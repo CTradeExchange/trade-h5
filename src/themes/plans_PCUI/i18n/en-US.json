@@ -917,7 +917,9 @@
         "spot": "Spot",
         "cashDeal": "Spot",
         "spotTip": "This page is used for Spot - Market order trading only.For more order types, please go to <span data-index=order>Professional</span> interface",
-        "newPrice": "Price"
+        "newPrice": "Price",
+        "hoverTip1": "Net asset value of each fund",
+        "hoverTip2": "The latest price of the fund in the spot market，When the fund token is listed, investors can buy and sell fund shares in the open spot market just like buying and selling cryptocurrencies"
     },
     "home": {
         "quick": {

@@ -922,7 +922,9 @@
         "spot": "现货",
         "cashDeal": "现货买卖",
         "spotTip": "此界面仅提供现货市价买卖，更多下单类型，请前往更专业的<span data-index=order>现货交易</span>界面",
-        "newPrice": "最新价"
+        "newPrice": "最新价",
+        "hoverTip1": "每份基金的净资产价值",
+        "hoverTIp2": "该基金在现货交易市场的最新价，基金代币在上市后，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额"
     },
     "home": {
         "quick": {
