@@ -41,3 +41,5 @@ yarn.lock
 /build_folder/cats-plugin-plans.zip
 /build_folder/cats-upload-h5/cats-upload-h5/dist
 /build_folder/cats-upload-h5.zip
+.vscode/settings.json
+
