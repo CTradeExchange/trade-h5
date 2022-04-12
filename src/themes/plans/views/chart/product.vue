@@ -37,15 +37,15 @@
                     </p>
                 </div>
                 <div class='others'>
-                    <span v-if='[1,2].includes(product?.tradeType)' :class='product?.upDownColor'>
-                        {{ product.upDownAmount }}
+                    <span v-if='[1,2].includes(product?.tradeType)' :class='product?.rolling_upDownColor'>
+                        {{ product.rolling_upDownAmount }}
                         <span>
-                            ({{ product?.upDownAmount_pip }} {{ $t('trade.dot') }})
+                            ({{ product?.rolling_upDownAmount_pip }} {{ $t('trade.dot') }})
                         </span>
                     </span>
                     <div class='others-bottom'>
-                        <span class='upDownAmount' :class='product?.upDownColor'>
-                            {{ product?.upDownWidth }}
+                        <span class='upDownAmount' :class='product?.rolling_upDownColor'>
+                            {{ product?.rolling_upDownWidth }}
                         </span>
                     </div>
                 </div>
@@ -551,6 +551,7 @@ export default {
         // 订阅产品
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
+            QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
@@ -1135,6 +1136,7 @@ export default {
 
         onBeforeUnmount(() => {
             unWatchPrice()
+            QuoteSocket.cancel_subscribe(3)
             document.title = originTitle
         })
 

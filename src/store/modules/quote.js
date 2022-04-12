@@ -237,10 +237,12 @@ export default {
                 product.last_color = BigNumber(data.rolling_last_price).eq(product.rolling_last_price_pre) ? product.last_color : BigNumber(data.rolling_last_price).lt(product.rolling_last_price_pre) ? 'fallColor' : 'riseColor'
 
                 const rolling_upDownAmount = BigNumber(data.rolling_last_price).minus(product.rolling_first_price).toFixed(digits) // 24H涨跌额
+                const rolling_upDownAmount_pip = priceToPip(rolling_upDownAmount, product) // 涨跌额(点)
                 const rolling_upDownWidthTemp = BigNumber(rolling_upDownAmount).div(product.rolling_first_price).times(100).toFixed(2)
                 const rolling_upDownWidth = rolling_upDownWidthTemp > 0 ? '+' + rolling_upDownWidthTemp + '%' : rolling_upDownWidthTemp + '%' // 涨跌幅
                 const rolling_upDownColor = parseFloat(rolling_upDownAmount) === 0 ? 'grayColor' : (parseFloat(rolling_upDownAmount) > 0 ? 'riseColor' : 'fallColor')
                 vue_set(product, 'rolling_upDownAmount', rolling_upDownAmount)
+                vue_set(product, 'rolling_upDownAmount_pip', rolling_upDownAmount_pip)
                 vue_set(product, 'rolling_upDownWidth', product.rolling_first_price ? rolling_upDownWidth : '--')
                 vue_set(product, 'rolling_upDownColor', rolling_upDownColor)
 

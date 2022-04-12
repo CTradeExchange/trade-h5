@@ -19,14 +19,14 @@
 
         <div class='item range'>
             <p :class='product?.cur_color'>
-                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.price_digits) : '--' }}
+                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.symbolDigits) : '--' }}
             </p>
             <p>
-                <span :class='product?.upDownColor'>
-                    {{ product?.upDownAmount ? product?.upDownAmount : '--' }}
+                <span :class='product?.rolling_upDownColor'>
+                    {{ product?.rolling_upDownAmount ? product?.rolling_upDownAmount : '--' }}
                 </span>&nbsp;
-                <span :class='product?.upDownColor'>
-                    {{ product?.upDownWidth ? product?.upDownWidth : '--' }}
+                <span :class='product?.rolling_upDownColor'>
+                    {{ product?.rolling_upDownWidth ? product?.rolling_upDownWidth : '--' }}
                 </span>
             </p>
         </div>
