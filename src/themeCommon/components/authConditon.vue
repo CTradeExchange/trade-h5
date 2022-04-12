@@ -216,6 +216,7 @@ export default {
                         state.showImgList = cardTypeMap[el.elementCodeInputGroup]
                     }
                 } else if (el.showType === 'date') {
+                    el.elementValue = el.elementValue ? el.elementValue : new Date().getDate().getTime()
                     state.conditionModel[el.elementCode] = window.dayjs(Number(el.elementValue)).format('YYYY-MM-DD')
                     state.datePickerVal = new Date(Number(el.elementValue))
                 } else {
