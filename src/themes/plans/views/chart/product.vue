@@ -1096,6 +1096,17 @@ export default {
             if (!unref(fundtoken)) {
                 return Toast(t('trade.noFeature'))
             }
+            if (route.query.isUniapp && uni) {
+                return uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'fund',
+                        params: {
+                            fundId: fundtoken.value.fundId
+                        }
+                    }
+                })
+            }
             router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
         }
 
