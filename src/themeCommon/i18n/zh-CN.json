@@ -218,6 +218,10 @@
     "invite": "邀请",
     "remove": "删除",
     "add": "添加",
+    "24hHigh": "24H最高",
+    "24hLow": "24H最低",
+    "24hNumber": "24H量",
+    "24hAmount": "24H额",
     "viewMore": "查看更多"
   },
   "faceAuth": {

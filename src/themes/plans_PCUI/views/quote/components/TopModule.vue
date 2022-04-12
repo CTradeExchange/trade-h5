@@ -4,16 +4,16 @@
             <span class='name'>
                 {{ productMap[symbolKey]?.symbolName || '- -' }}
             </span>
-            <span class='price' :class='[productMap[symbolKey]?.cur_color]'>
-                {{ productMap[symbolKey]?.price || '- -' }}
+            <span class='price' :class='[productMap[symbolKey]?.last_color]'>
+                {{ productMap[symbolKey]?.rolling_last_price || '- -' }}
             </span>
             <currency-icon v-if='productMap[symbolKey]' class='currency-icon' :currency='productMap[symbolKey].baseCurrency' :size='32' />
             <div class='change'>
-                <span class='upDownAmount' :class='[productMap[symbolKey]?.upDownColor]'>
-                    {{ productMap[symbolKey]?.upDownAmount || '- -' }}
+                <span class='upDownAmount' :class='[productMap[symbolKey]?.rolling_upDownColor]'>
+                    {{ productMap[symbolKey]?.rolling_upDownAmount || '- -' }}
                 </span>
-                <span class='upDownWidth' :class='[productMap[symbolKey]?.upDownColor]'>
-                    {{ productMap[symbolKey]?.upDownWidth || '- -' }}
+                <span class='upDownWidth' :class='[productMap[symbolKey]?.rolling_upDownColor]'>
+                    {{ productMap[symbolKey]?.rolling_upDownWidth || '- -' }}
                 </span>
             </div>
         </div>
@@ -41,8 +41,8 @@ const gotoOrder = (symbolKey) => {
 // 产品列表
 const productMap = computed(() => store.state._quote.productMap)
 // const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5'] // pre
-const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5'] // prd
-const unSubscribe = QuoteSocket.add_subscribe({ moduleId: 'topQuote', symbolKeys })
+const symbolKeys = ['1_5', '20_5', '21_5', '38_5', '2_5'] // prd
+const unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'topQuote', symbolKeys })
 
 onUnmounted(() => {
     unSubscribe()

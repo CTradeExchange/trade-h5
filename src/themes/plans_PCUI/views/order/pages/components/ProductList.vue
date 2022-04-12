@@ -21,11 +21,11 @@
                     </span>
                     <ETF v-if='productMap[item.symbolKey].etf' />
                 </div>
-                <span class='price' :class='[productMap[item.symbolKey]?.cur_color]'>
-                    {{ productMap[item.symbolKey]?.cur_price || '- -' }}
+                <span class='price' :class='[productMap[item.symbolKey]?.last_color]'>
+                    {{ productMap[item.symbolKey]?.rolling_last_price || '- -' }}
                 </span>
-                <span class='change' :class='[productMap[item.symbolKey]?.upDownColor]'>
-                    {{ productMap[item.symbolKey]?.upDownWidth || '- -' }}
+                <span class='change' :class='[productMap[item.symbolKey]?.rolling_upDownColor]'>
+                    {{ productMap[item.symbolKey]?.rolling_upDownWidth || '- -' }}
                 </span>
             </div>
         </div>
