@@ -391,7 +391,8 @@ export default {
         const originTitle = document.title
 
         // uniapp传参
-        const { lang, customerGroupId, theme, isUniapp } = route.query
+        const { customerGroupId, theme, isUniapp } = route.query
+        const lang = route.query.lang || getCookie('lang')
 
         const { t, locale } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
@@ -551,7 +552,6 @@ export default {
             onChartReadyFlag: false,
             loading: false,
             findFundPageList: [], // 基金产品列表
-            lang: getCookie('lang')
         })
 
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId.value}_${tradeType.value}`)
@@ -1097,6 +1097,17 @@ export default {
             if (!unref(fundtoken)) {
                 return Toast(t('trade.noFeature'))
             }
+            if (route.query.isUniapp && uni) {
+                return uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'fund',
+                        params: {
+                            fundId: fundtoken.value.fundId
+                        }
+                    }
+                })
+            }
             router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
         }
 
@@ -1215,7 +1226,8 @@ export default {
             fundtoken,
             fundtokenLink,
             formatAmount,
-            plansLen
+            plansLen,
+            lang
         }
     }
 }
