@@ -123,3 +123,18 @@ export function limitDecimal (num, digits) {
     }
     return result
 }
+
+// 金额格式化显示
+export function formatAmount (num) {
+    let result = ''
+    if (num >= 1000 && num < 1000000) {
+        num = toFixed((num / 1000))
+        result = num + 'K'
+    } else if (num >= 1000000) {
+        num = toFixed((num / 1000000))
+        result = num + 'M'
+    } else {
+        result = num
+    }
+    return result
+}

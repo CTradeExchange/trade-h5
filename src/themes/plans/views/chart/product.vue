@@ -105,13 +105,13 @@
                         <p class='priceBottom'>
                             {{ $t('common.24hNumber') }}({{ product.baseCurrency }})
                             <span>
-                                {{ product.rolling_transactions_number }}
+                                {{ formatAmount(product.rolling_transactions_number) }}
                             </span>
                         </p>
                         <p>
                             {{ $t('common.24hAmount') }}({{ product.profitCurrency }})
                             <span>
-                                {{ product.rolling_amount }}
+                                {{ formatAmount(product.rolling_amount) }}
                             </span>
                         </p>
                     </template>
@@ -363,6 +363,7 @@ import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/user
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
+import { formatAmount } from '@/utils/calculation'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
@@ -1213,6 +1214,7 @@ export default {
             etfTip,
             fundtoken,
             fundtokenLink,
+            formatAmount,
             plansLen
         }
     }

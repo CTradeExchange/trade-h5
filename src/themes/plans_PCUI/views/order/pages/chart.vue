@@ -49,12 +49,12 @@
                 <p>
                     <span class='muted'>
                         {{ $t('common.24hNumber') }}
-                    </span>  {{ product?.rolling_transactions_number || '--' }}
+                    </span>  {{ product?.rolling_transactions_number ? formatAmount(product.rolling_transactions_number) : '--' }}
                 </p>
                 <p>
                     <span class='muted'>
                         {{ $t('common.24hAmount') }}
-                    </span>  {{ product?.rolling_amount || '--' }}
+                    </span>  {{ product?.rolling_amount ? formatAmount(product.rolling_amount) : '--' }}
                 </p>
             </div>
         </template>
@@ -255,6 +255,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty, localSet, localGet, getCookie } from '@/utils/util'
+import { formatAmount } from '@/utils/calculation'
 import EtfIcon from '@planspc/components/etfIcon.vue'
 import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
@@ -865,6 +866,7 @@ export default {
             updateStudy,
             addOptional,
             isSelfSymbol,
+            formatAmount,
             contractRoute
         }
     }
