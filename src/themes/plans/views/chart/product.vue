@@ -55,22 +55,42 @@
             </div>
             <div v-if='product' class='bd'>
                 <div class='item'>
-                    <p class='priceBottom'>
-                        <span>
-                            {{ $t('trade.todayOpen') }}
-                        </span>
-                        <span>
-                            {{ product.open_price }}
-                        </span>
-                    </p>
-                    <p>
-                        <span>
-                            {{ $t('trade.yesterdayClosed') }}
-                        </span>
-                        <span>
-                            {{ product.yesterday_close_price }}
-                        </span>
-                    </p>
+                    <template v-if='product.isCryptocurrency'>
+                        <p class='priceBottom'>
+                            <span>
+                                {{ $t('common.24hHigh') }}
+                            </span>
+                            <span>
+                                {{ product.rolling_high_price }}
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                                {{ $t('common.24hLow') }}
+                            </span>
+                            <span>
+                                {{ product.rolling_low_price }}
+                            </span>
+                        </p>
+                    </template>
+                    <template v-else>
+                        <p class='priceBottom'>
+                            <span>
+                                {{ $t('trade.todayOpen') }}
+                            </span>
+                            <span>
+                                {{ product.open_price }}
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                                {{ $t('trade.yesterdayClosed') }}
+                            </span>
+                            <span>
+                                {{ product.yesterday_close_price }}
+                            </span>
+                        </p>
+                    </template>
                     <p v-if='product.etf' class='priceTop'>
                         <span>
                             {{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }})
@@ -81,18 +101,35 @@
                     </p>
                 </div>
                 <div class='item'>
-                    <p class='priceBottom'>
-                        {{ $t('trade.high') }}
-                        <span>
-                            {{ product.high_price }}
-                        </span>
-                    </p>
-                    <p>
-                        {{ $t('trade.low') }}
-                        <span>
-                            {{ product.low_price }}
-                        </span>
-                    </p>
+                    <template v-if='product.isCryptocurrency'>
+                        <p class='priceBottom'>
+                            {{ $t('common.24hNumber') }}({{ product.baseCurrency }})
+                            <span>
+                                {{ product.rolling_transactions_number }}
+                            </span>
+                        </p>
+                        <p>
+                            {{ $t('common.24hAmount') }}({{ product.profitCurrency }})
+                            <span>
+                                {{ product.rolling_amount }}
+                            </span>
+                        </p>
+                    </template>
+                    <template v-else>
+                        <p class='priceBottom'>
+                            {{ $t('trade.high') }}
+                            <span>
+                                {{ product.high_price }}
+                            </span>
+                        </p>
+                        <p>
+                            {{ $t('trade.low') }}
+                            <span>
+                                {{ product.low_price }}
+                            </span>
+                        </p>
+                    </template>
+
                     <p v-if='product.etf' class='priceTop'>
                         {{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }})
                         <span>
@@ -1356,9 +1393,11 @@ export default {
                 display: flex;
                 flex: 1;
                 flex-direction: column;
-                margin-left: rem(50px);
+                margin-left: rem(40px);
                 &:first-child {
                     margin-left: 0;
+                    width: 43%;
+                    flex: none;
                 }
                 &:first-child {
                     margin-right: rem(5px);
@@ -1369,6 +1408,7 @@ export default {
                     flex-wrap: nowrap;
                     justify-content: space-between;
                     white-space: nowrap;
+                    align-items: center;
                     &.priceBottom {
                         margin-bottom: rem(10px);
                     }

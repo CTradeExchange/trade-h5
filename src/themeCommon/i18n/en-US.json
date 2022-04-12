@@ -213,6 +213,10 @@
         "invite": "invite",
         "remove": "Remove",
         "add": "Add ",
+		"24hHigh": "24H High",
+		"24hLow": "24H Low",
+		"24hNumber": "24H Vol",
+		"24hAmount": "24H Amt",
         "viewMore": "View more markets"
     },
     "faceAuth": {

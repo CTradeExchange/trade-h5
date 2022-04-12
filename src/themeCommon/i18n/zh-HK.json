@@ -216,7 +216,12 @@
     "emailCodeInput": "請匯入郵箱驗證碼",
     "invite": "邀請",
     "remove": "删除",
-    "add": "添加"
+    "add": "添加",
+    "24hHigh": "24H最高",
+    "24hLow": "24H最低",
+    "24hNumber": "24H成交量",
+    "24hAmount": "24H成交额",
+    "viewMore": "查看更多"
   },
   "faceAuth": {
     "faceDetectTip": "請正對手機，保持光線充足",

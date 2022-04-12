@@ -30,31 +30,61 @@
                 </span>
             </p>
         </div>
-        <div class='item ohlc'>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.todayOpen') }}
-                </span> {{ product?.open_price || '--' }}
-            </p>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.yesterdayClosed') }}
-                </span> {{ product?.yesterday_close_price || '--' }}
-            </p>
-        </div>
 
-        <div class='item ohlc'>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.high') }}
-                </span>  {{ product?.high_price || '--' }}
-            </p>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.low') }}
-                </span>  {{ product?.low_price || '--' }}
-            </p>
-        </div>
+        <template v-if='product.isCryptocurrency'>
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hHigh') }}
+                    </span> {{ product?.rolling_high_price || '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hLow') }}
+                    </span> {{ product?.rolling_low_price || '--' }}
+                </p>
+            </div>
+
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hNumber') }}
+                    </span>  {{ product?.rolling_transactions_number || '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hAmount') }}
+                    </span>  {{ product?.rolling_amount || '--' }}
+                </p>
+            </div>
+        </template>
+        <template v-else>
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.todayOpen') }}
+                    </span> {{ product?.open_price || '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.yesterdayClosed') }}
+                    </span> {{ product?.yesterday_close_price || '--' }}
+                </p>
+            </div>
+
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.high') }}
+                    </span>  {{ product?.high_price || '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.low') }}
+                    </span>  {{ product?.low_price || '--' }}
+                </p>
+            </div>
+        </template>
 
         <div v-if='product.etf' class='item ohlc'>
             <p>
