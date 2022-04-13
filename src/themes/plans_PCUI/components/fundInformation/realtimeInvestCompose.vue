@@ -1,32 +1,10 @@
 <template>
     <div class='realtimeInvestCompose'>
         <div class='width-limit'>
-<<<<<<< HEAD
             <h4 class='title'>
                 <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
                 {{ title || $t('fundInfo.realtimeInvestCompose') }}
             </h4>
-            <div class='merge-case'>
-                <div v-if="showBlock==='list' || allShow" class='case-list'>
-                    <div class='assetsTitle cellflex'>
-                        <p class='hd'>
-                            {{ $t('fundInfo.assets') }}
-                        </p>
-                        <p class='bd'>
-                            {{ $t('fundInfo.ranking') }}
-                            <br v-if='symbolId' />
-                            <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
-                            </span>
-                        </p>
-                        <p class='ft'>
-                            {{ $t('fundInfo.weight') }}
-                            <br v-if='symbolId' />
-                            <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
-                            </span>
-                        </p>
-=======
             <div class='block'>
                 <h4 class='title switch-title'>
                     <span>{{ title || $t('fundInfo.realtimeInvestCompose') }}</span>
@@ -38,7 +16,6 @@
                         <div class='box' :class="{ 'active': showBlock === 'chart' }">
                             <img class='icon icon2' src='../../images/chart-icon2.png' @click="switchAction('chart')" />
                         </div>
->>>>>>> dev_home_vitatoken
                     </div>
                 </h4>
                 <div class='merge-case'>
@@ -101,7 +78,6 @@
                     </div>
                 </div>
             </div>
-
             <div class='block'>
                 <h4 class='title singleAssetTitle'>
                     <span>{{ $t('fundInfo.singleAsset') }}</span>

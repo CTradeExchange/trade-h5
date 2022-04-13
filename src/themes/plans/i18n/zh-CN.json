@@ -822,7 +822,6 @@
         "subTitle": "下载Vitatoken客户端，所有交易尽在手中。",
         "android": "下载安卓端",
         "ios": "下载苹果端"
-<<<<<<< HEAD
     },
     "aboutUs": {
         "introduceTitle":  {
@@ -845,7 +844,5 @@
         "visionsTextCell2": "我們像維他命那樣，是重要組成部分，",
         "visionsTextCell3": "使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，",
         "visionsTextCell4": "提高獲利概率，從而在這個快速變化的市場中賺錢。"
-=======
->>>>>>> dev_home_vitatoken
     }
 }

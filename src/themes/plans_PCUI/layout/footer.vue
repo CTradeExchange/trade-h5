@@ -1,9 +1,5 @@
 <template>
-<<<<<<< HEAD
-    <div class='footer-nav'>
-=======
     <div class='footer-nav' :class='[$route.name]'>
->>>>>>> dev_home_vitatoken
         <div class='auto-width'>
             <div class='footer-auto'>
                 <div class='nav-left'>
@@ -176,15 +172,9 @@ export default {
                     program: 'https://www.vitatoken.io/zh-CN/new1',
                     vip: 'https://www.vitatoken.io/zh-CN/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-<<<<<<< HEAD
                     // faqs: 'https://www.vitatoken.io/site/faqs',
                     // terms: 'https://www.vitatoken.io/site/terms-conditions',
                     // policy: 'https://www.vitatoken.io/site/privacy-policy',
-=======
-                    faqs: 'https://www.vitatoken.io/site/faqs',
-                    terms: 'https://www.vitatoken.io/site/terms-conditions',
-                    policy: 'https://www.vitatoken.io/site/privacy-policy',
->>>>>>> dev_home_vitatoken
                     // about: 'https://www.vitatoken.io/site/about-us'
                 }
             } else {
@@ -194,15 +184,9 @@ export default {
                     program: 'https://www.vitatoken.io/en-US/new1',
                     vip: 'https://www.vitatoken.io/en-US/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-<<<<<<< HEAD
                     // faqs: 'https://www.vitatoken.io/site/faqs',
                     // terms: 'https://www.vitatoken.io/site/terms-conditions',
                     // policy: 'https://www.vitatoken.io/site/privacy-policy',
-=======
-                    faqs: 'https://www.vitatoken.io/site/faqs',
-                    terms: 'https://www.vitatoken.io/site/terms-conditions',
-                    policy: 'https://www.vitatoken.io/site/privacy-policy',
->>>>>>> dev_home_vitatoken
                     // about: 'https://www.vitatoken.io/site/about-us'
                 }
             }
@@ -245,7 +229,6 @@ export default {
                 case 'about':
                     router.push('/about')
                     break
-<<<<<<< HEAD
                 case 'faqs':
                     router.push('/faqs')
                     break
@@ -255,8 +238,6 @@ export default {
                 case 'terms':
                     router.push('/terms-conditions')
                     break
-=======
->>>>>>> dev_home_vitatoken
                 default:
                     const newLinkList = { ...linkList, ...community }
                     if (newLinkList[index]) {

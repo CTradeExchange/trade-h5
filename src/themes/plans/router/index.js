@@ -99,7 +99,6 @@ const routes = [
                     title: 'route.download',
                 }
             },
-<<<<<<< HEAD
             {
                 path: 'about',
                 name: 'About',
@@ -147,9 +146,7 @@ const routes = [
                 meta: {
                     title: 'route.terms',
                 }
-            },
-=======
->>>>>>> dev_home_vitatoken
+            }
         ]
     },
     {
