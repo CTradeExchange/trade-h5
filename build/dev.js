@@ -29,7 +29,7 @@ async function init () {
             type: 'list',
             name: 'buildType',
             message: '构建单个WP插件还是构建所有的WP插件',
-            choices: ['h5', 'wp-editor'],
+            choices: ['h5'],
             default: 'h5',
         },
         {
@@ -43,7 +43,7 @@ async function init () {
             type: 'list',
             name: 'h5Environment',
             message: '请选择调试环境：',
-            choices: ['uat', 'pre'], //, 'other'
+            choices: ['pre'], //, 'other'
             when: answers => answers.buildType === 'h5',
             default: 'uat',
         },

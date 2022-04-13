@@ -13,7 +13,7 @@ export const wpFooter = () => pageConfig('Footer')
 /* 获取页面配置信息 */
 export function pageConfig (id) {
     const NODE_ENV = process.env.NODE_ENV
-    if (1 || NODE_ENV === 'production') {
+    if (NODE_ENV === 'production') {
         let data = ''
         switch (id) {
         case 'SelfSymbolIndex':
