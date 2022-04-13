@@ -960,5 +960,18 @@
     "aboutus": "關於我們",
     "followus": "關注我們",
     "fees": "費用"
+  },
+  "aboutUs": {
+    "title": "關於我們",
+    "introduce": "Vitatoken在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 於2021年9月6日成立，提供金融科技解決方案，有加密貨幣交易牌照。 2022年一季度將實現如下功能：加密貨幣現貨交易，ETF基金二級市場交易，基金申購、贖回，支持基金實時淨值及報表發布，APP上線，全面支持eth主鍊及代幣，全面支持trx主鍊及代幣，交易所錢包升級，將符合FIPS 140-2 level 3標準。更多功能敬請期待。",
+    "servicesTitle": "基礎服務",
+    "visionsTitle": "願景",
+    "visionsTextCell1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場",
+    "visionsTextCell2": "我們像維他命那樣",
+    "visionsTextCell3": "是重要組成部分",
+    "visionsTextCell4": "使用我們平台發行或者買賣加密貨幣基金",
+    "visionsTextCell5": "降低參與門檻",
+    "visionsTextCell6": "提高獲利概率",
+    "visionsTextCell7": "從而在這個快速變化的市場中賺錢"
   }
 }

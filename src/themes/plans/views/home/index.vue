@@ -193,9 +193,12 @@
                     <p class='link' @click='jumpUrl("about")'>
                         {{ $t('newHomeFooter.aboutus') }}
                     </p>
+<<<<<<< HEAD
                     <p class='link' @click='jumpUrl("fees")'>
                         {{ $t('newHomeFooter.fees') }}
                     </p>
+=======
+>>>>>>> dev_home_vitatoken
                 </div>
             </div>
             <div class='menu'>
@@ -293,7 +296,11 @@
 
             <div class='content'>
                 {{ $t('home.privacy.text1') }}
+<<<<<<< HEAD
                 <a class='sc-AxiKw cJlLNA' color='light' href='javascript:;' rel='noopener' @click='openPrivacy'>
+=======
+                <a class='sc-AxiKw cJlLNA' color='light' href='https://www.vitatoken.io/site/privacy-policy' rel='noopener' target='_blank'>
+>>>>>>> dev_home_vitatoken
                     {{ $t('home.privacy.text2') }}
                 </a>
             </div>
@@ -413,9 +420,12 @@ const jumpUrl = (index) => {
     }
     const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === 5 && el.symbolName)?.symbolId
     switch (index) {
+<<<<<<< HEAD
         case 'fees':
             router.push({ path: '/fees' })
             break
+=======
+>>>>>>> dev_home_vitatoken
         case 'trading':
             router.push({
                 path: '/order',
@@ -441,6 +451,7 @@ const jumpUrl = (index) => {
             }
             break
         case 'about':
+<<<<<<< HEAD
             router.push('about')
             break
         case 'faqs':
@@ -451,6 +462,9 @@ const jumpUrl = (index) => {
             break
         case 'terms':
             router.push('/terms-conditions')
+=======
+            router.push('/about')
+>>>>>>> dev_home_vitatoken
             break
         default:
             const newLinkList = { ...linkList, ...community }
@@ -476,11 +490,14 @@ const toService = () => {
     }
 }
 
+<<<<<<< HEAD
 // 打开cookie协议页面
 const openPrivacy = () => {
     router.push({ path: 'cookies-policy' })
 }
 
+=======
+>>>>>>> dev_home_vitatoken
 const agree = () => {
     localSet('privacyFlag', true)
     privacyVis.value = false
@@ -878,7 +895,10 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             }
         }
     }
+<<<<<<< HEAD
     a {color: #0062FF;}
+=======
+>>>>>>> dev_home_vitatoken
     .content {
         padding: 0 0 10px;
     }
@@ -898,6 +918,7 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             margin-right: rem(40px);
             padding: 0 24px;
             color: rgb(255, 255, 255);
+<<<<<<< HEAD
             // font-size: 14px;
             white-space: nowrap;
             background-color: #0062FF;
@@ -905,6 +926,14 @@ QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
             border-radius: 4px;
             cursor: pointer;
 
+=======
+            font-size: 14px;
+            white-space: nowrap;
+            background-color: var(--primary);
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
+>>>>>>> dev_home_vitatoken
         }
     }
 }

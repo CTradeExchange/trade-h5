@@ -200,6 +200,7 @@
                                     v-model='form.supportLanguage'
                                     multiple
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='val'
                                     @change='changeSupportLanguage'
                                 >
@@ -218,6 +219,7 @@
                                 <el-select
                                     v-model='form.language'
                                     :placeholder="$t('pleaseEnter')"
+                                    style='width: 500px;'
                                     value-key='name'
                                 >
                                     <el-option
@@ -681,19 +683,26 @@ export default {
                 if (content.instructions_zh) {
                     content.instructions_zh = decodeURIComponent(content.instructions_zh)
                 }
+<<<<<<< HEAD
                 if (content.instructions_en) {
                     content.instructions_en = decodeURIComponent(content.instructions_en)
                 }
                 if (content.instructions_hk) {
                     content.instructions_hk = decodeURIComponent(content.instructions_hk)
                 }
+=======
+>>>>>>> dev_home_vitatoken
 
                 that.filterLang = content.supportLanguage
                 console.log('渠道配置', content)
 
                 // 设置存款数据
                 this.$refs['amountSet'].setData(content)
+<<<<<<< HEAD
 
+=======
+                //
+>>>>>>> dev_home_vitatoken
                 // this.$refs['editor'].setContent(content.instructions)
                 const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                 that.form = Object.assign(that.form, content, { other })
@@ -914,6 +923,7 @@ export default {
                         if (_formData.instructions_zh) {
                             _formData.instructions_zh = encodeURIComponent(_formData.instructions_zh)
                         }
+<<<<<<< HEAD
                         if (_formData.instructions_hk) {
                             _formData.instructions_hk = encodeURIComponent(_formData.instructions_hk)
                         }
@@ -921,6 +931,9 @@ export default {
                             _formData.instructions_en = encodeURIComponent(_formData.instructions_en)
                         }
 
+=======
+                        //
+>>>>>>> dev_home_vitatoken
                         // const aa = this.$refs['editor'].getContent()
                         // _formData.instructions = aa
                         if (_formData.registList.length > 0) {
@@ -1352,10 +1365,13 @@ export default {
     }
 }
 #pane-fourth {
+<<<<<<< HEAD
     .lang-label {
         line-height: 40px;
         text-align: center;
     }
+=======
+>>>>>>> dev_home_vitatoken
     .el-form-item {
         display: block;
         .el-form-item__content {

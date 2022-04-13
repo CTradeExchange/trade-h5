@@ -822,6 +822,7 @@
         "subTitle": "All the power of Vitatoken's cryptocurrency exchange, in the palm of your hand. Download the Vitatoken mobile crypto trading app today.",
         "android": "Download for Android",
         "ios": "Download for iphone"
+<<<<<<< HEAD
     },
     "aboutUs": {
         "introduceTitle": {
@@ -845,5 +846,7 @@
         "visionsTextCell2": "Our mission is to create an opportunity for everyone to participle in the crypto market. ",
         "visionsTextCell3": "Vitamin is vital, just like Vitatoken.",
         "visionsTextCell4": "We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
+=======
+>>>>>>> dev_home_vitatoken
     }
 }

@@ -11,5 +11,11 @@ export const lang = [
     {
         name: 'English',
         val: 'en-US'
-    }
+    },
+    {
+        name: '繁體中文',
+        val: 'zh-HK',
+        isDefault: true
+    },
+
 ]

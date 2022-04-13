@@ -95,6 +95,10 @@ const fundInformation = defineAsyncComponent({
                 }
                 .currencyIcon {
                     width: 32px;
+<<<<<<< HEAD
+=======
+                    height: 32px;
+>>>>>>> dev_home_vitatoken
                 }
             }
             .merge-case {

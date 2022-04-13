@@ -32,7 +32,9 @@
 		"startTime": "開始時間",
 		"endTime": "結束時間",
         "languageAreas": "語言和地區",
-        "SelectLanguageAreas": "選取語言和地區"
+        "SelectLanguageAreas": "選取語言和地區",
+        "lastBox": "上一個",
+        "nextBox": "下一個"
 	},
 	"c": {
 		"login": "登入",
@@ -890,7 +892,7 @@
 		"fundArrive": "資金到賬",
 		"redeem_tip1": "贖回以份額申請，即贖回基金時，只要填寫贖回多少份額即可",
 		"redeem_tip2": "贖回價格釆用“未知價”原則，預計按T+2日當天確認份額結束后的淨值價格執行",
-		"redeem_tip3": "贖回流程結束，那你所贖回的基金代幣將以選取的接收資產匯入您的現貨錢包",
+		"redeem_tip3": "贖回流程結束，贖回的基金代幣將以你選擇的接收資產匯入您的現貨錢包",
 		"assetIndexQquestionTip":"圖表為指數樣本所含資產在近24小時內的市場表現(報價單位:USDT)",
 		"assetQquestionTip":"圖表為基金投資組合所含資產在近24小時內的市場表現(報價單位:USDT)",
         "fundTrade": "申購/贖回",
@@ -898,6 +900,30 @@
 		"fundTokenTrade": "現貨交易",
 		"noTradeMarket": "暫無交易市場"
 	},
+    "funds": {
+        "fundShare": "基金份額",
+        "fundsAccount": "基金賬戶",
+        "fundsList": "基金列表",
+        "title": "基金精選",
+        "subTitle": "讓我們幫助您更加輕鬆地進行加密資產投資",
+        "buyRedeem": "基金申購贖回",
+        "trend": "走勢",
+        "offerTrend": "報價走勢",
+        "applyStatus": "申購狀態",
+        "canApply": "可申購",
+        "notApply": "不可申購",
+        "redeemStatus": "贖回狀態",
+        "canRedeem": "可贖回",
+        "notRedeem": "不可贖回",
+        "tradeFee": "申贖手續費",
+        "deal": "買賣",
+        "spot": "現貨",
+        "cashDeal": "現貨買賣",
+        "spotTip": "此界面僅提供現貨市價買賣，更多下單類型，請前往更專業的<span data-index=order>現貨交易</span>界面",
+        "newPrice": "最新價",
+        "hoverTip1": "每份基金的淨資產價值",
+        "hoverTip2": "該基金在現貨交易市場的最新價，基金代幣在上市後，投資者可以如買賣加密貨幣一樣，在公開的現貨市場買賣基金份額"
+    },
     "home": {
         "quick": {
             "title": "幫助所有人輕鬆參與加密貨幣市場"
@@ -994,5 +1020,18 @@
         "visionsTextCell2": "我們像維他命那樣，是重要組成部分，",
         "visionsTextCell3": "使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，",
         "visionsTextCell4": "提高獲利概率，從而在這個快速變化的市場中賺錢。"
+    },
+    "about": {
+        "aboutUs": "關於我們",
+        "desc": "在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 於2021年9月6日成立，提供金融科技解決方案，有加密貨幣交易牌照。2022年一季度將實現如下功能：加密貨幣現貨交易，ETF基金二級市場交易，基金申購、贖回，支援基金實時淨值及報表發布，APP上線，全面支援eth主鏈及代幣，全面支援trx主鏈及代幣，交易所錢包升級，將符合FIPS 140-2 level 3標准。更多功能敬請期待。",
+        "base": "基礎服務",
+        "hope": "願景",
+        "hopeT1": "我們的願景是輔助說明所有人輕松參與加密貨幣市場",
+        "hopeT2": "我們像維他命那樣",
+        "hopeT3": "是重要組成部分",
+        "hopeT4": "使用我們平台發行或者買賣加密貨幣基金",
+        "hopeT5": "降低參且閘檻",
+        "hopeT6": "提高獲利概率",
+        "hopeT7": "從而在這個快速變化的市場中賺錢"
     }
 }
