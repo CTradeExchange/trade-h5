@@ -676,14 +676,14 @@ export default {
                 handleDesposit(params).then(res => {
                     state.loading = false
                     state.pin = ''
-                    if (res.check()) {
-                        state.despositResult = res.data
-                        if (params.paymentChannelCode !== 'payredeem') despositSuccess() // payredeem支付成功不需要处理该函数
-                        resolve()
-                    } else {
-                        Toast(res.msg)
-                        reject()
-                    }
+                    // if (res.check()) {
+                    //     state.despositResult = res.data
+                    //     if (params.paymentChannelCode !== 'payredeem') despositSuccess() // payredeem支付成功不需要处理该函数
+                    //     resolve()
+                    // } else {
+                    //     Toast(res.msg)
+                    //     reject()
+                    // }
                 }).catch(err => {
                     state.pin = ''
                     state.loading = false
