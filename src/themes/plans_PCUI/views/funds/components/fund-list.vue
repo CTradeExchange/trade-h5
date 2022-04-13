@@ -25,8 +25,12 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('fundInfo.realtimeJZ')" prop='netValue' />
-                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='marketPriceChangeQuote' />
+                <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='120' prop='netValue'>
+                    <template #default='scope'>
+                        <span>{{ scope.row.netValue }} {{ scope.row.currencyCode }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='netValueChangeQuote' />
                 <el-table-column :label="$t('funds.applyStatus')" :min-width='120'>
                     <template #default='scope'>
                         <span v-if='scope.row.canPurchase === 1'>
@@ -75,16 +79,12 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('funds.newPrice')" :min-width='minWidth'>
+                <el-table-column :label="$t('funds.newPrice')" :min-width='120' prop='marketPrice'>
                     <template #default='scope'>
-                        <span>{{ curProductList[scope.$index].cur_price ? curProductList[scope.$index].cur_price : '-' }}</span>
+                        <span>{{ scope.row.marketPrice }} {{ scope.row.currencyCode }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth'>
-                    <template #default='scope'>
-                        <span>{{ curProductList[scope.$index].upDownWidth ? curProductList[scope.$index].upDownWidth : '-' }}</span>
-                    </template>
-                </el-table-column>
+                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='marketPriceChangeQuote' />
                 <el-table-column :label="$t('trade.operating')" :min-width='minWidth'>
                     <template #default='scope'>
                         <div class='handle'>
@@ -106,8 +106,6 @@ import currencyIcon from '@/components/currencyIcon.vue'
 import klineSvg from '@planspc/components/klineSvg.vue'
 
 const selectFund = inject('selectFund')
-// 当前基金列表对应的产品
-const curProductList = inject('curProductList')
 // 基金列表基金净值数据
 const netValueArrs = inject('netValueArrs')
 // 基金列表市场价格数据

@@ -29,7 +29,6 @@ import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { useFund } from './hooks.js'
 import { batchMarketPerformance } from '@/api/trade'
-import { QuoteSocket } from '@/plugins/socket/socket'
 import sideBar from './components/side-bar.vue'
 import fundModule from './components/fund-module.vue'
 import fundDetail from './components/fund-detail.vue'
@@ -86,6 +85,8 @@ const curProduct = computed(() => {
 const netValueArrs = ref([])
 // 基金列表市场价格数据
 const marketPriceArrs = ref([])
+// 基金列表接口定时器
+const fundTimer = ref(null)
 
 // 批量获取市场表现走势图
 const batchMarketPerformanceData = () => {
@@ -116,24 +117,6 @@ const batchMarketPerformanceData = () => {
         })
         netValueArrs.value = valueArrs
         marketPriceArrs.value = priceArrs
-    })
-}
-
-// 获取基金产品列表数据
-const getProductList = () => {
-    getFundList({ name: '', isRealTime: true }).then(() => {
-        console.log('curProductList', curProductList.value)
-        console.log('curProduct', curProduct.value)
-        const productKeys = []
-        curProductList.value.map(product => {
-            productKeys.push(`${product.symbolId}_${product.tradeType}`)
-        })
-
-        // 发起行情订阅
-        QuoteSocket.send_subscribe(productKeys)
-
-        // 批量获取市场表现走势图
-        batchMarketPerformanceData()
     })
 }
 
@@ -175,7 +158,14 @@ onMounted(() => {
         showModel.value = 'fundDetail'
     }
     // 获取基金产品列表数据
-    getProductList()
+    getFundList({ name: '', isRealTime: true }).then(() => {
+        // 批量获取市场表现走势图
+        batchMarketPerformanceData()
+    })
+    // 定时获取基金产品列表数据
+    fundTimer.value = setInterval(() => {
+        getFundList({ name: '', isRealTime: true })
+    }, 10000)
     // 获取用户资产数据
     if (customerInfo.value) {
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: 5 })
@@ -183,8 +173,8 @@ onMounted(() => {
 })
 onUnmounted(() => {
     document.body.style.overflow = 'visible'
-    // 取消行情订阅
-    QuoteSocket.cancel_subscribe()
+    // 清除基金接口定时器
+    clearInterval(fundTimer.value)
 })
 </script>
 

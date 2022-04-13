@@ -405,27 +405,27 @@ const routes = [
                 },
                 children: h5Children
             },
+            // {
+            //     path: 'fund2',
+            //     name: 'Fund2',
+            //     component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/index.vue'),
+            //     meta: {
+            //         title: '',
+            //     },
+            //     children: h5Children
+            // },
+            // {
+            //     path: 'fundRecord',
+            //     name: 'FundRecord',
+            //     component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/record.vue'),
+            //     meta: {
+            //         title: '',
+            //     },
+            //     children: h5Children
+            // },
             {
                 path: 'fund',
                 name: 'Fund',
-                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
-            },
-            {
-                path: 'fundRecord',
-                name: 'FundRecord',
-                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/record.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
-            },
-            {
-                path: 'fund2',
-                name: 'Funds',
                 component: () => import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
                 meta: {
                     title: '',
