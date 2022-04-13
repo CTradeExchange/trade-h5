@@ -215,6 +215,10 @@
         "invite": "invite",
         "remove": "Remove",
         "add": "Add ",
+		"24hHigh": "24H High",
+		"24hLow": "24H Low",
+		"24hNumber": "24H Vol",
+		"24hAmount": "24H Amt",
         "viewMore": "View more markets"
     },
     "faceAuth": {
@@ -812,7 +816,7 @@
         "inputOpenAddressText": "Input account opening address",
         "branchAddress": "Branch address",
         "inputBranchAddress": "Please input branch address (optional)",
-        "submitSuccessTips": "Your information is submitted",
+        "submitSuccessTips": "Added successfully",
         "noBanks": "No bank card",
         "addBank": "Add bank card",
         "bankList": "Bank list",

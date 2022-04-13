@@ -289,6 +289,7 @@ export default {
             result.push(symbolKey.value)
             result = [...new Set(result)]
             QuoteSocket.send_subscribe(result)
+            QuoteSocket.send_subscribe24H(result)
         }
 
         // 初始化设置
@@ -433,6 +434,7 @@ export default {
             document.title = originTitle
 
             QuoteSocket.cancel_subscribe(1)
+            QuoteSocket.cancel_subscribe(3)
             store.commit('_quote/Delete_dealList')
         })
         return {

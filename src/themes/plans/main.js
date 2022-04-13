@@ -15,7 +15,7 @@ import LayoutTop from '@plans/layout/top'
 import { setRootVariable } from './colorVariables'
 import { setRouter, modifybaseURL } from '@/utils/request'
 // import LuckDraw from 'vue-luck-draw/vue3'
-import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie } from '@/utils/util'
+import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie, sessionSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
@@ -26,6 +26,8 @@ import { getPreDemoAccountParams } from './officialDemoAccount.js'
 const isProduction = process.env.NODE_ENV === 'production'
 
 BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
+
+sessionSet('entrySearch', location.search) // 缓存入口url的参数，给注册开会来源使用
 
 const app = createApp(App)
 app.use(preventReClick)

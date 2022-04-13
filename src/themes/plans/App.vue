@@ -34,6 +34,8 @@ import { MsgSocket } from '@/plugins/socket/socket'
 import { localGet, getQueryVariable, sessionSet, unzip } from '@/utils/util'
 import Base from '@/store/modules/base'
 import { setRootVariable } from '@plans/colorVariables'
+import onWindowMessage from '@/plugins/onWindowMessage/onMessage'
+
 export default {
     components: {
         Notice
@@ -113,6 +115,7 @@ export default {
         // 监听ws全局事件
         document.body.addEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
         document.body.addEventListener('GotMsg_disconnect', disconnect, false)
+        window.addEventListener('message', onWindowMessage, false)
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
             document.body.removeEventListener('GotMsg_disconnect', disconnect, false)

@@ -37,15 +37,15 @@
                     </p>
                 </div>
                 <div class='others'>
-                    <span v-if='[1,2].includes(product?.tradeType)' :class='product?.upDownColor'>
-                        {{ product.upDownAmount }}
+                    <span v-if='[1,2].includes(product?.tradeType)' :class='product?.rolling_upDownColor'>
+                        {{ product.rolling_upDownAmount }}
                         <span>
-                            ({{ product?.upDownAmount_pip }} {{ $t('trade.dot') }})
+                            ({{ product?.rolling_upDownAmount_pip }} {{ $t('trade.dot') }})
                         </span>
                     </span>
                     <div class='others-bottom'>
-                        <span class='upDownAmount' :class='product?.upDownColor'>
-                            {{ product?.upDownWidth }}
+                        <span class='upDownAmount' :class='product?.rolling_upDownColor'>
+                            {{ product?.rolling_upDownWidth }}
                         </span>
                     </div>
                 </div>
@@ -55,22 +55,42 @@
             </div>
             <div v-if='product' class='bd'>
                 <div class='item'>
-                    <p class='priceBottom'>
-                        <span>
-                            {{ $t('trade.todayOpen') }}
-                        </span>
-                        <span>
-                            {{ product.open_price }}
-                        </span>
-                    </p>
-                    <p>
-                        <span>
-                            {{ $t('trade.yesterdayClosed') }}
-                        </span>
-                        <span>
-                            {{ product.yesterday_close_price }}
-                        </span>
-                    </p>
+                    <template v-if='product.isCryptocurrency'>
+                        <p class='priceBottom'>
+                            <span>
+                                {{ $t('common.24hHigh') }}
+                            </span>
+                            <span>
+                                {{ product.rolling_high_price }}
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                                {{ $t('common.24hLow') }}
+                            </span>
+                            <span>
+                                {{ product.rolling_low_price }}
+                            </span>
+                        </p>
+                    </template>
+                    <template v-else>
+                        <p class='priceBottom'>
+                            <span>
+                                {{ $t('trade.todayOpen') }}
+                            </span>
+                            <span>
+                                {{ product.open_price }}
+                            </span>
+                        </p>
+                        <p>
+                            <span>
+                                {{ $t('trade.yesterdayClosed') }}
+                            </span>
+                            <span>
+                                {{ product.yesterday_close_price }}
+                            </span>
+                        </p>
+                    </template>
                     <p v-if='product.etf' class='priceTop'>
                         <span>
                             {{ $t('fundInfo.realtimeJZ') }}({{ product.fundCurrency }})
@@ -81,18 +101,35 @@
                     </p>
                 </div>
                 <div class='item'>
-                    <p class='priceBottom'>
-                        {{ $t('trade.high') }}
-                        <span>
-                            {{ product.high_price }}
-                        </span>
-                    </p>
-                    <p>
-                        {{ $t('trade.low') }}
-                        <span>
-                            {{ product.low_price }}
-                        </span>
-                    </p>
+                    <template v-if='product.isCryptocurrency'>
+                        <p class='priceBottom'>
+                            {{ $t('common.24hNumber') }}({{ product.baseCurrency }})
+                            <span>
+                                {{ formatAmount(product.rolling_transactions_number) }}
+                            </span>
+                        </p>
+                        <p>
+                            {{ $t('common.24hAmount') }}({{ product.profitCurrency }})
+                            <span>
+                                {{ formatAmount(product.rolling_amount) }}
+                            </span>
+                        </p>
+                    </template>
+                    <template v-else>
+                        <p class='priceBottom'>
+                            {{ $t('trade.high') }}
+                            <span>
+                                {{ product.high_price }}
+                            </span>
+                        </p>
+                        <p>
+                            {{ $t('trade.low') }}
+                            <span>
+                                {{ product.low_price }}
+                            </span>
+                        </p>
+                    </template>
+
                     <p v-if='product.etf' class='priceTop'>
                         {{ $t('fundInfo.premiumRate') }}({{ product.fundCurrency }})
                         <span>
@@ -326,6 +363,7 @@ import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/user
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
+import { formatAmount } from '@/utils/calculation'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
@@ -353,7 +391,8 @@ export default {
         const originTitle = document.title
 
         // uniapp传参
-        const { lang, customerGroupId, theme, isUniapp } = route.query
+        const { customerGroupId, theme, isUniapp } = route.query
+        const lang = route.query.lang || getCookie('lang')
 
         const { t, locale } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
@@ -513,7 +552,6 @@ export default {
             onChartReadyFlag: false,
             loading: false,
             findFundPageList: [], // 基金产品列表
-            lang: getCookie('lang')
         })
 
         if (symbolId && tradeType) store.commit('_quote/Update_productActivedID', `${symbolId.value}_${tradeType.value}`)
@@ -551,6 +589,7 @@ export default {
         // 订阅产品
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
+            QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
@@ -1058,6 +1097,17 @@ export default {
             if (!unref(fundtoken)) {
                 return Toast(t('trade.noFeature'))
             }
+            if (route.query.isUniapp && uni) {
+                return uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'fund',
+                        params: {
+                            fundId: fundtoken.value.fundId
+                        }
+                    }
+                })
+            }
             router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
         }
 
@@ -1135,6 +1185,7 @@ export default {
 
         onBeforeUnmount(() => {
             unWatchPrice()
+            QuoteSocket.cancel_subscribe(3)
             document.title = originTitle
         })
 
@@ -1174,7 +1225,9 @@ export default {
             etfTip,
             fundtoken,
             fundtokenLink,
-            plansLen
+            formatAmount,
+            plansLen,
+            lang
         }
     }
 }
@@ -1354,9 +1407,11 @@ export default {
                 display: flex;
                 flex: 1;
                 flex-direction: column;
-                margin-left: rem(50px);
+                margin-left: rem(40px);
                 &:first-child {
                     margin-left: 0;
+                    width: 43%;
+                    flex: none;
                 }
                 &:first-child {
                     margin-right: rem(5px);
@@ -1367,6 +1422,7 @@ export default {
                     flex-wrap: nowrap;
                     justify-content: space-between;
                     white-space: nowrap;
+                    align-items: center;
                     &.priceBottom {
                         margin-bottom: rem(10px);
                     }

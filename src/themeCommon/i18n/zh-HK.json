@@ -216,7 +216,12 @@
     "emailCodeInput": "請匯入郵箱驗證碼",
     "invite": "邀請",
     "remove": "删除",
-    "add": "添加"
+    "add": "添加",
+    "24hHigh": "24H最高",
+    "24hLow": "24H最低",
+    "24hNumber": "24H成交量",
+    "24hAmount": "24H成交额",
+    "viewMore": "查看更多"
   },
   "faceAuth": {
     "faceDetectTip": "請正對手機，保持光線充足",
@@ -811,7 +816,7 @@
     "inputOpenAddressText": "請匯入開戶位址",
     "branchAddress": "支行位址",
     "inputBranchAddress": "請匯入支行位址（選填）",
-    "submitSuccessTips": "您的資料已提交成功",
+    "submitSuccessTips": "添加成功",
     "noBanks": "暫無銀行卡",
     "addBank": "新增銀行卡",
     "bankList": "銀行卡管理",

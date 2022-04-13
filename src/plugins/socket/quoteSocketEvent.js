@@ -1,4 +1,4 @@
-import { tickFormat, tickToObj, formatSubscribe } from './socketUtil'
+import { tickFormat, tickToObj, tick24HToObj, formatSubscribe } from './socketUtil'
 import { guid } from '@/utils/util'
 import { mul } from '@/utils/calculation'
 
@@ -12,7 +12,9 @@ class SocketEvent {
         this.$store = null
         this.requests = new Map()
         this.subscribedMap = {} // 根据不同模块增量订阅
+        this.subscribed24HMap = {} // 根据不同模块增量订阅24H
         this.subscribedList = [] // 上一次报价订阅记录
+        this.subscribed24HList = [] // 上一次报价订阅记录
         this.subscribeDeal = [] // 上一次盘口订阅记录
         this.preSetTime = 1 // 上一次保存价格的时间
         this.newPrice = []
@@ -98,9 +100,9 @@ class SocketEvent {
 
         // 拿到产品精简信息后，根据交易模式进行订阅产品行情
         this.$store.dispatch('_quote/querySymbolBaseInfoList', null).then((res) => {
-            this.subscribedList = productIds
+            this.subscribed24HList = productIds
             const subscribeList = formatSubscribe(productIds, productMap)
-            this.send(14018, { symbol_list: subscribeList })
+            this.send(14016, { symbol_list: subscribeList, update_speed: 1000 })
         })
     }
 
@@ -119,11 +121,36 @@ class SocketEvent {
         return del_subscribe
     }
 
+    /** 增量订阅24H的产品
+        @param Object {} 需要订阅的数据, moduleId 模块ID，symbolKeys 模块ID里面需要订阅的产品
+     */
+    add_subscribe24H ({ moduleId, symbolKeys }) {
+        this.subscribed24HMap[moduleId] = symbolKeys
+        const symbolkeyAll = Object.values(this.subscribed24HMap).flat()
+        this.send_subscribe24H(symbolkeyAll)
+
+        // 返回取消改模块订阅的方法
+        const del_subscribe = () => {
+            delete this.subscribed24HMap[moduleId]
+            if (Object.keys(this.subscribed24HMap).length === 0) {
+                this.cancel_subscribe(3)
+            }
+        }
+        return del_subscribe
+    }
+
     /** 删除订阅产品
         @param Object {} 需要删除订阅的数据, moduleId 模块ID
      */
     del_subscribe (moduleId) {
         return delete this.subscribedMap[moduleId]
+    }
+
+    /** 删除订阅24H的产品
+        @param Object {} 需要删除订阅的数据, moduleId 模块ID
+     */
+    del_subscribe24H (moduleId) {
+        return delete this.subscribed24HMap[moduleId]
     }
 
     // 盘口成交报价订阅
@@ -154,6 +181,7 @@ class SocketEvent {
     // websocket连接成功
     onOpen () {
         if (this.subscribedList.length) this.send_subscribe(this.subscribedList)
+        if (this.subscribed24HList.length) this.send_subscribe24H(this.subscribed24HList)
         if (this.subscribeDeal.length) {
             const { symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode } = this.subscribeDeal[0]
             this.deal_subscribe(symbol_id, depth_level, merge_accuracy, trade_type, trade_info_count, trade_mode)
@@ -179,6 +207,14 @@ class SocketEvent {
         const $store = this.$store
         const newData = list.map(el => tickFormat(el))
         $store.commit('_quote/Update_productTick', newData)
+    }
+
+    // 处理24H报价快照
+    ['cmd_id_14017'] (data) {
+        const list = data.data?.tick_list ?? []
+        const $store = this.$store
+        const newData = list.map(el => tickFormat(el))
+        $store.commit('_quote/Update_productTick24H', newData)
     }
 
     // 处理盘口成交数据快照
@@ -246,6 +282,16 @@ class SocketEvent {
                 this.newPrice = []
             }
         }, 500)
+    }
+
+    // 24H实时报价
+    tick24H (p) {
+        // pr(symbol_id,trade_type,trade_mode,rolling_last_price,rolling_first_price,rolling_high_price,rolling_low_price,rolling_transactions_number,rolling_amount);
+        // pr(产品ID，报价交易类型，成交模式，24小时里最后一口价，24小时里第一口价，24小时里最高价，24小时里最低价，24小时成交量，24小时成交金额);
+
+        const $store = this.$store
+        const curPriceData = tick24HToObj(p)
+        $store.commit('_quote/Update_productTick24H', curPriceData)
     }
 
     // 实时成交数据
