@@ -45,7 +45,8 @@
                                 {{ $t('trade.dealList') }}
                             </span>
                         </p>
-                        <p @click="toOrder" class='trade-tip' v-html="$t('funds.spotTip')">
+                        <p class='trade-tip'>
+                            {{ $t('funds.spotTip1') }}<span @click="toOrder" >{{ $t('funds.spotTip2') }}</span>{{ $t('funds.spotTip3') }}
                         </p>
                     </div>
                     <!-- 未登录 -->
@@ -98,7 +99,8 @@
                                 {{ $t('trade.dealList') }}
                             </span>
                         </p>
-                         <p @click="toOrder" class='trade-tip' v-html="$t('funds.spotTip')">
+                        <p class='trade-tip'>
+                            {{ $t('funds.spotTip1') }}<span @click="toOrder" >{{ $t('funds.spotTip2') }}</span>{{ $t('funds.spotTip3') }}
                         </p>
                     </div>
                     <!-- 未登录 -->
@@ -182,17 +184,14 @@ const openDeal = () => {
 }
 
 // 跳转到交易页页
-const toOrder = (e) => {
-    const { index } = e.target.dataset
-    if (index === 'order') {
-        router.push({
-            path: '/order',
-            query: {
-                symbolId: product.value.symbolId,
-                tradeType: product.value.tradeType
-            }
-        })
-    }
+const toOrder = () => {
+    router.push({
+        path: '/order',
+        query: {
+            symbolId: product.value.symbolId,
+            tradeType: product.value.tradeType
+        }
+    })
 }
 
 // 获取账户信息
