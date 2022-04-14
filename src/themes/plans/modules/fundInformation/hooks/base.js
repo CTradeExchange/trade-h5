@@ -1,11 +1,13 @@
 import { ref, computed, watch, inject } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 
 // 基金详情
 export function useFundInfo () {
     const store = useStore()
     const router = useRouter()
+    const route = useRoute()
+    const { isUniapp } = route.query
     const fundInfo = ref(null)
     const fundId = inject('fundId')
     const productMap = computed(() => store.state._quote.productMap)
@@ -24,7 +26,22 @@ export function useFundInfo () {
     const toTrackProduct = () => {
         if (fundInfo.value.trackIndex && fundInfo.value.trackProduct) {
             const { symbolId, tradeType } = fundInfo.value.trackProduct
-            router.push({ name: 'Product', query: { symbolId, tradeType } })
+            const query = { symbolId, tradeType }
+            if (isUniapp && uni) {
+                // query.isUniapp = true
+                return uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'product',
+                        params: {
+                            tradeType,
+                            symbolId
+                        }
+                    }
+                })
+            }
+
+            router.push({ name: 'Product', query })
         }
     }
 

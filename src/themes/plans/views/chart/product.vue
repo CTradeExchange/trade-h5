@@ -1061,7 +1061,7 @@ export default {
         // 跳转下单页
         const toOrder = (direction) => {
             // eslint-disable-next-line no-undef
-            if (route.query.isUniapp && uni) {
+            if (isUniapp && uni) {
                 // uni.navigateTo({
                 //     url: `/pages/order/index?symbolId=${getSymbolId()}&direction=${direction}&tradeType=${getTradeType()}`
                 // })
@@ -1097,7 +1097,7 @@ export default {
             if (!unref(fundtoken)) {
                 return Toast(t('trade.noFeature'))
             }
-            if (route.query.isUniapp && uni) {
+            if (isUniapp && uni) {
                 return uni.postMessage({
                     data: {
                         action: 'message',
