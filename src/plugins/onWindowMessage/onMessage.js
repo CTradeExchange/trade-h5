@@ -15,7 +15,7 @@ class OnMessage {
 
     // 分发处理接受到的消息
     receiveMessage (event) {
-        console.log(event)
+        // console.log(event)
         this.targetOrigin = event.origin || event.originalEvent?.origin
         this.targetWindow = event.source.window
         const dataStr = event.data

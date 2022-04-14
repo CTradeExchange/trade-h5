@@ -71,7 +71,6 @@ export default {
         // 全量订阅产品报价
         const subscribeAll = () => {
             const list = props.productList.map(({ symbolKey }) => symbolKey)
-            console.log('subscribeAll ', list)
             if (list.length > 0) QuoteSocket.send_subscribe24H(list)
         }
 
