@@ -114,7 +114,7 @@ export default {
             if (!isEmpty(product.value.eodTime)) {
                 return product.value.eodTime.split(',').map(el => {
                     return window.dayjs().utc().startOf('day').utcOffset(utcOffset).add(parseInt(el), 'minute').format('HH:mm')
-                }).join(', ')
+                }).sort((a, b) => a.replace(/:/, '') - b.replace(/:/, '')).join(', ')
             }
             return ''
         })
