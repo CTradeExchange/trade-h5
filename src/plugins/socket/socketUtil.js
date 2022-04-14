@@ -20,7 +20,7 @@ export function tickFormat (data) {
         data.cur_price = toFixed(data.price, digits)
         data.sell_price = toFixed(firstTick.price_bid, digits)
         data.buy_price = toFixed(firstTick.price_ask, digits)
-        data.yesterday_close_price = toFixed(data.yesterday_close_price, digits)
+        if (data.yesterday_close_price) data.yesterday_close_price = toFixed(data.yesterday_close_price, digits)
     }
 
     return data
