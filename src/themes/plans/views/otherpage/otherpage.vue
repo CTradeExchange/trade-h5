@@ -18,7 +18,7 @@
 <script>
 import top from '@/components/top'
 import myIframe from '@plans/components/iframe'
-import { onBeforeUnmount, onMounted, reactive, ref, toRefs , computed } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref, toRefs, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import Base from '@/store/modules/base'
 export default {
@@ -42,7 +42,7 @@ export default {
 
         // 处理iframe子页面的postmessage消息
         const fnPostMessage = (ev) => {
-            console.log(ev)
+            // console.log(ev)
             const { type } = ev.data
             if (type === 'getAppToken') {
                 const _data = {
