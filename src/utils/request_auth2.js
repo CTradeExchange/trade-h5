@@ -45,4 +45,9 @@ service.interceptors.response.use(
     }
 )
 
+// 配置不同环境的请求地址
+export const modifybaseURL = (domain) => {
+    service.defaults.baseURL = domain + '/cats-gateway-auth2'
+}
+
 export default service

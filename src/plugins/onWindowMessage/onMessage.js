@@ -1,6 +1,7 @@
 /* 监听外部窗口传来的postmessage消息服务 */
 
 import { getAuth2Code } from '@/api/auth2'
+import { modifybaseURL } from '@/utils/request_auth2'
 import { useStore } from 'vuex'
 
 class OnMessage {
@@ -28,9 +29,16 @@ class OnMessage {
     }
 
     resolveMsg (msgData = {}) {
-        if (msgData.type === 'cats-auth2Code') {
+        if (msgData.type === 'cats-init') {
+            this.init(msgData)
+        } else if (msgData.type === 'cats-auth2Code') {
             this.requestAuth2Code(msgData)
         }
+    }
+
+    // 初始化环境域名配置
+    init (data = {}) {
+        if (data.domain) modifybaseURL(data.domain)
     }
 
     // 获取auth2获取授权码
