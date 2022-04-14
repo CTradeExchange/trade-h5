@@ -1,6 +1,6 @@
 <template>
-    <div class='page-wrap' :class='{ isIframe: $route.query.isUniapp }'>
-        <LayoutTop v-if='!$route.query.isUniapp' :back='true' :menu='false'>
+    <div class='page-wrap' :class='{ isIframe: isUniapp }'>
+        <LayoutTop v-if='!isUniapp' :back='true' :menu='false'>
             <p class='symbolName'>
                 <i v-if='product?.symbolName' class='icon_chouti1' @click='showSidebar=true'></i>
                 {{ product?.symbolName }}
@@ -44,8 +44,8 @@
                         </span>
                     </span>
                     <div class='others-bottom'>
-                        <span class='upDownAmount' :class='product?.rolling_upDownColor'>
-                            {{ product?.rolling_upDownWidth }}
+                        <span class='upDownAmount' :class='isUniapp ? product.upDownColor : product.rolling_upDownColor'>
+                            {{ isUniapp ? product.upDownWidth : product.rolling_upDownWidth }}
                         </span>
                     </div>
                 </div>
@@ -1227,6 +1227,7 @@ export default {
             fundtokenLink,
             formatAmount,
             plansLen,
+            isUniapp,
             lang
         }
     }
