@@ -5,16 +5,16 @@
             <li v-for='item in products' :key='item.symbloKey' @click='goOrder(item)'>
                 <p class='row_1'>
                     <span>{{ item.symbolName }}</span>
-                    <strong :class='item.upDownColor'>
-                        {{ item.upDownWidth || '--' }}
+                    <strong :class='item.rolling_upDownColor'>
+                        {{ item.rolling_upDownWidth || '--' }}
                     </strong>
                 </p>
                 <p class='row_2'>
-                    <span>{{ item.cur_price || '--' }}</span>
+                    <span>{{ item.rolling_last_price || '--' }}</span>
                 </p>
                 <p class='row_3'>
-                    <span :class='item.upDownColor'>
-                        {{ item.upDownAmount > 0 ? '+' : '' }}{{ item.upDownAmount || '--' }}
+                    <span :class='item.rolling_upDownColor'>
+                        {{ item.rolling_upDownAmount > 0 ? '+' : '' }}{{ item.rolling_upDownAmount || '--' }}
                     </span>
                 </p>
             </li>
@@ -23,10 +23,11 @@
 </template>
 
 <script>
-import { computed, unref } from 'vue'
+import { computed, onBeforeUnmount, unref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import exampleImg from './example.png'
+import { QuoteSocket } from '@/plugins/socket/socket'
 
 export default {
     props: {
@@ -68,7 +69,12 @@ export default {
                 }
             })
         }
-        store.commit('home/Update_subscribeBannerList', symbolKeys)
+        // store.commit('home/Update_subscribeBannerList', symbolKeys)
+        const unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'bannerProducts', symbolKeys })
+
+        onBeforeUnmount(() => {
+            unSubscribe()
+        })
 
         return {
             products,

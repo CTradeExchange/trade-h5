@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { computed, ref, watch, onMounted, getCurrentInstance } from 'vue'
+import { computed, ref, watch, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import useProduct from '@planspc/hooks/useProduct'
 import { useRouter } from 'vue-router'
@@ -157,6 +157,8 @@ export default {
             }
         }
 
+        let unSubscribe = () => {}
+
         // 设置产品数据
         const setProducts = () => {
             // 只显示指定数量数据
@@ -171,7 +173,8 @@ export default {
                     }
                 }
                 filterProductList.value = list
-                if (list.length > 0) QuoteSocket.send_subscribe24H(list)
+                const symbolKeys = list.map(el => el.symbolKey)
+                unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'homeQuote', symbolKeys })
             }
         }
 
@@ -197,6 +200,10 @@ export default {
 
         onMounted(() => {
             setProducts()
+        })
+
+        onBeforeUnmount(() => {
+            unSubscribe()
         })
 
         return {
