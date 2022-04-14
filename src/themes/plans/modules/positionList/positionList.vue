@@ -146,7 +146,7 @@ export default {
             state.positionData = data
             state.multipleSetVisible = true
             state.mVal = data.crossLevelNum
-            store.commit('_quote/Update_productActivedID', data.symbolId + '_' + tradeType.value)
+            // store.commit('_quote/Update_productActivedID', data.symbolId + '_' + tradeType.value)
             if (!product.value.minVolume) {
                 store.dispatch('_quote/querySymbolInfo', {
                     symbolId: data.symbolId,
