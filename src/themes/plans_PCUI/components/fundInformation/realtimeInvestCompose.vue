@@ -1,10 +1,6 @@
 <template>
     <div class='realtimeInvestCompose'>
         <div class='width-limit'>
-            <h4 class='title'>
-                <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
-                {{ title || $t('fundInfo.realtimeInvestCompose') }}
-            </h4>
             <div class='block'>
                 <h4 class='title switch-title'>
                     <span>{{ title || $t('fundInfo.realtimeInvestCompose') }}</span>

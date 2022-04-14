@@ -10,7 +10,7 @@
                     {{ fund.fundName }}
                 </span>
                 <span class='by'>
-                    By <span>VITATOKEN</span> Capital
+                    By <span>VITATOKEN</span> Crypto Exchange
                 </span>
             </div>
         </div>
@@ -56,7 +56,7 @@
                     <span>{{ $t('fundInfo.totalMarketValue') }}({{ fund.currencyCode }})</span>
                     <strong>{{ calculate(fund.totalBalance) }}</strong>
                 </div>
-                <div class='col'>
+                <div v-if='fund.upDate' class='col'>
                     <span>{{ $t('fundInfo.fundCreateTime') }}</span>
                     <strong>{{ fund.upDate ? fund.upDate.substring(0, fund.upDate.length - 3) : '' }}</strong>
                 </div>

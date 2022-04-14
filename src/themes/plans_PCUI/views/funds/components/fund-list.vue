@@ -27,10 +27,16 @@
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='120' prop='netValue'>
                     <template #default='scope'>
-                        <span>{{ scope.row.netValue }} {{ scope.row.currencyCode }}</span>
+                        <strong>{{ scope.row.netValue }} {{ scope.row.currencyCode }}</strong>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='netValueChangeQuote' />
+                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='netValueChangeQuote'>
+                    <template #default='scope'>
+                        <strong :class="{ 'riseColor': scope.row.netValueChangeQuote.replace('%', '') > 0, 'fallColor': scope.row.netValueChangeQuote.replace('%', '') < 0 }">
+                            {{ scope.row.netValueChangeQuote }}
+                        </strong>
+                    </template>
+                </el-table-column>
                 <el-table-column :label="$t('funds.applyStatus')" :min-width='120'>
                     <template #default='scope'>
                         <span v-if='scope.row.canPurchase === 1'>
@@ -81,10 +87,16 @@
                 </el-table-column>
                 <el-table-column :label="$t('funds.newPrice')" :min-width='120' prop='marketPrice'>
                     <template #default='scope'>
-                        <span>{{ scope.row.marketPrice }} {{ scope.row.currencyCode }}</span>
+                        <strong>{{ scope.row.marketPrice }} {{ scope.row.currencyCode }}</strong>
                     </template>
                 </el-table-column>
-                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='marketPriceChangeQuote' />
+                <el-table-column :label="$t('fundInfo.dayUpDown')" :min-width='minWidth' prop='marketPriceChangeQuote'>
+                    <template #default='scope'>
+                        <strong :class="{ 'riseColor': scope.row.marketPriceChangeQuote.replace('%', '') > 0, 'fallColor': scope.row.marketPriceChangeQuote.replace('%', '') < 0 }">
+                            {{ scope.row.marketPriceChangeQuote }}
+                        </strong>
+                    </template>
+                </el-table-column>
                 <el-table-column :label="$t('trade.operating')" :min-width='minWidth'>
                     <template #default='scope'>
                         <div class='handle'>
