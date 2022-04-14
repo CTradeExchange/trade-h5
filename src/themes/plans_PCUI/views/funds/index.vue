@@ -90,19 +90,19 @@ const fundTimer = ref(null)
 
 // 批量获取市场表现走势图
 const batchMarketPerformanceData = () => {
-    const fundIds = (fundProductList.value.map(el => el.fundId)).toString()
+    const fundIds = (fundProductList.value.map(el => el.fundId))
     batchMarketPerformance({
-        fundIds,
+        fundIds: fundIds.toString(),
         days: 36,
         type: 1
     }).then(res => {
-        const list = Object.values(res.data)
+        const { data } = res
         const valueArrs = []
         const priceArrs = []
-        list.map(arr => {
+        fundIds.map(fundId => {
             const valueArr = []
             const priceArr = []
-            arr.map(elem => {
+            data[fundId].map(elem => {
                 elem.columnList.map(sub => {
                     if (elem.type === 2) {
                         valueArr.push(Number(sub.value))
