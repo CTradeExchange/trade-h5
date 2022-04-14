@@ -41,7 +41,7 @@ export default {
 
         // 产品订阅
         const sendSubscribe = () => {
-            if (products.length > 0) QuoteSocket.send_subscribe(products)
+            if (products.length > 0) QuoteSocket.send_subscribe24H(products)
         }
         store.dispatch('_base/getPageConfig', 'Home').then(res => {
             console.log(res)

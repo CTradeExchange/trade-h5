@@ -11,11 +11,11 @@
                             <div class='name'>
                                 {{ product.symbolName }}
                             </div>
-                            <div class='price' :class='[product.cur_color]'>
-                                {{ product.cur_price || '--' }}
+                            <div class='price' :class='[product.last_color]'>
+                                {{ product.rolling_last_price || '--' }}
                             </div>
-                            <div class='change' :class='[product.upDownColor]'>
-                                {{ product.upDownAmount || '--' }} &nbsp; {{ product.upDownWidth }}
+                            <div class='change' :class='[product.rolling_upDownColor]'>
+                                {{ product.rolling_upDownAmount || '--' }} &nbsp; {{ product.rolling_upDownWidth }}
                             </div>
                         </li>
                     </ul>

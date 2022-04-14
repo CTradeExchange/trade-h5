@@ -25,11 +25,11 @@
                         <p class='text1'>
                             {{ product.symbolName }}
                         </p>
-                        <p class='text2' :class='[product.cur_color]'>
-                            {{ product.cur_price || '--' }}
+                        <p class='text2' :class='[product.last_color]'>
+                            {{ product.rolling_last_price || '--' }}
                         </p>
-                        <p class='text3' :class='[product.upDownColor]'>
-                            {{ product.upDownWidth || '--' }}
+                        <p class='text3' :class='[product.rolling_upDownColor]'>
+                            {{ product.rolling_upDownWidth || '--' }}
                         </p>
                         <klineSvg :data='product?.kline_list' :height='30' :product='product' :width='90' />
                     </div>
