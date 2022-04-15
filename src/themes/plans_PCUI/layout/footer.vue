@@ -4,7 +4,7 @@
             <div class='footer-auto'>
                 <div class='nav-left'>
                     <ul>
-                        <!-- <li>
+                        <li>
                             <h4 class='title'>
                                 {{ $t('newHomeFooter.aboutus') }}
                             </h4>
@@ -18,7 +18,7 @@
                                     {{ $t('newHomeFooter.fees') }}
                                 </a>
                             </p>
-                        </li> -->
+                        </li>
                         <li>
                             <h4 class='title'>
                                 {{ $t('newHomeFooter.product') }}
@@ -54,7 +54,7 @@
                                 </a>
                             </p>
                         </li>
-                        <!-- <li>
+                        <li>
                             <h4 class='title'>
                                 {{ $t('newHomeFooter.help') }}
                             </h4>
@@ -73,7 +73,7 @@
                                     {{ $t('newHomeFooter.policy') }}
                                 </a>
                             </p>
-                        </li> -->
+                        </li>
                     </ul>
                 </div>
                 <div class='nav-right'>
@@ -122,7 +122,7 @@
             </div>
             <div class='footer-last'>
                 <p class='year'>
-                    Trade Switcher © 2022
+                    Vitatoken © 2022
                 </p>
             </div>
         </div>
@@ -274,7 +274,7 @@ export default {
             display: flex;
         }
         li {
-            margin-right: 200px;
+            margin-right: 100px;
             &:last-of-type {
                 margin-right: 0;
             }

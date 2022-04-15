@@ -13,24 +13,24 @@ const routes = [
         component: Layout,
         keepAlive: true,
         children: [
-            {
-                path: 'home',
-                name: 'Home',
-                component: () => import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
-                meta: {
-                    title: 'route.home',
-                    keepAlive: true,
-                }
-            },
             // {
             //     path: 'home',
             //     name: 'Home',
-            //     component: () => import(/* webpackChunkName: "Quote" */ '../views/home/index.vue'),
+            //     component: () => import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
             //     meta: {
             //         title: 'route.home',
             //         keepAlive: true,
             //     }
             // },
+            {
+                path: 'home',
+                name: 'Home',
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/index.vue'),
+                meta: {
+                    title: 'route.home',
+                    keepAlive: true,
+                }
+            },
             {
                 path: 'selfSymbol',
                 name: 'SelfSymbol',

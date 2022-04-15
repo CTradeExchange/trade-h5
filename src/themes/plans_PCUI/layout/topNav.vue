@@ -3,18 +3,24 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' height='18' src='@planspc/images/logo.png' />
+                    <img alt='' height='24' src='/images/logo_vitamin.png' />
                 </h1>
             </router-link>
             <div class='menus'>
-                <div :class="['item', { 'active': $route.path === '/quote' }]">
-                    <router-link to='/quote'>
+                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
+                    <router-link to='/fund'>
                         <span class='link'>
-                            {{ $t('header.quote') }}
+                            {{ $t('header.fund') }}
                         </span>
+                        <span class='symbolUp'></span>
                     </router-link>
                 </div>
-                <div :class="['item', { 'active': $route.path === '/order' }]">
+                <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
+                    <span class='link'>
+                        {{ $t('tradeType.5') }}
+                    </span>
+                </div>
+                <!-- <div :class="['item', { 'active': $route.path === '/order' }]">
                     <el-dropdown @command='changePlans'>
                         <span class='link'>
                             {{ plansName }}
@@ -32,13 +38,12 @@
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                </div>
-                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
-                    <router-link to='/fund'>
+                </div> -->
+                <div :class="['item', { 'active': $route.path === '/quote' }]">
+                    <router-link to='/quote'>
                         <span class='link'>
-                            {{ $t('header.fund') }}
+                            {{ $t('header.quote') }}
                         </span>
-                        <span class='symbolUp'></span>
                     </router-link>
                 </div>
                 <div v-if='customerInfo.isFund === 1' :class="['item', { 'active': $route.path === '/fundManager' }]">
@@ -87,9 +92,9 @@
                                 <el-dropdown-item v-if='Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
                                     {{ $t('cRoute.regKyc') }}
                                 </el-dropdown-item>
-                                <el-dropdown-item @click="handRoutTo('/bankList')">
+                                <!-- <el-dropdown-item @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
-                                </el-dropdown-item>
+                                </el-dropdown-item> -->
                                 <el-dropdown-item @click="handRoutTo('/googleMFA/status')">
                                     {{ $t('mfa.routeTitile') }}
                                 </el-dropdown-item>
@@ -164,7 +169,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         // 在线客服地址
-        const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
+        const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
 
         onBeforeMount(() => {
 
@@ -177,14 +182,7 @@ export default {
         }
 
         // 玩法列表
-        const isWallet = store.state._base.wpCompanyInfo.isWallet
-        const plansList = computed(() =>
-            store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
-                .map(el => {
-                    el.name = t('tradeType.' + el.tradeType)
-                    return el
-                })
-        )
+        const plansList = computed(() => store.state._base.plans)
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
         const customerInfo = computed(() => store.state._user.customerInfo)
 

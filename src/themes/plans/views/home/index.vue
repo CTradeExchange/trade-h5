@@ -53,13 +53,13 @@
                             </p>
                         </div>
                         <div class='price'>
-                            <p class='cur-price' :class='item.cur_color'>
-                                {{ item.cur_price }}
+                            <p class='cur-price' :class='item.last_color'>
+                                {{ item.rolling_last_price }}
                             </p>
                         </div>
                         <div class='price'>
-                            <p class='up-down' :class='item.upDownColor'>
-                                {{ item.upDownWidth }}
+                            <p class='up-down' :class='item.rolling_upDownColor'>
+                                {{ item.rolling_upDownWidth }}
                             </p>
                         </div>
                     </li>
@@ -490,7 +490,7 @@ if (!localGet('privacyFlag')) {
     privacyVis.value = true
 }
 
-QuoteSocket.add_subscribe({ moduleId: 'home', symbolKeys })
+QuoteSocket.add_subscribe24H({ moduleId: 'home', symbolKeys })
 
 </script>
 
