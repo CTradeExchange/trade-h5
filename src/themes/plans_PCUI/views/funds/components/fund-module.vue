@@ -10,8 +10,8 @@
             {{ $t('funds.subTitle') }}
         </p>
         <div class='fund-tabs'>
-            <i :class="['switch icon_XX_015', { 'active': fundModel === 'card' }]" @click="fundModel = 'card'"></i>
-            <i :class="['switch icon_31liebiao', { 'active': fundModel === 'list' }]" @click="fundModel = 'list'"></i>
+            <i :class="['switch card-icon icon_doufukuai', { 'active': fundModel === 'card' }]" @click="fundModel = 'card'"></i>
+            <i :class="['switch list-icon icon_liebiao', { 'active': fundModel === 'list' }]" @click="fundModel = 'list'"></i>
         </div>
         <!-- 卡片模式 -->
         <div v-if="fundModel === 'card'" class='card-case'>
@@ -78,13 +78,18 @@ const fundModel = ref('card')
         height: 48px;
         line-height: 1;
         margin: 16px;
-        font-size: 32px;
         color: var(--mainColor);
         background: var(--contentColor);
         border-radius: 10px;
         box-shadow: 3px 3px 20px rgb(0 0 0 / 9%);
         transition: all .2s ease-in-out;
         cursor: pointer;
+        &.card-icon {
+            font-size: 32px;
+        }
+        &.list-icon {
+            font-size: 36px;
+        }
         &.active {
             color: var(--primary);
             border: 1px solid var(--primary);

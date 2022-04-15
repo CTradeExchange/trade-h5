@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2890191 */
-  src: url('iconfont.woff2?t=1648716462572') format('woff2'),
-       url('iconfont.woff?t=1648716462572') format('woff'),
-       url('iconfont.ttf?t=1648716462572') format('truetype');
+  src: url('iconfont.woff2?t=1649983782021') format('woff2'),
+       url('iconfont.woff?t=1649983782021') format('woff'),
+       url('iconfont.ttf?t=1649983782021') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon_liebiao:before {
+  content: "\e62d";
+}
+
+.icon_doufukuai:before {
+  content: "\e615";
 }
 
 .icon_31liebiao:before {
