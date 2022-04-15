@@ -2,11 +2,16 @@
     <div class='fund-list'>
         <el-table :cell-style="{ background:'none' }" :data='fundProductList'>
             <el-table-column>
-                <el-table-column :label="$t('fundInfo.fundName')" :min-width='minWidth' prop='fundName' />
+                <!-- <el-table-column :label="$t('fundInfo.fundName')" :min-width='minWidth' prop='fundName' /> -->
+                <el-table-column :label="$t('fundInfo.fundIcon')" :min-width='minWidth'>
+                    <template #default='scope'>
+                        <strong>{{ scope.row.fundName }}</strong>
+                    </template>
+                </el-table-column>
                 <el-table-column :label="$t('fundInfo.fundIcon')" :min-width='minWidth'>
                     <template #default='scope'>
                         <currency-icon class='currency' :currency='scope.row.shareTokenCode' size='20px' />
-                        <span>{{ scope.row.shareTokenCode }}</span>
+                        <strong>{{ scope.row.shareTokenCode }}</strong>
                     </template>
                 </el-table-column>
             </el-table-column>
@@ -39,22 +44,22 @@
                 </el-table-column>
                 <el-table-column :label="$t('funds.applyStatus')" :min-width='120'>
                     <template #default='scope'>
-                        <span v-if='scope.row.canPurchase === 1'>
+                        <strong v-if='scope.row.canPurchase === 1'>
                             {{ $t('funds.canApply') }}
-                        </span>
-                        <span v-else>
+                        </strong>
+                        <strong v-else>
                             {{ $t('funds.notApply') }}
-                        </span>
+                        </strong>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('funds.redeemStatus')" :min-width='120'>
                     <template #default='scope'>
-                        <span v-if='scope.row.canRedemption === 1'>
+                        <strong v-if='scope.row.canRedemption === 1'>
                             {{ $t('funds.canRedeem') }}
-                        </span>
-                        <span v-else>
+                        </strong>
+                        <strong v-else>
                             {{ $t('funds.notRedeem') }}
-                        </span>
+                        </strong>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('trade.operating')" :min-width='160'>
