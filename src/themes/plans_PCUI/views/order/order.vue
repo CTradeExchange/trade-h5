@@ -126,7 +126,7 @@ export default {
 
         const contentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 3) {
-                return '785px'
+                return '920px'
             } else if (Number(product.value?.tradeType) === 5) {
                 return '840px'
             } else {
