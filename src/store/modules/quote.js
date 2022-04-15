@@ -243,7 +243,7 @@ export default {
                 const rolling_upDownColor = parseFloat(rolling_upDownAmount) === 0 ? 'grayColor' : (parseFloat(rolling_upDownAmount) > 0 ? 'riseColor' : 'fallColor')
                 vue_set(product, 'rolling_upDownAmount', rolling_upDownAmount)
                 vue_set(product, 'rolling_upDownAmount_pip', rolling_upDownAmount_pip)
-                vue_set(product, 'rolling_upDownWidth', product.rolling_first_price ? rolling_upDownWidth : '--')
+                vue_set(product, 'rolling_upDownWidth', parseFloat(product.rolling_first_price) ? rolling_upDownWidth : '--')
                 vue_set(product, 'rolling_upDownColor', rolling_upDownColor)
 
                 // 更新上一口价的裸行情
