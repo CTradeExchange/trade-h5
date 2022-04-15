@@ -30,7 +30,7 @@ class OnMessage {
 
     resolveMsg (msgData = {}) {
         if (msgData.type === 'cats-init') {
-            this.init(msgData)
+            this.init(msgData.data)
         } else if (msgData.type === 'cats-auth2Code') {
             this.requestAuth2Code(msgData)
         }
