@@ -130,7 +130,7 @@ export default {
             } else if (Number(product.value?.tradeType) === 5) {
                 return '840px'
             } else {
-                return '874px'
+                return '964px'
             }
         })
 
@@ -215,7 +215,7 @@ export default {
         position: relative;
         display: flex;
         justify-content: space-between;
-        max-height: 874px;
+        max-height: 964px;
         >div {
             margin-right: 8px;
             background: var(--contentColor);
