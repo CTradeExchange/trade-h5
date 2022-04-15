@@ -314,7 +314,7 @@ export default {
 
                         if (state.extendsMap[key]?.showType === 'date') {
                             const dateVal = tempElementList.find(el => el.elementCode === key)
-                            dateVal.elementValue = window.dayjs(dateVal.elementValue).valueOf().toString()
+                            dateVal.elementValue = (new Date(dateVal.elementValue).getTime()).toString()
                         }
                     }
                 }
