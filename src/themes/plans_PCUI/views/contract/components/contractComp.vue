@@ -112,7 +112,9 @@ export default {
         // 结算时间
         const eodTime = computed(() => {
             if (!isEmpty(product.value.eodTime)) {
-                return window.dayjs().utc().startOf('day').utcOffset(utcOffset).add(product.value.eodTime, 'minute').format('HH:mm')
+                return product.value.eodTime.split(',').map(el => {
+                    return window.dayjs().utc().startOf('day').utcOffset(utcOffset).add(parseInt(el), 'minute').format('HH:mm')
+                }).sort((a, b) => a.replace(/:/, '') - b.replace(/:/, '')).join(', ')
             }
             return ''
         })

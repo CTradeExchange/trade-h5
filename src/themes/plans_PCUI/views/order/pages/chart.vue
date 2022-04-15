@@ -19,42 +19,72 @@
 
         <div class='item range'>
             <p :class='product?.cur_color'>
-                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.price_digits) : '--' }}
+                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.symbolDigits) : '--' }}
             </p>
             <p>
-                <span :class='product?.upDownColor'>
-                    {{ product?.upDownAmount ? product?.upDownAmount : '--' }}
+                <span :class='product?.rolling_upDownColor'>
+                    {{ product?.rolling_upDownAmount ? product?.rolling_upDownAmount : '--' }}
                 </span>&nbsp;
-                <span :class='product?.upDownColor'>
-                    {{ product?.upDownWidth ? product?.upDownWidth : '--' }}
+                <span :class='product?.rolling_upDownColor'>
+                    {{ product?.rolling_upDownWidth ? product?.rolling_upDownWidth : '--' }}
                 </span>
             </p>
         </div>
-        <div class='item ohlc'>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.todayOpen') }}
-                </span> {{ product?.open_price || '--' }}
-            </p>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.yesterdayClosed') }}
-                </span> {{ product?.yesterday_close_price || '--' }}
-            </p>
-        </div>
 
-        <div class='item ohlc'>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.high') }}
-                </span>  {{ product?.high_price || '--' }}
-            </p>
-            <p>
-                <span class='muted'>
-                    {{ $t('trade.low') }}
-                </span>  {{ product?.low_price || '--' }}
-            </p>
-        </div>
+        <template v-if='product.isCryptocurrency'>
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hHigh') }}
+                    </span> {{ product?.rolling_high_price || '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hLow') }}
+                    </span> {{ product?.rolling_low_price || '--' }}
+                </p>
+            </div>
+
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hNumber') }}
+                    </span>  {{ product?.rolling_transactions_number ? formatAmount(product.rolling_transactions_number) : '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('common.24hAmount') }}
+                    </span>  {{ product?.rolling_amount ? formatAmount(product.rolling_amount) : '--' }}
+                </p>
+            </div>
+        </template>
+        <template v-else>
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.todayOpen') }}
+                    </span> {{ product?.open_price || '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.yesterdayClosed') }}
+                    </span> {{ product?.yesterday_close_price || '--' }}
+                </p>
+            </div>
+
+            <div class='item ohlc'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.high') }}
+                    </span>  {{ product?.high_price || '--' }}
+                </p>
+                <p>
+                    <span class='muted'>
+                        {{ $t('trade.low') }}
+                    </span>  {{ product?.low_price || '--' }}
+                </p>
+            </div>
+        </template>
 
         <div v-if='product.etf' class='item ohlc'>
             <p>
@@ -225,6 +255,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty, localSet, localGet, getCookie } from '@/utils/util'
+import { formatAmount } from '@/utils/calculation'
 import EtfIcon from '@planspc/components/etfIcon.vue'
 import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
@@ -774,7 +805,7 @@ export default {
 
         // 监听路由变化
         const changeRoute = () => {
-            // QuoteSocket.send_subscribe([`${product.value.symbolId}_${product.value.tradeType}`])
+            QuoteSocket.add_subscribe({ moduleId: 'order_productActivited', symbolKeys: [`${product.value.symbolId}_${product.value.tradeType}`] })
             // const invertColor = localGet('invertColor')
             initChartData()
             chartRef.value && chartRef.value.reset({
@@ -835,6 +866,7 @@ export default {
             updateStudy,
             addOptional,
             isSelfSymbol,
+            formatAmount,
             contractRoute
         }
     }

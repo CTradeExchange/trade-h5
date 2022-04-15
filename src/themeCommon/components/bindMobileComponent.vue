@@ -91,7 +91,6 @@ export default {
                 state.allCountryList = res.data
             }
         })
-
         const onlineServices = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const countryList = computed(() => store.state.countryList)

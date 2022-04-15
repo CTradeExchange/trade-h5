@@ -55,17 +55,17 @@
                     </div>
                     <div>
                         <span>
-                            {{ item.cur_price || '--' }}
+                            {{ item.rolling_last_price || '--' }}
                         </span>
                     </div>
                     <div>
                         <span>
-                            {{ item.upDownAmount || '--' }}
+                            {{ item.rolling_upDownAmount || '--' }}
                         </span>
                     </div>
                     <div>
-                        <span :class='item.upDownColor'>
-                            {{ item.upDownWidth || '--' }}
+                        <span :class='item.rolling_upDownColor'>
+                            {{ item.rolling_upDownWidth || '--' }}
                         </span>
                     </div>
                     <div class='handle'>
@@ -89,11 +89,13 @@
 </template>
 
 <script>
-import { computed, ref, watch, onMounted, getCurrentInstance } from 'vue'
+import { computed, ref, watch, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import useProduct from '@planspc/hooks/useProduct'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import globalData from '@h5/hooks/globalData'
+import { QuoteSocket } from '@/plugins/socket/socket'
 
 export default {
     props: {
@@ -117,10 +119,18 @@ export default {
         const { h5Preview } = globalData()
         const router = useRouter()
         const store = useStore()
+        const { t, locale } = useI18n({ useScope: 'global' })
         const curInstance = getCurrentInstance()
 
         // 玩法列表
-        const plansList = computed(() => store.state._base?.plans || [])
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
+        const plansList = computed(() =>
+            store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
+                .map(el => {
+                    el.name = t('tradeType.' + el.tradeType)
+                    return el
+                })
+        )
         // 玩法类型
         const tradeType = ref(h5Preview ? '' : Number(plansList.value[0]?.tradeType))
         // 分类类型
@@ -147,6 +157,8 @@ export default {
             }
         }
 
+        let unSubscribe = () => {}
+
         // 设置产品数据
         const setProducts = () => {
             // 只显示指定数量数据
@@ -161,7 +173,8 @@ export default {
                     }
                 }
                 filterProductList.value = list
-                store.commit('home/Update_subscribeQuoteList', keys)
+                const symbolKeys = list.map(el => el.symbolKey)
+                unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'homeQuote', symbolKeys })
             }
         }
 
@@ -187,6 +200,10 @@ export default {
 
         onMounted(() => {
             setProducts()
+        })
+
+        onBeforeUnmount(() => {
+            unSubscribe()
         })
 
         return {

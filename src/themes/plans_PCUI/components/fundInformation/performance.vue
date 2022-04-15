@@ -54,7 +54,7 @@ onMounted(async () => {
             yData.push({
                 name: data1[0],
                 type: 'line',
-                stack: 'Total',
+                // stack: 'Total',
                 showSymbol: false,
                 data: data1[1].map(el => el.value)
             })
@@ -64,7 +64,7 @@ onMounted(async () => {
             yData.push({
                 name: data2[0],
                 type: 'line',
-                stack: 'Total',
+                // stack: 'Total',
                 showSymbol: false,
                 data: data2[1].map(el => el.value)
             })
@@ -125,7 +125,7 @@ onMounted(async () => {
             yData.push({
                 name: data1[0],
                 type: 'line',
-                stack: 'Total',
+                // stack: 'Total',
                 showSymbol: false,
                 data: data1[1].map(el => el.value)
             })
@@ -134,7 +134,7 @@ onMounted(async () => {
             yData.push({
                 name: data2[0],
                 type: 'line',
-                stack: 'Total',
+                // stack: 'Total',
                 showSymbol: false,
                 data: data2[1].map(el => el.value)
             })

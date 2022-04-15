@@ -126,11 +126,11 @@ export default {
 
         const contentHeight = computed(() => {
             if (Number(product.value?.tradeType) === 3) {
-                return '785px'
+                return '920px'
             } else if (Number(product.value?.tradeType) === 5) {
                 return '840px'
             } else {
-                return '874px'
+                return '964px'
             }
         })
 
@@ -215,7 +215,7 @@ export default {
         position: relative;
         display: flex;
         justify-content: space-between;
-        max-height: 874px;
+        max-height: 964px;
         >div {
             margin-right: 8px;
             background: var(--contentColor);

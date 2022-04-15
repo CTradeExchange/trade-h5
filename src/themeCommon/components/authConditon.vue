@@ -216,6 +216,7 @@ export default {
                         state.showImgList = cardTypeMap[el.elementCodeInputGroup]
                     }
                 } else if (el.showType === 'date') {
+                    el.elementValue = el.elementValue ? el.elementValue : new Date().getDate().getTime()
                     state.conditionModel[el.elementCode] = window.dayjs(Number(el.elementValue)).format('YYYY-MM-DD')
                     state.datePickerVal = new Date(Number(el.elementValue))
                 } else {
@@ -313,7 +314,7 @@ export default {
 
                         if (state.extendsMap[key]?.showType === 'date') {
                             const dateVal = tempElementList.find(el => el.elementCode === key)
-                            dateVal.elementValue = window.dayjs(dateVal.elementValue).valueOf().toString()
+                            dateVal.elementValue = (new Date(dateVal.elementValue).getTime()).toString()
                         }
                     }
                 }

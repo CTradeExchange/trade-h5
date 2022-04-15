@@ -15,18 +15,18 @@
             <div class='ft'>
                 <span
                     class='buy_price'
-                    :class='[product.cur_color, "digits"+product.price_digits]'
+                    :class='[product.last_color, "digits"+product.symbolDigits]'
                 >
-                    {{ !product.cur_price && product.cur_price != 0 ? '- -' : product.cur_price }}
+                    {{ !product.rolling_last_price && product.rolling_last_price != 0 ? '- -' : product.rolling_last_price }}
                     <!-- {{ !product.buy_price && product.buy_price != 0 ? '- -' : product.buy_price }} -->
                 </span>
             </div>
             <div class='tb'>
                 <span
                     class='sell_price'
-                    :class='[product.upDownColor,"digits"+product.price_digits]'
+                    :class='[product.rolling_upDownColor,"digits"+product.symbolDigits]'
                 >
-                    {{ !product.upDownWidth && product.upDownWidth != 0 ? '- -' : product.upDownWidth }}
+                    {{ !product.rolling_upDownWidth && product.rolling_upDownWidth != 0 ? '- -' : product.rolling_upDownWidth }}
                     <!-- {{ !product.sell_price && product.sell_price != 0 ? '- -' : product.sell_price }} -->
                 </span>
             </div>

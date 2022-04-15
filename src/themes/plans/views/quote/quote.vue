@@ -28,10 +28,10 @@
                 {{ $t('trade.nameCode') }}
             </span>
             <span class='item'>
-                {{ $t('trade.positionLastPrice') }}
+                {{ $t('trade.newPrice') }}
             </span>
             <span class='item'>
-                {{ $t('trade.upDown') }}
+                {{ $t('trade.changePercent') }}
             </span>
         </div>
         <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
@@ -100,13 +100,15 @@ export default {
         // 获取productList.vue组件的ref对象和产品列表均是异步，所以第一次产品订阅在productList.vue组件内
         watch(
             [tradeType, categoryType],
-            () => {
-                if (productListEl.value) productListEl.value.calcProductsDebounce()
+            async () => {
+                await nextTick()
+                if (productListEl.value) productListEl.value.subscribeAll()
             }
         )
 
-        onActivated(() => {
-            if (productListEl.value) productListEl.value.calcProductsDebounce()
+        onActivated(async () => {
+            await nextTick()
+            if (productListEl.value) productListEl.value.subscribeAll()
         })
 
         const tabChange = (i) => {}

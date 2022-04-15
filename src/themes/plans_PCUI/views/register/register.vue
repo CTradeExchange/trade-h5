@@ -151,6 +151,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
+        const entrySearch = sessionGet('entrySearch')
         const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
         const { openAccountType } = route.query
@@ -163,7 +164,7 @@ export default {
             verifyCodeLoading: false,
             checkCode: '',
             mobile: '',
-            openType: 'email', // mobile 手机号开户， email 邮箱开户
+            openType: 'mobile', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
             tradeType: 1,
             email: '',
@@ -293,11 +294,11 @@ export default {
                 // currency: state.currency,
                 // tradeType: state.tradeType,
                 sendToken: token,
-                utmSource: getQueryVariable('utm_source'),
-                utmMedium: getQueryVariable('utm_medium'),
-                utmCampaign: getQueryVariable('utm_campaign'),
-                utmContent: getQueryVariable('utm_content'),
-                utmTerm: getQueryVariable('utm_term'),
+                utmSource: getQueryVariable('utm_source', entrySearch),
+                utmMedium: getQueryVariable('utm_medium', entrySearch),
+                utmCampaign: getQueryVariable('utm_campaign', entrySearch),
+                utmContent: getQueryVariable('utm_content', entrySearch),
+                utmTerm: getQueryVariable('utm_term', entrySearch),
                 protocol: state.protocol,
                 tradeTypeCurrencyList: getPlansByCountry(state.countryCode),
                 customerGroupId: getCustomerGroupIdByCountry(state.countryCode),

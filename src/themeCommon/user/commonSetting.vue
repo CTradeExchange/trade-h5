@@ -8,6 +8,17 @@
             <van-cell
                 class='cellItem'
                 is-link
+                :title='$t("common.lang")'
+                @click='langShow=true'
+            >
+                <template #right-icon>
+                    <img alt='' class='lang-icon' :src="'/images/country_icon/'+ lang + '.png'" />
+                    <van-icon class='right-arrow' name='arrow' />
+                </template>
+            </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
                 :title='Number(chartVal) === 1 ? $t("common.redDown") : $t("common.redUp")'
                 @click='colorShow=true'
             >
@@ -16,7 +27,15 @@
                     <van-icon class='right-arrow' name='arrow' />
                 </template>
             </van-cell>
-
+            <van-cell
+                class='cellItem'
+                is-link
+                :title='$t("common.dark")'
+            >
+                <template #right-icon>
+                    <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
+                </template>
+            </van-cell>
             <van-cell
                 v-if='inviteVis'
                 class='cellItem'
@@ -26,6 +45,31 @@
             />
         </van-cell-group>
     </div>
+    <van-popup
+        v-model:show='langShow'
+        class='custom-popup lang-popup'
+        position='bottom'
+        round
+    >
+        <div class='header'>
+            <div class='header-title'>
+                {{ $t('common.lang') }}
+            </div>
+            <i class='icon_guanbi' @click='langShow=false'></i>
+        </div>
+
+        <div class='popup-wrap'>
+            <div
+                v-for='(item, index) in supportLanguages'
+                :key='index'
+                class='lang-item'
+                :class='{ active: lang === item.val }'
+                @click='langSelect(item)'
+            >
+                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png?555'" />
+            </div>
+        </div>
+    </van-popup>
 
     <van-popup
         v-model:show='colorShow'
@@ -125,6 +169,63 @@ export default {
             return (location.href.includes('uat') && companyId.value === 1) || (location.href.includes('pre') && companyId.value === 360) || (companyId.value === 11)
         })
 
+        // 选择语言
+        const langSelect = (action) => {
+            state.loading = true
+            new Promise((resolve, reject) => {
+                if (customInfo.value) {
+                    return changeLang(action.val).then(res => {
+                        return res.check() ? resolve() : reject()
+                    })
+                } else {
+                    resolve()
+                }
+            }).then(() => {
+                state.loading = false
+                state.langVisible = false
+                state.lang = action.val
+
+                // 替换URL
+                const str = location.pathname
+                const firstSlash = str.indexOf('/') + 1
+                const twoSlash = str.indexOf('/', firstSlash) // 第二个斜杠下标
+                const pathTemp = str.substring(twoSlash).substring(1, str.length)
+                location.pathname = action.val + '/' + pathTemp
+
+                loadLocaleMessages(i18n, action.val).then(() => {
+                    locale.value = action.val // change!
+                    store.commit('del_cacheViews', 'Home')
+                    store.commit('del_cacheViews', 'Layout')
+                })
+
+                setCookie('lang', action.val, 'y10')
+            }).catch(err => (state.loading = false))
+        }
+
+        // 选择颜色
+        const colorSelect = (action) => {
+            const themeColor = action ? 'night' : 'light'
+            // 设置全局变量
+            store.commit('Update_invertColor', themeColor)
+            setRootVariable(themeColor)
+            state.colorVisible = false
+
+            let themeColors = sessionStorage.getItem('themeColors')
+            if (!isEmpty(themeColors)) {
+                themeColors = JSON.parse(themeColors)
+
+                document.body.style.setProperty('--color', themeColors[themeColor].color)
+                document.body.style.setProperty('--contentColor', themeColors[themeColor].contentColor)
+                document.body.style.setProperty('--primaryAssistColor', themeColors[themeColor].primaryAssistColor)
+                document.body.style.setProperty('--bgColor', themeColors[themeColor].bgColor)
+                document.body.style.setProperty('--normalColor', themeColors[themeColor].normalColor)
+                document.body.style.setProperty('--minorColor', themeColors[themeColor].minorColor)
+                document.body.style.setProperty('--lineColor', themeColors[themeColor].lineColor)
+                document.body.style.setProperty('--assistColor', themeColors[themeColor].assistColor)
+                document.body.style.setProperty('--placeholdColor', themeColors[themeColor].placeholdColor)
+            }
+        }
+
         // 设置红涨绿跌颜色
         const upDownColorSelect = (chartObj) => {
             const curTheme = localGet('invertColor')
@@ -155,11 +256,13 @@ export default {
         }
 
         const back = () => {
-            return router.replace('/')
+            return router.replace('/mine')
         }
 
         return {
             supportLanguages,
+            langSelect,
+            colorSelect,
             upDownColorSelect,
             back,
             inviteVis,

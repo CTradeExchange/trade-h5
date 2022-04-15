@@ -6,8 +6,8 @@
                 {{ product.symbolName }}
             </span>
             <ETF v-if='product.etf' />
-            <span class='upDownWidth' :class='product.upDownColor'>
-                {{ product.upDownWidth }}
+            <span class='upDownWidth' :class='product.rolling_upDownColor'>
+                {{ product.rolling_upDownWidth }}
                 <!-- {{ parseFloat(product.upDownWidth) > 0 ? '+'+ product.upDownWidth : '-'+ Math.abs(parseFloat(product.upDownWidth)) }} -->
             </span>
             <span class='chartIcon icon_tubiao' @click="$router.push({ name:'Product', query: { symbolId:product.symbolId, tradeType:product.tradeType } })"></span>

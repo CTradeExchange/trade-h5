@@ -34,7 +34,7 @@ export default function (productList) {
         // 把当前路由的产品加入订阅列表
         subscribList.value.unshift(product.value?.symbolKey)
         if (subscribList.value.length > 0) {
-            unSubscribe = QuoteSocket.add_subscribe({ moduleId, symbolKeys: subscribList.value })
+            unSubscribe = QuoteSocket.add_subscribe24H({ moduleId, symbolKeys: subscribList.value })
         }
     })
 

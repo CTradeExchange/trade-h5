@@ -115,13 +115,13 @@ export const getColumns = tradeType => {
                 name: t('trade.sellPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'sell_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_last_price')
             },
             {
                 name: t('trade.buyPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'buy_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount')
             },
             {
                 name: t('trade.upDownWidth'),
@@ -129,23 +129,23 @@ export const getColumns = tradeType => {
                 minWidth: 160,
                 className: 'upDownWidth',
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        {getVal(row.symbolKey, 'upDownWidth')}
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </span>
                 )
 
             },
             {
-                name: t('trade.highPrice'),
+                name: t('trade.24highPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'high_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_high_price')
             },
             {
-                name: t('trade.lowPrice'),
+                name: t('trade.24lowPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'low_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_low_price')
             },
             {
                 name: t('trade.operating'),
@@ -178,13 +178,13 @@ export const getColumns = tradeType => {
                 name: t('trade.sellPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'sell_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_last_price')
             },
             {
                 name: t('trade.buyPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'buy_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount')
             },
             {
                 name: t('trade.upDownWidth'),
@@ -192,8 +192,8 @@ export const getColumns = tradeType => {
                 minWidth: 160,
                 className: 'upDownWidth',
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        {getVal(row.symbolKey, 'upDownWidth')}
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </span>
                 )
 
@@ -202,13 +202,13 @@ export const getColumns = tradeType => {
                 name: t('trade.highPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'high_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_high_price')
             },
             {
                 name: t('trade.lowPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'low_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_low_price')
             },
             {
                 name: t('trade.operating'),
@@ -242,8 +242,8 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 160,
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        {getVal(row.symbolKey, 'price')}
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        {getVal(row.symbolKey, 'rolling_last_price')}
                     </span>
                 )
             },
@@ -252,8 +252,8 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 160,
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount') }
                     </span>
                 )
 
@@ -264,8 +264,8 @@ export const getColumns = tradeType => {
                 minWidth: 160,
                 className: 'upDownWidth',
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        {getVal(row.symbolKey, 'upDownWidth')}
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </span>
                 )
 
@@ -274,13 +274,13 @@ export const getColumns = tradeType => {
                 name: t('trade.highPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'high_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_high_price')
             },
             {
                 name: t('trade.lowPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'low_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_low_price')
             },
             {
                 name: t('trade.operating'),
@@ -315,8 +315,8 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 formatter: row => (
-                    <span className={unref(productMap)[row.symbolKey]?.cur_color}>
-                        {getVal(row.symbolKey, 'price')}
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        {getVal(row.symbolKey, 'rolling_last_price')}
                     </span>
                 )
             },
@@ -325,8 +325,8 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 formatter: row => (
-                    <strong className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        { getVal(row.symbolKey, 'upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'upDownAmount') }
+                    <strong className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount') }
                     </strong>
                 )
 
@@ -337,8 +337,8 @@ export const getColumns = tradeType => {
                 minWidth: 150,
                 className: 'upDownWidth',
                 formatter: row => (
-                    <strong className={unref(productMap)[row.symbolKey]?.upDownColor}>
-                        {getVal(row.symbolKey, 'upDownWidth')}
+                    <strong className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </strong>
                 )
 
@@ -348,14 +348,14 @@ export const getColumns = tradeType => {
                 align: 'left',
                 minWidth: 150,
                 className: 'primaryText',
-                formatter: row => getVal(row.symbolKey, 'high_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_high_price')
             },
             {
                 name: t('trade.24lowPrice'),
                 align: 'left',
                 minWidth: 150,
                 className: 'primaryText',
-                formatter: row => getVal(row.symbolKey, 'low_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_low_price')
             },
             {
                 name: t('trade.operating'),

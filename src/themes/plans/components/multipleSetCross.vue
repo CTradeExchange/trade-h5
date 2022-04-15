@@ -160,9 +160,9 @@ export default {
                     emit('update:multipleVal', state.multipleValue)
                     emit('update:modelValue', false)
                     emit('save', state.multipleValue)
+                    store.dispatch('_trade/queryPositionPage', { tradeType: props.product.tradeType })
                     if (props.position) {
                         Toast(t('trade.modifySuccess'))
-                        store.dispatch('_trade/queryPositionPage', { tradeType: props.position.tradeType })
                     }
                 }
             })

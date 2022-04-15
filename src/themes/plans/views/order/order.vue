@@ -196,6 +196,20 @@ export default {
         // 1.玩法类型
         const productTradeType = ref(tradeType)
 
+        const positionList = computed(() => store.state._trade.positionList[productTradeType.value] ?? [])
+        // 合约全仓的当前产品的持仓杠杆倍数
+        const multipleValPosition = computed(() => {
+            const position = positionList.value.find(el => parseInt(el.symbolId) === parseInt(product.value.symbolId))
+            return position ? position.crossLevelNum : ''
+        })
+        // 合约全仓监听当前产品持仓的杠杆倍数修改
+        watch(
+            () => multipleValPosition.value,
+            newval => {
+                if (parseInt(productTradeType.value) === 1) state.multipleVal = newval
+            }
+        )
+
         const profitLossWarn = computed(() => profitLossRef.value?.stopLossWarn || profitLossRef.value?.stopProfitWarn)
 
         const accountList = computed(() => store.state._user.customerInfo?.accountList)
@@ -289,6 +303,7 @@ export default {
             result.push(symbolKey.value)
             result = [...new Set(result)]
             QuoteSocket.send_subscribe(result)
+            QuoteSocket.send_subscribe24H(result)
         }
 
         // 初始化设置
@@ -412,6 +427,7 @@ export default {
             document.title = originTitle
 
             QuoteSocket.cancel_subscribe(1)
+            QuoteSocket.cancel_subscribe(3)
             store.commit('_quote/Delete_dealList')
         })
         return {
