@@ -28,6 +28,7 @@ import { ref, onMounted, onUnmounted, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { useFund } from './hooks.js'
+import { QuoteSocket } from '@/plugins/socket/socket'
 import { batchMarketPerformance } from '@/api/trade'
 import sideBar from './components/side-bar.vue'
 import fundModule from './components/fund-module.vue'
@@ -159,6 +160,15 @@ onMounted(() => {
     }
     // 获取基金产品列表数据
     getFundList({ name: '', isRealTime: true }).then(() => {
+        // 发起行情订阅
+        const productKeys = []
+        curProductList.value.map(product => {
+            if (product.symbolId) {
+                productKeys.push(`${product.symbolId}_${product.tradeType}`)
+            }
+        })
+        QuoteSocket.send_subscribe(productKeys)
+
         // 批量获取市场表现走势图
         batchMarketPerformanceData()
     })
@@ -173,6 +183,8 @@ onMounted(() => {
 })
 onUnmounted(() => {
     document.body.style.overflow = 'visible'
+    // 取消行情订阅
+    QuoteSocket.cancel_subscribe()
     // 清除基金接口定时器
     clearInterval(fundTimer.value)
 })
