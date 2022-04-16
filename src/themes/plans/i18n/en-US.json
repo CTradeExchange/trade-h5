@@ -116,7 +116,7 @@
 		"assets": "Assets",
 		"returnMoney": "Repay",
 		"loan": "Borrow",
-		"fundProductList": "Purchase and Redeem",
+		"fundProductList": "Funds List",
 		"fundProductInfo": "Fund Details",
 		"fundPurchase": "Fun Purchase",
 		"fundRedemption": "Fund Redeem",
@@ -140,6 +140,9 @@
 	"trade": {
 		"advance": "Prepayment",
 		"advanceRatio": "Prepayment ratio",
+        "newPrice": "Last price",
+        "changePrice": "24h Change",
+        "changePercent": "24h Change%",
 		"chart": "Chart",
 		"closeOrder": "Close Position",
 		"contract": "Symbol Properties",
@@ -678,7 +681,7 @@
 		"fundChartTip": "The data is for reference only, past performance does not represent future performance!",
 		"marketPrice": "Market Price",
 		"totalMarketValue": "Fund Size",
-		"fund": "Fund",
+		"fund": "Funds",
 		"fundApplyFeeCalc": "Estimated fees",
 		"choosePayAsset": "Select payment asset",
 		"chooseApplyAsset": "Fund share token",
@@ -745,7 +748,9 @@
         "redeemTipRemark": "赎回费指赎回基金的时候产生的手续费，一次性收取。",
         "applyRule_tipRemark1": "基金管理费指基金管理人管理基金资产所收取的报酬。",
         "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
-        "noTradeMarket": "No trading market"
+        "noTradeMarket": "No trading market",
+        "applyNow": "Explore"
+
 	},
     "home": {
         "quick": {
