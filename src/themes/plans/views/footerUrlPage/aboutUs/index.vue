@@ -99,7 +99,7 @@ export default {
     color:#333;
     background: #fff;
     .content {
-        padding: rem(78px) rem(30px) 0;
+        padding: rem(40px) rem(30px);
         // width: 100vw;
         font-size: rem(28px);
         font-weight: 400;

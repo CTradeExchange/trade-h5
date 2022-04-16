@@ -39,7 +39,7 @@ export default {
             },
             {
                 title: 'What is the transaction fee?',
-                reply: 'For Spot Trading, we charge 0.1%; For Fund Trading, we charge 0.5%.'
+                reply: 'For Spot Trading, we charge 0.15%; For Fund Trading, we charge 0.5%.'
             },
             {
                 title: 'How to contact Vitatoken customer service team?',

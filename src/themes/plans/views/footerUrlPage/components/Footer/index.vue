@@ -1,6 +1,6 @@
 
 <template>
-    <div class='new-footer'>
+    <div v-show='isShowFooter' class='new-footer'>
         <!-- 页脚 -->
         <div class='footer-wrap'>
             <div class='menu'>
@@ -104,18 +104,21 @@
             <!-- <img alt='' src='/images/serviceIcon.png' /> -->
             <i class='icon icon_xiaoxizhongxin'></i>
         </div>
+        <LangPop v-model='langShow' />
     </div>
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref, watchEffect } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { getCookie } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
+import LangPop from '../../../home/components/langPop.vue'
 
 const router = useRouter()
 const store = useStore()
+const route = useRoute()
 const { t } = useI18n({ useScope: 'global' })
 const customerInfo = computed(() => store.state._user.customerInfo)
 
@@ -238,6 +241,15 @@ const toService = () => {
         })
     }
 }
+
+const isShowFooter = ref(true)
+
+watchEffect(() => {
+    const routerReg = (route.path === '/about' || route.path === '/faqs')
+    const queryReg = (route.query.isApp && (parseInt(route.query.isApp) === 1))
+    if ((lang.value === 'en-US') && routerReg && queryReg) isShowFooter.value = false
+    else isShowFooter.value = true
+})
 
 </script>
 
