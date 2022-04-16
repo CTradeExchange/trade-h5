@@ -168,7 +168,6 @@ export default {
 
         const getConditon = () => {
             state.loading = true
-
             findAllLevelKyc({
                 levelCode: levelCode
             }).then(res => {
@@ -181,7 +180,7 @@ export default {
                     state.pathCode = res.data[0].pathCode
                     state.elementList = getArrayObj(state.list, 'pathCode', state.pathCode).elementList
                     state.areaShow = false
-
+                    getInputGroupList()
                     if (state.elementList.length > 0) {
                         state.hasFacePhoto = state.elementList.find(el => el.elementCode === 'face_photo')
                         if (!isEmpty(state.hasFacePhoto) && props.platform === 'h5') {
@@ -196,9 +195,7 @@ export default {
                         }
                         handleElementList()
                     }
-
                     console.log('state.conditionModel', state.conditionModel)
-                    getInputGroupList()
                 }
             }).catch(err => {
                 state.loading = false
@@ -319,7 +316,6 @@ export default {
                     }
                 }
             }
-
             if (tempElementList.length < compareElement.length) {
                 return Toast(t('auth.allAuthPlease'))
             }
