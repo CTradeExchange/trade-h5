@@ -245,7 +245,7 @@ export default {
         }
 
         const back = () => {
-            return router.replace('/mine')
+            return router.replace('/')
         }
 
         return {
