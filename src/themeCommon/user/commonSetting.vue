@@ -8,17 +8,6 @@
             <van-cell
                 class='cellItem'
                 is-link
-                :title='$t("common.lang")'
-                @click='langShow=true'
-            >
-                <template #right-icon>
-                    <img alt='' class='lang-icon' :src="'/images/country_icon/'+ lang + '.png'" />
-                    <van-icon class='right-arrow' name='arrow' />
-                </template>
-            </van-cell>
-            <van-cell
-                class='cellItem'
-                is-link
                 :title='Number(chartVal) === 1 ? $t("common.redDown") : $t("common.redUp")'
                 @click='colorShow=true'
             >
@@ -27,7 +16,7 @@
                     <van-icon class='right-arrow' name='arrow' />
                 </template>
             </van-cell>
-            <van-cell
+            <!-- <van-cell
                 class='cellItem'
                 is-link
                 :title='$t("common.dark")'
@@ -35,7 +24,7 @@
                 <template #right-icon>
                     <van-switch v-model='themeVal' :active-color='$style.primary' size='24px' @change='colorSelect' />
                 </template>
-            </van-cell>
+            </van-cell> -->
             <van-cell
                 v-if='inviteVis'
                 class='cellItem'
