@@ -68,7 +68,7 @@
                 </p>
             </li>
         </ul>
-        <div v-if="page === 'list'" class='btn-purchase fallColorBg'>
+        <div v-if="page === 'list'" class='btn-purchase'>
             {{ $t('fundInfo.applyNow') }}
         </div>
     </section>
@@ -109,7 +109,8 @@ defineProps({
     }
 }
 .fundType{
-    margin-top: rem(78px);
+    margin-top: rem(39px);
+    margin-bottom: rem(39px);
     text-align: center;
     font-size: rem(32px);
     font-weight: bold;
@@ -193,10 +194,12 @@ defineProps({
 .btn-purchase{
     padding: 0 rem(20px);
     text-align: center;
-    color: var(--contentColor);
-    margin: rem(50px) rem(150px) rem(20px) rem(150px);
+    color: #fff;
+    background: #0062ff;
+    margin: rem(50px) rem(100px) rem(20px) rem(100px);
     height: rem(80px);
     line-height: rem(80px);
     border-radius: rem(10px);
+    font-weight: bold;
 }
 </style>
