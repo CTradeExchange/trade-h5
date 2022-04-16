@@ -137,7 +137,7 @@ export default {
             verifyCodeLoading: false,
             checkCode: '',
             mobile: '',
-            openType: 'mobile', // mobile 手机号开户， email 邮箱开户
+            openType: 'email', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
             tradeType: 1,
             email: '',
