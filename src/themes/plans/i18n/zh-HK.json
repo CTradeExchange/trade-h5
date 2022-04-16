@@ -746,6 +746,7 @@
     "redeemTipRemark": "贖回費指贖回基金的時候產生的手續費，一次性收取。",
     "applyRule_tipRemark1": "基金管理費指基金管理人管理基金資產所收取的報酬。",
     "applyRule_tipRemark2": "基金管理費從基金資產中每日00:00結算，結算后的基金淨值已經扣除相應費用，無需投資者在每筆交易中另行支付。",
-    "noTradeMarket": "暫無交易市場"
+    "noTradeMarket": "暫無交易市場",
+    "applyNow": "立即申購"
   }
 }

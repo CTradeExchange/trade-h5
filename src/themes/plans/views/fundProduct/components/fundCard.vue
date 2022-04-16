@@ -7,12 +7,13 @@
             </h2>
         </figure>
         <div class='fundType'>
-            <span class='operation'>
+            Invest in the top 10 cryptocurrencies
+            <!-- <span class='operation'>
                 {{ fund.operationMode===1 ? $t('fundInfo.operationModeValue1') : $t('fundInfo.operationModeValue2') }}
             </span>
             <span class='title'>
                 {{ fund.fundType }}
-            </span>
+            </span> -->
         </div>
         <div class='desc'>
             {{ fund.introduction }}
@@ -67,6 +68,9 @@
                 </p>
             </li>
         </ul>
+        <div v-if="page === 'list'" class='btn-purchase fallColorBg'>
+            {{ $t('fundInfo.applyNow') }}
+        </div>
     </section>
 </template>
 
@@ -74,7 +78,8 @@
 import { defineProps } from 'vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 defineProps({
-    fund: Object
+    fund: Object,
+    page: String
 })
 </script>
 
@@ -83,7 +88,7 @@ defineProps({
 .fundCard{
     background: var(--contentColor);
     padding: rem(30px);
-    margin: rem(80px) rem(30px) rem(30px) rem(30px);
+    margin: rem(80px) rem(40px) rem(30px) rem(40px);
     border-radius: rem(15px);
     box-shadow: 0 0 rem(12px) rgba(0, 0, 0, .2);
     position: relative;
@@ -184,5 +189,14 @@ defineProps({
     .mleft5{
         margin-left: 5px;
     }
+}
+.btn-purchase{
+    padding: 0 rem(20px);
+    text-align: center;
+    color: var(--contentColor);
+    margin: rem(50px) rem(150px) rem(20px) rem(150px);
+    height: rem(80px);
+    line-height: rem(80px);
+    border-radius: rem(10px);
 }
 </style>

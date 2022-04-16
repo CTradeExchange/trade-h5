@@ -748,7 +748,8 @@
         "redeemTipRemark": "赎回费指赎回基金的时候产生的手续费，一次性收取。",
         "applyRule_tipRemark1": "基金管理费指基金管理人管理基金资产所收取的报酬。",
         "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
-        "noTradeMarket": "暂无交易市场"
+        "noTradeMarket": "暂无交易市场",
+        "applyNow": "立即申购"
     },
     "home": {
         "quick": {
