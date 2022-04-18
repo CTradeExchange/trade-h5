@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.mine")' @back='$router.push("/")' />
+        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.mine")' @back='$router.push("/mine")' />
         <p class='header'>
             {{ $t('cRoute.securitySetting') }}
         </p>
