@@ -2,8 +2,7 @@
     <div class='fund-list'>
         <el-table :cell-style="{ background:'none' }" :data='fundProductList'>
             <el-table-column>
-                <!-- <el-table-column :label="$t('fundInfo.fundName')" :min-width='minWidth' prop='fundName' /> -->
-                <el-table-column :label="$t('fundInfo.fundIcon')" :min-width='minWidth'>
+                <el-table-column :label="$t('fundInfo.fundName')" :min-width='minWidth'>
                     <template #default='scope'>
                         <strong>{{ scope.row.fundName }}</strong>
                     </template>
