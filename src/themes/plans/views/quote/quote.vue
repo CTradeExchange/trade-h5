@@ -158,7 +158,7 @@ export default {
     overflow: auto;
     background: var(--bgColor);
     &.hasNav {
-        //padding-bottom: rem(100px);
+        padding-bottom: rem(100px);
     }
     .productListWrap {
         flex: 1;
