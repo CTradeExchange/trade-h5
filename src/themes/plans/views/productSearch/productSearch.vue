@@ -1,7 +1,7 @@
 <template>
     <div class='quoteWrap'>
-        <plansType v-if='plansList.length>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
-        <div class='search_box' :class='{ top: plansList.length>1 }'>
+        <plansType v-if='plansLen>1' :list='plansList' :value='tradeType' @change='handleTradeType' />
+        <div class='search_box' :class='{ top: plansLen>1 }'>
             <div class='search_input'>
                 <van-search
                     v-model='state.searchKey'
@@ -71,6 +71,16 @@ export default {
                     return el
                 })
         )
+
+        const plansLen = computed(() => {
+            const userProductCategory = store.getters.userProductCategory
+            let arr = Object.keys(userProductCategory)
+            arr = arr.filter(el => {
+                return userProductCategory[el]?.find(o => o.listByUser?.length)
+            })
+            return arr.length
+        })
+
         const productMap = computed(() => store.state._quote.productMap)
 
         // 1.玩法类型
@@ -106,7 +116,7 @@ export default {
                             }
                         }
                     })
-                    const currentSelfSymbolList = selfSymbolList.value[tradeType.value]
+                    const currentSelfSymbolList = selfSymbolList.value[tradeType.value] || []
                     const isSelfSymbol = false
                     state.searchList.forEach(item => {
                         item.isSelfSymbol = isSelfSymbol
@@ -175,6 +185,7 @@ export default {
             onSearch,
             onCancel,
             state,
+            plansLen,
             plansList,
             handleTradeType,
             tradeType,
