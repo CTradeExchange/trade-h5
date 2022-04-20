@@ -88,7 +88,6 @@ const routes = [
                 component: () => import(/* webpackChunkName: "ProductSearch" */ '../views/productSearch/productSearch.vue'),
                 meta: {
                     title: 'route.productSearch',
-                    roles: ['User'],
                 }
             },
             {
