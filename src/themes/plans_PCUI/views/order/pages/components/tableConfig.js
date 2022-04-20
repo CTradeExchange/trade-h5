@@ -821,20 +821,21 @@ export const getAssetColumns = (tradeType) => {
                 name: t('trade.name'),
                 prop: 'symbolName',
                 align: 'left',
-                minWidth: 120,
+                className: 'symbolName',
+                minWidth: 150,
                 slots: {
                     default: ({ row, onGetComponentRefs }) => {
                         const refs = onGetComponentRefs()
                         return (
 
                             <>
-                                {row.symbolName}
-                                { row.crossLevelNum ? <span class='multipleVal' onclick={
+                                {<div class="van-ellipsis">{row.symbolName}</div>}
+                                { row.crossLevelNum ? <p class='multipleVal marginleft0' onclick={
                                     openMultipleSet.bind(null, row, refs.multipleSetCross)
                                 }>
                                     <i>{ row.crossLevelNum }x</i>
                                     {Number(row.marginSetType) === 2 ? <i class='icon_icon_arrow'></i> : ''}
-                                </span> : '' }
+                                </p> : '' }
 
                             </>
                         )
@@ -941,7 +942,7 @@ export const getAssetColumns = (tradeType) => {
                         return (
 
                             <>
-                                {row.symbolName}
+                                {<div class="van-ellipsis">{row.symbolName}</div>}
                                 { row.crossLevelNum ? <span class='multipleVal' onclick={
                                     openMultipleSet.bind(null, row, refs.multipleSet)
                                 }>

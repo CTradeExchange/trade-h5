@@ -231,7 +231,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, ref, watch, unref } from 'vue'
+import { reactive, toRefs, computed, ref, watch, unref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
@@ -542,6 +542,13 @@ export default {
             })
         }
 
+        // 监听合约全仓的持仓杠杆倍数修改
+        const watchMultipLeVal = (evt) => {
+            console.log(evt.detail)
+            const { multipleVal, symbolId } = evt.detail
+            if (parseInt(symbolId) === product.value.symbolId) state.multipleVal = multipleVal
+        }
+
         // 监听产品变化
         watch(
             () => product.value, (val, oval) => {
@@ -551,6 +558,14 @@ export default {
 
         init()
         getFundPage()
+
+        onMounted(() => {
+            document.body.addEventListener('update:multipLeVal', watchMultipLeVal, false)
+        })
+
+        onBeforeUnmount(() => {
+            document.body.removeEventListener('update:multipLeVal', removeEventListener)
+        })
 
         return {
             orderType: 1, // 订单类型
