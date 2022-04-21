@@ -9,7 +9,7 @@
 
 <script>
 /**
- * docs:
+ * docs: https://github.com/PanJiaChen/vue-element-admin/blob/master/src/components/Tinymce/index.vue
  * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
  */
 import editorImage from './components/EditorImage'
@@ -18,7 +18,7 @@ import toolbar from './toolbar'
 import load from './dynamicLoadScript'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const tinymceCDN = '/wp-content/uploads/cats_business/libs/tinymce/tinymce.min.js'
 
 export default {
     name: 'Tinymce',
@@ -29,6 +29,10 @@ export default {
             default: function () {
                 return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
             }
+        },
+        modelValue: {
+            type: String,
+            default: ''
         },
         value: {
             type: String,
@@ -56,6 +60,7 @@ export default {
             default: 'auto'
         }
     },
+    emits: ['update:modelValue', 'input'],
     data () {
         return {
             hasChange: false,
@@ -80,7 +85,7 @@ export default {
         }
     },
     watch: {
-        value (val) {
+        moduleValue (val) {
             if (!this.hasChange && this.hasInit) {
                 this.$nextTick(() =>
                     window.tinymce.get(this.tinymceId).setContent(val || ''))
@@ -121,7 +126,8 @@ export default {
                 body_class: 'panel-body ',
                 object_resizing: false,
                 toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
-                menubar: this.menubar,
+                // menubar: this.menubar,
+                menubar: false,
                 plugins: plugins,
                 end_container_on_empty_block: true,
                 powerpaste_word_import: 'clean',
@@ -134,18 +140,23 @@ export default {
                 link_title: false,
                 nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
                 init_instance_callback: editor => {
-                    if (_this.value) {
-                        editor.setContent(_this.value)
+                    if (_this.modelValue) {
+                        editor.setContent(_this.modelValue)
+                        _this.hasInit = true
                     }
-                    _this.hasInit = true
+
                     editor.on('NodeChange Change KeyUp SetContent', () => {
                         this.hasChange = true
                         this.$emit('input', editor.getContent())
+                        this.$emit('update:modelValue', editor.getContent())
                     })
                 },
                 setup (editor) {
                     editor.on('FullscreenStateChanged', (e) => {
                         _this.fullscreen = e.state
+                    })
+                    editor.on('change', (e) => {
+                        editor.save() // 自动保存，tinymce 关闭离开页面时confirm提示框
                     })
                 },
                 // it will try to keep these URLs intact
@@ -201,7 +212,7 @@ export default {
             window.tinymce.get(this.tinymceId).setContent(value)
         },
         getContent () {
-            window.tinymce.get(this.tinymceId).getContent()
+            return window.tinymce.get(this.tinymceId).getContent()
         },
         imageSuccessCBK (arr) {
             arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`))
@@ -212,36 +223,39 @@ export default {
 
 <style lang="scss" scoped>
 .tinymce-container {
-  position: relative;
-  line-height: normal;
-}
-
-.tinymce-container {
-  ::v-deep {
-    .mce-fullscreen {
-      z-index: 10000;
+    position: relative;
+    line-height: normal;
+    :deep{
+        .mce-toolbar{
+            .mce-container{
+                &>div{
+                        white-space: normal;
+                }
+            }
+        }
     }
-  }
-}
 
+}
+.tinymce-container {
+    :deep(.mce-fullscreen) {
+        z-index: 10000;
+    }
+}
 .tinymce-textarea {
-  visibility: hidden;
-  z-index: -1;
+    z-index: -1;
+    visibility: hidden;
 }
-
 .editor-custom-btn-container {
-  position: absolute;
-  right: 4px;
-  top: 4px;
-  /*z-index: 2005;*/
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    /* z-index: 2005; */
 }
-
 .fullscreen .editor-custom-btn-container {
-  z-index: 10000;
-  position: fixed;
+    position: fixed;
+    z-index: 10000;
 }
-
 .editor-upload-btn {
-  display: inline-block;
+    display: inline-block;
 }
 </style>

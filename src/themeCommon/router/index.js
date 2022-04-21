@@ -32,6 +32,15 @@ const routes = [
         }
     },
     {
+        path: '/register/handler',
+        name: 'RegisterHandler',
+        component: () => import(/* webpackChunkName: "Register" */ '../user/register/registerHandler.vue'),
+        meta: {
+            title: 'route.registerHandler',
+            roles: [],
+        }
+    },
+    {
         path: '/forgot',
         name: 'Forgot',
         component: () => import(/* webpackChunkName: "forgot" */ '../user/forgot/forgot.vue'),
@@ -40,9 +49,17 @@ const routes = [
         }
     },
     {
-        path: '/resetPwd',
-        name: 'ResetPwd',
-        component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetPwd.vue'),
+        path: '/resetLoginPwd',
+        name: 'ResetLoginPwd',
+        component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetLoginPwd.vue'),
+        meta: {
+            title: 'cRoute.resetPwd'
+        }
+    },
+    {
+        path: '/resetFundPwd',
+        name: 'ResetFundPwd',
+        component: () => import(/* webpackChunkName: "resetPwd" */ '../user/forgot/resetFundPwd.vue'),
         meta: {
             title: 'cRoute.resetPwd'
         }
@@ -72,9 +89,38 @@ const routes = [
         }
     },
     {
-        path: '/withdraw',
-        name: 'Withdraw',
-        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw.vue'),
+        path: '/withdrawAccount',
+        name: 'WithdrawAccount',
+        component: () => import(/* webpackChunkName: "page" */ '../user/withdraw/withdrawAccount.vue'),
+        meta: {
+            title: 'cRoute.withdrawAccount',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/withdrawMoney',
+        name: 'WithdrawMoney',
+        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdrawMoney.vue'),
+        meta: {
+            title: 'cRoute.withdraw',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/withdrawCoin',
+        name: 'WithdrawCoin',
+        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdrawCoin.vue'),
+        meta: {
+            title: 'cRoute.withdraw',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/withdrawRedeem',
+        name: 'WithdrawRedeem',
+        component: () => import(/* webpackChunkName: "withdraw" */ '../user/withdraw/withdrawRedeem.vue'),
         meta: {
             title: 'cRoute.withdraw',
             footerMenu: false,
@@ -84,19 +130,9 @@ const routes = [
     {
         path: '/withdrawRecord',
         name: 'WithdrawRecord',
-        component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdrawRecord.vue'),
+        component: () => import(/* webpackChunkName: "withdrawRecord" */ '../user/withdraw/withdrawRecord.vue'),
         meta: {
             title: 'cRoute.withdrawRecord',
-            footerMenu: false,
-            roles: ['User'],
-        }
-    },
-    {
-        path: '/coinRecord',
-        name: 'CoinRecord',
-        component: () => import(/* webpackChunkName: "coinRecord" */ '../user/coinRecord.vue'),
-        meta: {
-            title: 'cRoute.coinRecord',
             footerMenu: false,
             roles: ['User'],
         }
@@ -132,9 +168,9 @@ const routes = [
         }
     },
     {
-        path: '/desposit',
-        name: 'Desposit',
-        component: () => import(/* webpackChunkName: "addBank" */ '../user/desposit.vue'),
+        path: '/deposit',
+        name: 'Deposit',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/deposit.vue'),
         meta: {
             title: 'cRoute.deposit',
             footerMenu: false,
@@ -142,9 +178,29 @@ const routes = [
         }
     },
     {
-        path: '/despositRecord',
-        name: 'DespositRecord',
-        component: () => import(/* webpackChunkName: "addBank" */ '../user/despositRecord.vue'),
+        path: '/depositChoose',
+        name: 'DepositChoose',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/choose.vue'),
+        meta: {
+            title: 'cRoute.deposit',
+            footerMenu: false,
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/depositDirect',
+        name: 'DepositDirect',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/direct.vue'),
+        meta: {
+            title: 'cRoute.deposit',
+            footerMenu: false,
+            roles: [],
+        }
+    },
+    {
+        path: '/depositRecord',
+        name: 'DepositRecord',
+        component: () => import(/* webpackChunkName: "addBank" */ '../user/deposit/depositRecord.vue'),
         meta: {
             title: 'cRoute.depositRecord',
             footerMenu: false,
@@ -171,16 +227,16 @@ const routes = [
             roles: ['User']
         }
     },
-    {
-        path: '/fund',
-        name: 'Fund',
-        component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fund.vue'),
-        meta: {
-            title: 'cRoute.fund',
-            footerMenu: false,
-            roles: ['User']
-        }
-    },
+    // {
+    //     path: '/fund',
+    //     name: 'Fund',
+    //     component: () => import(/* webpackChunkName: "fundDetail" */ '../user/fund.vue'),
+    //     meta: {
+    //         title: 'cRoute.fund',
+    //         footerMenu: false,
+    //         roles: ['User']
+    //     }
+    // },
     {
         path: '/personal',
         name: 'Personal',
@@ -230,8 +286,7 @@ const routes = [
         component: () => import(/* webpackChunkName: "bankList" */ '../user/setting.vue'),
         meta: {
             title: 'cRoute.setting',
-            footerMenu: false,
-            roles: ['User']
+            footerMenu: false
         }
     },
     {
@@ -240,6 +295,16 @@ const routes = [
         component: () => import(/* webpackChunkName: "setLoginPwd" */ '../user/setLoginPwd.vue'),
         meta: {
             title: 'cRoute.setLoginPwd',
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
+    {
+        path: '/setFundPwd',
+        name: 'setFundPwd',
+        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../user/setFundPwd.vue'),
+        meta: {
+            title: 'cRoute.setFundPwd',
             footerMenu: false,
             roles: ['User']
         }
@@ -261,6 +326,7 @@ const routes = [
         meta: {
             title: 'cRoute.bindMobile',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -270,6 +336,7 @@ const routes = [
         meta: {
             title: 'cRoute.bindEmail',
             footerMenu: false,
+            roles: ['User']
         }
     },
     {
@@ -282,11 +349,11 @@ const routes = [
         }
     },
     {
-        path: '/despositCb',
-        name: 'DespositCb',
-        component: () => import(/* webpackChunkName: "page" */ '../user/despositCb.vue'),
+        path: '/depositCb',
+        name: 'DepositCb',
+        component: () => import(/* webpackChunkName: "page" */ '../user/deposit/depositCb.vue'),
         meta: {
-            title: 'cRoute.despositCb',
+            title: 'cRoute.depositCb',
             footerMenu: false,
         }
     },
@@ -315,6 +382,95 @@ const routes = [
         meta: {
             title: 'cRoute.chartSetting',
             footerMenu: false,
+        }
+    },
+    {
+        path: '/chooseAccount',
+        name: 'chooseAccount',
+        component: () => import(/* webpackChunkName: "page" */ '../user/chooseAccount.vue'),
+        meta: {
+            title: 'cRoute.chooseCurrency',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/faceDetect',
+        name: 'FaceDetect',
+        component: () => import(/* webpackChunkName: "page" */ '../user/faceDetect.vue'),
+        meta: {
+            title: 'faceAuth.faceDetect',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/securitySetting',
+        name: 'SecuritySetting',
+        component: () => import(/* webpackChunkName: "page" */ '../user/securitySetting.vue'),
+        meta: {
+            title: 'cRoute.securitySetting',
+            footerMenu: false,
+            roles: ['User']
+        }
+    },
+    {
+        path: '/commonSetting',
+        name: 'CommonSetting',
+        component: () => import(/* webpackChunkName: "page" */ '../user/commonSetting.vue'),
+        meta: {
+            title: 'cRoute.commonSetting',
+            footerMenu: false,
+        }
+    },
+    {
+        path: '/googleMFA/status',
+        name: 'MFA_status',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/status.vue'),
+        meta: {
+            title: 'cRoute.MFA_status',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/googleMFA/install',
+        name: 'MFA_install',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/install.vue'),
+        meta: {
+            title: 'cRoute.MFA_status',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/googleMFA/secretKey',
+        name: 'MFA_secretKey',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/secretKey.vue'),
+        meta: {
+            title: 'cRoute.MFA_bind',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/googleMFA/bind',
+        name: 'MFA_bind',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/google_MFA/bind.vue'),
+        meta: {
+            title: 'cRoute.MFA_bind',
+            roles: ['User'],
+        }
+    },
+    {
+        path: '/invite',
+        name: 'Invite',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/invite/invite.vue'),
+        meta: {
+            title: 'cRoute.invite'
+        }
+    },
+    {
+        path: '/invite/rule',
+        name: 'rule',
+        component: () => import(/* webpackChunkName: "google_MFA" */ '../user/invite/rule.vue'),
+        meta: {
+            title: 'cRoute.rule'
         }
     },
 

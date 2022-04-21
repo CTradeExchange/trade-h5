@@ -1,46 +1,46 @@
 import { h5PageList } from '@index/views/Pages/h5PageList.js'
 export default [
     ...h5PageList.filter(item => (!item.notHref)),
+    // {
+    //     name: 'DepositFunds',
+    //     title: '入金'
+    // },
+    // {
+    //     name: 'WithAmount',
+    //     title: '出金'
+    // },
+    // {
+    //     name: 'Login',
+    //     title: '登录'
+    // },
     {
-        name: 'DepositFunds',
-        title: '入金'
-    },
-    {
-        name: 'WithAmount',
-        title: '出金'
-    },
-    {
-        name: 'Login',
-        title: '登录'
-    },
-    {
-        name: 'Setting',
-        title: '设置'
-    },
-    {
-        name: 'MsgList',
+        name: 'Msg',
         title: '消息中心'
     },
     {
-        name: 'mt4',
-        title: 'MT4出入金'
+        name: 'SecuritySetting',
+        title: '安全设置'
     },
     {
-        name: 'Search',
-        title: '搜索产品'
+        name: 'CommonSetting',
+        title: '通用设置'
     },
+    // {
+    //     name: 'Personal',
+    //     title: '个人资料'
+    // },
     {
-        name: 'Certified',
-        title: '个人资料'
+        name: 'Authentication',
+        title: '身份认证'
     },
-    {
-        name: 'ResetPwd',
-        title: '修改密码'
-    },
-    {
-        name: 'FundingDetails',
-        title: '资金明细'
-    },
+    // {
+    //     name: 'SetLoginPwd',
+    //     title: '修改密码'
+    // },
+    // {
+    //     name: 'FundingDetails',
+    //     title: '资金明细'
+    // },
     {
         name: 'Nest',
         title: '外部地址',

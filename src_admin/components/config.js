@@ -1,41 +1,7 @@
-import img from '@m/modules/img/config.js'
-import swipe from '@m/modules/swipe/config.js'
-import notice from '@m/modules/notice/config.js'
-import layout from '@m/modules/layout/config.js'
-// import quote from '@m/modules/quote/config.js'
-// // import infoflow from '@m/modules/infoflow/config.js';
-// import infoflow2 from '@m/modules/infoflow2/config.js'
-import menulist from '@m/modules/menulist/config.js'
-// import position from '@m/modules/position/config.js'
-import selfSymbol from '@m/modules/selfSymbol/config.js'
-import text from '@m/modules/text/config.js'
-// import tinymce from '@m/modules/tinymce/config.js'
-import redpacket from '@m/modules/redpacket/config.js'
-// import template from '@m/modules/template/config.js'
-// import mineTop from '@m/modules/mineTop/config.js'
-import quoteList from '@m/modules/quoteList/config.js'
-// import nav from '@m/modules/nav/config.js'
-import registerForm from '@m/modules/registerForm/config.js'
+import { getThemeModules } from '@h5/modules/themeModulesAll'
+
 export const mobileComponentsConfig = async () => {
-    return [
-        img,
-        swipe,
-        notice,
-        layout,
-        // quote,
-        // infoflow2,
-        menulist,
-        // position,
-        selfSymbol,
-        // nav,
-        text,
-        // tinymce,
-        quoteList,
-        redpacket,
-        // template,
-        // mineTop,
-        await registerForm()
-    ]
+    return getThemeModules()
 }
 export const pcComponentsConfig = []
 export const example = [
@@ -84,7 +50,7 @@ export const example = [
             {
                 name: 'items',
                 type: 'Array',
-                label: '轮播页',
+                label: '轮播项',
                 max: 5,
                 config: [
                     {

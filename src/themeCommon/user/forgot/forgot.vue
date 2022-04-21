@@ -1,24 +1,20 @@
 <template>
     <div class='pageWrap'>
         <Top
-            back
-            left-icon='arrow-left'
             :menu='false'
             :right-action='false'
             :show-center='false'
-            @back='back'
         />
         <Loading :show='loading' />
-        <a class='icon_icon_close_big' href='javascript:;' @click='$router.back()'></a>
         <header class='header'>
             <h1 class='pageTitle'>
-                {{ $t('forgot.forgot') }}
+                {{ type === 'login' ? $t('forgot.forgot') : $t('forgot.forgotFund') }}
             </h1>
         </header>
         <div class='tabs-wrap'>
             <van-tabs
                 v-model:active='active'
-                :color='style.color'
+                :color='style.primary'
                 line-height='2px'
                 line-width='20px'
                 :title-active-color='style.color'
@@ -32,20 +28,75 @@
         </div>
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
-                <div class='field'>
-                    <InputComp v-model.trim='mobile' clear :label='$t("common.inputPhone")' />
+                <div v-if="type==='login'" class='field'>
+                    <InputComp
+                        v-model.trim='mobile'
+                        clear
+                        :label='$t("common.inputPhone")'
+                        @onBlur='checkUserMfa'
+                    />
                 </div>
+                <div v-else class='field'>
+                    <p class='title'>
+                        {{ $t('common.sendToYou') }} {{ customerInfo?.phone }}
+                    </p>
+                </div>
+
                 <div class='field'>
-                    <checkCode v-model.trim='checkCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode
+                        v-if="type === 'login'"
+                        v-model.trim='checkCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSend'
+                    />
+                    <checkCode
+                        v-else
+                        v-model.trim='checkCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSendFund'
+                    />
+                </div>
+
+                <div v-if='googleCodeVis' class='field field-google'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </form>
 
             <form v-show='curTab === 1' class='loginForm'>
-                <div class='field'>
-                    <InputComp v-model.trim='email' clear :label='$t("common.inputEmail")' />
+                <div v-if="type==='login'" class='field'>
+                    <InputComp
+                        v-model.trim='email'
+                        clear
+                        :label='$t("common.inputEmail")'
+                        @onBlur='checkUserMfa'
+                    />
+                </div>
+                <div v-else class='field'>
+                    <p class='title'>
+                        {{ $t('common.sendToYou') }} {{ customerInfo?.email }}
+                    </p>
                 </div>
                 <div class='field'>
-                    <checkCode v-model.trim='emailCode' :label='$t("common.inputVerifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                    <checkCode
+                        v-if='type === "login"'
+                        v-model.trim='emailCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSend'
+                    />
+                    <checkCode
+                        v-else
+                        v-model.trim='emailCode'
+                        :label='$t("common.inputVerifyCode")'
+                        :type='type'
+                        @verifyCodeSend='handleVerifyCodeSendFund'
+                    />
+                </div>
+
+                <div v-if='googleCodeVis' class='field field-google'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </form>
         </div>
@@ -62,26 +113,31 @@ import { reactive, toRefs, computed } from 'vue'
 import areaInput from '@/components/form/areaInput'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import uInput from '@/components/input.vue'
 import Schema from 'async-validator'
 import RuleFn from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
-import { checkUserStatus } from '@/api/user'
+import { checkUserStatus, checkGoogleMFAStatus } from '@/api/user'
 import { isEmpty, getArrayObj } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
+
 export default {
     components: {
         Top,
         InputComp,
         checkCode,
-        uInput
+        uInput,
+        googleVerifyCode
     },
     setup (props) {
         const style = computed(() => store.state.style)
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
+        const { type } = route.query
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             mobile: '',
@@ -97,25 +153,66 @@ export default {
             },
             sendToken: '',
             active: 0,
-            loading: false
+            loading: false,
+            googleCodeVis: false,
+            googleCode: ''
         })
+
+        const bizTypeMap = {
+            login: {
+                0: 'SMS_PASSWORD_VERIFICATION_CODE',
+                1: 'EMAIL_PASSWORD_VERIFICATION_CODE'
+            },
+            fund: {
+                0: 'SMS_LOGINED_VERIFICATION_CODE',
+                1: 'EMAIL_LOGINED_VERIFICATION_CODE'
+            }
+        }
+
+        const customerInfo = computed(() => store.state._user.customerInfo)
+        if (type === 'fund') {
+            state.mobile = customerInfo.value?.phone
+            state.email = customerInfo.value?.email
+            state.googleCodeVis = customerInfo.value.googleId > 0
+        }
 
         const handleTabChange = (name, title) => {
             state.curTab = name
         }
 
-        // 发送验证码
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
+        // 检测客户是否开启GoogleMFA
+        const checkUserMfa = (val) => {
+            if (val) {
+                checkGoogleMFAStatus({
+                    loginName: val,
+                    type: val.includes('@') ? 1 : 2
+                }).then(res => {
+                    if (res.check()) {
+                        state.googleCodeVis = res.data > 0
+                    }
+                }).catch(err => {
+                    console.log('err', err)
+                })
+            }
+        }
+
+        // 找回登录密码发送验证码
         const handleVerifyCodeSend = (callback) => {
-            state.loading = true
             const validator = new Schema(RuleFn(t))
             validator.validate({
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
-                zone: state.zone
+                zone: state.zone,
+                resetType: type
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
                 if (errors) {
+                    callback && callback(false)
                     return Toast(errors[0].message)
                 }
 
@@ -124,25 +221,29 @@ export default {
                     type: state.curTab === 0 ? 2 : 1,
                     loginName: state.curTab === 0 ? state.mobile : state.email
                 }
-
+                state.loading = true
                 checkUserStatus(source).then(res => {
                     state.loading = false
                     if (res.check()) {
                         if (Number(res.data.status) === 2) {
                             const msg = t(state.curTab === 0 ? 'common.unExistPhone' : 'common.unExistEmail')
+                            callback && callback(false)
                             return Toast(msg)
+                        } else if (Number(res.data.status === -1)) {
+                            callback && callback(false)
+                            return Toast(t('c.userDisable'))
                         } else {
                             state.countryZone = res.data.phoneArea
                             verifyCodeSend({
-                                bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
+                                bizType: bizTypeMap['login'][state.curTab],
                                 toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                             }).then(res => {
                                 if (res.check()) {
-                                    if (res.code === '0') {
-                                        state.sendToken = res.data.token
-                                        Toast(t('common.verifySended'))
-                                        callback && callback()
-                                    }
+                                    state.sendToken = res.data.token
+                                    Toast(t('common.verifySended'))
+                                    callback && callback()
+                                } else {
+                                    callback && callback(false)
                                 }
                             })
                         }
@@ -154,7 +255,31 @@ export default {
             })
         }
 
-        const next = () => {
+        // 找回资金密码发送验证码
+        const handleVerifyCodeSendFund = (callback) => {
+            if (state.curTab === 0 && !customerInfo.value.phone) {
+                callback && callback(false)
+                return Toast(t('common.noBindPhone'))
+            }
+            if (state.curTab === 1 && !customerInfo.value.email) {
+                callback && callback(false)
+                return Toast(t('common.noBindEmail'))
+            }
+
+            verifyCodeSend({
+                bizType: bizTypeMap['fund'][state.curTab],
+            }).then(res => {
+                if (res.check()) {
+                    state.sendToken = res.data.token
+                    Toast(t('common.verifySended'))
+                    callback && callback()
+                } else {
+                    callback && callback(false)
+                }
+            })
+        }
+
+        const resetLoginPwd = () => {
             const params = {
                 mobile: state.mobile,
                 email: state.email,
@@ -171,21 +296,45 @@ export default {
                     return Toast(errors[0].message)
                 }
                 state.loading = true
+                handleVerifyCode()
+            })
+        }
+
+        const resetFundPwd = () => {
+            if ((isEmpty(state.checkCode) && state.curTab === 0) || (isEmpty(state.emailCode) && state.curTab === 1)) {
+                return Toast(t('common.inputVerifyCode'))
+            }
+            if (isEmpty(state.sendToken)) {
+                return Toast(t('common.getVerifyCode'))
+            }
+            handleVerifyCode()
+        }
+
+        const handleVerifyCode = () => {
+            // let loginName
+            // if (type === 'login') {
+            //     loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
+            // } else if (type === 'fund') {
+            //     loginName = ''
+            // }
+
+            if (type === 'login') {
                 verifyCodeCheck({
-                    bizType: state.curTab === 0 ? 'SMS_PASSWORD_VERIFICATION_CODE' : 'EMAIL_PASSWORD_VERIFICATION_CODE',
+                    bizType: bizTypeMap['login'][state.curTab],
                     toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
-                    sendToken: state.sendToken,
+                    sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
                     state.loading = false
                     if (res.ok) {
                         router.push({
-                            path: '/resetPwd',
+                            path: '/resetLoginPwd',
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
+                                googleCode: state.googleCode,
                                 verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
                             }
                         })
@@ -195,7 +344,30 @@ export default {
                 }).catch((err) => {
                     state.loading = false
                 })
-            })
+            } else {
+                router.push({
+                    path: '/resetFundPwd',
+                    query: {
+                        // verifyCodeToken: res.data.token,
+                        sendToken: state.sendToken,
+                        type: state.curTab === 0 ? 2 : 1,
+                        loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                        verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
+                        googleCode: state.googleCode
+                    }
+                })
+            }
+        }
+
+        const next = () => {
+            if (state.googleCodeVis && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
+            }
+            if (type === 'login') {
+                resetLoginPwd()
+            } else if (type === 'fund') {
+                resetFundPwd()
+            }
         }
 
         const zoneSelect = (data) => {
@@ -213,7 +385,12 @@ export default {
             handleVerifyCodeSend,
             style,
             zoneSelect,
-            back
+            back,
+            customerInfo,
+            type,
+            handleVerifyCodeSendFund,
+            getGooleVerifyCode,
+            checkUserMfa
         }
     }
 }
@@ -224,6 +401,7 @@ export default {
 .pageWrap {
     position: relative;
     height: 100%;
+    background: var(--contentColor);
     .header {
         display: flex;
         align-items: center;
@@ -238,6 +416,9 @@ export default {
     .tabs-wrap {
         width: 40%;
         margin: rem(60px) auto 0;
+        :deep(.van-tabs__nav--line) {
+            background: var(--contentColor);
+        }
     }
 }
 .icon_icon_close_big {
@@ -252,12 +433,20 @@ export default {
     .field {
         position: relative;
         display: flex;
+        flex: 1;
         align-items: center;
         &:not(:first-of-type) {
             margin-top: rem(30px);
         }
         &.toolWrap {
             justify-content: space-between;
+        }
+        &.field-google {
+            padding: 0 rem(10px);
+        }
+        .title {
+            padding-left: rem(10px);
+            color: var(--normalColor);
         }
         label {
             position: absolute;
@@ -285,13 +474,13 @@ export default {
             }
         }
         .van-icon-clear {
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
         }
         .icon_icon_default,
         .icon_icon_pressed {
             margin-left: rem(10px);
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
         }
     }
@@ -299,11 +488,11 @@ export default {
 .next-btn {
     position: absolute;
     bottom: 0;
-    background: var(--bdColor);
-    border-color: var(--bdColor);
+    background: var(--bgColor);
+    border-color: var(--lineColor);
     span {
         color: var(--color);
-        font-size: rem(34px);
+        font-size: rem(30px);
     }
 }
 

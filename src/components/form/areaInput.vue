@@ -9,7 +9,7 @@
                 class='input'
                 v-bind='$attrs'
                 required
-                type='tel'
+                :type='inputType'
                 :value='modelValue'
                 @input='onInput'
             />
@@ -41,6 +41,10 @@ export default {
             type: [Number, String],
             default: ''
         },
+        inputType: {
+            type: [String, Number],
+            default: 'tel'
+        },
         label: {
             type: [String, Number],
             default: ''
@@ -52,36 +56,65 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        allCountry: {
+            type: Boolean,
+            default: false
         }
     },
     data () {
         return {
             value: '',
             id: this.$attrs.id || randomId(),
-            zoneVal: this.zone
+            allCountryList: []
         }
     },
     computed: {
         countryList () {
-            const countryList = this.$store.state.countryList
-            const tempArr = []
-            countryList.forEach(item => {
-                tempArr.push({
-                    name: item.name + ' (' + item.countryCode + ')',
-                    code: item.countryCode,
-                    countryCode: item.code,
-                    countryName: item.name
+            if (this.allCountry) {
+                return this.allCountryList
+            } else {
+                const countryList = this.$store.state.countryList || []
+                const tempArr = []
+                countryList.forEach(item => {
+                    tempArr.push({
+                        name: item.name + ' (' + item.countryCode + ')',
+                        code: item.countryCode,
+                        countryCode: item.code,
+                        countryName: item.name
+                    })
                 })
-            })
-            return tempArr
-        }
-    },
-    watch: {
-        zone (newval) {
-            if (newval !== this.zoneVal) this.zoneVal = newval
+                return tempArr
+            }
+        },
+        zoneVal: {
+            get () {
+                return this.zone
+            },
+            set (value) {
+                if (!this.disabled) {
+                    this.$emit('update:zone', value)
+                }
+            }
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],
+    mounted () {
+        this.$store.dispatch('getCountryListByParentCode').then(res => {
+            if (res.data.length > 0) {
+                const tempArr = []
+                res.data.forEach(item => {
+                    tempArr.push({
+                        name: item.name + ' (' + item.countryCode + ')',
+                        code: item.countryCode,
+                        countryCode: item.code,
+                        countryName: item.name
+                    })
+                })
+                this.allCountryList = tempArr
+            }
+        })
+    },
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
@@ -147,7 +180,7 @@ export default {
     }
 }
 .van-icon-clear {
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 :deep(.selectWrap) {
@@ -163,7 +196,7 @@ export default {
         width: 1px;
         height: rem(50px);
         margin-top: rem(-25px);
-        background: var(--bdColor);
+        background: var(--lineColor);
         content: '';
     }
 }

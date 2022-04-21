@@ -1,16 +1,29 @@
 <template>
     <div class='pageWrap'>
-        <Top :right-action='rightAction' @rightClick='changeLoginType' />
+        <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
+        <van-tabs
+            v-model:active='active'
+            :color='$style.primary'
+            shrink
+            :title-active-color='$style.primary'
+        >
+            <van-tab :title='$t("login.loginByPersonal")' />
+            <van-tab :title='$t("login.loginByCorporate")' />
+        </van-tabs>
         <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
             </h1>
-        <!-- <LanguageDiv /> -->
         </header>
+
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
-                <!-- <areaInput v-model.trim='loginName' v-model:zone='zone' clear placeholder='请输入手机号或邮箱' /> -->
-                <InputComp v-model.trim='loginName' clear :label="$t('login.loginNamePlaceholder')" />
+                <InputComp
+                    v-model.trim='loginName'
+                    clear
+                    :label="$t('login.loginNamePlaceholder')"
+                    @onBlur='checkUserMfa'
+                />
             </div>
             <div v-else class='field'>
                 <InputComp v-model.trim='email' clear :label="$t('login.email')" />
@@ -21,6 +34,9 @@
             <div v-else class='field'>
                 <CheckCode v-model.trim='checkCode' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
             </div>
+            <div v-if='googleCodeVis' class='field field-google'>
+                <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
+            </div>
             <van-button block class='loginBtn' :disabled='loading' type='primary' @click='loginHandle'>
                 {{ $t('login.loginBtn') }}
             </van-button>
@@ -29,26 +45,36 @@
                     {{ $t('login.register') }}
                 </a>
                 <Vline />
-                <a class='btn' href='javascript:;' @click="$router.push({ name:'Forgot' })">
+                <a class='btn' href='javascript:;' @click="$router.push({ name:'Forgot',query: { type: 'login' } })">
                     {{ $t('login.forgot') }}
                 </a>
             </div>
         </form>
-    <!-- <div class='otherLogin'>
-            <LoginByGoogle />
-            <span class='empty'></span>
-            <LoginByFacebook />
-        </div> -->
-    <!-- <footer class='footer'>
+
+        <div v-if='thirdLoginArr && thirdLoginArr.length > 0' class='three-way-login'>
+            <p class='title'>
+                {{ $t('login.otherLogin') }}
+            </p>
+            <div class='otherLogin'>
+                <LoginByGoogle v-if="thirdLoginArr.includes('google')" />
+                <LoginByFacebook v-if="thirdLoginArr.includes('facebook')" />
+                <LoginByTwitter v-if="thirdLoginArr.includes('twitter')" />
+            </div>
+        </div>
+
+        <!-- <footer class='footer'>
             <a class='link' href='javascript:;'>
                 <i class='icon_icon_service'></i>
                 在线客服
             </a>
         </footer> -->
+        <!-- <div class='support'>
+            <img alt='' src='/images/support.png' />
+        </div> -->
     </div>
 
     <!-- 设置登录密码 -->
-    <van-popup v-model:show='loginPwdPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px' }">
+    <van-popup v-model:show='loginPwdPop' :close-on-click-overlay='false' :style="{ 'border-radius':'8px','background-color': $style.bgColor }">
         <section class='popContainer'>
             <a class='noTip' href='javascript:;' @click='noTip'>
                 {{ $t('login.neverTip') }}
@@ -76,40 +102,42 @@
 
 <script>
 import Schema from 'async-validator'
-import LanguageDiv from '@m/modules/languageDiv'
-import areaInput from '@/components/form/areaInput'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
-import LoginByGoogle from '@/components/loginByGoogle/loginByGoogle'
-import LoginByFacebook from '@/components/loginByFacebook/loginByFacebook'
+import LoginByGoogle from '@/themeCommon/user/login/components/loginByGoogle.vue'
+import LoginByFacebook from '@/themeCommon/user/login/components/loginByFacebook.vue'
+import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.vue'
+
 import Top from '@/components/top'
-import { getDevice, localGet, localSet, getArrayObj } from '@/utils/util'
+import { getDevice, localGet, localSet, getArrayObj, sessionGet, isEmpty } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { computed, reactive, toRefs, getCurrentInstance } from 'vue'
+import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import RuleFn from './rule'
 import md5 from 'js-md5'
 import { timeline, timelineItem } from '@/components/timeline'
-import { checkUserStatus } from '@/api/user'
+import { checkUserStatus, checkGoogleMFAStatus } from '@/api/user'
+import { setQuoteService } from '@/plugins/socket/socket'
 import { useI18n } from 'vue-i18n'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
+//  import hooks from './hooks'
 
 export default {
     components: {
-        timeline,
-        timelineItem,
-        LanguageDiv,
         Vline,
         InputComp,
-        areaInput,
         LoginByGoogle,
         LoginByFacebook,
+        LoginByTwitter,
         CheckCode,
         Top,
+        googleVerifyCode
     },
     setup () {
+        // const { getPlansByCountry, getCustomerGroupIdByCountry } = hooks()
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
@@ -122,8 +150,12 @@ export default {
             loginName: '',
             pwd: '',
             checkCode: '',
-            loginType: 'checkCode',
+            loginType: 'password', // checkCode
             loginAccount: 'mobile',
+            bindAddShow: false,
+            userId: '',
+            googleCodeVis: false,
+            googleCode: ''
         })
         let token = ''
         const rightAction = computed(() => {
@@ -132,11 +164,25 @@ export default {
             }
         })
 
+        const countryList = computed(() => store.state.countryList)
+        const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
+        if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
+            // 获取国家区号
+            store.dispatch('getCountryListByParentCode')
+        }
+
         const changeLoginType = () => {
             const loginType = state.loginType
             state.loginType = loginType === 'password' ? 'checkCode' : 'password'
         }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
+
         const loginHandle = () => {
+            if (state.googleCodeVis && isEmpty(state.googleCode)) {
+                return Toast(t('common.inputGoogleCode'))
+            }
             const loginParams = {
                 type: state.loginName.includes('@') ? 1 : 2,
                 loginName: state.loginName,
@@ -144,7 +190,10 @@ export default {
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
-
+                thirdSource: route.query.thirdSource || '',
+                bindThirdUserId: route.query.bindThirdUserId || '',
+                isThird: false, // true为三方登录 false 系统登录
+                googleCode: state.googleCode
             }
 
             const validator = new Schema(RuleFn(t))
@@ -169,21 +218,24 @@ export default {
 
         // 登录成功跳转
         const loginToPath = () => {
-            const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-            router.replace(toURL)
+            // const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
+            router.replace('/')
         }
 
         // 发送登录接
         const loginSubmit = (params) => {
+            state.loading = true
             store.dispatch('_user/login', params).then(res => {
                 state.loading = false
-                // console.log(res)
                 if (res.invalid()) return false
+
+                // 切换登录后的行情websocket
+                // setQuoteService()
 
                 // 登录websocket
                 instance.appContext.config.globalProperties.$MsgSocket.login()
-                // 重新登录清除账户信息
-                store.commit('_user/Update_accountAssets', {})
+                store.commit('del_cacheViews', 'Home')
+                store.commit('del_cacheViews', 'Layout')
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
@@ -193,7 +245,7 @@ export default {
                             title: t('common.tip'),
                             confirmButtonText: t('login.goAuthenticate'),
                             message: t('login.goAuthenticateMsg'),
-                            theme: 'round-button',
+
                         }).then(() => {
                             router.push('/authentication')
                         })
@@ -202,7 +254,7 @@ export default {
                             title: t('common.tip'),
                             confirmButtonText: t('common.close'),
                             message: t('common.inReview'),
-                            theme: 'round-button',
+
                         }).then(() => {
                             store.dispatch('_user/logout').then(() => {
                                 return router.push('/login')
@@ -214,20 +266,13 @@ export default {
                         return Dialog.alert({
                             title: t('common.tip'),
                             confirmButtonText: t('common.reSubmit'),
-                            message: t('common.reviewFailed'),
-                            theme: 'round-button',
+                            message: t('common.reviewFailed') + '\n' + t('common.reviewReson') + res.data.kycAuditRemark,
+
                         }).then(() => {
                             router.push('/authentication')
                         })
                     } else if (Number(res.data.kycAuditStatus === 2)) {
-                        Dialog.alert({
-                            title: t('common.tip'),
-                            confirmButtonText: t('common.ok'),
-                            message: t('common.reviewSuccess'),
-                            theme: 'round-button',
-                        }).then(() => {
-                            noticeSetPwd(res.data.loginPassStatus)
-                        })
+                        noticeSetPwd(res.data.loginPassStatus)
                     }
                 } else if (Number(res.data.companyKycStatus) === 2) {
                     noticeSetPwd(res.data.loginPassStatus)
@@ -235,6 +280,7 @@ export default {
             })
         }
 
+        // 设置登录密码弹窗
         const noticeSetPwd = (loginPassStatus) => {
             if (parseInt(loginPassStatus) === 1 && !localGet('loginPwdIgnore')) {
                 state.loginPwdPop = true
@@ -245,6 +291,22 @@ export default {
 
         const topRightClick = () => {
             console.log('rightClick')
+        }
+
+        // 检测客户是否开启GoogleMFA
+        const checkUserMfa = (val) => {
+            if (val) {
+                checkGoogleMFAStatus({
+                    loginName: val,
+                    type: val.includes('@') ? 1 : 2
+                }).then(res => {
+                    if (res.check()) {
+                        state.googleCodeVis = res.data > 0
+                    }
+                }).catch(err => {
+                    console.log('err', err)
+                })
+            }
         }
 
         // 发送验证码
@@ -263,7 +325,11 @@ export default {
                     if (res.check()) {
                         if (Number(res.data.status) === 2) {
                             const msg = t(verifyParams.type === 1 ? 'common.noEmail' : 'common.noPhone')
+                            callback && callback(false)
                             return Toast(msg)
+                        } else if (Number(res.data.status === -1)) {
+                            callback && callback(false)
+                            return Toast(t('c.userDisable'))
                         } else {
                             state.zone = res.data.phoneArea
                             const params = {
@@ -275,7 +341,11 @@ export default {
                                     token = res.data.token
                                     // if (res.data.code) state.checkCode = res.data.code
                                     callback && callback()
+                                } else {
+                                    callback && callback(false)
                                 }
+                            }).catch(err => {
+                                callback && callback(false)
                             })
                         }
                     }
@@ -284,6 +354,7 @@ export default {
                 errors,
                 fields
             }) => {
+                callback && callback(false)
                 if (errors) {
                     Toast(errors[0].message)
                 }
@@ -309,6 +380,9 @@ export default {
             loginToPath()
         }
 
+        // 获取三方登录配置
+        store.dispatch('_base/getLoginConfig')
+
         return {
             ...toRefs(state),
             changeLoginType,
@@ -319,6 +393,10 @@ export default {
             loginPwdSetNext,
             loginPwdSet,
             noTip,
+            loginSubmit,
+            checkUserMfa,
+            getGooleVerifyCode,
+            thirdLoginArr
         }
     }
 }
@@ -329,6 +407,7 @@ export default {
 .pageWrap {
     position: relative;
     height: 100%;
+    background: var(--contentColor);
     .header {
         display: flex;
         align-items: center;
@@ -339,6 +418,20 @@ export default {
         margin-bottom: rem(10px);
         font-weight: normal;
         font-size: rem(50px);
+    }
+    .support {
+        position: absolute;
+        bottom: rem(30px);
+        left: 50%;
+        width: rem(300px);
+        margin-left: rem(-150px);
+        color: var(--placeholdColor);
+        font-size: rem(20px);
+        line-height: rem(32px);
+        text-align: center;
+        img {
+            width: 100%;
+        }
     }
 }
 .icon_icon_close_big {
@@ -386,14 +479,22 @@ export default {
             }
         }
         .van-icon-clear {
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
         }
         .icon_icon_default,
         .icon_icon_pressed {
             margin-left: rem(10px);
-            color: var(--bdColor);
+            color: var(--lineColor);
             font-size: rem(36px);
+        }
+        &.field-google {
+            :deep(.van-cell) {
+                padding-left: 0;
+                input {
+                    padding: 0 rem(10px);
+                }
+            }
         }
     }
     .loginBtn {
@@ -403,8 +504,8 @@ export default {
         color: var(--color);
         font-size: rem(30px);
         line-height: rem(80px);
-        background: var(--btnColor);
-        border-color: var(--bdColor);
+        background: var(--lineColor);
+        border-color: var(--lineColor);
         border-radius: rem(4px);
         &.light {
             margin-top: rem(40px);
@@ -419,17 +520,22 @@ export default {
     text-align: center;
     .line {
         margin: 0 1em;
-        color: var(--mutedColor);
+        color: var(--minorColor);
     }
 }
-.otherLogin {
-    margin-top: rem(30px);
-    text-align: center;
-    .empty {
-        display: inline-block;
-        width: rem(50px);
-        height: rem(30px);
-        vertical-align: middle;
+.three-way-login {
+    margin-top: rem(200px);
+    .title {
+        margin-bottom: rem(20px);
+        color: var(--placeholdColor);
+        text-align: center;
+    }
+    .otherLogin {
+        display: flex;
+        justify-content: space-evenly;
+        width: rem(470px);
+        margin: rem(30px) auto 0;
+        text-align: center;
     }
 }
 .footer {
@@ -449,12 +555,13 @@ export default {
     .btn {
         @include active();
         color: var(--color);
+        vertical-align: middle;
     }
 }
 .popContainer {
     position: relative;
     width: 80vw;
-    background: var(--white);
+    background: var(--contentColor);
     border-radius: 8px;
     .kycTimeLine {
         padding: rem(60px);
@@ -479,23 +586,23 @@ export default {
         position: absolute;
         top: rem(20px);
         right: rem(20px);
-        color: var(--mutedColor);
+        color: var(--minorColor);
     }
     .btnBox {
         position: relative;
         display: flex;
-        color: var(--btnText);
+        color: var(--color);
         font-size: rem(34px);
         text-align: center;
-        background: var(--btnColor);
-        border-top: 1px solid var(--btnLine);
+        background: var(--bgColor);
+        border-top: 1px solid var(--lineColor);
         &::after {
             position: absolute;
             top: 50%;
             left: 50%;
             width: 1px;
             height: rem(50px);
-            background: var(--btnInterval);
+            background: var(--lineColor);
             transform: translateY(-50%);
             content: '';
         }

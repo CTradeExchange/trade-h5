@@ -1,7 +1,7 @@
 <template>
     <div class='m-file'>
         <el-form-item :label='config.label'>
-            <el-input placeholder='请输入' :value='activeData' @input='input'>
+            <el-input v-model='imgUrl' placeholder='请输入' @input='input'>
                 <template #append>
                     <el-button
                         icon='el-icon-upload'
@@ -13,6 +13,9 @@
                 </template>
             </el-input>
         </el-form-item>
+        <div v-if='config.tips' class='tips-wrap'>
+            {{ config.tips }}
+        </div>
     </div>
 </template>
 
@@ -32,6 +35,7 @@ export default {
     },
     data () {
         return {
+            imgUrl: this.activeData
         }
     },
     mounted () {
@@ -51,8 +55,9 @@ export default {
                     console.log(html)
                     const _div = document.createElement('div')
                     _div.innerHTML = html
-                    const imgUrl = _div.querySelector('img').src
+                    const imgUrl = _div.querySelector('img').getAttribute('src')
                     this.$emit('formChange', imgUrl)
+                    this.imgUrl = imgUrl
                 }
             } else {
                 console.log('执行WordPress window.tb_show方法显示上传图片功能')
@@ -65,5 +70,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.m-file {
+    margin-bottom: 18px;
+    .el-form-item {
+        margin-bottom: 0 !important;
+    }
+}
+.tips-wrap {
+    margin-top: 5px;
+    padding-left: 90px;
+    color: #E6A23C;
+}
 </style>

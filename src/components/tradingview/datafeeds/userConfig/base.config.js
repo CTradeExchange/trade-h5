@@ -4,20 +4,20 @@ import customIndicatorsGetter from './customIndicators'
 export function genBaseConfig () {
     return {
         autosize: true,
-        container_id: 'tv_chart_container',
+        container: 'tv_chart_container',
         library_path: '/charting_library/',
-        custom_css_url: 'customCssUrl.css?v=1.0.1',
+        custom_css_url: 'customCssUrl.css?v=1.0.2',
         locale: 'zh',
         charts_storage_api_version: '1.1',
         user_id: 'public_user_id',
-        theme: 'Dark', // "Light" | "Dark"
+        theme: 'Light', // "Light" | "Dark"
         timezone: 'Asia/Shanghai',
         custom_indicators_getter: customIndicatorsGetter,
         overrides: {
-            'paneProperties.legendProperties.showSeriesTitle': true, // 隐藏K线标题
+            'paneProperties.legendProperties.showSeriesTitle': false, // 隐藏K线标题
             'paneProperties.legendProperties.showSeriesOHLC': false, // 显示高开低收
-            'paneProperties.legendProperties.showLegend': true,
             'paneProperties.legendProperties.showBarChange': false, // 涨跌幅
+            'paneProperties.legendProperties.showLegend': true,
             // 边际（百分比）。 用于自动缩放。
             'paneProperties.topMargin': 22,
             'paneProperties.bottomMargin': 5,
@@ -34,8 +34,8 @@ export function genBaseConfig () {
             //  Point&Figure = 6    #点数图
             //  Line Break = 7      #新价图
             'mainSeriesProperties.style': 1, // K线样式 0美国K线 1K线 2线形图 3面积图
-            'mainSeriesProperties.showPriceLine': true, // 现价线
-            'scalesProperties.showSeriesLastValue': true, // 现价标签
+            'mainSeriesProperties.showPriceLine': false, // 现价线
+            'scalesProperties.showSeriesLastValue': false, // 现价标签 (配置出的现价线标签会重复显示多个的bug，因此改为手动创建现价线)
             'mainSeriesProperties.priceLineColor': 'rgb(71, 127, 211)',
             'mainSeriesProperties.priceAxisProperties.autoScaleDisabled': false,
             'mainSeriesProperties.priceAxisProperties.percentage': false,
@@ -98,15 +98,19 @@ export function genBaseConfig () {
             // 禁用右边价格坐标弹窗
             'scales_context_menu',
             // 禁用图表上下滑动，上下滑动是直接滑动页面
-            'vert_touch_drag_scroll',
+            //'vert_touch_drag_scroll',
             // 显示有关可能的鼠标/快捷键/ UI操作的弹出提示
-            'popup_hints'
+            'popup_hints',
+            'pinch_scale'
+
         ],
         enabled_features: [
             // 指标栏目
             'dont_show_boolean_study_arguments',
             // 阻止滚动到第一个历史 K 线的左侧
-            'fix_left_edge'
+            'fix_left_edge',
+            'hide_left_toolbar_by_default',
+            'chart_zoom'
         ],
 
     }

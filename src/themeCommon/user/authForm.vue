@@ -1,15 +1,26 @@
 <template>
-    <LayoutTop back :menu='false' />
-    <auth-condition :business-code='businessCode' />
+    <div class='authConditionWrapper'>
+        <Top back show-center />
+        <auth-condition :business-code='businessCode' :platform='platform' />
+    </div>
 </template>
 
 <script>
+import Top from '@/components/top'
+import authCondition from '@/themeCommon/components/authConditon'
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import authCondition from '@/themeCommon/components/authConditon'
+
 export default {
     components: {
-        authCondition,
+        Top,
+        authCondition
+    },
+    props: {
+        platform: {
+            type: String,
+            default: 'h5'
+        }
     },
     setup (props) {
         const route = useRoute()
@@ -24,8 +35,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.notice {
-    margin-bottom: rem(20px);
-    padding-left: rem(30px);
+.authConditionWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 </style>

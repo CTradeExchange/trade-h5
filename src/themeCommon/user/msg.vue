@@ -1,28 +1,35 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' :title-vis='false'>
-        <template #center>
-            <div>
-                <van-dropdown-menu active-color='#007AFF'>
-                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
-                </van-dropdown-menu>
-            </div>
-        </template>
+    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")'>
         <template #right>
-            <div class='right-ico'>
-                <i class='icon icon_quanbuyidu'></i>
-            </div>
+            <van-dropdown-menu :active-color='$style.primary'>
+                <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+            </van-dropdown-menu>
         </template>
     </LayoutTop>
+
     <Loading :show='pageLoading' />
     <div class='msg-list'>
+        <p class='header'>
+            {{ $t('cRoute.msg') }}
+        </p>
         <div v-if='list.length === 0'>
-            <van-empty :description='$t("common.noData")' image='search' />
+            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
         </div>
-        <van-pull-refresh v-else v-model='loading' @refresh='onRefresh'>
+        <van-pull-refresh
+            v-else
+            v-model='loading'
+            :loading-text="$t('compLang.loading')"
+            :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+            :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+            @refresh='onRefresh'
+        >
             <van-list
+                v-model:error='isError'
                 v-model:loading='loading'
+                :error-text='errorTip'
                 :finished='finished'
                 :finished-text='$t("common.noMore")'
+                :loading-text="$t('compLang.loading')"
                 @load='onLoad'
             >
                 <div v-for='(item,index) in list' :key='index' class='msg-item'>
@@ -43,17 +50,19 @@
 
 <script>
 
-import { onBeforeMount, computed, reactive, toRefs } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
-import dayjs from 'dayjs'
-import { Toast } from 'vant'
+import Top from '@/components/top'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 export default {
+    components: {
+        Top,
+    },
     setup (props) {
         const store = useStore()
-        const { t, tm } = useI18n({ useScope: 'global' })
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             list: [],
             loading: false,
@@ -61,9 +70,28 @@ export default {
             pageLoading: false,
             current: 1,
             type: '',
+            errorTip: '',
             rightAction: { title: 444 },
-            options: tm('msg.typesOptions')
+            options: [
+                {
+                    'text': t('msg.all'),
+                    'value': ''
+                },
+                {
+                    'text': t('msg.accountMsg'),
+                    'value': 'USER_MESSAGE'
+                },
+                {
+                    'text': t('msg.assetsMsg'),
+                    'value': 'CASH_MESSAGE'
+                },
+                {
+                    'text': t('msg.tradeMsg'),
+                    'value': 'TRADE_MESSAGE'
+                }
+            ]
         })
+        const isError = computed(() => !!state.isError)
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -79,6 +107,7 @@ export default {
 
         const getMsgList = () => {
             state.pageLoading = true
+            state.errorTip = ''
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
@@ -96,6 +125,7 @@ export default {
                     }
                 }
             }).catch(err => {
+                state.errorTip = t('c.loadError')
                 state.pageLoading = false
             })
         }
@@ -109,8 +139,7 @@ export default {
                     tag.forEach(item => {
                         returnVal = content.replace(reg, function (matchStr) {
                             const time = matchStr.toString().replace(/<\/?time>/g, '')
-                            const timeStr = dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
-                            return timeStr
+                            return window.dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
                         })
                     })
                     return returnVal
@@ -122,8 +151,16 @@ export default {
             }
         }
 
+        // 获取到顶部消息通知，同时刷新消息列表
+        const gotMsg = () => {
+            onRefresh()
+        }
+        document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
             getMsgList()
+        })
+        onUnmounted(() => {
+            document.body.removeEventListener('GotMsg_notice', gotMsg)
         })
 
         // 上拉刷新
@@ -140,11 +177,12 @@ export default {
         }
 
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         return {
             getMsgList,
+            isError,
             customInfo,
             formatTime,
             onRefresh,
@@ -162,16 +200,34 @@ export default {
 .right-ico {
     position: absolute;
     right: rem(30px);
-    color: var(--white);
+    color: var(--contentColor);
     font-size: rem(48px);
+}
+.msgTopCenter {
+    position: absolute;
+    width: 100%;
+}
+:deep(.van-dropdown-menu__bar){
+    box-shadow: none;
+    --van-dropdown-menu-title-font-size: 12px;
 }
 .msg-list {
     flex: 1;
     height: 100%;
     overflow: auto;
+    padding-top: rem(110px);
+    background-color: var(--bgColor);
+    .header{
+        font-size: rem(48px);
+        padding-left: rem(30px);
+        padding-bottom: rem(30px);
+        background: var(--contentColor);
+    }
     .msg-item {
+        margin: rem(10px) 0;
         padding: rem(30px);
-        border-top: solid rem(20px) var(--btnColor);
+        background-color: var(--contentColor);
+        //border-top: solid rem(10px) var(--bgColor);
         .msg-title {
             color: var(--color);
             font-weight: bold;
@@ -185,24 +241,12 @@ export default {
             line-height: rem(40px);
         }
         .msg-time {
-            color: var(--mutedColor);
+            color: var(--minorColor);
             font-weight: 400;
             font-size: rem(20px);
             line-height: rem(60px);
         }
     }
-}
-</style>
 
-<style lang="scss">
-@import '@/sass/mixin.scss';
-.van-dropdown-menu__bar {
-    background-color: transparent !important;
-    .van-dropdown-menu__title {
-        color: var(--white);
-    }
-    .van-ellipsis {
-        color: var(--white);
-    }
 }
 </style>

@@ -3,6 +3,7 @@
         back
         left-icon='arrow-left'
         :menu='false'
+        :title="$t('cRoute.authForm')"
     />
 
     <auth-condition business-code='open_account'>
@@ -15,7 +16,7 @@
 </template>
 
 <script>
-import Top from '@m/layout/top'
+import Top from '@/components/top'
 import { onBeforeRouteLeave, useRouter } from 'vue-router'
 import authCondition from '@/themeCommon/components/authConditon'
 import { useStore } from 'vuex'
@@ -47,7 +48,9 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .notice {
+    margin-top: rem(20px);
     margin-bottom: rem(20px);
     padding-left: rem(30px);
+    line-height: rem(40px);
 }
 </style>

@@ -1,13 +1,16 @@
 import axios from 'axios'
 import CheckAPI from './checkAPI'
 import { login } from '@/api/user'
-import { guid, getLoginParams, getToken, setToken, removeLoginParams, localGet } from '@/utils/util'
+import { guid, getLoginParams, getToken, removeLoginParams, getCookie } from '@/utils/util'
+import { encryptParams } from '@/utils/requestEncrypt'
 import { apiDomain } from '@/config'
 let router = null
 export const setRouter = r => (router = r)
 
 // const baseURL = 'http://18.162.240.170:10000/cats-gateway'
-const baseURL = `${apiDomain}/cats-gateway`
+const realApiDomain = apiDomain && apiDomain.startsWith('http') ? apiDomain : apiDomain
+const baseURL = `${realApiDomain}/cats-gateway`
+const development = process.env.NODE_ENV === 'development'
 
 // create an axios instance
 const service = axios.create({
@@ -23,9 +26,12 @@ service.interceptors.request.use(
         const headers = config.headers
         const companyId = sessionStorage.getItem('companyId')
         const token = getToken()
+        const timestamp = Date.now()
+        const SysSetting = JSON.parse(window['wp_SysSetting'])
         config.toastErr = config.toastErr ?? true
-        headers.trace = guid()
-        headers.lang = localGet('lang')
+        headers.trace = SysSetting.pk ? 'x-' + guid() : guid()
+        headers.timestamp = timestamp
+        headers.lang = getCookie('lang')
         if (token) headers.token = token
         headers.companyId = companyId
         if (config.method === 'get') {
@@ -34,7 +40,9 @@ service.interceptors.request.use(
             const postData = config.data
 
             if (!config.isUpload) {
-                config.data = Object.assign({}, postData)
+                // config.data = Object.assign({}, postData)
+                if (development) { console.warn('%c 请求原参数 %c ' + config.url, 'background-color:#5e5', 'background-color:#fe6', config.data) }
+                config.data = SysSetting.pk ? { data: encryptParams(config.data, timestamp, SysSetting.pk) } : Object.assign({}, postData)
             }
         }
         return config
@@ -51,9 +59,16 @@ service.interceptors.response.use(
         const { data, config } = response
         // token失效重新登录
         const loginParams = getLoginParams()
-        if (data.code === 'GATEWAY_CODE_005' && router) {
+        const routeName = router?.currentRoute?.value?.name
+        // const isUserRoute = router?.currentRoute?.value?.meta?.roles?.includes('User')
+        if (['GATEWAY_CODE_001', 'GATEWAY_CODE_005'].includes(data.code) && router && routeName && routeName !== 'Login') {
             removeLoginParams()
-            router.push({ name: 'Login', query: { back: encodeURIComponent(location.pathname + location.search) } })
+            let backPath = location.pathname.split('/')
+            backPath.splice(1, 1)
+            backPath = backPath.join('/')
+            router.push({ name: 'Login', query: { back: encodeURIComponent(backPath + location.search) } }).then(() => {
+                location.reload()
+            })
             // return login(loginParams).then(res => {
             //     setToken(res.data.token)
             //     config.headers.token = res.data.token
@@ -71,5 +86,11 @@ service.interceptors.response.use(
         return Promise.reject(error)
     }
 )
+
+// 修改请求地址
+export const modifybaseURL = (baseURL) => {
+    console.log(baseURL)
+    service.defaults.baseURL = baseURL + '/cats-gateway'
+}
 
 export default service

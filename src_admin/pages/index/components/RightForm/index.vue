@@ -1,4 +1,5 @@
 <template>
+    <!-- --{{ }} === {{ elementConfig }} -->
     <div class='rightForm'>
         <div
             v-for='(config, index) in elementConfig'
@@ -6,7 +7,7 @@
         >
             <template
                 v-if='
-                    !config.hidden &&
+                    !config.hidden ||
                         !(
                             (config.exclude &&
                                 config.exclude.includes(
@@ -20,13 +21,25 @@
                 '
             >
                 <el-form-item
-                    v-if="config.type == 'Input' || config.type == 'Textarea'"
+                    v-if="config.type == 'Input' && !config.hidden "
                     :label='config.label'
                     :row='8'
                 >
                     <el-input
                         v-model='activeData[config.name]'
                         placeholder='请输入'
+                        :type='config.type.toLowerCase()'
+                    />
+                </el-form-item>
+                <el-form-item
+                    v-else-if="config.type == 'Textarea'"
+                    :label='config.label'
+                    :row='8'
+                >
+                    <el-input
+                        v-model='activeData[config.name]'
+                        placeholder='请输入'
+                        :rows='5'
                         :type='config.type.toLowerCase()'
                     />
                 </el-form-item>
@@ -66,9 +79,16 @@
                 </el-form-item>
                 <el-form-item
                     v-else-if="config.type == 'Tinymce'"
+                    class='tinymce-form-item'
                     :label='config.label'
                 >
-                    <Tinymce v-model='activeData[config.name]' :height='300' />
+                    <Tinymce
+                        v-model='activeData[config.name]'
+                        :height='300'
+                        :menubar='false'
+                        :toolbar="['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat hr', 'fullscreen bullist numlist link table forecolor backcolor fontsizeselect']"
+                        :width='320'
+                    />
                 </el-form-item>
                 <el-form-item
                     v-else-if="config.type === 'Checkbox'"
@@ -111,6 +131,7 @@
                         }
                     '
                 />
+
                 <File
                     v-else-if="config.type === 'File'"
                     :active-data='activeData[config.name]'
@@ -123,11 +144,16 @@
                 />
                 <Product
                     v-else-if="config.type === 'Product'"
+                    :active-block='activeBlock'
                     :active-data='activeData[config.name]'
+                    :block-index='blockIndex'
                     :config='config'
+                    :element-tag='elementTag'
+                    :self-symbol='tradeTypeSelfSymbol'
+                    :trade-type-collect='tradeTypeCollect'
                     @formChange='
-                        (formData) => {
-                            updateFormData(config.name, formData);
+                        (formData,type) => {
+                            updateFormData(config.name, formData,type);
                         }
                     '
                 />
@@ -138,6 +164,7 @@
                         }}
                     </el-divider>
                     <right-form
+                        :active-block='config._id'
                         :active-data='activeData[config.name]'
                         :element-config='config.formConfig'
                     />
@@ -184,16 +211,20 @@
                                     </el-button>
                                 </el-divider>
                                 <right-form
+                                    :active-block='config._id'
                                     :active-data='
                                         activeData[config.name][ArrayIndex]
                                     '
+
+                                    :block-index='ArrayIndex'
                                     :element-config='ArrayItem'
+                                    :trade-type-collect='tradeTypeCollect'
                                 />
                             </div>
                         </template>
                     </draggable>
                     <el-row>
-                        <el-col :span='24' style='text-align: center'>
+                        <el-col :span='24' style='text-align: center;'>
                             <el-button
                                 v-if='config.formConfig.length < config.max'
                                 icon='el-icon-plus'
@@ -201,7 +232,9 @@
                                 @click='
                                     addRow(
                                         config.formConfig,
-                                        activeData[config.name]
+                                        activeData[config.name],
+                                        config,
+                                        activeData
                                     )
                                 '
                             >
@@ -239,6 +272,10 @@ export default {
                 return []
             }
         },
+        activeBlock: {},
+        blockIndex: {},
+        elementTag: {},
+        // tradeTypeCollect: {},
         activeData: {
             type: Object,
             default () {
@@ -248,13 +285,30 @@ export default {
     },
     data () {
         return {
+            // tradeTypeCollect: [],
+            // tradeTypeSelfSymbol: {},
         }
     },
+    computed: {
+        tradeTypeCollect () {
+            return this.$store.state.editor.tradeTypeBlockCollect
+        },
+        tradeTypeSelfSymbol () {
+            return this.$store.state.editor.tradeTypeSelfSymbol
+        },
+        tradeTypeBlockProduct () {
+            return this.$store.state.editor.tradeTypeBlockProduct
+        }
+    },
+    created () {
+        // console.log('---activeData-----', this.activeData)
+    },
     methods: {
-        addRow (formConfig, data) {
+        addRow (formConfig, data, config, activeData) {
+            activeData.saved = true
             this.$store.commit('editor/ADD_FROM_ROW', {
-                formConfig: formConfig,
-                data: data
+                formConfig,
+                data
             })
         },
         deleteRow (formConfig, data, index) {
@@ -265,8 +319,38 @@ export default {
             console.log(evt)
             this.$store.commit('editor/CHANGE_INDEX_FROM_ROW', evt)
         },
-        updateFormData (key, data) {
-            this.activeData[key] = data
+        updateFormData (key, data, type) { // 此处提交版块产品
+            if (key === 'product') {
+                const activatedId = this.$store.state.editor.activated
+                this.$store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL', { data, activatedId, type })
+            } else if (key === 'tradeTypeBlock' || key === 'code_ids_all') {
+                const newData = [...this.tradeTypeCollect]
+                if (newData[this.blockIndex]) {
+                    newData[this.blockIndex][type] = data
+                } else {
+                    newData[this.blockIndex] = { [type]: data }
+                }
+                this.$store.commit('editor/UPDATE_TRADETYPE_BLOCK_COLLECT', newData)
+            } else {
+                this.activeData[key] = data
+                this.$store.commit('editor/UPDATE_FORM_DATA', { key, value: data })
+            }
+            // const newTradeTypeData = { ...this.activeData['tradeTypeCollect'], [type]: data }
+
+            // this.$store.commit('editor/UPDATE_FORM_DATA', { key: 'tradeTypeCollect', value: newTradeTypeData })
+            // if (key === 'product') {
+
+            //     // this.activeData[key][type] = data
+            // } else {
+            //     const xinData = { ...this.activeData[key], [type]: data }
+            //     this.$store.commit('editor/UPDATE_FORM_DATA', { key: key, value: xinData })
+            //     // this.activeData[key] = data
+            //     // if (this.activeData['tradeTypeCollect']) {
+            //     //     this.activeData['tradeTypeCollect'][type] = data
+            //     // }
+            // }
+
+            // this.activeData[key] = { ...data, tradeTypeCollect: { value: type, data } }
             // this.$store.commit('editor/UPDATE_FORM_DATA', {key:key,value:data})
         }
     }
@@ -279,9 +363,22 @@ export default {
 }
 .rightForm {
     padding-bottom: 10px;
+    .list-item {
+        margin: 10px;
+        margin-bottom: 20px;
+        padding: 10px;
+        border-bottom: solid 1px #DDD;
+    }
+    .tinymce-form-item{
+        flex-direction: column;
+    align-items: flex-start;
+
+        :deep{
+            .el-form-item__label{
+                    text-align: left;
+            }
+        }
+    }
 }
- .odd {
-    background-color: #fafafa;
-  }
 
 </style>

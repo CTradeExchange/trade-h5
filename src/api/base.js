@@ -1,7 +1,7 @@
 
 import request from '@/utils/request'
 
-/* 获取国家区号列表 */
+/* 获取字典列表 */
 export function getListByParentCode (data) {
     return request({
         url: '/global/config.app.AppDictDubboService.getListByParentCode',
@@ -61,6 +61,44 @@ export function changeLang (lang) {
         headers: {
             version: '0.0.1',
         },
-        data: { lang }
+        data: {
+            newLang: lang
+        }
+    })
+}
+
+/* 获取三方登录配置信息 */
+export function getThirdLoginConfig (data) {
+    return request({
+        url: '/global/customer.app.CustomerThirdLoginService.config',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取公司资产列表 */
+export function getAssetsList (data) {
+    return request({
+        url: '/global/config.app.AppAssetsDubboService.getAssetsList',
+        method: 'post',
+        toastErr: false,
+        data
+    })
+}
+
+/* 获取白标后台配置的企业开户国家 */
+export function findCompanyCountry (data) {
+    return request({
+        url: '/global/customer.app.KycWebApiService.findCompanyCountry',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
     })
 }

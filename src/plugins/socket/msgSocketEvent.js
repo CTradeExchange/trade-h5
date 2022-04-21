@@ -12,9 +12,10 @@ class SocketEvent {
         this.$router = null
         this.requests = new Map()
         this.subscribedList = []
+        this.loginStatus = 0 // websocket登录状态， 0未登录 1登录中 2已登录
         this.connectNum = 0 // websocket链接连接次数
         this.preSetTime = 1 // 上一次保存价格的时间
-        this.newPrice = []
+        this.newPrice = {}
         this.newPriceTimer = null
     }
 
@@ -36,6 +37,7 @@ class SocketEvent {
                 sendTime: Date.now(),
                 lang: 'zh-CN',
             },
+            data,
             device: getDevice(),
             seqId: this.seq_id,
             trace: guid(),
@@ -95,6 +97,8 @@ class SocketEvent {
 
     // 登录
     login () {
+        if (this.loginStatus !== 0) return false
+        this.loginStatus = 1
         return this.send('login')
     }
 
@@ -125,13 +129,28 @@ class SocketEvent {
     onOpen () {
         const token = getToken()
         this.connectNum++
-        if (this.connectNum > 1 && token) this.login() // 重连后自动登录
+        if (token) this.login() // 重连后自动登录
         const executeFn = () => {
             const fn = this.subscribedList.shift()
             fn && fn()
             if (this.subscribedList.length) executeFn()
         }
         executeFn()
+    }
+
+    // websocket 断开
+    onDisconnect () {
+        this.loginStatus = 0
+    }
+
+    // websocket 登录成功
+    subscribe_success () {
+        this.loginStatus = 2
+    }
+
+    // websocket 登录登录失败，登录失败只能是token失效，这时可直接给用户退出登录
+    subscribe_fail () {
+        this.handlerLogout()
     }
 
     // 心跳机制
@@ -147,36 +166,40 @@ class SocketEvent {
         }, 30000)
     }
 
-    // 处理持仓盈亏浮动数据和账户数据
-    positionsTick (str) {
+    // 处理玩法1CFD全仓的：持仓盈亏浮动数据和账户数据
+    positionsTick (str, tradeType) {
         // f(profitLoss,occupyMargin,availableMargin,marginRadio,netWorth,balance);(positionId,profitLoss);(positionId,profitLoss);(positionId,profitLoss)
         if (this.newPriceTimer) clearTimeout(this.newPriceTimer)
         const curPriceData = positionsTickToObj(str)
+        if (!this.newPrice[tradeType]) this.newPrice[tradeType] = []
+        const newPrice = this.newPrice[tradeType]
         const now = new Date().getTime()
         if (this.preSetTime + 125 <= now) { // 控制计算频率
             this.preSetTime = now
-            this.newPrice.push(curPriceData)
-            this.floatProfitLoss(this.newPrice)
-            this.newPrice = []
+            newPrice.push(curPriceData)
+            this.floatProfitLoss(newPrice, tradeType)
+            this.newPrice[tradeType] = []
         } else {
-            this.newPrice.push(curPriceData)
+            newPrice.push(curPriceData)
         }
 
         // 500毫秒后更新最后一组报价数据
         this.newPriceTimer = setTimeout(() => {
-            if (this.newPrice.length > 0) {
-                this.floatProfitLoss(this.newPrice)
-                this.newPrice = []
+            if (newPrice.length > 0) {
+                this.floatProfitLoss(newPrice, tradeType)
+                this.newPrice[tradeType] = []
             }
         }, 500)
     }
 
-    floatProfitLoss (dataArr) {
+    floatProfitLoss (dataArr, tradeType) {
         const $store = this.$store
+        if (!dataArr?.length) return false
+        const last = dataArr[dataArr.length - 1]
+        $store.commit('_user/Update_accountAssets', { tradeType, data: last.content })
         dataArr.forEach(({ content }) => {
-            $store.commit('_user/Update_accountAssets', content)
             if (content.positionProfitLossMessages.length > 0) {
-                $store.commit('_trade/Update_positionProfitLossList', content.positionProfitLossMessages)
+                $store.commit('_trade/Update_positionProfitLossList', { tradeType, list: content.positionProfitLossMessages })
             }
         })
     }
@@ -188,7 +211,7 @@ class SocketEvent {
 
     // 消息通知
     notice (data) {
-        const content = data.content
+        const { tradeType, updateType, show, bizType } = data.content
         // 刷新字段：updateType
         // NO_MOVEMENT(0 ,"无动作"),
         // POSITION(1 ,"刷新仓位"),
@@ -196,23 +219,61 @@ class SocketEvent {
         // AMOUNT(3 ,"刷新资金"),
         // LOGOUT(4 ,"踢出"),
         // POSITION_AND_ORDER(5, "同时刷新挂单、仓位"),
-        if (content.updateType === 1) {
-            this.$store.dispatch('_trade/queryPositionPage')
-        } else if (content.updateType === 2) {
-            this.$store.dispatch('_trade/queryPBOOrderPage')
-        } else if (content.updateType === 4) {
+        // POSITION_AND_ORDER(6, "同时刷新挂单、资金"),
+        const store = this.$store
+        const accountIds = store.state._user.customerInfo?.accountList.filter(el => el.tradeType === Number(tradeType)).map(el => el.accountId)
+        if (updateType === 1) {
+            store.dispatch('_trade/queryPositionPage', {
+                tradeType,
+                sortFieldName: 'openTime',
+                sortType: 'desc',
+            })
+        } else if (updateType === 2) {
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc',
+                accountIds: accountIds + ''
+            })
+            store.dispatch('_trade/tradeRecordList')
+        } else if (updateType === 3 && [3, 5, 9].includes(tradeType)) {
+            store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+        } else if (updateType === 4) {
             setTimeout(() => {
                 this.handlerLogout()
             }, 2000)
-        } else if (content.updateType === 5) {
-            this.$store.dispatch('_trade/queryPositionPage')
-            this.$store.dispatch('_trade/queryPBOOrderPage')
+        } else if (updateType === 5) {
+            store.dispatch('_trade/queryPositionPage', {
+                tradeType,
+                sortFieldName: 'openTime',
+                sortType: 'desc',
+            })
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc',
+                accountIds: accountIds + ''
+            })
+        } else if (updateType === 6) { // 同时刷新资金和委托列表
+            if ([3, 5, 9].includes(tradeType)) store.dispatch('_user/queryCustomerAssetsInfo', { tradeType })
+            store.dispatch('_trade/queryPBOOrderPage', {
+                tradeType,
+                sortFieldName: 'orderTime',
+                sortType: 'desc',
+                accountIds: accountIds + ''
+            })
+        }
+
+        // kyc审核通过或失败刷新客户信息
+        if (['AUDIT_CUSTOMER_SUCCESS', 'AUDIT_CUSTOMER_REFUSE'].includes(bizType)) {
+            store.dispatch('_user/findCustomerInfo', false)
+            store.dispatch('_user/findAllBizKycList')
         }
 
         // 展示字段：show
         // NO_MOVEMENT(0 ,"无动作"),
         // POPUP(1 ,"弹窗"), // 显示顶部消息
-        if (content.show === 1) {
+        if (show === 1) {
             const event = new CustomEvent('GotMsg_notice', { detail: data })
             document.body.dispatchEvent(event)
         }
@@ -222,6 +283,24 @@ class SocketEvent {
     UserForceLogoutRet () {
         const detail = {}
         document.body.dispatchEvent(new CustomEvent('GotMsg_UserForceLogoutRet', { detail }))
+    }
+
+    // 订阅资产数据
+    subscribeAsset (tradeTypes) {
+        this.subscribedListAdd(() => {
+            this.send('subscribe_asset', {
+                tradeTypes
+            })
+        })
+    }
+
+    // 取消订阅资产数据
+    cancelSubscribeAsset (tradeTypes = '1,2') {
+        this.subscribedListAdd(() => {
+            this.send('cancel_subscribe_asset', {
+                tradeTypes
+            })
+        })
     }
 }
 

@@ -12,6 +12,18 @@ export function querySymbolBaseInfoList (data) {
         data
     })
 }
+/* 产品基础信息列表-多玩法 */
+export function findSymbolBaseInfoList (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.getSymbolBaseList',
+        // url: '/global/customer.app.CustomerOptionalWebApiService.findSymbolBaseInfoList',
+        method: 'post',
+        // headers: {
+        //     version: '0.0.1',
+        // },
+        data
+    })
+}
 /* 产品信息 */
 export function querySymbolInfo (data) {
     return request({
@@ -27,6 +39,7 @@ export function querySymbolInfo (data) {
 
 /* 下单 */
 export function addMarketOrder (data) {
+    if ([3, 5, 9].includes(parseInt(data.tradeType))) return addOrder(data)
     return request({
         url: '/global/tradeapi.app.OrderApiService.addMarketOrder',
         method: 'post',
@@ -37,6 +50,33 @@ export function addMarketOrder (data) {
         data
     })
 }
+
+/* 全仓杠杆下单 */
+export function addOrder (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.addOrder',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+
+/* 设置杠杆倍数 */
+export function setCrossLevelNum (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.setCrossLevelNum',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+
 /* 查看持仓列表 */
 export function queryPositionPage (data) {
     return request({
@@ -55,6 +95,7 @@ export function queryOrderPage (data) {
         url: '/global/tradeapi.app.OrderApiService.queryOrderPage',
         method: 'post',
         headers: {
+            version: '0.0.1',
             group: 'tradeApi'
         },
         data
@@ -123,7 +164,7 @@ export function addCustomerOptional (data) {
         data
     })
 }
-/* 添加自选 */
+/* 删除自选 */
 export function removeCustomerOptional (data) {
     return request({
         url: '/global/customer.app.CustomerOptionalWebApiService.delete',
@@ -159,3 +200,122 @@ export function updatePboOrder (data) {
         data
     })
 }
+
+/* 查看 ABCC预埋单 */
+export function queryAbccPboPage (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.queryPboPage',
+        method: 'post',
+        headers: {
+            group: 'tradeApi',
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* ABCC取消限价单 */
+export function closeTradePboOrder (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.closeTradePboOrder',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 修改仓位杠杆倍数 */
+export function updateCrossLevelNum (data) {
+    return request({
+        url: '/global/tradeapi.app.PositionApiService.updateCrossLevelNum',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 基金产品实时净值和溢价率 */
+export function getEquityPremiumRate (data) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.getEquityPremiumRate',
+        method: 'post',
+        toastErr: false,
+        data
+    })
+}
+/* 市场表现走势图 */
+export function marketPerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.marketPerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 市场表现涨跌幅走势图 */
+export function marketPerformanceQuoteChange (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.marketPerformanceQuoteChange',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 实时投资组合排名 */
+export function investCombination (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.investCombination',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 单资产表现柱状图 */
+export function assetPerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.assetPerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            // group: 'tradeApi'
+        },
+        data
+    })
+}
+/* 指数产品指数样本 */
+export function queryIndexSample (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.indexSample',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+/* 指数产品单资产表现柱状图 */
+export function indexSimplePerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.indexSimplePerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 现货撮合取消委托单 */

@@ -1,6 +1,6 @@
 # cats2 H5
 
-## 安装依赖
+## 安装依赖包
 ```
 npm install
 ```
@@ -34,6 +34,11 @@ npm run build
 cats2 H5里面由于时区功能对`dayjs`做了一些封装；   
 直接`import dayjs, from 'dayjs'` 是封装后的`dayjs`，包含了时区处理   
 `import { _dayjs } from 'dayjs'` 导入的`_dayjs`是`源dayjs`，如果有特殊需求可以使用`_dayjs`
+
+## 关于颜色
+
+cats2 H5里面所有的颜色都必须使用颜色变量；   
+js里面需要用到的颜色可以使用`store.state.style`，也可以使用全局`mixin`的 `$style`计算器属性
 
 ## store里面常用数据
 - `store.state._user.customerInfo` // 当前登录的用户信息

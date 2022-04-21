@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { CheckAPI_wp } from './checkAPI'
+import { getCookie } from '@/utils/util'
 
 // create an axios instance
 const service = axios.create({
@@ -11,6 +12,8 @@ headers.post['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
 // request interceptor
 service.interceptors.request.use(
     config => {
+        const lang = getCookie('lang') || 'zh-CN'
+        config.baseURL = '/' + lang + config.baseURL
         // do something before request is sent
         config.responseType = config.responseType || ''
 

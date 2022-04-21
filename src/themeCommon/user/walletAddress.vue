@@ -34,12 +34,12 @@
             <van-empty
                 v-else
                 :description="$t('walletAddress.none')"
-                image='https://img01.yzcdn.cn/vant/empty-image-default.png'
+                image='/images/empty.png'
             />
         </div>
         <!-- 底部按钮 -->
         <button class='footer-btn' @click="$router.push({ path: '/walletAdd' })">
-            <van-icon color='#333' name='plus' />
+            <van-icon :color='style.color' name='plus' />
             <span>{{ $t('walletAddress.addBtn') }}</span>
         </button>
     </div>
@@ -47,12 +47,14 @@
 
 <script>
 // vue
-import { onMounted, reactive, toRefs } from 'vue'
+import { onMounted, reactive, toRefs, computed } from 'vue'
 // components
 import Top from '@/components/top'
 import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
+import { useStore } from 'vuex'
+
 // api
 import { getWalletAddressList, deleteWalletAddress } from '@/api/user'
 
@@ -61,7 +63,9 @@ export default {
         Top
     },
     setup () {
+        const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const style = computed(() => store.state.style)
         const state = reactive({
             // 加载状态
             loading: true,
@@ -73,7 +77,7 @@ export default {
         const deleteWallet = (id) => {
             Dialog.confirm({
                 title: t('withdraw.hint'),
-                message: t('withdraw.addHint'),
+                message: t('walletAddress.addHint'),
             }).then(() => {
                 // 发起api请示
                 deleteWalletAddress({
@@ -106,7 +110,8 @@ export default {
 
         return {
             ...toRefs(state),
-            deleteWallet
+            deleteWallet,
+            style
         }
     }
 }
@@ -118,24 +123,28 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background-color: var(--bgColor);
 }
 .container {
     display: flex;
     flex: 1;
     flex-direction: column;
     overflow-y: auto;
+    background-color: var(--bgColor);
+    //padding-bottom: rem(104px);
 }
 .address-list {
     .item {
         width: rem(690px);
-        margin: 0 auto rem(30px);
+        margin: rem(30px) auto rem(30px);
         padding: 0 rem(32px);
-        border: 1px solid var(--bdColor);
+        background-color: var(--contentColor);
+        border: 1px solid var(--lineColor);
         border-radius: rem(4px);
         .above {
             height: rem(122px);
             padding-top: rem(20px);
-            border-bottom: 1px solid var(--bdColor);
+            border-bottom: 1px solid var(--lineColor);
             .info {
                 display: flex;
                 align-items: center;
@@ -146,9 +155,9 @@ export default {
                 }
                 .tag {
                     padding: rem(9px) rem(7px);
-                    color: #3894FF;
+                    color: var(--primary);
                     font-size: rem(20px);
-                    background-color: #EEF6FE;
+                    background-color: var(--primaryAssistColor);
                     border-radius: rem(4px);
                 }
             }
@@ -165,24 +174,27 @@ export default {
             :deep(.van-radio__label) {
                 margin-top: rem(4px);
                 margin-left: rem(10px);
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
             }
             .delete {
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
             }
         }
     }
 }
 .footer-btn {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
     display: flex;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
     height: rem(104px);
-    background-color: var(--btnColor);
-    border-top: 1px solid var(--bdColor);
+    background-color: var(--contentColor);
+    border-top: 1px solid var(--lineColor);
     :deep(.van-icon-plus) {
         font-weight: bold;
     }

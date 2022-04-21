@@ -36,5 +36,6 @@ export default (t) => {
                 return options.loginType === 'password' ? !!value : true
             },
         },
+
     }
 }

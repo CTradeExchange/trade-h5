@@ -4,7 +4,11 @@ var DataPulseProvider = /** @class */ (function () {
         this._subscribers = {};
         this._requestsPending = 0;
         this._historyProvider = historyProvider;
-        // setInterval(this._updateData.bind(this), updateFrequency);
+
+        /**
+         * 快速切换周期，图表会缓存最近一定数量的订阅者和数据，导致在缓存的周期内来回切换，不会触发subscribeBars和getbars,无法直接获取指定被缓存的订阅者函数，实时报价就无法更新
+         */
+        // setInterval(this._updateData.bind(this), 200);
     }
     DataPulseProvider.prototype.subscribeBars = function (symbolInfo, resolution, newDataCallback, listenerGuid) {
         if (this._subscribers.hasOwnProperty(listenerGuid)) {
@@ -17,6 +21,10 @@ var DataPulseProvider = /** @class */ (function () {
             resolution: resolution,
             symbolInfo: symbolInfo,
         };
+        if(Object.keys(this._subscribers).length === 1){
+            // 未曾切换过周期时
+            this._historyProvider.setTick(this._subscribers[listenerGuid].listener)
+        }
         logMessage("DataPulseProvider: subscribed for #" + listenerGuid + " - {" + symbolInfo.name + ", " + resolution + "}");
     };
     DataPulseProvider.prototype.unsubscribeBars = function (listenerGuid) {
@@ -53,7 +61,12 @@ var DataPulseProvider = /** @class */ (function () {
         // BEWARE: please note we really need 2 bars, not the only last one
         // see the explanation below. `10` is the `large enough` value to work around holidays
         var rangeStartTime = rangeEndTime - periodLengthSeconds(subscriptionRecord.resolution, 10);
-        return this._historyProvider.getBars(subscriptionRecord.symbolInfo, subscriptionRecord.resolution, rangeStartTime, rangeEndTime)
+        return this._historyProvider.getBars(subscriptionRecord.symbolInfo, subscriptionRecord.resolution, {
+            from: rangeStartTime,
+            to: rangeEndTime,
+            countBack: 2,
+            firstDataRequest: false,
+        })
             .then(function (result) {
             _this._onSubscriberDataReceived(listenerGuid, result);
         });
@@ -77,11 +90,11 @@ var DataPulseProvider = /** @class */ (function () {
         // Pulse updating may miss some trades data (ie, if pulse period = 10 secods and new bar is started 5 seconds later after the last update, the
         // old bar's last 5 seconds trades will be lost). Thus, at fist we should broadcast old bar updates when it's ready.
         if (isNewBar) {
-            // if (bars.length < 2) {
-            //     throw new Error('Not enough bars in history for proper pulse update. Need at least 2.');
-            // }
-            // var previousBar = bars[bars.length - 2];
-            // subscriptionRecord.listener(previousBar);
+            if (bars.length < 2) {
+                throw new Error('Not enough bars in history for proper pulse update. Need at least 2.');
+            }
+            var previousBar = bars[bars.length - 2];
+            subscriptionRecord.listener(previousBar);
         }
         subscriptionRecord.lastBarTime = lastBar.time;
         subscriptionRecord.listener(lastBar);

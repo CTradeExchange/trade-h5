@@ -1,43 +1,77 @@
 <template>
     <div class='right-board'>
         <el-tabs v-model='currentTab' class='center-tabs' @tab-click='handleTabClick'>
-            <el-tab-pane label='组件属性' name='field'>
+            <el-tab-pane :label="$t('editor.componentProperties')" name='field'>
                 <el-scrollbar class='right-scrollbar'>
                     <el-form v-if='activated' label-width='90px' size='small'>
-                        <el-divider content-position='left'>
-                            基础信息
-                        </el-divider>
-                        <el-form-item label='账户状态'>
-                            <el-checkbox-group v-model='activeData.accountType'>
-                                <el-checkbox label='G'>
-                                    游客
-                                </el-checkbox>
-                                <el-checkbox label='D'>
-                                    模拟
-                                </el-checkbox>
-                                <el-checkbox label='R_1'>
-                                    未入金
-                                </el-checkbox>
-                                <el-checkbox label='R_2'>
-                                    已入金
-                                </el-checkbox>
-                            </el-checkbox-group>
-                        </el-form-item>
-                        <el-form-item label='有效期'>
-                            <el-date-picker
-                                v-model='activeData.expiryDate'
-                                end-placeholder='结束日期'
-                                format='YYYY-MM-DD HH:mm:ss'
-                                range-separator='至'
-                                start-placeholder='开始日期'
-                                type='datetimerange'
-                                :unlink-panels='true'
-                            />
-                        </el-form-item>
-                        <el-divider v-if='element.formConfig && element.formConfig.length > 0' content-position='left'>
-                            组件设置
-                        </el-divider>
-                        <right-form :active-data='activeData' :element-config='element.formConfig' />
+                        <div class='base-setting'>
+                            <el-popconfirm
+                                v-if='!element.hidden'
+                                :cancel-button-text="$t('cancel')"
+                                :confirm-button-text="$t('editor.delete')"
+                                icon='el-icon-info'
+                                icon-color='red'
+                                :title="$t('editor.tip1')"
+                                @confirm='deleteElement'
+                            >
+                                <template #reference>
+                                    <el-button class='delete-btn' icon='el-icon-delete' type='text'>
+                                        {{ $t('editor.deleteComponent') }}
+                                    </el-button>
+                                </template>
+                            </el-popconfirm>
+
+                            <template v-if='!element.hideUserRole'>
+                                <el-divider content-position='left'>
+                                    <h3> {{$t('editor.basicSettings')}}</h3>
+                                </el-divider>
+                                <div class='setting-wrap'>
+                                    <el-form-item :label="$t('editor.accountStatus')">
+                                        <el-checkbox-group v-model='activeData.accountType'>
+                                            <el-checkbox label='G'>
+                                                {{ $t('editor.tourist') }}
+                                            </el-checkbox>
+                                            <!-- <el-checkbox label='D'>
+                                            模拟
+                                        </el-checkbox> -->
+                                            <el-checkbox label='R'>
+                                                {{ $t('editor.true') }}
+                                            </el-checkbox>
+                                        <!-- <el-checkbox label='R_1'>
+                                            未入金
+                                        </el-checkbox>
+                                        <el-checkbox label='R_2'>
+                                            已入金
+                                        </el-checkbox> -->
+                                        </el-checkbox-group>
+                                    </el-form-item>
+                                    <el-form-item :label="$t('editor.validPeriod')">
+                                        <el-date-picker
+                                            v-model='activeData.expiryDate'
+                                            :end-placeholder="$t('editor.endDate')"
+                                            format='YYYY-MM-DD HH:mm:ss'
+                                            :range-separator="$t('editor.to')"
+                                            :start-placeholder="$t('editor.startDate')"
+                                            type='datetimerange'
+                                            :unlink-panels='true'
+                                        />
+                                    </el-form-item>
+                                </div>
+                            </template>
+                        </div>
+
+                        <div class='component-setting'>
+                            <el-divider v-if='element.formConfig && element.formConfig.length > 0' class='component-setting' content-position='left'>
+                                <h3>{{ $t('editor.componentSettings') }}</h3>
+                            </el-divider>
+                            <div class='setting-wrap'>
+                                <right-form
+                                    :active-data='activeData'
+                                    :element-config='element.formConfig'
+                                    :element-tag='element.tag'
+                                />
+                            </div>
+                        </div>
                     </el-form>
                 <!-- <a
                         class="document-link"
@@ -51,81 +85,84 @@
                 <!-- {{ elementConfig }} -->
                 </el-scrollbar>
             </el-tab-pane>
-            <el-tab-pane label='组件扩展' name='extend'>
+            <el-tab-pane :label="$t('editor.componentExtension')" name='extend'>
                 <el-scrollbar v-if='activated' class='right-scrollbar' label-width='90px'>
                     <el-form label-width='90px' size='small'>
                         <el-divider content-position='left'>
-                            间距设置
+                            {{ $t('editor.spacingSetting') }}
                         </el-divider>
                         <div class='m-spaceSetting'>
-                            <el-input v-model="activeData.style['margin-top']" class='spaceInput top' placeholder='上间距' />
-                            <el-input v-model="activeData.style['margin-right']" class='spaceInput right' placeholder='右间距' />
-                            <el-input v-model="activeData.style['margin-bottom']" class='spaceInput bottom' placeholder='下间距' />
-                            <el-input v-model="activeData.style['margin-left']" class='spaceInput left' placeholder='左间距' />
+                            <el-input v-model="activeData.style['margin-top']" class='spaceInput top' :placeholder="$t('editor.upperSpacing')" />
+                            <el-input v-model="activeData.style['margin-right']" class='spaceInput right' :placeholder="$t('editor.rightSpacing')" />
+                            <el-input v-model="activeData.style['margin-bottom']" class='spaceInput bottom' :placeholder="$t('editor.bottomSpacing')" />
+                            <el-input v-model="activeData.style['margin-left']" class='spaceInput left' :placeholder="$t('editor.leftSpacing')" />
                             <div class='margin'>
-                                <el-input v-model="activeData.style['padding-top']" class='spaceInput top' placeholder='上填充' />
-                                <el-input v-model="activeData.style['padding-right']" class='spaceInput right' placeholder='右填充' />
-                                <el-input v-model="activeData.style['padding-bottom']" class='spaceInput bottom' placeholder='下填充' />
-                                <el-input v-model="activeData.style['padding-left']" class='spaceInput left' placeholder='左填充' />
+                                <el-input v-model="activeData.style['padding-top']" class='spaceInput top' :placeholder="$t('editor.fillUp')" />
+                                <el-input v-model="activeData.style['padding-right']" class='spaceInput right' :placeholder="$t('editor.rightFill')" />
+                                <el-input v-model="activeData.style['padding-bottom']" class='spaceInput bottom' :placeholder="$t('editor.underFill')" />
+                                <el-input v-model="activeData.style['padding-left']" class='spaceInput left' :placeholder="$t('editor.leftPadding')" />
                                 <div class='padding'>
-                                    组件
+                                    {{ $t('editor.component') }}
                                 </div>
                             </div>
                         </div>
-                        <el-divider content-position='left'>
+                        <!-- <el-divider content-position='left'>
                             样式设置
                         </el-divider>
-                        <File :active-data='activeData.background' :config="{ label:'背景图片' }" @formChange='updateBackground' />
+                        <File :active-data='activeData.background' :config="{ label:'背景图片' }" @formChange='updateBackground' /> -->
                         <el-divider content-position='left'>
-                            位置设置
+                            {{ $t('editor.locationSettings') }}
                             <el-button v-if='!element.hidden' class='delete-btn' icon='el-icon-delete' type='text' @click='deleteElement(activated)'>
-                                删除
+                                {{ $t('editor.delete') }}
                             </el-button>
                         </el-divider>
-                        <el-form-item label='组件ID'>
+                        <el-form-item :label="$t('editor.componentId')">
                             <el-input :disabled='true' :value='element.id' />
                         </el-form-item>
-                        <el-form-item label='绑定组件ID'>
+                        <!--<el-form-item label='绑定组件ID'>
                             <el-select v-model='activeData.linkComp' clearable placeholder='请选择'>
                                 <el-option v-for='item in showElementList' :key='item.id' :label='item.id' :value='item.id' />
                             </el-select>
-                        </el-form-item>
-                        <el-form-item v-if='activeData.linkComp' label='组件对齐'>
+                        </el-form-item> -->
+                        <el-form-item v-if='activeData.linkComp' :label="$t('editor.componentAlignment')">
                             <el-radio-group v-model='activeData.linkCompPosition'>
                                 <el-radio label='top-right'>
-                                    右上角
+                                    {{ $t('editor.upperRightCorner') }}
                                 </el-radio>
                                 <el-radio label='top-left'>
-                                    左上角
+                                    {{ $t('editor.upperLeftCorner') }}
                                 </el-radio>
                                 <el-radio label='bottom-left'>
-                                    左下角
+                                    {{ $t('editor.bottomLeftCorner') }}
                                 </el-radio>
                                 <el-radio label='bottom-right'>
-                                    右下角
+                                    {{ $t('editor.bottomRightCorner') }}
                                 </el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-form>
-                    <el-divider content-position='left'>
+                    <!-- <el-divider content-position='left'>
                         扩展字段设置
                     </el-divider>
                     <el-form class='extendForm'>
                         <el-row v-for='(item, index) in extend' :key='index' class='row'>
-                            <el-col :span='10'>
-                                <el-input v-model='item.key'>
+                            <el-col :span='8'>
+                                <el-input v-model='item.key' placeholder='Key'>
                                     <template slot='prepend'>
                                         Key
                                     </template>
                                 </el-input>
                             </el-col>
-                            <el-col :span='12'>
-                                <el-input v-model='item.value'>
+                            <el-col :span='1' />
+
+                            <el-col :span='8'>
+                                <el-input v-model='item.value' placeholder='Value'>
                                     <template slot='prepend'>
                                         Value
                                     </template>
                                 </el-input>
                             </el-col>
+                            <el-col :span='1' />
                             <el-col :span='2'>
                                 <el-button icon='el-icon-delete' type='danger' @click='deleteExtendRow(index)' />
                             </el-col>
@@ -137,7 +174,7 @@
                                 添加
                             </el-button>
                         </el-col>
-                    </el-row>
+                    </el-row> -->
                 </el-scrollbar>
             </el-tab-pane>
         </el-tabs>
@@ -146,8 +183,9 @@
 
 <script>
 import File from '@index/components/RightForm/File'
-import { computed, reactive, toRefs, watch } from 'vue'
+import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
+import { forOwn, isPlainObject } from 'lodash'
 export default {
     components: {
         File
@@ -160,6 +198,7 @@ export default {
             }
         }
     },
+
     setup (props, context) {
         const store = useStore()
         const state = reactive({
@@ -189,6 +228,41 @@ export default {
         const activeData = computed(() => {
             return element.value.data || {}
         })
+        watchEffect(() => {
+            if (Object.keys(activeData.value).length > 0) {
+                if (activeData.value?.product) {
+                    store.commit('editor/UPDATE_TRADETYPE_SELFSYMBOL_ALL', {
+                        activatedId: activated.value,
+                        data: activeData.value.product
+                    })
+                } else {
+                    const tradeTypeBlock = activeData.value.tradeTypeBlock
+                    const BlockEumn = {
+
+                    }
+                    if (isPlainObject(tradeTypeBlock)) {
+                        forOwn(tradeTypeBlock, (value, key) => {
+                            if (Array.isArray(value)) {
+                                value.forEach(item => {
+                                    if (!BlockEumn[item.id]) {
+                                        BlockEumn[item.id] = {}
+                                    }
+                                    BlockEumn[item.id][key] = item.list
+                                })
+                            }
+                        })
+                    }
+                    const sortKey = Object.keys(BlockEumn).sort(function (a, b) {
+                        return parseInt(a.slice(a.lastIndexOf('_') + 1)) - parseInt(b.slice(b.lastIndexOf('_') + 1))
+                    })
+                    const initTradeTypeBlock = []
+                    sortKey.forEach(item => {
+                        initTradeTypeBlock.push(BlockEumn[item])
+                    })
+                    store.commit('editor/UPDATE_TRADETYPE_BLOCK_COLLECT', initTradeTypeBlock)
+                }
+            }
+        })
 
         watch(() => state.extend, (newVal) => {
             const _obj = {}
@@ -203,6 +277,12 @@ export default {
             })
         }, {
             deep: true // 深度监听的参数
+        })
+
+        watch(() => activeData.value, (val, newVal) => {
+            newVal.saved = true
+        }, {
+            deep: true
         })
 
         const updateBackground = (url) => {
@@ -228,8 +308,8 @@ export default {
             state.extend.splice(index, 1)
         }
 
-        const deleteElement = (id) => {
-            store.commit('editor/DELETE_ELEMENT', id)
+        const deleteElement = () => {
+            store.commit('editor/DELETE_ELEMENT', activated.value)
         }
 
         const addExtendRow = () => {
@@ -261,13 +341,12 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
-    width: 480px;
+    width: 400px;
     padding-top: 3px;
-    padding-bottom: 40px;
     background-color: #FFF;
     .right-scrollbar {
         height: calc(100vh - 57px);
-        ::v-deep .el-form {
+        :deep(.el-form) {
             .el-range-editor {
                 width: 100%;
             }
@@ -275,6 +354,24 @@ export default {
     }
     .delete-btn {
         margin-left: 15px;
+    }
+    .center-tabs {
+        padding-left: 10px;
+        .base-setting {
+            padding-right: 10px;
+        }
+        .component-setting {
+            margin-top: 50px;
+            padding-right: 10px;
+        }
+        .setting-wrap {
+            margin: 10px;
+            margin-bottom: 20px;
+            padding: 20px;
+            border: solid 1px #CCC;
+            border: solid 1px #DDD;
+            border-radius: 10px;
+        }
     }
 }
 .m-spaceSetting {
@@ -289,7 +386,12 @@ export default {
     }
     .spaceInput {
         position: absolute;
-        width: 70px;
+        width: 50px;
+        font-size: 12px;
+        :deep(.el-input__inner) {
+            padding: 0 5px;
+            text-align: center;
+        }
     }
     .top {
         top: 5px;
@@ -303,12 +405,12 @@ export default {
     }
     .left {
         top: 50%;
-        left: 10px;
+        left: 5px;
         margin-top: -17px;
     }
     .right {
         top: 50%;
-        right: 10px;
+        right: 5px;
         margin-top: -17px;
     }
     .margin {

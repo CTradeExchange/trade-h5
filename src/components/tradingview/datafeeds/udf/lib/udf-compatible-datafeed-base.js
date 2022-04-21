@@ -49,9 +49,6 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
     UDFCompatibleDatafeedBase.prototype.unsubscribeQuotes = function (listenerGuid) {
         this._quotesPulseProvider.unsubscribeQuotes(listenerGuid);
     };
-    UDFCompatibleDatafeedBase.prototype.calculateHistoryDepth = function (resolution, resolutionBack, intervalBack) {
-        return undefined;
-    };
     UDFCompatibleDatafeedBase.prototype.getMarks = function (symbolInfo, from, to, onDataCallback, resolution) {
         if (!this._configuration.supports_marks) {
             return;
@@ -172,68 +169,64 @@ var UDFCompatibleDatafeedBase = /** @class */ (function () {
             logMessage("Symbol resolved: " + (Date.now() - resolveRequestStartTime) + "ms");
             onResolve(symbolInfo);
         }
-        if(this.otherConfig.isControl){
-            // 这里需要异步返回结果
-            setTimeout(() => {
-                onResultReady({
-                    ...querySymbolInfo(symbolName, this.otherConfig.symbolInfo),
-                })
-            }, 0)
-        } else {
-            if (!this._configuration.supports_group_request) {
-                var params = {
-                    symbol: symbolName,
-                };
-                if (currencyCode !== undefined) {
-                    params.currencyCode = currencyCode;
-                }
-                this._send('symbols', params)
-                    .then(function (response) {
-                    if (response.s !== undefined) {
-                        onError('unknown_symbol');
-                    }
-                    else {
-                        onResultReady(response);
-                    }
-                })
-                    .catch(function (reason) {
-                    logMessage("UdfCompatibleDatafeed: Error resolving symbol: " + getErrorMessage(reason));
-                    onError('unknown_symbol');
-                });
-            }
-            else {
-                if (this._symbolsStorage === null) {
-                    throw new Error('UdfCompatibleDatafeed: inconsistent configuration (symbols storage)');
-                }
-                this._symbolsStorage.resolveSymbol(symbolName, currencyCode).then(onResultReady).catch(onError);
-            }
-        }
+
+        // 这里需要异步返回结果
+        setTimeout(() => {
+            onResultReady({
+                ...querySymbolInfo(symbolName, this.otherConfig.symbolInfo),
+            })
+        }, 0)
+        return
+        // if (!this._configuration.supports_group_request) {
+        //     var params = {
+        //         symbol: symbolName,
+        //     };
+        //     if (currencyCode !== undefined) {
+        //         params.currencyCode = currencyCode;
+        //     }
+        //     this._send('symbols', params)
+        //         .then(function (response) {
+        //         if (response.s !== undefined) {
+        //             onError('unknown_symbol');
+        //         }
+        //         else {
+        //             onResultReady(response);
+        //         }
+        //     })
+        //         .catch(function (reason) {
+        //         logMessage("UdfCompatibleDatafeed: Error resolving symbol: " + getErrorMessage(reason));
+        //         onError('unknown_symbol');
+        //     });
+        // }
+        // else {
+        //     if (this._symbolsStorage === null) {
+        //         throw new Error('UdfCompatibleDatafeed: inconsistent configuration (symbols storage)');
+        //     }
+        //     this._symbolsStorage.resolveSymbol(symbolName, currencyCode).then(onResultReady).catch(onError);
+        // }
     };
-    UDFCompatibleDatafeedBase.prototype.getBars = function (symbolInfo, resolution, rangeStartDate, rangeEndDate, onResult, onError, firstDataRequest) {
-        this._historyProvider.getBars(symbolInfo, resolution, rangeStartDate, rangeEndDate, firstDataRequest)
+    UDFCompatibleDatafeedBase.prototype.getBars = function (symbolInfo, resolution, periodParams, onResult, onError) {
+        this._historyProvider.getBars(symbolInfo, resolution, periodParams)
             .then(function (result) {
             onResult(result.bars, result.meta);
         })
             .catch(onError);
     };
     UDFCompatibleDatafeedBase.prototype.subscribeBars = function (symbolInfo, resolution, onTick, listenerGuid, onResetCacheNeededCallback) {
-        this._historyProvider._onTick = onTick
         this._dataPulseProvider.subscribeBars(symbolInfo, resolution, onTick, listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype.unsubscribeBars = function (listenerGuid) {
-        this._historyProvider._onTick = null
         this._dataPulseProvider.unsubscribeBars(listenerGuid);
     };
     UDFCompatibleDatafeedBase.prototype._requestConfiguration = function () {
-        if(this.otherConfig.isControl){
-            return Promise.resolve(otherDefaultConfiguration())
-        } else {
-            return this._send('config')
-                .catch(function (reason) {
-                logMessage("UdfCompatibleDatafeed: Cannot get datafeed configuration - use default, error=" + getErrorMessage(reason));
-                return null;
-            });
-        }
+        return Promise.resolve(otherDefaultConfiguration())
+        // const a = {"supports_search":true,"supports_group_request":false,"supports_marks":true,"supports_timescale_marks":true,"supports_time":true,"exchanges":[{"value":"","name":"All Exchanges","desc":""},{"value":"NasdaqNM","name":"NasdaqNM","desc":"NasdaqNM"},{"value":"NYSE","name":"NYSE","desc":"NYSE"},{"value":"NCM","name":"NCM","desc":"NCM"},{"value":"NGM","name":"NGM","desc":"NGM"}],"symbols_types":[{"name":"All types","value":""},{"name":"Stock","value":"stock"},{"name":"Index","value":"index"}],"supported_resolutions":["D","2D","3D","W","3W","M","6M"]}
+        // return Promise.resolve(a)
+        // return this._send('config')
+        //     .catch(function (reason) {
+        //     logMessage("UdfCompatibleDatafeed: Cannot get datafeed configuration - use default, error=" + getErrorMessage(reason));
+        //     return null;
+        // });
     };
     UDFCompatibleDatafeedBase.prototype._send = function (urlPath, params) {
         return this._requester.sendRequest(this._datafeedURL, urlPath, params);
@@ -278,6 +271,8 @@ function defaultConfiguration() {
         supports_timescale_marks: false,
     };
 }
+
+
 
 function otherDefaultConfiguration() {
     return {
@@ -331,6 +326,8 @@ function normalizeInfo(info){
         description: info.description,
         symbolId: info.symbolId,
         pricescale:  Math.pow(10, info.digits),
+        tradeType: info.tradeType,
+        dealMode: info.dealMode,
     }
     return result
 }

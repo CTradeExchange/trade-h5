@@ -1,8 +1,8 @@
 <template>
-    <div class='top'>
+    <div class='top' :class="{ 'absolute': absolute }">
         <slot name='left'>
             <a class='back' href='javascript:;' @click='back'>
-                <van-icon :name='leftIcon' />
+                <span class='icon_icon_back1'></span>
             </a>
         </slot>
         <slot name='center'>
@@ -35,10 +35,11 @@ export default {
                 return { title: '' }
             }
         },
+        absolute: Boolean,
         backHandler: Function,
         leftIcon: {
             type: String,
-            default: 'cross'
+            default: 'arrow-left'
         },
         title: {
             type: String,
@@ -74,14 +75,20 @@ export default {
     flex-shrink: 0;
     align-items: center;
     justify-content: space-between;
-    height: rem(100px);
-    background-color: #FFF;
-    .back {
+    height: rem(110px);
+    font-size: rem(34px);
+    background: var(--contentColor);
+    &.absolute{
         position: absolute;
-        top: rem(26px);
-        left: rem(13px);
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    .back {
+        z-index: 1;
+        width: rem(120px);
+        padding: 0 rem(30px);
         color: var(--color);
-        font-size: rem(46px);
     }
     .rightClick {
         position: absolute;
@@ -96,6 +103,7 @@ export default {
         border-radius: rem(30px);
     }
     .van-icon-arrow {
+        height: rem(28px);
         margin-right: rem(10px);
         margin-left: rem(5px);
         font-weight: bold;
@@ -105,10 +113,12 @@ export default {
         vertical-align: middle;
     }
     .title {
-        width: 60%;
-        max-width: 60%;
+        position: absolute;
+        width: 100%;
         margin: 0 auto;
-        font-size: rem(34px);
+        color: var(--color);
+        font-size: rem(48px);
+        font-weight: bold;
         line-height: rem(59px);
         text-align: center;
     }

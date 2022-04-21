@@ -1,5 +1,6 @@
+import { isEmpty } from '@/utils/util'
 import { UDFCompatibleDatafeed } from './datafeeds/udf/lib/udf-compatible-datafeed'
-import { portraitOptions, landscapeOptions } from './datafeeds/userConfig/config.js'
+import { portraitOptions, landscapeOptions, styleNameMap } from './datafeeds/userConfig/config.js'
 
 // 创建Chart实例
 export function createChart (...args) {
@@ -12,23 +13,50 @@ export function createChart (...args) {
         description: '欧元美元' || '123',// 图表左上角名称显示
         symbolId: 1,  //产品id
         digits: '4', //小数点
-        buyPrice: '1.23', //买价
-        sellPrice: '1.35', //卖价
+    }
+ */
+
+/**
+    图表属性-默认值
+    property = {
+        chartType: '1', // 图表类型
+        showLastPrice: true, // 现价线
+        showBuyPrice: false, // 买价线
+        showSellPrice: false, // 卖价线
+        showPositionPrice: false, // 持仓线
+        showSeriesOHLC: false, // 高开低收
+        showBarChange: false, // 涨跌幅
+        showPriceBox: false, // 价格框
+        showSeriesTitle: false // K线标题
+    }
+ */
+
+/**
+    扩展字段-默认值
+    extension = {
+        theme: 'Light' // 主题
+        fullScreen: false // 全屏功能（右上角缩放按钮、横屏监听等）
+        orientation: 'portrait' // 非必填，默认值portrait，可选值: 'portrait' ｜ 'landscape' (竖屏｜横屏)
     }
  */
 
 class Chart {
-    constructor ({ containerId, initial, property, indicators = [] }, chartReadyCallback = () => {}) {
+    constructor ({ containerId, initial, property = {}, indicators = [], extension = {} }, chartReadyCallback = () => {}) {
         // 产品初始值
         this.initial = {
             description: initial.description, // 图表左上角名称显示
             symbolId: initial.symbolId, // 产品id
             digits: initial.digits, // 小数点
-            buyPrice: initial.buyPrice || 0, // 买价
-            sellPrice: initial.sellPrice || 0, // 卖价
         }
+        this.interval = initial.interval || '1'
+        this.buyPrice = '' // 买价
+        this.sellPrice = '' // 卖价
+        // 产品id
+        this.symbolId = initial.symbolId
         // 图表属性
-        this.property = property || {}
+        this.property = property
+        // 扩展
+        this.extension = extension
         // 容器id
         this.containerId = containerId
         // 容器节点
@@ -39,7 +67,6 @@ class Chart {
         this.chartReadyCallback = chartReadyCallback
         // 数据适配器
         this.datafeed = new UDFCompatibleDatafeed('', {
-            isControl: true,
             symbolInfo: initial
         })
         // 指标列表
@@ -48,9 +75,11 @@ class Chart {
         this._indicatorsEntity = []
 
         // 默认竖屏
-        this._orientation = 'portrait'
+        this._orientation = extension.orientation || 'portrait'
         // 价格线实例
         this._linesMap = {}
+        // 持仓线实例
+        this._positionLines = []
         // 事件订阅,通过实例方法subscribe订阅
         this._listener = {
             isLandscape: [], // 是否横屏
@@ -75,16 +104,10 @@ class Chart {
             return
         }
 
-        this.symbolId = initial.symbolId
+        console.log(`%c当前产品: ${[initial.description, initial.symbolId, initial.digits].join(',')}`, 'color:#2196f3')
 
         // 获取横竖屏配置项
-        let options = null
-        if (this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
-            // 横屏，但是默认值是竖屏时
-            options = landscapeOptions()
-        } else {
-            options = this._orientation === 'portrait' ? portraitOptions() : landscapeOptions()
-        }
+        const options = { ...this._options }
 
         if (!this._firstInit) {
             // 还原上一次用户操作（例如绘图）
@@ -95,17 +118,14 @@ class Chart {
         this.widget = window.tvWidget = new window.TradingView.widget({
             ...options,
             datafeed: datafeed,
-            container_id: containerId.slice(1),
+            container: containerId.slice(1),
             symbol: this.symbolId,
-            interval: '1',
-            locale: 'zh'
+            interval: this.interval,
         })
 
         this.widget.onChartReady(() => {
-            console.log(`%c初始产品: ${JSON.stringify(initial)}`, 'color:green')
             this.updateIndicator(this.indicators)
             this.updateProperty(this.property)
-            this._addFullScreenBtn()
             this._addPriceBox()
             this._bindEvent()
             if (this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
@@ -118,13 +138,38 @@ class Chart {
         })
     }
 
+    get _options () {
+        let options = null
+        if (this.fullScreen && this._firstInit && this._orientation === 'portrait' && [90, -90].includes(window.orientation)) {
+            // 横屏，但是默认值是竖屏时
+            options = landscapeOptions()
+        } else {
+            options = this._orientation === 'portrait' ? portraitOptions() : landscapeOptions()
+        }
+
+        ['theme', 'locale'].forEach(key => {
+            if (this.extension[key]) {
+                options[key] = this.extension[key]
+            }
+        })
+
+        // 覆盖图表属性
+        Object.assign(options.overrides, this._setProperty(this.property))
+
+        return options
+    }
+
     _bindEvent () {
         this._bindResize()
         this._bindClick()
+        this._addSubscribeEvents()
     }
 
     // 监听窗口变化
     _bindResize () {
+        if (!this.extension.fullScreen) return
+
+        this._addFullScreenBtn()
         const handleResize = debounce(() => {
             // 火狐的orientation延迟超过200ms以上
             if (window.orientation === 0 && this._orientation !== 'portrait') {
@@ -212,6 +257,46 @@ class Chart {
         })
     }
 
+    // 订阅图表事件
+    _addSubscribeEvents () {
+        // 监听周期改变
+        let timer = null
+        let _interval = this.interval
+        this.widget.activeChart().onIntervalChanged()
+            .subscribe(null, (interval) => {
+                _interval = interval
+                this.datafeed._historyProvider.setTick(null)
+                this.datafeed._historyProvider._previousBar = null
+                const rec = () => {
+                    clearTimeout(timer)
+                    timer = setTimeout(() => {
+                        const { _subscribers } = this.datafeed._dataPulseProvider
+                        const listenerGuid = Object.keys(_subscribers).find(key => new RegExp(`_#_${_interval}$`).test(key))
+                        if (listenerGuid) {
+                            // 切换周期后，修改产品信息
+                            this.datafeed._historyProvider.setResolution(_interval)
+                            this.datafeed._historyProvider.setTick(_subscribers[listenerGuid].listener)
+
+                            // 更新最新价为当前周期数据的最后一根k线
+                            this._setLastPriceFromLastBar()
+                        } else {
+                            rec()
+                        }
+                    }, 300)
+                }
+
+                rec()
+            })
+
+        // 监听数据加载
+        this.widget.activeChart().onDataLoaded()
+            .subscribe(null,
+                () => {
+                    this._setLastPriceFromLastBar()
+                },
+                true)
+    }
+
     // 批量创建指标
     _createStudies (info) {
         this.indicators.forEach(e => {
@@ -224,7 +309,7 @@ class Chart {
     // 添加买卖价节点（左上角）
     _addPriceBox () {
         const contentWindow = this.elm.querySelector('iframe').contentWindow
-        this.priceBox = appendPriceBoxToIframe(contentWindow, this.initial.sellPrice, this.initial.buyPrice, this.property.showPriceBox)
+        this.priceBox = appendPriceBoxToIframe(contentWindow, this.sellPrice, this.buyPrice, this.property.showPriceBox)
     }
 
     togglePriceBox (bool) {
@@ -236,7 +321,7 @@ class Chart {
     }
 
     _addFullScreenBtn () {
-        const len = this.initial.sellPrice ? this.initial.sellPrice.length : 10
+        const len = this.sellPrice ? this.sellPrice.length : 10
         appendBtnToIframe({
             el: this.elm.querySelector('iframe'),
             type: 'landscape',
@@ -310,32 +395,44 @@ class Chart {
     }
 
     // 价格线
-    _setLine (config) {
+    _setLine (config = {}) {
         const { _linesMap, symbolId } = this
         !_linesMap[symbolId] && (_linesMap[symbolId] = {})
         const target = _linesMap[symbolId]
+        const isShowBuyPrice = typeof config.showBuyPrice === 'boolean' ? config.showBuyPrice : this.property.showBuyPrice
+        const showSellPrice = typeof config.showSellPrice === 'boolean' ? config.showSellPrice : this.property.showSellPrice
+        const upColor = config.upColor || this.property.upColor
+        const downColor = config.downColor || this.property.downColor
 
-        if (typeof config.showBuyPrice === 'boolean') {
-            if (config.showBuyPrice) {
-                target.buyPriceLine = target.buyPriceLine || this.widget.activeChart().createOrderLine()
-                    .setPrice(this.initial.buyPrice)
-                    .setText('')
-                    .setLineStyle(0)
-                    .setLineColor('#e3525c')
-                    .setQuantity(false)
+        if (typeof isShowBuyPrice === 'boolean') {
+            if (isShowBuyPrice) {
+                if (target.buyPriceLine) {
+                    target.buyPriceLine.setPrice(this.buyPrice)
+                } else {
+                    target.buyPriceLine = this.widget.activeChart().createOrderLine()
+                        .setPrice(this.buyPrice)
+                        .setText('')
+                        .setLineStyle(0)
+                        .setLineColor(upColor)
+                        .setQuantity(false)
+                }
             } else if (target.buyPriceLine) {
                 target.buyPriceLine.remove()
                 target.buyPriceLine = null
             }
         }
-        if (typeof config.showSellPrice === 'boolean') {
-            if (config.showSellPrice) {
-                target.sellPriceLine = target.sellPriceLine || this.widget.activeChart().createOrderLine()
-                    .setPrice(this.initial.sellPrice)
-                    .setText('')
-                    .setLineStyle(0)
-                    .setLineColor('#10b873')
-                    .setQuantity(false)
+        if (typeof showSellPrice === 'boolean') {
+            if (showSellPrice) {
+                if (target.sellPriceLine) {
+                    target.sellPriceLine.setPrice(this.sellPrice)
+                } else {
+                    target.sellPriceLine = this.widget.activeChart().createOrderLine()
+                        .setPrice(this.sellPrice)
+                        .setText('')
+                        .setLineStyle(0)
+                        .setLineColor(downColor)
+                        .setQuantity(false)
+                }
             } else if (target.sellPriceLine) {
                 target.sellPriceLine.remove()
                 target.sellPriceLine = null
@@ -361,15 +458,92 @@ class Chart {
 
     // 覆盖图表属性
     _applyOverrides (config) {
-        const options = {}
-        if (typeof config.showSeriesOHLC === 'boolean') {
-            options['paneProperties.legendProperties.showSeriesOHLC'] = config.showSeriesOHLC
+        const options = this._setProperty(config)
+        this.widget.applyOverrides(options)
+    }
+
+    _setProperty (property, overrides = {}) {
+        Object.keys(property || {}).forEach(key => {
+            switch (key) {
+            case 'showSeriesTitle':
+            case 'showSeriesOHLC':
+            case 'showBarChange': {
+                overrides[`paneProperties.legendProperties.${key}`] = property[key]
+                break
+            }
+            case 'upColor':
+            case 'downColor': {
+                const styleName = styleNameMap[property.chartType]
+                if (['barStyle', 'candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
+                    overrides['mainSeriesProperties.' + styleName + '.upColor'] = property.upColor
+                    overrides['mainSeriesProperties.' + styleName + '.downColor'] = property.downColor
+                }
+                if (['candleStyle', 'haStyle', 'hollowCandleStyle'].includes(styleName)) {
+                    overrides['mainSeriesProperties.' + styleName + '.borderUpColor'] = property.upColor
+                    overrides['mainSeriesProperties.' + styleName + '.borderDownColor'] = property.downColor
+                }
+                break
+            }
+            case 'chartType': {
+                overrides['mainSeriesProperties.style'] = Number(property.chartType)
+                break
+            }
+            }
+        })
+        return overrides
+    }
+
+    // 重置K线可视区域
+    _resetVisibleRange () {
+        try {
+            // 重置图表（包括缩放/刻度等）
+            this.widget.activeChart().executeActionById('chartReset')
+        } catch (error) {
+            console.error('_resetVisibleRange: ', error)
+        }
+    }
+
+    // 判断是否存在历史数据
+    _hasBars () {
+        return !!this.widget.activeChart().getSeries().barsCount()
+    }
+
+    // 手动更新现价线
+    _setLastPrice (price, isShowLastPrice = this.property.showLastPrice) {
+        const { _linesMap, symbolId } = this
+        !_linesMap[symbolId] && (_linesMap[symbolId] = {})
+        const target = _linesMap[symbolId]
+
+        if (isShowLastPrice && !target.lastPriceLine) {
+            target.lastPriceLine = this.widget.activeChart().createOrderLine()
+                .setPrice(price)
+                .setText('')
+                .setLineStyle(1)
+                .setLineColor('#467fd3')
+                .setQuantity(false)
         }
 
-        if (typeof config.showSeriesOHLC === 'boolean') {
-            options['paneProperties.legendProperties.showBarChange'] = config.showBarChange
+        if (isShowLastPrice) {
+            target.lastPriceLine.setPrice(price)
+        } else {
+            target.lastPriceLine && target.lastPriceLine.remove()
+            target.lastPriceLine = null
         }
-        this.widget.applyOverrides(options)
+    }
+
+    // 更新最新价为当前周期数据的最后一根k线
+    _setLastPriceFromLastBar (bool) {
+        const lastBar = this.widget.activeChart().getSeries().data().last()
+        if (lastBar) {
+            this._setLastPrice(lastBar.value[4], bool)
+            this.datafeed._historyProvider._previousBar = {
+                time: lastBar.value[6],
+                close: lastBar.value[4],
+                open: lastBar.value[1],
+                high: lastBar.value[2],
+                low: lastBar.value[3],
+            }
+        }
     }
 
     /** ---------------------------- 分割线 ------------------------------------------------------------------------------------------- */
@@ -393,28 +567,35 @@ class Chart {
     }
 
     // 切换图表类型
-    setChartType = (type) => {
-        if (typeof type === 'number') {
+    setChartType = (chartType) => {
+        if (typeof chartType === 'number' && !isNaN(chartType)) {
             // 0:Bar 1:Candle 2:Line 3:Area ,8:Heikin-Ashi ,9: Hollow Candle 10: Baseline 12 10Hi-Lo
-            this.widget.activeChart().setChartType(type)
+            this._applyOverrides({
+                chartType
+            })
         }
     }
 
     // 切换周期
     setResolution = (val) => {
-        console.log('setResolution:', val)
+        console.log(`%c开始切换周期: ${val}`, 'color:rgba(0,0,0,0.3)')
         this.widget.activeChart()
             .setResolution(val, () => {
-                console.log(`%c切换周期: ${val}`, 'color:green')
+                this.interval = val
+                console.log(`%c周期切换成功: ${val}`, 'color:rgba(0,0,0,0.6)')
+                this._resetVisibleRange()
             })
     }
 
     // 更新买/卖价格线
     updateLineData = ({ buyPrice, sellPrice }) => {
-        const { _linesMap, symbolId } = this
-        const target = _linesMap[symbolId] || {}
-        target.buyPriceLine && target.buyPriceLine.setPrice(buyPrice)
-        target.sellPriceLine && target.sellPriceLine.setPrice(sellPrice)
+        if (!this._hasBars()) {
+            return
+        }
+        this.buyPrice = buyPrice
+        this.sellPrice = sellPrice
+
+        this._setLine()
         if (this.priceBox) {
             this.priceBox.setSellPrice(sellPrice)
             this.priceBox.setBuyPrice(buyPrice)
@@ -427,6 +608,8 @@ class Chart {
         if (!Array.isArray(value)) {
             value = [value]
         }
+
+        value = value.filter(e => !isEmpty(e))
 
         const allStudies = this.widget.activeChart().getAllStudies()
         const temp = {}
@@ -441,6 +624,8 @@ class Chart {
 
         addList.forEach(e => {
             this.widget.activeChart().createStudy(e.name, ...e.params, {
+                'palettes.plot_0_Palette.colors.0.color': this.property.upColor, // 涨的颜色
+                'palettes.plot_0_Palette.colors.1.color': this.property.downColor, // 跌的颜色
                 precision: this.initial.digits
             }).then(id => {
                 // 更新指标实体
@@ -489,17 +674,59 @@ class Chart {
     }
 
     // 覆盖图表配置
-    updateProperty (config) {
+    updateProperty (config = {}) {
         this._applyOverrides(config)
-        this.setChartType(config.chartType)
+        if (typeof config.showPositionPrice === 'boolean') {
+            !config.showPositionPrice && this.updatePosition()
+        }
+        // 现价线
+        if (typeof config.showLastPrice === 'boolean' && config.showLastPrice !== this.property.showLastPrice) {
+            // 更新最新价为当前周期数据的最后一根k线
+            this._setLastPriceFromLastBar(config.showLastPrice)
+        }
+
         this._setLine(config)
 
+        // 合并属性
         Object.assign(this.property, config)
     }
 
     // 实时tick
     setTick (price, time) {
         this.datafeed._historyProvider.onTick(price, time)
+        this._setLastPrice(price)
+    }
+
+    // 批量创建持仓线
+    updatePosition (positions = []) {
+        while (this._positionLines.length) {
+            this._positionLines.pop().remove()
+        }
+        if (!this.property.showPositionPrice) {
+            return
+        }
+        this._positionLines = positions.map(el => {
+            const { text, quantity, price, color } = el
+
+            const entity = this.widget.activeChart().createOrderLine()
+                .setPrice(price)
+                .setText(text)
+                .setExtendLeft(false)
+                .setLineStyle(0)
+                .setQuantity(quantity)
+                .setQuantityBackgroundColor(color)
+                .setBodyBorderColor(color)
+                .setLineColor(color)
+                .setQuantityBorderColor(color)
+                .setLineLength(55)
+            return entity
+        })
+    }
+
+    // 更改图表主题
+    changeTheme (name) {
+        this.widget.changeTheme(name)
+        this.extension.theme = name
     }
 }
 
@@ -550,7 +777,7 @@ function appendPriceBoxToIframe (iframeWindow, sellPrice, buyPrice, isShow) {
                     </div>`
     const sellElm = div.querySelector('.sell .num')
     const buyElm = div.querySelector('.buy .num')
-    elm.appendChild(div)
+    if (elm) elm.appendChild(div)
 
     let oldSellPrice = 0
     const setSellPrice = price => {

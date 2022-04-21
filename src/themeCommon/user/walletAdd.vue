@@ -31,14 +31,20 @@
                 <div class='box'>
                     <input v-model='name' :placeholder="$t('walletAdd.namePlaceholder')" type='text' />
                 </div>
+                <div class='tip'>
+                    {{ $t('common.sendToYou') }} {{ customInfo?.phone || customInfo?.email }}
+                </div>
                 <div class='box'>
-                    <input v-model='code' :placeholder="$t('walletAdd.codePlaceholder')" />
+                    <input v-model='code' :placeholder="$t('common.inputVerifyCode')" />
                     <span v-if='countDown === 0' class='get' @click='getCode'>
                         {{ $t('walletAdd.codeBtn') }}
                     </span>
                     <span v-else class='time'>
                         {{ countDown }}{{ $t('walletAdd.codeHint') }}
                     </span>
+                </div>
+                <div v-if='googleCodeVis' class='box'>
+                    <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
                 </div>
             </div>
         </div>
@@ -48,9 +54,9 @@
         </button>
 
         <!-- 提币币种弹窗 -->
-        <van-action-sheet v-model:show='coinKindVisible' :actions='coinKindList' @select='selectCoinKind' />
+        <van-action-sheet v-model:show='coinKindVisible' :actions='coinKindList' class='action-sheet-coin' @select='selectCoinKind' />
         <!-- 链名称弹窗 -->
-        <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' @select='selectChainName' />
+        <van-action-sheet v-model:show='chainNameVisible' :actions='chainNameList' class='action-sheet-chain' @select='selectChainName' />
     </div>
 </template>
 
@@ -60,7 +66,7 @@ import { reactive, toRefs, computed, onMounted } from 'vue'
 // vuex
 import { useStore } from 'vuex'
 // router
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 // components
 import Top from '@/components/top'
 // vant
@@ -68,17 +74,21 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 // api
-import { getWithdrawCurrencyList, addWalletAddress } from '@/api/user'
+import { getAllWithdrawCurrencyList, addWalletAddressV1v1v2 } from '@/api/user'
 import { verifyCodeSend } from '@/api/base'
+import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
 export default {
     components: {
-        Top
+        Top,
+        googleVerifyCode
     },
     setup () {
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
+        const route = useRoute()
+        const { tradeType, accountId } = route.query
         const state = reactive({
             // 提币链名称数据列表
             allList: [],
@@ -106,10 +116,12 @@ export default {
             verifyInfo: {
                 code: '',
                 token: ''
-            }
+            },
+            googleCode: ''
         })
         // 账户信息
         const { value: customInfo } = computed(() => store.state._user.customerInfo)
+        const googleCodeVis = computed(() => customInfo.googleId > 0)
 
         // 初始化数据
         let timer = null
@@ -139,14 +151,20 @@ export default {
             state.chainName = item.name
             state.chainNameVisible = false
         }
+        const getGooleVerifyCode = val => {
+            state.googleCode = val
+        }
         // 获取客户提币币种和链名称
         const queryWithdrawCurrencyList = () => {
-            getWithdrawCurrencyList({
+            getAllWithdrawCurrencyList({
                 companyId: customInfo.companyId,
                 customerNo: customInfo.customerNo,
                 customerGroupId: customInfo.customerGroupId,
                 country: customInfo.country,
-                withdrawMethod: 'digit_wallet'
+                withdrawMethod: 'digit_wallet',
+                tradeType,
+                accountId
+
             }).then(res => {
                 if (res.check()) {
                     const { data } = res
@@ -172,23 +190,9 @@ export default {
         }
         // 点击获取验证码
         const getCode = () => {
-            // 验证是否绑定手机号
-            if (!customInfo.phone) {
-                return Dialog.confirm({
-                    title: t('withdraw.hint'),
-                    theme: 'round-button',
-                    message: t('withdraw.bindPhoneHint'),
-                    confirmButtonText: t('withdraw.bindBtn'),
-                    cancelButtonText: t('withdraw.close')
-                }).then(() => {
-                    router.push('/bindMobile')
-                }).catch(() => {})
-            }
-
             // 发送验证码
             verifyCodeSend({
-                bizType: 'SMS_COMMON_VERIFICATION_CODE',
-                toUser: customInfo.phoneArea + ' ' + customInfo.phone
+                bizType: customInfo?.phone ? 'SMS_LOGINED_VERIFICATION_CODE' : 'EMAIL_LOGINED_VERIFICATION_CODE'
             }).then(res => {
                 state.verifyInfo = res.data
                 state.countDown = 59
@@ -215,27 +219,29 @@ export default {
             if (!state.code) {
                 return Toast({ message: t('walletAdd.codePlaceholder') })
             }
-            if (state.code !== verifyInfo.code) {
-                return Toast({ message: t('walletAdd.confirmCodePlaceholder') })
+            if (googleCodeVis.value && !state.googleCode) {
+                return Toast(t('common.inputGoogleCode'))
             }
 
             // 发起api请示
-            addWalletAddress({
+            addWalletAddressV1v1v2({
                 currency: state.coinKind,
                 chainName: state.chainName,
                 address: state.address,
                 remark: state.name,
-                phone: customInfo.phone,
+                type: customInfo?.phone ? 2 : 1,
                 verifyCode: state.code,
-                phoneArea: customInfo.phoneArea,
-                sendToken: verifyInfo.token
+                phoneArea: customInfo?.phoneArea,
+                sendToken: verifyInfo.token,
+                googleCode: state.googleCode,
+
             }).then(res => {
                 if (res.check()) {
-                    Toast.success(t('withdraw.successHint'))
-                    init()
-                    setTimeout(() => {
+                    Dialog.alert({
+                        message: t('withdraw.successHint'),
+                    }).then(() => {
                         router.go(-1)
-                    }, 1500)
+                    })
                 } else {
                     Toast(res.msg)
                 }
@@ -252,7 +258,10 @@ export default {
             selectCoinKind,
             selectChainName,
             getCode,
-            onConfirm
+            onConfirm,
+            customInfo,
+            googleCodeVis,
+            getGooleVerifyCode
         }
     }
 }
@@ -264,18 +273,21 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    background: var(--bgColor);
 }
 .container {
     display: flex;
     flex: 1;
     flex-direction: column;
     overflow-y: auto;
+    background: var(--contentColor);
     .empty {
         height: rem(20px);
-        background-color: #F9F9F9;
+        background-color: var(--bgColor);
     }
 }
 .module-form {
+    background-color: var(--contentColor);
     .select {
         display: flex;
         align-items: center;
@@ -283,7 +295,7 @@ export default {
         padding: 0 rem(30px);
         color: var(--color);
         font-size: rem(28px);
-        border-bottom: 1px solid var(--bdColor);
+        border-bottom: 1px solid var(--lineColor);
         .option {
             display: inline-flex;
             flex: 1;
@@ -303,20 +315,35 @@ export default {
     padding: 0 rem(28px);
     .box {
         display: flex;
-        align-items: center;
         justify-content: space-between;
         height: rem(100px);
         color: var(--color);
         font-size: rem(28px);
-        border-bottom: 1px solid var(--bdColor);
+        background-color: var(--contentColor);
+        border-bottom: 1px solid var(--lineColor);
+        :deep(.van-cell){
+            padding-left: 0;
+            padding-right: 0;
+            &::after{
+                border: none;
+            }
+        }
         input {
             flex: 1;
             height: 100%;
             margin-right: rem(20px);
         }
         .time {
-            color: var(--mutedColor);
+            color: var(--minorColor);
+             line-height: rem(104px);
         }
+        .get{
+            line-height: rem(104px);
+        }
+    }
+    .tip{
+        padding-top: rem(20px) ;
+        color: var(--normalColor);
     }
 }
 .footer-btn {
@@ -324,8 +351,8 @@ export default {
     align-items: center;
     justify-content: center;
     height: rem(104px);
-    background-color: var(--btnColor);
-    border-top: 1px solid var(--bdColor);
+    background-color: var(--contentColor);
+    border-top: 1px solid var(--lineColor);
     span {
         color: var(--color);
         font-weight: bold;
@@ -333,4 +360,5 @@ export default {
         letter-spacing: 1px;
     }
 }
+
 </style>

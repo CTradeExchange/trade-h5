@@ -6,9 +6,11 @@
             v-model='val'
             class='input'
             v-bind='$attrs'
+            :maxlength='maxLength'
+            :placeholder='label'
             required
-            :placeholder="label"
             :type='pwdVisible ? "text" : "password"'
+            @blur='onBlur'
             @input='onInput'
         />
         <input
@@ -17,9 +19,11 @@
             v-model='val'
             class='input'
             v-bind='$attrs'
+            :maxlength='maxLength'
+            :placeholder='label'
             required
             type='text'
-            :placeholder="label"
+            @blur='onBlur'
             @input='onInput'
         />
         <!-- <label v-if='label' class='label' :for='id'>{{ label }}</label> -->
@@ -48,8 +52,11 @@ export default {
             type: Boolean,
             default: false
         },
+        maxLength: {
+            type: Number
+        }
     },
-    emits: ['update:modelValue', 'input'],
+    emits: ['update:modelValue', 'input', 'onBlur'],
     data () {
         return {
             val: this.modelValue,
@@ -72,6 +79,9 @@ export default {
             this.$emit('update:modelValue', $event.target.value)
             this.$emit('input', $event.target.value)
         },
+        onBlur ($event) {
+            this.$emit('onBlur', $event.target.value)
+        }
     }
 }
 </script>
@@ -103,6 +113,7 @@ export default {
     width: 100%;
     height: rem(75px);
     padding: 0 5px;
+    //color: var(--white);
     &:focus~.label,
     &:valid~.label {
         transform: scale(0.8) translateY(-90%);
@@ -110,13 +121,13 @@ export default {
     }
 }
 .van-icon-clear {
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 .icon_icon_default,
 .icon_icon_pressed {
     margin-left: 0.8em;
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 </style>

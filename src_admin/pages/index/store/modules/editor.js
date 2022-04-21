@@ -1,4 +1,4 @@
-import Vue from 'vue'
+// import Vue from 'vue'
 import { deepClone } from '@utils/deepClone'
 export default {
     namespaced: true,
@@ -6,7 +6,12 @@ export default {
         activated: null,
         elementList: [],
         getProducting: false,
-        accountGroupProduct: []
+        accountGroupProduct: [],
+        tradeTypeList: [],
+        tradeTypeBlockProduct: {},
+        tradeTypeSelfSymbol: {},
+        tradeTypeBlockCollect: [],
+        activeIndex: ''
     },
     mutations: {
         /**
@@ -128,12 +133,56 @@ export default {
             state.accountGroupProduct = data
         },
         /**
+         * 更新玩法板块产品.
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_PRODUCT (state, data) {
+            state.tradeTypeBlockProduct = data
+        },
+        /**
+         * 更新玩法
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_LIST (state, data) {
+            state.tradeTypeList = data
+        },
+        UPDATE_TRADETYPE_BLOCK_COLLECT (state, data) {
+            state.tradeTypeBlockCollect = data
+        },
+        /**
+         * 更新玩法自选产品.
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_SELFSYMBOL (state, data) {
+            if (data.activatedId) {
+                if (!state.tradeTypeSelfSymbol[data.activatedId]) {
+                    state.tradeTypeSelfSymbol[data.activatedId] = {}
+                }
+                state.tradeTypeSelfSymbol[data.activatedId][data.type] = data.data
+            }
+        },
+        /**
+         * 从接口更新玩法自选产品.
+         * @param {string} data - 产品信息.
+         */
+        UPDATE_TRADETYPE_SELFSYMBOL_ALL (state, data) {
+            state.tradeTypeSelfSymbol[data.activatedId] = data.data
+        },
+        /**
          * 获取产品信息中.
          * @param {string} data.key - 客户组id.
          * @param {string} data.value - 产品列表.
          */
         UPDATE_GET_PRODUCTING (state, data) {
             state.getProducting = data
+        },
+        /**
+         * 更新当前操作的对象.
+         * @param {string} data.key - 当前操作右侧表单的下标.
+         * @param {string} data.value - 产品列表.
+         */
+        UPDATE_ACTIVEINDEX (state, data) {
+            state.activeIndex = data
         }
     }
 }

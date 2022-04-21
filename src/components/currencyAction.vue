@@ -2,7 +2,7 @@
     <van-field
         v-model='modelValue'
         :input-align='inputAlign'
-        :label='$t("register.accountCurrency")'
+        :label='$t("bank.bankCurrency")'
         :placeholder='$t("register.accountCurrency")'
         readonly
         right-icon='arrow-down'
@@ -37,7 +37,13 @@ export default {
         const state = reactive({
             actionSheetVisible: false
         })
-        const actionsList = computed(() => store.state._base.wpCompanyInfo.currencyList)
+        const actionsList = computed(() => {
+            store.state._base.wpCompanyInfo.currencyList.forEach(el => {
+                el.name = el.code
+            })
+            return store.state._base.wpCompanyInfo.currencyList
+        })
+
         const actionOnSelect = (item) => {
             emit('update:modelValue', item.code)
             state.actionSheetVisible = false

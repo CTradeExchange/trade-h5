@@ -20,16 +20,11 @@
 </template>
 
 <script>
-import { computed, onMounted, onUnmounted, ref, watch, unref } from 'vue'
-import { useStore } from 'vuex'
-import { Popup } from 'vant'
+import { onMounted, onUnmounted, ref, unref } from 'vue'
 import { resolutionToKlineType, resolutionToText } from './datafeeds/userConfig/config.js'
 import { createChart } from './chart'
 
 export default {
-    components: {
-        [Popup.name]: Popup,
-    },
     props: {
         // 产品初始值
         initialValue: {
@@ -42,9 +37,6 @@ export default {
         }
     },
     setup (props, context) {
-        const store = useStore()
-        const symbolId = ref(props.initialValue.symbolId)
-        const product = computed(() => store.state._quote.productMap[symbolId.value])
         // 是否横屏
         const isLandscape = ref([90, -90].includes(window.orientation))
 
@@ -57,33 +49,32 @@ export default {
 
         // 图表实例
         const chart = ref(null)
-        onMounted(() => {
-            const { options } = props
+        // 图表实例化状态
+        const chartReady = ref(false)
+
+        const initChart = (_props = props, cb = () => {}) => {
+            chartReady.value = false
+            const { options, initialValue } = _props
             chart.value = createChart({
                 // 容器id
                 containerId: '#tv-chart-container',
                 // 产品初始值
                 initial: {
-                    ...props.initialValue,
-                    buyPrice: product.value.buy_price,
-                    sellPrice: product.value.sell_price,
+                    ...initialValue
                 },
                 // 图表属性
-                property: {
-                    showBuyPrice: options.showBuyPrice, // 买价线
-                    showSellPrice: options.showSellPrice, // 卖价线
-                    showSeriesOHLC: options.showSeriesOHLC, // 高开低收
-                    showBarChange: options.showBarChange, // 涨跌幅
-                    chartType: options.chartType, // 图表类型
-                    showPriceBox: options.showPriceBox // 价格框
-                },
+                property: options.property,
                 // 指标
-                indicators: options.indicators || []
+                indicators: options.indicators,
+                // 扩展
+                extension: options.extension
             }, () => {
+                chartReady.value = true
+
                 // 监听是否横屏
                 unref(chart).subscribe('isLandscape', (bool) => {
                     isLandscape.value = bool
-                    context.emit('changeOrientation', bool)
+                    context.emit('orientationChanged', bool)
                 })
 
                 // 监听指标从图表内直接移除
@@ -92,42 +83,91 @@ export default {
                         context.emit('indicatorRemoved', name)
                     }
                 })
-
-                // 实时更新买卖价线
-                watch(() => [product.value.buy_price, product.value.sell_price], (newValues) => {
-                    const [buyPrice, sellPrice] = newValues
-                    unref(chart).updateLineData({ buyPrice, sellPrice })
-                })
-
-                // 实时更新tick
-                store.subscribe((mutation) => {
-                    const { type, payload: { tick_time, cur_price } } = mutation
-                    if (!(type === '_quote/Update_productTick' && String(unref(chart).symbolId) === String(mutation.payload.symbolId))) {
-                        return
-                    }
-                    unref(chart).setTick(cur_price, tick_time)
-                })
+                // 图表实例创建完成后回调
+                context.emit('onChartReady')
+                cb()
             })
+        }
+
+        // 对方法增加判断
+        const withMethod = (fn) => {
+            return (...args) => {
+                if (unref(chartReady)) {
+                    // console.log(fn.name, '图表未准备好')
+                    return fn(...args)
+                }
+            }
+        }
+
+        onMounted(() => {
+            initChart()
         })
         onUnmounted(() => {
             unref(chart).destroyed()
         })
 
-        // 切换产品后增加自定义逻辑
+        // 设置图表类型
+        const setChartType = (...args) => {
+            unref(chart).setChartType(...args)
+        }
+        // 切换产品, 执行symbolChanged回调
         const setSymbol = (info) => {
             unref(chart).setSymbol(info)
                 .then(id => {
-                    symbolId.value = id
                     context.emit('symbolChanged', id)
                 })
         }
+        // 设置周期
+        const setResolution = (...args) => {
+            unref(chart).setResolution(...args)
+        }
+        // 设置指标
+        const updateIndicator = (...args) => {
+            unref(chart).updateIndicator(...args)
+        }
+        // 更新买卖价线（若左上角/买卖价框设置显示，则同步更新）
+        const updateLineData = (...args) => {
+            unref(chart).updateLineData(...args)
+        }
+        // 更新持仓线
+        const updatePosition = (...args) => {
+            unref(chart).updatePosition(...args)
+        }
+        // 覆盖图表配置
+        const updateProperty = (...args) => {
+            unref(chart).updateProperty(...args)
+        }
+        // 实时更新tick
+        const setTick = (price, time) => {
+            unref(chart).setTick(price, time)
+        }
+        // 重新初始化图表
+        const reset = (newProps, cb) => {
+            unref(chart) && unref(chart).destroyed()
+            initChart(newProps, cb)
+        }
+
+        // 更改图表主题
+        const changeTheme = (name) => {
+            unref(chart) && unref(chart).changeTheme(name)
+        }
+
         /** 图表相关-end */
 
         return {
             resolutionList,
-            chart,
-            setSymbol,
             isLandscape,
+            chart,
+            setSymbol: withMethod(setSymbol),
+            setResolution: withMethod(setResolution),
+            updateIndicator: withMethod(updateIndicator),
+            updatePosition: withMethod(updatePosition),
+            setChartType: withMethod(setChartType),
+            updateLineData: withMethod(updateLineData),
+            updateProperty: withMethod(updateProperty),
+            setTick: withMethod(setTick),
+            changeTheme: withMethod(changeTheme),
+            reset
         }
     }
 }
@@ -141,6 +181,7 @@ export default {
     height: 100%;
     #tv-chart-container {
         flex: 1;
+        background: var(--contentColor);
         &.landscape {
             position: fixed;
             top: 0;

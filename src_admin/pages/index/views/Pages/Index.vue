@@ -1,58 +1,57 @@
 <template>
     <div class='m-pageList'>
         <el-collapse :value="['1']">
-            <el-collapse-item class='search' name='1' title='页面列表'>
-                <el-form ref='form' inline label-position='left' label-width='60px' :model='searchForm'>
-                <!-- <el-form-item label="code">
-                        <el-input v-model="searchForm.name"></el-input>
-                    </el-form-item>
-                    <el-form-item label="标题">
-                        <el-input v-model="searchForm.name"></el-input>
-                    </el-form-item> -->
+            <el-collapse-item class='search' name='1' :title="$t('title')">
+                <!-- <el-form ref='form' inline label-position='left' label-width='60px' :model='searchForm'>
+
                 </el-form>
                 <el-row>
                     <el-col class='footerBtns' :span='24'>
                         <el-button icon='el-icon-edit' type='success' @click='create'>
                             新建
                         </el-button>
-                        <!-- <el-button icon="el-icon-delete">重置</el-button> -->
+
                         <el-button icon='el-icon-search' :loading='loading' type='primary' @click='getPageList'>
                             查询
                         </el-button>
                     </el-col>
-                </el-row>
+                </el-row> -->
             </el-collapse-item>
         </el-collapse>
+        <el-tabs v-model='activeLang'>
+            <el-tab-pane v-for='item in lang' :key='item.val' :label='item.name' :name='item.val' />
+        </el-tabs>
+
         <div class='data-list'>
             <el-table v-loading='loading' border :data='list' style='width: 100%;'>
-                <el-table-column align='center' label='页面编码' prop='page_code'>
+                <el-table-column align='center' :label="$t('pageCode')" prop='page_code'>
                     <template #default='scope'>
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text'>
                             {{ scope.row.page_code }}
                         </el-button>
-                        <el-button v-else size='small' type='text' @click='edit(scope.row.page_code)'>
+                        <el-button v-else size='small' type='text' @click='edit(scope.row)'>
                             {{ scope.row.page_code }}
                         </el-button>
                     </template>
                 </el-table-column>
-                <el-table-column align='center' label='标题' prop='title' />
-                <el-table-column align='center' label='状态' prop='status' width='60' />
-                <el-table-column label='创建时间' prop='create_date' width='160' />
-                <el-table-column label='更新时间' prop='update_date' width='160' />
-                <el-table-column align='center' label='操作人' prop='updater' width='100' />
-                <el-table-column align='center' fixed='right' label='操作' width='200'>
+                <el-table-column align='center' :label="$t('titleName')" prop='title' />
+                <el-table-column align='center' :label="$t('state')" prop='status' width='60' />
+                <el-table-column :label="$t('createTime')" prop='create_date' width='160' />
+                <el-table-column :label="$t('updateTime')" prop='update_date' width='160' />
+                <el-table-column align='center' :label="$t('operator')" prop='updater' width='100' />
+                <el-table-column align='center' fixed='right' :label="$t('operate')" width='200'>
                     <template #default='scope'>
-                        <el-button size='small' type='text' @click='setting(scope.row)'>
+                        <!-- <el-button size='small' type='text' @click='setting(scope.row)'>
                             编辑
-                        </el-button>
+                        </el-button> -->
                         <el-button v-if="scope.row.page_code.indexOf('http')==0" size='small' type='text' @click='showOtherPage(scope.row.page_code)'>
-                            查看
+                            {{ $t('check') }}
                         </el-button>
-                        <el-button v-else size='small' type='text' @click='edit(scope.row.page_code)'>
-                            设计页面
+                        <el-button v-else size='small' type='text' @click='edit(scope.row)'>
+                            {{ $t('designPage') }}
                         </el-button>
                         <el-button size='small' type='text' @click='viewPublish(scope.row)'>
-                            查看发布记录
+                            {{ $t('viewHistory') }}
                         </el-button>
                     </template>
                 </el-table-column>
@@ -74,51 +73,51 @@
             v-model='addForm.show'
             append-to-body
             :close-on-click-modal='false'
-            :title="addForm.type == 'add' ? '新建页面' : '编辑页面'"
+            :title="addForm.type == 'add' ? $t('newPage') : $t('editPage')"
             width='500px'
             @closed='closed'
         >
             <el-form ref='addFormModal' label-width='80px' :model='addForm.form' :rules='addForm.rules'>
-                <el-form-item label='页面类型'>
+                <el-form-item :label="$t('pageType')">
                     <el-radio-group v-model='addForm.form.pageType' :aa='addForm.form.pageType' :disabled="addForm.type ==='modify'" @change='changeType'>
                         <el-radio label='1'>
-                            内部页面
+                            {{ $t('innerPage') }}
                         </el-radio>
                         <el-radio label='2'>
-                            活动页面
+                            {{ $t('activePage') }}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
-                <el-form-item v-if='addForm.form.pageType == 1' v-model='addForm.form.page_code' :disabled="addForm.type ==='modify'" label='页面编码' prop='page_code'>
-                    <el-select v-model='addForm.form.page_code' clearable :disabled="addForm.type ==='modify'" placeholder='请选择' @change='changePage'>
+                <el-form-item v-if='addForm.form.pageType == 1' v-model='addForm.form.page_code' :disabled="addForm.type ==='modify'" :label="$t('pageCode')" prop='page_code'>
+                    <el-select v-model='addForm.form.page_code' clearable :disabled="addForm.type ==='modify'" :placeholder="$t('pleaseChoose')" @change='changePage'>
                         <el-option v-for='item in h5PageList' :key='item.name' :label='item.title' :value='item.name' />
                     </el-select>
                 </el-form-item>
                 <template v-else-if='addForm.form.pageType == 2'>
-                    <el-form-item label='页面地址' prop='page_code'>
-                        <el-input v-model='addForm.form.page_code' placeholder='请输入' />
+                    <el-form-item :label="$t('pageAdd')" prop='page_code'>
+                        <el-input v-model='addForm.form.page_code' :placeholder="$t('pleaseEnter')" />
                     </el-form-item>
-                    <el-form-item label='标题'>
-                        <el-input v-model='addForm.form.title' autocomplete='off' placeholder='请输入' />
+                    <el-form-item :label="$t('titleName')">
+                        <el-input v-model='addForm.form.title' autocomplete='off' :placeholder="$t('pleaseEnter')" />
                     </el-form-item>
                 </template>
-                <el-form-item label='状态'>
+                <el-form-item :label="$t('State')">
                     <el-radio-group v-model='addForm.form.status'>
                         <el-radio label='1'>
-                            启用
+                            {{ $t('enable') }}
                         </el-radio>
                         <el-radio label='0'>
-                            禁用
+                            {{ $t('disable') }}
                         </el-radio>
                     </el-radio-group>
                 </el-form-item>
             </el-form>
             <div slot='footer' class='dialog-footer'>
                 <el-button @click='addForm.show = false'>
-                    取 消
+                    {{ $t('cancel') }}
                 </el-button>
                 <el-button :loading='addForm.loading' type='primary' @click='submit'>
-                    确 定
+                    {{ $t('sure') }}
                 </el-button>
             </div>
         </el-dialog>
@@ -126,20 +125,22 @@
 </template>
 
 <script>
-import { pageList, modifyPageConfig } from '@index/Api/editor'
+import { pageList, modifyPageConfig, getViChannel } from '@index/Api/editor'
 import { deepClone } from '@utils/deepClone'
 import { h5PageList } from './h5PageList'
-import { useRouter } from 'vue-router'
-import { onMounted, reactive, ref, toRefs, getCurrentInstance } from 'vue'
-import { getQuery } from '@admin/utils'
+import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { onMounted, reactive, ref, toRefs, getCurrentInstance, watch } from 'vue'
+import { getQueryString } from '@admin/utils'
+import { useI18n } from 'vue-i18n'
+import { localGet, localSet } from '@/utils/util'
 export default {
     beforeRouteEnter (to, from, next) {
-        const urlParams = getQuery()
-        console.log(to, from, urlParams)
-        if (urlParams.page == 'cats_sett_manage') {
+        if (getQueryString('page') === 'cats_sett_manage') {
             next({ name: 'Setting' })
-        } else if (urlParams.page == 'cats_init_manage') {
+        } else if (getQueryString('page') === 'cats_init_manage') {
             next({ name: 'Install' })
+        } else if (getQueryString('page') === 'cats_editor_page_manage') {
+            next({ name: 'ChannelSetting' })
         } else {
             next()
         }
@@ -147,15 +148,17 @@ export default {
     name: 'Pages',
     setup (props) {
         const router = useRouter()
+        const route = useRoute()
         const addFormModal = ref(null)
+        const { t } = useI18n({ useScope: 'global' })
         const {
             ctx
         } = getCurrentInstance()
 
         const checkPageCode = (rule, value, callback) => {
             const localData = state.list.find((item) => (item.page_code == value))
-            if (state.addForm.type == 'add' && localData) {
-                callback(new Error('页面已存在，请重新输入'))
+            if (state.addForm.type === 'add' && localData) {
+                callback(new Error(t('error1')))
             } else {
                 callback()
             }
@@ -180,7 +183,7 @@ export default {
                     page_code: [
                         {
                             required: true,
-                            message: '请输入页面标题',
+                            message: t('error2'),
                             trigger: 'blur'
                         },
                         {
@@ -189,12 +192,49 @@ export default {
                         }
                     ]
                 },
-                type: 'add'
+                type: 'add',
 
             },
             loading: false,
-            searchForm: {}
+            searchForm: {},
+            activeLang: route.query.language || 'zh-CN',
+            lang: []
+
         })
+
+        watch(
+            () => state.activeLang,
+            (val) => {
+                getPageList()
+                // router.replace({
+                //     query: {
+                //         id: getQueryString('id'),
+                //         language: state.activeLang
+                //     }
+                // })
+                // localSet('lang', state.activeLang)
+                // setI18nLanguage(I18n, state.activeLang)
+                // loadLocaleMessages(I18n, state.activeLang)
+            }
+        )
+        // 获取页面配置
+        const getPageConfig = () => {
+            const that = this
+            getViChannel(getQueryString('id')).then(res => {
+                if (!res.success) {
+                    that.$message.error(res.message)
+                    return
+                }
+
+                let content = res.data.content ? JSON.parse(res.data.content) : {}
+                content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
+
+                state.lang = content.supportLanguage
+            }).catch(error => {
+                console.log(error)
+            }).finally(() => {
+            })
+        }
 
         const changePage = () => {
             const info = state.h5PageList.find(item => (item.name == val))
@@ -204,9 +244,9 @@ export default {
         }
 
         const changeType = (type) => {
-            if (type == '1') {
+            if (Number(type) === 1) {
                 state.addForm.form.page_slug = 'h5'
-            } else if (type == '2') {
+            } else if (Number(type) === 2) {
                 state.addForm.form.page_slug = 'act_1'
             }
         }
@@ -223,7 +263,7 @@ export default {
                         if (!res.success) {
                             ctx.$message.error(res.message)
                         }
-                        ctx.$message.success(state.addForm.type == 'add' ? '新建成功' : '编辑成功')
+                        ctx.$message.success(state.addForm.type === 'add' ? t('createdSuccessfully') : t('createdSuccessfully'))
                         getPageList()
                         state.addForm.show = false
                     })
@@ -246,15 +286,20 @@ export default {
                 page_slug: 'act_1',
                 type: 'html',
                 status: '1',
-                content: []
+                content: '',
+                id: getQueryString('id'),
+                language: state.activeLang // getQueryString('language'),
             }
             state.addForm.show = true
         }
-        const edit = (code) => {
+        const edit = (row) => {
             router.push({
                 name: 'Editor',
                 query: {
-                    page_code: code
+                    page_code: row.page_code,
+                    id: row.channel_id,
+                    lang: state.activeLang,
+                    title: row.title
                 }
             })
         }
@@ -265,7 +310,9 @@ export default {
             state.loading = true
             state.list = []
             pageList({
-                type: 'html'
+                type: 'html',
+                channelId: getQueryString('id'),
+                language: state.activeLang,
             }).then(res => {
                 state.loading = false
                 if (res.success) {
@@ -282,7 +329,6 @@ export default {
                 })
         }
         const setting = (row) => {
-            console.log(row)
             state.addForm.form = deepClone(row)
             const nameList = h5PageList.map(item => (item.name))
             if (nameList.indexOf(row.page_code) >= 0) {
@@ -291,20 +337,27 @@ export default {
             } else {
                 state.addForm.form.pageType = '2'
             }
+
             state.addForm.type = 'modify'
+            state.addForm.form.id = getQueryString('id')
+            state.addForm.form.language = state.activeLang // getQueryString('language')
             state.addForm.show = true
         }
         const viewPublish = (row) => {
             router.push({
                 name: 'PublishList',
                 query: {
-                    id: row.page_code
+                    pageCode: row.page_code,
+                    id: row.channel_id,
+                    language: state.activeLang // getQueryString('language')
+
                 }
             })
         }
 
         onMounted(() => {
             getPageList()
+            getPageConfig()
         })
 
         return {
@@ -330,15 +383,15 @@ export default {
 <style lang="scss" scoped>
 .m-pageList {
     height: 100vh;
+    margin: 30px;
     overflow-y: auto;
     .search {
-        ::v-deep .el-collapse-item__wrap {
+        :deep(.el-collapse-item__wrap) {
             padding: 0 20px;
         }
     }
     .data-list {
         margin-top: 20px;
-        padding: 0 20px;
     }
     .headerBtns {
         margin-bottom: 20px;

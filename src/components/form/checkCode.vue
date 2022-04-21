@@ -18,7 +18,7 @@
         <button ref='getCodeBtn' class='getCodeBtn' :disabled='disabled' type='button' @click='getCode'>
             <van-loading v-if='loading' size='20px' />
             <span v-else>
-                {{ $t('login.getVerifyCode') }}
+                {{ getCodeText }}
             </span>
         </button>
         <!-- <div class='checkCodeBtn'>
@@ -29,6 +29,7 @@
 
 <script>
 import { randomId } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
 export default {
     props: {
         modelValue: {
@@ -51,15 +52,23 @@ export default {
             type: Boolean,
             default: false
         },
+        // 类型：login / fund
+        type: {
+            type: String
+        }
     },
     data () {
         return {
             value: '',
             id: this.$attrs.id || randomId(),
             disabled: false,
+            getCodeText: this.$t('login.getVerifyCode'),
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input', 'verifyCodeSend'],
+    beforeUnmount () {
+        clearInterval(this.interval)
+    },
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
@@ -74,26 +83,25 @@ export default {
             this.$emit('update:zone', item.value)
         },
         getCode () {
-            this.$emit('verifyCodeSend', this.getCodeBtnCountDown.bind(this))
+            this.disabled = true
+            this.$emit('verifyCodeSend', this.getCodeBtnCountDown)
             // this.getCodeBtnCountDown()
         },
-        getCodeBtnCountDown () {
-            const getCodeBtn = this.$refs.getCodeBtn
-            const originText = getCodeBtn.textContent
+        getCodeBtnCountDown (flag) {
+            if (flag === false) return (this.disabled = false)
             let len = 60
-            this.disabled = true
-            const t = setInterval(() => {
+            this.interval = setInterval(() => {
                 if (len === 0) {
-                    clearInterval(t)
-                    getCodeBtn.innerText = originText
+                    clearInterval(this.interval)
+                    this.getCodeText = this.$t('register.reGet')
                     this.disabled = false
                     return
                 }
                 len--
-                getCodeBtn.innerText = `${len}s`
+                this.getCodeText = `${len}s`
             }, 1000)
-        }
-    }
+        },
+    },
 }
 </script>
 
@@ -103,18 +111,21 @@ export default {
     display: flex;
     align-items: center;
     width: 100%;
+    border-bottom: solid 1px var(lineColor);
     .checkCodeInput {
         position: relative;
         flex: 1;
         font-size: rem(26px);
+
     }
     .getCodeBtn {
         margin-left: rem(20px);
-        color: var(--assist2Color);
+        color: var(--color);
         font-size: rem(26px);
         background: none;
+        cursor: pointer;
         &:disabled {
-            color: var(--bdColor);
+            color: var(--minorColor);
         }
     }
 }
@@ -122,6 +133,7 @@ export default {
     width: 100%;
     height: rem(75px);
     padding: 0 5px;
+    //color: var(--white);
     // &:focus~.label,
     // &:valid~.label {
     //     transform: scale(0.8) translateY(-90%);
@@ -142,7 +154,7 @@ export default {
     }
 }
 .van-icon-clear {
-    color: var(--bdColor);
+    color: var(--minorColor);
     font-size: rem(36px);
 }
 </style>

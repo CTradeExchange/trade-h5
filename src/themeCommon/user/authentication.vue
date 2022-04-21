@@ -1,20 +1,23 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' @backEvent='back' />
+    <!-- 头部导航 -->
+    <LayoutTop :custom-back='true' :menu='false' :title='$t("route.mine")' @back='back' />
     <div class='page-wrap'>
         <Loading :show='loading' />
-        <div v-if='list.length === 0'>
-            <van-empty :description='$t("auth.noRequired")' image='search' />
+        <p class='header'>
+            {{ $t('cRoute.regKyc') }}
+        </p>
+        <div v-if='customInfo.openAccountType===1' class='business'>
+            {{ $t('auth.authToPC') }}
+        </div>
+        <div v-else-if='kycList.length === 0' class='empty-data'>
+            <van-empty :description='$t("auth.noRequired")' image='/images/empty.png' />
         </div>
         <div v-else>
-            <p class='title'>
-                {{ $t('auth.authComplete') }}
-            </p>
             <div class='auth-list'>
-                <div v-for='(item,index) in list' :key='index' class='auth-item'>
-                    <img alt='' class='auth-img' :src="require('../../themes/mt4/images/'+ item.levelCode +'.png')" />
+                <div v-for='(item,index) in kycList' :key='index' class='auth-item'>
                     <div class='content'>
                         <p class='t1'>
-                            {{ item.levelName }}
+                            {{ kycMap[item.levelCode] }}
                         </p>
                         <p class='t2'>
                             {{ $t('auth.authPass') }} [{{ item.businessNameList.toString() }}]
@@ -22,18 +25,17 @@
                     </div>
                     <div v-if='item.preLevelObj && item.preLevelObj.status !== 2'>
                         <span class='notice'>
-                            {{ $t('auth.executeAuth', [item.preLevelObj.levelName]) }}
+                            {{ $t('auth.executeAuth', [kycMap[item.preLevelObj.levelCode]]) }}
                         </span>
                     </div>
-                    <div v-else>
-                        <van-button plain round size='small' @click='handleNext(item)'>
-                            <template #default>
-                                <span class='btn-text'>
-                                    {{ item.statusName }}
-                                </span>
-                                <van-icon name='arrow' />
-                            </template>
-                        </van-button>
+                    <div v-else class='btn'>
+                        <span v-if='[0,3].includes(Number(item.status))' class='unverified' @click='handleNext(item)'>
+                            {{ kycAuditStatus[item.status] }}
+                            <van-icon :color='style.fallColor' name='arrow' />
+                        </span>
+                        <span v-else class='state'>
+                            {{ kycAuditStatus[item.status] }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -42,38 +44,41 @@
 </template>
 
 <script>
-
+import Top from '@/components/top'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
-import { findAllBizKycList } from '@/api/user'
 import { useStore } from 'vuex'
 import { toRefs, reactive, computed, onBeforeMount } from 'vue'
 import { getArrayObj } from '@/utils/util'
+import { useI18n } from 'vue-i18n'
+
 export default {
+    components: {
+        Top
+    },
     setup (props, { emit, attrs }) {
+        const { t, tm } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()
         const route = useRoute()
+        const style = computed(() => store.state.style)
+        const customInfo = computed(() => store.state._user.customerInfo)
         const state = reactive({
-            list: [],
             loading: false,
         })
 
+        const kycMap = {
+            level_1: t('common.kycLevel1'),
+            level_2: t('common.kycLevel2'),
+            level_3: t('common.kycLevel3'),
+        }
+
         const kycState = computed(() => store.state._user.kycState)
+        const kycList = computed(() => store.state._user.kycList)
+        const kycAuditStatus = tm('kycAuditStatus')
 
         const getAuthCondition = () => {
             state.loading = true
-            findAllBizKycList().then(res => {
-                state.loading = false
-                if (res.check()) {
-                    res.data.forEach(item => {
-                        if (item.preLevelName) {
-                            const temp = getArrayObj(res.data, 'levelName', item.preLevelName)
-                            item.preLevelObj = temp
-                        }
-                    })
-                    state.list = res.data
-                }
-            }).catch(err => {
+            store.dispatch('_user/findAllBizKycList').then(res => {
                 state.loading = false
             })
         }
@@ -91,7 +96,7 @@ export default {
         }
 
         const back = () => {
-            router.replace('/personal')
+            router.replace('/mine')
         }
 
         onBeforeRouteLeave((to, from) => {
@@ -112,6 +117,11 @@ export default {
             kycState,
             handleNext,
             back,
+            style,
+            kycMap,
+            kycList,
+            customInfo,
+            kycAuditStatus,
             ...toRefs(state)
         }
     }
@@ -122,19 +132,33 @@ export default {
 @import '@/sass/mixin.scss';
 .page-wrap {
     flex: 1;
-    padding: 0 rem(30px);
+    padding-top: rem(110px);
     overflow: auto;
+    background: var(--bgColor);
+    .header {
+        padding-bottom: rem(30px);
+        padding-left: rem(30px);
+        font-size: rem(48px);
+        background: var(--contentColor);
+    }
+    .empty-data {
+        padding-top: rem(200px);
+    }
     .title {
-        color: var(--mutedColor);
+        padding: 0 rem(25px);
+        color: var(--minorColor);
         line-height: rem(80px);
-        border-bottom: solid 1px var(--btnLine);
+        border-bottom: solid 1px var(--lineColor);
     }
     .auth-list {
+        //margin-top: rem(10px);
+        //padding: 0 rem(30px);
+        background: var(--contentColor);
         .auth-item {
             display: flex;
             align-items: center;
-            padding: rem(45px) 0;
-            border-bottom: solid 1px var(--btnLine);
+            padding: rem(30px) rem(30px);
+            border-top: solid rem(10px) var(--bgColor);
             .auth-img {
                 width: rem(60px);
                 height: rem(100px);
@@ -158,18 +182,39 @@ export default {
             }
             .van-button {
                 padding: 0 rem(30px);
+                // background: var(--primaryAssistColor);
                 .btn-text {
+                    padding-right: rem(6px);
+                    color: var(--color);
                     vertical-align: middle;
                 }
                 .van-icon {
-                    vertical-align: middle;
+                    vertical-align: rem(-2px);
                 }
             }
             .notice {
-                color: var(--mutedColor);
+                color: var(--minorColor);
                 font-size: rem(24px);
             }
         }
+        .btn {
+            :deep(.van-button) {
+                background: var(--primaryAssistColor);
+            }
+            .unverified {
+                color: var(--fallColor);
+            }
+            .state {
+                color: var(--minorColor);
+                font-size: rem(26px);
+            }
+        }
+    }
+    .business {
+        padding-top: 40%;
+        color: var(--minorColor);
+        font-size: rem(30px);
+        text-align: center;
     }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <Top back show-center />
     <div class='page-wrap'>
         <div class='header'>
             <div class='header-info'>
@@ -77,6 +77,7 @@
 </template>
 
 <script>
+import Top from '@/components/top'
 import { toRefs, reactive, onMounted, computed, onUpdated, onBeforeMount, getCurrentInstance } from 'vue'
 import { createTorus } from '@/plugins/createTorus'
 import { useStore } from 'vuex'
@@ -86,6 +87,9 @@ import { divide } from '@/utils/calculation'
 import { useI18n } from 'vue-i18n'
 
 export default {
+    components: {
+        Top
+    },
     setup (props) {
         const router = useRouter()
         const store = useStore()
@@ -118,7 +122,7 @@ export default {
         })
 
         const toDesposit = () => {
-            router.push('/desposit')
+            router.push('/deposit')
         }
 
         const computePrice = (price,) => {
@@ -137,6 +141,7 @@ export default {
 
                 const netWorthPercent = divide(netWorth.value, parseFloat(netWorth.value + earnest))
                 const earnestPercent = divide(earnest, parseFloat(netWorth.value + earnest))
+
                 createTorus({
                     id: 'annulus',
                     width: 220,
@@ -146,8 +151,9 @@ export default {
                     label: t('common.jz'),
                     text: netWorth.value || '--',
                     data: [
-                        { color: '#3894FF', percent: netWorthPercent || 0, text: t('common.nthItem', 1) },
-                        { color: '#51C31C', percent: earnestPercent || 0, text: t('common.nthItem', 2) },
+                        { color: '#3894FF', percent: 0.5, text: t('common.nthItem', 1) },
+                        { color: '#51C31C', percent: 0.2, text: t('common.nthItem', 2) },
+                        { color: '#51C31C', percent: 0.3, text: t('common.nthItem', 2) },
                     ]
                 })
             }
@@ -155,10 +161,6 @@ export default {
 
         onBeforeMount(() => {
             internalInstance.appContext.config.globalProperties.$findCustomerInfo()
-        })
-
-        onMounted(() => {
-
         })
 
         return {
@@ -180,7 +182,7 @@ export default {
 .page-wrap {
     flex: 1;
     overflow: auto;
-    background-color: var(--btnColor);
+    background-color: var(--bgColor);
     .header {
         padding: rem(30px);
         background-color: #FFF;
@@ -210,7 +212,7 @@ export default {
             width: 100%;
             height: rem(10px);
             margin-top: rem(20px);
-            background: var(--btnColor);
+            background: var(--bgColor);
             border-radius: rem(20px);
             .p-val {
                 position: absolute;
@@ -292,10 +294,10 @@ export default {
         position: absolute;
         bottom: 0;
         width: 100%;
-        background: var(--bdColor);
-        border-color: var(--bdColor);
+        background: var(--lineColor);
+        border-color: var(--lineColor);
         span {
-            color: var(--btnSelected);
+            color: var(--focusColor);
             font-size: rem(34px);
         }
     }

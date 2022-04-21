@@ -1,10 +1,12 @@
+@use 'sass:math';
 /* trade页面的适配方案
  * 可以使用 rem(设计稿里面的原始尺寸大小px)； rem(100px);
  * 也可以用设计稿里面的原始尺寸大小px / 100 (单位直接写rem)； 100px = 1rem; 例如20px = 0.2rem;
 */
 
 @function rem($px) {
-    @return $px / 75px * 1rem;
+    // @return $px / 75px * 1rem;
+    @return math.div($px, 75px) * 1rem;
 }
 
 @mixin clfix() {
@@ -58,6 +60,18 @@
         box-shadow: 0 0 999px rgba(0, 0, 0, 0.05) inset;
     }
 }
+@mixin hover() {
+    &:hover{
+        box-shadow: 0 0 0 999px rgba($color: #000000, $alpha: .2) inset;
+    }
+}
+
+@mixin single-line-clamp() {
+    @include text_wrap;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
 
 @mixin scroll() {
     scrollbar-color: #DFDFDF white;
@@ -79,6 +93,28 @@
     &::-webkit-scrollbar-thumb:hover {
         background: #7D7D7D;
     }
+}
+
+@mixin scroll-pc() {
+    // scrollbar-width: thin;
+    // &::-webkit-scrollbar {
+    //     width: 7px;
+    //     height: 7px;
+    // }
+    // &::-webkit-scrollbar-track {
+    //     background: var(--bgColor);
+    //     border-radius: 10px;
+	// 	outline: 1px solid var(--lineColor);
+	// 	outline-offset: -1px;
+	// 	border: 1px solid var(--lineColor);
+    // }
+    // &::-webkit-scrollbar-thumb {
+    //     background: #C2C2C2;
+    //     border-radius: 10px;
+    // }
+    // &::-webkit-scrollbar-thumb:hover {
+    //     background: #7D7D7D;
+    // }
 }
 
 @mixin borderline($color: #ebedf0) {
@@ -166,4 +202,9 @@
         border-top: 0;
         content: '';
     }
+}
+
+// 字体 
+@mixin font() {
+    font-family: 'Microsoft Yahei';
 }

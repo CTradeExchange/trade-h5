@@ -5,7 +5,7 @@ const routes = [
     {
         path: '',
         component: Layout,
-        redirect: 'pages',
+        redirect: 'pages?id=1',
         children: [
             {
                 path: 'pages',
@@ -36,7 +36,13 @@ const routes = [
                 name: 'PublishList',
                 component: () =>
                     import(/* webpackChunkName: "Editor" */ '@index/views/PublishList.vue')
-            }
+            },
+            {
+                path: 'channelSetting',
+                name: 'ChannelSetting',
+                component: () =>
+                    import(/* webpackChunkName: "Editor" */ '@index/views/ChannelSetting/Index.vue')
+            },
         ]
     }
 ]
@@ -45,5 +51,6 @@ const router = createRouter({
     history: createWebHashHistory(),
     routes
 })
+console.log(router)
 
 export default router

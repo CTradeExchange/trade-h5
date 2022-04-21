@@ -1,5 +1,11 @@
 <template>
-    <LayoutTop :back='true' :menu='false' title='' />
+    <Top>
+        <template #center>
+            <p class='topTitle'>
+                {{ $t($route.meta.title) }}
+            </p>
+        </template>
+    </Top>
     <Loading :show='loadingPage' />
     <div class='page-wrap'>
         <div class='oper-area'>
@@ -36,7 +42,7 @@
                         </van-button>
                     </div>
                     <div class='btns'>
-                        <van-button plain size='small' type='primary' @click='reset'>
+                        <van-button class='reset-btn' plain size='small' type='primary' @click='reset'>
                             {{ $t('fund.reset') }}
                         </van-button>
                         <van-button size='small' type='primary' @click='handleProConfirm'>
@@ -71,7 +77,7 @@
                         />
                     </div>
                     <div class='btns'>
-                        <van-button plain size='small' type='primary' @click='dateReset'>
+                        <van-button class='reset-btn' plain size='small' type='primary' @click='dateReset'>
                             {{ $t('fund.reset') }}
                         </van-button>
                         <van-button size='small' type='primary' @click='dateConfirm'>
@@ -82,16 +88,23 @@
             </van-dropdown-menu>
         </div>
         <div class='list'>
-            <van-pull-refresh v-model='loading' @refresh='onRefresh'>
+            <van-pull-refresh
+                v-model='loading'
+                :loading-text="$t('compLang.loading')"
+                :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                @refresh='onRefresh'
+            >
                 <van-list
                     v-model:loading='loading'
                     :finished='finished'
                     :finished-text='finishedText'
                     :immediate-check='false'
+                    :loading-text="$t('compLang.loading')"
                     @load='onLoad'
                 >
                     <div v-if='list.length === 0'>
-                        <van-empty :description='$t("common.noData")' image='search' />
+                        <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                     </div>
                     <div v-for='(item,index) in list' :key='index' class='fund-item'>
                         <div class='f-left'>
@@ -104,10 +117,10 @@
                         </div>
                         <div class='f-right'>
                             <p class='amount'>
-                                {{ item.amount }} {{ customInfo.currency }}
+                                {{ item.amount }} {{ item.currency }}
                             </p>
                             <p class='balance'>
-                                {{ $t('common.balance') + item.amountAfter }} {{ customInfo.currency }}
+                                {{ $t('common.balance') + item.amountAfter }} {{ item.currency }}
                             </p>
                         </div>
                     </div>
@@ -120,13 +133,18 @@
 <script>
 import { toRefs, reactive, ref, computed, onBeforeMount } from 'vue'
 import { queryCapitalFlowList } from '@/api/user'
-import dayjs from 'dayjs'
+import Top from '@/components/top'
 import { useStore } from 'vuex'
 import { isEmpty, priceFormat } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
+import { useRoute } from 'vue-router'
 export default {
+    components: {
+        Top,
+    },
     setup (props) {
         const store = useStore()
+        const route = useRoute()
         const proDownItem = ref(null)
         const dateDownItem = ref(null)
         const { t, tm } = useI18n({ useScope: 'global' })
@@ -180,14 +198,14 @@ export default {
         const onDate = (item) => {
             state.dateTitle = item.name
             if (item.value === 1) {
-                state.date = dayjs(new Date()).format('YYYY/MM/DD 00:00:00') + '-' + dayjs(new Date()).format('YYYY/MM/DD 23:59:59')
+                state.date = window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')
             } else if (item.value === 2) {
-                state.date = dayjs().subtract(7, 'day').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
-                state.dateRange = [dayjs().subtract(7, 'day').format('YYYY/MM/DD'), dayjs(new Date()).format('YYYY/MM/DD')]
+                state.date = window.dayjs().subtract(7, 'day').format('YYYY/MM/DD') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD')
+                state.dateRange = [window.dayjs().subtract(7, 'day').format('YYYY/MM/DD'), window.dayjs(new Date()).format('YYYY/MM/DD')]
             } else if (item.value === 3) {
-                state.date = dayjs().subtract(1, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+                state.date = window.dayjs().subtract(1, 'month').format('YYYY/MM/DD') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD')
             } else if (item.value === 4) {
-                state.date = dayjs().subtract(3, 'month').format('YYYY/MM/DD') + '-' + dayjs(new Date()).format('YYYY/MM/DD')
+                state.date = window.dayjs().subtract(3, 'month').format('YYYY/MM/DD') + '-' + window.dayjs(new Date()).format('YYYY/MM/DD')
             } else if (item.value === 0) {
                 state.date = ''
             }
@@ -221,7 +239,7 @@ export default {
         const dateConfirm = () => {
             if (!isEmpty(state.date)) {
                 state.startTime = new Date(state.date.split('-')[0]).getTime()
-                state.endTime = new Date(dayjs(state.date.split('-')[1])).getTime()
+                state.endTime = new Date(window.dayjs(state.date.split('-')[1])).getTime()
             } else {
                 state.startTime = 0
                 state.endTime = 0
@@ -253,6 +271,7 @@ export default {
         const queryFundDetail = () => {
             const params = {
                 size: state.pagigation.size,
+                tradeType: parseInt(route.query.tradeType),
                 current: state.pagigation.current,
                 status: 2, // 状态。1-初始化；2-处理成功；3-处理失败；
                 startTime: state.startTime,
@@ -273,6 +292,7 @@ export default {
                     // 数据全部加载完成
                     if (state.list.length >= res.data.total) {
                         state.finished = true
+                        state.loadingMore = true
                         state.finishedText = t('common.noMore')
                     }
 
@@ -288,7 +308,7 @@ export default {
         }
 
         const formatTime = (val) => {
-            return dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         onBeforeMount(() => {
@@ -324,27 +344,49 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.topTitle {
+    flex: 1;
+    color: var(--color);
+    text-align: center;
+}
 .page-wrap {
     flex: 1;
     overflow: auto;
+    background: var(--bgColor);
     .oper-area {
+        :deep(.van-dropdown-menu__bar) {
+            background-color: var(--contentColor);
+            .van-ellipsis {
+
+            }
+            .van-dropdown-menu__title {
+                color: var(--color);
+                &.van-dropdown-menu__title--active {
+                    color: var(--primary);
+                }
+            }
+        }
+        :deep(.van-popup) {
+            background-color: var(--contentColor);
+        }
         .condition {
             margin-top: rem(20px);
             margin-bottom: rem(30px);
             padding: 0 rem(30px);
             .title {
+                color: var(--color);
                 line-height: rem(60px);
             }
             .van-button {
                 margin-right: rem(20px);
                 margin-bottom: rem(20px);
                 padding: 0 rem(13px);
+                color: var(--color);
+                background: var(--contentColor);
                 &.active {
-                    border-color: dodgerblue;
+                    color: var(--primary);
+                    border-color: var(--primary);
                 }
-            }
-            .van-cell {
-                padding: 0;
             }
         }
         .btns {
@@ -352,7 +394,15 @@ export default {
             justify-content: space-around;
             margin: rem(20px) 0;
             .van-button {
+                flex: 1;
+                margin: 0 rem(20px);
                 padding: 0 rem(30px);
+                background-color: var(--primary);
+                &.reset-btn {
+                    color: var(--color);
+                    background-color: var(--primaryAssistColor);
+                    border: none;
+                }
             }
         }
     }
@@ -366,10 +416,11 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: rem(30px);
-            padding-bottom: rem(30px);
+            //margin: rem(30px);
+            padding: rem(30px);
             line-height: rem(50px);
-            border-bottom: solid 1px var(--bdColor);
+            background: var(--contentColor);
+            border-bottom: solid 1px var(--lineColor);
             .f-left {
                 .title {
                     color: var(--color);
@@ -378,7 +429,7 @@ export default {
                     font-family: PingFang SC;
                 }
                 .date {
-                    color: var(--mutedColor);
+                    color: var(--normalColor);
                     font-weight: 400;
                     font-family: DIN 1451 Mittelschrift;
                 }
@@ -392,7 +443,7 @@ export default {
                     text-align: right;
                 }
                 .balance {
-                    color: var(--mutedColor);
+                    color: var(--normalColor);
                     font-weight: 500;
                     font-family: PingFang SC;
                 }

@@ -1,9 +1,9 @@
 <template>
-    <div class='selectWrap' @click='show=true'>
+    <div class='selectWrap' @click='openActionSheet'>
         <span class='selectval'>
             {{ selected && selected[text] }}
+            <van-icon v-if='showSelect' name='arrow-down' />
         </span>
-        <span class='icon_arrow-down'></span>
     </div>
     <van-action-sheet v-if='actions && actions.length' v-model:show='show' :actions='actions' @select='onSelect' />
 </template>
@@ -32,6 +32,10 @@ export default {
             type: String,
             default: 'value'
         },
+        showSelect: {
+            type: Boolean,
+            default: true
+        }
     },
     emits: ['update:modelValue', 'select'],
     data () {
@@ -46,6 +50,11 @@ export default {
         }
     },
     methods: {
+        // 打开弹窗
+        openActionSheet () {
+            if (this.showSelect) this.show = true
+        },
+
         onSelect (item, index) {
             this.$emit('select', item, index)
             this.$emit('update:modelValue', item[this.value])
@@ -59,7 +68,7 @@ export default {
 @import '@/sass/mixin.scss';
 .selectWrap {
     position: relative;
-    display: inline-block;
+    align-items: center;
     width: 100%;
     .icon_arrow-down {
         position: absolute;
@@ -71,7 +80,7 @@ export default {
     position: relative;
     display: block;
     height: rem(75px);
-    padding: 0 rem(50px) 0 rem(15px);
+    padding: 0 rem(20px) 0 rem(5px);
     overflow: hidden;
     font-size: rem(26px);
     line-height: rem(75px);

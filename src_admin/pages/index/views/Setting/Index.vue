@@ -7,17 +7,9 @@
                         icon='el-icon-s-promotion'
                         :loading='submitLoading'
                         type='primary'
-                        @click='submit'
-                    >
-                        保存
-                    </el-button>
-                    <el-button
-                        icon='el-icon-upload'
-                        :loading='publishLoading'
-                        type='primary'
                         @click='pushPage'
                     >
-                        发布
+                        {{ $t('setting.save') }}
                     </el-button>
                     <el-button
                         :disabled='getLoading'
@@ -25,85 +17,80 @@
                         type='primary'
                         @click='getPageConfig'
                     >
-                        重置
+                        {{ $t('setting.reset') }}
                     </el-button>
                 </el-button-group>
             </el-col>
         </el-row>
         <el-form ref='form' label-width='120px' :model='form'>
             <el-tabs type='border-card'>
-                <el-tab-pane class='tab' label='AIP设置'>
+                <el-tab-pane class='tab' :label="$t('setting.apiSettings')">
                     <el-row class='row'>
                         <el-col :span='12' :xs='24'>
                             <el-form-item label='apiKey'>
                                 <el-input
                                     v-model='form.other.apiKey'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='apiId'>
                                 <el-input
                                     v-model='form.other.apiId'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='apiUrl'>
                                 <el-input
                                     v-model='form.other.apiUrl'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
                             <el-form-item label='btKey'>
                                 <el-input
                                     v-model='form.other.btKey'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
                             <el-form-item label='btUrl'>
                                 <el-input
                                     v-model='form.other.btUrl'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
-                            <el-form-item label='是否更新产品信息'>
+                            <el-form-item :label="$t('setting.ifUpdate')" label-width='120'>
                                 <el-radio-group v-model='form.other.isInitSymbol'>
                                     <el-radio label='1'>
-                                        是
+                                        {{ $t('setting.yes') }}
                                     </el-radio>
                                     <el-radio label='0'>
-                                        否
+                                        {{ $t('setting.no') }}
                                     </el-radio>
                                 </el-radio-group>
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane class='tab' label='基础设置'>
+                <el-tab-pane class='tab' :label="$t('editor.basicSettings')">
                     <el-row class='row'>
                         <el-col :span='12' :xs='24'>
-                            <el-form-item label='公司id'>
+                            <el-form-item :label="$t('setting.companyId')">
                                 <el-input
                                     v-model='form.companyId'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
-                            <el-form-item label='账户币种列表'>
-                                <el-input
-                                    v-model='form.currencyList'
-                                    placeholder='请输入'
-                                    type='textarea'
-                                />
-                            </el-form-item>
-                            <el-form-item label='游客账户组'>
+
+                            <el-form-item :label="$t('setting.touristAccountGroup')">
                                 <el-input
                                     v-model='form.customerGroupId'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
-                            <el-form-item label='玩法'>
+
+                            <!-- <el-form-item label='玩法'>
                                 <div class='play-settings'>
                                     <div class='p-left'>
                                         <el-input
@@ -123,33 +110,52 @@
                                     </div>
                                 </div>
                             </el-form-item>
+                            <el-form-item label='账户币种列表'>
+                                <el-input
+                                    v-model='form.currencyList'
+                                    placeholder='请输入'
+                                    type='textarea'
+                                />
+                            </el-form-item> -->
 
                             <el-form-item label='apiService'>
                                 <el-input
                                     v-model='form.apiService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='quoteService'>
                                 <el-input
                                     v-model='form.quoteService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='msgService'>
                                 <el-input
                                     v-model='form.msgService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
                             <el-form-item label='tradeService'>
                                 <el-input
                                     v-model='form.tradeService'
-                                    placeholder='请输入'
+                                    :placeholder="$t('pleaseEnter')"
+                                />
+                            </el-form-item>
+                            <el-form-item label='adminDomain' size='normal'>
+                                <el-input
+                                    v-model='form.other.adminDomain'
+                                    :placeholder="$t('pleaseEnter')"
+                                />
+                            </el-form-item>
+                            <el-form-item label='forwardDomain' size='normal'>
+                                <el-input
+                                    v-model='form.other.forwardDomain'
+                                    :placeholder="$t('pleaseEnter')"
                                 />
                             </el-form-item>
 
-                            <el-form-item label='USDCNY_CODE'>
+                            <!-- <el-form-item label='USDCNY_CODE'>
                                 <el-input
                                     v-model='form.usdcnyCodeid'
                                     placeholder='请输入'
@@ -161,46 +167,12 @@
                                     placeholder='请输入'
                                 />
                             </el-form-item>
-                            <el-form-item label='GA埋点代码'>
-                                <el-input
-                                    v-model='form.googleAnalytics'
-                                    placeholder='请输入'
-                                    :row='5'
-                                    type='textarea'
-                                />
-                            </el-form-item>
-                            <el-form-item label='保证金提醒'>
-                                <el-input
-                                    v-model='form.marginLevel.marginLess'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='保证金警告'>
-                                <el-input
-                                    v-model='form.marginLevel.marginWarn'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='语言'>
-                                <el-select
-                                    v-model='form.language'
-                                    placeholder='请输入'
-                                >
-                                    <el-option
-                                        label='中文'
-                                        value='zh-CN'
-                                    />
-                                    <el-option
-                                        label='英文'
-                                        value='EN'
-                                    />
-                                </el-select>
-                            </el-form-item>
+
                             <File
                                 :active-data='form.languageuri'
                                 :config="{ label: '语言包地址' }"
                                 @formChange='updateBackground'
-                            />
+                            /> -->
                             <!-- <el-form-item label='登录保持时间'>
                                 <el-input
                                     v-model='form.loginTime'
@@ -211,7 +183,7 @@
                                     </template>
                                 </el-input>
                             </el-form-item> -->
-                            <el-form-item label='时区'>
+                            <!-- <el-form-item label='时区'>
                                 <el-select
                                     v-model='form.utcOffset'
                                     placeholder='请输入'
@@ -223,8 +195,9 @@
                                         :value='item'
                                     />
                                 </el-select>
-                            </el-form-item>
-                            <el-form-item label='web API地址'>
+                            </el-form-item> -->
+
+                            <!-- <el-form-item label='web API地址'>
                                 <el-input
                                     v-model='form.webApiUri'
                                     placeholder='请输入'
@@ -241,36 +214,11 @@
                                     v-model='form.imsApiUri'
                                     placeholder='请输入'
                                 />
-                            </el-form-item>
-                            <el-form-item label='H5地址'>
-                                <el-input
-                                    v-model='form.other.h5Address'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='H5预览地址'>
-                                <el-input
-                                    v-model='form.other.h5PreviewAddress'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
-                            <el-form-item label='在线客服地址'>
-                                <el-input
-                                    v-model='form.onlineService'
-                                    placeholder='请输入'
-                                    type='textarea'
-                                />
-                            </el-form-item>
-                            <el-form-item label='借款还款'>
-                                <el-input
-                                    v-model='form.borrowReturn'
-                                    placeholder='请输入'
-                                />
-                            </el-form-item>
+                            </el-form-item> -->
                         </el-col>
                     </el-row>
                 </el-tab-pane>
-                <el-tab-pane class='tab' label='其他设置'>
+                <!-- <el-tab-pane class='tab' label='禁用开户地区设置'>
                     <el-row class='row'>
                         <el-form-item label='ip禁用提示语'>
                             <el-input
@@ -303,17 +251,32 @@
                         </el-col>
                     </el-row>
                 </el-tab-pane>
+                <el-tab-pane class='tab' label='APP管理'>
+                    <el-row class='row'>
+                        <el-col :span='12' :xs='24'>
+                            <el-form-item label='APP最新版本'>
+                                <el-input
+                                    v-model='form.appVersion'
+                                    placeholder='请输入'
+                                />
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-tab-pane> -->
             </el-tabs>
         </el-form>
     </div>
 </template>
 
 <script>
-import { getPageConfig, modifyPageConfig, pushPage, getCompanyInfo } from '@index/Api/editor'
+import { getPageConfig, modifyPageConfig, pushPage, queryCountryList, tradeTypeAccountAssets } from '@index/Api/editor'
 import File from '@index/components/RightForm/File'
 import city from './data/city.json'
 import province from './data/province.json'
 import { deepClone } from '@utils/deepClone'
+import { getQueryString } from '@utils/index'
+import { keyBy, forOwn, isPlainObject, compact } from 'lodash'
+import { Toast } from 'vant'
 const treeData = province.map(province => {
     const children = city.filter(item => (item.province === province.province))
     if (children.length > 0) {
@@ -329,7 +292,14 @@ export default {
     data () {
         return {
             filterText: '',
+            selectTradeType: '',
+            tradeTypeCurrencyCollect: [],
+            // accountCurrencyList: [],
+            tradeTypeList: [],
+            checkedTradeType: {},
+            tradeTypeAssets: [],
             form: {
+                tradeTypeCurrencyList: [],
                 companyId: '',
                 customerGroupId: '',
                 googleAnalytics: '',
@@ -341,21 +311,24 @@ export default {
                 webApiUri: '',
                 imsApiUri: '',
                 h5PreviewAddress: '',
-                marginLevel: {
-                    marginLess: '',
-                    marginWarn: ''
-                },
                 other: {
                     isInitSymbol: ''
                 },
-                tradeTypeList: '',
+                // tradeTypeList: '',
+                // tradeTypeList: '',
                 apiService: '',
+                orgid: '',
                 quoteService: '',
                 msgService: '',
                 tradeService: '',
                 utcOffset: '',
-                currencyList: ''
+                // currencyList: '',
+                defaultZone: '',
+                appVersion: '1.0.0',
+
             },
+            zoneList: [],
+            otherZoneList: [],
             publishLoading: false,
             treeData: treeData,
             defaultPropsTree: {
@@ -366,7 +339,18 @@ export default {
             getLoading: false,
             pageData: {},
             utcOffsetList: [-12, 13],
-            tradeTypeListLoading: false
+            tradeTypeListLoading: false,
+            customerGroupList: [{
+                label: this.$t('setting.customerGroupList1'),
+                value: 1
+            }, {
+                label: this.$t('setting.customerGroupList2'),
+                value: 2
+
+            }],
+            plansDialogVisible: false,
+            activeName: 1,
+            accountTradeList: []
         }
     },
     watch: {
@@ -384,16 +368,68 @@ export default {
     created () {
         this.createTimezoneList()
         this.getPageConfig()
+        this.queryCountryList()
+        // this.getTradeTypeAssets()
     },
     methods: {
+        renderFunc (_, option) {
+            return <span>{ option.key } - { option.label }</span>
+        },
         createTimezoneList () {
             const [min, max] = this.utcOffsetList
             this.utcOffsetList = new Array(max - min).fill(0).map((el, i) => min + i)
             this.form.utcOffset = 0 - (new Date().getTimezoneOffset() / 60)
         },
+        // 获取国家区号列表
+        queryCountryList () {
+            queryCountryList().then(res => {
+                if (res.success && res.data?.length) {
+                    const list = res.data
+                    this.zoneList = list
+                    this.otherZoneList = list
+                }
+            })
+        },
+        getTradeTypeAssets () {
+            tradeTypeAccountAssets({}).then(res => {
+                const { data, success } = res
+                // const tradeTypeAssetsList = []
+
+                if (success && Array.isArray(data)) {
+                    this.tradeTypeList = data.map(el => ({ id: el.id, name: el.name }))
+                    const tempCheckedTradeType = {}
+                    this.tradeTypeList.forEach(el => {
+                        tempCheckedTradeType[String(el.id)] = this.checkedTradeType[String(el.id)] || {
+                            assets: ['1', '2'].indexOf(String(el.id)) ? '' : [],
+                            sort: '',
+                            alias: '',
+                            isWallet: ''
+                        }
+                    })
+                    this.checkedTradeType = tempCheckedTradeType
+                    this.tradeTypeAssets = data.map(item => {
+                        let customerGroupAssets = []
+                        if (isPlainObject(item.data)) {
+                            forOwn(item.data, (value, key) => {
+                                if (key === '1' && Array.isArray(value.data)) {
+                                    customerGroupAssets = value.data.map(el => ({ key: el.code, label: el.name }))
+                                }
+                            })
+                        }
+                        return {
+                            id: item.id,
+                            name: item.name,
+                            assetsList: customerGroupAssets
+                        }
+                    })
+                }
+            })
+        },
         getPageConfig () {
             this.getLoading = true
-            getPageConfig('SysSetting')
+            getPageConfig({
+                page_code: 'SysSetting',
+            })
                 .then(res => {
                     if (!res.success) {
                         this.$message.error(res.message)
@@ -401,16 +437,9 @@ export default {
                     }
                     let content = res.data.content && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.content) : {}
                     content = Object.prototype.toString.call(content) === '[object Object]' ? content : {}
-                    this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
+                    // this.$refs.tree.setCheckedKeys(content.disabledProvince || [])
                     const other = res.data.other && res.data.other.indexOf('{') === 0 ? JSON.parse(res.data.other) : {}
                     this.form = Object.assign(this.form, content, { other })
-
-                    try {
-                        this.form.tradeTypeList = this.form.tradeTypeList && JSON.stringify(this.form.tradeTypeList)
-                        this.form.currencyList = this.form.currencyList && JSON.stringify(this.form.currencyList)
-                    } catch (error) {
-                        console.error(error)
-                    }
 
                     this.pageData = res.data
                 })
@@ -427,19 +456,37 @@ export default {
         },
         submit () {
             return new Promise((resolve, reject) => {
+                // console.log(this.tradeTypeCurrencyCollect)
+
                 this.submitLoading = true
                 const _other = JSON.stringify(this.form.other)
                 console.log(_other)
                 const _formData = deepClone(this.form)
                 delete _formData.other
+
                 try {
-                    _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
-                    _formData.currencyList = JSON.parse(_formData.currencyList)
+                    // _formData.tradeTypeList = JSON.parse(_formData.tradeTypeList)
+                    // _formData.currencyList = JSON.parse(_formData.currencyList)
+
+                    // console.log('this.checkedTradeTypeAssets-', this.checkedTradeTypeAssets)
+                    const tempTradeTypeCurrencyList = this.tradeTypeList.map(el => {
+                        const { assets, sort, alias, isWallet } = this.checkedTradeType[String(el.id)]
+                        if (['1', '2'].indexOf(String(el.id)) > -1) {
+                            return { id: el.id, name: el.name, sort, allCurrency: assets || '', alias, isWallet }
+                        } else {
+                            return { id: el.id, name: el.name, sort, allCurrency: assets ? compact(assets).join() : '', alias, isWallet }
+                        }
+                    })
+                    tempTradeTypeCurrencyList.sort(function (a, b) {
+                        return a.sort - b.sort
+                    })
+                    _formData.tradeTypeCurrencyList = tempTradeTypeCurrencyList
+                    // console.log('tradeTypeCurrencyList', _formData.tradeTypeCurrencyList)
                 } catch (error) {
                     console.error(error)
                 }
 
-                _formData.disabledProvince = this.$refs.tree.getCheckedKeys(true)
+                // _formData.disabledProvince = this.$refs.tree.getCheckedKeys(true)
                 return modifyPageConfig(Object.assign(this.pageData, { content: JSON.stringify(_formData), other: _other }))
                     .then(res => {
                         if (!res.success) {
@@ -448,10 +495,6 @@ export default {
                             return
                         }
                         resolve(true)
-                        this.$message({
-                            message: '保存成功',
-                            type: 'success'
-                        })
                         this.getPageConfig()
                     })
                     .catch(error => {
@@ -470,16 +513,19 @@ export default {
             if (!submitData) {
                 return
             }
-            pushPage({ pageCode: this.pageData.page_code })
+
+            pushPage({
+                pageCode: this.pageData.page_code
+            })
 
                 .then(res => {
                     if (!res.success) {
                         this.$message.error(res.message)
                         return
                     }
-                    this.$confirm('发布成功', {
-                        confirmButtonText: '确认',
-                        cancelButtonText: '关闭',
+                    this.$confirm(this.$t('setting.successful'), {
+                        confirmButtonText: this.$t('setting.confirm'),
+                        cancelButtonText: this.$t('editor.close'),
                     })
                         .then(_ => {
                         })
@@ -495,30 +541,34 @@ export default {
         updateBackground (url) {
             this.form.languageuri = url
         },
-        getTradeTypeList () {
-            this.tradeTypeListLoading = true
-            getCompanyInfo()
-                .then(res => {
-                    if (res.success) {
-                        this.form.companyId === '' ? this.form.companyId = res.data.companyId : null
-                        !this.form.customerGroupId ? this.form.customerGroupId = res.data.customerGroupId : null
 
-                        try {
-                            if (this.form.tradeTypeList === '' && Array.isArray(res.data.tradeTypeList)) {
-                                this.form.tradeTypeList = JSON.stringify(res.data.tradeTypeList)
-                            }
-                            if (this.form.currencyList === '' && Array.isArray(res.data.currencyList)) {
-                                this.form.currencyList = JSON.stringify(res.data.currencyList)
-                            }
-                        } catch (error) {
-                            console.error(error)
-                        }
-                    }
-                })
-                .finally(() => {
-                    this.tradeTypeListLoading = false
-                })
-        }
+        // getTradeTypeList () {
+        //     this.tradeTypeListLoading = true
+        //     getCompanyInfo()
+        //         .then(res => {
+        //             if (res.success) {
+        //                 this.form.companyId === '' ? this.form.companyId = res.data.companyId : null
+        //                 !this.form.customerGroupId ? this.form.customerGroupId = res.data.customerGroupId : null
+
+        //                 try {
+        //
+        //                     if (this.form.tradeTypeList === '' && Array.isArray(res.data.tradeTypeList)) {
+        //                         // this.form.tradeTypeList = JSON.stringify(res.data.tradeTypeList)
+        //                         this.form.tradeTypeList = res.data.currencyList
+        //                     }
+        //                     if (this.form.currencyList === '' && Array.isArray(res.data.currencyList)) {
+        //                         this.form.currencyList = JSON.stringify(res.data.currencyList)
+        //                         // this.form.currencyList = res.data.currencyList
+        //                     }
+        //                 } catch (error) {
+        //                     console.error(error)
+        //                 }
+        //             }
+        //         })
+        //         .finally(() => {
+        //             this.tradeTypeListLoading = false
+        //         })
+        // }
     }
 }
 </script>
@@ -565,6 +615,33 @@ export default {
                 background: #F5F7FA;
                 border: 1px solid #DCDFE6;
                 border-left: none;
+            }
+        }
+    }
+    .el-transfer-panel {
+        .el-transfer-panel__header {
+            .el-checkbox {
+                .el-checkbox__label {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    .tradeType-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        .el-checkbox {
+            margin-right: 50px;
+        }
+    }
+    .sort-row {
+        margin-top: 10px;
+    }
+    .pay-channel-setting {
+        .card-header {
+            .pay-name {
+                font-weight: bold;
             }
         }
     }

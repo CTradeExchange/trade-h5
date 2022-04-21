@@ -1,6 +1,10 @@
-import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage } from '@/api/trade'
+import { queryPositionPage, queryHistoryCloseOrderList, queryPBOOrderPage, queryAbccPboPage, queryOrderPage } from '@/api/trade'
 import CheckAPI from '@/utils/checkAPI'
+import { cachePendingParams } from './storeUtil.js'
+import { minus, divide, toFixed, plus, shiftedBy } from '@/utils/calculation'
+import { vue_set, assign } from '@/utils/vueUtil.js'
 import BigNumber from 'bignumber.js'
+import { tradeRecordList } from '@/api/user'
 
 const EmptyProfitLossRang = {
     buyProfitRange: [], // 买入止盈范围
@@ -15,19 +19,26 @@ const EmptyPendingPriceRang = {
     sellStopRange: [], // 卖出止损范围
 }
 
+const positionsConfig = {} // 持仓列表排序
+const pendingsConfig = {} // 挂单列表排序
+
 export default {
     namespaced: true,
     state: {
         modifyPositionId: 0, // 修改持仓ID
-        pendingPrice: 0, // 挂单价格
+        pendingEnable: false, // 启用挂单
+        pendingPrice: {
+            buy: 0,
+            sell: 0
+        }, // 挂单价格
         positionLoading: '', // 持仓列表加载
-        positionList: [], // 持仓列表
-        positionMap: [], // 持仓列表map
+        positionList: {}, // 持仓列表, 多玩法id为Key
+        positionMap: {}, // 持仓列表map
         historyLoading: false, // 历史记录加载
         historyList: [], // 平仓历史记录列表
-        pendingList: [], // 预埋单列表
-        pendingMap: [], // 预埋单列表
-        positionProfitLossList: [] // 持仓盈亏列表
+        pendingList: {}, // 预埋单列表, 多玩法id为Key
+        pendingMap: {}, // 预埋单列表
+        positionProfitLossList: [], // 持仓盈亏列表
     },
     getters: {
         // 当前操作的产品
@@ -37,21 +48,20 @@ export default {
             return product
         },
         // 市价、持仓止盈止损范围
-        marketProfitLossRang (state, getters, rootState) {
-            const product = getters.product
+        marketProfitLossRang (state, getters, rootState, rootGetters) {
+            const product = rootGetters.stopLossPprofitProduct || getters.product
             if (!product) return EmptyProfitLossRang
             const curPosition = state.positionMap[state.modifyPositionId] // 当前修改的持仓
             const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
 
-            let buy_price = state.pendingPrice ? state.pendingPrice : product.buy_price
-            let sell_price = state.pendingPrice ? state.pendingPrice : product.sell_price
+            let buy_price = state.pendingPrice['buy'] ? state.pendingPrice['buy'] : product.buy_price
+            let sell_price = state.pendingPrice['sell'] ? state.pendingPrice['sell'] : product.sell_price
             if (curPosition) {
                 // 如果当前是修改持仓，公式里面的价格则是：买方向取卖价、卖方向取买价
                 buy_price = sell_price = curPosition.direction === 1 ? product.sell_price : product.buy_price
             }
-
             const buyProfitMax = BigNumber(buy_price).plus(pip * product.stopLossMaxPoint).toFixed(digits) // 买入止盈范围最大值 买入价+pip*限价最大距离
             const buyProfitMin = BigNumber(buy_price).plus(pip * product.stopLossMinPoint).toFixed(digits) // 买入止盈范围最小值 买入价+pip*限价最小距离
 
@@ -74,7 +84,7 @@ export default {
         // 挂单价格范围
         pendingPriceRang (state, getters, rootState) {
             const product = getters.product
-            if (!product || state.pendingPrice === 0) return EmptyPendingPriceRang
+            if (!product || !state.pendingEnable) return EmptyPendingPriceRang
             const digits = product.price_digits
             const point = Math.pow(0.1, digits)
             const pip = point * product.pointRatio
@@ -94,40 +104,50 @@ export default {
             const sellStopMax = BigNumber(sell_price).minus(pip * product.priceMinLimit).toFixed(digits) // 停损卖出范围最大值 卖出价-pip*止损最小距离
             const sellStopMin = BigNumber(sell_price).minus(pip * product.priceMaxLimit).toFixed(digits) // 停损卖出范围最小值 卖出价-pip*止损最大距离
 
+            const priceMinLimit = product.priceMinLimit + 10
+            const priceMinLimitPrice = toFixed(priceMinLimit * pip, digits)
+            const defaultBuyPrice = minus(buy_price, priceMinLimitPrice) // 买入方向挂单价格默认值
+            const defaultSellPrice = plus(sell_price, priceMinLimitPrice) // 卖出方向挂单价格默认值
             return {
                 buyLimitRange: [buyLimitMin, buyLimitMax], // 限价买入范围
                 sellLimitRange: [sellLimitMin, sellLimitMax], // 限价卖出范围
                 buyStopRange: [buyStopMin, buyStopMax], // 停损买入范围
                 sellStopRange: [sellStopMin, sellStopMax], // 停损卖出范围
+                defaultBuyPrice, // 买入方向挂单价格默认值
+                defaultSellPrice, // 卖出方向挂单价格默认值
             }
         }
     },
     mutations: {
         Empty_data (state, data) { // 清空信息
-            state.positionList = []
+            state.positionList = {}
             state.positionMap = {}
             state.historyList = []
-            state.pendingList = []
+            state.pendingList = {}
             state.pendingMap = {}
             state.positionProfitLossList = []
         },
         Update_modifyPositionId (state, data) {
             state.modifyPositionId = data
         },
-        Update_pendingPrice (state, data) {
-            state.pendingPrice = data
+        Update_pendingEnable (state, data) {
+            state.pendingEnable = data
+        },
+        Update_pendingPrice (state, data, direction) {
+            state.pendingPrice[data.direction] = data.price
         },
         Update_positionLoading (state, data) {
             state.positionLoading = data
         },
-        Update_positionList (state, data) {
-            state.positionList = data
+        Update_positionList (state, { tradeType, list }) {
+            vue_set(state.positionList, tradeType, list)
             const positionMap = state.positionMap
-            data.forEach(item => {
+            list && list.forEach(item => {
                 if (!item || !item.positionId) return false
-                const curPosition = positionMap[item.positionId]
+                const key = `${item.positionId}_${tradeType}`
+                const curPosition = positionMap[key]
                 if (curPosition) Object.assign(item, { profitLoss: curPosition.profitLoss }) // 如果map数据中已经有此持仓信息，将之合并到item
-                positionMap[item.positionId] = item
+                vue_set(positionMap, key, item)
             })
         },
         Update_historyLoading (state, data) {
@@ -136,39 +156,67 @@ export default {
         Update_historyList (state, data) {
             state.historyList = data
         },
-        Update_pendingList (state, data) {
-            state.pendingList = data
+        Update_pendingList (state, { tradeType, list }) {
+            vue_set(state.pendingList, tradeType, list)
             const pendingMap = state.pendingMap
-            data.forEach(item => {
+            list.forEach(item => {
                 if (!item || !item.id) return false
-                if (!pendingMap[item.id]) pendingMap[item.id] = {}
-                Object.assign(pendingMap[item.id], item)
+                const key = `${item.id}_${item.tradeType}`
+                if (!pendingMap[key]) pendingMap[key] = {}
+                assign(pendingMap[key], item)
             })
         },
-        Update_positionProfitLossList (state, dataList = []) {
-            state.positionProfitLossList = dataList
+        Update_positionProfitLossList (state, { tradeType, list }) {
+            state.positionProfitLossList = list
             const positionMap = state.positionMap
-            dataList.forEach(({ positionId, profitLoss }) => {
-                if (positionMap[positionId]) positionMap[positionId].profitLoss = profitLoss
-                else positionMap[positionId] = { profitLoss }
+            list.forEach(({ positionId, profitLoss, previewStopPrice }) => {
+                const key = `${positionId}_${tradeType}`
+                const position = positionMap[key]
+                if (position) {
+                    position.profitLoss = profitLoss
+                    position.previewStopPrice = previewStopPrice
+                } else {
+                    vue_set(positionMap, key, { profitLoss })
+                }
             })
-        },
+        }
     },
     actions: {
         // 查询持仓列表
-        queryPositionPage ({ dispatch, commit, state, rootState }, params = {}) {
+        queryPositionPage ({ dispatch, commit, state, rootState }, params) {
+            if (!params.tradeType) return false
+            cachePendingParams(params, positionsConfig) // 缓存请求参数
+            const hideLoading = !!params.hideLoading
             const accountListLen = rootState._user.customerInfo?.accountList?.length
-            dispatch('queryPBOOrderPage')
-
+            const tradeType = params.tradeType
             if (!accountListLen) {
-                commit('Update_positionList', [])
+                commit('Update_positionList', { tradeType, list: [] })
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空持仓
             }
-            commit('Update_positionLoading', true)
-            return queryPositionPage(params).then((res) => {
+            if (!hideLoading) commit('Update_positionLoading', true)
+            return queryPositionPage(positionsConfig[tradeType]).then((res) => {
                 commit('Update_positionLoading', false)
+
+                const productMap = rootState._quote.productMap
                 if (res.check()) {
-                    commit('Update_positionList', res.data)
+                    // 持仓列表里面有wp未配置的产品，那么重新获取改产品的基础信息
+                    const list = res.data || []
+                    const emptyProducts = list.filter(el => {
+                        const { symbolId, tradeType } = el
+                        const symbolKey = `${symbolId}_${tradeType}`
+                        if (productMap[symbolKey]) {
+                            return false
+                        } else {
+                            return {
+                                symbolId,
+                                tradeType,
+                            }
+                        }
+                    })
+                    if (emptyProducts.length) {
+                        commit('_quote/add_products', emptyProducts, { root: true })
+                    }
+                    commit('Update_positionList', { tradeType, list })
                 }
                 return res
             })
@@ -180,6 +228,7 @@ export default {
                 commit('Update_historyList', [])
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
+            Object.assign(params, { tradeType: rootState._base.tradeType })
             commit('Update_historyLoading', true)
             return queryHistoryCloseOrderList(params).then((res) => {
                 commit('Update_historyLoading', false)
@@ -191,18 +240,65 @@ export default {
             })
         },
         // 预埋单列表
-        queryPBOOrderPage ({ dispatch, commit, state, rootState }, params = {}) {
+        queryPBOOrderPage ({ dispatch, commit, state, rootState }, params) {
+            if (!params.tradeType) return false
+            cachePendingParams(params, pendingsConfig) // 缓存请求参数
             const accountListLen = rootState._user.customerInfo?.accountList?.length
+            const tradeType = parseInt(params.tradeType)
             if (!accountListLen) {
-                commit('Update_pendingList', [])
+                commit('Update_pendingList', { tradeType, list: [] })
                 return Promise.resolve(new CheckAPI({ code: '0', data: [] })) // 没有交易账户直接返回空数据
             }
-            return queryPBOOrderPage(params).then((res) => {
-                if (res.check()) {
-                    commit('Update_pendingList', res.data)
-                }
-                return res
-            })
+
+            if (Number(tradeType) === 9) {
+                return queryAbccPboPage(pendingsConfig[tradeType]).then((res) => {
+                    if (res.check()) {
+                        if (res.data.list.length > 0) {
+                            const list = res.data.list
+                            // 处理接口返回字段不一致
+                            list.forEach(item => {
+                                item.id = item.orderId
+                                item.tradeType = tradeType
+                                item.requestNum = item.executeNum
+                                item.orderTime = item.executeTime
+                            })
+                        }
+                        commit('Update_pendingList', { tradeType, list: res.data.list })
+                    }
+                    return res
+                })
+            } else if (Number(tradeType) === 5) {
+                return queryOrderPage(pendingsConfig[tradeType]).then(res => {
+                    if (res.check()) {
+                        if (res.data.length > 0) {
+                            const list = res.data
+                            // 处理接口返回字段不一致
+                            list.forEach(item => {
+                                item.tradeType = tradeType
+                                item.orderTime = item.requestTime
+                            })
+                        }
+                        commit('Update_pendingList', { tradeType, list: res.data })
+                    }
+                    return res
+                })
+            } else {
+                return queryPBOOrderPage(pendingsConfig[tradeType]).then((res) => {
+                    if (res.check()) {
+                        if (res.data.length > 0) {
+                            const list = res.data
+                            // 处理接口返回字段不一致
+                            list.forEach(item => {
+                                item.requestPrice = shiftedBy(item.requestPrice, -1 * item.digits)
+                            })
+                        }
+                        commit('Update_pendingList', { tradeType, list: res.data })
+                    }
+                    return res
+                })
+            }
         },
+        // 发出查询成交记录的通知
+        tradeRecordList () {}
     }
 }

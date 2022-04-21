@@ -1,13 +1,12 @@
 <template>
     <div class='stepper'>
-        {{ disabledMinus }}
         <button ref='minus' class='minus van-stepper__minus' :disabled='disabledMinus' @click='minus'></button>
         <input
             class='input inputEl'
             :disabled='disabled'
             :placeholder='placeholderText'
             type='number'
-            :value='value'
+            :value='modelValue'
             @blur='blur'
             @input='input'
         />
@@ -23,23 +22,23 @@ export default {
     name: 'Stepper',
     props: {
         digits: {
-            type: Number,
+            type: [Number, String],
             default: 2
         },
-        value: {
+        modelValue: {
             type: [Number, String],
-            default: 3
+            default: ''
         },
         step: {
-            type: Number,
+            type: [Number, String],
             default: 1
         },
         min: {
-            type: Number,
+            type: [Number, String],
             default: 0
         },
         max: {
-            type: Number,
+            type: [Number, String],
             default: Infinity
         },
         placeholder: {
@@ -61,10 +60,10 @@ export default {
             return this.placeholder || this.$t('common.noSet')
         },
         disabledPlus () {
-            return this.disabled || !!(this.value && Number(this.value) >= this.max)
+            return this.disabled || !!(this.modelValue && Number(this.modelValue) >= this.max)
         },
         disabledMinus () {
-            return this.disabled || !!(this.value && Number(this.value) <= this.min)
+            return this.disabled || !!(this.modelValue && Number(this.modelValue) <= this.min)
         },
     },
     mounted () {
@@ -73,12 +72,12 @@ export default {
     emits: ['update:modelValue', 'change', 'firstMinus', 'firstPlus'],
     methods: {
         minus () {
-            const curval = (this.value == '' || this.value == 'NaN') && this.max && this.max !== Infinity ? this.max : this.value
+            const curval = (this.modelValue == '' || this.modelValue == 'NaN') && this.max && this.max !== Infinity ? this.max : this.modelValue
             if (this.disabledMinus) return false
             const newval = minus(curval, this.step)
             this.$emit('update:modelValue', toFixed(newval, this.digits))
             this.$emit('change', toFixed(newval, this.digits))
-            if (this.value == '') this.$emit('firstMinus')
+            if (this.modelValue == '') this.$emit('firstMinus')
         },
         input (e) {
             let newval = e.target.value
@@ -95,17 +94,17 @@ export default {
         },
         blur (e) {
             let value = e.target.value
-            if (value === this.value) return false
+            if (value === this.modelValue) return false
             value = value ? toFixed(value, this.digits) : value
             this.$emit('change', value)
         },
         plus () {
-            const curval = this.value == '' || this.value == 'NaN' && this.min ? this.min : this.value
+            const curval = this.modelValue == '' || this.modelValue == 'NaN' && this.min ? this.min : this.modelValue
             if (this.disabledPlus) return
             const newval = plus(curval, this.step)
             this.$emit('update:modelValue', toFixed(newval, this.digits))
             this.$emit('change', toFixed(newval, this.digits))
-            if (this.value == '') this.$emit('firstPlus')
+            if (this.modelValue == '') this.$emit('firstPlus')
         },
         longPressStep (type) {
             const timer = Date.now() - this.longPressTimerStart > 3000 ? 50 : 200
