@@ -130,11 +130,12 @@ export const getPendingColumns = tradeType => {
             {
                 name: t('trade.name'),
                 prop: 'symbolName',
+                className: 'symbolName',
                 align: 'left',
                 minWidth: 150,
                 formatter: row => <span >
-                    {row.symbolName }
-                    {row.crossLevelNum ? <><span class="crossLevelNum">{ row.crossLevelNum }x</span></> : <></>}
+                    {<div class="van-ellipsis">{row.symbolName}</div>}
+                    {row.crossLevelNum ? <><span class="crossLevelNum marginleft0">{ row.crossLevelNum }x</span></> : <></>}
                 </span>
             },
             {

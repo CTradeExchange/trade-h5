@@ -130,7 +130,7 @@ export default {
                     toast.clear()
                     if (res.check()) {
                         Toast(t('common.setSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
+                        store.dispatch('_user/findCustomerInfo', false)
                         router.back()
                     }
                 })

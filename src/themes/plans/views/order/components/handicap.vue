@@ -110,6 +110,11 @@ export default {
             () => lastPrice.value,
             (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
         )
+        // 产品变化之后重置深度报价小数位的长度
+        watch(
+            () => props.product.symbolId,
+            newval => (state.handicapDigit = pow(0.1, props.product.symbolDigits))
+        )
 
         // 报价不够5档，补空位
         const fillPosition = (data, type) => {

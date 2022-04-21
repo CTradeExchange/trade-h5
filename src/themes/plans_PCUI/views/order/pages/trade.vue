@@ -508,16 +508,6 @@ export default {
             state.operationType = parseFloat(tradeType) !== 3 // 杠杆玩法默认是普通类型
             state.multipleVal = tradeType === '1' ? 20 : 1 // 全仓默认20倍
             setVolumeType() // 设置按额或者按手数交易
-            if (tradeType === '1') {
-                store.dispatch('_trade/queryPositionPage', { tradeType }).then(res => {
-                    if (res.check() && res.data?.length) {
-                        const position = res.data.find(el => el.tradeType === parseInt(tradeType) && el.symbolId === parseInt(symbolId))
-                        if (position && position.crossLevelNum) {
-                            state.multipleVal = position.crossLevelNum
-                        }
-                    }
-                })
-            }
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 state.sell.volume = ''
                 if (!isEmpty(customerInfo.value)) {
@@ -538,6 +528,17 @@ export default {
                     } else if (min > 20) {
                         state.multipleVal = min
                     }
+                }
+            }).then(() => {
+                if (tradeType === '1') {
+                    store.dispatch('_trade/queryPositionPage', { tradeType }).then(res => {
+                        if (res.check() && res.data?.length) {
+                            const position = res.data.find(el => el.tradeType === parseInt(tradeType) && el.symbolId === parseInt(symbolId))
+                            if (position && position.crossLevelNum) {
+                                state.multipleVal = position.crossLevelNum
+                            }
+                        }
+                    })
                 }
             })
         }

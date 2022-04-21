@@ -2,7 +2,7 @@
     <div class='pageWrap'>
         <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
         <van-tabs
-            v-model:active='active'
+            v-model:active='tabActive'
             :color='$style.primary'
             shrink
             :title-active-color='$style.primary'
@@ -147,6 +147,7 @@ export default {
             loading: false,
             pwdVisible: false,
             loginPwdPop: false,
+            tabActive: 0,
             loginName: '',
             pwd: '',
             checkCode: '',
