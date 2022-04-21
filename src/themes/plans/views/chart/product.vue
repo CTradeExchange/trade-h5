@@ -44,8 +44,8 @@
                         </span>
                     </span>
                     <div class='others-bottom'>
-                        <span class='upDownAmount' :class='isUniapp ? product.upDownColor : product.rolling_upDownColor'>
-                            {{ isUniapp ? product.upDownWidth : product.rolling_upDownWidth }}
+                        <span class='upDownAmount' :class='product.rolling_upDownColor'>
+                            {{ product.rolling_upDownWidth }}
                         </span>
                     </div>
                 </div>
