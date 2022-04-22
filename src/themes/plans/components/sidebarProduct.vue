@@ -176,7 +176,6 @@ export default {
         justify-content: flex-start;
         box-sizing: border-box;
         width: 100%;
-        overflow-y: auto;
         color: var(--color);
         font-weight: 500;
         font-size: rem(30px);
