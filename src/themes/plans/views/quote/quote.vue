@@ -26,12 +26,15 @@
         <div class='titleBar van-hairline--bottom'>
             <span class='item'>
                 {{ $t('trade.nameCode') }}
+                <SortIcon />
             </span>
             <span class='item'>
                 {{ $t('trade.newPrice') }}
+                <SortIcon />
             </span>
             <span class='item'>
                 {{ $t('trade.changePercent') }}
+                <SortIcon />
             </span>
         </div>
         <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
@@ -41,6 +44,7 @@
 <script>
 import TopTab from '@plans/components/topTab'
 import productListComp from '@plans/modules/productList/productList.vue'
+import SortIcon from '@plans/components/sortIcon.vue'
 import { ref, watch, computed, onActivated, unref, nextTick } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import useProduct from '@plans/hooks/useProduct'
@@ -52,6 +56,7 @@ export default {
     components: {
         productListComp,
         TopTab,
+        SortIcon,
         plansType
     },
     setup () {
