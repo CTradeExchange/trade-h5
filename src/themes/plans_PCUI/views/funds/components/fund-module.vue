@@ -41,6 +41,7 @@ const fundModel = ref('card')
 
 <style lang='scss' scoped>
 .fund-module {
+    padding-bottom: 60px;
     .title {
         text-align: center;
         padding-top: 80px;
