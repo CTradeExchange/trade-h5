@@ -7,12 +7,18 @@ import { findFundPage } from '@/api/fund.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
+import SortIcon from '@plans/components/sortIcon.vue'
+import { sortFieldFn, sortTypeFn, sortFunc } from '@planspc/hooks/useProduct'
 
-export const getColumns = tradeType => {
+export const getColumns = tradeTypeValue => {
     const store = useStore()
     const router = useRouter()
     const { t } = useI18n({ useScope: 'global' })
     const productMap = computed(() => store.state._quote.productMap)
+
+    const sortField = sortFieldFn()
+    const sortType = sortTypeFn()
+
     const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '--'
     // 基金列表
     const fundList = ref([])
@@ -99,6 +105,46 @@ export const getColumns = tradeType => {
         </>
     )
 
+    // 列表label的名称
+    const headerCommonName = ({ row }) => (
+        <>
+            <span class="pointer" onclick={() => sortFunc('symbolName')}>
+                {t('trade.name')}
+                <SortIcon name='symbolName' sort-field={sortField.value} sort-type={sortType.value} />
+            </span>
+        </>
+    )
+
+    // 列表label的最新价
+    const headerCommonLasPrice = ({ row }) => (
+        <>
+            <span class="pointer" onclick={() => sortFunc('rolling_last_price')}>
+                {t('trade.newPrice')}
+                <SortIcon name='rolling_last_price' sort-field={sortField.value} sort-type={sortType.value} />
+            </span>
+        </>
+    )
+
+    // 列表label的涨跌额
+    const headerCommonUpDownAmount = ({ row }) => (
+        <>
+            <span class="pointer" onclick={() => sortFunc('rolling_upDownAmount')}>
+                {t('trade.changePrice')}
+                <SortIcon name='rolling_upDownAmount' sort-field={sortField.value} sort-type={sortType.value} />
+            </span>
+        </>
+    )
+
+    // 列表label的涨跌幅
+    const headerCommonUpDownWidth = ({ row }) => (
+        <>
+            <span class="pointer" onclick={() => sortFunc('rolling_upDownWidth')}>
+                {t('trade.changePercent')}
+                <SortIcon name='rolling_upDownWidth' sort-field={sortField.value} sort-type={sortType.value} />
+            </span>
+        </>
+    )
+
     const columnsMap = {
         1: [
             {
@@ -115,19 +161,28 @@ export const getColumns = tradeType => {
                             { row.symbolName }
                         </span>
                     </div>
-                </div>)
+                </div>),
+                slots: {
+                    header: headerCommonName
+                }
             },
             {
                 name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_last_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_last_price'),
+                slots: {
+                    header: headerCommonLasPrice,
+                }
             },
             {
                 name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount')
+                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount'),
+                slots: {
+                    header: headerCommonUpDownAmount
+                }
             },
             {
                 name: t('trade.changePercent'),
@@ -138,8 +193,10 @@ export const getColumns = tradeType => {
                     <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </span>
-                )
-
+                ),
+                slots: {
+                    header: headerCommonUpDownWidth,
+                }
             },
             {
                 name: t('trade.24highPrice'),
@@ -178,19 +235,28 @@ export const getColumns = tradeType => {
                             { row.symbolName }
                         </span>
                     </div>
-                </div>)
+                </div>),
+                slots: {
+                    header: headerCommonName
+                }
             },
             {
                 name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_last_price')
+                formatter: row => getVal(row.symbolKey, 'rolling_last_price'),
+                slots: {
+                    header: headerCommonLasPrice,
+                }
             },
             {
                 name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount')
+                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount'),
+                slots: {
+                    header: headerCommonUpDownAmount
+                }
             },
             {
                 name: t('trade.changePercent'),
@@ -201,7 +267,10 @@ export const getColumns = tradeType => {
                     <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </span>
-                )
+                ),
+                slots: {
+                    header: headerCommonUpDownWidth,
+                }
 
             },
             {
@@ -241,7 +310,10 @@ export const getColumns = tradeType => {
                             { row.symbolName }
                         </span>
                     </div>
-                </div>)
+                </div>),
+                slots: {
+                    header: headerCommonName
+                }
             },
             {
                 name: t('trade.newPrice'),
@@ -251,7 +323,10 @@ export const getColumns = tradeType => {
                     <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         {getVal(row.symbolKey, 'rolling_last_price')}
                     </span>
-                )
+                ),
+                slots: {
+                    header: headerCommonLasPrice,
+                }
             },
             {
                 name: t('trade.changePrice'),
@@ -261,7 +336,10 @@ export const getColumns = tradeType => {
                     <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount') }
                     </span>
-                )
+                ),
+                slots: {
+                    header: headerCommonUpDownAmount
+                }
 
             },
             {
@@ -273,7 +351,10 @@ export const getColumns = tradeType => {
                     <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </span>
-                )
+                ),
+                slots: {
+                    header: headerCommonUpDownWidth,
+                }
 
             },
             {
@@ -314,7 +395,10 @@ export const getColumns = tradeType => {
                         </span>
                         <ETF v-show={getVal(row.symbolKey, 'etf') === true} />
                     </div>
-                </div>)
+                </div>),
+                slots: {
+                    header: headerCommonName
+                }
             },
             {
                 name: t('trade.newPrice'),
@@ -324,7 +408,10 @@ export const getColumns = tradeType => {
                     <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         {getVal(row.symbolKey, 'rolling_last_price')}
                     </span>
-                )
+                ),
+                slots: {
+                    header: headerCommonLasPrice,
+                }
             },
             {
                 name: t('trade.changePrice'),
@@ -334,7 +421,10 @@ export const getColumns = tradeType => {
                     <strong className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount') }
                     </strong>
-                )
+                ),
+                slots: {
+                    header: headerCommonUpDownAmount
+                }
 
             },
             {
@@ -346,7 +436,10 @@ export const getColumns = tradeType => {
                     <strong className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
                         {getVal(row.symbolKey, 'rolling_upDownWidth')}
                     </strong>
-                )
+                ),
+                slots: {
+                    header: headerCommonUpDownWidth,
+                }
 
             },
             {
@@ -375,5 +468,5 @@ export const getColumns = tradeType => {
         ]
     }
 
-    return columnsMap[tradeType]
+    return columnsMap[tradeTypeValue]
 }

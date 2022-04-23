@@ -183,6 +183,12 @@ const current = computed({
                 display: inline-flex;
                 align-items: center;
             }
+            .pointer{
+                cursor: pointer;
+                &:hover{
+                    color: var(--color);
+                }
+            }
         }
         .el-pagination{
             .btn-prev,

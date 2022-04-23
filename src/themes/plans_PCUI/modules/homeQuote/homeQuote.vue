@@ -33,16 +33,25 @@
         <div class='product-module'>
             <ul class='header-block'>
                 <li>
-                    <span>{{ $t('trade.name') }}</span>
+                    <span class='pointer' @click='sortHandler("symbolName")'>
+                        {{ $t('trade.name') }}
+                        <SortIcon name='symbolName' :sort-field='sortField' :sort-type='sortType' />
+                    </span>
                 </li>
                 <li>
-                    <span>{{ $t('trade.newPrice') }}</span>
+                    <span class='pointer' @click='sortHandler("rolling_last_price")'>
+                        {{ $t('trade.newPrice') }}<SortIcon name='rolling_last_price' :sort-field='sortField' :sort-type='sortType' />
+                    </span>
                 </li>
                 <li>
-                    <span>{{ $t('trade.changePrice') }}</span>
+                    <span class='pointer' @click='sortHandler("rolling_upDownAmount")'>
+                        {{ $t('trade.changePrice') }}<SortIcon name='rolling_upDownAmount' :sort-field='sortField' :sort-type='sortType' />
+                    </span>
                 </li>
                 <li>
-                    <span>{{ $t('trade.changePercent') }}</span>
+                    <span class='pointer' @click='sortHandler("rolling_upDownWidth")'>
+                        {{ $t('trade.changePercent') }}<SortIcon name='rolling_upDownWidth' :sort-field='sortField' :sort-type='sortType' />
+                    </span>
                 </li>
                 <li>
                     <span>{{ $t('c.handle') }}</span>
@@ -91,13 +100,17 @@
 <script>
 import { computed, ref, watch, onMounted, getCurrentInstance, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
-import useProduct from '@planspc/hooks/useProduct'
+import useProduct, { sortFieldFn, sortTypeFn, sortFunc } from '@planspc/hooks/useProduct'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import globalData from '@h5/hooks/globalData'
 import { QuoteSocket } from '@/plugins/socket/socket'
+import SortIcon from '@planspc/components/sortIcon'
 
 export default {
+    components: {
+        SortIcon,
+    },
     props: {
         data: {
             type: Object,
@@ -138,10 +151,18 @@ export default {
         // 过滤后的产品列表数据
         const filterProductList = ref([])
 
+        const sortField = sortFieldFn()
+        const sortType = sortTypeFn()
+
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
             tradeType, categoryType, isSelfSymbol: false
         })
+
+        // 点击排序
+        const sortHandler = (field) => {
+            sortFunc(field)
+        }
 
         // 切换玩法
         const switchPlan = (val) => {
@@ -213,6 +234,9 @@ export default {
             categoryList,
             productList,
             filterProductList,
+            sortField,
+            sortType,
+            sortHandler,
             switchPlan,
             toOrder,
             examineMore,
@@ -311,8 +335,14 @@ export default {
                 font-size: 14px;
                 color: var(--minorColor);
             }
+            .pointer{
+                cursor: pointer;
+                &:hover{
+                    color: var(--color);
+                }
+            }
             &:first-child {
-                span {
+                &>span {
                     margin-left: 16px;
                 }
             }
