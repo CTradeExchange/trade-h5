@@ -234,7 +234,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.phoneBindSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
+                        store.dispatch('_user/findCustomerInfo', false)
 
                         setTimeout(() => {
                             router.back()
@@ -248,7 +248,7 @@ export default {
                     state.loading = false
                     if (res.check()) {
                         Toast(t('common.replacePhoneSuccess'))
-                        store.dispatch('_user/findCustomerInfo')
+                        store.dispatch('_user/findCustomerInfo', false)
                         setTimeout(() => {
                             router.back()
                         }, 1500)
@@ -260,7 +260,7 @@ export default {
         }
 
         onUnmounted(() => {
-            store.dispatch('_user/findCustomerInfo')
+            store.dispatch('_user/findCustomerInfo', false)
         })
 
         return {

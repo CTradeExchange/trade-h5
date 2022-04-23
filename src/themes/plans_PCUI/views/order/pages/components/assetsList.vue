@@ -12,10 +12,12 @@
             <MultipleSet
                 :ref='el => componentRefs.multipleSet = el'
                 :product='product'
+                @beforeClose='MultipleSetBeforeClose'
             />
             <MultipleSetCross
                 :ref='el => componentRefs.multipleSetCross = el'
                 :product='product'
+                @beforeClose='MultipleSetBeforeClose'
             />
         </template>
     </customTable>
@@ -32,6 +34,7 @@ import ClosePosition from '@planspc/views/assets/components/close-position.vue'
 import Sltp from '@planspc/views/assets/components/sltp.vue'
 import MultipleSet from '@planspc/components/multipleSet.vue'
 import MultipleSetCross from '@planspc/components/multipleSetCross.vue'
+import { useRoute, useRouter } from 'vue-router'
 const componentRefs = ref({})
 const props = defineProps({
     tradeType: {
@@ -43,6 +46,8 @@ const props = defineProps({
         default: () => ({})
     }
 })
+const router = useRouter()
+const route = useRoute()
 const store = useStore()
 // 用户信息
 
@@ -77,6 +82,11 @@ const queryPositionList = () => {
             accountId
         })
     }
+}
+
+// 杠杆倍数弹出关闭之后，当前产品还原成弹窗之前的产品
+const MultipleSetBeforeClose = (symbolKey) => {
+    store.commit('_quote/Update_productActivedID', symbolKey)
 }
 
 const initData = () => {
