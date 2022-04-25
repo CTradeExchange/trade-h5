@@ -1,6 +1,6 @@
 <template>
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
-        <PageComp :data='pageModules' />
+        <PageComp class='marginbottom' :data='pageModules' />
     </div>
 </template>
 
@@ -80,8 +80,8 @@ export default {
     height: 100%;
     //overflow: auto;
     background: var(--contentColor);
-    &.hasNav {
-        //margin-bottom: rem(80px);
+    .marginbottom{
+        padding-bottom: rem(100px);
     }
 }
 .noticeBar,
