@@ -1,12 +1,13 @@
 <template>
     <span class='sortIcon'>
-        <i class='upArrow'></i>
-        <i class='downArrow'></i>
+        <i class='upArrow' :class="{ active:sortType==='asc' && sortField===name }"></i>
+        <i class='downArrow' :class="{ active:sortType==='desc' && sortField===name }"></i>
     </span>
 </template>
 
 <script setup>
 const props = defineProps({
+    name: String,
     sortField: String,
     sortType: String,
 })
@@ -14,18 +15,27 @@ const props = defineProps({
 
 <style lang="scss" scoped>
 .sortIcon{
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
+    vertical-align: middle;
+    height: 12px;
     .upArrow,.downArrow{
         width: 0;
         height: 0;
-        border: 10px solid var(--color);
-        border-top-width: 0;
-        border-color: transparent transparent var(--color) transparent;
+        border: 4px solid var(--placeholdColor);
+        border-width: 0 4px 4px;
+        border-color: transparent transparent var(--placeholdColor) transparent;
+        &.active{
+            border-color: transparent transparent var(--primary) transparent;
+        }
     }
     .downArrow{
-        border-bottom-width: 0;
-        border-top-width: 10px;
+        margin-top: 2px;
+        border-width: 4px 4px 0;
+        border-color: var(--placeholdColor) transparent transparent transparent;
+        &.active{
+            border-color: var(--primary) transparent transparent transparent;
+        }
     }
 }
 </style>

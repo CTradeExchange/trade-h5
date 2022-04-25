@@ -24,17 +24,17 @@
         </a>
 
         <div class='titleBar van-hairline--bottom'>
-            <span class='item'>
+            <span class='item' @click='sortHandler("symbolName")'>
                 {{ $t('trade.nameCode') }}
-                <SortIcon />
+                <SortIcon name='symbolName' :sort-field='sortField' :sort-type='sortType' />
             </span>
-            <span class='item'>
+            <span class='item' @click='sortHandler("rolling_last_price")'>
                 {{ $t('trade.newPrice') }}
-                <SortIcon />
+                <SortIcon name='rolling_last_price' :sort-field='sortField' :sort-type='sortType' />
             </span>
-            <span class='item'>
+            <span class='item' @click='sortHandler("rolling_upDownWidth")'>
                 {{ $t('trade.changePercent') }}
-                <SortIcon />
+                <SortIcon name='rolling_upDownWidth' :sort-field='sortField' :sort-type='sortType' />
             </span>
         </div>
         <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
@@ -63,7 +63,7 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t, locale } = useI18n({ useScope: 'global' })
-        console.log(locale)
+
         const productListEl = ref(null)
         // 玩法列表
         const isWallet = store.state._base.wpCompanyInfo.isWallet
@@ -81,7 +81,7 @@ export default {
         // 2.板块类型
         const categoryType = ref(1)
         // 获取板块列表和所选板块的产品列表
-        const { categoryList, productList } = useProduct({
+        const { categoryList, productList, sortField, sortType, sortFunc } = useProduct({
             tradeType, categoryType
         })
         const plansLen = computed(() => {
@@ -92,6 +92,11 @@ export default {
             })
             return arr.length
         })
+
+        // 点击排序
+        const sortHandler = (field) => {
+            sortFunc(field)
+        }
 
         // 监听玩法类型
         const handleTradeType = async (val) => {
@@ -139,6 +144,9 @@ export default {
             plansList,
             categoryList,
             productList,
+            sortField,
+            sortType,
+            sortHandler,
             tabChange,
             tabClick,
             handleTradeType,
