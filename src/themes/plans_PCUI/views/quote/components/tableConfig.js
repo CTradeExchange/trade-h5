@@ -7,7 +7,7 @@ import { findFundPage } from '@/api/fund.js'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
-import SortIcon from '@plans/components/sortIcon.vue'
+import SortIcon from '@planspc/components/sortIcon.vue'
 import { sortFieldFn, sortTypeFn, sortFunc } from '@planspc/hooks/useProduct'
 
 export const getColumns = tradeTypeValue => {
