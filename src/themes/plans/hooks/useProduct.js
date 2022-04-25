@@ -2,6 +2,7 @@ import { computed, unref, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { gte } from '@/utils/calculation'
+import { localGet, localSet } from '@/utils/util'
 
 export default function ({ tradeType, categoryType }) {
     const { t } = useI18n({ useScope: 'global' })
@@ -30,8 +31,8 @@ export default function ({ tradeType, categoryType }) {
     })
 
     // 排序
-    const sortField = ref('') // 排序字段
-    const sortType = ref('') // 排序方式， asc-升序； desc-降序；
+    const sortField = ref(localGet('productListSortField') || '') // 排序字段
+    const sortType = ref(localGet('productListSortType') || '') // 排序方式， asc-升序； desc-降序；
 
     // 所选板块的产品列表
     const productList = computed(() => {
@@ -63,20 +64,30 @@ export default function ({ tradeType, categoryType }) {
                 // 根据享元模式封装，默认是asc排序
                 let firstEl = a
                 let secondEl = b
+                const defaultInfinity = sortType.value === 'asc' ? Infinity : -Infinity
 
                 if (sortType.value === 'desc') {
                     firstEl = b
                     secondEl = a
                 }
                 if (sortField.value === 'symbolName') {
-                    return firstEl[sortField.value].localeCompare(secondEl[sortField.value])
+                    // 将有报价的产品排序到前面
+                    if (parseFloat(firstEl['rolling_last_price']) && parseFloat(secondEl['rolling_last_price'])) {
+                        return firstEl[sortField.value].localeCompare(secondEl[sortField.value])
+                    } else if (parseFloat(firstEl['rolling_last_price']) || parseFloat(secondEl['rolling_last_price'])) {
+                        const firtstValue = firstEl['rolling_last_price'] || defaultInfinity
+                        const secondValue = secondEl['rolling_last_price'] || defaultInfinity
+                        return gte(firtstValue, secondValue) ? 1 : -1
+                    } else {
+                        return 0
+                    }
                 } else if (sortField.value === 'rolling_upDownWidth') {
-                    const firtstValue = parseFloat(firstEl[sortField.value]) || -9999
-                    const secondValue = parseFloat(secondEl[sortField.value]) || -9999
+                    const firtstValue = parseFloat(firstEl[sortField.value]) || defaultInfinity
+                    const secondValue = parseFloat(secondEl[sortField.value]) || defaultInfinity
                     return firtstValue - secondValue
                 } else {
-                    const firtstValue = firstEl[sortField.value] || -9999
-                    const secondValue = secondEl[sortField.value] || -9999
+                    const firtstValue = firstEl[sortField.value] || defaultInfinity
+                    const secondValue = secondEl[sortField.value] || defaultInfinity
                     return gte(firtstValue, secondValue) ? 1 : -1
                 }
             })
@@ -100,43 +111,13 @@ export default function ({ tradeType, categoryType }) {
             }
         }
         sortField.value = field
+        localSet('productListSortField', field)
+        localSet('productListSortType', sortType.value)
     }
 
     return {
         categoryList,
         productList,
-        sortField,
-        sortType,
-        sortFunc,
-    }
-}
-
-// 行情页面，产品列表排序
-export const sortProductListHook = () => {
-    const sortField = ref('') // 排序字段
-    const sortType = ref('') // 排序方式， asc-升序； desc-降序；
-    // 排序方法
-    const sortFunc = (field, type, list) => {
-        sortField.value = field
-        sortType.value = type
-        list.sort((a, b) => {
-            // 根据享元模式封装，默认是asc排序
-            let firstEl = a
-            let secondEl = b
-
-            if (sortType.valeu === 'desc') {
-                firstEl = b
-                secondEl = a
-            }
-            if (sortField.value === 'symbolName') {
-                return firstEl[sortField.value].localeCompare(secondEl[sortField.value])
-            } else {
-                return firstEl[sortField.value] - secondEl[sortField.value]
-            }
-        })
-    }
-
-    return {
         sortField,
         sortType,
         sortFunc,

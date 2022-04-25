@@ -3,10 +3,11 @@ import { useStore } from 'vuex'
 import globalData from './globalData'
 import { useI18n } from 'vue-i18n'
 import { gte } from '@/utils/calculation'
+import { localGet, localSet } from '@/utils/util'
 
 // 排序
-const sortField = ref('') // 排序字段
-const sortType = ref('') // 排序方式， asc-升序； desc-降序；
+const sortField = ref(localGet('productListSortField') || '') // 排序字段
+const sortType = ref(localGet('productListSortType') || '') // 排序方式， asc-升序； desc-降序；
 
 export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     // wp拖拽预览的时候直接返回空数据
@@ -69,20 +70,30 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
                 // 根据享元模式封装，默认是asc排序
                 let firstEl = a
                 let secondEl = b
+                const defaultInfinity = sortType.value === 'asc' ? Infinity : -Infinity
 
                 if (sortType.value === 'desc') {
                     firstEl = b
                     secondEl = a
                 }
                 if (sortField.value === 'symbolName') {
-                    return firstEl[sortField.value].localeCompare(secondEl[sortField.value])
+                    // 将有报价的产品排序到前面
+                    if (parseFloat(firstEl['rolling_last_price']) && parseFloat(secondEl['rolling_last_price'])) {
+                        return firstEl[sortField.value].localeCompare(secondEl[sortField.value])
+                    } else if (parseFloat(firstEl['rolling_last_price']) || parseFloat(secondEl['rolling_last_price'])) {
+                        const firtstValue = firstEl['rolling_last_price'] || defaultInfinity
+                        const secondValue = secondEl['rolling_last_price'] || defaultInfinity
+                        return gte(firtstValue, secondValue) ? 1 : -1
+                    } else {
+                        return 0
+                    }
                 } else if (sortField.value === 'rolling_upDownWidth') {
-                    const firtstValue = parseFloat(firstEl[sortField.value]) || -9999
-                    const secondValue = parseFloat(secondEl[sortField.value]) || -9999
+                    const firtstValue = parseFloat(firstEl[sortField.value]) || defaultInfinity
+                    const secondValue = parseFloat(secondEl[sortField.value]) || defaultInfinity
                     return firtstValue - secondValue
                 } else {
-                    const firtstValue = firstEl[sortField.value] || -9999
-                    const secondValue = secondEl[sortField.value] || -9999
+                    const firtstValue = firstEl[sortField.value] || defaultInfinity
+                    const secondValue = secondEl[sortField.value] || defaultInfinity
                     return gte(firtstValue, secondValue) ? 1 : -1
                 }
             })
@@ -91,27 +102,7 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
         return resultList
     })
 
-    // 排序方法
-    const sortFunc = (field) => {
-        if (sortField.value === field || sortType.value === '') {
-            switch (sortType.value) {
-            case 'asc':
-                sortType.value = 'desc'
-                break
-            case 'desc':
-                sortType.value = ''
-                break
-            default:
-                sortType.value = 'asc'
-            }
-        }
-        sortField.value = field
-    }
-
     return {
-        sortField,
-        sortType,
-        sortFunc,
         categoryList,
         productList
     }
@@ -126,7 +117,7 @@ export const sortTypeFn = () => {
 
 // 排序方法
 export const sortFunc = (field) => {
-    if (sortField.value === field || sortType.value === '') {
+    if (sortField.value === field) {
         switch (sortType.value) {
         case 'asc':
             sortType.value = 'desc'
@@ -137,6 +128,10 @@ export const sortFunc = (field) => {
         default:
             sortType.value = 'asc'
         }
+    } else {
+        sortType.value = 'asc'
     }
     sortField.value = field
+    localSet('productListSortField', field)
+    localSet('productListSortType', sortType.value)
 }
