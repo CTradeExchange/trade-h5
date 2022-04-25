@@ -35,8 +35,7 @@ export default createStore({
         countryList: [],
         cacheViews: ['Layout'],
         currencyList: [],
-        stopLossPprofitProductID: '', // 用于止损止盈弹层
-        businessConfig: '', // 业务渠道自定义配置
+        stopLossPprofitProductID: '' // 用于止损止盈弹层
     },
     getters: {
         productActived (state) {
@@ -130,9 +129,6 @@ export default createStore({
         },
         Update_stopLossPprofitProductID (state, data) {
             state.stopLossPprofitProductID = data
-        },
-        Update_businessConfig (state, data) {
-            state.businessConfig = data
         }
     },
     actions: {

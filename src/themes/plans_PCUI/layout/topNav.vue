@@ -3,7 +3,7 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' height='18' :src='logoUrl' />
+                    <img alt='' height='18' src='@planspc/images/logo.png' />
                 </h1>
             </router-link>
             <div class='menus'>
@@ -134,7 +134,6 @@ import ThemeIcon from './components/themeIcon'
 import LangIcon from './components/langIcon'
 import Msg from './components/msg'
 import DownloadIcon from './components/downloadIcon'
-const logoImg = require('@planspc/images/logo.png')
 
 export default {
     components: {
@@ -160,10 +159,6 @@ export default {
             } else {
                 return t('header.trade')
             }
-        })
-
-        const logoUrl = computed(() => {
-            return store.state.businessConfig?.pcuiLogo || logoImg
         })
 
         // 获取账户信息
@@ -216,7 +211,6 @@ export default {
         const handRoutTo = (path) => router.push(route.path + path)
 
         return {
-            logoUrl,
             plansList,
             onlineService,
             userAccountType,

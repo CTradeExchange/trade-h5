@@ -293,7 +293,6 @@ export default {
         min-width: rem(400px);
         //min-width: 2.66667rem;
         padding: rem(30px) rem(50px) 0 rem(50px);
-        overflow-y: auto;
         background-color: var(--contentColor);
         .bank-item {
             position: relative;

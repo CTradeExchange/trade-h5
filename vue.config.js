@@ -142,7 +142,7 @@ const config = {
         },
         proxy: {
             '/wp-content/uploads': {
-                target: h5URL || 'https://prewpadmin_10.cats-trade.com',
+                target: 'https://prewpadmin_9.cats-trade.com',
             },
             '/wp-json/wp': {
                 target: 'http://prewpadmin_9.cats-trade.com', // http://prewpadmin.cats-trade.com/
