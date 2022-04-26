@@ -52,7 +52,6 @@ const pagination = computed(() => {
     }
 })
 const computedList = computed(() => {
-    console.log(props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size))
     return props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size)
 })
 const moduleId = 'quote_' + Date.now()
