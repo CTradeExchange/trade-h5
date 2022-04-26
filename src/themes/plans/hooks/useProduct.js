@@ -98,7 +98,7 @@ export default function ({ tradeType, categoryType }) {
 
     // 排序方法
     const sortFunc = (field) => {
-        if (sortField.value === field || sortType.value === '') {
+        if (sortField.value === field) {
             switch (sortType.value) {
             case 'asc':
                 sortType.value = 'desc'
@@ -109,6 +109,8 @@ export default function ({ tradeType, categoryType }) {
             default:
                 sortType.value = 'asc'
             }
+        } else {
+            sortType.value = 'asc'
         }
         sortField.value = field
         localSet('productListSortField', field)
