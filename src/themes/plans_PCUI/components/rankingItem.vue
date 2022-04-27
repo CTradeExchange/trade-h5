@@ -147,14 +147,14 @@ export default {
                 })
             } else if (props.type === 'amountRanking') {
                 proList.sort((a, b) => {
-                    const firtstValue = parseFloat(a.rolling_amount) || Infinity
-                    const secondValue = parseFloat(b.rolling_amount) || Infinity
-                    return firtstValue - secondValue
+                    const firtstValue = isNaN(a.rolling_amount) ? -Infinity : a.rolling_amount
+                    const secondValue = isNaN(b.rolling_amount) ? -Infinity : b.rolling_amount
+                    return secondValue - firtstValue
                 })
             } else if (props.type === 'tradingVolume') {
                 proList.sort((a, b) => {
-                    const firtstValue = parseFloat(a.rolling_transactions_number) || Infinity
-                    const secondValue = parseFloat(b.rolling_transactions_number) || Infinity
+                    const firtstValue = isNaN(a.rolling_transactions_number) ? -Infinity : a.rolling_transactions_number
+                    const secondValue = isNaN(b.rolling_transactions_number) ? -Infinity : b.rolling_transactions_number
                     return firtstValue - secondValue
                 })
             }

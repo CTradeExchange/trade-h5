@@ -8,10 +8,7 @@ export function configSystem () {
         params: {
             timestamp: Date.now()
         }
-    }).then(res => {
-        console.log(res.data)
-        return res.data
-    })
+    }).then(res => res.data)
 }
 
 /* 获取字典列表 */
