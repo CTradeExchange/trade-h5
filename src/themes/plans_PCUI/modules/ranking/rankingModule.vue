@@ -69,6 +69,43 @@
                     </template>
                 </RankingItem>
             </div>
+            <div v-if="'stock'===activeLabelCode" class='item'>
+                <RankingItem
+                    v-model:currency='amountCurrency'
+                    :currency-list='profitCurrencyList'
+                    :index-column='false'
+                    :label-index='activeTab'
+                    :max='max'
+                    title='成交量榜'
+                    type='tradingVolume'
+                >
+                    <template #header>
+                        <span class='label'>
+                            名称
+                        </span>
+                        <span class='label'>
+                            价格
+                        </span>
+                        <span class='label lastLabel'>
+                            24成交量
+                        </span>
+                    </template>
+                    <template #default='{ item }'>
+                        <span class='label'>
+                            <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' />
+                            <span class='symbolCurrency'>
+                                {{ item.isCryptocurrency ? item.baseCurrency : item.symbolName }}
+                            </span>
+                        </span>
+                        <span class='label' :class='[item.last_color]'>
+                            {{ item.rolling_last_price }}
+                        </span>
+                        <span class='label lastLabel' :class='[item.rolling_upDownColor]'>
+                            {{ formatAmount(item.rolling_transactions_number) }}
+                        </span>
+                    </template>
+                </RankingItem>
+            </div>
         </div>
     </div>
 </template>

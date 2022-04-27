@@ -151,6 +151,12 @@ export default {
                     const secondValue = parseFloat(b.rolling_amount) || Infinity
                     return firtstValue - secondValue
                 })
+            } else if (props.type === 'tradingVolume') {
+                proList.sort((a, b) => {
+                    const firtstValue = parseFloat(a.rolling_transactions_number) || Infinity
+                    const secondValue = parseFloat(b.rolling_transactions_number) || Infinity
+                    return firtstValue - secondValue
+                })
             }
             return proList.slice(0, props.max)
         })
