@@ -54,19 +54,19 @@ const pagination = computed(() => {
 const computedList = computed(() => {
     return props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size)
 })
-const moduleId = 'quote_' + Date.now()
-let unSubscribe = () => {}
+// const moduleId = 'quote_' + Date.now()
+// let unSubscribe = () => {}
 
-watch(() => unref(computedList), () => {
-    const symbolKeys = unref(computedList).map(e => e.symbolKey)
-    unSubscribe = QuoteSocket.add_subscribe24H({ moduleId, symbolKeys })
-}, {
-    immediate: true
-})
+// watch(() => unref(computedList), () => {
+//     const symbolKeys = unref(computedList).map(e => e.symbolKey)
+//     unSubscribe = QuoteSocket.add_subscribe24H({ moduleId, symbolKeys })
+// }, {
+//     immediate: true
+// })
 
-onUnmounted(() => {
-    unSubscribe()
-})
+// onUnmounted(() => {
+//     unSubscribe()
+// })
 
 </script>
 

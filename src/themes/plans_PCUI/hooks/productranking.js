@@ -22,7 +22,6 @@ export default (params) => {
     const symbolLabelList = ref([]) // 标签列表
     const symbolLabelMap = ref({})
     const sortPlans = ['5','3','2','1'];    // 取产品玩法的排序；现货 → 杠杆 → 合约全仓 → 合约逐仓
-    const curPlans = ref('');   // 当前产品玩法
     const symbolKeyByPlans = ref([]);  // 按顺序取到的某个玩法的产品symbolKey列表
     const productListByLabel = ref([]);  // 产品根据标签分类
 
@@ -45,7 +44,6 @@ export default (params) => {
                     symbolList.forEach(el=> {
                         symbolKeyByPlans.value.push(`${el}_${plan}`)
                     })
-                    if(curPlans.value==='') curPlans.value = plan
                 }
             })
 
@@ -83,7 +81,6 @@ export default (params) => {
         }
     })
     return {
-        curPlans,
         symbolLabelList,
         symbolKeyByPlans,
         productListByLabel,
