@@ -141,8 +141,8 @@
 		"advance": "Prepayment",
 		"advanceRatio": "Prepayment ratio",
         "newPrice": "Last price",
-        "changePrice": "24h Change",
-        "changePercent": "24h Change%",
+        "changePrice": "24H Change",
+        "changePercent": "24H Change%",
 		"chart": "Chart",
 		"closeOrder": "Close Position",
 		"contract": "Symbol Properties",
@@ -493,7 +493,7 @@
         "purchaseRedeemBtn": "Purchase Redeem",
         "productEtfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
 		"quantity": "QTY(Lots)",
-        "upDown": "24h Change%"
+        "upDown": "24H Change%"
 	},
 	"bizType": {
 		"2": "Market close",
