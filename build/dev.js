@@ -13,7 +13,7 @@ function queryThemes (params) {
         fs.readdir(resolvePath('../src/themes'), { withFileTypes: true }, (err, files) => {
             const directory = []
             for (const file of files) {
-                if (file.isDirectory()) {
+                if (file.isDirectory() && file.name !== 'upgrading') {
                     directory.push(file.name)
                 }
             }
