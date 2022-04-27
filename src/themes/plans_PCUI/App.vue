@@ -84,7 +84,7 @@ export default {
         configSystem()
             .then(res => {
                 const isProduction = process.env.NODE_ENV === 'production'
-                if (res && res.maintenance === true && !isProduction) location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
+                if (res && res.maintenance === true && isProduction) location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
             })
             .catch(() => {
                 location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
