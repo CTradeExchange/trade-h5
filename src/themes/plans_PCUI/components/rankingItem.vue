@@ -35,7 +35,7 @@
                     </span>
                 </slot>
             </li>
-            <li v-for='(item, i) in list' :key='item.symbolKey' class='item'>
+            <li v-for='(item, i) in list' :key='item.symbolKey' class='item productItem' @click='clickHandler(item)'>
                 <slot :item='item'>
                     <span v-if='indexColumn' class='label'>
                         {{ i + 1 }}
@@ -69,6 +69,7 @@
 <script>
 import { computed, ref, watch } from 'vue'
 import CurrencyIcon from '@/components/currencyIcon'
+import { useRouter } from 'vue-router'
 export default {
     components: {
         CurrencyIcon,
@@ -90,6 +91,8 @@ export default {
     },
     emits: ['update:currency'],
     setup (props, { emit }) {
+        const router = useRouter()
+
         const currencyVal = computed({
             get: () => props.currency,
             set: (val) => emit('update:currency', val),
@@ -115,6 +118,9 @@ export default {
             () => props.labelIndex,
             () => {
                 resetCurrency()
+            },
+            {
+                immediate: true
             }
         )
 
@@ -148,8 +154,14 @@ export default {
             }
             return proList.slice(0, props.max)
         })
+
+        // 跳转到产品交易页面
+        const clickHandler = (item) => {
+            router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
+        }
         return {
             currencyVal,
+            clickHandler,
             list,
         }
     }
@@ -197,6 +209,14 @@ export default {
         line-height: 24px;
         padding: 5px 6px;
         box-sizing: content-box;
+        &.productItem{
+            cursor: pointer;
+            &:hover{
+                background: var(--assistColor);
+                border-radius: 5px;
+            }
+        }
+
         .label:last-child {
             text-align: right;
         }
