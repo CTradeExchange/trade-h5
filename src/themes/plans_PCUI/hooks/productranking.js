@@ -4,7 +4,8 @@ import { getListByParentCode } from '@/api/base'
 import { ref } from 'vue'
 
 // 产品标签分类
-function productByLabel (product, symbolLabelMap) {
+function productByLabel (symbolKey, productMap, symbolLabelMap) {
+    const product = productMap[symbolKey]
     const labels = product.labels
     if (!labels) return
     labels.split(',').forEach(el => {
@@ -20,9 +21,9 @@ export default (params) => {
     const store = useStore()
     const symbolLabelList = ref([]) // 标签列表
     const symbolLabelMap = ref({})
-    const profitCurrencyMap = ref({})
     const sortPlans = ['5','3','2','1'];    // 取产品玩法的排序；现货 → 杠杆 → 合约全仓 → 合约逐仓
-    const productByPlans = [];  // 按顺序取到的某个玩法的产品列表
+    const curPlans = ref('');   // 当前产品玩法
+    const symbolKeyByPlans = ref([]);  // 按顺序取到的某个玩法的产品symbolKey列表
     const productListByLabel = ref([]);  // 产品根据标签分类
 
     // 获取产品标签的字典
@@ -40,24 +41,17 @@ export default (params) => {
             sortPlans.forEach(plan=>{
                 const planItem = plans.find(el=>el.tradeType===plan);
                 const symbolList = planMap[plan].symbolList.filter(el=> productMap[`${el}_${plan}`]?.symbolName);   // 过滤出有权限的产品列表
-                if(planItem && symbolList.length && productByPlans.length===0){
+                if(planItem && symbolList.length && symbolKeyByPlans.value.length===0){
                     symbolList.forEach(el=> {
-                        productByPlans.push(productMap[`${el}_${plan}`])
+                        symbolKeyByPlans.value.push(`${el}_${plan}`)
                     })
+                    if(curPlans.value==='') curPlans.value = plan
                 }
             })
 
-            productByPlans.forEach(el => {
+            symbolKeyByPlans.value.forEach(el => {
                 // 标签分类
-                productByLabel(el, symbolLabelMap)
-
-                // 盈利货币分类
-                const profitCurrency = el.profitCurrency
-                if (profitCurrencyMap.value[profitCurrency]) {
-                    profitCurrencyMap.value[profitCurrency].push(el)
-                } else {
-                    profitCurrencyMap.value[profitCurrency] = [el]
-                }
+                productByLabel(el, productMap, symbolLabelMap)
             })
 
             // 将产品列表根据标签、盈利货币进行分类
@@ -82,17 +76,16 @@ export default (params) => {
 
                 productListByLabel.value.push({
                     labelCode: el,
+                    productList: proList,
                     list: proListByCurrency
                 })
             })
         }
     })
-    console.log(symbolLabelMap.value)
-    console.log(profitCurrencyMap.value)
     return {
+        curPlans,
         symbolLabelList,
-        symbolLabelMap,
-        profitCurrencyMap,
+        symbolKeyByPlans,
         productListByLabel,
     }
 }

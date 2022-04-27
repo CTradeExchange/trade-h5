@@ -5,17 +5,22 @@
                 {{ title }}
             </h3>
 
-            <el-select v-model='currencyVal' class='currencySelect' placeholder='Select' size='small'>
+            <el-select
+                v-model='currencyVal'
+                class='currencySelect'
+                placeholder='Select'
+                size='small'
+            >
                 <el-option
                     v-for='item in currencyList'
                     :key='item.currency'
-                    :label='item.currency + $t("trade.markets")'
+                    :label="item.currency + $t('trade.markets')"
                     :value='item.currency'
                 />
             </el-select>
         </div>
 
-        <ul class='rankingList' :class='{ showIndex:indexColumn }'>
+        <ul class='rankingList' :class='{ showIndex: indexColumn }'>
             <li class='item labelBar'>
                 <slot name='header'>
                     <span v-if='indexColumn' class='label'></span>
@@ -30,13 +35,24 @@
                     </span>
                 </slot>
             </li>
-            <li v-for='(item,i) in list' :key='item.symbolKey' class='item'>
+            <li v-for='(item, i) in list' :key='item.symbolKey' class='item'>
                 <slot :item='item'>
                     <span v-if='indexColumn' class='label'>
-                        {{ i+1 }}
+                        {{ i + 1 }}
                     </span>
                     <span class='label'>
-                        {{ item.symbolName }}
+                        <CurrencyIcon
+                            v-if='item.isCryptocurrency'
+                            class='symbolCurrencyIcon'
+                            :currency='item.baseCurrency'
+                        />
+                        <span class='symbolCurrency'>
+                            {{
+                                item.isCryptocurrency
+                                    ? item.baseCurrency
+                                    : item.symbolName
+                            }}
+                        </span>
                     </span>
                     <span class='label' :class='[item.last_color]'>
                         {{ item.rolling_last_price }}
@@ -52,7 +68,11 @@
 
 <script>
 import { computed, ref, watch } from 'vue'
+import CurrencyIcon from '@/components/currencyIcon'
 export default {
+    components: {
+        CurrencyIcon,
+    },
     props: {
         title: String,
         currencyList: Array,
@@ -62,6 +82,10 @@ export default {
         indexColumn: {
             type: Boolean,
             default: false
+        },
+        max: {
+            type: Number,
+            default: 3
         },
     },
     emits: ['update:currency'],
@@ -122,7 +146,7 @@ export default {
                     return firtstValue - secondValue
                 })
             }
-            return proList.slice(0, 3)
+            return proList.slice(0, props.max)
         })
         return {
             currencyVal,
@@ -133,35 +157,39 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.rankingItem{
+.rankingItem {
     position: relative;
     padding-bottom: 20px;
-    .titleBar{
+    .titleBar {
         display: flex;
         justify-content: space-between;
         line-height: 40px;
-        .title{
-            font-size: 12px;
+        .title {
+            font-size: 16px;
             font-weight: normal;
         }
     }
-    .categorySelect{
+    .categorySelect {
         position: absolute;
         right: 20px;
         top: 0;
     }
-    .currencySelect{
+    .currencySelect {
         width: 150px;
+        :deep(.el-input__inner) {
+            background: none;
+            border: 1px solid var(--lineColor);
+        }
     }
 }
-.rankingList{
+.rankingList {
     margin-top: 20px;
-    .labelBar{
+    .labelBar {
         height: 32px;
         line-height: 32px;
         color: var(--minorColor);
     }
-    .item{
+    .item {
         display: grid;
         grid-template-columns: 2fr 1fr 1fr;
         grid-column-gap: 15px;
@@ -169,14 +197,23 @@ export default {
         line-height: 24px;
         padding: 5px 6px;
         box-sizing: content-box;
-        .label:last-child{
+        .label:last-child {
             text-align: right;
         }
     }
-    .showIndex{
-        .item{
+    .showIndex {
+        .item {
             grid-template-columns: 20px 2fr 1fr 1fr;
         }
+    }
+    .symbolCurrencyIcon {
+        margin-right: 0.2em;
+    }
+    .symbolCurrency {
+        display: inline-block;
+        line-height: 16px;
+        vertical-align: middle;
+        font-size: 14px;
     }
 }
 </style>

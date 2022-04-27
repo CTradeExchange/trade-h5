@@ -3,17 +3,17 @@
         <h2 class='title'>
             排行榜
         </h2>
-        <a class='rightMore' href='javascript:;'>
+        <a class='rightMore' href='javascript:;' @click="$router.push('/ranking')">
             <van-icon name='arrow' />
         </a>
 
-        <el-tabs
+        <!-- <el-tabs
             v-model='activeTab'
             class='labelTabs'
             type='card'
         >
             <el-tab-pane v-for='(item, index) in labelList' :key='index' :label='item.name' />
-        </el-tabs>
+        </el-tabs> -->
         <div class='rankContent'>
             <div class='item'>
                 <RankingItem
@@ -21,7 +21,6 @@
                     :currency-list='profitCurrencyList'
                     :index-column='false'
                     :label-index='activeTab'
-                    :list='increaseRanking'
                     title='涨幅榜'
                     type='increaseRanking'
                 />
@@ -32,7 +31,6 @@
                     :currency-list='profitCurrencyList'
                     :index-column='false'
                     :label-index='activeTab'
-                    :list='declineRanking'
                     title='跌幅榜'
                     type='declineRanking'
                 />
@@ -43,7 +41,6 @@
                     :currency-list='profitCurrencyList'
                     :index-column='false'
                     :label-index='activeTab'
-                    :list='amountRanking'
                     title='成交额榜'
                     type='amountRanking'
                 >
@@ -60,9 +57,9 @@
                     </template>
                     <template #default='{ item }'>
                         <span class='label'>
-                            <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.profitCurrency' />
+                            <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' />
                             <span class='symbolCurrency'>
-                                {{ item.isCryptocurrency ? item.profitCurrency : item.symbolName }}
+                                {{ item.isCryptocurrency ? item.baseCurrency : item.symbolName }}
                             </span>
                         </span>
                         <span class='label' :class='[item.last_color]'>
@@ -81,9 +78,10 @@
 <script>
 import RankingItem from '@planspc/components/rankingItem'
 import productranking from '@planspc/hooks/productranking'
-import { computed, ref, unref, watch } from 'vue'
+import { computed, ref, unref, watch, onUnmounted } from 'vue'
 import { formatAmount } from '@/utils/calculation'
 import CurrencyIcon from '@/components/currencyIcon'
+import { QuoteSocket } from '@/plugins/socket/socket'
 
 export default {
     components: {
@@ -91,18 +89,11 @@ export default {
         CurrencyIcon,
     },
     setup () {
-        const { symbolLabelList, symbolLabelMap, profitCurrencyMap, productListByLabel } = productranking()
-        const activeTab = ref(0)
+        const { symbolLabelList, productListByLabel, symbolKeyByPlans } = productranking()
+        const activeTab = ref('0')
         const increaseCurrency = ref('') // 涨幅榜币种
         const declineCurrency = ref('') // 跌幅榜币种
         const amountCurrency = ref('') // 成交额榜币种
-
-        // 下拉框分类列表
-        const categorys = computed(() => {
-            // const symbolLabels = Object.keys(symbolLabelMap.value).map(el => symbolLabelMap.value[el])
-            const profitCurrencys = Object.keys(profitCurrencyMap.value).map(el => profitCurrencyMap.value[el])
-            return profitCurrencys
-        })
 
         // 产品标签的显示排序：加密货币、外汇、商品、股票
         const labelList = computed(() => {
@@ -122,60 +113,31 @@ export default {
         // 当前标签下的盈利货币下拉框列表
         const profitCurrencyList = computed(() => {
             const item = labelList.value[activeTab.value]?.list || []
-            // const currencyList = Object.keys(profitCurrencyMap.value).sort((a, b) => a.localeCompare(b))
-            //     .map(el => {
-            //         return {
-            //             profitCurrency: el,
-            //             list: profitCurrencyMap.value[el]
-            //         }
-            //     })
             return item
         })
 
-        // 涨幅榜
-        const increaseRanking = computed(() => {
-            if (labelList.value.length === 0) return []
-            const list = symbolLabelMap.value[labelList.value[unref(activeTab)].labelCode].slice()
-            list.sort((a, b) => {
-                const firtstValue = parseFloat(a.rolling_upDownWidth) || -Infinity
-                const secondValue = parseFloat(b.rolling_upDownWidth) || -Infinity
-                return secondValue - firtstValue
-            })
-            return list.slice(0, 3)
-        })
+        // 订阅产品报价
+        let unSubscribe = () => {}
+        watch(
+            symbolKeyByPlans,
+            () => {
+                if (unref(symbolKeyByPlans).length === 0) return false
+                unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'ranking', symbolKeys: symbolKeyByPlans.value })
+            },
+            {
+                immediate: true,
+                deep: true
+            }
+        )
 
-        // 跌幅榜
-        const declineRanking = computed(() => {
-            if (labelList.value.length === 0) return []
-            const list = symbolLabelMap.value[labelList.value[unref(activeTab)].labelCode].slice()
-            list.sort((a, b) => {
-                const firtstValue = parseFloat(a.rolling_upDownWidth) || Infinity
-                const secondValue = parseFloat(b.rolling_upDownWidth) || Infinity
-                return firtstValue - secondValue
-            })
-            return list.slice(0, 3)
-        })
-
-        // 成交额榜
-        const amountRanking = computed(() => {
-            if (labelList.value.length === 0) return []
-            const list = symbolLabelMap.value[labelList.value[unref(activeTab)].labelCode].slice()
-            list.sort((a, b) => {
-                const firtstValue = parseFloat(a.rolling_amount) || Infinity
-                const secondValue = parseFloat(b.rolling_amount) || Infinity
-                return firtstValue - secondValue
-            })
-            return list.slice(0, 3)
+        onUnmounted(() => {
+            unSubscribe()
         })
 
         return {
             labelList,
-            categorys,
             formatAmount,
             activeTab,
-            increaseRanking,
-            declineRanking,
-            amountRanking,
             profitCurrencyList,
             increaseCurrency,
             declineCurrency,
@@ -197,13 +159,13 @@ export default {
     .title{
         height: 56px;
         line-height: 56px;
-        font-size: 20px;
+        font-size: 24px;
     }
     .rightMore{
         position: absolute;
         right: 20px;
         top: 25px;
-        font-size: 20px;
+        font-size: 24px;
         color: var(--color);
     }
     .labelTabs{
@@ -225,6 +187,7 @@ export default {
         display: inline-block;
         line-height: 16px;
         vertical-align: middle;
+        font-size: 14px;
     }
 }
 </style>

@@ -113,7 +113,10 @@
 		"fundManager": "基金作業專區",
         "MFA_status": "谷歌驗證器",
         "MFA_bind": "連結谷歌驗證器",
-        "MFA_close": "關閉谷歌驗證器"
+        "MFA_close": "關閉谷歌驗證器",
+        "download": "下载",
+        "ranking": "排行榜",
+        "about": "关于我们"
 	},
     "historyList": {
         "noMore": "沒有更多了"

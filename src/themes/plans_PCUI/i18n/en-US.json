@@ -115,7 +115,9 @@
         "MFA_status": "Google Authenticator",
         "MFA_bind": "Bind Google Authenticator",
         "MFA_close": "Close Google Authenticator",
-        "download": "Download"
+        "download": "Download",
+        "ranking": "排行榜",
+        "about": "关于我们"
     },
     "historyList": {
         "noMore": "No more"

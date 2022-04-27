@@ -475,6 +475,14 @@ const routes = [
                 meta: {
                     title: 'route.download'
                 }
+            },
+            {
+                path: '/ranking',
+                name: 'Ranking',
+                component: () => import(/* webpackChunkName: "resetFail" */ '../views/ranking/ranking.vue'),
+                meta: {
+                    title: 'route.ranking'
+                }
             }
 
         ],
