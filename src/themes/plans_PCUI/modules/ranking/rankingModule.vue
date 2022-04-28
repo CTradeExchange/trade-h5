@@ -45,13 +45,13 @@
                     <template #header>
                         <span v-if='indexColumn' class='label'></span>
                         <span class='label'>
-                            名称
+                            {{ $t('trade.name') }}
                         </span>
                         <span class='label'>
-                            价格
+                            {{ $t('trade.priceLabel') }}
                         </span>
                         <span class='label lastLabel'>
-                            24成交额
+                            {{ $t('ranking.24hAmount') }}
                         </span>
                     </template>
                     <template #default='{ item,i }'>
@@ -80,19 +80,19 @@
                     :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
-                    title='成交量榜'
+                    :title='$t("ranking.tradeVolumeRanking")'
                     type='tradingVolume'
                 >
                     <template #header>
                         <span v-if='indexColumn' class='label'></span>
                         <span class='label'>
-                            名称
+                            {{ $t('trade.name') }}
                         </span>
                         <span class='label'>
-                            价格
+                            {{ $t('trade.priceLabel') }}
                         </span>
                         <span class='label lastLabel'>
-                            24成交量
+                            {{ $t('ranking.24hTradeVolume') }}
                         </span>
                     </template>
                     <template #default='{ item, i }'>

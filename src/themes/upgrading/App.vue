@@ -5,7 +5,7 @@
             <div>
                 <template v-if="lang==='en-US'">
                     <p v-if="lang==='en-US'" class='label'>
-                        Dear customer
+                        Dear Customer
                     </p>
                     <p class='labelContent'>
                         During system upgrade, all services are suspended until today <span id='endTime'></span>
@@ -13,10 +13,10 @@
                 </template>
                 <template v-else>
                     <p class='label'>
-                        尊敬的客户
+                        亲爱的客户
                     </p>
                     <p class='labelContent'>
-                        我司系统升级中，届时暂停服务，预计今天<span id='endTime'></span>前恢复，给您带来不便敬请见谅！
+                        系统维护中，暂停所有服务。预计于今天 <span id='endTime'></span> 恢复。
                     </p>
                 </template>
             </div>

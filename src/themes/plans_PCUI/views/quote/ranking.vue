@@ -1,7 +1,7 @@
 <template>
     <div class='ranking'>
         <h2 class='title'>
-            排行榜
+            {{ $t('route.ranking') }}
         </h2>
         <a class='rightMore' href='javascript:;' @click="$router.push('/ranking')">
             <van-icon name='arrow' />

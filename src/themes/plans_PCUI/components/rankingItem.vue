@@ -25,13 +25,13 @@
                 <slot name='header'>
                     <span v-if='indexColumn' class='label'></span>
                     <span class='label'>
-                        名称
+                        {{ $t('trade.name') }}
                     </span>
                     <span class='label'>
-                        价格
+                        {{ $t('trade.priceLabel') }}
                     </span>
                     <span class='label'>
-                        24涨跌
+                        {{ $t('ranking.24hUpdown') }}
                     </span>
                 </slot>
             </li>

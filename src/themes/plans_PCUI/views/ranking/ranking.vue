@@ -6,7 +6,7 @@
                 <van-icon name='arrow-left' />
             </a>
             <h2 class='title'>
-                排行榜
+                {{ $t('route.ranking') }}
             </h2>
         </div>
         <div class='ranking'>

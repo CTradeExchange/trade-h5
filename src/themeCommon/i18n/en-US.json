@@ -982,5 +982,14 @@
         "visionsTextCell5": "to lower the passing standard",
         "visionsTextCell6": "and make increase the probability of profit, ",
         "visionsTextCell7": "and essentially earn from the market."
+    },
+    "ranking": {
+        "increaseRanking": "Top Gainers",
+        "declineRanking": "Top Losers",
+        "amountRanking": "Top Volume",
+        "24hAmount": "24H Volume",
+        "tradeVolumeRanking": "Top Volume",
+        "24hTradeVolume": "24H Volume",
+        "24hUpdown": "24H chg%"
     }
 }
