@@ -14,7 +14,7 @@
                 <RankingItem
                     v-model:currency='increaseCurrency'
                     :currency-list='profitCurrencyList'
-                    :index-column='false'
+                    :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
                     title='涨幅榜'
@@ -25,7 +25,7 @@
                 <RankingItem
                     v-model:currency='declineCurrency'
                     :currency-list='profitCurrencyList'
-                    :index-column='false'
+                    :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
                     title='跌幅榜'
@@ -36,13 +36,14 @@
                 <RankingItem
                     v-model:currency='amountCurrency'
                     :currency-list='profitCurrencyList'
-                    :index-column='false'
+                    :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
                     title='成交额榜'
                     type='amountRanking'
                 >
                     <template #header>
+                        <span v-if='indexColumn' class='label'></span>
                         <span class='label'>
                             名称
                         </span>
@@ -53,7 +54,10 @@
                             24成交额
                         </span>
                     </template>
-                    <template #default='{ item }'>
+                    <template #default='{ item,i }'>
+                        <span v-if='indexColumn' class='label'>
+                            {{ i + 1 }}
+                        </span>
                         <span class='label'>
                             <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' />
                             <span class='symbolCurrency'>
@@ -73,13 +77,14 @@
                 <RankingItem
                     v-model:currency='amountCurrency'
                     :currency-list='profitCurrencyList'
-                    :index-column='false'
+                    :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
                     title='成交量榜'
                     type='tradingVolume'
                 >
                     <template #header>
+                        <span v-if='indexColumn' class='label'></span>
                         <span class='label'>
                             名称
                         </span>
@@ -90,7 +95,10 @@
                             24成交量
                         </span>
                     </template>
-                    <template #default='{ item }'>
+                    <template #default='{ item, i }'>
+                        <span v-if='indexColumn' class='label'>
+                            {{ i + 1 }}
+                        </span>
                         <span class='label'>
                             <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' />
                             <span class='symbolCurrency'>
@@ -124,6 +132,10 @@ export default {
         CurrencyIcon,
     },
     props: {
+        indexColumn: {
+            type: Boolean,
+            default: false
+        },
         max: {
             type: Number,
             default: 3
@@ -218,6 +230,11 @@ export default {
             &:last-child{
                 margin-right: 0;
             }
+        }
+        .label{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
     }

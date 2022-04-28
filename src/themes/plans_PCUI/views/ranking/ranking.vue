@@ -10,7 +10,7 @@
             </h2>
         </div>
         <div class='ranking'>
-            <rankingModule :max='30' />
+            <rankingModule :index-column='true' :max='30' />
         </div>
     </div>
 </template>

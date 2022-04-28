@@ -25,12 +25,13 @@
 </template>
 
 <script setup>
-import { ref, computed, unref } from 'vue'
+import { ref, computed, unref, watch, onBeforeUnmount } from 'vue'
 import { useStore } from 'vuex'
 import useProduct from '@planspc/hooks/useProduct'
 import search from './components/search'
 import TopTab from './components/topTab'
 import ProductList from './components/ProductList'
+import { QuoteSocket } from '@/plugins/socket/socket'
 
 const props = defineProps({
     tradeType: {
@@ -71,6 +72,30 @@ const onSearch = (result) => {
 const onInput = (val) => {
     searching.value = !!val
 }
+let unSubscribe = () => {}
+const subscribeProducts = () => {
+    const symbolList = store.state._quote.planMap[tradeType.value]?.symbolList || [] // 每个玩法下配置的产品
+    const symbolKeys = symbolList.map(el => `${el}_${tradeType.value}`)
+    if (symbolKeys.length === 0) return false
+    console.log(symbolKeys)
+    unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'productSearch', symbolKeys })
+}
+
+watch(
+    tradeType,
+    (newval) => {
+        categoryType.value = '1'
+        subscribeProducts()
+    },
+    {
+        immediate: true
+    }
+)
+
+onBeforeUnmount(() => {
+    unSubscribe()
+})
+
 </script>
 
 <style lang="scss" scoped>

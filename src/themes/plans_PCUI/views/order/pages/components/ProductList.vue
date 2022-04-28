@@ -1,14 +1,17 @@
 <template>
     <div class='listWrap'>
         <div class='listHead'>
-            <span class='name'>
+            <span class='name' @click='sortHandler("symbolName")'>
                 {{ $t('trade.name') }}
+                <SortIcon name='symbolName' :sort-field='sortField' :sort-type='sortType' />
             </span>
-            <span class='price'>
+            <span class='price' @click='sortHandler("rolling_last_price")'>
                 {{ $t('trade.newPrice') }}
+                <SortIcon name='rolling_last_price' :sort-field='sortField' :sort-type='sortType' />
             </span>
-            <span class='change'>
+            <span class='change' @click='sortHandler("rolling_upDownWidth")'>
                 {{ $t('trade.changePercent') }}
+                <SortIcon name='rolling_upDownWidth' :sort-field='sortField' :sort-type='sortType' />
             </span>
         </div>
         <div ref='productListEl' class='items' :style='[scrollBarWidth && { paddingRight: 0 }]'>
@@ -40,11 +43,13 @@ import ETF from '@planspc/components/etfIcon'
 import { ref, watch, nextTick, computed, toRef, defineProps } from 'vue'
 import { useStore } from 'vuex'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
-import subscribeProducts from '@planspc/hooks/subscribeProducts'
+// import subscribeProducts from '@planspc/hooks/subscribeProducts'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n'
-import { QuoteSocket } from '@/plugins/socket/socket'
+// import { QuoteSocket } from '@/plugins/socket/socket'
+import SortIcon from '@planspc/components/sortIcon.vue'
+import { sortFieldFn, sortTypeFn, sortFunc } from '@planspc/hooks/useProduct'
 
 const store = useStore()
 const router = useRouter()
@@ -56,12 +61,19 @@ const props = defineProps({
         default: () => []
     }
 })
-
+const productMap = computed(() => store.state._quote.productMap)
 const productActived = computed(() => store.getters.productActived)
 
+const sortField = sortFieldFn()
+const sortType = sortTypeFn()
+// 点击排序
+const sortHandler = (field) => {
+    sortFunc(field)
+}
+
 // 监听列表滚动，订阅/获取产品数据
-const list = toRef(props, 'list')
-const { productListEl, productMap, subscribList } = subscribeProducts(list)
+// const list = toRef(props, 'list')
+// const { productListEl, productMap, subscribList } = subscribeProducts(list)
 
 // 切换当前选中产品
 const onClick = product => {
@@ -84,12 +96,12 @@ const onClick = product => {
 
 /** 监听是否存在滚动条，调整样式 */
 const scrollBarWidth = ref(0)
-watch(() => [props.list.length], async () => {
-    await nextTick()
-    if (productListEl && props.list.length) {
-        scrollBarWidth.value = productListEl.value.offsetWidth - productListEl.value.clientWidth
-    }
-}, { immediate: true })
+// watch(() => [props.list.length], async () => {
+//     await nextTick()
+//     if (productListEl && props.list.length) {
+//         scrollBarWidth.value = productListEl.value.offsetWidth - productListEl.value.clientWidth
+//     }
+// }, { immediate: true })
 /** 监听是否存在滚动条，调整样式 */
 
 /** 添加自选逻辑 */
@@ -166,8 +178,13 @@ const addOptional = ({ symbolId, tradeType }) => {
         line-height: 26px;
         .name {
             flex: 1;
+            cursor: pointer;
+        }
+        .price {
+            cursor: pointer;
         }
         .change{
+            cursor: pointer;
             width: 85px;
             text-align: right;
         }

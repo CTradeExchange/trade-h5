@@ -65,12 +65,21 @@ export default (params) => {
                     }
                 })
 
-                const proListByCurrency = Object.entries(proByCurrency).map(([key,val])=>{
-                    return {
-                        currency: key,
-                        list: val,
-                    }
-                })
+                const proListByCurrency = Object.entries(proByCurrency).sort((a,b)=>{
+                            if(a[0]<b[0]){
+                                return -1;
+                            }else if(a[0]>b[0]){
+                                return 1
+                            }else{
+                                return 0
+                            }
+                        })
+                        .map(([key,val])=>{
+                            return {
+                                currency: key,
+                                list: val,
+                            }
+                        })
 
                 productListByLabel.value.push({
                     labelCode: el,

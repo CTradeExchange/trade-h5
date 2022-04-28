@@ -36,7 +36,7 @@
                 </slot>
             </li>
             <li v-for='(item, i) in list' :key='item.symbolKey' class='item productItem' @click='clickHandler(item)'>
-                <slot :item='item'>
+                <slot :i='i' :item='item'>
                     <span v-if='indexColumn' class='label'>
                         {{ i + 1 }}
                     </span>
@@ -209,7 +209,7 @@ export default {
     }
     .item {
         display: grid;
-        grid-template-columns: 2fr 1fr 1fr;
+        grid-template-columns: 3fr 2fr 2fr;
         grid-column-gap: 15px;
         height: 24px;
         line-height: 24px;
@@ -223,13 +223,13 @@ export default {
             }
         }
 
+        .label{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
         .label:last-child {
             text-align: right;
-        }
-    }
-    .showIndex {
-        .item {
-            grid-template-columns: 20px 2fr 1fr 1fr;
         }
     }
     .symbolCurrencyIcon {
@@ -240,6 +240,11 @@ export default {
         line-height: 16px;
         vertical-align: middle;
         font-size: 14px;
+    }
+}
+.showIndex {
+    .item {
+        grid-template-columns: 20px 3fr 2fr 2fr !important;
     }
 }
 </style>

@@ -84,7 +84,7 @@
         "getVerifyCode": "Get Code",
         "mobileEmailPlaceholder": "Please input your email / mobile",
         "defaultLogin": "Normal Log In",
-		"fundLogin": "Fund Log In"
+		"fundLogin": "Fund"
     },
     "route": {
         "home": "Home",
