@@ -104,7 +104,7 @@ export default {
                     const { exception, domain } = res
                     const host = location.host
                     const companyId = window['companyId']
-                    const isBusiness = domain.includes(host) && exception.includes(Number(companyId))
+                    const isBusiness = domain.find(el => location.host.includes(el)) && exception.indexOf(Number(companyId)) === -1
                     if (isBusiness) {
                         location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
                     }
