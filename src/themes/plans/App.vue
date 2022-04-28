@@ -97,11 +97,21 @@ export default {
         // 检查系统是否在维护
         configSystem()
             .then(res => {
-                const isProduction = process.env.NODE_ENV === 'production'
-                if (res && res.maintenance === true && isProduction) location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
+                // "exception":[11,13,16,360,362,387,388,1,2,9,10]
+                // "domain:"["cats-trade.com"]
+                // const isProduction = process.env.NODE_ENV === 'production'
+                if (res && res.maintenance === true) {
+                    const { exception, domain } = res
+                    const host = location.host
+                    const companyId = window['companyId']
+                    const isBusiness = domain.includes(host) && exception.includes(companyId)
+                    if (isBusiness) {
+                        location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
+                    }
+                }
             })
             .catch(() => {
-                location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
+                // location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
             })
 
         // 插入谷歌统计代码
