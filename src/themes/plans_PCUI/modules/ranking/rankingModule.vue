@@ -1,7 +1,7 @@
 <template>
     <div class='rankingModule'>
         <el-tabs
-            v-if='showLabelTab'
+            v-if='showLabelTab && labelList.length>1'
             v-model='activeTab'
             class='labelTabs'
             type='card'
@@ -17,7 +17,7 @@
                     :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
-                    title='涨幅榜'
+                    :title='$t("ranking.increaseRanking")'
                     type='increaseRanking'
                 />
             </div>
@@ -28,7 +28,7 @@
                     :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
-                    title='跌幅榜'
+                    :title='$t("ranking.declineRanking")'
                     type='declineRanking'
                 />
             </div>
@@ -39,7 +39,7 @@
                     :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
-                    title='成交额榜'
+                    :title='$t("ranking.amountRanking")'
                     type='amountRanking'
                 >
                     <template #header>

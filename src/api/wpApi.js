@@ -79,7 +79,7 @@ export function pageConfig (id) {
 // }
 
 export function requestBusinessConfig (params) {
-    const url = '/wp-content/uploads/2022/04/businessConfig-2.json'
+    const url = '/bc/businessConfig.json'
     return axios({
         url,
         responseType: 'json',
