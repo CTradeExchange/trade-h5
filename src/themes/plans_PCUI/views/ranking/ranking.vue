@@ -57,6 +57,8 @@ export default {
     background: var(--contentColor);
     border-radius: 5px;
     font-size: 12px;
-
+    :deep(.productItem){
+        padding: 10px 6px !important;
+    }
 }
 </style>

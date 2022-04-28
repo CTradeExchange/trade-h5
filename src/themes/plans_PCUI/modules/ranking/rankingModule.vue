@@ -1,8 +1,7 @@
 <template>
     <div class='rankingModule'>
-        <div v-if='showLabelTab' class='plansList'>
+        <div v-if='showLabelTab && labelList.length>1' class='plansList'>
             <el-tabs
-                v-if='labelList.length>1'
                 v-model='activeTab'
                 class='labelTabs'
             >

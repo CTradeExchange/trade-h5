@@ -14,7 +14,7 @@
                 <el-option
                     v-for='item in currencyList'
                     :key='item.currency'
-                    :label="item.currency + $t('trade.markets')"
+                    :label="item.currency + (lang==='en-US' ? ' ': '')+ $t('trade.markets')"
                     :value='item.currency'
                 />
             </el-select>
@@ -71,6 +71,7 @@
 import { computed, ref, watch } from 'vue'
 import CurrencyIcon from '@/components/currencyIcon'
 import { useRouter } from 'vue-router'
+import { getCookie } from '@/utils/util'
 export default {
     components: {
         CurrencyIcon,
@@ -172,6 +173,7 @@ export default {
             router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
         }
         return {
+            lang: getCookie('lang'),
             currencyVal,
             clickHandler,
             list,
@@ -223,6 +225,7 @@ export default {
         box-sizing: content-box;
         &.productItem{
             cursor: pointer;
+            padding: 7px 6px;
             &:hover{
                 background: var(--assistColor);
                 border-radius: 5px;

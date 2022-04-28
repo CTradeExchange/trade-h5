@@ -283,6 +283,7 @@
 		"baseLine": "基線"
 	},
 	"trade": {
+        "markets": "市場",
 		"name": "名稱",
 		"newPrice": "最新價",
 		"changePrice": "24H漲跌額",
