@@ -1,7 +1,7 @@
 <template>
     <div class='categoryList'>
         <el-tabs v-model='activeName'>
-            <el-tab-pane v-for='(item, index) in props.list' :key='item.id' :label='item.title' :name='index'>
+            <el-tab-pane v-for='(item, index) in props.list' :key='item.id' :label='item.title' :name='String(index)'>
                 <template #label>
                     <component :is='item.slot?.label' v-if='item.slot?.label' />
                     <template v-else>

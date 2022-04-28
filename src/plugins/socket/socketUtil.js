@@ -128,7 +128,15 @@ export function positionsTickToObj (str) {
  */
 export function formatSubscribe (productIds, productMap) {
     if (!productIds || productIds.length === 0) return []
-    productIds = productIds.filter(el => el)
+    productIds = productIds.filter(el => {
+        if (!el) {
+            return false
+        } else if (typeof (el) === 'string') {
+            return !!productMap[el]?.dealMode
+        } else {
+            return !!el.dealMode
+        }
+    })
     let subscribedList = []
     if (typeof (productIds[0]) === 'number') {
         console.warn('产品报价订阅的参数格式错误')
@@ -155,7 +163,7 @@ export function formatSubscribe (productIds, productMap) {
  */
 export function productMapToSymbolKey (productMaps = []) {
     const symbolKey = new Set()
-    if (!productMaps || productMaps.length === 0) return symbolKey
+    if (!productMaps || productMaps.length === 0) return []
     productMaps.forEach(el => {
         const symbol_id = el.symbol_id || el.symbolId
         const trade_type = el.trade_type || el.tradeType

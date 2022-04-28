@@ -89,7 +89,7 @@ export default {
             default: ''
         }
     },
-    emits: ['update:modelValue', 'update:multipleVal', 'save'],
+    emits: ['update:modelValue', 'update:multipleVal', 'save', 'beforeClose'],
     setup (props, { emit }) {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
@@ -100,6 +100,7 @@ export default {
                 emit('update:modelValue', val)
             }
         })
+        let prevProduct = store.getters.productActived // 记录弹窗打开之前的产品
         const accountInfo = computed(() => store.state._user.customerInfo?.accountList?.find(el => el.tradeType === props.product.tradeType))
         const marginInfo = computed(() => props.product?.marginInfo)
 
@@ -139,12 +140,15 @@ export default {
             if (!isEmpty(row)) {
                 state.multipleValue = row.crossLevelNum
                 state.position = row
+                prevProduct = store.getters.productActived
+                store.commit('_quote/Update_productActivedID', `${row.symbolId}_${row.tradeType}`)
             } else {
                 state.multipleValue = String(props.multipleVal)
             }
         }
 
         const close = () => {
+            emit('beforeClose', prevProduct.symbolKey)
             show.value = false
             state.position = null
         }
@@ -163,10 +167,17 @@ export default {
                     emit('update:multipleVal', state.multipleValue)
                     emit('update:modelValue', false)
                     emit('save', state.multipleValue)
+                    store.dispatch('_trade/queryPositionPage', { tradeType: props.product.tradeType })
                     if (state.position) {
                         Toast(t('trade.modifySuccess'))
                         show.value = false
-                        store.dispatch('_trade/queryPositionPage', { tradeType: state.position.tradeType })
+
+                        const detail = {
+                            multipleVal: state.multipleValue,
+                            symbolId: state.position.symbolId
+                        }
+                        const event = new CustomEvent('update:multipLeVal', { detail })
+                        document.body.dispatchEvent(event)
                     }
                 }
             })

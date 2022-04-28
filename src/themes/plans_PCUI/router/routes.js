@@ -495,6 +495,14 @@ const routes = [
                 },
                 children: h5Children
             },
+            {
+                path: '/ranking',
+                name: 'Ranking',
+                component: () => import(/* webpackChunkName: "resetFail" */ '../views/ranking/ranking.vue'),
+                meta: {
+                    title: 'route.ranking'
+                }
+            }
 
         ],
     },

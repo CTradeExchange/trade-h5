@@ -225,7 +225,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, computed, ref, watch, unref } from 'vue'
+import { reactive, toRefs, computed, ref, watch, unref, onMounted, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
@@ -511,7 +511,34 @@ export default {
                         accountIds: accountIds + ''
                     })
                 }
+                if (product.tradeType === 1 && product.marginInfo?.type === '2') {
+                    // 默认显示20x杠杆，若后台设置的产品最大杠杆小于20x，则取最大杠杆；若后台设置最小杠杆大于20x，则取最小杠杆
+                    const [min, max] = product.marginInfo?.values?.split('-') || [1, 1]
+                    if (max < 20) {
+                        state.multipleVal = max
+                    } else if (min > 20) {
+                        state.multipleVal = min
+                    }
+                }
+            }).then(() => {
+                if (tradeType === '1') {
+                    store.dispatch('_trade/queryPositionPage', { tradeType }).then(res => {
+                        if (res.check() && res.data?.length) {
+                            const position = res.data.find(el => el.tradeType === parseInt(tradeType) && el.symbolId === parseInt(symbolId))
+                            if (position && position.crossLevelNum) {
+                                state.multipleVal = position.crossLevelNum
+                            }
+                        }
+                    })
+                }
             })
+        }
+
+        // 监听合约全仓的持仓杠杆倍数修改
+        const watchMultipLeVal = (evt) => {
+            console.log(evt.detail)
+            const { multipleVal, symbolId } = evt.detail
+            if (parseInt(symbolId) === product.value.symbolId) state.multipleVal = multipleVal
         }
 
         // 监听产品变化
@@ -523,6 +550,14 @@ export default {
 
         init()
         getFundPage()
+
+        onMounted(() => {
+            document.body.addEventListener('update:multipLeVal', watchMultipLeVal, false)
+        })
+
+        onBeforeUnmount(() => {
+            document.body.removeEventListener('update:multipLeVal', removeEventListener)
+        })
 
         return {
             orderType: 1, // 订单类型

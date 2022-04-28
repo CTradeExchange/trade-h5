@@ -1,5 +1,15 @@
 
 import request from '@/utils/request'
+import axios from 'axios'
+
+// 获取是否在维护中的配置数据
+export function configSystem () {
+    return axios.get('https://cats2.oss-cn-hongkong.aliyuncs.com/configSystem/configSystem.json?timestamp=1651047766230', {
+        params: {
+            timestamp: Date.now()
+        }
+    }).then(res => res.data)
+}
 
 /* 获取字典列表 */
 export function getListByParentCode (data) {

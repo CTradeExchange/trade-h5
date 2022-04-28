@@ -1,6 +1,15 @@
 <template>
     <div class='pageWrap'>
         <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
+        <van-tabs
+            v-model:active='tabActive'
+            :color='$style.primary'
+            shrink
+            :title-active-color='$style.primary'
+        >
+            <van-tab :title='$t("login.loginByPersonal")' />
+            <van-tab :title='$t("login.loginByCorporate")' />
+        </van-tabs>
         <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
@@ -137,6 +146,7 @@ export default {
             loading: false,
             pwdVisible: false,
             loginPwdPop: false,
+            tabActive: 0,
             loginName: '',
             pwd: '',
             checkCode: '',

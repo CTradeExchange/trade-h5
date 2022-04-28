@@ -27,9 +27,15 @@
                     <van-icon class='arrowIcon' name='arrow' />
                     <div class='subDrapdown'>
                         <ul class='list'>
-                            <li v-for='(item,i) in chartColorAction' :key='i' class='item flexBetween' :class='{ active:item.val===chartColorActive }' @click='changeChartColor(item)'>
+                            <li
+                                v-for='(item,i) in chartColorAction'
+                                :key='i'
+                                class='item flexBetween'
+                                :class='{ active:Number(item.val)===Number(chartColorActive) }'
+                                @click='changeChartColor(item)'
+                            >
                                 <span>{{ item.name }}</span>
-                                <van-icon v-show='item.val===chartColorActive' name='success' />
+                                <van-icon v-show='Number(item.val)===Number(chartColorActive)' name='success' />
                             </li>
                         </ul>
                     </div>
@@ -64,7 +70,7 @@ export default {
             { val: '2', name: t('common.redUp') },
         ]
         const state = reactive({
-            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || '1'
+            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1
         })
 
         // 设置涨跌颜色
@@ -82,7 +88,7 @@ export default {
             state.chartColorActive = item.val
 
             const { riseColor, fallColor } = colors.common
-            if (item.val === '1') {
+            if (parseInt(item.val) === 1) {
                 document.body.style.setProperty('--riseColor', riseColor)
                 document.body.style.setProperty('--fallColor', fallColor)
             } else {

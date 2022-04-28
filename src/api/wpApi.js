@@ -1,5 +1,6 @@
 import { unzip, isEmpty } from '@/utils/util'
 import request_wp from '@/utils/request_wp'
+import axios from 'axios'
 
 /* 获取wp公司配置信息 */
 export const wpCompanyConfig = () => {
@@ -76,3 +77,13 @@ export function pageConfig (id) {
 //         code_ids_all['3'] = ids_all
 //     })
 // }
+
+export function requestBusinessConfig (params) {
+    const url = '/bc/businessConfig.json'
+    return axios({
+        url,
+        responseType: 'json',
+    }).then(res => {
+        return res.data
+    })
+};

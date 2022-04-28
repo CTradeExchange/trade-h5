@@ -183,6 +183,12 @@ const current = computed({
                 display: inline-flex;
                 align-items: center;
             }
+            .pointer{
+                cursor: pointer;
+                &:hover{
+                    color: var(--color);
+                }
+            }
         }
         .el-pagination{
             .btn-prev,
@@ -229,15 +235,17 @@ const current = computed({
     display: inline-block;
     vertical-align: middle;
     position: relative;
-    height: 24px;
-    line-height: 24px;
+    height: 20px;
+    line-height: 20px;
     padding-right: 5px;
     padding-left: 4px;
     font-size: 12px;
     color: var(--color);
     border-radius: 3px;
     border: 1px solid var(--color);
-    min-width: 36px;
+    &.marginleft0{
+        margin-left: 0;
+    }
     &.arrow{
         padding-right: 25px;
         color: var(--color);
@@ -245,9 +253,7 @@ const current = computed({
 
     .icon_icon_arrow{
         font-size: 12px;
-        position: absolute;
-        right: 4px;
-        top: -0.5px;
+        margin-left: 3px;
     }
 }
 </style>

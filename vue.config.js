@@ -98,6 +98,11 @@ if (isAdminMode) {
             entry: `src/themes/${theme}/main.js`,
             template: 'public/index.html',
             filename: process.env.NODE_ENV === 'production' ? 'index_template.html' : 'index.html',
+        },
+        upgrading: {
+            entry: 'src/themes/upgrading/main.js',
+            template: 'public/index.html',
+            filename: process.env.NODE_ENV === 'production' ? 'upgrading.html' : 'upgrading.html',
         }
         // index: 'src/themes/mt4/main.js'
         // index: 'src/themes/ctrader/main.js'
@@ -143,7 +148,7 @@ const config = {
         },
         proxy: {
             '/wp-content/uploads': {
-                target: 'https://prewpadmin.cats-trade.com',
+                target: h5URL || 'https://prewpadmin_10.cats-trade.com',
             },
             '/wp-json/wp': {
                 target: 'http://uatwpadmin_5.cats-trade.com', // http://prewpadmin.cats-trade.com/

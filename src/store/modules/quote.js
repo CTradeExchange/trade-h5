@@ -346,6 +346,9 @@ export default {
                     if (res.check()) {
                         res.data.forEach(el => {
                             el.symbol_id = el.symbolId
+                            const labelsArr = el.labels?.split(',') ?? []
+                            el.isIndex = labelsArr.includes('index')
+                            el.isCryptocurrency = labelsArr.includes('cryptocurrency')
                             commit('Update_product', el)
                         })
                     }

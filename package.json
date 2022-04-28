@@ -35,6 +35,7 @@
     "jsencrypt": "^3.2.1",
     "jsonlint": "^1.6.3",
     "lightweight-charts": "^3.7.0",
+    "lottie-web": "^5.9.3",
     "mockjs": "^1.1.0",
     "mousetrap": "^1.6.5",
     "pako": "^1.0.11",
