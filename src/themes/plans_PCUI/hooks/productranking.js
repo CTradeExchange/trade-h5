@@ -3,6 +3,8 @@ import { useStore } from 'vuex'
 import { getListByParentCode } from '@/api/base'
 import { ref } from 'vue'
 
+const symbolLabelList = ref([]) // 标签字典列表
+
 // 产品标签分类
 function productByLabel (symbolKey, productMap, symbolLabelMap) {
     const product = productMap[symbolKey]
@@ -19,16 +21,17 @@ function productByLabel (symbolKey, productMap, symbolLabelMap) {
 
 export default (params) => {
     const store = useStore()
-    const symbolLabelList = ref([]) // 标签列表
     const symbolLabelMap = ref({})
     const sortPlans = ['5','3','2','1'];    // 取产品玩法的排序；现货 → 杠杆 → 合约全仓 → 合约逐仓
     const symbolKeyByPlans = ref([]);  // 按顺序取到的某个玩法的产品symbolKey列表
     const productListByLabel = ref([]);  // 产品根据标签分类
 
     // 获取产品标签的字典
-    getListByParentCode({ parentCode: 'SymbolLabel' }).then(res => {
-        if (res.check()) symbolLabelList.value = res.data
-    })
+    if(symbolLabelList.value.length===0){
+        getListByParentCode({ parentCode: 'SymbolLabel' }).then(res => {
+            if (res.check()) symbolLabelList.value = res.data
+        })
+    }
 
     store.dispatch('_quote/querySymbolBaseInfoList', null).then(res => {
         if (res.check()) {
