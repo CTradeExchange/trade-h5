@@ -1,19 +1,21 @@
 <template>
     <div class='rankingModule'>
-        <el-tabs
-            v-if='showLabelTab && labelList.length>1'
-            v-model='activeTab'
-            class='labelTabs'
-            type='card'
-        >
-            <el-tab-pane v-for='(item, index) in labelList' :key='index' :label='item.name' />
-        </el-tabs>
+        <div v-if='labelList.length>1' class='plansList'>
+            <el-tabs
+                v-if='showLabelTab '
+                v-model='activeTab'
+                class='labelTabs'
+            >
+                <el-tab-pane v-for='(item, index) in labelList' :key='index' :label='item.name' />
+            </el-tabs>
+        </div>
 
-        <div v-if='profitCurrencyList.length>0' class='rankContent'>
+        <div class='rankContent'>
             <div class='item'>
                 <RankingItem
                     v-model:currency='increaseCurrency'
                     :currency-list='profitCurrencyList'
+                    :icon-size='iconSize'
                     :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
@@ -25,6 +27,7 @@
                 <RankingItem
                     v-model:currency='declineCurrency'
                     :currency-list='profitCurrencyList'
+                    :icon-size='iconSize'
                     :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
@@ -36,6 +39,7 @@
                 <RankingItem
                     v-model:currency='amountCurrency'
                     :currency-list='profitCurrencyList'
+                    :icon-size='iconSize'
                     :index-column='indexColumn'
                     :label-index='activeTab'
                     :max='max'
@@ -59,7 +63,7 @@
                             {{ i + 1 }}
                         </span>
                         <span class='label'>
-                            <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' />
+                            <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' :size='iconSize' />
                             <span class='symbolCurrency'>
                                 {{ item.isCryptocurrency ? item.baseCurrency : item.symbolName }}
                             </span>
@@ -100,7 +104,7 @@
                             {{ i + 1 }}
                         </span>
                         <span class='label'>
-                            <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' />
+                            <CurrencyIcon v-if='item.isCryptocurrency' class='symbolCurrencyIcon' :currency='item.baseCurrency' :size='iconSize' />
                             <span class='symbolCurrency'>
                                 {{ item.isCryptocurrency ? item.baseCurrency : item.symbolName }}
                             </span>
@@ -144,9 +148,14 @@ export default {
             type: Boolean,
             default: true
         },
+        type: {
+            type: String,
+            default: 'module'
+        },
     },
-    setup () {
+    setup (props) {
         const { symbolLabelList, productListByLabel, symbolKeyByPlans } = productranking()
+        const iconSize = props.type === 'module' ? '24px' : '20px'
         const activeTab = ref('0')
         const increaseCurrency = ref('') // 涨幅榜币种
         const declineCurrency = ref('') // 跌幅榜币种
@@ -196,6 +205,7 @@ export default {
         })
 
         return {
+            iconSize,
             labelList,
             activeLabelCode,
             symbolKeyByPlans,
@@ -242,13 +252,51 @@ export default {
         text-align: right;
     }
     .symbolCurrencyIcon{
-        margin-right: .2em;
+        margin-right: 8px;
     }
     .symbolCurrency{
         display: inline-block;
         line-height: 16px;
         vertical-align: middle;
         font-size: 14px;
+    }
+}
+.plansList{
+    position: relative;
+    margin-bottom: 30px;
+    &::after{
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -1px;
+        width: 100%;
+        height: 3px;
+        background-color: var(--assistColor);
+        z-index: var(--el-index-normal);
+    }
+    :deep{
+        .el-tabs__header{
+            margin: 0;
+        }
+        .el-tabs__nav-wrap::after{
+            display: none;
+        }
+        .el-tabs__active-bar{
+            height: 3px;
+        }
+        .el-tabs__item{
+            font-size: 20px;
+            color: var(--normalColor);
+            line-height: 22px;
+            font-weight: 400;
+            &.is-active{
+                color: var(--primary);
+                font-weight: bold;
+            }
+        }
+        .el-tabs__active-bar{
+            background-color: var(--primary);
+        }
     }
 }
 </style>

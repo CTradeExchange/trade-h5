@@ -130,6 +130,9 @@ export function formatAmount (num) {
     if (num >= 1000 && num < 1000000) {
         num = toFixed((num / 1000))
         result = num + 'K'
+    } else if (num >= 1000000000) {
+        num = toFixed((num / 1000000000))
+        result = num + 'B'
     } else if (num >= 1000000) {
         num = toFixed((num / 1000000))
         result = num + 'M'

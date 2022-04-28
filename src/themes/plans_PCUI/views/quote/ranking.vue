@@ -7,7 +7,7 @@
             <van-icon name='arrow' />
         </a>
         <div>
-            <rankingModule :max='3' :show-label-tab='false' />
+            <rankingModule :max='3' :show-label-tab='false' type='module' />
         </div>
     </div>
 </template>

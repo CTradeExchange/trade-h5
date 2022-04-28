@@ -45,6 +45,7 @@
                             v-if='item.isCryptocurrency'
                             class='symbolCurrencyIcon'
                             :currency='item.baseCurrency'
+                            :size='iconSize'
                         />
                         <span class='symbolCurrency'>
                             {{
@@ -88,6 +89,10 @@ export default {
             type: Number,
             default: 3
         },
+        iconSize: {
+            type: [Number, String],
+            default: '24px'
+        },
     },
     emits: ['update:currency'],
     setup (props, { emit }) {
@@ -100,7 +105,8 @@ export default {
 
         // 重置币种
         const resetCurrency = () => {
-            emit('update:currency', props.currencyList[0].currency)
+            const currency = props.currencyList[0]?.currency
+            if (currency) emit('update:currency', currency)
         }
         // 设置默认币种
         watch(
@@ -233,7 +239,7 @@ export default {
         }
     }
     .symbolCurrencyIcon {
-        margin-right: 0.2em;
+        margin-right: 8px;
     }
     .symbolCurrency {
         display: inline-block;
