@@ -675,7 +675,7 @@
 		"ranking": "Rank",
 		"weight": "Weights",
 		"comparePrev": "Movement",
-		"comparePrev24": "24H chg",
+		"comparePrev24": "24H Chg",
 		"singleAsset": "Asset Performance",
 		"totalManager": "{0} people in total",
 		"fundChartTip": "The data is for reference only, past performance does not represent future performance!",
