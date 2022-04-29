@@ -990,6 +990,6 @@
         "24hAmount": "24H Volume",
         "tradeVolumeRanking": "Top Volume",
         "24hTradeVolume": "24H Volume",
-        "24hUpdown": "24H chg%"
+        "24hUpdown": "24H Chg%"
     }
 }
