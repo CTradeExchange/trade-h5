@@ -34,10 +34,10 @@ export default {
     min-height: calc(100vh - 300px);
     .topTool{
         position: relative;
-        line-height: 56px;
+        line-height: 40px;
         .title{
             margin-left: 30px;
-            height: 56px;
+            height: 40px;
             font-size: 24px;
         }
         .back{
