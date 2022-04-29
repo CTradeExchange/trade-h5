@@ -3,7 +3,7 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' height='18' :src='logoUrl' />
+                    <img alt='' height='20' :src='logoUrl' />
                 </h1>
             </router-link>
             <div class='menus'>
