@@ -31,7 +31,7 @@ export default {
 <style lang="scss" scoped>
 .ranking{
     position: relative;
-    margin: 60px 0;
+    margin: 40px 0;
     padding: 10px 20px 0;
     background: var(--contentColor);
     border-radius: 5px;
