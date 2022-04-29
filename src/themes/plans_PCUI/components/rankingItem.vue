@@ -14,7 +14,7 @@
                 <el-option
                     v-for='item in currencyList'
                     :key='item.currency'
-                    :label="item.currency + $t('trade.markets')"
+                    :label="item.currency + (lang==='en-US' ? ' ': '')+ $t('trade.markets')"
                     :value='item.currency'
                 />
             </el-select>
@@ -25,13 +25,13 @@
                 <slot name='header'>
                     <span v-if='indexColumn' class='label'></span>
                     <span class='label'>
-                        名称
+                        {{ $t('trade.name') }}
                     </span>
                     <span class='label'>
-                        价格
+                        {{ $t('trade.priceLabel') }}
                     </span>
                     <span class='label'>
-                        24涨跌
+                        {{ $t('ranking.24hUpdown') }}
                     </span>
                 </slot>
             </li>
@@ -45,6 +45,7 @@
                             v-if='item.isCryptocurrency'
                             class='symbolCurrencyIcon'
                             :currency='item.baseCurrency'
+                            :size='iconSize'
                         />
                         <span class='symbolCurrency'>
                             {{
@@ -70,6 +71,7 @@
 import { computed, ref, watch } from 'vue'
 import CurrencyIcon from '@/components/currencyIcon'
 import { useRouter } from 'vue-router'
+import { getCookie } from '@/utils/util'
 export default {
     components: {
         CurrencyIcon,
@@ -88,6 +90,10 @@ export default {
             type: Number,
             default: 3
         },
+        iconSize: {
+            type: [Number, String],
+            default: '24px'
+        },
     },
     emits: ['update:currency'],
     setup (props, { emit }) {
@@ -100,7 +106,8 @@ export default {
 
         // 重置币种
         const resetCurrency = () => {
-            emit('update:currency', props.currencyList[0].currency)
+            const currency = props.currencyList[0]?.currency
+            if (currency) emit('update:currency', currency)
         }
         // 设置默认币种
         watch(
@@ -166,6 +173,7 @@ export default {
             router.push(`/order?symbolId=${item.symbolId}&tradeType=${item.tradeType}`)
         }
         return {
+            lang: getCookie('lang'),
             currencyVal,
             clickHandler,
             list,
@@ -217,6 +225,7 @@ export default {
         box-sizing: content-box;
         &.productItem{
             cursor: pointer;
+            padding: 7px 6px;
             &:hover{
                 background: var(--assistColor);
                 border-radius: 5px;
@@ -233,7 +242,7 @@ export default {
         }
     }
     .symbolCurrencyIcon {
-        margin-right: 0.2em;
+        margin-right: 8px;
     }
     .symbolCurrency {
         display: inline-block;

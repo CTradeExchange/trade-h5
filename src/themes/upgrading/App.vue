@@ -3,22 +3,38 @@
         <div class='container'>
             <div id='bm'></div>
             <div>
-                <p class='label'>
-                    尊敬的客户
-                </p>
-                <p class='labelContent'>
-                    我司系统升级中，届时暂停服务，预计今天<span id='endTime'></span>前恢复，给您带来不便敬请见谅！
-                </p>
+                <template v-if="lang==='en-US'">
+                    <p v-if="lang==='en-US'" class='label'>
+                        Dear Customer
+                    </p>
+                    <p class='labelContent'>
+                        During system upgrade, all services are suspended until today <span id='endTime'></span>
+                    </p>
+                </template>
+                <template v-else>
+                    <p class='label'>
+                        亲爱的客户
+                    </p>
+                    <p class='labelContent'>
+                        系统维护中，暂停所有服务。预计于今天 <span id='endTime'></span> 恢复。
+                    </p>
+                </template>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { getQueryVariable } from '@/utils/util'
+import { getCookie, getQueryVariable } from '@/utils/util'
 import axios from 'axios'
 import lottie from 'lottie-web'
+import dayjs from 'dayjs'
 export default {
+    data () {
+        return {
+            lang: getCookie('lang')
+        }
+    },
     mounted () {
         this.initLottie()
         this.getConfigSystem()
@@ -51,7 +67,7 @@ export default {
             }).then(({ data }) => {
                 if (data && data.maintenance === false && navigatorType === 1 && backUrl) location.replace(backUrl)
                 var endTimeEl = document.querySelector('#endTime')
-                endTimeEl.innerHTML = data.endTime
+                endTimeEl.innerHTML = dayjs(parseInt(data.endTime)).format('HH:mm')
             })
         }
     },

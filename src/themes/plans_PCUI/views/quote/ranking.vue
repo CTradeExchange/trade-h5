@@ -1,13 +1,13 @@
 <template>
     <div class='ranking'>
         <h2 class='title'>
-            排行榜
+            {{ $t('route.ranking') }}
         </h2>
         <a class='rightMore' href='javascript:;' @click="$router.push('/ranking')">
             <van-icon name='arrow' />
         </a>
         <div>
-            <rankingModule :max='3' :show-label-tab='false' />
+            <rankingModule :max='3' :show-label-tab='false' type='module' />
         </div>
     </div>
 </template>

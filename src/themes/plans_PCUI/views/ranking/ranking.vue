@@ -6,11 +6,11 @@
                 <van-icon name='arrow-left' />
             </a>
             <h2 class='title'>
-                排行榜
+                {{ $t('route.ranking') }}
             </h2>
         </div>
         <div class='ranking'>
-            <rankingModule :index-column='true' :max='30' />
+            <rankingModule :index-column='true' :max='30' type='moduleList' />
         </div>
     </div>
 </template>
@@ -57,6 +57,8 @@ export default {
     background: var(--contentColor);
     border-radius: 5px;
     font-size: 12px;
-
+    :deep(.productItem){
+        padding: 10px 6px !important;
+    }
 }
 </style>
