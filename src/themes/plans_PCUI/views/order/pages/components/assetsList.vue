@@ -115,6 +115,9 @@ onUnmounted(() => {
     unSubscribe()
 })
 
+// 拉取用户信息
+store.dispatch('_user/findCustomerInfo', false)
+
 </script>
 
 <style lang="scss" scoped>
