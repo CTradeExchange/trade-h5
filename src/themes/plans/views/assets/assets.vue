@@ -165,6 +165,8 @@ export default {
                 store.commit('_quote/Update_tradeType', tradeType)
             }
             initData(tradeType.value)
+            // 每次切换资产页面拉取用户信息
+            store.dispatch('_user/findCustomerInfo')
         })
 
         return {
@@ -186,7 +188,7 @@ export default {
 .assetsWrapper {
     padding: 0 0 rem(100px);
     overflow: auto;
-    .plans-item{
+    .plans-item {
         padding: 0 rem(20px);
     }
     &.mt {
