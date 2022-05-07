@@ -152,6 +152,8 @@ export default {
                     getPositionList()
                     break
                 case 'assets':
+                    // 每次切换资产页面拉取用户信息
+                    store.dispatch('_user/findCustomerInfo', false)
                     getAssetsInfo()
                     break
             }

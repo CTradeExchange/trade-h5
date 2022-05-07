@@ -133,8 +133,10 @@ export function formatSubscribe (productIds, productMap) {
             return false
         } else if (typeof (el) === 'string') {
             return !!productMap[el]?.dealMode
+        } else if(el.dealMode) {
+            return true
         } else {
-            return !!el.dealMode
+            return !!productMap[`${el.symbolId}_${el.tradeType}`]?.dealMode
         }
     })
     let subscribedList = []

@@ -40,7 +40,7 @@ export default (params) => {
             const isWallet = store.state._base.wpCompanyInfo?.isWallet;  // 现货是否当钱包使用
             const productMap = store.state._quote.productMap;
             if(isWallet) sortPlans.shift();
-            sortPlans.forEach(plan=>{
+            sortPlans.filter(plan=> planMap[plan]).forEach(plan=>{
                 const planItem = plans.find(el=>el.tradeType===plan);
                 const symbolList = planMap[plan].symbolList.filter(el=> productMap[`${el}_${plan}`]?.symbolName);   // 过滤出有权限的产品列表
                 if(planItem && symbolList.length && symbolKeyByPlans.value.length===0){

@@ -225,11 +225,11 @@ export default {
         }
         &.depth {
             flex: none;
-            //padding-left: rem(10px);
+            padding-left: rem(10px);
             .depth-select {
                 display: block;
-                padding:0 rem(10px);
                 height: rem(40px);
+                padding: 0 rem(10px);
                 line-height: rem(40px);
                 background-color: var(--assistColor);
                 border-radius: rem(6px);
@@ -284,9 +284,9 @@ export default {
             align-items: center;
             justify-content: flex-start;
             box-sizing: border-box;
+            height: rem(60px);
             //width: 100%;
             overflow: hidden;
-            height: rem(60px);
             //padding: 0 rem(10px);
             white-space: nowrap;
             .label,
@@ -314,12 +314,12 @@ export default {
                 //text-align: center;
             }
             .histogram {
-                 position: absolute;
+                position: absolute;
                 // top: 0;
                 // width: 0;
                 // max-width: 100%;
-                 height: 100%;
-                 opacity: 0.2;
+                height: 100%;
+                opacity: 0.2;
                 // transition: width 0.28s ease-in-out;
                 &.sell-histogram {
                     right: 0;
