@@ -33,7 +33,7 @@
                 {{ item.price_ask }}
             </span>
             <span class='ft'>
-                {{ item.volume_ask }}
+                {{ formatAmount(item.volume_ask) }}
             </span>
             <span class='my'>
                 {{ item.unitNum === 0 ? '': item.unitNum }}
@@ -51,7 +51,7 @@
                 {{ item.price_bid }}
             </span>
             <span class='ft'>
-                {{ item.volume_bid }}
+                {{ formatAmount(item.volume_bid) }}
             </span>
             <span class='my'>
                 {{ item.unitNum === 0 ? '': item.unitNum }}
@@ -68,7 +68,7 @@ import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import computeHandicap from '@planspc/hooks/handicap'
-import { lt, pow } from '@/utils/calculation'
+import { lt, pow, formatAmount } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty } from '@/utils/util'
 export default {
@@ -210,6 +210,7 @@ export default {
             handicapResult,
             product,
             handicapDigit,
+            formatAmount,
             deallist
         }
     }
