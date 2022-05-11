@@ -622,7 +622,8 @@
         "volumes": "手数",
         "zone": "所在时区",
         "expireTime": "到期时间",
-        "point": " 点"
+        "point": " 点",
+        "interestTip": "持仓过夜时需要支付或者获得的利息，正数表示获得，负数表示支付。"
     },
     "weekdayMap": {
         "1": "周一",

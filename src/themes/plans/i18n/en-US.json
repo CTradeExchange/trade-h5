@@ -68,7 +68,8 @@
 		"volumes": "Lots Volume",
 		"zone": "Time Zone",
 		"expireTime": "Expiration Time",
-		"point": " point"
+		"point": " point",
+        "interestTip": "The interest paid or gained,for holding the position overnight.Positive means gain,negative  means paid."
 	},
 	"depositText": "Deposit",
 	"emptyHistory": "No history",

@@ -432,7 +432,8 @@
                 "54": "Transaction",
                 "55": "Transfer",
                 "56": "Purchase",
-                "57": "Redeem"
+                "57": "Redeem",
+                "59": "Reward"
             }
         },
         "flowSubCategory": {
