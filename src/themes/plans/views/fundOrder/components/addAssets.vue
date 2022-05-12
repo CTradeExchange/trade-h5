@@ -51,6 +51,10 @@ const props = defineProps({
     currency: {
         type: String,
         default: 'USDT'
+    },
+    accountId: {
+        type: String,
+        default: ''
     }
 })
 
