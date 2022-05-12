@@ -483,8 +483,17 @@ const routes = [
                 meta: {
                     title: 'route.ranking'
                 }
-            }
-
+            },
+			{
+                path: '/api',
+                name: 'Api',
+                component: () =>
+                    import ( /* webpackChunkName: "api" */ '../views/api/api.vue'),
+                meta: {
+                    title: 'route.api'
+                }
+            },
+	
         ],
     },
     // {
