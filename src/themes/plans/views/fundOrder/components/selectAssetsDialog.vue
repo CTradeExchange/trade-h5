@@ -29,9 +29,9 @@
                     </p>
                     <div v-if="item.currencyCode === 'self'" class='currency-list'>
                         <currencyIcon
-                            v-for='(assets, index) in fundAssetsList'
+                            v-for='(elem, index) in fundAssetsList'
                             :key='index'
-                            :currency='assets'
+                            :currency='elem.currencyCode'
                         />
                     </div>
                 </div>

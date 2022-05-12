@@ -23,7 +23,7 @@ export const orderHook = () => {
     // 当前账户
     const curAccount = computed(() => accountList.value.find(el => el.currency === activeCurrency.value))
     // 基金底层资产列表
-    const fundAssetsList = ref(['USDT', 'BTC'])
+    const fundAssetsList = ref([])
     // 基金产品列表
     const fundProductList = computed(() => store.state._quote.fundProductList)
     if (!fundProductList.value.length) {
@@ -42,6 +42,7 @@ export const orderHook = () => {
     // 获取基金详情
     store.dispatch('_quote/queryFundInfo', fundId).then(res => {
         if (res.check()) {
+            fundAssetsList.value = fund.value.fundCurrencyList
             activeCurrency.value = activeCurrencyList.value[0]?.currencyCode
             activeAssets.value = activeCurrencyList.value[0]
             updateAccountAssetsInfo(direction === 'buy' ? activeCurrency.value : res.data.shareTokenCode)

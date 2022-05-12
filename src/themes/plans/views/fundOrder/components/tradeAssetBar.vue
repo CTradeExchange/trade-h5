@@ -13,7 +13,7 @@
                     {{ currency === 'self' ? '一篮子资产' : currency }}
                 </span>
                 <span v-if="currency === 'self'" class='assets-all'>
-                    {{ fundAssetsStr }}
+                    通过支付{{ fundAssetsList.length }}个资产购买基金
                 </span>
             </div>
             <i class='arrowDown'></i>
@@ -161,6 +161,11 @@ const props = defineProps({
     currency: String,
     placeholder: String,
     modelValue: String,
+    // 基金数据
+    fund: {
+        type: Object,
+        default: () => {}
+    },
     // 基金底层资产列表
     fundAssetsList: {
         type: Array,
@@ -176,15 +181,6 @@ const { direction } = route.query
 const showSharePopup = ref(false)
 // 是否显示支付资产说明弹窗
 const showAssetsPupup = ref(false)
-// 基金底层资产字符串
-const fundAssetsStr = computed(() => {
-    let result = ''
-    props.fundAssetsList.map(elem => {
-        result += elem + ' + '
-    })
-    result = result.substring(0, result.length - 2)
-    return result
-})
 
 // 切换币种
 const chooseCurrency = () => {
