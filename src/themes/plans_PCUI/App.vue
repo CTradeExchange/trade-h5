@@ -92,7 +92,7 @@ export default {
                     const companyId = window['companyId']
                     const isQA = domain.find(el => host.includes(el)) && exception.indexOf(Number(companyId)) > -1
                     if (!isQA) {
-                        location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
+                        // location.href = `/upgrading.html?back=${encodeURIComponent(location.href)}`
                     }
                 }
             })

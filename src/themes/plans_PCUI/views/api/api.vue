@@ -111,7 +111,8 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Toast, Dialog } from 'vant'
-import { getCustomerApiList, checkKycApply } from '@/api/user'
+import { getCustomerApiList, checkKycApply, delCustomerApi } from '@/api/user'
+import Clipboard from 'clipboard'
 
 export default {
     components: {
@@ -217,7 +218,7 @@ export default {
         const goDetails = (id) => {
             console.log(id)
             router.push({
-                path: '/apiManage/edit',
+                path: '/apiEdit',
                 query: {
                     id: id
                 }
@@ -242,9 +243,7 @@ export default {
             })
         }
 
-        const handleDelete = () => {
-            console.log('handleDelete')
-            const id = state.query.id
+        const handleDelete = (id) => {
             Dialog.confirm({
                 title: t('tip'),
                 message:
@@ -255,7 +254,7 @@ export default {
                     if (Number(res.code) === 0) {
                         Toast(t('api.deleteSuccess'))
                         setTimeout(() => {
-                            router.back()
+                            getAPIList()
                         }, 1500)
                     } else {
                         Toast(res.msg)
@@ -281,6 +280,7 @@ export default {
             showApiHelp,
             activeIndex,
             handleCreate,
+            handleDelete,
             goDetails,
             checkKycApplyFn,
             getAPIList,
