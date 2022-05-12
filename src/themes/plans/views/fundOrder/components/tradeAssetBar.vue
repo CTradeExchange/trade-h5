@@ -2,14 +2,14 @@
     <div class='tradeAssetBar'>
         <p class='label'>
             {{ label }}
+            <van-icon name='question-o' size='18' @click='showPopup' />
         </p>
-        <div class='assetCell'>
-            <div class='leftCell' @click='chooseCurrency'>
+        <div class='assetCell' @click='chooseCurrency'>
+            <div class='leftCell'>
                 <CurrencyIcon class='currencyImg' :currency='currency' size='18px' />
                 <span class='currency'>
                     {{ currency }}
                 </span>
-                <i v-if='canChooseCurrency' class='arrowDown'></i>
             </div>
             <div class='rightCell'>
                 <span v-if='readonly'>
@@ -24,15 +24,121 @@
                     @input='onInput'
                 />
             </div>
+            <i v-if='canChooseCurrency' class='arrowDown'></i>
         </div>
     </div>
+    <van-popup
+        v-model:show='show'
+        class=''
+        position='bottom'
+        round
+    >
+        <div v-if="iconContentType === 'fund'" class='popup-wrap'>
+            <h2> 什么是基金份额</h2>
+            <br />
+            <p>
+                1、什么是基金份额
+
+                基金份额可简单理解为“基金数量”
+            </p>
+            <br />
+
+            <p>
+                2、份额、净值、基金总价值的关系
+
+                简单的说，基金份额就相当于基金数量，基金净值相当于基金的单价，而您基金的总价值是：基金份额*基金净值。
+            </p>
+
+            <p>例如：</p>
+            <p>
+                Sam有一套房子，这个房子有100平米，每平米最新价格是1000USD，房子的总价值=100平米*1000USD=100000USD；
+
+                这个100平米可类比基金份额，每平米价格可类比基金的最新净值，房子的总价值可类比基金的总价值或总金额。
+            </p>
+            <br />
+        </div>
+        <div v-else class='popup-wrap'>
+            <van-tabs
+                color='$style.primary'
+            >
+                <van-tab title='USDT'>
+                    <p v-if="direction === 'buy'" class='content'>
+                        投资者用USDT向基金公司申购基金
+                    </p>
+                    <p v-else class='content'>
+                        投资者用基金份额向基金公司发起赎回申请，基金公司向投资者支付USDT金额
+                        <br />
+                        金额=份额*净值
+                    </p>
+                    <div class='direction'>
+                        <div class='from'>
+                            <currencyIcon
+                                currency='USDT'
+                                size='24'
+                            />
+                            <p class='currency-text'>
+                                USDT
+                            </p>
+                        </div>
+
+                        <img alt='' class='arrow-down' src='/images/arrow-down.png?dgs22' srcset='' />
+                        <div class='to'>
+                            <currencyIcon currency='V10' size='24' />
+                            <p class='currency-text'>
+                                V10基金
+                            </p>
+                        </div>
+                    </div>
+                </van-tab>
+                <van-tab title='一篮子资产'>
+                    <p class='content'>
+                        投资者用一篮子资产向基金公司提出申购申请，一篮子资产指的是和基金的投资构成完全一致，比例也完全一致的一组加密货币
+                    </p>
+                    <div class='direction'>
+                        <div class='from'>
+                            <currencyIcon
+                                currency='BTC'
+                                size='18'
+                            />
+                            <currencyIcon
+                                currency='ETH'
+                                size='18'
+                            />
+                            <currencyIcon
+                                currency='TRX'
+                                size='18'
+                            />
+                            <currencyIcon
+                                currency='UNI'
+                                size='18'
+                            />
+                            <p class='currency-text'>
+                                USDT BTC TRX UNI..
+                            </p>
+                        </div>
+
+                        <img alt='' class='arrow-down' src='/images/arrow-down.png?dgs22' srcset='' />
+                        <div class='to'>
+                            <currencyIcon currency='V10' size='24' />
+                            <p class='currency-text'>
+                                V10基金
+                            </p>
+                        </div>
+                    </div>
+                </van-tab>
+            </van-tabs>
+        </div>
+        <van-button class='popup-btn' type='primary' @click='show = false'>
+            {{ $t('common.sure') }}
+        </van-button>
+    </van-popup>
 </template>
 
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import { getDecimalNum, toFixed } from '@/utils/calculation'
 import { debounce } from '@/utils/util'
-
+import { useRoute } from 'vue-router'
 import { ref, defineProps, defineEmits, computed } from 'vue'
 const props = defineProps({
     readonly: Boolean,
@@ -44,9 +150,14 @@ const props = defineProps({
     label: String,
     currency: String,
     placeholder: String,
-    modelValue: String
+    modelValue: String,
+    iconContentType: String, // 图标点击内容类型
 })
 const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue'])
+const route = useRoute()
+
+const { direction } = route.query
+const show = ref(false)
 
 // 切换币种
 const chooseCurrency = () => {
@@ -90,55 +201,85 @@ const inputHandler = debounce((e) => {
     emit('input', e.target.value, e)
 }, 800)
 
+// 点击问号弹出内容
+const showPopup = () => {
+    show.value = !show.value
+}
+
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.tradeAssetBar{
-    .label{
-        font-size: rem(48px);
+.tradeAssetBar {
+    --van-tab-active-text-color: var(--primary);
+    .label {
+        font-size: rem(36px);
     }
-    .assetCell{
-        margin-top: rem(20px);
-        border-radius: 6px;
-        height: rem(100px);
-        background: var(--assistColor);
-        padding: 10px 0;
+    .assetCell {
         display: flex;
         align-items: center;
+        height: rem(100px);
+        margin-top: rem(20px);
+        padding: 10px 0;
+        background: var(--assistColor);
+        border-radius: 6px;
     }
-    .leftCell{
-        padding: 0 15px;
-        border-right: 1px solid var(--lineColor);
+    .leftCell {
+        position: relative;
         width: 40%;
         margin-right: 1em;
+        padding: 0 15px;
         line-height: rem(45px);
-        position: relative;
-        .arrowDown{
-            position: absolute;
-            top:7px;
-            right: 10px;
-        }
+        border-right: 1px solid var(--lineColor);
     }
-    .rightCell{
+    .arrowDown {
+        position: relative;
+        right: 10px;
+    }
+    .rightCell {
         flex: 1;
     }
-    .currency{
-        vertical-align: middle;
+    .currency {
         font-size: rem(30px);
+        vertical-align: middle;
     }
-    .currencyImg{
+    .currencyImg {
         margin-right: 5px;
         margin-bottom: 3px;
     }
 }
-.arrowDown{
+.arrowDown {
     width: 0;
     height: 0;
+    vertical-align: middle;
     border: 7px solid var(--placeholdColor);
-    border-radius: 3px;
     border-color: var(--placeholdColor) transparent transparent transparent;
     border-bottom: 0;
-    vertical-align: middle;
+    border-radius: 3px;
+}
+.popup-wrap {
+    padding: rem(40px);
+
+    --van-tabs-bottom-bar-color: var(--primary);
+    .content {
+        margin: rem(40px) 0;
+    }
+    .direction {
+        text-align: center;
+        .arrow-down {
+            width: rem(100px);
+            margin: rem(60px) 0;
+        }
+        .currency-text {
+            margin: rem(10px) 0;
+            vertical-align: middle;
+        }
+    }
+}
+.popup-btn {
+    width: 100%;
+    .direction{
+
+    }
 }
 </style>

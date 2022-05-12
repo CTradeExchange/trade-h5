@@ -15,39 +15,35 @@
         </div>
 
         <div class='tradeFormBar'>
-            <div class='tradeTypeTab'>
-                <a class='item active' href='javascript:;'>
-                    {{ $t('fundInfo.buy') }}
-                </a>
-                <a class='item' href='javascript:;' @click='toRedeem'>
-                    {{ $t('fundInfo.sell') }}
-                </a>
-            </div>
-            <TradeAssetBar
-                v-model='amountPay'
-                :can-choose-currency='true'
-                :currency='activeCurrency'
-                :digits='curAccount? curAccount?.digits : 0'
-                :label="$t('fundInfo.choosePayAsset')"
-                :placeholder='payPlaceholder'
-                @input='calcApplyShares'
-                @touchCurrency='touchCurrency'
-            />
-            <p class='iconArrowWrapper'>
-                <span>
-                    <i class='iconArrowDown icon_paixuxiaojiantou_xiangxia'></i>
-                </span>
-            </p>
             <TradeAssetBar
                 v-model='sharesPlaceholder'
                 :can-choose-currency='false'
                 class='tradeBarMtop'
                 :currency='fund.shareTokenCode'
-                :label=" $t('fundInfo.chooseApplyAsset')"
-                :readonly='true'
+                icon-content-type='fund'
+                label='申购多少份基金'
+                placeholder='输入申购份额'
+                :readonly='false'
             />
+
+            <p class='iconArrowWrapper'>
+            </p>
+
+            <TradeAssetBar
+                v-model='amountPay'
+                :can-choose-currency='true'
+                :currency='activeCurrency'
+                :digits='curAccount? curAccount?.digits : 0'
+                icon-content-type='asset'
+                :label="$t('fundInfo.choosePayAsset')"
+                :placeholder='payPlaceholder'
+                :readonly='true'
+                @input='calcApplyShares'
+                @touchCurrency='touchCurrency'
+            />
+
             <div class='fee'>
-                <p>
+                <!-- <p>
                     <span class='muted'>
                         {{ $t('fundInfo.realtimeJZ') }}：
                     </span>
@@ -60,21 +56,164 @@
                     </span>
                     {{ calcApplyNet.fees || '--' }}
                     {{ calcApplyNet.currencyPay }}
+                </p> -->
+                <p>
+                    <span class='muted'>
+                        1 V10 =
+                    </span>
+                    5.54USDT
                 </p>
-            </div>
-            <div class='footerBtn'>
-                <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
-                    {{ fund.canPurchase===1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
-                </van-button>
+                <p>
+                    <span class='muted'>
+                        Fee Rate:
+                    </span>
+                    0.05%
+                </p>
             </div>
         </div>
 
-        <!-- 申购赎回记录 -->
-        <recordList ref='recordListRef' />
+        <div class='pay-wrap'>
+            <p class='title'>
+                您需要支付以下资产
+            </p>
+            <div class='header'>
+                <span>Asset</span>
+                <span>支付数量</span>
+            </div>
+            <ul class='content'>
+                <li>
+                    <div class='c-left'>
+                        <currencyIcon
+                            currency='BTC'
+                            size='18'
+                        />
+                        <span class='currency-text'>
+                            BTC
+                        </span>
+                    </div>
+                    <div class='c-right'>
+                        <span> 0.0001</span>
+                        <van-icon :color='$style.success' name='checked' size='22' />
+                    </div>
+                </li>
+                <li>
+                    <div class='c-left'>
+                        <currencyIcon
+                            currency='XMR'
+                            size='18'
+                        />
+                        <span class='currency-text'>
+                            XMR
+                        </span>
+                    </div>
+                    <div class='c-right'>
+                        <div class='cr-inline'>
+                            <span> 0.01</span>
+                            <p class='error-text'>
+                                可用不足，需增加0.06
+                            </p>
+                        </div>
+                        <van-icon :color='$style.primary' name='add' size='22' />
+                    </div>
+                </li>
+                <li>
+                    <div class='c-left'>
+                        <currencyIcon
+                            currency='XMR'
+                            size='18'
+                        />
+                        <span class='currency-text'>
+                            XMR
+                        </span>
+                    </div>
+                    <div class='c-right'>
+                        <div class='cr-inline'>
+                            <span> 0.01</span>
+                            <p class='error-text'>
+                                可用不足，需增加0.06
+                            </p>
+                        </div>
+                        <van-icon :color='$style.primary' name='add' size='22' />
+                    </div>
+                </li>
+            </ul>
+            <div class='notice'>
+                注：以上计算结果包含申购手续费，并且是预计值，具体以提交后实际成交为准，查看规则
+            </div>
+        </div>
+
+        <div class='footerBtn'>
+            <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
+                {{ fund.canPurchase===1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
+            </van-button>
+        </div>
 
         <loadingVue :show='loading' />
 
-        <van-action-sheet v-model:show='selectShow' :actions='selectActions' @select='onSelect' />
+        <van-popup
+            v-model:show='selectShow'
+            position='bottom'
+            round
+        >
+            <div class='popup-assets-list'>
+                <p class='title'>
+                    选择支付资产
+                </p>
+                <div class='asset-item' @click='onSelect'>
+                    <div class='left'>
+                        <div class='top-block'>
+                            <currencyIcon
+                                currency='USDT'
+                                size='24'
+                            />
+                            <span> USDT</span>
+                        </div>
+                        <p class='desc'>
+                            Pay USDT to purchase for the fund
+                        </p>
+                    </div>
+                    <div class='right'>
+                        <van-icon :color='$style.success' name='checked' size='22' />
+                    </div>
+                </div>
+                <div class='asset-item' @click='onSelect'>
+                    <div class='left'>
+                        <div class='top-block'>
+                            <currencyIcon
+                                size='24'
+                            />
+                            <span> 一篮子资产</span>
+                        </div>
+                        <p class='desc'>
+                            Pay for a basket of assets to purchasee for fund
+                        </p>
+                        <div class='currency-list'>
+                            <currencyIcon
+                                currency='BTC'
+                                size='18'
+                            />
+                            <currencyIcon
+                                currency='ETH'
+                                size='18'
+                            />
+                            <currencyIcon
+                                currency='TRX'
+                                size='18'
+                            />
+                            <currencyIcon
+                                currency='UNI'
+                                size='18'
+                            />
+                        </div>
+                    </div>
+                    <div class='right'>
+                        <van-icon :color='$style.success' name='checked' size='22' />
+                    </div>
+                </div>
+            </div>
+        </van-popup>
+
+        <!-- <van-action-sheet v-model:show='selectShow' :actions='selectActions' @select='onSelect' /> -->
     </div>
 </template>
 
@@ -107,31 +246,19 @@ const {
     calcApplyNet,
 } = orderHook()
 
-const recordListRef = ref(null)
-
-// 切换到赎回基金
-const toRedeem = () => {
-    router.replace({
-        name: 'FundRedeem',
-        query: {
-            ...route.query,
-            direction: 'sell'
-        }
-    })
-}
-
 // 支付资产输入框的placeholder
 const payPlaceholder = computed(() => {
     const text = t('fundInfo.available') + curAccount.value?.available
     return unref(curAccount) ? text : '--'
 })
 const amountPay = ref('')
-
 // 份额输入框的placeholder
-const sharesPlaceholder = computed(() => {
-    const text = '≈ ' + calcApplyNet.value.shares
-    return unref(calcApplyNet).shares ? text : '--'
-})
+const sharesPlaceholder = ref('')
+
+// const sharesPlaceholder = computed(() => {
+//     const text = '≈ ' + calcApplyNet.value.shares
+//     return unref(calcApplyNet).shares ? text : '--'
+// })
 const touchCurrency = () => {
     selectShow.value = true
 }
@@ -146,112 +273,170 @@ const submitHandler = () => {
         if (res.check()) {
             amountPay.value = ''
             calcApplyShares()
-            unref(recordListRef) && unref(recordListRef).refresh()
-            Dialog.alert({
+            Dialog.confirm({
                 title: t('fundInfo.applySuccessed'),
-                message: '',
-            }).then(() => {
-            // on close
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow')
             })
+                .then(() => {
+                    router.push({
+                        path: '/fundRecord',
+                        query: {
+                            direction: 'buy'
+                        }
+                    })
+                })
+                .catch(() => {
+                    // on cancel
+                })
         }
     })
 }
 
-onMounted(() => {
-    console.log(recordListRef)
-})
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.pageWrapp{
-    margin-top: rem(110px);
+.pageWrapp {
     height: 100%;
+    margin-top: rem(110px);
     overflow-y: auto;
     .text {
         color: var(--color);
     }
-    .currencyBar{
-        background: var(--contentColor);
+    .currencyBar {
         margin: rem(30px) 0;
         padding: rem(30px) rem(30px);
         line-height: 28px;
+        background: var(--contentColor);
     }
-    .fundCurrency{
+    .fundCurrency {
+        margin-left: 0.5em;
         font-size: rem(32px);
-        margin-left: .5em;
         vertical-align: middle;
     }
-    .tradeBarMtop{
+    .tradeBarMtop {
         margin-top: 25px;
     }
 }
-.tradeFormBar{
+.tradeFormBar {
     position: relative;
-    background: var(--contentColor);
     margin-top: rem(30px);
-    padding: rem(30px);
-
-    .fee{
-        margin-top: rem(30px);
-        font-size: rem(26px);
+    padding: rem(60px) rem(30px) rem(30px) rem(30px);
+    background: var(--contentColor);
+    .fee {
         display: flex;
         justify-content: space-between;
+        margin-top: rem(30px);
+        font-size: rem(26px);
     }
-    .mleft{
+    .mleft {
         margin-left: 10px;
     }
 }
-.tradeTypeTab{
-    margin-top: rem(10px);
-    margin-bottom: rem(30px);
-    display: grid;
-    grid-column-gap: rem(10px);
-    grid-template-columns: 1fr 1fr;
-    text-align: center;
-    .item{
-        height: rem(80px);
-        line-height: rem(80px);
-        background: var(--bgColor);
-        color: var(--color);
-        font-size: rem(30px);
-        border-radius: rem(5px);
-        &.active{
-            background-color: var(--primary);
-            color: #fff;
+.pay-wrap {
+    margin-top: rem(40px);
+    padding: rem(30px) 0;
+    background: var(--contentColor);
+    .title {
+        font-size: rem(32px);
+        text-align: center;
+    }
+    .header {
+        display: flex;
+        justify-content: space-between;
+        margin: rem(30px) 0;
+        padding: 0 rem(40px);
+    }
+    .content {
+        margin: rem(30px) 0;
+        padding: 0 rem(30px);
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: rem(30px);
+            .c-right {
+                display: flex;
+                align-items: center;
+                text-align: right;
+                .icon_success {
+                    margin-left: rem(20px);
+                    color: var(--success);
+                    font-size: rem(28px);
+                }
+                .icon_icon_assets {
+                    margin-left: rem(20px);
+                    color: var(--primary);
+                    font-size: rem(28px);
+                }
+                .van-icon {
+                    position: relative;
+                    top: -2px;
+                    display: inline-block;
+                    margin-left: rem(20px);
+                    vertical-align: -12%;
+                }
+                .error-text {
+                    color: var(--warn);
+                }
+                .cr-inline {
+                    display: inline-block;
+                }
+            }
         }
     }
+    .notice {
+        padding: 0 rem(30px);
+    }
 }
-.iconArrowWrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: rem(60px);
+.iconArrowWrapper {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: rem(60px);
     text-align: center;
-    span {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: rem(60px);
-        height: rem(60px);
-        background: var(--primary);
-        border-radius: 50%;
-    }
-    .iconArrowDown{
-        font-size: rem(36px);
-        color: #fff;
-    }
 }
-.footerBtn{
+.footerBtn {
+    position: fixed;
+    bottom: 0;
     display: block;
+    width: 100%;
     margin-top: rem(40px);
-
-    .van-button{
+    .van-button {
+        color: #FFF;
+        font-size: 15px;
         background: var(--primary);
         border-color: var(--primary);
-        color: #fff;
-        font-size: 15px;
+    }
+}
+.popup-assets-list {
+    padding: rem(30px);
+    .title {
+        font-size: rem(32px);
+        text-align: center;
+    }
+    .asset-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: rem(40px);
+        padding: rem(30px);
+        background: var(--bgColor);
+        border-radius: rem(12px);
+        .top-block {
+            margin-bottom: rem(10px);
+            >span {
+                margin-left: rem(10px);
+                color: var(--color);
+                vertical-align: middle;
+            }
+        }
+        .desc {
+            margin-bottom: rem(20px);
+            color: var(--minorColor);
+        }
     }
 }
 </style>
