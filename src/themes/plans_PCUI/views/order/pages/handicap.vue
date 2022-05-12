@@ -42,9 +42,10 @@
         </p>
     </div>
 
-    <div class='curPrice' :class='[product.cur_color]'>
-        {{ lastPrice || '--' }}
+    <div class='curPrice' :class='[product.cur_color]' :data-lastPrice='lastPrice'>
+        {{ lastPriceShow || '--' }}
     </div>
+
     <div class='priceMultiGear sell'>
         <p v-for='(item, index) in bid_deep' :key='index' class='item'>
             <span class='hd'>
@@ -68,7 +69,7 @@ import { computed, reactive, toRefs, watch, watchEffect } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import computeHandicap from '@planspc/hooks/handicap'
-import { lt, pow } from '@/utils/calculation'
+import { lt, pow, gte, lte, toFixed, plus, div } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { isEmpty } from '@/utils/util'
 export default {
@@ -79,6 +80,7 @@ export default {
         const state = reactive({
             showPopover: false,
             lastPriceColor: '', // 最新成交价的颜色
+            lastPriceShow: '', // 最新成交价，新的报价不在盘口范围内的时候过滤掉
             curDigit: ''
         })
 
@@ -95,59 +97,14 @@ export default {
 
         // 获取盘口深度报价
         const handicapList = computed(() => store.state._quote.handicapList.find(({ symbol_id }) => parseInt(symbol_id) === product.value.symbolId))
+        // 最新成交价
+        const lastPrice = computed(() => store.state._quote.dealList[0]?.price)
+        const deallist = computed(() => store.state._quote.dealList)
 
         // 获取处理后的盘口数据
         const { handicapResult } = computeHandicap({
             showPending: false
         })
-
-        const ask_deep = computed(() => {
-            const askResult = handicapResult.value?.ask_deep?.slice(0, 5) || []
-            if (askResult.length < 5) {
-                return fillPosition(askResult, 1)
-            } else {
-                return askResult
-            }
-        })
-
-        const bid_deep = computed(() => {
-            const bidREsult = handicapResult.value.bid_deep.slice(0, 5)
-            if (bidREsult.length < 5) {
-                return fillPosition(bidREsult, 2)
-            } else {
-                return bidREsult
-            }
-        })
-
-        // 最新成交价的颜色
-        watch(
-            () => lastPrice && lastPrice.value,
-            (newval, oldval) => (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
-        )
-
-        // 监听路由变化
-        watch(
-            () => [route.query, state.curDigit], (val, oval) => {
-                state.curDigit = val[1]
-                QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 20)
-                // 清除盘口数据
-                store.commit('_quote/Delete_dealList')
-            }, {
-                immediate: true
-            }
-        )
-        watch(() => handicapDigit.value, val => {
-            if (val) {
-                state.curDigit = val
-            }
-        }, {
-            immediate: true
-        })
-
-        // watchEffect(() => {
-        //     state.curDigit = handicapDigit.value
-        //     console.log('**************', state.curDigit)
-        // })
 
         // 报价不够5档，补空位
         const fillPosition = (data, type) => {
@@ -178,9 +135,77 @@ export default {
             return result
         }
 
-        // 最新成交价
-        const lastPrice = computed(() => store.state._quote.dealList[0]?.price)
-        const deallist = computed(() => store.state._quote.dealList)
+        const ask_deep = computed(() => {
+            const askResult = handicapResult.value?.ask_deep?.slice(0, 5) || []
+            if (askResult.length < 5) {
+                return fillPosition(askResult, 1)
+            } else {
+                return askResult
+            }
+        })
+
+        const bid_deep = computed(() => {
+            const bidREsult = handicapResult.value.bid_deep.slice(0, 5)
+            if (bidREsult.length < 5) {
+                return fillPosition(bidREsult, 2)
+            } else {
+                return bidREsult
+            }
+        })
+
+        // 最新成交价的颜色， 判断最新价是否在当前盘口买一卖一的范围内
+        watch(
+            () => lastPrice.value,
+            (newval, oldval) => {
+                (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
+                const askFirst = ask_deep.value[0]
+                const bidFirst = bid_deep.value[0]
+                if (lte(lastPrice.value, askFirst.price_ask) && gte(lastPrice.value, bidFirst.price_bid)) {
+                    state.lastPriceShow = lastPrice.value
+                }
+            }
+        )
+        // 盘口变动时，如果最新价不在当前盘口买一卖一的范围内，(买一+卖一)/2算出最新价
+        watch(
+            () => bid_deep.value[0],
+            (newval, oldval) => {
+                if (!parseFloat(newval.price_bid)) return
+                const askFillList = ask_deep.value.filter(el => parseFloat(el.price_ask))
+                const askFirst = askFillList[0]
+                const bidFirst = bid_deep.value[0]
+                const isBetween = lte(state.lastPriceShow, askFirst.price_ask) && gte(state.lastPriceShow, bidFirst.price_bid)
+                if (!state.lastPriceShow || !isBetween) {
+                    const t = plus(askFirst.price_ask, bidFirst.price_bid)
+                    const m = div(t, 2)
+                    state.lastPriceShow = toFixed(m, product.value.symbolDigits)
+                }
+            }
+        )
+
+        // 监听路由变化
+        watch(
+            () => [route.query, state.curDigit], (val, oval) => {
+                state.curDigit = val[1]
+                QuoteSocket.deal_subscribe(product.value?.symbolId, 5, state.curDigit, product.value?.tradeType, 20)
+                // 清除盘口数据
+                store.commit('_quote/Delete_dealList')
+            }, {
+                immediate: true
+            }
+        )
+        watch(() => handicapDigit.value, val => {
+            if (val) {
+                state.curDigit = val
+            }
+        }, {
+            immediate: true
+        })
+
+        // watchEffect(() => {
+        //     state.curDigit = handicapDigit.value
+        //     console.log('**************', state.curDigit)
+        // })
+
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
