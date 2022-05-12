@@ -69,8 +69,8 @@ const toDeposit = () => {
         path: '/depositChoose',
         query: {
             tradeType: 5,
-            accountId: 1001049,
-            currency: 'BTC'
+            accountId: props.accountId,
+            currency: props.currency
         }
 
     })

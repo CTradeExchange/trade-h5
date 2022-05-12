@@ -149,7 +149,7 @@
         />
 
         <!-- 添加资产弹窗 -->
-        <AddAssets v-model:show='addAssetShow' />
+        <AddAssets v-model:show='addAssetShow' account-id='1001049' currency='USDT' />
     </div>
 </template>
 
