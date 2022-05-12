@@ -1049,3 +1049,69 @@ export function findCustomerExtend (data) {
         data
     })
 }
+
+
+/* 获取客户API列表 */
+export function getCustomerApiList(data) {
+    return request({
+        url: '/global/customer.app.CustomerApiWebService.page',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 创建客户API */
+export function createCustomerApi(data) {
+    return request({
+        url: '/global/customer.app.CustomerApiWebService.applyApi',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取客户API详情 */
+export function createCustomerApiDetail(data) {
+    return request({
+        url: '/global/customer.app.CustomerApiWebService.queryApi',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 删除客户API */
+export function delCustomerApi(data) {
+    return request({
+        url: '/global/customer.app.CustomerApiWebService.delApi',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 编辑客户API保存 */
+export function editCustomerApiSave(data) {
+    return request({
+        url: '/global/customer.app.CustomerApiWebService.editApiPermission',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

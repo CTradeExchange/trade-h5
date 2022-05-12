@@ -77,6 +77,16 @@
             <van-cell
                 class='cellItem'
                 is-link
+                :title='$t("api.title")'
+                to='/apiManage/list'
+            >
+                <template #right-icon>
+                    <van-icon name='arrow' />
+                </template>
+            </van-cell>
+            <van-cell
+                class='cellItem'
+                is-link
                 :title='$t("mfa.routeTitile")'
                 to='/googleMFA/status'
             >
