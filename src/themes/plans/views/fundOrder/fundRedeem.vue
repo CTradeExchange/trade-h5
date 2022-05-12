@@ -72,27 +72,25 @@
                     </li>
                 </ul>
             </div>
-            <div class='redeem-type'>
-                <div class='redeem-assets'>
-                    <div v-for='item in 10' class='redeem-asset-item'>
-                        <currencyIcon
-                            currency='USDT'
-                            size='24'
-                        />
-                        <p class='currency'>
-                            USDT
-                        </p>
-                        <p class='percent'>
-                            34.24%
-                        </p>
-                    </div>
+            <div class='redeem-assets'>
+                <div v-for='item in 10' class='redeem-asset-item'>
+                    <currencyIcon
+                        currency='USDT'
+                        size='24'
+                    />
+                    <p class='currency'>
+                        USDT
+                    </p>
+                    <p class='percent'>
+                        34.24%
+                    </p>
                 </div>
-                <div class='notice'>
-                    注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
-                    <span class='toRule'>
-                        查看规则
-                    </span>
-                </div>
+            </div>
+            <div class='notice'>
+                注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
+                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
+                    查看规则
+                </router-link>
             </div>
         </div>
 
@@ -244,12 +242,13 @@ const submitHandler = () => {
 .pageWrapp {
     height: 100%;
     margin-top: rem(110px);
+    margin-bottom: rem(88px);
     overflow-y: auto;
     .text {
         color: var(--color);
     }
     .currencyBar {
-        margin: rem(30px) 0;
+        margin-top: rem(20px);
         padding: rem(30px) rem(30px);
         line-height: 28px;
         background: var(--contentColor);
@@ -265,7 +264,7 @@ const submitHandler = () => {
 }
 .tradeFormBar {
     position: relative;
-    margin-top: rem(30px);
+    margin-top: rem(20px);
     padding: rem(30px);
     background: var(--contentColor);
     .fee {
@@ -300,15 +299,14 @@ const submitHandler = () => {
     }
 }
 .pay-wrap {
-    margin-top: rem(40px);
+    margin: rem(30px) 0;
     padding: rem(30px) 0;
     background: var(--contentColor);
     .title {
-        font-size: rem(32px);
+        font-size: rem(30px);
         text-align: center;
     }
     .redeem-type {
-        margin-bottom: rem(80px);
         overflow: hidden;
         .header {
             display: flex;
@@ -354,34 +352,34 @@ const submitHandler = () => {
                 }
             }
         }
-        .redeem-assets {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            margin: 0 rem(30px) 0;
-            .redeem-asset-item {
-                flex: 1;
-                width: calc((100% - 45px) / 4);  // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
-                min-width: calc((100% - 45px) / 4); // 加入这两个后每个item的宽度就生效了
-                max-width: calc((100% - 45px) / 4);
-                margin-right: 15px;
-                margin-bottom: 15px;
-                padding: rem(10px) 0;
-                text-align: center;
-                background-color: var(--bgColor);
-                border: solid 1px var(--lineColor);
-                &:nth-child(4n) { // 去除第3n个的margin-right
-                    margin-right: 0;
-                }
-                .currency {
-                    margin: rem(10px) 0 rem(5px);
-                    font-weight: bold;
-                    font-size: rem(28px);
-                }
-                .percent {
-                    color: var(--minorColor);
-                    font-size: rem(20px);
-                }
+    }
+    .redeem-assets {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin: rem(30px) rem(30px) 0;
+        .redeem-asset-item {
+            flex: 1;
+            width: calc((100% - 45px) / 4);  // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
+            min-width: calc((100% - 45px) / 4); // 加入这两个后每个item的宽度就生效了
+            max-width: calc((100% - 45px) / 4);
+            margin-right: 15px;
+            margin-bottom: 15px;
+            padding: rem(10px) 0;
+            text-align: center;
+            background-color: var(--bgColor);
+            border: solid 1px var(--lineColor);
+            &:nth-child(4n) { // 去除第3n个的margin-right
+                margin-right: 0;
+            }
+            .currency {
+                margin: rem(10px) 0 rem(5px);
+                font-weight: bold;
+                font-size: rem(28px);
+            }
+            .percent {
+                color: var(--minorColor);
+                font-size: rem(20px);
             }
         }
     }
@@ -398,7 +396,6 @@ const submitHandler = () => {
     bottom: 0;
     display: block;
     width: 100%;
-    margin-top: rem(40px);
     .van-button {
         color: #FFF;
         font-size: 15px;

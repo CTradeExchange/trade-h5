@@ -2,7 +2,6 @@ import { computed, ref, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
-import { debounce } from '@/utils/util'
 import { fundCalcApplyShares, fundApply, fundRedeem } from '@/api/fund'
 import { Toast } from 'vant'
 
@@ -15,10 +14,16 @@ export const orderHook = () => {
     let pageTitle = direction === 'buy' ? t('fundInfo.buy') : t('fundInfo.sell')
     pageTitle = t('fundInfo.fund') + pageTitle
 
-    const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
-    const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
+    // 申购的时候表示支付资产，赎回的时候表示接受资产
+    const activeCurrency = ref('')
+    // 当前选择的资产数据
+    const activeAssets = ref({})
+    // 现货玩法的账户列表
+    const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5) || [])
+    // 当前账户
     const curAccount = computed(() => accountList.value.find(el => el.currency === activeCurrency.value))
-
+    // 基金底层资产列表
+    const fundAssetsList = ref(['USDT', 'BTC'])
     // 基金产品列表
     const fundProductList = computed(() => store.state._quote.fundProductList)
     if (!fundProductList.value.length) {
@@ -33,16 +38,20 @@ export const orderHook = () => {
         const resultList = direction === 'buy' ? purchaseCurrencySetting : redemptionCurrencySetting
         return resultList
     })
+
+    // 获取基金详情
     store.dispatch('_quote/queryFundInfo', fundId).then(res => {
         if (res.check()) {
             activeCurrency.value = activeCurrencyList.value[0]?.currencyCode
+            activeAssets.value = activeCurrencyList.value[0]
             updateAccountAssetsInfo(direction === 'buy' ? activeCurrency.value : res.data.shareTokenCode)
         }
     })
+    // 获取基金净值等数据
+    store.dispatch('_quote/fundNetValue', { fundId })
 
     // 获取申购手续费
     const calcApplyShares = (val, e) => {
-        // console.log('开始获取申购手续费', val, e)
         getCalcApplyFee(val, activeCurrency.value)
     }
 
@@ -58,6 +67,7 @@ export const orderHook = () => {
             return res
         })
     }
+
     // 点击赎回
     const submitFundRedeem = (params) => {
         if (!params?.shares) {
@@ -71,19 +81,19 @@ export const orderHook = () => {
         })
     }
 
-    // 是否显示actionsSheet弹窗
+    // 选择支付资产、选择赎回方式
     const selectShow = ref(false)
     const selectActions = computed(() => {
         const resultList = activeCurrencyList.value.map(el => {
             return {
-                ...el,
-                name: el.currencyCode
+                ...el
             }
         })
         return resultList
     })
     const onSelect = (item) => {
         activeCurrency.value = item.currencyCode
+        activeAssets.value = item
         updateAccountAssetsInfo(item.currencyCode)
         selectShow.value = false
     }
@@ -98,13 +108,19 @@ export const orderHook = () => {
         })
     }
 
-    const calcApplyNet = ref('') // 申购手续费,申购份额, 申购净值,手续费的币种,净值币种
+    // 申购手续费,申购份额, 申购净值,手续费的币种,净值币种
+    const calcApplyNet = ref('')
     const getCalcApplyFee = (amountPay, currencyPay) => {
         if (!amountPay) {
             calcApplyNet.value = ''
             return false
         }
-        fundCalcApplyShares({ amountPay, currencyPay, fundId: parseInt(fundId) }).then(res => {
+        fundCalcApplyShares({
+            amountPay,
+            currencyPay,
+            fundId: parseInt(fundId),
+            applyType: 2
+        }).then(res => {
             if (res.check()) {
                 const { data } = res
                 calcApplyNet.value = data
@@ -115,6 +131,7 @@ export const orderHook = () => {
     return {
         pageTitle,
         fund,
+        fundAssetsList,
         accountList,
         loading,
         calcApplyShares,
@@ -123,6 +140,7 @@ export const orderHook = () => {
         selectShow,
         selectActions,
         activeCurrency,
+        activeAssets,
         curAccount,
         updateAccountAssetsInfo,
         calcApplyNet,

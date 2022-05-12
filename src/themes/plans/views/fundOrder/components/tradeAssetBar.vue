@@ -2,21 +2,32 @@
     <div class='tradeAssetBar'>
         <p class='label'>
             {{ label }}
-            <van-icon name='question-o' size='18' @click='showPopup' />
+            <van-icon v-if='canChooseCurrency' name='question-o' size='18' @click='showAssetsPupup = true' />
+            <van-icon v-else name='question-o' size='18' @click='showSharePopup = true' />
         </p>
-        <div class='assetCell' @click='chooseCurrency'>
+        <!-- 选择框 -->
+        <div v-if='canChooseCurrency' class='selectCell' @click='chooseCurrency'>
+            <CurrencyIcon class='currencyImg' :currency='currency' size='22px' />
+            <div class='textCell'>
+                <span class='currency'>
+                    {{ currency === 'self' ? '一篮子资产' : currency }}
+                </span>
+                <span v-if="currency === 'self'" class='assets-all'>
+                    {{ fundAssetsStr }}
+                </span>
+            </div>
+            <i class='arrowDown'></i>
+        </div>
+        <!-- 输入框 -->
+        <div v-else class='inputCell'>
             <div class='leftCell'>
-                <CurrencyIcon class='currencyImg' :currency='currency' size='18px' />
+                <CurrencyIcon class='currencyImg' :currency='currency' size='22px' />
                 <span class='currency'>
                     {{ currency }}
                 </span>
             </div>
             <div class='rightCell'>
-                <span v-if='readonly'>
-                    {{ modelValue }}
-                </span>
                 <input
-                    v-else
                     :placeholder='placeholder'
                     type='text'
                     :value='modelValue'
@@ -24,43 +35,43 @@
                     @input='onInput'
                 />
             </div>
-            <i v-if='canChooseCurrency' class='arrowDown'></i>
         </div>
     </div>
+
+    <!-- 基金份额说明弹窗 -->
     <van-popup
-        v-model:show='show'
-        class=''
+        v-model:show='showSharePopup'
         position='bottom'
         round
     >
-        <div v-if="iconContentType === 'fund'" class='popup-wrap'>
-            <h2> 什么是基金份额</h2>
-            <br />
+        <div class='popup-fund'>
+            <h2>什么是基金份额</h2>
             <p>
                 1、什么是基金份额
-
                 基金份额可简单理解为“基金数量”
             </p>
-            <br />
-
             <p>
                 2、份额、净值、基金总价值的关系
-
                 简单的说，基金份额就相当于基金数量，基金净值相当于基金的单价，而您基金的总价值是：基金份额*基金净值。
-            </p>
-
-            <p>例如：</p>
-            <p>
+                <br />例如：<br />
                 Sam有一套房子，这个房子有100平米，每平米最新价格是1000USD，房子的总价值=100平米*1000USD=100000USD；
-
                 这个100平米可类比基金份额，每平米价格可类比基金的最新净值，房子的总价值可类比基金的总价值或总金额。
             </p>
-            <br />
         </div>
-        <div v-else class='popup-wrap'>
-            <van-tabs
-                color='$style.primary'
-            >
+        <van-button class='popup-btn' type='primary' @click='showSharePopup = false'>
+            {{ $t('common.sure') }}
+        </van-button>
+    </van-popup>
+
+    <!-- 支付资产说明弹窗 -->
+    <van-popup
+        v-model:show='showAssetsPupup'
+        position='bottom'
+        round
+    >
+        <div class='popup-assets'>
+            <van-tabs color='$style.primary'>
+                <!-- 单资产 -->
                 <van-tab title='USDT'>
                     <p v-if="direction === 'buy'" class='content'>
                         投资者用USDT向基金公司申购基金
@@ -80,7 +91,6 @@
                                 USDT
                             </p>
                         </div>
-
                         <img alt='' class='arrow-down' src='/images/arrow-down.png?dgs22' srcset='' />
                         <div class='to'>
                             <currencyIcon currency='V10' size='24' />
@@ -90,6 +100,7 @@
                         </div>
                     </div>
                 </van-tab>
+                <!-- 一篮子资产 -->
                 <van-tab title='一篮子资产'>
                     <p class='content'>
                         投资者用一篮子资产向基金公司提出申购申请，一篮子资产指的是和基金的投资构成完全一致，比例也完全一致的一组加密货币
@@ -116,7 +127,6 @@
                                 USDT BTC TRX UNI..
                             </p>
                         </div>
-
                         <img alt='' class='arrow-down' src='/images/arrow-down.png?dgs22' srcset='' />
                         <div class='to'>
                             <currencyIcon currency='V10' size='24' />
@@ -128,7 +138,7 @@
                 </van-tab>
             </van-tabs>
         </div>
-        <van-button class='popup-btn' type='primary' @click='show = false'>
+        <van-button class='popup-btn' type='primary' @click='showAssetsPupup = false'>
             {{ $t('common.sure') }}
         </van-button>
     </van-popup>
@@ -139,7 +149,7 @@ import CurrencyIcon from '@/components/currencyIcon.vue'
 import { getDecimalNum, toFixed } from '@/utils/calculation'
 import { debounce } from '@/utils/util'
 import { useRoute } from 'vue-router'
-import { ref, defineProps, defineEmits, computed } from 'vue'
+import { ref, computed, defineProps, defineEmits } from 'vue'
 const props = defineProps({
     readonly: Boolean,
     canChooseCurrency: {
@@ -151,13 +161,30 @@ const props = defineProps({
     currency: String,
     placeholder: String,
     modelValue: String,
-    iconContentType: String, // 图标点击内容类型
+    // 基金底层资产列表
+    fundAssetsList: {
+        type: Array,
+        default: () => []
+    }
 })
 const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue'])
 const route = useRoute()
 
+// 申购、赎回类型
 const { direction } = route.query
-const show = ref(false)
+// 是否显示基金份额说明弹窗
+const showSharePopup = ref(false)
+// 是否显示支付资产说明弹窗
+const showAssetsPupup = ref(false)
+// 基金底层资产字符串
+const fundAssetsStr = computed(() => {
+    let result = ''
+    props.fundAssetsList.map(elem => {
+        result += elem + ' + '
+    })
+    result = result.substring(0, result.length - 2)
+    return result
+})
 
 // 切换币种
 const chooseCurrency = () => {
@@ -201,11 +228,6 @@ const inputHandler = debounce((e) => {
     emit('input', e.target.value, e)
 }, 800)
 
-// 点击问号弹出内容
-const showPopup = () => {
-    show.value = !show.value
-}
-
 </script>
 
 <style lang="scss" scoped>
@@ -215,37 +237,65 @@ const showPopup = () => {
     .label {
         font-size: rem(36px);
     }
-    .assetCell {
-        display: flex;
-        align-items: center;
-        height: rem(100px);
-        margin-top: rem(20px);
-        padding: 10px 0;
-        background: var(--assistColor);
-        border-radius: 6px;
-    }
-    .leftCell {
-        position: relative;
-        width: 40%;
-        margin-right: 1em;
-        padding: 0 15px;
-        line-height: rem(45px);
-        border-right: 1px solid var(--lineColor);
-    }
-    .arrowDown {
-        position: relative;
-        right: 10px;
-    }
-    .rightCell {
-        flex: 1;
-    }
     .currency {
         font-size: rem(30px);
-        vertical-align: middle;
+        font-weight: bold;
+        margin-top: rem(4px);
     }
     .currencyImg {
-        margin-right: 5px;
-        margin-bottom: 3px;
+        align-self: flex-start;
+        margin-right: rem(15px);
+    }
+    .inputCell {
+        display: flex;
+        align-items: center;
+        padding: rem(30px) 0;
+        margin-top: rem(20px);
+        background: var(--assistColor);
+        border-radius: 6px;
+        .leftCell {
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            position: relative;
+            width: 40%;
+            padding: 0 15px;
+            border-right: 1px solid var(--lineColor);
+        }
+        .rightCell {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 15px;
+            input {
+                flex: 1;
+                height: 100%;
+                text-align: right;
+                font-size: rem(28px);
+            }
+        }
+    }
+    .selectCell {
+        display: flex;
+        align-items: center;
+        margin-top: rem(20px);
+        background: var(--assistColor);
+        border-radius: 6px;
+        padding: rem(30px);
+        .textCell {
+            display: inline-flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            height: 100%;
+            margin-right: rem(30px);
+            .assets-all {
+                margin-top: rem(15px);
+                font-size: rem(26px);
+                color: var(--minorColor);
+            }
+        }
     }
 }
 .arrowDown {
@@ -257,7 +307,16 @@ const showPopup = () => {
     border-bottom: 0;
     border-radius: 3px;
 }
-.popup-wrap {
+.popup-fund {
+    padding: rem(40px);
+    h2 {
+        margin-bottom: rem(40px);
+    }
+    p {
+        margin-bottom: rem(10px);
+    }
+}
+.popup-assets {
     padding: rem(40px);
 
     --van-tabs-bottom-bar-color: var(--primary);
@@ -278,8 +337,5 @@ const showPopup = () => {
 }
 .popup-btn {
     width: 100%;
-    .direction{
-
-    }
 }
 </style>
