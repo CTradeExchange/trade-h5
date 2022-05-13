@@ -114,7 +114,7 @@ import lotDialog from './lot-dialog.vue'
 import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundRedeemMoney } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { Toast } from 'vant'
-import { onMounted, ref, reactive, watch, computed } from 'vue'
+import { onMounted, ref, reactive, watch, computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
@@ -271,13 +271,14 @@ const selectionChange = (list) => {
     }
 }
 // 打开确认份额弹窗
-const openLotDialog = (type = 'preview') => {
+const openLotDialog = async (type = 'preview') => {
     if (disableBtn.value) return
     // if (Number(totalLot.value) > Number(usable.value)) {
     //     return Toast(t('fundManager.ransom.tip1'))
     // }
     const ids = selectList.value.map(elem => elem.id)
     lotDialogType.value = type
+    await nextTick()
     lotDialogRef.value.open(ids)
 }
 // 确认份额

@@ -136,7 +136,7 @@
 
 <script setup>
 import selfFeesDialog from './selfFees-dialog.vue'
-import { getCompanyList, getCompanyAssets, getFundApplyList, getFundCurrencyList } from '@/api/fund'
+import { getCompanyList, getCompanyAssets, getFundApplyList } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
 import { onMounted, ref, reactive, computed } from 'vue'
