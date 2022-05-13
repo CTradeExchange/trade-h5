@@ -1,7 +1,9 @@
 <template>
     <div class='fundApplyRecordItem' @click='full=true'>
         <p class='title'>
-            {{ $t('fundInfo.sell') }}  {{ data.fundName }}
+            <span class='fallColor'>
+                {{ $t('fundInfo.sell') }}
+            </span>  {{ data.fundName }}
         </p>
         <ul class='infos' :class='{ "full": full || index===0 }'>
             <li class='item'>
@@ -61,25 +63,24 @@ const full = ref(false)
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.fundApplyRecordItem{
-    padding: rem(10px) rem(30px);
+.fundApplyRecordItem {
     margin-bottom: rem(20px);
+    padding: rem(10px) rem(30px);
     background: var(--contentColor);
-    .title{
+    .title {
         font-size: rem(28px);
         line-height: 2;
     }
-    .infos{
+    .infos {
         position: relative;
-        line-height: rem(42px);
         display: grid;
         grid-column-gap: rem(20px);
         grid-template-columns: 1fr;
-        font-size: rem(24px);
         height: 7em;
         overflow: hidden;
-        &::before{
-            content: "";
+        font-size: rem(24px);
+        line-height: rem(42px);
+        &::before {
             position: absolute;
             bottom: 0;
             left: 47%;
@@ -88,18 +89,19 @@ const full = ref(false)
             border: 5px solid var(--placeholdColor);
             border-color: var(--placeholdColor) transparent transparent transparent;
             border-bottom: 0;
+            content: '';
         }
-        &.full{
+        &.full {
             height: auto;
-            &::before{
+            &::before {
                 display: none;
             }
         }
-        .item{
+        .item {
             display: flex;
             justify-content: space-between;
         }
-        .label{
+        .label {
             color: var(--minorColor);
         }
     }
