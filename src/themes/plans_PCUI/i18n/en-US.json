@@ -623,7 +623,8 @@
         "volumes": "Volume",
         "zone": "Zone",
         "expireTime": "Expire time",
-        "point": " point"
+        "point": " point",
+        "interestTip": "The interest paid or gained,for holding the position overnight.Positive means gain,negative  means paid."
     },
     "weekdayMap": {
         "1": "Monday",
