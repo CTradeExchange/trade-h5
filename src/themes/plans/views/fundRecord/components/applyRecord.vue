@@ -10,7 +10,11 @@
             >
                 <template #default='{ list }'>
                     <div v-for='item in list' :key='item.id' class='li'>
-                        <fundApplyRecordItem :data='item' />
+                        <fundApplyRecordItem
+                            :data='item'
+                            :show-info='showInfo'
+                            @showDetail='showDetail(item)'
+                        />
                     </div>
                 </template>
             </listVue>
@@ -22,18 +26,21 @@
 import listVue from '@plans/views/record/components/list.vue'
 import fundApplyRecordItem from '@plans/modules/fundApplyRecord/fundApplyRecordItem.vue'
 import filterBox from './filterBox.vue'
-import { fundApplyRecord } from '@/api/fund'
+import { fundApplyRecord, getFundCurrencyList } from '@/api/fund'
 import { hooks } from './hooks'
-import { ref, unref } from 'vue'
+import { useStore } from 'vuex'
+import { ref, unref, computed } from 'vue'
 
 const params = {}
 const { assetsList } = hooks()
-
+const store = useStore()
 const listRef = ref(null)
+const showInfo = ref([])
 const refresh = () => {
     unref(listRef) && unref(listRef).refresh()
 }
-
+// 获取账户信息
+const customerNo = computed(() => store.state._user.customerInfo.customerNo)
 // 筛选日期
 const assetChange = val => {
     params.currencyShares = val || ''
@@ -46,18 +53,38 @@ const dateChange = val => {
     params.endTime = endTime
     refresh()
 }
+
+const showDetail = item => {
+    getFundCurrencyList({
+        customerNo: customerNo.value,
+        proposalNo: item.proposalNo,
+    }).then(res => {
+        if (res.check()) {
+            if (res.data.length > 0) {
+                res.data.forEach(el => {
+                    showInfo.value = []
+                    showInfo.value.push({
+                        currency: el.currency,
+                        amount: el.amount,
+                        fees: el.fees
+                    })
+                })
+            }
+        }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.applyRecord{
-    height: 100%;
+.applyRecord {
     display: flex;
     flex-flow: column;
-    .listContainer{
-        background: var(--contentColor);
+    height: 100%;
+    .listContainer {
         flex: 1;
         overflow-y: auto;
+        background: var(--contentColor);
     }
 }
 </style>

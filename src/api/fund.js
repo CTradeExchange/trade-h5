@@ -249,3 +249,15 @@ export function getIndexSimplePerformance (data) {
         data
     })
 }
+
+/* 获取一篮子资产列表 */
+export function getFundCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.FundApplyAppDubboService.getFundCurrencyList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

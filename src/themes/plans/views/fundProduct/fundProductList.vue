@@ -92,7 +92,7 @@ export default {
     margin-top: rem(110px);
     overflow-y: auto;
     .icon_mingxi1 {
-        font-size: rem(32px);
+        font-size: rem(42px);
     }
 }
 </style>
