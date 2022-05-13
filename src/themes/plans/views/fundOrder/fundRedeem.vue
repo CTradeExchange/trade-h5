@@ -225,11 +225,18 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
-            Dialog.alert({
+            Dialog.confirm({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow')
             }).then(() => {
-                // on close
+                router.push({
+                    path: '/fundRecord',
+                    query: {
+                        direction: 'sell'
+                    }
+                })
             })
         }
     })

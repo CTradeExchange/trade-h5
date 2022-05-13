@@ -148,7 +148,7 @@ const showDetail = (item) => {
     }
 }
 .info-wrap {
-    padding: rem(30px);
+    padding: rem(30px) rem(60px);
     .info-item {
         display: flex;
         justify-content: space-between;
