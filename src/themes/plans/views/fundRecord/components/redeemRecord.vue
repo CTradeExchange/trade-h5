@@ -15,7 +15,12 @@
                 <template #default='{ list }'>
                     <div v-for='item in list' :key='item.id' class='li'>
                         <fundRedeemRecordItem v-if='redeemActive===0' :data='item' />
-                        <fundRedeemRecordHistoryItem v-else-if='redeemActive===1' :data='item' />
+                        <fundRedeemRecordHistoryItem
+                            v-else-if='redeemActive===1'
+                            :data='item'
+                            :show-info='showInfo'
+                            @showDetail='showDetail(item)'
+                        />
                     </div>
                 </template>
             </listVue>
@@ -28,7 +33,8 @@ import listVue from '@plans/views/record/components/list.vue'
 import fundRedeemRecordItem from '@plans/modules/fundApplyRecord/fundRedeemRecordItem.vue'
 import fundRedeemRecordHistoryItem from '@plans/modules/fundApplyRecord/fundRedeemRecordHistoryItem.vue'
 import filterBox from './filterBox.vue'
-import { fundRedeemRecord } from '@/api/fund'
+import { fundRedeemRecord, getFundRedeemCurrencyList } from '@/api/fund'
+import { useStore } from 'vuex'
 import { computed, ref, unref } from 'vue'
 import { hooks } from './hooks'
 
@@ -39,6 +45,7 @@ const filterBoxRef = ref(null)
 const currencyShares = ref('')
 const startTime = ref()
 const endTime = ref()
+const showInfo = ref([])
 const params = computed(() => {
     const p = {
         currencyShares: unref(currencyShares),
@@ -53,6 +60,9 @@ const params = computed(() => {
     }
     return p
 })
+// 获取账户信息
+const customerNo = computed(() => store.state._user.customerInfo.customerNo)
+
 const listRef = ref(null)
 const refresh = () => {
     unref(listRef) && unref(listRef).refresh()
@@ -80,26 +90,45 @@ const dateChange = val => {
         refresh()
     }, 10)
 }
+const showDetail = item => {
+    getFundRedeemCurrencyList({
+        customerNo: customerNo.value,
+        proposalNo: item.proposalNo,
+    }).then(res => {
+        if (res.check()) {
+            if (res.data?.length > 0) {
+                showInfo.value = []
+                res.data.forEach(el => {
+                    showInfo.value.push({
+                        currency: el.currency,
+                        amount: el.amount,
+                        fees: el.fees
+                    })
+                })
+            }
+        }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.applyRecord{
-    height: 100%;
+.applyRecord {
     display: flex;
     flex-flow: column;
-    .redeemTab{
+    height: 100%;
+    .redeemTab {
         margin: rem(20px) 10% 0;
 
         --van-tabs-default-color: var(--primary);
-        :deep(.van-tab--active .van-tab__text){
-            color:#fff;
+        :deep(.van-tab--active .van-tab__text) {
+            color: #FFF;
         }
     }
-    .listContainer{
-        background: var(--contentColor);
+    .listContainer {
         flex: 1;
         overflow-y: auto;
+        background: var(--contentColor);
     }
 }
 </style>

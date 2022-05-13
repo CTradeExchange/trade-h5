@@ -152,7 +152,7 @@ const showDetail = (item) => {
     .info-item {
         display: flex;
         justify-content: space-between;
-        margin-top: rem(10px);
+        margin-top: rem(20px);
         span {
             color: var(--normalColor);
             font-size: rem(24px);

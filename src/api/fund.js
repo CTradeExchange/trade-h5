@@ -261,3 +261,15 @@ export function getFundCurrencyList (data) {
         data
     })
 }
+
+/* 根据提按号获取赎回的金额、手续费等信息 */
+export function getFundRedeemCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.FundRedeemAppDubboService.getFundRedeemCurrencyList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

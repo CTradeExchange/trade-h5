@@ -60,9 +60,9 @@ const showDetail = item => {
         proposalNo: item.proposalNo,
     }).then(res => {
         if (res.check()) {
-            if (res.data.length > 0) {
+            if (res.data?.length > 0) {
+                showInfo.value = []
                 res.data.forEach(el => {
-                    showInfo.value = []
                     showInfo.value.push({
                         currency: el.currency,
                         amount: el.amount,
