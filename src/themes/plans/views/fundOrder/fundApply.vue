@@ -16,27 +16,24 @@
 
         <div class='tradeFormBar'>
             <TradeAssetBar
+                :can-choose-currency='true'
+                :currency='activeCurrency'
+                :fund-assets-list='fundAssetsList'
+                label='您支付'
+                :readonly='true'
+                @open='openCurrencyExplain'
+                @touchCurrency='touchCurrency'
+            />
+            <TradeAssetBar
+                v-model='amountPay'
                 :can-choose-currency='false'
                 class='tradeBarMtop'
                 :currency='fund.shareTokenCode'
                 :digits='curAccount? curAccount?.digits : 0'
-                label='申购多少份基金'
+                label='您想要得到'
                 placeholder='输入申购份额'
                 :readonly='false'
                 @input='calcApplyShares'
-            />
-
-            <p class='iconArrowWrapper'></p>
-
-            <TradeAssetBar
-                v-model='amountPay'
-                :can-choose-currency='true'
-                :currency='activeCurrency'
-                :fund-assets-list='fundAssetsList'
-                :label="$t('fundInfo.choosePayAsset')"
-                :placeholder='payPlaceholder'
-                :readonly='true'
-                @touchCurrency='touchCurrency'
             />
 
             <div class='fee'>
@@ -68,59 +65,38 @@
                 <span>支付数量</span>
             </div>
             <ul class='content'>
-                <li>
+                <li v-for='item in lastAssetsPay' :key='item.currencyCode'>
                     <div class='c-left'>
                         <currencyIcon
-                            currency='BTC'
-                            size='22'
-                        />
-                        <span class='currency-text'>
-                            BTC
-                        </span>
-                    </div>
-                    <div class='c-right'>
-                        <span>0.0001</span>
-                        <van-icon :color='$style.success' name='checked' size='22' />
-                    </div>
-                </li>
-                <li>
-                    <div class='c-left'>
-                        <currencyIcon
-                            currency='XMR'
+                            :currency='item.currency'
                             size='18'
                         />
                         <span class='currency-text'>
-                            XMR
+                            {{ item.currency }}
                         </span>
                     </div>
                     <div class='c-right'>
                         <div class='cr-inline'>
-                            <span> 0.01</span>
-                            <p class='error-text'>
-                                可用不足，需增加0.06
+                            <span>{{ item.amountPay }}</span>
+                            <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
+                                可用不足，需增加{{ item.depositAmount }}
                             </p>
                         </div>
-                        <van-icon :color='$style.primary' name='add' size='22' @click='addAssetShow=true' />
-                    </div>
-                </li>
-                <li>
-                    <div class='c-left'>
-                        <currencyIcon
-                            currency='XMR'
-                            size='18'
-                        />
-                        <span class='currency-text'>
-                            XMR
-                        </span>
-                    </div>
-                    <div class='c-right'>
-                        <div class='cr-inline'>
-                            <span> 0.01</span>
-                            <p class='error-text'>
-                                可用不足，需增加0.06
-                            </p>
+                        <div v-if='item.isShow' class='cr-icon'>
+                            <van-icon
+                                v-if='item.depositAmount > 0'
+                                :color='$style.primary'
+                                name='add'
+                                size='22'
+                                @click='openAddAssets(item)'
+                            />
+                            <van-icon
+                                v-else
+                                :color='$style.success'
+                                name='checked'
+                                size='22'
+                            />
                         </div>
-                        <van-icon :color='$style.primary' name='add' size='22' />
                     </div>
                 </li>
             </ul>
@@ -138,6 +114,7 @@
             </van-button>
         </div>
 
+        <!-- 加载效果 -->
         <loadingVue :show='loading' />
         <!-- 选择支付资产弹窗 -->
         <SelectAssetsDialog
@@ -145,11 +122,22 @@
             :active-currency='activeCurrency'
             :fund-assets-list='fundAssetsList'
             :list='selectActions'
-            @select='onSelect'
+            @select='selectAssets'
         />
-
         <!-- 添加资产弹窗 -->
-        <AddAssets v-model:show='addAssetShow' account-id='1001049' currency='USDT' />
+        <AddAssets
+            v-model:show='addAssetShow'
+            :currency='addAssetsCurrency'
+            :fund='fund'
+        />
+        <!-- 资产说明弹窗 -->
+        <CurrencyExplainDialog
+            v-model:show='currencyExplainShow'
+            :currency='activeCurrency'
+            :fund='fund'
+            :fund-assets-list='fundAssetsList'
+            :list='selectActions'
+        />
     </div>
 </template>
 
@@ -159,11 +147,13 @@ import CurrencyIcon from '@/components/currencyIcon.vue'
 import TradeAssetBar from './components/tradeAssetBar.vue'
 import SelectAssetsDialog from './components/selectAssetsDialog.vue'
 import AddAssets from './components/addAssets.vue'
+import CurrencyExplainDialog from './components/currencyExplainDialog.vue'
 import { orderHook } from './orderHook'
-import { computed, unref, ref } from 'vue'
+import { ref, unref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Dialog } from 'vant'
+import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
+import { isEmpty } from '@/utils/util'
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
@@ -172,6 +162,7 @@ const { fundId } = route.query
 const {
     fund,
     fundAssetsList,
+    lastAssetsPay,
     loading,
     calcApplyShares,
     submitFundApply,
@@ -183,25 +174,58 @@ const {
     onSelect
 } = orderHook()
 
-// 支付资产输入框的placeholder
-const payPlaceholder = computed(() => {
-    const text = t('fundInfo.available') + curAccount.value?.available
-    return unref(curAccount) ? text : '--'
-})
 // 输入的基金份额
 const amountPay = ref('')
+// 是否显示新增资产弹窗
 const addAssetShow = ref(false)
+// 新增资产的货币
+const addAssetsCurrency = ref('')
+// 是否显示资产说明弹窗
+const currencyExplainShow = ref(false)
+
 // 显示选择支付资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
 }
+// 选择资产
+const selectAssets = (item) => {
+    onSelect(item)
+    calcApplyShares(amountPay.value)
+}
+// 显示添加资产弹窗
+const openAddAssets = (item) => {
+    addAssetShow.value = true
+    addAssetsCurrency.value = item.currency
+}
+// 显示资产说明弹窗
+const openCurrencyExplain = () => {
+    currencyExplainShow.value = true
+}
 
-// 提交申购或者赎回
+// 提交申购
 const submitHandler = () => {
+    // 验证参数
+    if (isEmpty(amountPay.value)) {
+        return Toast(t('fundInfo.subScriptePlaceholder'))
+    }
+    if (Number(amountPay.value) < Number(activeAssets.value.minPurchaseNum)) {
+        return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
+    }
+    let assetsTip = ''
+    lastAssetsPay.value.map(elem => {
+        if (elem.depositAmount > 0) assetsTip += elem.currency + '、'
+    })
+    if (assetsTip) {
+        assetsTip = assetsTip.substring(0, assetsTip.length - 1)
+        assetsTip = assetsTip + '的可用余额不足'
+        return Toast(assetsTip)
+    }
+    // 提交申购
     submitFundApply({
         fundId: parseInt(fundId),
         amountPay: unref(amountPay),
         currencyPay: unref(activeCurrency),
+        applyType: 2
     }).then(res => {
         if (res.check()) {
             amountPay.value = ''
@@ -329,14 +353,6 @@ const submitHandler = () => {
     .notice {
         padding: 0 rem(30px);
     }
-}
-.iconArrowWrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: rem(60px);
-    text-align: center;
 }
 .footerBtn {
     position: fixed;

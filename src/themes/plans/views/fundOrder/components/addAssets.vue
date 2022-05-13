@@ -7,7 +7,7 @@
     >
         <div class='add-wrap'>
             <h2>选择获取该资产的方式</h2>
-            <div class='type' @click='toDeposit'>
+            <div class='type' @click="way = 'deposit'">
                 <div class='left'>
                     <i
                         class='icon iconfong icon_icon_assets'
@@ -17,10 +17,9 @@
                         <h5>通过存款的方式存入该资产</h5>
                     </div>
                 </div>
-
-                <van-icon name='arrow' />
+                <van-icon :color="way === 'deposit' ? $style.success : $style.minorColor" name='checked' size='22' />
             </div>
-            <div class='type' @click='toOrderFund'>
+            <div class='type' @click="way = 'trade'">
                 <div class='left'>
                     <img alt='' class='icon' src='../../../images/trade.png' />
                     <div class='text'>
@@ -28,19 +27,25 @@
                         <h5>通过交易的方式买入该资产</h5>
                     </div>
                 </div>
-                <van-icon name='arrow' />
+                <van-icon :color="way === 'trade' ? $style.success : $style.minorColor" name='checked' size='22' />
             </div>
         </div>
+        <van-button block type='primary' @click='onConfirm'>
+            {{ $t('common.sure') }}
+        </van-button>
     </van-popup>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import { ref, computed, defineProps, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { Toast } from 'vant'
 
 const router = useRouter()
 const store = useStore()
+const { t } = useI18n({ useScope: 'global' })
 const emit = defineEmits(['update:show'])
 const props = defineProps({
     // 是否显示弹窗
@@ -48,42 +53,71 @@ const props = defineProps({
         type: Boolean,
         default: false
     },
+    // 基金信息
+    fund: {
+        type: Object,
+        default: () => {}
+    },
+    // 需要添加的资产
     currency: {
         type: String,
         default: 'USDT'
-    },
-    accountId: {
-        type: String,
-        default: ''
     }
 })
 
+// 现货玩法的账户列表
+const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5) || [])
+// 当前账户
+const curAccount = computed(() => accountList.value.find(el => el.currency === props.currency))
+// 新增资产方式 deposit:存款 trade:买入
+const way = ref('')
+
 // 关闭弹窗
 const close = () => {
+    way.value = ''
     emit('update:show', false)
 }
 
-// 跳转充值页面
+// 点击确定
+const onConfirm = () => {
+    switch (way.value) {
+        case '':
+            Toast('选择获取该资产的方式')
+            break
+        // 存款
+        case 'deposit':
+            toDeposit()
+            break
+        // 买入
+        case 'trade':
+            toOrderFund()
+            break
+    }
+}
+
+// 跳转到充值页面
 const toDeposit = () => {
+    close()
     router.push({
         path: '/depositChoose',
         query: {
             tradeType: 5,
-            accountId: props.accountId,
+            accountId: curAccount.value.accountId,
             currency: props.currency
         }
-
     })
 }
 
 // 点击前往交易页面的对应产品
 const toOrderFund = () => {
     const productList = store.state._quote.productList
-    let product = productList.find(el => el.baseCurrency === props.currency && el.profitCurrency === 'USDT' && el.tradeType === 5)
+    let product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 'USDT' && el.tradeType === 5)
     if (!product) {
-        product = productList.find(el => el.baseCurrency === props.currency && el.tradeType === 5)
+        product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.tradeType === 5)
     }
-
+    if (!product) {
+        return Toast(t('fundInfo.noTradeMarket'))
+    }
     router.replace(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
 }
 </script>

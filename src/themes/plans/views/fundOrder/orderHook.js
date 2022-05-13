@@ -18,12 +18,59 @@ export const orderHook = () => {
     const activeCurrency = ref('')
     // 当前选择的资产数据
     const activeAssets = ref({})
+    // 基金底层资产列表
+    const fundAssetsList = ref([])
     // 现货玩法的账户列表
     const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5) || [])
     // 当前账户
     const curAccount = computed(() => accountList.value.find(el => el.currency === activeCurrency.value))
-    // 基金底层资产列表
-    const fundAssetsList = ref([])
+    // 单资产需要支付的资产
+    const singleAssetsPay = ref(null)
+    // 一篮子需要支付的资产
+    const selfAssetsList = ref([])
+    // 处理后需要支付的资产
+    const lastAssetsPay = computed(() => {
+        const result = []
+        // 一篮子资产
+        if (activeCurrency.value === 'self') {
+            fundAssetsList.value.map(elem => {
+                const item = {
+                    currency: elem.currencyCode,
+                    amountPay: '0.00',
+                    isShow: false
+                }
+                const account = accountList.value.find(el => el.currency === item.currency)
+                const payItem = selfAssetsList.value.find(el => el.currency === item.currency)
+                if (account && payItem) {
+                    item.isShow = true
+                    item.available = account.available
+                    item.amountPay = payItem.amount
+                    // 计算需要充值的金额
+                    item.depositAmount = Number(item.amountPay) - Number(item.available)
+                }
+                result.push(item)
+            })
+        } else {
+            // 单资产
+            const item = {
+                currency: activeCurrency.value,
+                amountPay: '0.00',
+                isShow: false
+            }
+            const account = accountList.value.find(el => el.currency === item.currency)
+            const payItem = singleAssetsPay.value
+            if (account && payItem) {
+                item.isShow = true
+                item.available = account.available
+                item.amountPay = payItem.amountPay
+                // 计算需要充值的金额
+                item.depositAmount = Number(item.amountPay) - Number(item.available)
+            }
+            result.push(item)
+        }
+        return result
+    })
+    console.log('lastAssetsPay', lastAssetsPay)
     // 基金产品列表
     const fundProductList = computed(() => store.state._quote.fundProductList)
     if (!fundProductList.value.length) {
@@ -52,15 +99,12 @@ export const orderHook = () => {
     store.dispatch('_quote/fundNetValue', { fundId })
 
     // 获取申购手续费
-    const calcApplyShares = (val, e) => {
-        getCalcApplyFee(val, activeCurrency.value)
+    const calcApplyShares = (val) => {
+        getCalcApplyFee(val)
     }
 
     // 点击申购
     const submitFundApply = (params) => {
-        if (!params?.amountPay) {
-            return Toast(t('fundInfo.subScriptePlaceholder'))
-        }
         loading.value = true
         return fundApply(params).then(res => {
             loading.value = false
@@ -110,21 +154,30 @@ export const orderHook = () => {
     }
 
     // 申购手续费,申购份额, 申购净值,手续费的币种,净值币种
-    const calcApplyNet = ref('')
-    const getCalcApplyFee = (amountPay, currencyPay) => {
+    const getCalcApplyFee = (amountPay) => {
         if (!amountPay) {
-            calcApplyNet.value = ''
+            singleAssetsPay.value = null
+            selfAssetsList.value = []
             return false
+        }
+        if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
+            singleAssetsPay.value = null
+            selfAssetsList.value = []
+            return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
         }
         fundCalcApplyShares({
             amountPay,
-            currencyPay,
+            currencyPay: activeCurrency.value,
             fundId: parseInt(fundId),
             applyType: 2
         }).then(res => {
             if (res.check()) {
                 const { data } = res
-                calcApplyNet.value = data
+                if (activeCurrency.value === 'self') {
+                    selfAssetsList.value = data.list || []
+                } else {
+                    singleAssetsPay.value = data
+                }
             }
         })
     }
@@ -133,6 +186,7 @@ export const orderHook = () => {
         pageTitle,
         fund,
         fundAssetsList,
+        lastAssetsPay,
         accountList,
         loading,
         calcApplyShares,
@@ -144,7 +198,6 @@ export const orderHook = () => {
         activeAssets,
         curAccount,
         updateAccountAssetsInfo,
-        calcApplyNet,
         onSelect
     }
 }
