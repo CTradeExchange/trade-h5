@@ -293,7 +293,7 @@ export default {
         margin: rem(20px);
     }
     .van-checkbox{
-        border: rem(1px) solid var(--lineColor);
+        border: rem(1px) solid var(--minorColor);
         padding: rem(10px) rem(30px);
         border-radius: rem(6px);
         margin-bottom: rem(30px);

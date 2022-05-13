@@ -2,7 +2,9 @@
     <router-view />
     <div class='wrapper'>
         <div class='page-title'>
-            {{ $t('api.title') }}
+            <span class='back-icon' @click='back'>
+                ＜
+            </span>{{ $t('api.editHeader') }}
         </div>
         <div class='api-create'>
             <!-- <div class='desc'>
@@ -55,10 +57,29 @@
                 />
             </div>
 
-            <van-button block class='confirm-btn' type='primary' @click='handleSave'>
+            <van-button block class='confirm-btn' type='primary' @click='handleSubmit'>
                 <span>{{ $t('compLang.confirm') }}</span>
             </van-button>
         </div>
+
+        <van-popup
+            v-model:show='helpPopupShow'
+            class='custom-dialog'
+            :duration='0.2'
+            position='center'
+            round
+            :transition-appear='true'
+        >
+            <div class='header'>
+                <van-icon name='cross' @click='helpPopupShow = false' />
+                <div class='header-title'>
+                    {{ $t('api.editTitle2') }}
+                </div>
+                <!-- <i class='icon_guanbi' @click='helpPopupShow = false'></i> -->
+            </div>
+            <div class='page-wrap' v-html="$t('api.editHelpTxt')">
+            </div>
+        </van-popup>
     </div>
 </template>
 
@@ -186,36 +207,63 @@ export default {
             state.helpPopupShow = true
         }
 
-        // 查询KYC验证
-        const checkKycApplyFn = () => {
-            state.loading = true
-            checkKycApply({ businessCode: 'API', openAccountType: customInfo.value.openAccountType }).then(res => {
-                state.loading = false
-                const status = Number(res.data)
-                if (status === 2) {
-                    // router.push({
-                    //     path: '/apiManage/create'
-                    // })
-                    console.log('KYC验证OK')
-                } else {
-                    Dialog.alert({
-                        title: t('common.tip'),
-                        showCancelButton: true,
-                        confirmButtonText: status === 1 ? t('common.goLook') : t('login.goAuthenticate'),
-                        message: status === 1 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
-                    }).then(() => {
-                        router.replace({
-                            name: 'Authentication'
-                        })
-                    })
+        const handleSubmit = () => {
+            // handRoutTo('/googleSecurityCheck/index', state.query.tag)
+            const id = route.query.id
+            const { whiteIps, purview } = state.query
+            const { tag } = state.detailData
+            const _premArr = []
+
+            state.detailData.permissionDTOList.map((item, index) => {
+                _premArr.push({
+                    ...item,
+                    status: purview.includes(item.code) ? 1 : 2
+                })
+            })
+
+            var permArr = [] // 比对旧数据权限列表，只把变更的提交
+            state.oldDetailData.permissionDTOList.map((it, i) => {
+                _premArr.map((item, index) => {
+                    if (item.code !== 'ready_only') {
+                        if (it.code === item.code) {
+                            if (it.status !== item.status) {
+                                permArr.push({
+                                    code: item.code,
+                                    status: item.status
+                                })
+                            }
+                        }
+                    }
+                })
+            })
+
+            const params = {
+                id: id,
+                tag: tag,
+                whiteIps: whiteIps,
+                permissionList: permArr
+            }
+
+            router.push({
+                path: route.path + '/googleSecurityCheck/index',
+                query: {
+                    tag: tag || '',
+                    originPage: 'apiEdit',
+                    editParams: JSON.stringify(params)
                 }
-            }).catch(err => {
-                state.loading = false
             })
         }
 
+        const handRoutTo = (path, tag) => router.push({
+            path: route.path + path,
+            query: {
+                tag: tag ? '' : tag,
+                originPage: 'apiEdit'
+            }
+        })
+
         // 跳转到编辑页
-        const goBack = (id) => {
+        const back = (id) => {
             console.log(id)
             router.back()
         }
@@ -230,11 +278,12 @@ export default {
 
         return {
             initData,
+            handRoutTo,
             handleSave,
             showHelper,
-            checkKycApplyFn,
+            handleSubmit,
             showApiHelp,
-            goBack,
+            back,
             inviteVis,
             ...toRefs(state)
         }
@@ -246,10 +295,13 @@ export default {
 @import '@/sass/mixin.scss';
 .wrapper{
     width: 1200px;
-    margin: 40px auto;
+    margin: 20px auto;
     .page-title{
         font-size: 32px;
         font-weight: bold;
+        .back-icon{
+            cursor: pointer;
+        }
     }
     .api-create{
         width: 460px;
@@ -267,7 +319,7 @@ export default {
             font-size: 18px;
         }
         .api-input{
-            margin: 20px 0;
+            margin: 0px 0 20px 0;
         }
     }
 
@@ -275,67 +327,94 @@ export default {
         font-size: 24px;
     }
 
-    .list{
+    .api-input{
+        margin: rem(0px);
+        .van-field{
+            border: rem(1px) solid #dedede;
+            border-radius: rem(8px);
+        }
+    }
+    .descEditTxt {
+        padding: rem(20px) 0;
+        color: var(--warn);
+        font-size: rem(28px);
+        text-align: left;
+    }
+    .sub-title {
+        font-size: rem(32px);
+        padding: 0 rem(28px) rem(15px) rem(0px);
+        color: var(--color);
+    }
+    .sub-title-minor{
+        font-size: rem(24px);
+        color: var(--minorColor);
+    }
+    .purview-set{
+        margin: rem(20px);
+    }
+    .van-checkbox{
+        border: rem(1px) solid var(--lineColor);
+        padding: rem(10px) rem(30px);
+        border-radius: rem(6px);
+        margin-bottom: rem(30px);
+
+        :deep(.van-checkbox__label){
+            display:inline-block;
+            min-width: rem(140px);
+            text-align: center;
+            font-size: rem(24px);
+        }
+
+        :deep(.van-icon) {
+            display: none;
+        }
+        :deep(.van-checkbox__label){margin-left:0}
+
+        &[aria-checked="true"]{
+            border: rem(1px) solid var(--primary);
+            :deep(.van-checkbox__label){
+                color: var(--primary);
+            }
+        }
+    }
+
+}
+</style>
+
+<style lang="scss">
+@import '@/sass/mixin.scss';
+.custom-dialog{
+    display: flex;
+    flex-direction: column;
+    max-height: 60%;
+    overflow: hidden;
+    background: var(--bgColor);
+    .header{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 15px 8px 15px;
         background-color: var(--contentColor);
-        border: 1px solid #dedede;
-        margin-top: 15px;
-
-        :deep(.van-cell__right-icon){
-            font-size: rem(50px);
-            margin-top: 5px;
+        .header-title{
+            font-size: rem(48px);
+            font-weight: bold;
+            color: var(--color);
+            text-align: center;
+            flex: 1;
         }
-
-        .operaRight{
-            span{
-                display: inline-block;
-                margin: 0px 15px 0 15px;
-                font-size: 14px;
-            }
+        .van-icon{
+            font-size: 24px;
+            cursor: pointer;
         }
-        .item{
-            font-size: rem(28px);
-            color: var(--minorColor);
-            margin-bottom: rem(0px);
-            .van-row{
-                padding:rem(10px) 0;
-            }
-            h6{
-                font-size: rem(32px);
-                font-weight: normal;
-                margin-bottom: rem(0px);
-                color: var(--color);
-            }
-            p{
-                color: var(--minorColor);
-            }
-            .copy-btn{
-                font-size: 18px;
-                margin-left: 10px;
-                cursor: pointer;
-            }
-            .tags{
-                span{
-                    padding: 0 rem(5px);
-                    display: inline-block;
-                    background-color: var(--quoteFallBg);
-                    margin-right: rem(10px);
-                    margin-bottom: rem(8px);
-                    font-size: rem(24px);
-                }
-            }
-            .txtWrap{
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                width: auto;
-                max-width: 70%;
-                display: inline-block;
-                vertical-align: middle;
-            }
-            .item-right{
-
-            }
-        }
+    }
+    .page-wrap {
+        margin-top:0;
+        padding-top: 0;
+        padding: 15px;
+        font-size: 14px;
+        color: var(--normalColor);
+        line-height: 32px;
+        overflow: auto;
     }
 }
 </style>

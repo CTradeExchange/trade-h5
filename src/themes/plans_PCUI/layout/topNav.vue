@@ -90,7 +90,7 @@
                                 <el-dropdown-item @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
                                 </el-dropdown-item>
-								<el-dropdown-item @click="$router.push('/api')">
+                                <el-dropdown-item @click="$router.push('/api')">
                                     {{ $t('api.title') }}
                                 </el-dropdown-item>
                                 <el-dropdown-item @click="handRoutTo('/googleMFA/status')">

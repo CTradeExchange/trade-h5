@@ -285,6 +285,22 @@ const h5Children = [{
         meta: {
             title: 'route.MFA_bind',
         }
+    },
+    {
+        path: 'googleSecurityCheck/index',
+        component: () =>
+            import ( /* webpackChunkName: "googleSecurityCheck" */ '../views/googleSecurityCheck/index.vue'),
+        meta: {
+            title: 'route.MFA_check',
+        }
+    },
+    {
+        path: 'api/createSuccess',
+        component: () =>
+            import ( /* webpackChunkName: "googleSecurityCheck" */ '../views/api/createSuccess.vue'),
+        meta: {
+            title: 'api.createTitle',
+        }
     }
 ]
 
@@ -544,7 +560,8 @@ const routes = [
                     import ( /* webpackChunkName: "api" */ '../views/api/api.vue'),
                 meta: {
                     title: 'route.api'
-                }
+                },
+                children: h5Children
             },
             {
                 path: '/apiEdit',
@@ -553,7 +570,8 @@ const routes = [
                     import ( /* webpackChunkName: "api" */ '../views/api/edit.vue'),
                 meta: {
                     title: 'route.api'
-                }
+                },
+                children: h5Children
             },
 
         ],

@@ -1,5 +1,6 @@
 <template>
     <router-view />
+
     <div class='wrapper'>
         <div class='page-title'>
             {{ $t('api.title') }}
@@ -7,11 +8,11 @@
         <div class='api-create'>
             <div class='desc'>
                 {{ $t('api.text1') }}
-                <span>
+                <!-- <span>
                     <a class='a-link' @click='showApiHelp'>
                         {{ $t("api.linkTxt") }}
                     </a>
-                </span>
+                </span> -->
             </div>
             <div class='min-tit'>
                 {{ $t('api.editTitle4') }}
@@ -19,16 +20,17 @@
             <div class='api-input'>
                 <van-field v-model='query.tag' maxlength='20' :placeholder="$t('api.keyplaceholder')" />
             </div>
-            <van-button block class='confirm-btn' type='primary'>
+            <van-button block class='confirm-btn' type='primary' @click='handleCreate'>
                 <span>{{ $t('compLang.confirm') }}</span>
             </van-button>
         </div>
 
         <div class='sub-title'>
-            {{ $t('api.listTitle') }}
+            {{ $t('api.listTitle') }} <van-icon name='replay' @click='getAPIList' />
         </div>
 
         <div class='list'>
+            <Loading :show='loading' />
             <div class='listScroll'>
                 <van-collapse v-if='apiList.length > 0' v-model='activeIndex' accordion @change='collapseChange'>
                     <van-collapse-item v-for='(item, i) in apiList' :key='i' class='item' :name='item.id'>
@@ -106,7 +108,7 @@
 </template>
 
 <script>
-import { computed, toRefs, reactive, onBeforeMount, ref } from 'vue'
+import { computed, toRefs, reactive, onMounted, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -187,33 +189,6 @@ export default {
             })
         }
 
-        // 查询KYC验证
-        const checkKycApplyFn = () => {
-            state.loading = true
-            checkKycApply({ businessCode: 'API', openAccountType: customInfo.value.openAccountType }).then(res => {
-                state.loading = false
-                const status = Number(res.data)
-                if (status === 2) {
-                    router.push({
-                        path: '/apiManage/create'
-                    })
-                } else {
-                    Dialog.alert({
-                        title: t('common.tip'),
-                        showCancelButton: true,
-                        confirmButtonText: status === 1 ? t('common.goLook') : t('login.goAuthenticate'),
-                        message: status === 1 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
-                    }).then(() => {
-                        router.replace({
-                            name: 'Authentication'
-                        })
-                    })
-                }
-            }).catch(err => {
-                state.loading = false
-            })
-        }
-
         // 跳转到编辑页
         const goDetails = (id) => {
             console.log(id)
@@ -230,7 +205,36 @@ export default {
         }
 
         const handleCreate = (id) => {
-            checkKycApplyFn()
+            if (state.query.tag) {
+                // updatePopupVis(true)
+                checkKycApplyFn()
+            } else {
+                Toast(t('api.keyplaceholder'))
+            }
+        }
+
+        // 查询KYC验证
+        const checkKycApplyFn = () => {
+            state.loading = true
+            checkKycApply({ businessCode: 'API', openAccountType: customInfo.value.openAccountType }).then(res => {
+                state.loading = false
+                const status = Number(res.data)
+                if (status === 2) {
+                    console.log(state.query)
+                    handRoutTo('/googleSecurityCheck/index', state.query.tag)
+                } else {
+                    Dialog.alert({
+                        title: t('common.tip'),
+                        showCancelButton: true,
+                        confirmButtonText: status === 1 ? t('common.goLook') : t('login.goAuthenticate'),
+                        message: status === 1 ? t('deposit.KYCReviewing') : t('deposit.needKYC'),
+                    }).then(() => {
+                        handRoutTo('/authentication')
+                    })
+                }
+            }).catch(err => {
+                state.loading = false
+            })
         }
 
         // 复制
@@ -271,11 +275,20 @@ export default {
             console.log(index)
         }
 
-        onBeforeMount(() => {
+        const handRoutTo = (path, tag) => router.push({
+            path: route.path + path,
+            query: {
+                tag: tag || '',
+                originPage: 'apiList'
+            }
+        })
+
+        onMounted(() => {
             getAPIList()
         })
 
         return {
+            handRoutTo,
             collapseChange,
             showApiHelp,
             activeIndex,
@@ -299,7 +312,7 @@ export default {
 @import '@/sass/mixin.scss';
 .wrapper{
     width: 1200px;
-    margin: 40px auto;
+    margin: 20px auto;
     .page-title{
         font-size: 32px;
         font-weight: bold;
