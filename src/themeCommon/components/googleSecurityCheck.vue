@@ -107,9 +107,9 @@ export default {
             googleSafetyData: {},
             googleCode: '', // 谷歌验证码
             phoneCode: '', // 手机验证码
-            sendTokenSMS: '', // 手机验证码发送票据
+            phoneSendToken: '', // 手机验证码发送票据
             emailCode: '', // 邮箱验证码
-            sendTokenEmail: '', // 邮箱验证码发送票据
+            emailSendToken: '', // 邮箱验证码发送票据
         })
 
         const route = useRoute()
@@ -152,7 +152,7 @@ export default {
             verifyCodeSend(pramas).then(res => {
                 if (res.check()) {
                     fn && fn(true)
-                    state.sendTokenSMS = res.data.token
+                    state.phoneSendToken = res.data.token
                 } else {
                     fn && fn(false)
                 }
@@ -166,7 +166,7 @@ export default {
             verifyCodeSend(pramas).then(res => {
                 if (res.check()) {
                     fn && fn(true)
-                    state.sendTokenEmail = res.data.token
+                    state.emailSendToken = res.data.token
                 } else {
                     fn && fn(false)
                 }
@@ -189,38 +189,17 @@ export default {
 
         // 绑定谷歌验证码
         const bindHanlderFn = () => {
-            // const googleId = customerInfo.value.googleId > 0 ? customerInfo.value.googleId : parseInt(id)
-            // const pramas = {}
             const pramas = {
                 googleCode: state.googleCode, // String 必填 谷歌验证码
                 phoneCode: state.phoneCode, // String 非必填 手机验证码
                 emailCode: state.emailCode, // String 非必填 邮箱验证码
+                emailSendToken: state.emailSendToken,
+                phoneSendToken: state.phoneSendToken
             }
-            // console.log(pramas)
             validatPramas(pramas).then(res => {
                 if (!res) return false
                 state.loading = true
-                // console.log(pramas)
                 context.emit('update:googleSafetyData', pramas)
-            // enableOrForbidMFA(pramas).then(res => {
-            //     console.log(res)
-            //     state.loading = false
-            //     if (res.check()) {
-            //         Dialog.alert({
-            //             message: customerInfo.value.googleId > 0 ? t('mfa.closeSuccess') : t('mfa.bindSuccess'),
-            //         }).then(() => {
-            //             router.go(customerInfo.value.googleId > 0 ? -2 : -4)
-            //             store.dispatch('_user/findCustomerInfo', false)
-            //         })
-            //         state.googleCode = ''
-            //         state.phoneCode = ''
-            //         state.sendTokenSMS = ''
-            //         state.emailCode = ''
-            //         state.sendTokenEmail = ''
-            //     }
-            // }).catch(err => {
-            //     state.loading = false
-            // })
             })
         }
 
@@ -229,7 +208,6 @@ export default {
             if (!navigator.clipboard) Toast(t('common.unSupported'))
             googleVerifyCodeRef.value.focus()
             const text = await navigator.clipboard.readText()
-            // console.log(text)
             state.googleCode = text
         }
 

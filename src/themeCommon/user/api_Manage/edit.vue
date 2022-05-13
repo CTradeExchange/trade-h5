@@ -46,7 +46,7 @@
                     </van-button>
                 </van-col>
                 <van-col span='12'>
-                    <van-button block type='primary' @click='handleSave'>
+                    <van-button block type='primary' @click='handleSubmit'>
                         {{ $t('save') }}
                     </van-button>
                 </van-col>
@@ -70,6 +70,15 @@
             <div class='page-wrap' v-html="$t('api.editHelpTxt')">
             </div>
         </van-popup>
+
+        <!-- 谷歌安全验证 -->
+        <googleSecurityCheck
+            v-if='ggSafetyPopupShow'
+            ref='googleSecurityCheck'
+            :show='ggSafetyPopupShow'
+            @update:googleSafetyData='updateGoogleSafetyData'
+            @update:popShow='updatePopupVis'
+        />
     </div>
 </template>
 
@@ -79,13 +88,12 @@ import { computed, reactive, toRefs, onBeforeMount, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { isEmpty, localGet, localSet } from '@/utils/util'
-import Clipboard from 'clipboard'
 import { Toast, Dialog } from 'vant'
 import { createCustomerApiDetail, delCustomerApi, editCustomerApiSave } from '@/api/user'
+import googleSecurityCheck from '@/themeCommon/components/googleSecurityCheck.vue'
 
 export default {
-    // components: { },
+    components: { googleSecurityCheck },
     setup (props, context) {
         const router = useRouter()
         const route = useRoute()
@@ -101,7 +109,13 @@ export default {
             },
             detailData: {},
             oldDetailData: {},
-            helpPopupShow: false
+            helpPopupShow: false,
+            ggSafetyPopupShow: false,
+            googleSafetyData: {},
+            applySuccessShow: false,
+            isCreateOk: false, // 是否创建成功
+            backData: { }// 创建成功后返回数据
+
         })
 
         // 获取账户信息
@@ -143,6 +157,24 @@ export default {
             state.verifyShow = true
         }
 
+        const updatePopupVis = val => {
+            state.ggSafetyPopupShow = val
+        }
+
+        // 更新返回的谷歌安全验证参数，
+        const updateGoogleSafetyData = val => {
+            state.googleSafetyData = val
+            if (state.googleSafetyData.googleCode) {
+                state.ggSafetyPopupShow = false
+                state.googleSafetyData.tag = state.query.tag
+                state.query = {
+                    ...state.query,
+                    ...state.googleSafetyData
+                }
+                handleSave()
+            }
+        }
+
         // 保存编辑
         const handleSave = () => {
             // state.loading = true
@@ -174,6 +206,7 @@ export default {
             })
 
             const params = {
+                ...state.googleSafetyData,
                 id: id,
                 tag: tag,
                 whiteIps: whiteIps,
@@ -197,8 +230,11 @@ export default {
             })
         }
 
+        const handleSubmit = () => {
+            updatePopupVis(true)
+        }
+
         const handleDelete = () => {
-            console.log('handleDelete')
             const id = state.query.id
             Dialog.confirm({
                 title: t('tip'),
@@ -239,9 +275,12 @@ export default {
             initData,
             handleCreate,
             handleSave,
+            handleSubmit,
             handleDelete,
             showHelper,
             back,
+            updatePopupVis,
+            updateGoogleSafetyData,
             inviteVis,
             ...toRefs(state)
         }
@@ -334,7 +373,7 @@ export default {
         align-items: center;
         padding: rem(37px) rem(30px) rem(50px);
         .header-title{
-            font-size: rem(48px);
+            font-size: rem(36px);
             font-weight: bold;
             color: var(--color);
         }
