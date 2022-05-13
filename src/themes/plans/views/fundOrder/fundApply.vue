@@ -100,7 +100,7 @@
                                 可用不足，需增加0.06
                             </p>
                         </div>
-                        <van-icon :color='$style.primary' name='add' size='22' />
+                        <van-icon :color='$style.primary' name='add' size='22' @click='addAssetShow=true' />
                     </div>
                 </li>
                 <li>
@@ -147,6 +147,9 @@
             :list='selectActions'
             @select='onSelect'
         />
+
+        <!-- 添加资产弹窗 -->
+        <AddAssets v-model:show='addAssetShow' account-id='1001049' currency='USDT' />
     </div>
 </template>
 
@@ -155,6 +158,7 @@ import loadingVue from '@/components/loading.vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import TradeAssetBar from './components/tradeAssetBar.vue'
 import SelectAssetsDialog from './components/selectAssetsDialog.vue'
+import AddAssets from './components/addAssets.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -186,7 +190,7 @@ const payPlaceholder = computed(() => {
 })
 // 输入的基金份额
 const amountPay = ref('')
-
+const addAssetShow = ref(false)
 // 显示选择支付资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
