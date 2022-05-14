@@ -131,7 +131,14 @@
         </div>
     </div>
     <!-- 一篮子手续费弹窗 -->
-    <selfFeesDialog ref='buyDialogRef' v-model='selfFeesDialogShow' :data='selfFeesDialogData' :type='selfFeesDialogType' />
+    <selfFeesDialog
+        ref='buyDialogRef'
+        v-model='selfFeesDialogShow'
+        :data='selfFeesDialogData'
+        :th-list='selfFeesDialogTHList'
+        :title='selfFeesDialogTitle'
+        :type='selfFeesDialogType'
+    />
 </template>
 
 <script setup>
@@ -140,7 +147,9 @@ import { getCompanyList, getCompanyAssets, getFundApplyList } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
 import { onMounted, ref, reactive, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({ useScope: 'global' })
 const store = useStore()
 // 用户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
@@ -156,6 +165,9 @@ const timeRange = ref(null)
 const selfFeesDialogShow = ref(false)
 const selfFeesDialogData = ref({})
 const selfFeesDialogType = ref('fee') // fee 手续费   amount 最终申购金额
+const selfFeesDialogTitle = ref('') // 弹窗标题
+const selfFeesDialogTHList = ref([]) // 弹窗的table列表表头
+
 // 搜索参数
 const searchParams = reactive({
     // 类型
@@ -263,6 +275,12 @@ const showSelfFeesDialog = (item, type = 'fee') => {
     selfFeesDialogData.value = item
     selfFeesDialogType.value = type
     selfFeesDialogShow.value = true
+    selfFeesDialogTitle.value = type === 'fee' ? t('fundManager.buy.fees') : t('fundManager.buy.finalMoney')
+    if (type === 'fee') {
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.buy.fees')]
+    } else {
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.buy.finalMoney')]
+    }
 }
 
 onMounted(() => {

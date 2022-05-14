@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { getFundCurrencyList } from '@/api/fund'
+import { getFundRedeemCurrencyList } from '@/api/fund'
 import { ref, computed, defineEmits } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -54,7 +54,7 @@ const tableData = ref([])
 const onOpen = () => {
     tableData.value = []
     tableData.isLoading = true
-    getFundCurrencyList({
+    getFundRedeemCurrencyList({
         'proposalNo': props.data.proposalNo
     }).then(res => {
         tableData.isLoading = false
