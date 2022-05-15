@@ -119,7 +119,7 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import Clipboard from 'clipboard'
 import { Toast, Dialog } from 'vant'
-import { getCustomerApiList, checkKycApply } from '@/api/user'
+import { getCustomerApiList, checkKycApply, createCustomerApiDetail } from '@/api/user'
 import { isEmpty, priceFormat } from '@/utils/util'
 
 export default {
@@ -239,7 +239,46 @@ export default {
         }
 
         const collapseChange = (index) => {
-            console.log(index)
+            if (!index) {
+                return false
+            }
+            state.loading = true
+            const params = {
+                id: index
+            }
+            state.apiList.map((item, index) => {
+                if (Number(item.id) === params.id) {
+                    if (item.permissionDTOList == null) {
+                        createCustomerApiDetail(params).then(res => {
+                            state.loading = false
+                            if (Number(res.code) === 0) {
+                                // console.log(res)
+                                var apiArr = []
+                                state.apiList.map((item, index) => {
+                                    if (Number(item.id) === params.id) {
+                                        apiArr.push({
+                                        ...item,
+                                        permissionDTOList: res.data.permissionDTOList
+                                        })
+                                    } else {
+                                        apiArr.push({
+                                        ...item
+                                        })
+                                    }
+                                })
+                                state.apiList = apiArr
+                                // console.log(apiArr)
+                            } else {
+                                Toast(res.msg)
+                            }
+                        }).catch(err => {
+                            state.loading = false
+                        })
+                    }
+                } else {
+                    state.loading = false
+                }
+            })
         }
 
         const back = () => {

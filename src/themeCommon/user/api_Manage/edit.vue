@@ -107,6 +107,7 @@ export default {
                 id: '',
                 whiteIps: ''
             },
+            whiteIpsIsOk: false,
             detailData: {},
             oldDetailData: {},
             helpPopupShow: false,
@@ -182,6 +183,10 @@ export default {
             const { tag } = state.detailData
             const _premArr = []
 
+            if (!state.whiteIpsIsOk) {
+                return
+            }
+
             state.detailData.permissionDTOList.map((item, index) => {
                 _premArr.push({
                     ...item,
@@ -231,6 +236,12 @@ export default {
         }
 
         const handleSubmit = () => {
+            if (state.query.whiteIps) {
+                regWhiteIps()
+            }
+            if (!state.whiteIpsIsOk) {
+                return
+            }
             updatePopupVis(true)
         }
 
@@ -259,6 +270,23 @@ export default {
             })
         }
 
+        const regWhiteIps = () => {
+            const reg = /^((25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))\.){3}(25[0-5]|2[0-4]\d|((1\d{2})|([1-9]?\d)))$/
+            console.log('IP输入框的值:', state.query.whiteIps)
+            const ipArray = state.query.whiteIps.split(',')
+            for (const i in ipArray) {
+                ipArray[i] = ipArray[i].replace(/\s/g, '')
+                if (!reg.test(ipArray[i])) {
+                    Toast('IP地址输入格式有误！')
+                    state.whiteIpsIsOk = false
+                    return
+                }
+            }
+            const newIP = ipArray.join() // 转成字符串格式
+            console.log(newIP)
+            state.whiteIpsIsOk = true
+        }
+
         const showHelper = () => {
             state.helpPopupShow = true
         }
@@ -278,6 +306,7 @@ export default {
             handleSubmit,
             handleDelete,
             showHelper,
+            regWhiteIps,
             back,
             updatePopupVis,
             updateGoogleSafetyData,
