@@ -23,8 +23,30 @@
                 <i class='arrowDown'></i>
             </div>
         </div>
+        <!-- 切换 -->
+        <div v-if='canChooseCurrency' class='switch-block'>
+            <i class='switch-icon icon_huidui' @click='switchWay'></i>
+            <div class='switch-text'>
+                <p>
+                    <span class='muted'>
+                        手续费率:
+                    </span>
+                    <span>
+                        {{ activeAssets.purchaseFeeProportion }}%
+                    </span>
+                </p>
+                <p>
+                    <span>
+                        1 {{ fund.shareTokenCode }} =
+                    </span>
+                    <span>
+                        {{ fund.netValue }}{{ fund.currency }}
+                    </span>
+                </p>
+            </div>
+        </div>
         <!-- 输入框 -->
-        <div v-else class='cell'>
+        <div v-if='!canChooseCurrency' class='cell'>
             <div class='leftCell'>
                 <p class='label'>
                     <span>{{ label }}</span>
@@ -53,7 +75,7 @@
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import { getDecimalNum, toFixed } from '@/utils/calculation'
 import { debounce } from '@/utils/util'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { ref, computed, defineProps, defineEmits } from 'vue'
 const props = defineProps({
     readonly: Boolean,
@@ -66,17 +88,28 @@ const props = defineProps({
     currency: String,
     placeholder: String,
     modelValue: String,
+    // 基金信息
+    fund: {
+        type: Object,
+        default: () => {}
+    },
     // 基金底层资产列表
     fundAssetsList: {
         type: Array,
         default: () => []
+    },
+    // 当前选择的资产数据
+    activeAssets: {
+        type: Object,
+        default: () => {}
     }
 })
 const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue', 'open'])
+const router = useRouter()
 const route = useRoute()
 
 // 申购、赎回类型
-const { direction } = route.query
+const { direction, fundId } = route.query
 
 // 切换币种
 const chooseCurrency = () => {
@@ -120,6 +153,13 @@ const inputHandler = debounce((e) => {
     emit('input', e.target.value, e)
 }, 800)
 
+// 点击切换申购、赎回
+const switchWay = () => {
+    router.push({
+        name: direction === 'buy' ? 'FundRedeem' : 'FundApply',
+        query: { direction, fundId }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -190,6 +230,21 @@ const inputHandler = debounce((e) => {
                 border-bottom: 0;
                 border-radius: 3px;
             }
+        }
+    }
+}
+.switch-block {
+    display: flex;
+    align-items: center;
+    margin: rem(25px) 0;
+    .switch-icon {
+        margin-right: rem(20px);
+        font-size: rem(60px);
+        color: var(--primary);
+    }
+    .switch-text {
+        p {
+            line-height: 1.6;
         }
     }
 }

@@ -16,8 +16,10 @@
 
         <div class='tradeFormBar'>
             <TradeAssetBar
+                :active-assets='activeAssets'
                 :can-choose-currency='true'
                 :currency='activeCurrency'
+                :fund='fund'
                 :fund-assets-list='fundAssetsList'
                 label='您支付'
                 :readonly='true'
@@ -27,7 +29,6 @@
             <TradeAssetBar
                 v-model='amountPay'
                 :can-choose-currency='false'
-                class='tradeBarMtop'
                 :currency='fund.shareTokenCode'
                 :digits='curAccount? curAccount?.digits : 0'
                 label='您想要得到'
@@ -35,25 +36,6 @@
                 :readonly='false'
                 @input='calcApplyShares'
             />
-
-            <div class='fee'>
-                <p>
-                    <span class='muted'>
-                        1 {{ fund.shareTokenCode }} =
-                    </span>
-                    <span class='value'>
-                        {{ fund.netValue }}{{ fund.currency }}
-                    </span>
-                </p>
-                <p>
-                    <span class='muted'>
-                        手续费率:
-                    </span>
-                    <span class='value'>
-                        {{ activeAssets.purchaseFeeProportion }}%
-                    </span>
-                </p>
-            </div>
         </div>
 
         <div class='pay-wrap'>
@@ -278,19 +260,9 @@ const submitHandler = () => {
     }
 }
 .tradeFormBar {
-    position: relative;
     margin-top: rem(20px);
-    padding: rem(60px) rem(30px) rem(30px) rem(30px);
+    padding: rem(30px);
     background: var(--contentColor);
-    .fee {
-        display: flex;
-        justify-content: space-between;
-        margin-top: rem(30px);
-        font-size: rem(26px);
-    }
-    .mleft {
-        margin-left: 10px;
-    }
 }
 .pay-wrap {
     margin: rem(30px) 0;
