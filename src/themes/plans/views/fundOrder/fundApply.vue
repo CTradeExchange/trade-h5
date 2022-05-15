@@ -16,16 +16,36 @@
 
         <div class='tradeFormBar'>
             <TradeAssetBar
-                :active-assets='activeAssets'
                 :can-choose-currency='true'
                 :currency='activeCurrency'
-                :fund='fund'
                 :fund-assets-list='fundAssetsList'
                 label='您支付'
                 :readonly='true'
                 @open='openCurrencyExplain'
                 @touchCurrency='touchCurrency'
             />
+            <!-- 切换 -->
+            <div class='switch-block'>
+                <i class='switch-icon icon_huidui' @click='switchWay'></i>
+                <div class='switch-text'>
+                    <p>
+                        <span class='muted'>
+                            手续费率:
+                        </span>
+                        <span>
+                            {{ activeAssets.purchaseFeeProportion }}%
+                        </span>
+                    </p>
+                    <p>
+                        <span>
+                            1 {{ fund.shareTokenCode }} =
+                        </span>
+                        <span>
+                            {{ fund.netValue }}{{ fund.currency }}
+                        </span>
+                    </p>
+                </div>
+            </div>
             <TradeAssetBar
                 v-model='amountPay'
                 :can-choose-currency='false'
@@ -165,7 +185,7 @@ const addAssetsCurrency = ref('')
 // 是否显示资产说明弹窗
 const currencyExplainShow = ref(false)
 
-// 显示选择支付资产弹窗
+// 显示选择资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
 }
@@ -182,6 +202,13 @@ const openAddAssets = (item) => {
 // 显示资产说明弹窗
 const openCurrencyExplain = () => {
     currencyExplainShow.value = true
+}
+// 点击切换赎回
+const switchWay = () => {
+    router.push({
+        name: 'FundRedeem',
+        query: { direction: 'sell', fundId }
+    })
 }
 
 // 提交申购
@@ -263,6 +290,21 @@ const submitHandler = () => {
     margin-top: rem(20px);
     padding: rem(30px);
     background: var(--contentColor);
+    .switch-block {
+        display: flex;
+        align-items: center;
+        margin: rem(25px) 0;
+        .switch-icon {
+            margin-right: rem(20px);
+            font-size: rem(60px);
+            color: var(--primary);
+        }
+        .switch-text {
+            p {
+                line-height: 1.6;
+            }
+        }
+    }
 }
 .pay-wrap {
     margin: rem(30px) 0;

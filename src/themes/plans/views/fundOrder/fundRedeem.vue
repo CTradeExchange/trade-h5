@@ -21,30 +21,40 @@
                 :currency='fund.shareTokenCode'
                 :digits='fundAccount? fundAccount?.digits : 0'
                 icon-content-type='fund'
-                :label=" $t('fundInfo.redeemNum')"
+                label='您支付'
                 :placeholder='payPlaceholder'
             />
-            <p class='iconArrowWrapper'>
-            </p>
+            <!-- 切换 -->
+            <div class='switch-block'>
+                <i class='switch-icon icon_huidui' @click='switchWay'></i>
+                <div class='switch-text'>
+                    <p>
+                        <span class='muted'>
+                            手续费率:
+                        </span>
+                        <span>
+                            {{ activeAssets.purchaseFeeProportion }}%
+                        </span>
+                    </p>
+                    <p>
+                        <span>
+                            1 {{ fund.shareTokenCode }} =
+                        </span>
+                        <span>
+                            {{ fund.netValue }}{{ fund.currency }}
+                        </span>
+                    </p>
+                </div>
+            </div>
             <TradeAssetBar
                 v-model='sharesPlaceholder'
                 :can-choose-currency='true'
-                class='tradeBarMtop'
                 :currency='activeCurrency'
                 icon-content-type='asset'
-                label='选择赎回方式'
+                label='您想要得到'
                 :readonly='true'
                 @touchCurrency='touchCurrency'
             />
-            <div class='fee'>
-                <p></p>
-                <p>
-                    <span class='mleft muted'>
-                        {{ $t('fundInfo.redeemFeeRate') }}：
-                    </span>
-                    {{ redeemFeeRate || '--' }}
-                </p>
-            </div>
         </div>
         <div class='pay-wrap'>
             <p class='title'>
@@ -101,71 +111,6 @@
         </div>
 
         <loadingVue :show='loading' />
-
-        <van-popup
-            v-model:show='selectShow'
-            position='bottom'
-            round
-        >
-            <div class='popup-assets-list'>
-                <p class='title'>
-                    选择支付资产
-                </p>
-                <div class='asset-item' @click='onSelect'>
-                    <div class='left'>
-                        <div class='top-block'>
-                            <currencyIcon
-                                currency='USDT'
-                                size='24'
-                            />
-                            <span> USDT</span>
-                        </div>
-                        <p class='desc'>
-                            Pay USDT to purchase for the fund
-                        </p>
-                    </div>
-                    <div class='right'>
-                        <van-icon :color='$style.success' name='checked' size='22' />
-                    </div>
-                </div>
-                <div class='asset-item' @click='onSelect'>
-                    <div class='left'>
-                        <div class='top-block'>
-                            <currencyIcon
-                                size='24'
-                            />
-                            <span> 一篮子资产</span>
-                        </div>
-                        <p class='desc'>
-                            Pay for a basket of assets to purchasee for fund
-                        </p>
-                        <div class='currency-list'>
-                            <currencyIcon
-                                currency='BTC'
-                                size='18'
-                            />
-                            <currencyIcon
-                                currency='ETH'
-                                size='18'
-                            />
-                            <currencyIcon
-                                currency='TRX'
-                                size='18'
-                            />
-                            <currencyIcon
-                                currency='UNI'
-                                size='18'
-                            />
-                        </div>
-                    </div>
-                    <div class='right'>
-                        <van-icon :color='$style.success' name='checked' size='22' />
-                    </div>
-                </div>
-            </div>
-        </van-popup>
-
-        <!-- <van-action-sheet v-model:show='selectShow' :actions='selectActions' @select='onSelect' /> -->
     </div>
 </template>
 
@@ -175,7 +120,6 @@ import TradeAssetBar from './components/tradeAssetBar.vue'
 import loadingVue from '@/components/loading.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
-import { toFixed } from '@/utils/calculation'
 import { useRoute, useRouter } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
@@ -185,7 +129,6 @@ const route = useRoute()
 const router = useRouter()
 const { fundId } = route.query
 const {
-    pageTitle,
     fund,
     accountList,
     loading,
@@ -194,6 +137,7 @@ const {
     selectActions,
     onSelect,
     activeCurrency,
+    activeAssets
 } = orderHook()
 
 const fundAccount = computed(() => accountList.value?.find(el => el.currency === fund.value?.shareTokenCode))
@@ -212,8 +156,16 @@ const amountPay = ref('')
 const sharesPlaceholder = computed(() => {
     return t('fundInfo.redeemPlaceholder')
 })
+// 显示选择资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
+}
+// 点击切换申购
+const switchWay = () => {
+    router.push({
+        name: 'FundApply',
+        query: { direction: 'buy', fundId }
+    })
 }
 
 // 提交申购或者赎回
@@ -270,39 +222,23 @@ const submitHandler = () => {
     }
 }
 .tradeFormBar {
-    position: relative;
     margin-top: rem(20px);
     padding: rem(30px);
     background: var(--contentColor);
-    .fee {
+    .switch-block {
         display: flex;
-        justify-content: space-between;
-        margin-top: rem(30px);
-        font-size: rem(26px);
-    }
-    .mleft {
-        margin-left: 10px;
-    }
-}
-.iconArrowWrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: rem(60px);
-    text-align: center;
-    span {
-        display: inline-flex;
         align-items: center;
-        justify-content: center;
-        width: rem(60px);
-        height: rem(60px);
-        background: var(--primary);
-        border-radius: 50%;
-    }
-    .iconArrowDown {
-        color: #FFF;
-        font-size: rem(36px);
+        margin: rem(25px) 0;
+        .switch-icon {
+            margin-right: rem(20px);
+            font-size: rem(60px);
+            color: var(--primary);
+        }
+        .switch-text {
+            p {
+                line-height: 1.6;
+            }
+        }
     }
 }
 .pay-wrap {
