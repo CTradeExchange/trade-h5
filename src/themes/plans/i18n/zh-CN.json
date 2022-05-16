@@ -839,6 +839,8 @@
         "notSpecial": "标签不能包含特殊字符",
         "cellLimite": "每个API增加的IP地址是20个",
         "ipisError": "IP地址输入格式有误！",
+        "mfaTips": "您未开启谷歌验证码，请前往开启",
+        "mfaGoset": "去开启",
         "createTitle": "创建成功",
         "createSubTit1": "Acces Key",
         "createSubTit2": "Secret Key",

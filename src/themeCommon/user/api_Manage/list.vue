@@ -237,7 +237,21 @@ export default {
         }
 
         const handleCreate = (id) => {
-            checkKycApplyFn()
+            // console.log(customInfo)
+            if (Number(customInfo.value.googleId) > 0) {
+                checkKycApplyFn()
+            } else {
+                Dialog.alert({
+                    title: t('common.tip'),
+                    showCancelButton: true,
+                    confirmButtonText: t('api.mfaGoset'),
+                    message: t('api.mfaTips'),
+                }).then(() => {
+                    router.replace({
+                        name: 'MFA_status'
+                    })
+                })
+            }
         }
 
         // 复制
