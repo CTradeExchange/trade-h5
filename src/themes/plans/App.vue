@@ -99,8 +99,8 @@ export default {
             .then(res => {
                 // "exception":[11,13,16,360,362,387,388,1,2,9,10]
                 // "domain:"["cats-trade.com"]
-                // const isProduction = process.env.NODE_ENV === 'production'
-                if (res && res.maintenance === true) {
+                const isProduction = process.env.NODE_ENV === 'production'
+                if (isProduction && res && res.maintenance === true) {
                     const { exception, domain } = res
                     const host = location.host
                     const companyId = window['companyId']
