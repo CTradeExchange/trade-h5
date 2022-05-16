@@ -847,6 +847,7 @@
 			"standard": "下單執行標准",
 			"fees": "申購手續費",
 			"finalMoney": "最終申購金額",
+            "basketAssets": "一篮子资产",
 			"lot": "申購份額"
 		},
 		"ransom": {

@@ -273,3 +273,14 @@ export function getFundRedeemCurrencyList (data) {
         data
     })
 }
+
+/* 基金经理获取基金产品详情 */
+export function getFundInfoByCustomerNo (data = {}) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.getFundInfoByCustomerNo',
+        method: 'post',
+        headers: {
+        },
+        data
+    })
+}

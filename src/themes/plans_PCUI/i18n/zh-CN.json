@@ -776,6 +776,7 @@
             "standard": "下单执行标准",
             "fees": "申购手续费",
             "finalMoney": "最终申购金额",
+            "basketAssets": "一篮子资产",
             "lot": "申购份额"
         },
         "ransom": {
