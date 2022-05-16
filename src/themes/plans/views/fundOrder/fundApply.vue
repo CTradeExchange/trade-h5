@@ -118,7 +118,7 @@
 
         <!-- 加载效果 -->
         <loadingVue :show='loading' />
-        <!-- 选择支付资产弹窗 -->
+        <!-- 选择资产弹窗 -->
         <SelectAssetsDialog
             v-model:show='selectShow'
             :active-currency='activeCurrency'

@@ -110,13 +110,23 @@
             </van-button>
         </div>
 
+        <!-- 加载效果 -->
         <loadingVue :show='loading' />
+        <!-- 选择资产弹窗 -->
+        <SelectAssetsDialog
+            v-model:show='selectShow'
+            :active-currency='activeCurrency'
+            :fund-assets-list='fundAssetsList'
+            :list='selectActions'
+            @select='selectAssets'
+        />
     </div>
 </template>
 
 <script setup>
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import TradeAssetBar from './components/tradeAssetBar.vue'
+import SelectAssetsDialog from './components/selectAssetsDialog.vue'
 import loadingVue from '@/components/loading.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
@@ -130,6 +140,7 @@ const router = useRouter()
 const { fundId } = route.query
 const {
     fund,
+    fundAssetsList,
     accountList,
     loading,
     submitFundRedeem,
@@ -156,9 +167,14 @@ const amountPay = ref('')
 const sharesPlaceholder = computed(() => {
     return t('fundInfo.redeemPlaceholder')
 })
+
 // 显示选择资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
+}
+// 选择资产
+const selectAssets = (item) => {
+    onSelect(item)
 }
 // 点击切换申购
 const switchWay = () => {
