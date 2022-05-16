@@ -43,7 +43,9 @@
                 </div>
                 <div class='backContent'>
                     <span v-for='(item,i) in backData.permissionDTOList' :key='i' class='perItem'>
-                        {{ item.name }}
+                        <span v-if='item.status == 1'>
+                            {{ item.name }}
+                        </span>
                     </span>
                 </div>
                 <div class='sub-title'>
@@ -57,6 +59,10 @@
                 </div>
                 <div class='sub-createTipsTxt' v-html="$t('api.createTipsTxt')">
                 </div>
+
+                <van-button block class='confirm-btn' type='primary' @click='handleApi'>
+                    <span>{{ $t('compLang.confirm') }}</span>
+                </van-button>
             </div>
         </div>
     </div>
@@ -64,7 +70,7 @@
 
 <script>
 import Top from '@/components/top'
-import { onBeforeMount, computed, reactive, watch, toRefs, ref, onUnmounted } from 'vue'
+import { onBeforeMount, computed, reactive, watch, toRefs, ref, inject } from 'vue'
 import { Dialog, Toast } from 'vant'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -119,7 +125,14 @@ export default {
         const googleVerifyCodeRef = ref(null)
         const customerInfo = computed(() => store.state._user.customerInfo)
 
+        const isReLoad = inject('isReLoad')
+
         const goBackList = () => {
+            router.push({ path: '/api', query: { reload: true } })
+        }
+
+        const handleApi = () => {
+            isReLoad(true)
             router.push({ path: '/api', query: { reload: true } })
         }
 
@@ -146,6 +159,8 @@ export default {
         return {
             ...toRefs(state),
             goBackList,
+            isReLoad,
+            handleApi,
             close,
             copyCustomerNo,
             bgColor,
@@ -242,6 +257,10 @@ export default {
         width: auto;
         line-height: 24px;
         min-height: auto;
+    }
+
+    .confirm-btn{
+        margin-top: 20px;
     }
 
 }

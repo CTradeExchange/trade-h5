@@ -198,7 +198,15 @@ export default {
             }
             validatPramas(pramas).then(res => {
                 if (!res) return false
-                state.loading = true
+                // state.loading = true
+                if (pramas.phoneCode === '') {
+                    delete pramas.phoneCode
+                    delete pramas.phoneSendToken
+                }
+                if (pramas.emailCode === '') {
+                    delete pramas.emailCode
+                    delete pramas.emailSendToken
+                }
                 context.emit('update:googleSafetyData', pramas)
             })
         }

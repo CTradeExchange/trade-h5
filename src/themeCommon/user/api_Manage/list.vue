@@ -13,9 +13,9 @@
         </div>
         <div class='sub-title'>
             {{ $t("api.subtitle") }}
-            <span class='reloadList' @click='getAPIList'>
+            <!-- <span class='reloadList' @click='getAPIList'>
                 <van-icon name='replay' />
-            </span>
+            </span> -->
         </div>
         <div class='list'>
             <div class='listScroll'>
@@ -180,7 +180,7 @@ export default {
                             pubKey: item.pubKey,
                             permissionDTOList: item.permissionDTOList,
                             whiteIps: whiteIpsStr,
-                            createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD'),
+                            createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
                             tag: item.tag,
                             timeleft: _timeLeft > 0 ? t('api.timeleft') + _timeLeft + t('api.timeleftCell') : t('api.timeleftCell2')
                         })

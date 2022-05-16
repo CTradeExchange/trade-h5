@@ -73,7 +73,9 @@
                 </div>
                 <div class='backContent'>
                     <span v-for='(item,i) in backData.permissionDTOList' :key='i' class='perItem'>
-                        {{ item.name }}
+                        <span v-if='item.status == 1'>
+                            {{ item.name }}
+                        </span>
                     </span>
                 </div>
                 <div class='sub-title'>
@@ -165,8 +167,11 @@ export default {
                     if (state.backData.whiteIps == null) {
                         state.backData.whiteIps = '--'
                     }
+                    state.ggSafetyPopupShow = false
                 } else {
+                    state.loading = false
                     Toast(res.msg)
+                    return false
                 }
             }).catch(err => {
                 state.loading = false
@@ -181,7 +186,7 @@ export default {
         const updateGoogleSafetyData = val => {
             state.googleSafetyData = val
             if (state.googleSafetyData.googleCode) {
-                state.ggSafetyPopupShow = false
+                // state.ggSafetyPopupShow = false
                 state.googleSafetyData.tag = state.query.tag
                 state.query = {
                     ...state.googleSafetyData

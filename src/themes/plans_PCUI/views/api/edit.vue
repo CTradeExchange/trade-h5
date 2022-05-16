@@ -238,6 +238,8 @@ export default {
 
             if (state.query.whiteIps) {
                 regWhiteIps()
+            } else {
+                state.whiteIpsIsOk = true
             }
             if (!state.whiteIpsIsOk) {
                 return

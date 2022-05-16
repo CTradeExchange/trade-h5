@@ -26,7 +26,8 @@
         </div>
 
         <div class='sub-title'>
-            {{ $t('api.listTitle') }} <van-icon name='replay' @click='getAPIList' />
+            {{ $t('api.listTitle') }}
+            <!-- <van-icon name='replay' @click='getAPIList' /> -->
         </div>
 
         <div class='list'>
@@ -108,7 +109,7 @@
 </template>
 
 <script>
-import { computed, toRefs, reactive, onMounted, ref } from 'vue'
+import { computed, toRefs, reactive, onMounted, ref, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -120,6 +121,7 @@ export default {
     components: {
 
     },
+
     setup () {
         const router = useRouter()
         const route = useRoute()
@@ -132,7 +134,15 @@ export default {
             query: {
                 tag: ''
             },
-            apiList: []
+            apiList: [],
+            isReLoad: false
+        })
+
+        provide('isReLoad', (value) => {
+            state.isReLoad = value
+            if (value === true) {
+                getAPIList()
+            }
         })
 
         const routeName = computed(() => {
@@ -186,7 +196,7 @@ export default {
                             pubKey: item.pubKey,
                             permissionDTOList: item.permissionDTOList,
                             whiteIps: whiteIpsStr,
-                            createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD'),
+                            createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
                             tag: item.tag,
                             timeleft: _timeLeft > 0 ? t('api.timeleft') + _timeLeft + t('api.timeleftCell') : t('api.timeleftCell2')
                         })
@@ -215,7 +225,25 @@ export default {
             state.helpPopupShow = true
         }
 
+        const isReLoad = () => {
+            console.log('isReLoad()')
+            getAPIList()
+        }
+
         const handleCreate = (id) => {
+            if (state.query.tag) {
+                // updatePopupVis(true)
+                const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+                const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
+                if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
+                    Toast(t('api.notSpecial'))
+                    return false
+                }
+            } else {
+                Toast(t('api.keyplaceholder'))
+                return false
+            }
+
             if (Number(customInfo.value.googleId) > 0) {
                 checkKycApplyFn()
             } else {
@@ -229,19 +257,6 @@ export default {
                         name: 'MFA_status'
                     })
                 })
-                return
-            }
-            if (state.query.tag) {
-                // updatePopupVis(true)
-                const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
-                const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
-                if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
-                    Toast(t('api.notSpecial'))
-                    return false
-                }
-                checkKycApplyFn()
-            } else {
-                Toast(t('api.keyplaceholder'))
             }
         }
 
@@ -368,6 +383,7 @@ export default {
             goDetails,
             checkKycApplyFn,
             getAPIList,
+            isReLoad,
             inviteVis,
             copyCustomerNo,
             accountList,
