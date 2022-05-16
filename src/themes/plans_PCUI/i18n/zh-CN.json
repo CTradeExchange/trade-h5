@@ -32,7 +32,9 @@
         "startTime": "开始时间",
         "endTime": "结束时间",
         "languageAreas": "语言和地区",
-        "SelectLanguageAreas": "选择语言和地区"
+        "SelectLanguageAreas": "选择语言和地区",
+        "lastBox": "上一个",
+        "nextBox": "下一个"
     },
     "c": {
         "login": "登录",
@@ -905,6 +907,32 @@
         "fundTokenTradeTip": "基金代币在上市的情况下，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额，点击转至",
         "fundTokenTrade": "现货直接交易",
         "noTradeMarket": "暂无交易市场"
+    },
+    "funds": {
+        "fundShare": "基金份额",
+        "fundsAccount": "基金账户",
+        "fundsList": "基金列表",
+        "title": "基金精选",
+        "subTitle": "让我们帮助您更加轻松地进行加密资产投资",
+        "buyRedeem": "基金申购赎回",
+        "trend": "走势",
+        "offerTrend": "报价走势",
+        "applyStatus": "申购状态",
+        "canApply": "可申购",
+        "notApply": "不可申购",
+        "redeemStatus": "赎回状态",
+        "canRedeem": "可赎回",
+        "notRedeem": "不可赎回",
+        "tradeFee": "申赎手续费",
+        "deal": "买卖",
+        "spot": "现货",
+        "cashDeal": "现货买卖",
+        "spotTip1": "此界面仅提供现货市价买卖，更多下单类型，请前往更专业的",
+        "spotTip2": "现货交易",
+        "spotTip3": "界面",
+        "newPrice": "最新价",
+        "hoverTip1": "每份基金的净资产价值",
+        "hoverTip2": "该基金在现货交易市场的最新价，基金代币在上市后，投资者可以如买卖加密货币一样，在公开的现货市场买卖基金份额"
     },
     "home": {
         "quick": {

@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 2890191 */
-  src: url('iconfont.woff2?t=1648136563026') format('woff2'),
-       url('iconfont.woff?t=1648136563026') format('woff'),
-       url('iconfont.ttf?t=1648136563026') format('truetype');
+  src: url('iconfont.woff2?t=1649983782021') format('woff2'),
+       url('iconfont.woff?t=1649983782021') format('woff'),
+       url('iconfont.ttf?t=1649983782021') format('truetype');
 }
 
 .iconfont {
@@ -13,12 +13,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon_maichu:before {
-  content: "\e6ad";
+.icon_liebiao:before {
+  content: "\e62d";
 }
 
-.icon_mairu:before {
-  content: "\e6ae";
+.icon_doufukuai:before {
+  content: "\e615";
+}
+
+.icon_31liebiao:before {
+  content: "\e600";
+}
+
+.icon_XX_015:before {
+  content: "\e6bd";
 }
 
 .icon_dunpai:before {

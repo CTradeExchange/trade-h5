@@ -49,10 +49,9 @@
                     <span class='hd'>
                         {{ $t('fundInfo.followIndex') }}
                     </span>
-
                     <span class='ft link' @click='toTrackProduct'>
                         {{ fundInfo.trackProduct ? fundInfo.trackProduct.symbolName : fundInfo.trackIndexOut }}
-                        <i v-if='fundInfo.trackProduct?.symbolName'>
+                        <i v-if='fundInfo.trackProduct'>
                             &gt;
                         </i>
                     </span>

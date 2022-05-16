@@ -19,7 +19,8 @@ export const colors = {
         contentColor: '#21262f',
         bgColor: '#191e24',
         assistColor: '#2c2e3b',
-        lineColor: '#2c2e3b'
+        lineColor: '#2c2e3b',
+        mainColor: '#ffffff'
     },
     light: {
         primaryAssistColor: '#f4f7fc',
@@ -30,7 +31,8 @@ export const colors = {
         contentColor: '#ffffff',
         bgColor: '#f4f4f4',
         assistColor: '#f4f4f4',
-        lineColor: '#eeeeee'
+        lineColor: '#eeeeee',
+        mainColor: '#000000'
     },
     // disable: '#eeeeee'
 

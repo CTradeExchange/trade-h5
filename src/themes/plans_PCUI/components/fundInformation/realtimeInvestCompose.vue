@@ -1,72 +1,81 @@
 <template>
     <div class='realtimeInvestCompose'>
         <div class='width-limit'>
-            <h4 class='title'>
-                <span v-if='!allShow' class='rightSwitch icon_chouti1' @click='switchAction'></span>
-                {{ title || $t('fundInfo.realtimeInvestCompose') }}
-            </h4>
-            <div class='merge-case'>
-                <div v-if="showBlock==='list' || allShow" class='case-list'>
-                    <div class='assetsTitle cellflex'>
-                        <p class='hd'>
-                            {{ $t('fundInfo.assets') }}
-                        </p>
-                        <p class='bd'>
-                            {{ $t('fundInfo.ranking') }}
-                            <br v-if='symbolId' />
-                            <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
-                            </span>
-                        </p>
-                        <p class='ft'>
-                            {{ $t('fundInfo.weight') }}
-                            <br v-if='symbolId' />
-                            <span class='small'>
-                                ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
-                            </span>
-                        </p>
+            <div class='block'>
+                <h4 class='title switch-title'>
+                    <span>{{ title || $t('fundInfo.realtimeInvestCompose') }}</span>
+                    <span v-if='!allShow && showSwitch' class='rightSwitch icon_chouti1' @click='switchAction'></span>
+                    <div v-if='!showSwitch' class='more-tabs'>
+                        <div class='box' :class="{ 'active': showBlock === 'list' }">
+                            <img class='icon icon1' src='../../images/chart-icon1.png' @click="switchAction('list')" />
+                        </div>
+                        <div class='box' :class="{ 'active': showBlock === 'chart' }">
+                            <img class='icon icon2' src='../../images/chart-icon2.png' @click="switchAction('chart')" />
+                        </div>
                     </div>
-                    <ul class='assetsList'>
-                        <li v-for='item in rangList' :key='item.asset' class='cellflex'>
+                </h4>
+                <div class='merge-case'>
+                    <div v-if="showBlock==='list' || allShow" class='case-list'>
+                        <div class='assetsTitle cellflex'>
                             <p class='hd'>
-                                <!-- <i class='currencyIcon'></i> -->
-                                <currency-icon :currency='item.asset' :size='20' />
-                                <span class='name'>
-                                    {{ item.asset }}
-                                </span>
+                                {{ $t('fundInfo.assets') }}
                             </p>
                             <p class='bd'>
-                                {{ item.range }}
-                                ( <i v-if="item.previousPeriodRangeCompare!=='-'" :class='{ "downArrow":item.previousPeriodRangeCompare<0, "upArrow":item.previousPeriodRangeCompare>0 }'></i>
-                                {{ item.previousPeriodRangeCompare==='-' ? '-' : Math.abs(item.previousPeriodRangeCompare) }}
-                                )
+                                {{ $t('fundInfo.ranking') }}
+                                <br v-if='symbolId' />
+                                <span class='small'>
+                                    ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
+                                </span>
                             </p>
                             <p class='ft'>
-                                <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
-                                    <p style='padding: 5px 10px; white-space: nowrap;'>
-                                        {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
-                                    </p>
-                                    <template #reference>
-                                        <span>
-                                            {{ item.weight }}
-                                            (
-                                            <i v-if="item.previousPeriodWeightCompare!=='-'" :class='[item.arrow]'></i>
-                                            {{ item.previousPeriodWeightCompare==='-' ? '-' : item.previousPeriodWeightCompare.replace(/[\+-]/,'') }}
-                                            )
-                                        </span>
-                                    </template>
-                                </van-popover>
+                                {{ $t('fundInfo.weight') }}
+                                <br v-if='symbolId' />
+                                <span class='small'>
+                                    ({{ symbolId ? $t('fundInfo.comparePrev') : '24H' }})
+                                </span>
                             </p>
-                        </li>
-                    </ul>
-                </div>
-                <div v-if="showBlock==='chart' || allShow" class='case-chart'>
-                    <div ref='chartPieDOM' class='chartPieDOM' :style='{ height:chartPieDOMHeight }'></div>
+                        </div>
+                        <ul class='assetsList'>
+                            <li v-for='item in rangList' :key='item.asset' class='cellflex'>
+                                <p class='hd'>
+                                    <!-- <i class='currencyIcon'></i> -->
+                                    <currency-icon :currency='item.asset' :size='20' />
+                                    <span class='name'>
+                                        {{ item.asset }}
+                                    </span>
+                                </p>
+                                <p class='bd'>
+                                    {{ item.range }}
+                                    ( <i v-if="item.previousPeriodRangeCompare!=='-'" :class='{ "downArrow":item.previousPeriodRangeCompare<0, "upArrow":item.previousPeriodRangeCompare>0 }'></i>
+                                    {{ item.previousPeriodRangeCompare==='-' ? '-' : Math.abs(item.previousPeriodRangeCompare) }}
+                                    )
+                                </p>
+                                <p class='ft'>
+                                    <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
+                                        <p style='padding: 5px 10px; white-space: nowrap;'>
+                                            {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
+                                        </p>
+                                        <template #reference>
+                                            <span>
+                                                {{ item.weight }}
+                                                (
+                                                <i v-if="item.previousPeriodWeightCompare!=='-'" :class='[item.arrow]'></i>
+                                                {{ item.previousPeriodWeightCompare==='-' ? '-' : item.previousPeriodWeightCompare.replace(/[\+-]/,'') }}
+                                                )
+                                            </span>
+                                        </template>
+                                    </van-popover>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div v-if="showBlock==='chart' || allShow" class='case-chart'>
+                        <div ref='chartPieDOM' class='chartPieDOM' :style='{ height:chartPieDOMHeight }'></div>
+                    </div>
                 </div>
             </div>
-
             <div class='block'>
-                <h4 class='singleAssetTitle'>
+                <h4 class='title singleAssetTitle'>
                     <span>{{ $t('fundInfo.singleAsset') }}</span>
                     <el-tooltip
                         :content="symbolId ? $t('fundInfo.assetIndexQquestionTip') : $t('fundInfo.assetQquestionTip')"
@@ -80,7 +89,7 @@
                 <div ref='chartBarDOM' class='chartBarDOM'></div>
             </div>
 
-            <BottomTip />
+            <BottomTip v-if='showBottomTip' />
         </div>
     </div>
 </template>
@@ -112,14 +121,28 @@ const props = defineProps({
     rotate: {
         type: Number,
         default: 90
+    },
+    // 是否显示切换按钮
+    showSwitch: {
+        type: Boolean,
+        default: true
+    },
+    // 是否显示底部提示
+    showBottomTip: {
+        type: Boolean,
+        default: true
     }
 })
 
 // 显示数据列表还是显示环形图
-const showBlock = ref('chart')
+const showBlock = ref('list')
 // 切换数据列表和环形图的显示
-const switchAction = async () => {
-    showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
+const switchAction = async (value) => {
+    if (value) {
+        showBlock.value = value
+    } else {
+        showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
+    }
     if (showBlock.value === 'chart') {
         await nextTick()
         if (chartPieDOM.value) {
@@ -189,10 +212,43 @@ onMounted(async () => {
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
 .title{
+    display: flex;
+    align-items: center;
     font-size: rem(32px);
 }
+.switch-title {
+    justify-content: space-between;
+    .more-tabs {
+        display: flex;
+        .box {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 42px;
+            height: 42px;
+            margin-left: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            &.active {
+                background: var(--lineColor);
+            }
+            &:hover {
+                background: var(--lineColor);
+            }
+        }
+        .icon {
+            &.icon1 {
+                width: 36px;
+                height: 36px;
+            }
+            &.icon2 {
+                width: 28px;
+                height: 28px;
+            }
+        }
+    }
+}
 .rightSwitch{
-    float: right;
     font-size: rem(28px);
     line-height: 1.5;
     cursor: pointer;

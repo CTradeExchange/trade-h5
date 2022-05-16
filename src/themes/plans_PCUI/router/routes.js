@@ -416,16 +416,7 @@ const routes = [
             {
                 path: 'fund',
                 name: 'Fund',
-                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
-            },
-            {
-                path: 'fundRecord',
-                name: 'FundRecord',
-                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fund/record.vue'),
+                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
                 meta: {
                     title: '',
                 },

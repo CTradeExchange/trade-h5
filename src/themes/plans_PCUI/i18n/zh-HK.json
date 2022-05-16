@@ -30,7 +30,11 @@
 		"search": "搜索",
 		"add": "添加",
 		"startTime": "開始時間",
-		"endTime": "結束時間"
+		"endTime": "結束時間",
+        "languageAreas": "語言和地區",
+        "SelectLanguageAreas": "選取語言和地區",
+        "lastBox": "上一個",
+        "nextBox": "下一個"
 	},
 	"c": {
 		"login": "登入",
@@ -973,5 +977,31 @@
 		"fundTokenTradeTip": "基金代幣在上市的情況下，投資者可以如買賣加密貨幣一樣，在公開的現貨市場買賣基金份額，點擊前往",
 		"fundTokenTrade": "現貨交易",
 		"noTradeMarket": "暫無交易市場"
-	}
+	},
+    "funds": {
+        "fundShare": "基金份額",
+        "fundsAccount": "基金賬戶",
+        "fundsList": "基金列表",
+        "title": "基金精選",
+        "subTitle": "讓我們幫助您更加輕鬆地進行加密資產投資",
+        "buyRedeem": "基金申購贖回",
+        "trend": "走勢",
+        "offerTrend": "報價走勢",
+        "applyStatus": "申購狀態",
+        "canApply": "可申購",
+        "notApply": "不可申購",
+        "redeemStatus": "贖回狀態",
+        "canRedeem": "可贖回",
+        "notRedeem": "不可贖回",
+        "tradeFee": "申贖手續費",
+        "deal": "買賣",
+        "spot": "現貨",
+        "cashDeal": "現貨買賣",
+        "spotTip1": "此界面僅提供現貨市價買賣，更多下單類型，請前往更專業的",
+        "spotTip2": "現貨交易",
+        "spotTip3": "界面",
+        "newPrice": "最新價",
+        "hoverTip1": "每份基金的淨資產價值",
+        "hoverTip2": "該基金在現貨交易市場的最新價，基金代幣在上市後，投資者可以如買賣加密貨幣一樣，在公開的現貨市場買賣基金份額"
+    },
 }

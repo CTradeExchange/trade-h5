@@ -32,7 +32,9 @@
         "startTime": "Start Time",
         "endTime": "End Time",
         "languageAreas": "Language and Region",
-        "SelectLanguageAreas": "Choose a language and region"
+        "SelectLanguageAreas": "Choose a language and region",
+        "lastBox": "Last",
+        "nextBox": "Next"
     },
     "c": {
         "login": "Login",
@@ -904,6 +906,30 @@
 		"fundTokenTrade": "Buy / Sell in Spots Market",
 		"noTradeMarket": "No trading market"
 	},
+    "funds": {
+        "fundShare": "Fund Share",
+        "fundsAccount": "FUNDS ACCOUNT",
+        "fundsList": "FUNDS LIST",
+        "title": "Funds List",
+        "subTitle": "Enjoy crypto Investing by funds",
+        "buyRedeem": "Fund Purchase and Redeem",
+        "trend": "Trend",
+        "applyStatus": "Purchase status",
+        "canApply": "Yes",
+        "notApply": "No",
+        "redeemStatus": "Redeem status",
+        "canRedeem": "Yes",
+        "notRedeem": "No",
+        "deal": "Buy/Sell",
+        "spot": "Spot",
+        "cashDeal": "Spot",
+        "spotTip1": "This page is used for Spot - Market order trading only.For more order types, please go to",
+        "spotTip2": " Professional ",
+        "spotTip3": "interface",
+        "newPrice": "Price",
+        "hoverTip1": "Net asset value of each fund",
+        "hoverTip2": "The latest price of the fund in the spot market，When the fund token is listed, investors can buy and sell fund shares in the open spot market just like buying and selling cryptocurrencies"
+    },
     "home": {
         "quick": {
             "title": "We make your cryptocurrency journey easier",

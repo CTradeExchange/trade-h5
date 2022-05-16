@@ -317,5 +317,14 @@ export function indexSimplePerformance (data) {
         data
     })
 }
-
-/* 现货撮合取消委托单 */
+/* 批量获取市场表现走势图 */
+export function batchMarketPerformance (data) {
+    return request({
+        url: '/global/report.app.ReportDatadDubboService.batchMarketPerformance',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
