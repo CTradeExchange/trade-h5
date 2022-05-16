@@ -170,17 +170,25 @@ export default {
         const bindHanlderFn = () => {
             // const googleId = customerInfo.value.googleId > 0 ? customerInfo.value.googleId : parseInt(id)
             // const pramas = {}
-            // const pramas = {
-            //     googleCode: state.googleCode, // String 必填 谷歌验证码
-            //     phoneCode: state.phoneCode, // String 非必填 手机验证码
-            //     emailCode: state.emailCode, // String 非必填 邮箱验证码
-            //     phoneSendToken: state.phoneSendToken, // 手机验证码发送票据
-            //     emailSendToken: state.emailSendToken, // 邮箱验证码发送票据
-            // }
+            const pramas = {
+                googleCode: state.query.googleCode, // String 必填 谷歌验证码
+                phoneCode: state.query.phoneCode, // String 非必填 手机验证码
+                emailCode: state.query.emailCode, // String 非必填 邮箱验证码
+                phoneSendToken: state.query.phoneSendToken, // 手机验证码发送票据
+                emailSendToken: state.query.emailSendToken, // 邮箱验证码发送票据
+            }
             validatPramas(state.query).then(res => {
                 if (!res) return false
-                state.loading = true
-                context.emit('update:googleSafetyData', state.query)
+                // state.loading = true
+                if (pramas.phoneCode === '') {
+                    delete pramas.phoneCode
+                    delete pramas.phoneSendToken
+                }
+                if (pramas.emailCode === '') {
+                    delete pramas.emailCode
+                    delete pramas.emailSendToken
+                }
+                context.emit('update:googleSafetyData', pramas)
             })
         }
 

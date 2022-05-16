@@ -43,7 +43,9 @@
                 </div>
                 <div class='backContent'>
                     <span v-for='(item,i) in backData.permissionDTOList' :key='i' class='perItem'>
-                        {{ item.name }}
+                        <span v-if='item.status == 1'>
+                            {{ item.name }}
+                        </span>
                     </span>
                 </div>
                 <div class='sub-title'>
