@@ -115,9 +115,6 @@ export const orderHook = () => {
 
     // 点击赎回
     const submitFundRedeem = (params) => {
-        if (!params?.shares) {
-            return Promise.resolve().then(() => Toast(t('fundInfo.redeemNumPlaceholder')))
-        }
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false

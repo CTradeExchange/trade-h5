@@ -33,7 +33,7 @@
                             手续费率:
                         </span>
                         <span>
-                            {{ activeAssets.purchaseFeeProportion }}%
+                            {{ direction === 'buy' ? activeAssets.purchaseFeeProportion : activeAssets.redemptionFeeProportion }}%
                         </span>
                     </p>
                     <p>
@@ -50,9 +50,11 @@
                 v-model='sharesPlaceholder'
                 :can-choose-currency='true'
                 :currency='activeCurrency'
+                :fund-assets-list='fundAssetsList'
                 icon-content-type='asset'
                 label='您想要得到'
                 :readonly='true'
+                @open='openCurrencyExplain'
                 @touchCurrency='touchCurrency'
             />
         </div>
@@ -60,41 +62,43 @@
             <p class='title'>
                 您预计赎回以下资产及金额
             </p>
-            <div class='redeem-type'>
+            <!-- 一篮子资产 -->
+            <div v-if="activeCurrency === 'self'" class='redeem-assets'>
+                <div v-for='(item, index) in fundAssetsList' :key='index' class='redeem-asset-item'>
+                    <currencyIcon
+                        :currency='item.currencyCode'
+                        size='24'
+                    />
+                    <p class='currency'>
+                        {{ item.currencyCode }}
+                    </p>
+                    <p class='percent'>
+                        {{ item.weight }}
+                    </p>
+                </div>
+            </div>
+            <!-- 单资产 -->
+            <div v-else class='redeem-type'>
                 <div class='header'>
-                    <span>Asset</span>
+                    <span>资产</span>
                     <span>预计获得金额</span>
                 </div>
                 <ul class='content'>
                     <li>
                         <div class='c-left'>
                             <currencyIcon
-                                currency='USDT'
+                                :currency='activeCurrency'
                                 size='18'
                             />
                             <span class='currency-text'>
-                                USDT
+                                {{ activeCurrency }}
                             </span>
                         </div>
                         <div class='c-right'>
-                            <span> T+2 day nav calculation amount</span>
+                            <span>T+2日确认份额后的基金净值价格计算金额</span>
                         </div>
                     </li>
                 </ul>
-            </div>
-            <div class='redeem-assets'>
-                <div v-for='item in 10' class='redeem-asset-item'>
-                    <currencyIcon
-                        currency='USDT'
-                        size='24'
-                    />
-                    <p class='currency'>
-                        USDT
-                    </p>
-                    <p class='percent'>
-                        34.24%
-                    </p>
-                </div>
             </div>
             <div class='notice'>
                 注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
@@ -120,24 +124,34 @@
             :list='selectActions'
             @select='selectAssets'
         />
+        <!-- 资产说明弹窗 -->
+        <CurrencyExplainDialog
+            v-model:show='currencyExplainShow'
+            :currency='activeCurrency'
+            :fund='fund'
+            :fund-assets-list='fundAssetsList'
+            :list='selectActions'
+        />
     </div>
 </template>
 
 <script setup>
+import loadingVue from '@/components/loading.vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import TradeAssetBar from './components/tradeAssetBar.vue'
 import SelectAssetsDialog from './components/selectAssetsDialog.vue'
-import loadingVue from '@/components/loading.vue'
+import CurrencyExplainDialog from './components/currencyExplainDialog.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Dialog } from 'vant'
+import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
+import { isEmpty } from '@/utils/util'
 
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
-const { fundId } = route.query
+const { direction, fundId } = route.query
 const {
     fund,
     fundAssetsList,
@@ -152,21 +166,22 @@ const {
 } = orderHook()
 
 const fundAccount = computed(() => accountList.value?.find(el => el.currency === fund.value?.shareTokenCode))
-const redeemFeeRate = computed(() => {
-    return toFixed(fund.value?.redemptionFeeProportion * 100, 2) + '%'
-})
 
 // 赎回份额输入框的placeholder
 const payPlaceholder = computed(() => {
     const text = t('fundInfo.canRedeemMax') + (fundAccount.value?.available || 0)
     return text
 })
+// 赎回的数量
 const amountPay = ref('')
 
 // 份额输入框的placeholder
 const sharesPlaceholder = computed(() => {
     return t('fundInfo.redeemPlaceholder')
 })
+
+// 是否显示资产说明弹窗
+const currencyExplainShow = ref(false)
 
 // 显示选择资产弹窗
 const touchCurrency = () => {
@@ -175,6 +190,10 @@ const touchCurrency = () => {
 // 选择资产
 const selectAssets = (item) => {
     onSelect(item)
+}
+// 显示资产说明弹窗
+const openCurrencyExplain = () => {
+    currencyExplainShow.value = true
 }
 // 点击切换申购
 const switchWay = () => {
@@ -186,6 +205,14 @@ const switchWay = () => {
 
 // 提交申购或者赎回
 const submitHandler = () => {
+    // 验证参数
+    if (isEmpty(amountPay.value)) {
+        return Toast(t('fundInfo.redeemNumPlaceholder'))
+    }
+    if (Number(amountPay.value) < Number(activeAssets.value.minRedemptionNum)) {
+        return Toast('单笔最小赎回份额是' + activeAssets.value.minRedemptionNum)
+    }
+    // 提交赎回
     submitFundRedeem({
         fundId: parseInt(fundId),
         shares: unref(amountPay),
@@ -205,7 +232,7 @@ const submitHandler = () => {
                         direction: 'sell'
                     }
                 })
-            })
+            }).catch(() => {})
         }
     })
 }
@@ -281,6 +308,15 @@ const submitHandler = () => {
                 align-items: center;
                 justify-content: space-between;
                 margin-bottom: rem(30px);
+                .c-left {
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    .currency-text {
+                        margin-top: rem(4px);
+                        margin-left: rem(10px);
+                    }
+                }
                 .c-right {
                     display: flex;
                     align-items: center;
