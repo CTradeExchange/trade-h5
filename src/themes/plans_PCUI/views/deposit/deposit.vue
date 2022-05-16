@@ -538,7 +538,6 @@ export default {
 
                         openTimeList.forEach(item => {
                             state.resultTimeMap[payItem.id] = [].concat(state.resultTimeMap[payItem.id])
-                            const nowDate = window.dayjs()
                             const [start, end] = item.split('-')
                             const startLocal = window.dayjs.utc(`${todayStr} ${start}`).local()
                             const endLocal = window.dayjs.utc(`${todayStr} ${end}`).local()
@@ -553,7 +552,11 @@ export default {
                             }
 
                             // 判断当前时间是否在设置的存款时间内
-                            if (nowDate.isBetween(startLocal, endLocal)) {
+                            const nowDate = window.dayjs.utc()
+                            const nowMinutes = nowDate.hour() * 60 + nowDate.minute() // 获取当前天的分钟数
+                            const startMinutes = parseFloat(start.split(':')[0]) * 60 + parseFloat(start.split(':')[1]) // 计算开始时间的分钟数
+                            const endMinutes = parseFloat(end.split(':')[0]) * 60 + parseFloat(end.split(':')[1]) // 计算结束时间的分钟数
+                            if (nowMinutes >= startMinutes && nowMinutes <= endMinutes) {
                                 payItem.timeRangeFlag = true
                                 state.appendMap = state.checkedType.extend
                             }
