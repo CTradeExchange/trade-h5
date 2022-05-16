@@ -26,7 +26,8 @@
         </div>
 
         <div class='sub-title'>
-            {{ $t('api.listTitle') }} <van-icon name='replay' @click='getAPIList' />
+            {{ $t('api.listTitle') }}
+            <!-- <van-icon name='replay' @click='getAPIList' /> -->
         </div>
 
         <div class='list'>
@@ -108,7 +109,7 @@
 </template>
 
 <script>
-import { computed, toRefs, reactive, onMounted, ref } from 'vue'
+import { computed, toRefs, reactive, onMounted, ref, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -120,6 +121,7 @@ export default {
     components: {
 
     },
+
     setup () {
         const router = useRouter()
         const route = useRoute()
@@ -132,7 +134,15 @@ export default {
             query: {
                 tag: ''
             },
-            apiList: []
+            apiList: [],
+            isReLoad: false
+        })
+
+        provide('isReLoad', (value) => {
+            state.isReLoad = value
+            if (value === true) {
+                getAPIList()
+            }
         })
 
         const routeName = computed(() => {
@@ -213,6 +223,11 @@ export default {
 
         const showApiHelp = () => {
             state.helpPopupShow = true
+        }
+
+        const isReLoad = () => {
+            console.log('isReLoad()')
+            getAPIList()
         }
 
         const handleCreate = (id) => {
@@ -368,6 +383,7 @@ export default {
             goDetails,
             checkKycApplyFn,
             getAPIList,
+            isReLoad,
             inviteVis,
             copyCustomerNo,
             accountList,

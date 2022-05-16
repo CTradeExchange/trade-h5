@@ -13,9 +13,9 @@
         </div>
         <div class='sub-title'>
             {{ $t("api.subtitle") }}
-            <span class='reloadList' @click='getAPIList'>
+            <!-- <span class='reloadList' @click='getAPIList'>
                 <van-icon name='replay' />
-            </span>
+            </span> -->
         </div>
         <div class='list'>
             <div class='listScroll'>
