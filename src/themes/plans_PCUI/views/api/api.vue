@@ -216,6 +216,19 @@ export default {
         }
 
         const handleCreate = (id) => {
+            if (state.query.tag) {
+                // updatePopupVis(true)
+                const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+                const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
+                if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
+                    Toast(t('api.notSpecial'))
+                    return false
+                }
+            } else {
+                Toast(t('api.keyplaceholder'))
+                return false
+            }
+
             if (Number(customInfo.value.googleId) > 0) {
                 checkKycApplyFn()
             } else {
@@ -229,19 +242,6 @@ export default {
                         name: 'MFA_status'
                     })
                 })
-                return
-            }
-            if (state.query.tag) {
-                // updatePopupVis(true)
-                const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
-                const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
-                if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
-                    Toast(t('api.notSpecial'))
-                    return false
-                }
-                checkKycApplyFn()
-            } else {
-                Toast(t('api.keyplaceholder'))
             }
         }
 
