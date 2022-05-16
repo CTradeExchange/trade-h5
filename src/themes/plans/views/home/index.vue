@@ -54,12 +54,12 @@
                         </div>
                         <div class='price'>
                             <p class='cur-price' :class='item.last_color'>
-                                {{ item.rolling_last_price }}
+                                {{ !item.rolling_last_price && item.rolling_last_price != 0 ? '- -' : item.rolling_last_price }}
                             </p>
                         </div>
                         <div class='price'>
                             <p class='up-down' :class='item.rolling_upDownColor'>
-                                {{ item.rolling_upDownWidth }}
+                                {{ !item.rolling_upDownWidth && item.rolling_upDownWidth != 0 ? '- -' : item.rolling_upDownWidth }}
                             </p>
                         </div>
                     </li>
