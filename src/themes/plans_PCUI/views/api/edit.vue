@@ -215,6 +215,20 @@ export default {
             const { tag } = state.detailData
             const _premArr = []
 
+            if (!(Number(customInfo.value.googleId) > 0)) {
+                Dialog.alert({
+                    title: t('common.tip'),
+                    showCancelButton: true,
+                    confirmButtonText: t('api.mfaGoset'),
+                    message: t('api.mfaTips'),
+                }).then(() => {
+                    router.replace({
+                        name: 'MFA_status'
+                    })
+                })
+                return
+            }
+
             const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
             const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
             if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
