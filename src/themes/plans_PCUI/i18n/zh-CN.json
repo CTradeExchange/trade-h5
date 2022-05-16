@@ -1004,6 +1004,8 @@
         "listApiHelp": "详看API接口文档",
         "subtitle": "我的API Key",
         "createBtn": "创建API",
+        "mfaTips": "您未开启谷歌验证码，请前往开启",
+        "mfaGoset": "去开启",
         "notSpecial": "标签不能包含特殊字符",
         "cellLimite": "每个API增加的IP地址是20个",
         "createTitle": "创建成功",

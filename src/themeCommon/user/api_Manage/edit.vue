@@ -248,6 +248,19 @@ export default {
             if (!state.whiteIpsIsOk) {
                 return
             }
+            if (!(Number(customInfo.value.googleId) > 0)) {
+                Dialog.alert({
+                    title: t('common.tip'),
+                    showCancelButton: true,
+                    confirmButtonText: t('api.mfaGoset'),
+                    message: t('api.mfaTips'),
+                }).then(() => {
+                    router.replace({
+                        name: 'MFA_status'
+                    })
+                })
+                return
+            }
             updatePopupVis(true)
         }
 
