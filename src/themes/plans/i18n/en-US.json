@@ -843,7 +843,7 @@
         "createSubTit1": "Access Key",
         "createSubTit2": "Secret Key",
         "createSubTit3": "Rights",
-        "createSubTit4": "Bind API",
+        "createSubTit4": "Bind IP",
         "createSubTit5": "Tips：",
         "createSubTit6": "Create Time",
         "createTipsTxt": "1、Please no not share your Acces Key and Secret Key, to avoid any loss</br>2、If forget Secret Key, please delete that API and apply again</br>3、If you need more access rights, please add through edit",

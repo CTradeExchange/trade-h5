@@ -1046,7 +1046,7 @@
         "createSubTit1": "Acces Key",
         "createSubTit2": "Secret Key",
         "createSubTit3": "权限",
-        "createSubTit4": "绑定API",
+        "createSubTit4": "绑定IP",
         "createSubTit5": "温馨提示：",
         "createSubTit6": "创建时间",
         "createTipsTxt": "1、请不要泄露您的Acces Key及Secret Key，以免产生资产损失</br>2、如忘记了Secret Key，请删除该API并重新申请</br>3、如需更多权限，请通过编辑进行添加",

@@ -765,7 +765,7 @@
         "createSubTit1": "Acces Key",
         "createSubTit2": "Secret Key",
         "createSubTit3": "權限",
-        "createSubTit4": "綁定API",
+        "createSubTit4": "綁定IP",
         "createSubTit5": "溫馨提示：",
         "createSubTit6": "創建時間",
         "createTipsTxt": "1、請不要泄露您的Acces Key及Secret Key，以免產生資產損失</br>2、如忘記了Secret Key，請刪除該API並重新申請</br>3、如需更多權限，請通過編輯進行添加",
