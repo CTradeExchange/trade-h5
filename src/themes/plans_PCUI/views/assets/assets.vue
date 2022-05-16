@@ -88,6 +88,8 @@ export default {
             }
             // 订阅资产数据
             MsgSocket.subscribeAsset(state.tradeType)
+            // 拉取用户信息
+            store.dispatch('_user/findCustomerInfo', false)
         }
 
         // 获取持仓列表数据
@@ -139,7 +141,6 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-
 .assets {
     padding: 8px;
     background: var(--bgColor);
@@ -150,18 +151,18 @@ export default {
     min-height: 820px;
 }
 .assets-side {
+    flex-shrink: 0;
     width: 216px;
     margin-right: 16px;
-    flex-shrink: 0;
     background: var(--contentColor);
     border-radius: 10px;
     .title {
         @include font();
         padding: 30px;
-        line-height: 1;
-        font-size: 30px;
-        font-weight: bold;
         color: var(--color);
+        font-weight: bold;
+        font-size: 30px;
+        line-height: 1;
     }
     .plans-list {
         padding: 0 20px;
@@ -171,14 +172,14 @@ export default {
             align-items: center;
             height: 56px;
             margin-bottom: 10px;
-            font-size: 14px;
             color: var(--color);
+            font-size: 14px;
             background: var(--contentColor);
             border-radius: 10px;
             cursor: pointer;
             i {
-                margin-left: 20px;
                 margin-right: 18px;
+                margin-left: 20px;
                 font-size: 18px;
             }
             &:hover {
@@ -186,13 +187,13 @@ export default {
             }
         }
         .active {
-            color: #fff;
+            color: #FFF;
             background: var(--primary);
             i {
-                color: #fff;
+                color: #FFF;
             }
             span {
-                color: #fff;
+                color: #FFF;
             }
         }
     }

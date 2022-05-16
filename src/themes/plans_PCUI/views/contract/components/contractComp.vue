@@ -42,7 +42,17 @@
             </van-cell>
             <van-cell :title="$t('contract.feeType')" :value='["1","3"].includes(product.feeFormula)?$t("contract.ratio"):$t("contract.amount")' />
             <van-cell :title="$t('fee')" :value='fee' />
-            <van-cell :title="$t('contract.interest')" :value='interest' />
+            <van-cell>
+                <div class='margin-info'>
+                    <span class='left-label'>
+                        {{ $t('contract.interest') }}
+                        <van-icon class='questionIcon' name='question-o' @click='showInterest = true' />
+                    </span>
+                    <span class='right-val'>
+                        {{ interest }}
+                    </span>
+                </div>
+            </van-cell>
             <van-cell :title="$t('contract.zone')" :value="'GMT +' + (0 - new Date().getTimezoneOffset() / 60)" />
             <van-cell v-if='tradeTimeList && tradeTimeList.length' class='timeListCell' :title="$t('contract.tradeTime')">
                 <template v-for='(item,index) in tradeTimeList' :key='index'>
@@ -58,12 +68,19 @@
             <van-cell v-if='expireTime && product.endTime' :title='$t("contract.expireTime")' :value='expireTime' />
         </div>
     </div>
+
+    <!-- 隔夜利息 -->
+    <van-dialog v-model:show='showInterest' :confirm-button-text="$t('common.sure')" title=''>
+        <div class='question-tip'>
+            <p>{{ $t('contract.interestTip') }}</p>
+        </div>
+    </van-dialog>
 </template>
 
 <script>
 import top from '@planspc/layout/centerViewTop'
 import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isEmpty, objArraySort } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -85,6 +102,7 @@ export default {
         const product = computed(() => store.state._quote.productMap[`${symbolId}_${tradeType}`])
         if (product.value) store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType, forceQuery: true })
         else router.replace('/')
+        const showInterest = ref(false)
         const usedMarginSet = computed(() => {
             if (product.value.marginInfo?.type === '1' && !isEmpty(product.value.usedMarginSet)) {
                 const contractSize = product.value.contractSize
@@ -140,7 +158,8 @@ export default {
             interest,
             fee,
             expireTime,
-            usedMarginSet
+            usedMarginSet,
+            showInterest
         }
     }
 }
@@ -198,6 +217,20 @@ export default {
     .timeListCell :deep(.van-cell__value) {
         flex: none;
         width: 70%;
+    }
+    .questionIcon {
+        font-size: rem(34px);
+        color: var(--nomalColor);
+        vertical-align: -2px;
+        cursor: pointer;
+    }
+}
+.question-tip {
+    padding: rem(30px);
+    font-size: rem(26px);
+    p {
+        line-height: 1.6;
+        margin-top: rem(10px);
     }
 }
 </style>

@@ -35,7 +35,7 @@
                     </span>
                 </slot>
             </li>
-            <li v-for='(item, i) in list' :key='item.symbolKey' class='item productItem' @click='clickHandler(item)'>
+            <li v-for='(item, i) in list' :key='i' class='item productItem' @click='clickHandler(item)'>
                 <slot :i='i' :item='item'>
                     <span v-if='indexColumn' class='label'>
                         {{ i + 1 }}

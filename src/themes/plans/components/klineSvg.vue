@@ -38,9 +38,9 @@ export default {
                 // x起始坐标数组
                 let x = 0
                 // y坐标最小值
-                const min = rawData.reduce((x, y) => x > y ? y : x)
+                const min = Math.min(...rawData)
                 // y坐标最大值
-                const max = rawData.reduce((x, y) => x > y ? x : y)
+                const max = Math.max(...rawData)
                 // 缩放比例 max-min为曲线幅度
                 const rodio = props.height / (max - min)
                 // 此处的points 的值就是svg 都polyline 的points 属性的值
@@ -64,7 +64,7 @@ export default {
 
 <style lang="scss">
 @import '~@/sass/mixin.scss';
-.svg-wrap{
+.svg-wrap {
     margin-top: rem(20px);
 }
 </style>
