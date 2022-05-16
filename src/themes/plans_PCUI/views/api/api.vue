@@ -169,12 +169,23 @@ export default {
                     const tempArr = []
                     res.data.records.filter(item => {
                         const _timeLeft = window.dayjs(new Date(item.expiredTime)).diff(new Date(item.createTime), 'day')
+                        var whiteIpsStr = ''
+                        if (item.whiteIps == null) {
+                            whiteIpsStr = '--'
+                        } else {
+                            const whiteIpsArr = item.whiteIps.split(',')
+                            if (whiteIpsArr.length > 3) {
+                                whiteIpsStr = item.whiteIps.split(',')[0] + ',' + item.whiteIps.split(',')[1] + ',' + item.whiteIps.split(',')[2] + '...'
+                            } else {
+                                whiteIpsStr = item.whiteIps
+                            }
+                        }
                         tempArr.push({
                             id: item.id,
                             apiKey: item.apiKey,
                             pubKey: item.pubKey,
                             permissionDTOList: item.permissionDTOList,
-                            whiteIps: item.whiteIps == null ? '--' : item.whiteIps.split(',')[0],
+                            whiteIps: whiteIpsStr,
                             createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD'),
                             tag: item.tag,
                             timeleft: _timeLeft > 0 ? t('api.timeleft') + _timeLeft + t('api.timeleftCell') : t('api.timeleftCell2')
@@ -207,6 +218,12 @@ export default {
         const handleCreate = (id) => {
             if (state.query.tag) {
                 // updatePopupVis(true)
+                const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+                const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
+                if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
+                    Toast(t('api.notSpecial'))
+                    return false
+                }
                 checkKycApplyFn()
             } else {
                 Toast(t('api.keyplaceholder'))
@@ -437,8 +454,10 @@ export default {
                 display: inline-block;
                 vertical-align: middle;
             }
-            .item-right{
-
+            .whiteIps{
+                white-space: normal;
+                word-break: break-all;
+                word-wrap: break-word;
             }
         }
     }

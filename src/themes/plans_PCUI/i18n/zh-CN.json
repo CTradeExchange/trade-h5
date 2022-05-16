@@ -1004,6 +1004,8 @@
         "listApiHelp": "详看API接口文档",
         "subtitle": "我的API Key",
         "createBtn": "创建API",
+        "notSpecial": "标签不能包含特殊字符",
+        "cellLimite": "每个API增加的IP地址是20个",
         "createTitle": "创建成功",
         "createSubTit1": "Acces Key",
         "createSubTit2": "Secret Key",

@@ -141,6 +141,12 @@ export default {
         const handleCreate = () => {
             console.log(state.query.tag)
             if (state.query.tag) {
+                const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+                const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
+                if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
+                    Toast(t('api.notSpecial'))
+                    return false
+                }
                 updatePopupVis(true)
             } else {
                 Toast(t('api.keyplaceholder'))

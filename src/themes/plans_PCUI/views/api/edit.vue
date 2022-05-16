@@ -215,6 +215,13 @@ export default {
             const { tag } = state.detailData
             const _premArr = []
 
+            const regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+            const regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
+            if (regEn.test(state.query.tag) || regCn.test(state.query.tag)) {
+                Toast(t('api.notSpecial'))
+                return false
+            }
+
             if (state.query.whiteIps) {
                 regWhiteIps()
             }
@@ -277,10 +284,13 @@ export default {
             for (const i in ipArray) {
                 ipArray[i] = ipArray[i].replace(/\s/g, '')
                 if (!reg.test(ipArray[i])) {
-                    Toast('IP地址输入格式有误！')
+                    Toast(t('api.ipisError'))
                     state.whiteIpsIsOk = false
                     return
                 }
+            }
+            if (ipArray.length > 20) {
+                Toast(t('api.cellLimite'))
             }
             const newIP = ipArray.join() // 转成字符串格式
             console.log(newIP)
