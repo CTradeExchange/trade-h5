@@ -74,7 +74,14 @@ export default {
 
         // 刷新
         const refresh = () => {
-            tabActive.value === 0 ? getFundApplyRecord() : getFundRedeemRecord()
+            if (tabActive.value === 0) {
+                getFundApplyRecord()
+            } else if (tabActive.value === 1) {
+                getFundRedeemRecord()
+            } else if (tabActive.value === 2) {
+                getFundRedeemRecord()
+                store.dispatch('_user/findCustomerInfo', false)
+            }
         }
 
         watch(
@@ -105,18 +112,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.recordList{
+.recordList {
     margin-top: rem(30px);
     // background: var(--contentColor);
-    .listWrap{
+    .listWrap {
         margin-top: rem(30px);
     }
-    .redeemTab{
+    .redeemTab {
         margin: rem(20px) 6%;
 
         --van-tabs-default-color: var(--primary);
-        :deep(.van-tab--active .van-tab__text){
-            color:#fff;
+        :deep(.van-tab--active .van-tab__text) {
+            color: #FFF;
         }
     }
 }

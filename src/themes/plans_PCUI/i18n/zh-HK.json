@@ -663,7 +663,8 @@
 		"volumes": "手數",
 		"zone": "所在時區",
 		"expireTime": "到期時間",
-        "point": " 點"
+        "point": " 點",
+        "interestTip": "持倉過夜時需要支付或者獲得的利息，正數表示獲得，負數表示支付。"
 	},
 	"weekdayMap": {
 		"1": "周一",

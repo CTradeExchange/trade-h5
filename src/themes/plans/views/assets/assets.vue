@@ -165,8 +165,9 @@ export default {
                 store.commit('_quote/Update_tradeType', tradeType)
             }
             initData(tradeType.value)
+
             // 每次切换资产页面拉取用户信息
-            store.dispatch('_user/findCustomerInfo')
+            store.dispatch('_user/findCustomerInfo', false)
         })
 
         return {
