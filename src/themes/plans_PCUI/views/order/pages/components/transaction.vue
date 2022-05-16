@@ -50,7 +50,7 @@ const queryData = () => {
         .then(res => {
             if (res.check()) {
                 rawResponse.value = res.data
-                tableData.value = res.data.list
+                tableData.value = res.data?.list
             }
         })
         .catch(err => console.error(err))

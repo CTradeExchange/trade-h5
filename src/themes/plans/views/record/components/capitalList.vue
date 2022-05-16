@@ -17,7 +17,7 @@
                             {{ item.currency }}
                         </span>
                         <span class='businessType'>
-                            {{ flowSubCategory[item.businessType1] }}
+                            {{ item.businessType1Name }}
                         </span>
                         <span class='time'>
                             {{ formatTime(item.createTime) }}

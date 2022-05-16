@@ -126,6 +126,7 @@
         </div>
     </div>
     <DialogSLTP
+        v-if='positionData'
         :data='positionData'
         :product='product'
         :show='showSetProfit'
@@ -133,6 +134,7 @@
         @update:show='updateSLTPVisible'
     />
     <DialogClosePosition
+        v-if='positionData'
         v-model:show='closeVisible'
         :data='positionData'
         :product='product'
@@ -142,10 +144,10 @@
 <script>
 import DialogSLTP from '@plans/components/dialogSLTP'
 import DialogClosePosition from '@plans/components/dialogClosePosition'
-import { reactive, toRefs, computed, onMounted, onUnmounted } from 'vue'
+import { reactive, toRefs, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
-import { MsgSocket } from '@/plugins/socket/socket'
+import { MsgSocket, QuoteSocket } from '@/plugins/socket/socket'
 import { minus } from '@/utils/calculation'
 export default {
     components: {
@@ -178,6 +180,11 @@ export default {
         const accountId = customerInfo.value.accountList.find(item => Number(item.tradeType) === Number(tradeType))?.accountId
         // 初始化设置
         const init = () => {
+            QuoteSocket.send_subscribe([product.value.symbolKey])
+            // 订阅资产数据
+            MsgSocket.subscribedListAdd(function () {
+                MsgSocket.subscribeAsset(tradeType)
+            })
             if (!product.value?.minVolume) {
                 // 获取产品详情
                 store.dispatch('_quote/querySymbolInfo', {
@@ -213,7 +220,7 @@ export default {
             init()
         })
 
-        onUnmounted(() => {
+        onBeforeUnmount(() => {
             MsgSocket.cancelSubscribeAsset()
         })
 

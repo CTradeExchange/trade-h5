@@ -102,7 +102,7 @@ const props = defineProps({
 })
 
 // 显示数据列表还是显示环形图
-const showBlock = ref('chart')
+const showBlock = ref('list') // chart 显示饼图  list 显示列表
 // 切换数据列表和环形图的显示
 const switchAction = async () => {
     showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
@@ -150,7 +150,7 @@ onMounted(async () => {
             return el
         })
         await nextTick()
-        newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        // newPieDoughnutChart(chartPieDOM.value, chartData.value)
     })
 
     // 单资产表现柱状图
