@@ -772,6 +772,7 @@
 			"standard": "Order execution standard",
 			"fees": "Purchase fees",
 			"finalMoney": "Final purchase amount",
+            "basketAssets": "一篮子资产",
 			"lot": "Purchase shares"
 		},
 		"ransom": {

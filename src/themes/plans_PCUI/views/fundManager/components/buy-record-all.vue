@@ -27,7 +27,7 @@
                     filterable
                     :placeholder="$t('fundManager.buy.payCurrency')"
                 >
-                    <el-option v-for='item in assetsList' :key='item.code' :label='item.code' :value='item.code' />
+                    <el-option v-for='item in purchaseCurrencySetting' :key='item.currencyCode' :label='item.currencyName' :value='item.currencyCode' />
                 </el-select>
             </div>
             <div class='item-date'>
@@ -64,7 +64,7 @@
             <el-table-column :label="$t('fundManager.buy.payCurrency')" :min-width='180'>
                 <template #default='scope'>
                     <span v-if="scope.row.currencyPay==='self'">
-                        一篮子资产
+                        {{ $t('fundManager.buy.basketAssets') }}
                     </span>
                     <span v-else>
                         {{ scope.row.currencyPay }}
@@ -84,7 +84,7 @@
             <el-table-column :label="$t('fundManager.buy.fees')" :min-width='150'>
                 <template #default='scope'>
                     <a v-if="scope.row.currencyPay==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "fee")'>
-                        查看
+                        {{ $t('trade.check') }}
                     </a>
                     <span v-else>
                         {{ scope.row.fees }}{{ scope.row.currencyPay }}
@@ -94,7 +94,7 @@
             <el-table-column :label="$t('fundManager.buy.finalMoney')" :min-width='150'>
                 <template #default='scope'>
                     <a v-if="scope.row.currencyPay==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "amount")'>
-                        查看
+                        {{ $t('trade.check') }}
                     </a>
                     <span v-else>
                         {{ scope.row.finalAmount }}{{ scope.row.currencyPay }}
@@ -143,7 +143,7 @@
 
 <script setup>
 import selfFeesDialog from './selfFees-dialog.vue'
-import { getCompanyList, getCompanyAssets, getFundApplyList } from '@/api/fund'
+import { getCompanyList, getCompanyAssets, getFundApplyList, getFundInfoByCustomerNo } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
 import { onMounted, ref, reactive, computed } from 'vue'
@@ -283,6 +283,21 @@ const showSelfFeesDialog = (item, type = 'fee') => {
     }
 }
 
+const purchaseCurrencySetting = ref([]) // 申购资产设置
+// 获取基金产品详情
+const getFundInfo = () => {
+    getFundInfoByCustomerNo().then(res => {
+        if (res.check()) {
+            purchaseCurrencySetting.value = res.data.purchaseCurrencySetting.map(el => {
+                return {
+                    ...el,
+                    currencyName: el.currencyCode === 'self' ? t('fundManager.buy.basketAssets') : el.currencyName
+                }
+            })
+        }
+    })
+}
+
 onMounted(() => {
     // 获取公司列表
     queryCompanyList()
@@ -290,6 +305,8 @@ onMounted(() => {
     queryAssetsList()
     // 获取基金申购列表
     queryApplyList()
+    // 获取基金产品详情
+    getFundInfo()
 })
 </script>
 

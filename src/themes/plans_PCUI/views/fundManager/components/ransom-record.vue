@@ -24,7 +24,7 @@
                     filterable
                     :placeholder="$t('fundManager.ransom.receiveCurrency')"
                 >
-                    <el-option v-for='item in assetsList' :key='item.code' :label='item.code' :value='item.code' />
+                    <el-option v-for='item in purchaseCurrencySetting' :key='item.currencyCode' :label='item.currencyName' :value='item.currencyCode' />
                 </el-select>
             </div>
             <div class='item-date'>
@@ -135,7 +135,7 @@
 
 <script setup>
 import ransomSelfFeesDialog from './ransom-selfFees-dialog.vue'
-import { getCompanyList, getCompanyAssets, getFundRedeemList } from '@/api/fund'
+import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundInfoByCustomerNo } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
 import { onMounted, ref, reactive, computed } from 'vue'
@@ -260,6 +260,20 @@ const showSelfFeesDialog = (item, type = 'fee') => {
         selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.moneyTotal')]
     }
 }
+const purchaseCurrencySetting = ref([]) // 申购资产设置
+// 获取基金产品详情
+const getFundInfo = () => {
+    getFundInfoByCustomerNo().then(res => {
+        if (res.check()) {
+            purchaseCurrencySetting.value = res.data.purchaseCurrencySetting.map(el => {
+                return {
+                    ...el,
+                    currencyName: el.currencyCode === 'self' ? t('fundManager.buy.basketAssets') : el.currencyName
+                }
+            })
+        }
+    })
+}
 
 onMounted(() => {
     // 获取公司列表
@@ -268,6 +282,8 @@ onMounted(() => {
     queryAssetsList()
     // 获取基金赎回列表
     queryFundRedeemList()
+    // 获取基金产品详情
+    getFundInfo()
 })
 </script>
 
