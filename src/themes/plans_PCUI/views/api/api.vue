@@ -165,12 +165,12 @@ export default {
             getCustomerApiList(params).then(res => {
                 state.loading = false
                 console.log(res)
-                if (Number(res.code == 0)) {
+                if (Number(res.code) === 0) {
                     const tempArr = []
                     res.data.records.filter(item => {
                         const _timeLeft = window.dayjs(new Date(item.expiredTime)).diff(new Date(item.createTime), 'day')
                         var whiteIpsStr = ''
-                        if (item.whiteIps == null) {
+                        if (item.whiteIps === null) {
                             whiteIpsStr = '--'
                         } else {
                             const whiteIpsArr = item.whiteIps.split(',')
@@ -313,7 +313,7 @@ export default {
             }
             state.apiList.map((item, index) => {
                 if (Number(item.id) === params.id) {
-                    if (item.permissionDTOList == null) {
+                    if (item.permissionDTOList === null) {
                         createCustomerApiDetail(params).then(res => {
                             state.loading = false
                             if (Number(res.code) === 0) {
