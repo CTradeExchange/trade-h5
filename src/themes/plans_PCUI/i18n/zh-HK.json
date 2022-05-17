@@ -823,7 +823,8 @@
         },
         "confirmStatus": {
             "0": "待確認",
-            "1": "已確認"
+            "1": "已確認",
+            "2": "失敗"
         },
         "buy": {
             "waitExecute": "待執行",
@@ -851,6 +852,8 @@
             "fees": "申購手續費",
             "finalMoney": "最終申購金額",
             "basketAssets": "一篮子资产",
+            "subscriptionDetail": "申购明细",
+            "redeemDetail": "赎回明细",
             "lot": "申購份額"
         },
         "ransom": {

@@ -750,7 +750,8 @@
         },
         "confirmStatus": {
             "0": "Unconfirmed",
-            "1": "Confirmed"
+            "1": "Confirmed",
+            "2": "Failed"
         },
         "buy": {
             "waitExecute": "Pending",
@@ -778,6 +779,8 @@
             "fees": "Purchase fees",
             "finalMoney": "Final purchase amount",
             "basketAssets": "一篮子资产",
+            "subscriptionDetail": "申购明细",
+            "redeemDetail": "赎回明细",
             "lot": "Purchase shares"
         },
         "ransom": {
