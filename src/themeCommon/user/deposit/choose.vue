@@ -299,6 +299,7 @@ export default {
                 const accountList = store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(query.tradeType))
                 const data = res.data
                 state.accountList = accountList.filter(el => data.includes(el.currency))
+                state.accountInfo = state.accountList.find(el => el.currency === state.accountInfo.currency) || ''
             })
         }
 
