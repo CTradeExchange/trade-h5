@@ -17,7 +17,9 @@
                             <span v-if="direction === 'buy'">
                                 通过支付{{ fundAssetsList.length }}个资产购买基金
                             </span>
-                            <span>分别获得{{ fundAssetsList.length }}个资产</span>
+                            <span v-else>
+                                分别获得{{ fundAssetsList.length }}个资产
+                            </span>
                         </p>
                     </div>
                 </div>

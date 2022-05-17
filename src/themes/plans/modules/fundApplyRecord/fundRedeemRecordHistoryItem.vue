@@ -48,7 +48,7 @@
                 <span class='label'>
                     {{ $t('fundInfo.sureSharesStatus') }}
                 </span>
-                <span>{{ data.sharesStatus===1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
+                <span>{{ data.sharesStatus === 1 ? $t("fundInfo.confirmed") : $t("fundInfo.confirmFailure") }}</span>
             </li>
             <li class='item'>
                 <span class='label'>

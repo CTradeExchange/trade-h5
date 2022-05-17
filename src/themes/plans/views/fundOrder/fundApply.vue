@@ -19,7 +19,7 @@
                 :can-choose-currency='true'
                 :currency='activeCurrency'
                 :fund-assets-list='fundAssetsList'
-                label='您支付'
+                :label="$t('fundInfo.youPay')"
                 :readonly='true'
                 @open='openCurrencyExplain'
                 @touchCurrency='touchCurrency'
@@ -30,7 +30,7 @@
                 <div class='switch-text'>
                     <p>
                         <span class='muted'>
-                            手续费率:
+                            {{ $t('fundInfo.rate') }}:
                         </span>
                         <span>
                             {{ mul(activeAssets.purchaseFeeProportion, 100) }}%
@@ -51,8 +51,8 @@
                 :can-choose-currency='false'
                 :currency='fund.shareTokenCode'
                 :digits='fund.shareTokenDigits || 0'
-                label='您想要得到'
-                placeholder='输入数量'
+                :label="$t('fundInfo.wantGet')"
+                :placeholder="$t('fundInfo.inputCount')"
                 :readonly='false'
                 @input='inputAmount'
             />
@@ -60,10 +60,10 @@
 
         <div class='pay-wrap'>
             <p class='title'>
-                您需要支付以下资产
+                {{ $t('fundInfo.needAssets') }}
             </p>
             <div class='header'>
-                <span>资产</span>
+                <span>{{ $t('fundInfo.assets') }}</span>
                 <span>支付数量</span>
             </div>
             <ul class='content'>

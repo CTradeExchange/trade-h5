@@ -736,6 +736,7 @@
         "redeemShares": "赎回份额",
         "sureSharesStatus": "份额确认状态",
         "confirmed": "已确认",
+        "confirmFailure": "确认失败",
         "willConfirmed": "待确认",
         "shareCurrency": "份额代币",
         "customerAsset": "客户接受资产",
@@ -753,7 +754,12 @@
         "fundsList": "基金列表",
         "records": "查看记录",
         "iknow": "我知道了",
-        "redeemNum": "赎回多少份基金"
+        "redeemNum": "赎回多少份基金",
+        "youPay": "您支付",
+        "rate": "手续费率",
+        "wantGet": "您想要得到",
+        "inputCount": "输入数量",
+        "needAssets": "您需要支付以下资产"
     },
     "home": {
         "quick": {
