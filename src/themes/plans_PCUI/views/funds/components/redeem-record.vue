@@ -17,7 +17,16 @@
                     <span>{{ scope.row.shares }} {{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
-            <el-table-column v-if='params.sharesStatus === 0' :label="$t('fundInfo.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
+            <el-table-column v-if='params.sharesStatus === 0' :label="$t('fundInfo.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem'>
+                <template #default='scope'>
+                    <span v-if="scope.row.currencyRedeem === 'self'">
+                        {{ $t('fundManager.buy.basketAssets') }}
+                    </span>
+                    <span v-else>
+                        {{ scope.row.currencyRedeem }}
+                    </span>
+                </template>
+            </el-table-column>
             <template v-if='params.sharesStatus === 1'>
                 <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth' prop='sharesNet'>
                     <template #default='scope'>
@@ -26,12 +35,22 @@
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.redeemFee')" :min-width='minWidth' prop='fees'>
                     <template #default='scope'>
-                        <span>{{ scope.row.fees }} {{ scope.row.currencyRedeem }}</span>
+                        <span v-if="scope.row.currencyRedeem === 'self'" class='href' @click='showDetail(scope.row)'>
+                            {{ $t('common.look') }}
+                        </span>
+                        <span v-else>
+                            {{ scope.row.fees }} {{ scope.row.currencyRedeem }}
+                        </span>
                     </template>
                 </el-table-column>
                 <el-table-column :label="$t('fundInfo.redeemMoney')" :min-width='minWidth' prop='amountRedeem'>
                     <template #default='scope'>
-                        <span>{{ scope.row.amountRedeem }} {{ scope.row.currencyRedeem }}</span>
+                        <span v-if="scope.row.currencyRedeem === 'self'" class='href' @click='showDetail(scope.row)'>
+                            {{ $t('common.look') }}
+                        </span>
+                        <span v-else>
+                            {{ scope.row.amountRedeem }} {{ scope.row.currencyRedeem }}
+                        </span>
                     </template>
                 </el-table-column>
             </template>
@@ -68,12 +87,25 @@
             />
         </div>
     </div>
+
+    <van-dialog v-model:show='show' title='申购金额' width='30%'>
+        <div class='info-wrap'>
+            <p class='info-item header'>
+                <span>申购资产</span>
+                <span>手续费</span>
+            </p>
+            <p v-for='item in showInfo' :key='item.currency' class='info-item'>
+                <span>{{ item.amount }} {{ item.currency }}</span>
+                <span>{{ item.fees }} {{ item.currency }}</span>
+            </p>
+        </div>
+    </van-dialog>
 </template>
 
 <script setup>
 import { ref, defineProps, defineExpose, defineEmits, computed } from 'vue'
 import { useStore } from 'vuex'
-import { fundRedeemRecord } from '@/api/fund.js'
+import { fundRedeemRecord, getFundRedeemCurrencyList } from '@/api/fund.js'
 
 defineProps({
     // table最大高度
@@ -88,6 +120,9 @@ defineProps({
     }
 })
 
+const show = ref(false)
+// 一篮子申购记录弹窗内容
+const showInfo = ref('')
 const emits = defineEmits(['setSharesStatus'])
 const store = useStore()
 // 用户信息
@@ -153,6 +188,27 @@ const getData = (data = {}) => {
     })
 }
 
+const showDetail = row => {
+    show.value = true
+    getFundRedeemCurrencyList({
+        customerNo: customerInfo.value.customerNo,
+        proposalNo: row.proposalNo,
+    }).then(res => {
+        if (res.check()) {
+            if (res.data?.length > 0) {
+                showInfo.value = []
+                res.data.forEach(el => {
+                    showInfo.value.push({
+                        currency: el.currency,
+                        amount: el.amount,
+                        fees: el.fees
+                    })
+                })
+            }
+        }
+    })
+}
+
 // 暴露子组件属性或方法
 defineExpose({
     getData
@@ -168,11 +224,11 @@ defineExpose({
     padding-top: 10px;
     span {
         display: inline-flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
+        margin-right: 10px;
         padding: 3px 7px;
         font-size: 12px;
-        margin-right: 10px;
         border: 1px solid var(--lineColor);
         cursor: pointer;
         &:hover {
@@ -180,18 +236,40 @@ defineExpose({
         }
     }
     .active {
-        color: #fff;
+        color: #FFF;
         background: var(--primary);
         border-color: var(--primary);
         &:hover {
-            color: #fff;
+            color: #FFF;
         }
     }
 }
 .handle-action {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: flex-end;
     height: 60px;
+}
+.href {
+    color: var(--primary);
+    cursor: pointer;
+}
+.info-wrap {
+    padding: 15px 30px;
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        span {
+            color: var(--normalColor);
+            font-size: 12px;
+        }
+        &.header {
+            span {
+                color: var(--minorColor);
+                font-weight: bold;
+            }
+        }
+    }
 }
 </style>

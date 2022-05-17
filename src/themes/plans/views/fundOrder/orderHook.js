@@ -164,6 +164,7 @@ export const orderHook = () => {
             selfAssetsList.value = []
             return false
         }
+
         if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
             singleAssetsPay.value = null
             selfAssetsList.value = []
