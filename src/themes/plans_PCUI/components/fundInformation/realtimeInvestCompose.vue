@@ -138,7 +138,7 @@ const props = defineProps({
 const showBlock = ref('list')
 // 切换数据列表和环形图的显示
 const switchAction = async (value) => {
-    if (value) {
+    if (['chart', 'list'].includes(value)) {
         showBlock.value = value
     } else {
         showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
