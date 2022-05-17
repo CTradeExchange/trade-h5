@@ -17,7 +17,7 @@
                     <el-option
                         v-for='(item, index) in selectActions'
                         :key='index'
-                        :label='item.currencyCode'
+                        :label='item.currencyCode === "self" ? "一篮子资产": item.currencyCode'
                         :value='item.currencyCode'
                     >
                         <div v-if="item.currencyCode === 'self'" class='asset-item'>
@@ -27,20 +27,23 @@
                                     支付一篮子资产购买基金
                                 </span>
                             </div>
-                            <!-- <div>
+                            <div>
                                 <currencyIcon
                                     v-for='(elem, i) in fundAssetsList'
                                     :key='i'
                                     :currency='elem.currencyCode'
                                 />
-                            </div> -->
+                            </div>
                         </div>
                         <div v-else class='asset-item'>
                             <div class='top'>
                                 <CurrencyIcon :currency='item.currencyCode' :size='24' />
                                 <span class='currency-text'>
-                                    支付 {{ item.currencyCode }} 购买基金
+                                    {{ item.currencyCode }}
                                 </span>
+                            </div>
+                            <div>
+                                支付 {{ item.currencyCode }} 购买基金
                             </div>
                         </div>
                     </el-option>
@@ -161,7 +164,7 @@
                                     </div>
                                     <div class='type' @click='toOrderFund'>
                                         <div class='left'>
-                                            <img alt='' class='icon' src='/images/trade.png' />
+                                            <img alt='' class='icon trade-icon' src='/images/trade.png' />
                                             <div class='text'>
                                                 <h3>买入</h3>
                                                 <h5>通过交易的方式买入该资产</h5>
@@ -183,10 +186,7 @@
                 </li>
             </ul>
             <div class='notice'>
-                注：以上计算结果包含申购手续费，并且是预计值，具体以提交后实际成交为准，
-                <span class='toRule' @click='openRules'>
-                    查看规则
-                </span>
+                注：以上计算结果包含申购手续费，并且是预计值，具体以提交后实际成交为准
             </div>
         </div>
 
@@ -583,9 +583,15 @@ const toOrderFund = () => {
         }
     }
 }
-.asset-item {
-    .currencyIcon {
-        margin-right: 10px;
+.el-select-dropdown__item {
+    padding: 0;
+    .asset-item {
+        margin: 15px 15px 0;
+        padding: 5px 15px;
+        background: var(--bgColor);
+        .currencyIcon {
+            margin-right: 10px;
+        }
     }
 }
 .add-wrap {
@@ -604,13 +610,16 @@ const toOrderFund = () => {
         cursor: pointer;
         .left {
             display: flex;
+            align-items: center;
             .icon {
-                width: 40px;
-                height: 40px;
                 margin-right: 20px;
                 font-size: 40px;
                 &.icon_icon_assets {
                     color: var(--focusColor);
+                }
+                &.trade-icon {
+                    width: 40px;
+                    height: 40px;
                 }
             }
             .text {

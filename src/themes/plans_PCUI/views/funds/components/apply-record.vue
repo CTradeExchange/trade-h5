@@ -63,15 +63,17 @@
         </div>
     </div>
 
-    <van-dialog v-model:show='show' title='申购金额' width='30%'>
+    <van-dialog v-model:show='show' title='申购明细' width='30%'>
         <div class='info-wrap'>
             <p class='info-item header'>
                 <span>申购资产</span>
-                <span>手续费</span>
+                <span>申购金额</span>
+                <span>申购手续费</span>
             </p>
             <p v-for='item in showInfo' :key='item.currency' class='info-item'>
-                <span>{{ item.amount }} {{ item.currency }}</span>
-                <span>{{ item.fees }} {{ item.currency }}</span>
+                <span>{{ item.currency }}</span>
+                <span>{{ item.amount }}</span>
+                <span>{{ item.fees }} </span>
             </p>
         </div>
     </van-dialog>
@@ -192,10 +194,21 @@ defineExpose({
     .info-item {
         display: flex;
         justify-content: space-between;
-        margin-top: 10px;
+        &:last-of-type {
+            span {
+                border-bottom: 1px solid var(--minorColor);
+            }
+        }
         span {
+            flex: 1;
+            padding: 0.2rem;
             color: var(--normalColor);
             font-size: 12px;
+            border-top: 1px solid var(--minorColor);
+            border-left: 1px solid var(--minorColor);
+            &:nth-of-type(3n) {
+                border-right: 1px solid var(--minorColor);
+            }
         }
         &.header {
             span {

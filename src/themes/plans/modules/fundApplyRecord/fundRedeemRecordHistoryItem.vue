@@ -64,20 +64,6 @@
             </li>
         </ul>
     </div>
-    <van-dialog v-model:show='show' title='赎回明细'>
-        <div class='info-wrap'>
-            <p class='info-item header'>
-                <span>赎回资产</span>
-                <span>赎回金额</span>
-                <span>赎回手续费</span>
-            </p>
-            <p v-for='item in showInfo' :key='item.currency' class='info-item'>
-                <span>{{ item.currency }}</span>
-                <span>{{ item.amount }}</span>
-                <span>{{ item.fees }}</span>
-            </p>
-        </div>
-    </van-dialog>
 </template>
 
 <script setup>
@@ -89,10 +75,9 @@ defineProps({
     showInfo: Array
 })
 const emit = defineEmits(['showDetail'])
-const show = ref(false)
+
 const showDetail = (item) => {
     emit('showDetail')
-    show.value = true
 }
 const full = ref(false)
 </script>
@@ -145,33 +130,5 @@ const full = ref(false)
         }
     }
 }
-.info-wrap {
-    padding: rem(30px) rem(60px);
-    .info-item {
-        display: flex;
-        justify-content: space-between;
-        &:last-of-type {
-            span {
-                border-bottom: 1px solid var(--minorColor);
-            }
-        }
-        span {
-            flex: 1;
-            padding: rem(15px);
-            color: var(--normalColor);
-            font-size: rem(24px);
-            border-top: 1px solid var(--minorColor);
-            border-left: 1px solid var(--minorColor);
-            &:nth-of-type(3n) {
-                border-right: 1px solid var(--minorColor);
-            }
-        }
-        &.header {
-            span {
-                color: var(--normalColor);
-                font-weight: bold;
-            }
-        }
-    }
-}
+
 </style>

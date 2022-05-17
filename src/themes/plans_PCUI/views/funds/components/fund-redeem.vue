@@ -111,9 +111,6 @@
                 </div>
                 <div class='notice'>
                     注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
-                    <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
-                        查看规则
-                    </router-link>
                 </div>
             </div>
         </div>
