@@ -1,12 +1,14 @@
 import { computed, ref, unref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { fundCalcApplyShares, fundApply, fundRedeem } from '@/api/fund'
 import { Toast } from 'vant'
+import { minus } from '@/utils/calculation'
 
 export const orderHook = () => {
     const { t } = useI18n({ useScope: 'global' })
+    const router = useRouter()
     const route = useRoute()
     const store = useStore()
     const loading = ref(false)
@@ -46,7 +48,7 @@ export const orderHook = () => {
                     item.available = account.available
                     item.amountPay = payItem.amount
                     // 计算需要充值的金额
-                    item.depositAmount = Number(item.amountPay) - Number(item.available)
+                    item.depositAmount = minus(item.amountPay, item.available)
                 }
                 result.push(item)
             })
@@ -64,7 +66,7 @@ export const orderHook = () => {
                 item.available = account.available
                 item.amountPay = payItem.amountPay
                 // 计算需要充值的金额
-                item.depositAmount = Number(item.amountPay) - Number(item.available)
+                item.depositAmount = minus(item.amountPay, item.available)
             }
             result.push(item)
         }

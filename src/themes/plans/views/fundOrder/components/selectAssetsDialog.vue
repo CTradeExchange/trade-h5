@@ -22,7 +22,7 @@
                         </span>
                     </div>
                     <p v-if="item.currencyCode === 'self'" class='desc'>
-                        {{ direction === 'buy' ? '支付一篮子资产购买基金' : 'Redeem a basket of assets' }}
+                        {{ direction === 'buy' ? '支付一篮子资产购买基金' : '获得一篮子资产' }}
                     </p>
                     <p v-else class='desc'>
                         <span v-if="direction === 'buy'">
@@ -74,7 +74,7 @@ const props = defineProps({
 })
 const emit = defineEmits(['update:show', 'select'])
 const route = useRoute()
-const { direction } = route
+const { direction } = route.query
 
 // 当前选择的资产
 const currency = ref('')

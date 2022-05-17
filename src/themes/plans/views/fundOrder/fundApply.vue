@@ -33,7 +33,7 @@
                             手续费率:
                         </span>
                         <span>
-                            {{ activeAssets.purchaseFeeProportion }}%
+                            {{ mul(activeAssets.purchaseFeeProportion, 100) }}%
                         </span>
                     </p>
                     <p>
@@ -50,7 +50,7 @@
                 v-model='amountPay'
                 :can-choose-currency='false'
                 :currency='fund.shareTokenCode'
-                :digits='curAccount? curAccount?.digits : 0'
+                :digits='fund.shareTokenDigits || 0'
                 label='您想要得到'
                 placeholder='输入数量'
                 :readonly='false'
@@ -156,6 +156,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util'
+import { mul } from '@/utils/calculation'
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
@@ -171,7 +172,6 @@ const {
     submitFundApply,
     activeCurrency,
     activeAssets,
-    curAccount,
     selectShow,
     selectActions,
     onSelect
@@ -212,7 +212,7 @@ const openCurrencyExplain = () => {
 }
 // 点击切换赎回
 const switchWay = () => {
-    router.push({
+    router.replace({
         name: 'FundRedeem',
         query: { direction: 'sell', fundId }
     })
