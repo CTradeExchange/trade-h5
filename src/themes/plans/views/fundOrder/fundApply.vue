@@ -296,8 +296,8 @@ const submitHandler = () => {
         margin: rem(25px) 0;
         .switch-icon {
             margin-right: rem(20px);
-            font-size: rem(60px);
             color: var(--primary);
+            font-size: rem(60px);
         }
         .switch-text {
             p {
