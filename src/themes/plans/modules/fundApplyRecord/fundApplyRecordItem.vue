@@ -8,7 +8,10 @@
         <ul class='infos' :class='{ "full": full || index===0 }'>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.applyAmount') }}({{ data.currencyPay }})
+                    {{ $t('fundInfo.applyAmount') }}
+                    <em v-if="data.currencyPay !== 'self'">
+                        ({{ data.currencyPay }})
+                    </em>
                 </span>
                 <span v-if="data.currencyPay === 'self'" class='href' @click='showDetail(data)'>
                     {{ $t('common.look') }}
@@ -25,7 +28,10 @@
             </li>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.applyFees') }}({{ data.currencyPay }})
+                    {{ $t('fundInfo.applyFees') }}
+                    <em v-if="data.currencyPay !== 'self'">
+                        ({{ data.currencyPay }})
+                    </em>
                 </span>
                 <span v-if="data.currencyPay === 'self'" class='href' @click='showDetail(data.proposalNo)'>
                     {{ $t('common.look') }}
@@ -66,15 +72,17 @@
             </li>
         </ul>
     </div>
-    <van-dialog v-model:show='show' title='申购金额'>
+    <van-dialog v-model:show='show' title='申购明细'>
         <div class='info-wrap'>
             <p class='info-item header'>
                 <span>申购资产</span>
-                <span>手续费</span>
+                <span>申购金额</span>
+                <span>申购手续费</span>
             </p>
             <p v-for='item in showInfo' :key='item.currency' class='info-item'>
-                <span>{{ item.amount }} {{ item.currency }}</span>
-                <span>{{ item.fees }} {{ item.currency }}</span>
+                <span>{{ item.currency }}</span>
+                <span>{{ item.amount }}</span>
+                <span>{{ item.fees }}</span>
             </p>
         </div>
     </van-dialog>
@@ -141,6 +149,9 @@ const showDetail = (item) => {
         }
         .label {
             color: var(--minorColor);
+            em {
+                font-style: normal;
+            }
         }
         .href {
             color: var(--primary);
@@ -152,14 +163,25 @@ const showDetail = (item) => {
     .info-item {
         display: flex;
         justify-content: space-between;
-        margin-top: rem(20px);
+        &:last-of-type {
+            span {
+                border-bottom: 1px solid var(--minorColor);
+            }
+        }
         span {
+            flex: 1;
+            padding: rem(15px);
             color: var(--normalColor);
             font-size: rem(24px);
+            border-top: 1px solid var(--minorColor);
+            border-left: 1px solid var(--minorColor);
+            &:nth-of-type(3n) {
+                border-right: 1px solid var(--minorColor);
+            }
         }
         &.header {
             span {
-                color: var(--minorColor);
+                color: var(--normalColor);
                 font-weight: bold;
             }
         }

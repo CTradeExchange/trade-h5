@@ -8,7 +8,7 @@
     >
         <div class='popup-assets-list'>
             <p class='title'>
-                选择支付资产
+                {{ direction === 'buy' ? '选择支付资产' : '选择赎回方式' }}
             </p>
             <div v-for='item in list' :key='item.currencyCode' class='asset-item' @click='switchCurrency(item)'>
                 <div class='left'>

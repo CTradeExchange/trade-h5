@@ -4,10 +4,11 @@
         position='bottom'
         round
         @close='close'
+        @open='open'
     >
         <div class='add-wrap'>
             <h2>选择获取该资产的方式</h2>
-            <div class='type' @click="way = 'deposit'">
+            <div class='item' @click="way = 'deposit'">
                 <div class='left'>
                     <i
                         class='icon iconfong icon_icon_assets'
@@ -19,7 +20,7 @@
                 </div>
                 <van-icon :color="way === 'deposit' ? $style.success : $style.minorColor" name='checked' size='22' />
             </div>
-            <div class='type' @click="way = 'trade'">
+            <div class='item' @click="way = 'trade'">
                 <div class='left'>
                     <img alt='' class='icon' src='../../../images/trade.png' />
                     <div class='text'>
@@ -70,11 +71,15 @@ const accountList = computed(() => store.state._user.customerInfo?.accountList?.
 // 当前账户
 const curAccount = computed(() => accountList.value.find(el => el.currency === props.currency))
 // 新增资产方式 deposit:存款 trade:买入
-const way = ref('')
+const way = ref('deposit')
+
+// 打开弹窗
+const open = () => {
+    way.value = 'deposit'
+}
 
 // 关闭弹窗
 const close = () => {
-    way.value = ''
     emit('update:show', false)
 }
 
@@ -115,10 +120,10 @@ const toOrderFund = () => {
     if (!product) {
         product = productList.find(el => el.baseCurrency === props.currency && el.tradeType === 5)
     }
-    if (!product) {
+    if (!product || product.baseCurrency === product.profitCurrency) {
         return Toast(t('fundInfo.noTradeMarket'))
     }
-    router.replace(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
+    router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
 }
 </script>
 
@@ -130,7 +135,7 @@ const toOrderFund = () => {
         margin: rem(20px) 0 rem(40px) 0;
         text-align: center;
     }
-    .type {
+    .item {
         display: flex;
         align-items: center;
         justify-content: space-between;

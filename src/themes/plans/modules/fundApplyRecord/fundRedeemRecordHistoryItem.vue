@@ -31,7 +31,7 @@
                 <span class='label'>
                     {{ $t('fundInfo.redeemAmount') }}({{ data.currencyRedeem }})
                 </span>
-                <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data)'>
+                <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data.proposalNo)'>
                     {{ $t('common.look') }}
                 </span>
                 <span v-else>
@@ -64,15 +64,17 @@
             </li>
         </ul>
     </div>
-    <van-dialog v-model:show='show' title='申购金额'>
+    <van-dialog v-model:show='show' title='赎回明细'>
         <div class='info-wrap'>
             <p class='info-item header'>
                 <span>赎回资产</span>
-                <span>手续费</span>
+                <span>赎回金额</span>
+                <span>赎回手续费</span>
             </p>
             <p v-for='item in showInfo' :key='item.currency' class='info-item'>
-                <span>{{ item.amount }} {{ item.currency }}</span>
-                <span>{{ item.fees }} {{ item.currency }}</span>
+                <span>{{ item.currency }}</span>
+                <span>{{ item.amount }}</span>
+                <span>{{ item.fees }}</span>
             </p>
         </div>
     </van-dialog>
@@ -148,14 +150,25 @@ const full = ref(false)
     .info-item {
         display: flex;
         justify-content: space-between;
-        margin-top: rem(20px);
+        &:last-of-type {
+            span {
+                border-bottom: 1px solid var(--minorColor);
+            }
+        }
         span {
+            flex: 1;
+            padding: rem(15px);
             color: var(--normalColor);
             font-size: rem(24px);
+            border-top: 1px solid var(--minorColor);
+            border-left: 1px solid var(--minorColor);
+            &:nth-of-type(3n) {
+                border-right: 1px solid var(--minorColor);
+            }
         }
         &.header {
             span {
-                color: var(--minorColor);
+                color: var(--normalColor);
                 font-weight: bold;
             }
         }

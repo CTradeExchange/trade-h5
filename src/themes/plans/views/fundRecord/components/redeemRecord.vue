@@ -14,7 +14,10 @@
             >
                 <template #default='{ list }'>
                     <div v-for='item in list' :key='item.id' class='li'>
-                        <fundRedeemRecordItem v-if='redeemActive===0' :data='item' />
+                        <fundRedeemRecordItem
+                            v-if='redeemActive===0'
+                            :data='item'
+                        />
                         <fundRedeemRecordHistoryItem
                             v-else-if='redeemActive===1'
                             :data='item'
@@ -37,7 +40,7 @@ import { fundRedeemRecord, getFundRedeemCurrencyList } from '@/api/fund'
 import { useStore } from 'vuex'
 import { computed, ref, unref } from 'vue'
 import { hooks } from './hooks'
-
+const store = useStore()
 const { assetsList } = hooks()
 
 const redeemActive = ref(0)
