@@ -38,6 +38,7 @@
 </template>
 
 <script setup>
+import { getDepositCoinList } from '@/api/user'
 import { ref, computed, defineProps, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -69,13 +70,24 @@ const props = defineProps({
 // 现货玩法的账户列表
 const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5) || [])
 // 当前账户
-const curAccount = computed(() => accountList.value.find(el => el.currency === props.currency))
+const curAccount = ref(null)
 // 新增资产方式 deposit:存款 trade:买入
 const way = ref('deposit')
+
+// 获取客户支持的存款币种列表
+const queryDepositCoinList = () => {
+    getDepositCoinList({ clientType: 'mobile' }).then(res => {
+        const data = res.data
+        const list = accountList.value.filter(el => data.includes(el.currency))
+        curAccount.value = list.find(el => el.currency === props.currency)
+    })
+}
 
 // 打开弹窗
 const open = () => {
     way.value = 'deposit'
+    // 获取客户支持的存款币种列表
+    queryDepositCoinList()
 }
 
 // 关闭弹窗
@@ -102,6 +114,9 @@ const onConfirm = () => {
 
 // 跳转到充值页面
 const toDeposit = () => {
+    if (!curAccount.value) {
+        return Toast('该资产暂不支持存款')
+    }
     close()
     router.push({
         path: '/depositChoose',
@@ -123,6 +138,7 @@ const toOrderFund = () => {
     if (!product || product.baseCurrency === product.profitCurrency) {
         return Toast(t('fundInfo.noTradeMarket'))
     }
+    close()
     router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
 }
 </script>
