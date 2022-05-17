@@ -43,6 +43,7 @@ class HistoryProvider {
 
         let ticks = []
         const {_previousBar} = this
+
         if (isSameTime( this.symbolParams.resolution, _previousBar.time, time)) {
             ticks = [
                 {
@@ -106,8 +107,9 @@ function isSameTime(resolution, latestTime, tickTime) {
         // 小于日k
         const oldMinutes = oldTime.hour() * 60 + oldTime.minute()
         const newMinutes = newTime.hour() * 60 + newTime.minute()
+        const diffMinutes = newMinutes - oldMinutes
         // console.log(oldMinutes, newMinutes)
-        return newMinutes - oldMinutes < resolution
+        return diffMinutes < resolution && diffMinutes >= 0
     } else {
         switch(resolution){
             case '1D':{

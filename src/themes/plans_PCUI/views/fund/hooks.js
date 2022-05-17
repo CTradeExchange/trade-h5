@@ -38,6 +38,9 @@ export const orderHook = (params) => {
     const store = useStore()
 
     const loading = ref(false)
+    // 基金底层资产列表
+    const fundAssetsList = ref([])
+
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
     const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
     const curAccount = computed(() => accountList.value?.find(el => el.currency === activeCurrency.value))

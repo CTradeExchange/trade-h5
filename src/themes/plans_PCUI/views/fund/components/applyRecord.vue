@@ -131,8 +131,8 @@ defineExpose({
 @import '../table.scss';
 .handle-action {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: flex-end;
     height: 60px;
 }
 </style>

@@ -22,7 +22,7 @@
             </div>
             <div class='item' @click="way = 'trade'">
                 <div class='left'>
-                    <img alt='' class='icon' src='../../../images/trade.png' />
+                    <img alt='' class='icon' src='/images/trade.png' />
                     <div class='text'>
                         <h3>买入</h3>
                         <h5>通过交易的方式买入该资产</h5>
