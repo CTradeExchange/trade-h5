@@ -20,7 +20,7 @@
                         {{ backData.apiKey }}
                     </van-col>
                     <van-col align='right' class='item-right' span='4'>
-                        <van-icon class='copy-btnPop' :data-clipboard-text='backData.apiKey' name='description' :title="$t('compLang.copy')" @click='handleCopy' />
+                        <van-icon class='copy-btnPop' :data-clipboard-text='backData.apiKey' name='description' :title="$t('compLang.copy')" @click='copyActiveCode($event,backData.apiKey)' />
                     </van-col>
                 </van-row>
                 <div class='sub-title'>
@@ -31,7 +31,7 @@
                         {{ backData.privateKey }}
                     </van-col>
                     <van-col align='right' class='item-right' span='4'>
-                        <van-icon class='copy-btnPop' :data-clipboard-text='backData.privateKey' name='description' :title="$t('compLang.copy')" @click='handleCopy' />
+                        <van-icon class='copy-btnPop' :data-clipboard-text='backData.privateKey' name='description' :title="$t('compLang.copy')" @click='copyActiveCode($event,backData.privateKey)' />
                     </van-col>
                 </van-row>
                 <div class='sub-title'>
@@ -140,7 +140,7 @@ export default {
 
         // 复制
         const handleCopy = (value) => {
-            console.log('handleCopy:' + value)
+            // console.log('handleCopy:' + value)
             console.log(value)
             var clipboard = new Clipboard('.copy-btnPop')
             console.log(clipboard)
@@ -149,6 +149,32 @@ export default {
                 // 释放内存
                 clipboard.destroy()
             })
+            clipboard.on('error', e => {
+                // 不支持复制
+                console.log('该浏览器不支持自动复制')
+                // 释放内存
+                clipboard.destroy()
+            })
+        }
+
+        const copyActiveCode = (e, text) => {
+            const clipboard = new Clipboard(e.target, { text: () => text })
+            clipboard.on('success', e => {
+                Toast(t('common.copySuccess'))
+                // 释放内存
+                clipboard.off('error')
+                clipboard.off('success')
+                clipboard.destroy()
+            })
+            clipboard.on('error', e => {
+                // 不支持复制
+                Toast('该浏览器不支持自动复制')
+                // 释放内存
+                clipboard.off('error')
+                clipboard.off('success')
+                clipboard.destroy()
+            })
+            clipboard.onClick(e)
         }
 
         onBeforeMount(() => {
@@ -158,6 +184,7 @@ export default {
         return {
             ...toRefs(state),
             goBackList,
+            copyActiveCode,
             isReLoad,
             handleApi,
             close,
