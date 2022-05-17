@@ -1,7 +1,5 @@
-//
 <template>
     <div class='page-wrap'>
-        <!-- <LayoutTop :back='true' /> -->
         <Top absolute back left-icon='arrow-left' :right-action='false' show-center>
             <template #left>
                 <a class='topBack' href='javascript:;' @click='goBackList'>
@@ -22,8 +20,7 @@
                         {{ backData.apiKey }}
                     </van-col>
                     <van-col align='right' class='item-right' span='4'>
-                        <!-- <i class='icon_fuzhi copy-btn' :data-clipboard-text='backData.apiKey' @click='copyCustomerNo'></i> -->
-                        <van-icon class='copy-btn' :data-clipboard-text='backData.apiKey' name='description' :title="$t('compLang.copy')" @click='copyCustomerNo' />
+                        <van-icon class='copy-btnPop' :data-clipboard-text='backData.apiKey' name='description' :title="$t('compLang.copy')" @click='handleCopy' />
                     </van-col>
                 </van-row>
                 <div class='sub-title'>
@@ -34,8 +31,7 @@
                         {{ backData.privateKey }}
                     </van-col>
                     <van-col align='right' class='item-right' span='4'>
-                        <!-- <i class='icon_fuzhi copy-btn' :data-clipboard-text='backData.privateKey' @click='copyCustomerNo'></i> -->
-                        <van-icon class='copy-btn' :data-clipboard-text='backData.privateKey' name='description' :title="$t('compLang.copy')" @click='copyCustomerNo' />
+                        <van-icon class='copy-btnPop' :data-clipboard-text='backData.privateKey' name='description' :title="$t('compLang.copy')" @click='handleCopy' />
                     </van-col>
                 </van-row>
                 <div class='sub-title'>
@@ -71,11 +67,10 @@
 <script>
 import Top from '@/components/top'
 import { onBeforeMount, computed, reactive, watch, toRefs, ref, inject } from 'vue'
-import { Dialog, Toast } from 'vant'
+import { Toast } from 'vant'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { createCustomerApi } from '@/api/user'
 import Clipboard from 'clipboard'
 
 export default {
@@ -128,12 +123,13 @@ export default {
         const isReLoad = inject('isReLoad')
 
         const goBackList = () => {
-            router.push({ path: '/api', query: { reload: true } })
+            isReLoad(true)
+            router.push({ path: '/api' })
         }
 
         const handleApi = () => {
             isReLoad(true)
-            router.push({ path: '/api', query: { reload: true } })
+            router.push({ path: '/api' })
         }
 
         const getQuery = () => {
@@ -143,8 +139,11 @@ export default {
         }
 
         // 复制
-        const copyCustomerNo = (value) => {
-            var clipboard = new Clipboard('.copy-btn')
+        const handleCopy = (value) => {
+            console.log('handleCopy:' + value)
+            console.log(value)
+            var clipboard = new Clipboard('.copy-btnPop')
+            console.log(clipboard)
             clipboard.on('success', e => {
                 Toast(t('common.copySuccess'))
                 // 释放内存
@@ -162,7 +161,7 @@ export default {
             isReLoad,
             handleApi,
             close,
-            copyCustomerNo,
+            handleCopy,
             bgColor,
             customerInfo,
             googleVerifyCodeRef,
@@ -241,6 +240,11 @@ export default {
     .sub-createTipsTxt{
         color: var(--minorColor);
         line-height: 24px;
+    }
+    .copy-btnPop{
+        font-size: 18px;
+        margin-left: 10px;
+        cursor: pointer;
     }
     .perItem{
         display: inline-block;

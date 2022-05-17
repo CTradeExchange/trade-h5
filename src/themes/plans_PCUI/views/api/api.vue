@@ -9,7 +9,7 @@
             <div class='desc'>
                 {{ $t('api.text1') }}
                 <!-- <span>
-                    <a class='a-link' @click='showApiHelp'>
+                    <a class='a-link' href='https://www.baidu.com' target='_blank'>
                         {{ $t("api.linkTxt") }}
                     </a>
                 </span> -->
@@ -86,12 +86,16 @@
                             <van-row>
                                 <van-col class='item-left tags' span='12'>
                                     <span v-for='(it,a) in item.permissionDTOList' :key='a' class='perItem'>
-                                        {{ it.name }}
+                                        <span v-if='it.status === 1'>
+                                            {{ it.name }}
+                                        </span>
                                     </span>
                                 </van-col>
                                 <van-col class='item-right' span='12'>
                                     <div class='whiteIps'>
-                                        {{ item.whiteIps }}
+                                        <span>
+                                            {{ item.whiteIps }}
+                                        </span>
                                     </div>
                                 </van-col>
                             </van-row>
@@ -142,16 +146,7 @@ export default {
             state.isReLoad = value
             if (value === true) {
                 getAPIList()
-            }
-        })
-
-        const routeName = computed(() => {
-            if (Number(type) === 1) {
-                return 'loan'
-            } else if (Number(type) === 3) {
-                return 'returnMoney'
-            } else {
-                return 'deposit'
+                state.query.tag = ''
             }
         })
 
@@ -287,6 +282,8 @@ export default {
         // 复制
         const copyCustomerNo = (value) => {
             var clipboard = new Clipboard('.copy-btn')
+            console.log('copyCustomerNo:(list)' + value)
+            console.log(clipboard)
             clipboard.on('success', e => {
                 Toast(t('common.copySuccess'))
                 // 释放内存
@@ -388,7 +385,6 @@ export default {
             copyCustomerNo,
             accountList,
             type,
-            routeName,
             ...toRefs(state)
         }
     }
@@ -492,5 +488,15 @@ export default {
             }
         }
     }
+}
+@media screen and (max-width: 1200px) {
+	.wrapper {
+		width: 980px;
+	}
+}
+@media screen and (max-width: 980px) {
+	.wrapper {
+		width: 720px;
+	}
 }
 </style>

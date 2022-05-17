@@ -123,7 +123,8 @@
         "fundRedemption": "Fund Redeem",
         "transfer": "Transfer",
         "fundRules": "Trading Rule",
-        "spotTrade": "Spot"
+        "spotTrade": "Spot",
+        "MFA_check": "Google Security Verification"
     },
     "search": {
         "keywords": "Name/Symbol/Phonics",
@@ -839,6 +840,8 @@
         "notSpecial": "Label cannot include Special characters",
         "cellLimite": "Each API add 20 IP address",
         "ipisError": "IP address input format wrong！",
+        "mfaTips": "You do not have Google verification code turned on, please go to turn it on",
+        "mfaGoset": "Go turn on",
         "createTitle": "Create success",
         "createSubTit1": "Access Key",
         "createSubTit2": "Secret Key",
@@ -865,6 +868,8 @@
         "editSubTit1": "Key binded to IP address is long term effective; if it is not binded, effective 90 days",
         "keyplaceholder": "Please input API key label",
         "keyplaceholder2": "Please input binded IP address",
-        "editHelpTxt": "Read permission means user can only query the account information, fund flow and order details via this API</br>The withdrawal permission allows the current API Key to support the withdrawal address. After the creation is completed, withdrawal address can be configured. By default, all addresses in the withdrawal address list are supported.</br>Spot trading rights means that users can use this API to place orders, cancel orders and other trading operations on Spot.</br> Contract trading rights means that users can use this API to place orders, cancel orders and other trading operations on Contracts"
+        "editHelpTxt": "Read permission means user can only query the account information, fund flow and order details via this API</br>The withdrawal permission allows the current API Key to support the withdrawal address. After the creation is completed, withdrawal address can be configured. By default, all addresses in the withdrawal address list are supported.</br>Spot trading rights means that users can use this API to place orders, cancel orders and other trading operations on Spot.</br> Contract trading rights means that users can use this API to place orders, cancel orders and other trading operations on Contracts",
+        "phoneSmsTips": "Please get the dynamic mobile phone verification code",
+        "emailSmsTips": "Please get the dynamic email verification code"
     }
 }
