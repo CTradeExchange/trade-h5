@@ -67,7 +67,11 @@
             <div v-if="activeCurrency === 'self'" class='redeem-assets'>
                 <div v-for='(item, index) in fundAssetsList' :key='index' class='redeem-asset-item'>
                     <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
-                        <p style='padding: 5px; white-space: nowrap; font-size: 10px;'>
+                        <p
+                            style='padding: 5px;
+font-size: 10px;
+white-space: nowrap;'
+                        >
                             {{ item.weight }}
                         </p>
                         <template #reference>
@@ -301,8 +305,8 @@ const submitHandler = () => {
         margin: rem(25px) 0;
         .switch-icon {
             margin-right: rem(20px);
-            font-size: rem(60px);
             color: var(--primary);
+            font-size: rem(60px);
         }
         .switch-text {
             p {

@@ -20,9 +20,11 @@
 
                                 <div class='direction'>
                                     <div class='currency-list'>
+                                        
                                         <currencyIcon
                                             v-for='(elem, index) in fundAssetsList'
                                             :key='index'
+                                            size='40'
                                             :currency='elem.currencyCode'
                                         />
                                     </div>
@@ -33,7 +35,9 @@
                                         </div>
                                     </div>
                                     <div class='to'>
-                                        <currencyIcon :currency='fund.shareTokenCode' size='24' />
+                                        <currencyIcon 
+                                        :currency='fund.shareTokenCode' 
+                                        size='40' />
                                         <p class='currency-text'>
                                             {{ fund.shareTokenCode }}
                                         </p>
@@ -50,7 +54,7 @@
                                     <div class='from'>
                                         <currencyIcon
                                             :currency='item.currencyCode'
-                                            size='24'
+                                            size='40'
                                         />
                                         <p class='currency-text'>
                                             {{ item.currencyCode }}
@@ -63,7 +67,7 @@
                                         </div>
                                     </div>
                                     <div class='to'>
-                                        <currencyIcon :currency='fund.shareTokenCode' size='24' />
+                                        <currencyIcon :currency='fund.shareTokenCode' size='40' />
                                         <p class='currency-text'>
                                             {{ fund.shareTokenCode }}
                                         </p>
@@ -82,7 +86,7 @@
 
                                 <div class='direction'>
                                     <div class='to'>
-                                        <currencyIcon :currency='fund.shareTokenCode' size='24' />
+                                        <currencyIcon :currency='fund.shareTokenCode' size='40' />
                                         <p class='currency-text'>
                                             {{ fund.shareTokenCode }}
                                         </p>
@@ -97,6 +101,7 @@
                                         <currencyIcon
                                             v-for='(elem, index) in fundAssetsList'
                                             :key='index'
+                                            size='40'
                                             :currency='elem.currencyCode'
                                         />
                                     </div>
@@ -113,7 +118,7 @@
 
                                 <div class='direction'>
                                     <div class='to'>
-                                        <currencyIcon :currency='fund.shareTokenCode' size='24' />
+                                        <currencyIcon :currency='fund.shareTokenCode' size='40' />
                                         <p class='currency-text'>
                                             {{ fund.shareTokenCode }}
                                         </p>
@@ -127,7 +132,7 @@
                                     <div class='from'>
                                         <currencyIcon
                                             :currency='item.currencyCode'
-                                            size='24'
+                                            size='40'
                                         />
                                         <p class='currency-text'>
                                             {{ item.currencyCode }}
@@ -148,7 +153,6 @@ import { ref, defineProps, defineEmits } from 'vue'
 import { useRoute } from 'vue-router'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 const route = useRoute()
-const { direction } = route.query
 const props = defineProps({
     // 是否显示弹窗
     show: {
@@ -174,8 +178,13 @@ const props = defineProps({
     currency: {
         type: String,
         default: ''
+    },
+    direction:{
+        type: String
     }
 })
+
+
 const emit = defineEmits(['update:show'])
 // 当前选项卡
 const active = ref('')
@@ -199,7 +208,6 @@ const close = () => {
     }
     .currency-list {
         :deep(.currencyIcon) {
-            width: 20px;
             margin-left: -10px;
         }
     }

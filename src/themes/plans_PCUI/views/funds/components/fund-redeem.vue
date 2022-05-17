@@ -31,7 +31,7 @@
                         手续费率:
                     </span>
                     <span>
-                        {{ direction === 'buy' ? activeAssets.purchaseFeeProportion : activeAssets.redemptionFeeProportion }}%
+                        {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
                     </span>
                 </p>
                 <p>
@@ -54,7 +54,7 @@
                 <el-select
                     v-model='activeCurrency'
                     :placeholder="$t('fundInfo.redeemAssets')"
-                    @change='onSelect'
+                    @change='selectAssets'
                 >
                     <template #prefix>
                         <CurrencyIcon :currency='activeCurrency' :size='24' />
@@ -62,9 +62,34 @@
                     <el-option
                         v-for='(item, index) in selectActions'
                         :key='index'
-                        :label='item.currencyCode'
+                        :label='item.currencyCode === "self" ? "一篮子资产" : item.currencyCode'
                         :value='item.currencyCode'
-                    />
+                    >
+                        <div v-if="item.currencyCode === 'self'" class='asset-item'>
+                            <div class='top'>
+                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                <span class='currency-text'>
+                                    一篮子资产
+                                </span>
+                            </div>
+                            <div>
+                                <p>获得一篮子资产</p>
+                                <currencyIcon
+                                    v-for='(elem, i) in fundAssetsList'
+                                    :key='i'
+                                    :currency='elem.currencyCode'
+                                />
+                            </div>
+                        </div>
+                        <div v-else class='asset-item'>
+                            <div class='top'>
+                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                <span class='currency-text'>
+                                    {{ item.currencyCode }}
+                                </span>
+                            </div>
+                        </div>
+                    </el-option>
                 </el-select>
             </div>
             <div class='pay-wrap'>
@@ -109,7 +134,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class='notice'>
+                <div v-if="activeCurrency === 'self'" class='notice'>
                     注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
                 </div>
             </div>
@@ -154,6 +179,7 @@
     <CurrencyExplainDialog
         v-model:show='currencyExplainShow'
         :currency='activeCurrency'
+        direction='sell'
         :fund='fund'
         :fund-assets-list='fundAssetsList'
         :list='selectActions'
@@ -170,7 +196,7 @@ import { useStore } from 'vuex'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
-import { limitNumber, limitDecimal, toFixed } from '@/utils/calculation'
+import { limitNumber, limitDecimal, toFixed, mul } from '@/utils/calculation'
 import { getCookie } from '@/utils/util.js'
 
 const emit = defineEmits(['switchDirection'])
@@ -204,7 +230,8 @@ const {
     calcApplyShares,
     fundAssetsList,
     lastAssetsPay,
-    activeAssets
+    activeAssets,
+    queryFundNetValue
 
 } = orderHook({ fund: props.fund, direction: 'sell' })
 
@@ -222,6 +249,7 @@ const amountPay = ref('')
 
 // 输入事件控制
 const onInput = (value) => {
+    queryFundNetValue()
     const newval = limitNumber(value)
     amountPay.value = newval
     const digits = fundAccount.value?.digits || 0
@@ -250,6 +278,13 @@ const submitHandler = () => {
 // 打开赎回记录
 const openRedeemRecords = () => {
     changeShowModel('fundRecord', 'redeem')
+}
+
+// 选择资产
+const selectAssets = (item) => {
+    const action = selectActions.value.find(el => el.currencyCode === item)
+    onSelect(action)
+    queryFundNetValue()
 }
 
 // 打开规则弹窗
@@ -503,5 +538,20 @@ const switchWay = () => {
             }
         }
     }
+}
+.el-select-dropdown__item {
+    padding: 0;
+    .asset-item {
+        margin: 15px 15px 0;
+        padding: 5px 15px;
+        background: var(--bgColor);
+        .currencyIcon {
+            margin-right: 10px;
+        }
+    }
+}
+.el-select-dropdown__item {
+    height: auto;
+    overflow: auto;
 }
 </style>
