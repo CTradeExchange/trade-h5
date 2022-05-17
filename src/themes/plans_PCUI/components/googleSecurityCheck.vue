@@ -183,10 +183,20 @@ export default {
                 if (pramas.phoneCode === '') {
                     delete pramas.phoneCode
                     delete pramas.phoneSendToken
+                } else {
+                    if (pramas.phoneSendToken === '') {
+                        Toast(t('api.phoneSmsTips'))
+                        return false
+                    }
                 }
                 if (pramas.emailCode === '') {
                     delete pramas.emailCode
                     delete pramas.emailSendToken
+                } else {
+                    if (pramas.emailSendToken === '') {
+                        Toast(t('api.emailSmsTips'))
+                        return false
+                    }
                 }
                 context.emit('update:googleSafetyData', pramas)
             })

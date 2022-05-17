@@ -266,16 +266,6 @@ export default {
                                 }
                             })
                         })
-                    } else {
-                        // 设置默认选择币种
-                        if (query.accountId && query.currency) {
-                            state.accountInfo = {
-                                accountId: query.accountId,
-                                currency: query.currency
-                            }
-                            // 获取支付通道
-                            getPayTypes()
-                        }
                     }
                 }
             }).catch(err => {
@@ -299,6 +289,13 @@ export default {
                 const accountList = store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(query.tradeType))
                 const data = res.data
                 state.accountList = accountList.filter(el => data.includes(el.currency))
+                // 设置默认选择币种
+                if (query.accountId && query.currency) {
+                    state.accountInfo = state.accountList.find(el => el.currency === query.currency) || ''
+                    if (state.accountInfo) {
+                        getPayTypes()
+                    }
+                }
             })
         }
 

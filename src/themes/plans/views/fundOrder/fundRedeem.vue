@@ -19,7 +19,7 @@
                 v-model='amountPay'
                 :can-choose-currency='false'
                 :currency='fund.shareTokenCode'
-                :digits='fundAccount? fundAccount?.digits : 0'
+                :digits='fund.shareTokenDigits || 0'
                 icon-content-type='fund'
                 label='您支付'
                 :placeholder='payPlaceholder'
@@ -34,7 +34,7 @@
                             手续费率:
                         </span>
                         <span>
-                            {{ direction === 'buy' ? activeAssets.purchaseFeeProportion : activeAssets.redemptionFeeProportion }}%
+                            {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
                         </span>
                     </p>
                     <p>
@@ -160,7 +160,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util'
-import { retainDecimal } from '@/utils/calculation'
+import { mul, retainDecimal } from '@/utils/calculation'
 
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
@@ -223,7 +223,7 @@ const openCurrencyExplain = () => {
 }
 // 点击切换申购
 const switchWay = () => {
-    router.push({
+    router.replace({
         name: 'FundApply',
         query: { direction: 'buy', fundId }
     })

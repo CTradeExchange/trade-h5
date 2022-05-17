@@ -1,5 +1,5 @@
 <template>
-    <centerViewDialog class='pageWrapper'>
+    <centerViewDialog>
         <pageContainer />
     </centerViewDialog>
 </template>

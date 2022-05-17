@@ -5,11 +5,11 @@
         <Loading :show='loading' />
         <div class='descTxt'>
             {{ $t("api.text1") }}
-            <span>
-                <a class='a-link' @click='showApiHelp'>
+            <!-- <span>
+                <a class='a-link' href='https://www.baidu.com' target='_blank'>
                     {{ $t("api.linkTxt") }}
                 </a>
-            </span>
+            </span> -->
         </div>
         <div class='sub-title'>
             {{ $t("api.subtitle") }}
@@ -64,7 +64,9 @@
                             <van-row>
                                 <van-col class='item-left tags' span='12'>
                                     <span v-for='(it,a) in item.permissionDTOList' :key='a' class='perItem'>
-                                        {{ it.name }}
+                                        <span v-if='it.status === 1'>
+                                            {{ it.name }}
+                                        </span>
                                     </span>
                                 </van-col>
                                 <van-col class='item-right' span='12'>
