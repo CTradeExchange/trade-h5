@@ -89,7 +89,10 @@ export default {
         const handleSaveCheck = () => {
             state.loading = true
             console.log(state.query)
-            createCustomerApi({ ...state.query }).then(res => {
+            const params = state.query
+            delete params.originPage
+            delete params.purview
+            createCustomerApi(params).then(res => {
                 state.loading = false
                 console.log(res)
                 if (Number(res.code) === 0) { // 创建成功

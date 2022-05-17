@@ -761,6 +761,8 @@
         "notSpecial": "標籤不能包含特殊字符",
         "cellLimite": "每個API增加的IP地址是20個",
         "ipisError": "IP地址輸入格式有誤！",
+        "mfaTips": "您未開啟谷歌驗證碼，請前往開啟",
+        "mfaGoset": "去開啟",
         "createTitle": "創建成功",
         "createSubTit1": "Acces Key",
         "createSubTit2": "Secret Key",
@@ -787,6 +789,8 @@
         "editSubTit1": "綁定IP地址的密鑰長期有效，未綁定則有效期90天",
         "keyplaceholder": "請輸入API的密鑰標籤",
         "keyplaceholder2": "請輸入綁定IP地址",
-        "editHelpTxt": "讀取權限是指用戶僅能通過此API進行查詢賬戶信息，資金流程及訂單信息等只讀操作</br>提幣權限允許當前API Key 支持提幣地址，完成創建後可以配置支持的提幣地址，默認支持提現地址列表的所有地址</br>現貨交易權限指用戶可通過此API對現貨進行下單、撤單等交易操作</br>合約交易權限指用戶可通過此API對合約進行下單、撤單等交易操作"
+        "editHelpTxt": "讀取權限是指用戶僅能通過此API進行查詢賬戶信息，資金流程及訂單信息等只讀操作</br>提現權限是指用戶可通過此API進行提現操作</br>現貨交易權限指用戶可通過此API對現貨進行下單、撤單等交易操作</br>合約交易權限指用戶可通過此API對合約進行下單、撤單等交易操作",
+        "phoneSmsTips": "請獲取動態手機驗證碼",
+        "emailSmsTips": "請獲取動態郵箱驗證碼"
     }
 }
