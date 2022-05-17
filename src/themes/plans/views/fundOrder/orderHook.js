@@ -70,7 +70,7 @@ export const orderHook = () => {
         }
         return result
     })
-    console.log('lastAssetsPay', lastAssetsPay)
+
     // 基金产品列表
     const fundProductList = computed(() => store.state._quote.fundProductList)
     if (!fundProductList.value.length) {
@@ -87,16 +87,21 @@ export const orderHook = () => {
     })
 
     // 获取基金详情
-    store.dispatch('_quote/queryFundInfo', fundId).then(res => {
-        if (res.check()) {
-            fundAssetsList.value = fund.value.fundCurrencyList
-            activeCurrency.value = activeCurrencyList.value[0]?.currencyCode
-            activeAssets.value = activeCurrencyList.value[0]
-            updateAccountAssetsInfo(direction === 'buy' ? activeCurrency.value : res.data.shareTokenCode)
-        }
-    })
+    const queryFundInfo = () => {
+        store.dispatch('_quote/queryFundInfo', fundId).then(res => {
+            if (res.check()) {
+                fundAssetsList.value = fund.value.fundCurrencyList
+                activeCurrency.value = activeCurrencyList.value[0]?.currencyCode
+                activeAssets.value = activeCurrencyList.value[0]
+                updateAccountAssetsInfo(direction === 'buy' ? activeCurrency.value : res.data.shareTokenCode)
+            }
+        })
+    }
+
     // 获取基金净值等数据
-    store.dispatch('_quote/fundNetValue', { fundId })
+    const queryFundNetValue = () => {
+        store.dispatch('_quote/fundNetValue', { fundId })
+    }
 
     // 获取申购手续费
     const calcApplyShares = (val) => {
@@ -179,6 +184,11 @@ export const orderHook = () => {
         })
     }
 
+    // 获取基金详情
+    queryFundInfo()
+    // 获取基金净值等数据
+    queryFundNetValue()
+
     return {
         pageTitle,
         fund,
@@ -186,6 +196,7 @@ export const orderHook = () => {
         lastAssetsPay,
         accountList,
         loading,
+        queryFundNetValue,
         calcApplyShares,
         submitFundApply,
         submitFundRedeem,

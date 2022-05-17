@@ -194,7 +194,7 @@ const close = () => {
     .currency-list {
         :deep(.currencyIcon) {
             width: 20px;
-            margin-left: -10px;
+            margin-left: -5px;
         }
     }
     .equation {

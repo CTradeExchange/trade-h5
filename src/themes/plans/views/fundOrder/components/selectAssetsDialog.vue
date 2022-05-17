@@ -22,10 +22,12 @@
                         </span>
                     </div>
                     <p v-if="item.currencyCode === 'self'" class='desc'>
-                        支付一篮子资产购买基金
+                        {{ direction === 'buy' ? '支付一篮子资产购买基金' : 'Redeem a basket of assets' }}
                     </p>
                     <p v-else class='desc'>
-                        支付 {{ item.currencyCode }} 购买基金
+                        <span v-if="direction === 'buy'">
+                            支付 {{ item.currencyCode }} 购买基金
+                        </span>
                     </p>
                     <div v-if="item.currencyCode === 'self'" class='currency-list'>
                         <currencyIcon
@@ -40,14 +42,12 @@
                 </div>
             </div>
         </div>
-        <van-button block type='primary' @click='onConfirm'>
-            {{ $t('common.sure') }}
-        </van-button>
     </van-popup>
 </template>
 
 <script setup>
 import { ref, defineProps, defineEmits } from 'vue'
+import { useRoute } from 'vue-router'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 
 const props = defineProps({
@@ -73,6 +73,8 @@ const props = defineProps({
     }
 })
 const emit = defineEmits(['update:show', 'select'])
+const route = useRoute()
+const { direction } = route
 
 // 当前选择的资产
 const currency = ref('')
@@ -91,11 +93,6 @@ const close = () => {
 const switchCurrency = (item) => {
     if (currency.value === item.currencyCode) return
     currency.value = item.currencyCode
-}
-
-// 确定选择资产
-const onConfirm = () => {
-    const item = props.list.find(el => el.currencyCode === currency.value)
     close()
     emit('select', item)
 }
@@ -133,7 +130,7 @@ const onConfirm = () => {
             margin-left: 10px;
             :deep(.currencyIcon) {
                 width: 20px;
-                margin-left: -10px;
+                margin-left: -5px;
             }
         }
     }

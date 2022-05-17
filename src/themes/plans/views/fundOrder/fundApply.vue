@@ -52,9 +52,9 @@
                 :currency='fund.shareTokenCode'
                 :digits='curAccount? curAccount?.digits : 0'
                 label='您想要得到'
-                placeholder='输入申购份额'
+                placeholder='输入数量'
                 :readonly='false'
-                @input='calcApplyShares'
+                @input='inputAmount'
             />
         </div>
 
@@ -166,6 +166,7 @@ const {
     fundAssetsList,
     lastAssetsPay,
     loading,
+    queryFundNetValue,
     calcApplyShares,
     submitFundApply,
     activeCurrency,
@@ -185,6 +186,11 @@ const addAssetsCurrency = ref('')
 // 是否显示资产说明弹窗
 const currencyExplainShow = ref(false)
 
+// 输入数量
+const inputAmount = () => {
+    queryFundNetValue()
+    calcApplyShares(amountPay.value)
+}
 // 显示选择资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
@@ -192,6 +198,7 @@ const touchCurrency = () => {
 // 选择资产
 const selectAssets = (item) => {
     onSelect(item)
+    queryFundNetValue()
     calcApplyShares(amountPay.value)
 }
 // 显示添加资产弹窗
@@ -238,6 +245,7 @@ const submitHandler = () => {
     }).then(res => {
         if (res.check()) {
             amountPay.value = ''
+            queryFundNetValue()
             calcApplyShares()
             Dialog.confirm({
                 title: t('fundInfo.applySuccessed'),
@@ -366,6 +374,10 @@ const submitHandler = () => {
     }
     .notice {
         padding: 0 rem(30px);
+        color: var(--minorColor);
+        .toRule {
+            color: var(--primary);
+        }
     }
 }
 .footerBtn {

@@ -23,6 +23,7 @@
                 icon-content-type='fund'
                 label='您支付'
                 :placeholder='payPlaceholder'
+                @input='inputAmount'
             />
             <!-- 切换 -->
             <div class='switch-block'>
@@ -60,21 +61,28 @@
         </div>
         <div class='pay-wrap'>
             <p class='title'>
-                您预计赎回以下资产及金额
+                预计得到以下资产
             </p>
             <!-- 一篮子资产 -->
             <div v-if="activeCurrency === 'self'" class='redeem-assets'>
                 <div v-for='(item, index) in fundAssetsList' :key='index' class='redeem-asset-item'>
-                    <currencyIcon
-                        :currency='item.currencyCode'
-                        size='24'
-                    />
-                    <p class='currency'>
-                        {{ item.currencyCode }}
-                    </p>
-                    <p class='percent'>
-                        {{ item.weight }}
-                    </p>
+                    <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
+                        <p style='padding: 5px; white-space: nowrap; font-size: 10px;'>
+                            {{ item.weight }}
+                        </p>
+                        <template #reference>
+                            <currencyIcon
+                                :currency='item.currencyCode'
+                                size='24'
+                            />
+                            <p class='currency'>
+                                {{ item.currencyCode }}
+                            </p>
+                            <p class='percent'>
+                                {{ formatWeight(item.weight) }}
+                            </p>
+                        </template>
+                    </van-popover>
                 </div>
             </div>
             <!-- 单资产 -->
@@ -100,8 +108,13 @@
                     </li>
                 </ul>
             </div>
-            <div class='notice'>
+            <div v-if="activeCurrency === 'self'" class='notice'>
                 注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
+                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
+                    查看规则
+                </router-link>
+            </div>
+            <div v-else class='notice' style='text-align: right;'>
                 <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
                     查看规则
                 </router-link>
@@ -147,6 +160,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty } from '@/utils/util'
+import { retainDecimal } from '@/utils/calculation'
 
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
@@ -157,6 +171,7 @@ const {
     fundAssetsList,
     accountList,
     loading,
+    queryFundNetValue,
     submitFundRedeem,
     selectShow,
     selectActions,
@@ -183,6 +198,16 @@ const sharesPlaceholder = computed(() => {
 // 是否显示资产说明弹窗
 const currencyExplainShow = ref(false)
 
+// 输入数量
+const inputAmount = () => {
+    queryFundNetValue()
+}
+// 格式化权重
+const formatWeight = (value) => {
+    value = Number(value.replace('%', ''))
+    value = retainDecimal(value, 2)
+    return value + '%'
+}
 // 显示选择资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
@@ -190,6 +215,7 @@ const touchCurrency = () => {
 // 选择资产
 const selectAssets = (item) => {
     onSelect(item)
+    queryFundNetValue()
 }
 // 显示资产说明弹窗
 const openCurrencyExplain = () => {
@@ -220,6 +246,7 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
+            queryFundNetValue()
             Dialog.confirm({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),

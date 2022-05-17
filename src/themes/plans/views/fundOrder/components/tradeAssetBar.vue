@@ -14,7 +14,10 @@
                             {{ currency === 'self' ? '一篮子资产' : currency }}
                         </p>
                         <p v-if="currency === 'self'" class='assets'>
-                            通过支付{{ fundAssetsList.length }}个资产购买基金
+                            <span v-if="direction === 'buy'">
+                                通过支付{{ fundAssetsList.length }}个资产购买基金
+                            </span>
+                            <span>分别获得{{ fundAssetsList.length }}个资产</span>
                         </p>
                     </div>
                 </div>
