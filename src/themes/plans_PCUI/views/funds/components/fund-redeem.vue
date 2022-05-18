@@ -4,22 +4,24 @@
             <p class='title'>
                 您支付
             </p>
-            <div class='box'>
-                <label class='label'>
-                    <CurrencyIcon :currency='fund.shareTokenCode' :size='24' />
-                    <span class='name'>
-                        {{ fund.shareTokenCode }}
-                    </span>
-                </label>
-                <span class='line'></span>
-                <el-input
-                    v-model='amountPay'
-                    clearable
-                    :disabled='fund.canRedemption !== 1 || !customerInfo'
-                    :placeholder='payPlaceholder'
-                    type='number'
-                    @input='onInput'
-                />
+            <div class='box-bg'>
+                <div class='box'>
+                    <label class='label'>
+                        <CurrencyIcon :currency='fund.shareTokenCode' :size='24' />
+                        <span class='name'>
+                            {{ fund.shareTokenCode }}
+                        </span>
+                    </label>
+                    <span class='line'></span>
+                    <el-input
+                        v-model='amountPay'
+                        clearable
+                        :disabled='fund.canRedemption !== 1 || !customerInfo'
+                        :placeholder='payPlaceholder'
+                        type='number'
+                        @input='onInput'
+                    />
+                </div>
             </div>
         </div>
         <!-- 切换 -->
@@ -50,51 +52,57 @@
                 您想要得到
                 <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
-            <div class='box'>
-                <el-select
-                    v-model='activeCurrency'
-                    :placeholder="$t('fundInfo.redeemAssets')"
-                    @change='selectAssets'
-                >
-                    <template #prefix>
-                        <CurrencyIcon :currency='activeCurrency' :size='24' />
-                    </template>
-                    <el-option
-                        v-for='(item, index) in selectActions'
-                        :key='index'
-                        :label='item.currencyCode === "self" ? "一篮子资产" : item.currencyCode'
-                        :value='item.currencyCode'
+            <div class='box-bg'>
+                <div class='box'>
+                    <el-select
+                        v-model='activeCurrency'
+                        :placeholder="$t('fundInfo.redeemAssets')"
+                        @change='selectAssets'
                     >
-                        <div v-if="item.currencyCode === 'self'" class='asset-item'>
-                            <div class='top'>
-                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
-                                <span class='currency-text'>
-                                    一篮子资产
-                                </span>
+                        <template #prefix>
+                            <CurrencyIcon :currency='activeCurrency' :size='24' />
+                        </template>
+                        <el-option
+                            v-for='(item, index) in selectActions'
+                            :key='index'
+                            :label='item.currencyCode === "self" ? "一篮子资产" : item.currencyCode'
+                            :value='item.currencyCode'
+                        >
+                            <div v-if="item.currencyCode === 'self'" class='asset-item'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                    <span class='currency-text'>
+                                        一篮子资产
+                                    </span>
+                                </div>
+                                <div class='asset-list'>
+                                    <p>获得一篮子资产</p>
+                                    <currencyIcon
+                                        v-for='(elem, i) in fundAssetsList'
+                                        :key='i'
+                                        class='icon-asset'
+                                        :currency='elem.currencyCode'
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <p>获得一篮子资产</p>
-                                <currencyIcon
-                                    v-for='(elem, i) in fundAssetsList'
-                                    :key='i'
-                                    :currency='elem.currencyCode'
-                                />
+                            <div v-else class='asset-item'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                    <span class='currency-text'>
+                                        {{ item.currencyCode }}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div v-else class='asset-item'>
-                            <div class='top'>
-                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
-                                <span class='currency-text'>
-                                    {{ item.currencyCode }}
-                                </span>
-                            </div>
-                        </div>
-                    </el-option>
-                </el-select>
+                        </el-option>
+                    </el-select>
+                </div>
+                <p v-if="activeCurrency === 'self'" class='desc'>
+                    分别获得{{ fundAssetsList.length }}个资产
+                </p>
             </div>
             <div class='pay-wrap'>
                 <p class='title'>
-                    您预计赎回以下资产及金额
+                    预计得到以下资产
                 </p>
                 <!-- 一篮子资产 -->
                 <div v-if="activeCurrency === 'self'" class='redeem-assets'>
@@ -267,10 +275,16 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
-            Dialog.alert({
+            Dialog.confirm({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),
-            }).then(() => {})
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow'),
+            }).then(() => {
+                openRedeemRecords()
+            }).catch(() => {
+                // on cancel
+            })
         }
     })
 }
@@ -313,33 +327,40 @@ const switchWay = () => {
                 cursor: pointer;
             }
         }
-        .box {
-            display: flex;
-            align-items: center;
-            height: 50px;
-            background: var(--assistColor);
-            border-radius: 5px;
-            .line {
-                width: 1px;
-                height: 30px;
-                background: var(--lineColor);
-            }
-            .label {
-                display: inline-flex;
+        .box-bg {
+            background: #F4F4F4;
+            .box {
+                display: flex;
                 align-items: center;
-                width: 120px;
-                height: 100%;
-                padding: 0 12px;
-                .name {
-                    margin-left: 5px;
+                height: 50px;
+                background: var(--assistColor);
+                border-radius: 5px;
+                .line {
+                    width: 1px;
+                    height: 30px;
+                    background: var(--lineColor);
+                }
+                .label {
+                    display: inline-flex;
+                    align-items: center;
+                    width: 120px;
+                    height: 100%;
+                    padding: 0 12px;
+                    .name {
+                        margin-left: 5px;
+                    }
+                }
+                .value {
+                    display: inline-flex;
+                    flex: 1;
+                    align-items: center;
+                    height: 100%;
+                    padding: 0 15px;
                 }
             }
-            .value {
-                display: inline-flex;
-                flex: 1;
-                align-items: center;
-                height: 100%;
-                padding: 0 15px;
+            .desc {
+                padding: 0 0 8px 40px;
+                color: var(--minorColor);
             }
         }
         &:deep {
@@ -547,6 +568,11 @@ const switchWay = () => {
         background: var(--bgColor);
         .currencyIcon {
             margin-right: 10px;
+        }
+        .asset-list {
+            .icon-asset {
+                margin-right: -3px;
+            }
         }
     }
 }

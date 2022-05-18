@@ -163,7 +163,7 @@
                                         </div>
                                         <van-icon name='arrow' />
                                     </div>
-                                    <div class='type' @click='toOrderFund'>
+                                    <div class='type' @click='toOrderFund(item.currency)'>
                                         <div class='left'>
                                             <img alt='' class='icon trade-icon' src='/images/trade.png' />
                                             <div class='text'>
@@ -251,7 +251,6 @@ import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal, mul } from '@/utils/calculation'
 import { debounce, getCookie } from '@/utils/util'
 import { log } from '@public/libs/adapter-latest'
-
 const emit = defineEmits(['switchDirection'])
 
 const router = useRouter()
@@ -263,6 +262,7 @@ const props = defineProps({
         default: () => {}
     }
 })
+
 const changeShowModel = inject('changeShowModel')
 const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
 // 客户信息
@@ -270,8 +270,7 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 
 // 选择的币种account
 const activeAccount = computed(() => accountList.value.find(el => el.currency === props.currency))
-// 当前语言
-const lang = getCookie('lang')
+
 // 组件ref
 const applyRulesDialogRef = ref(null)
 const currencyExplainShow = ref(false)
@@ -294,6 +293,7 @@ const {
     lastAssetsPay,
     activeAssets,
     onSelect,
+    fund,
     queryFundNetValue
 } = orderHook({ fund: props.fund, direction: 'buy' })
 
@@ -301,10 +301,9 @@ const amountPay = ref('')
 
 // 输入事件控制
 const onInput = value => {
-    console.log('==============', value)
     const newval = limitNumber(value)
     amountPay.value = newval
-    const digits = curAccount.value?.digits || 0
+    const digits = fund.shareTokenDigits || 0
     amountPay.value = limitDecimal(newval, digits)
     inputHandler()
 }
@@ -336,10 +335,15 @@ const submitHandler = () => {
         if (res.check()) {
             amountPay.value = ''
             calcApplyShares()
-            Dialog.alert({
+            Dialog.confirm({
                 title: t('fundInfo.applySuccessed'),
-                message: '',
-            }).then(() => {})
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow'),
+            }).then(() => {
+                openApplyRecords()
+            }).catch(() => {
+                // on cancel
+            })
         }
     })
 }
@@ -376,11 +380,11 @@ const toDeposit = (item) => {
 }
 
 // 点击前往交易页面的对应产品
-const toOrderFund = () => {
+const toOrderFund = currency => {
     const productList = store.state._quote.productList
-    let product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 'USDT' && el.tradeType === 5)
+    let product = productList.find(el => el.baseCurrency === currency && el.profitCurrency === 'USDT' && el.tradeType === 5)
     if (!product) {
-        product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.tradeType === 5)
+        product = productList.find(el => el.baseCurrency === currency && el.tradeType === 5)
     }
     if (!product) {
         return Toast(t('fundInfo.noTradeMarket'))
@@ -422,7 +426,7 @@ const toOrderFund = () => {
                 height: 100%;
                 padding: 0 12px;
                 .name {
-                    margin-left: 5px;
+                    margin-left: 10px;
                 }
             }
             .value {

@@ -130,6 +130,7 @@ const toDeposit = () => {
 
 // 点击前往交易页面的对应产品
 const toOrderFund = () => {
+    debugger
     const productList = store.state._quote.productList
     let product = productList.find(el => el.baseCurrency === props.currency && el.profitCurrency === 'USDT' && el.tradeType === 5)
     if (!product) {

@@ -144,6 +144,13 @@
                     </van-tab>
                 </van-tabs>
             </div>
+          
+            <div class="dialog-footer">
+                <el-button type="primary" @click="close"
+                >{{$t('common.sure')}}</el-button
+                >
+            </div>
+          
         </el-dialog>
     </div>
 </template>
@@ -241,6 +248,13 @@ const close = () => {
             margin: 5 0;
             vertical-align: middle;
         }
+    }
+}
+.dialog-footer {
+    margin-top: 90px;
+    .el-button {
+        width: 100%;
+        background-color: var(--primary);
     }
 }
 </style>

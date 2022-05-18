@@ -68,13 +68,13 @@ export const orderHook = (params) => {
         // 一篮子资产
 
         if (activeCurrency.value === 'self') {
-            fundAssetsList.value.map(elem => {
+            fundAssetsList.value && fundAssetsList.value.map(elem => {
                 const item = {
                     currency: elem.currencyCode,
                     amountPay: '0.00',
                     isShow: false
                 }
-                const account = accountList.value.find(el => el.currency === item.currency)
+                const account = accountList.value?.find(el => el.currency === item.currency)
                 const payItem = selfAssetsList.value.find(el => el.currency === item.currency)
                 if (account && payItem) {
                     item.isShow = true
@@ -92,7 +92,7 @@ export const orderHook = (params) => {
                 amountPay: '0.00',
                 isShow: false
             }
-            const account = accountList.value.find(el => el.currency === item.currency)
+            const account = accountList.value?.find(el => el.currency === item.currency)
             const payItem = singleAssetsPay.value
             if (account && payItem) {
                 item.isShow = true
