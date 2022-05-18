@@ -2,7 +2,7 @@ import request from '@/utils/request'
 import { getDevice } from '@/utils/util'
 
 /* 登录 */
-export function login (data) {
+export function login(data) {
     if (data.isThird) {
         return request({
             url: '/third/login/customer.app.CustomerThirdLoginService.login',
@@ -30,7 +30,7 @@ export function login (data) {
 }
 
 /* 登出 */
-export function logout (data) {
+export function logout(data) {
     return request({
         url: '/logout',
         method: 'post',
@@ -42,7 +42,7 @@ export function logout (data) {
 }
 
 /* 注册 */
-export function register (data) {
+export function register(data) {
     return request({
         url: '/register/customer.app.CustomerWebApiService.register',
         method: 'post',
@@ -57,7 +57,7 @@ export function register (data) {
     })
 }
 /* 开交易账户 */
-export function openAccount (data) {
+export function openAccount(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.openAccount',
         method: 'post',
@@ -68,7 +68,7 @@ export function openAccount (data) {
     })
 }
 /* 检测客户信息是否存在 */
-export function checkCustomerExist (data) {
+export function checkCustomerExist(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.checkCustomerExist',
         method: 'post',
@@ -81,7 +81,7 @@ export function checkCustomerExist (data) {
     })
 }
 /* 查询客户信息 */
-export function findCustomerInfo (data) {
+export function findCustomerInfo(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.findCustomerInfo',
         method: 'post',
@@ -93,7 +93,7 @@ export function findCustomerInfo (data) {
 }
 
 /* 找回密码 */
-export function findPwd (data) {
+export function findPwd(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.forgetLoginPwd',
         method: 'post',
@@ -105,7 +105,7 @@ export function findPwd (data) {
 }
 
 /* 修改密码 */
-export function modifyPwd (data) {
+export function modifyPwd(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.updateLoginPwd',
         method: 'post',
@@ -117,7 +117,7 @@ export function modifyPwd (data) {
 }
 
 /* 创建存款提案 */
-export function handleDesposit (data) {
+export function handleDesposit(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.createDepositProposal',
         method: 'post',
@@ -129,7 +129,7 @@ export function handleDesposit (data) {
 }
 
 /* 创建取款提案 */
-export function handleWithdraw (data) {
+export function handleWithdraw(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.createWithdrawProposal',
         method: 'post',
@@ -141,7 +141,7 @@ export function handleWithdraw (data) {
 }
 
 /* 获取取款、提币额度限制配置 */
-export function queryWithdrawLimitInfo (data) {
+export function queryWithdrawLimitInfo(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.getWithdrawAmountLimitInfo',
         method: 'post',
@@ -153,7 +153,7 @@ export function queryWithdrawLimitInfo (data) {
 }
 
 /* 获取取款限制配置 */
-export function queryWithdrawConfig (data) {
+export function queryWithdrawConfig(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.queryWithdrawLimitConfig',
         method: 'post',
@@ -165,7 +165,7 @@ export function queryWithdrawConfig (data) {
 }
 
 /* 获取客户取款货币对汇率 */
-export function queryWithdrawRate (data) {
+export function queryWithdrawRate(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.getWithdrawExchangeRate',
         method: 'post',
@@ -177,7 +177,7 @@ export function queryWithdrawRate (data) {
 }
 
 /* 获取支付通道 */
-export function queryPayType (data) {
+export function queryPayType(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.getPayChannels',
         method: 'post',
@@ -188,7 +188,7 @@ export function queryPayType (data) {
     })
 }
 /* 获取直充支付通道支持币种信息 */
-export function getCryptoBlockchainInfo (data) {
+export function getCryptoBlockchainInfo(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.getCryptoBlockchainInfo',
         method: 'post',
@@ -199,7 +199,7 @@ export function getCryptoBlockchainInfo (data) {
     })
 }
 /* 获取直充支付钱包地址 */
-export function getBindRechargeAddress (data) {
+export function getBindRechargeAddress(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.getBindRechargeAddress',
         method: 'post',
@@ -211,7 +211,7 @@ export function getBindRechargeAddress (data) {
     })
 }
 /* 申请绑定直充支付钱包地址 */
-export function applyRechargeBindAddress (data) {
+export function applyRechargeBindAddress(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.applyRechargeBindAddress',
         method: 'post',
@@ -223,7 +223,7 @@ export function applyRechargeBindAddress (data) {
 }
 
 /* 获取客户存款货币对汇率 */
-export function queryDepositExchangeRate (data) {
+export function queryDepositExchangeRate(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.getDepositExchangeRate',
         method: 'post',
@@ -235,7 +235,7 @@ export function queryDepositExchangeRate (data) {
 }
 
 /* 查询客户出金银行卡列表 */
-export function queryBankList (data) {
+export function queryBankList(data) {
     return request({
         url: '/global/customer.app.WithdrawBankWebApiService.bankList',
         method: 'post',
@@ -247,7 +247,7 @@ export function queryBankList (data) {
 }
 
 /* 新增出金银行卡 */
-export function addBank (data) {
+export function addBank(data) {
     return request({
         url: '/global/customer.app.WithdrawBankWebApiService.add',
         method: 'post',
@@ -259,7 +259,7 @@ export function addBank (data) {
 }
 
 /* 取款提案列表 */
-export function queryWithdrawPageList (data) {
+export function queryWithdrawPageList(data) {
     return request({
         url: '/global/fund.app.CustomerProposalQueryService.queryWithdrawPageList',
         method: 'post',
@@ -271,7 +271,7 @@ export function queryWithdrawPageList (data) {
 }
 
 /* 存款提案列表 */
-export function queryDepositPageList (data) {
+export function queryDepositPageList(data) {
     return request({
         url: '/global/fund.app.CustomerProposalQueryService.queryDepositPageList',
         method: 'post',
@@ -283,7 +283,7 @@ export function queryDepositPageList (data) {
 }
 
 /* 资金明细查询 */
-export function queryCapitalFlowList (data) {
+export function queryCapitalFlowList(data) {
     return request({
         url: '/global/tradeapi.app.OrderApiService.queryCapitalFlowList',
         method: 'post',
@@ -296,7 +296,7 @@ export function queryCapitalFlowList (data) {
 }
 
 /* 获取取款手续费 */
-export function computeWithdrawFee (data) {
+export function computeWithdrawFee(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.computeWithdrawFee',
         method: 'post',
@@ -308,7 +308,7 @@ export function computeWithdrawFee (data) {
 }
 
 /* 设置登录密码 */
-export function setLoginPwd (data) {
+export function setLoginPwd(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.bindLoginPwd',
         method: 'post',
@@ -320,7 +320,7 @@ export function setLoginPwd (data) {
 }
 
 /* 修改登录密码 */
-export function modifyLoginPwd (data) {
+export function modifyLoginPwd(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.updateLoginPwd',
         method: 'post',
@@ -332,7 +332,7 @@ export function modifyLoginPwd (data) {
 }
 
 /* 获取指定公司下平台信息列表 */
-export function queryPlatFormMessageLogList (data) {
+export function queryPlatFormMessageLogList(data) {
     return request({
         url: '/global/message.app.PlatFormMessageLogApiService.queryPlatFormMessageLogByPage',
         method: 'post',
@@ -344,7 +344,7 @@ export function queryPlatFormMessageLogList (data) {
 }
 
 /* 切换交易账户信息 */
-export function switchAccount (data) {
+export function switchAccount(data) {
     return request({
         url: '/global/switch.trade.account',
         method: 'post',
@@ -356,7 +356,7 @@ export function switchAccount (data) {
 }
 
 /* 指定客户的身份认证信息 */
-export function findAllBizKycList (data) {
+export function findAllBizKycList(data) {
     return request({
         url: '/global/customer.app.KycWebApiService.findAllBizKycList',
         method: 'post',
@@ -368,7 +368,7 @@ export function findAllBizKycList (data) {
 }
 
 /* 判断指定KYC等级是否要KYC认证 */
-export function findAllLevelKyc (data) {
+export function findAllLevelKyc(data) {
     return request({
         url: '/global/customer.app.KycWebApiService.findAllLevelKyc',
         method: 'post',
@@ -380,7 +380,7 @@ export function findAllLevelKyc (data) {
 }
 
 /* KYC证申请 */
-export function kycLevelApply (data) {
+export function kycLevelApply(data) {
     return request({
         url: '/global/customer.app.KycWebApiService.kycLevelApply',
         method: 'post',
@@ -392,7 +392,7 @@ export function kycLevelApply (data) {
 }
 
 /* 指定业务场景是否KYC通过 */
-export function checkKycApply (data) {
+export function checkKycApply(data) {
     return request({
         url: '/global/customer.app.KycWebApiService.checkKycApply',
         method: 'post',
@@ -404,7 +404,7 @@ export function checkKycApply (data) {
 }
 
 /* KYC业务场景认证申请 */
-export function kycApply (data) {
+export function kycApply(data) {
     return request({
         url: '/global/customer.app.KycWebApiService.kycApply',
         method: 'post',
@@ -416,7 +416,7 @@ export function kycApply (data) {
 }
 
 /* 绑定手机号码 */
-export function bindPhone (data) {
+export function bindPhone(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.bindPhone',
         method: 'post',
@@ -428,7 +428,7 @@ export function bindPhone (data) {
 }
 
 /* 绑定邮箱 */
-export function bindEmail (data) {
+export function bindEmail(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.bindEmail',
         method: 'post',
@@ -440,7 +440,7 @@ export function bindEmail (data) {
 }
 
 /* 判断用户是否已入金 */
-export function judgeIsAlreadyDeposit (data) {
+export function judgeIsAlreadyDeposit(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.judgeIsAlreadyDeposit',
         method: 'post',
@@ -452,7 +452,7 @@ export function judgeIsAlreadyDeposit (data) {
 }
 
 /* 查询存款提案 */
-export function queryDepositProposal (data) {
+export function queryDepositProposal(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.queryDepositProposal',
         method: 'post',
@@ -464,7 +464,7 @@ export function queryDepositProposal (data) {
 }
 
 /* 客户自选产品列表 */
-export function queryCustomerOptionalList (data) {
+export function queryCustomerOptionalList(data) {
     return request({
         url: '/global/customer.app.CustomerOptionalWebApiService.optionalList',
         method: 'post',
@@ -476,7 +476,7 @@ export function queryCustomerOptionalList (data) {
 }
 
 /* 添加自选 */
-export function addCustomerOptional (data) {
+export function addCustomerOptional(data) {
     return request({
         url: '/global/customer.app.CustomerOptionalWebApiService.add',
         method: 'post',
@@ -488,7 +488,7 @@ export function addCustomerOptional (data) {
     })
 }
 /* 批量添加自选 */
-export function addCustomerOptionalBatch (data) {
+export function addCustomerOptionalBatch(data) {
     return request({
         url: '/global/customer.app.CustomerOptionalWebApiService.addBatch',
         method: 'post',
@@ -501,7 +501,7 @@ export function addCustomerOptionalBatch (data) {
 }
 
 /* 更换手机 */
-export function changePhone (data) {
+export function changePhone(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.changePhone',
         method: 'post',
@@ -513,7 +513,7 @@ export function changePhone (data) {
 }
 
 /* 更换手机 MFA */
-export function changePhoneV1v1v2 (data) {
+export function changePhoneV1v1v2(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.changePhoneV1v1v2',
         method: 'post',
@@ -525,7 +525,7 @@ export function changePhoneV1v1v2 (data) {
 }
 
 /* 更换邮箱 */
-export function changeEmail (data) {
+export function changeEmail(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.changeEmail',
         method: 'post',
@@ -537,7 +537,7 @@ export function changeEmail (data) {
 }
 
 /* 更换邮箱(MFA) */
-export function changeEmailV1v1v2 (data) {
+export function changeEmailV1v1v2(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.changeEmailV1v1v2',
         method: 'post',
@@ -549,7 +549,7 @@ export function changeEmailV1v1v2 (data) {
 }
 
 /* 检测客户信息是否存在,不需要区号信息 */
-export function checkUserStatus (data) {
+export function checkUserStatus(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.checkStatus',
         method: 'post',
@@ -561,7 +561,7 @@ export function checkUserStatus (data) {
 }
 
 /* 获取客户提现方式 */
-export function getWithdrawMethodList (data) {
+export function getWithdrawMethodList(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.getWithdrawMethodList',
         method: 'post',
@@ -573,7 +573,7 @@ export function getWithdrawMethodList (data) {
 }
 
 /* 获取客户提币币种和链名称 */
-export function getWithdrawCurrencyList (data) {
+export function getWithdrawCurrencyList(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.getWithdrawCurrencyList',
         method: 'post',
@@ -585,7 +585,7 @@ export function getWithdrawCurrencyList (data) {
 }
 
 /* 获取客户可用的钱包类提币币种和链名称列表 */
-export function getAllWithdrawCurrencyList (data) {
+export function getAllWithdrawCurrencyList(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.getAllWithdrawCurrencyList',
         method: 'post',
@@ -597,7 +597,7 @@ export function getAllWithdrawCurrencyList (data) {
 }
 
 /* 获取钱包列表 */
-export function getWalletAddressList (data) {
+export function getWalletAddressList(data) {
     return request({
         url: '/global/customer.app.CustomerWalletWebApiService.walletList',
         method: 'post',
@@ -609,7 +609,7 @@ export function getWalletAddressList (data) {
 }
 
 /* 添加钱包 */
-export function addWalletAddress (data) {
+export function addWalletAddress(data) {
     return request({
         url: '/global/customer.app.CustomerWalletWebApiService.add',
         method: 'post',
@@ -621,7 +621,7 @@ export function addWalletAddress (data) {
 }
 
 /* 新增钱包(MFA) */
-export function addWalletAddressV1v1v2 (data) {
+export function addWalletAddressV1v1v2(data) {
     return request({
         url: '/global/customer.app.CustomerWalletWebApiService.addV1v1v2',
         method: 'post',
@@ -633,7 +633,7 @@ export function addWalletAddressV1v1v2 (data) {
 }
 
 /* 删除钱包 */
-export function deleteWalletAddress (data) {
+export function deleteWalletAddress(data) {
     return request({
         url: '/global/customer.app.CustomerWalletWebApiService.delete',
         method: 'post',
@@ -645,7 +645,7 @@ export function deleteWalletAddress (data) {
 }
 
 /* 设置默认钱包 */
-export function setDefaultWallet (data) {
+export function setDefaultWallet(data) {
     return request({
         url: '/global/customer.app.CustomerWalletWebApiService.updateWallet',
         method: 'post',
@@ -657,7 +657,7 @@ export function setDefaultWallet (data) {
 }
 
 /* 查询客户总资产信息 */
-export function queryCustomerAssetsInfo (data) {
+export function queryCustomerAssetsInfo(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.queryCustomerAssetsInfo',
         method: 'post',
@@ -673,7 +673,7 @@ export function queryCustomerAssetsInfo (data) {
 }
 
 /* 查询账户资产信息 */
-export function queryAccountAssetsInfo (data) {
+export function queryAccountAssetsInfo(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.queryAccountAssetsInfo',
         method: 'post',
@@ -685,7 +685,7 @@ export function queryAccountAssetsInfo (data) {
 }
 
 // 手动还款
-export function manualRepayment (data) {
+export function manualRepayment(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.manualRepayment',
         method: 'post',
@@ -697,7 +697,7 @@ export function manualRepayment (data) {
 }
 
 // 修改仓位占用保证金
-export function updateOccupyTheMargin (data) {
+export function updateOccupyTheMargin(data) {
     return request({
         url: '/global/tradeapi.app.PositionApiService.updateOccupyTheMargin',
         method: 'post',
@@ -711,7 +711,7 @@ export function updateOccupyTheMargin (data) {
 }
 
 // 获取下单还币汇率(杠杆)
-export function previewOrder (data) {
+export function previewOrder(data) {
     return request({
         url: '/global/tradeapi.app.OrderApiService.previewOrder',
         method: 'post',
@@ -724,7 +724,7 @@ export function previewOrder (data) {
 }
 
 // 下单还币(杠杆)
-export function addRepaymentOrder (data) {
+export function addRepaymentOrder(data) {
     return request({
         url: '/global/tradeapi.app.OrderApiService.addRepaymentOrder',
         method: 'post',
@@ -738,7 +738,7 @@ export function addRepaymentOrder (data) {
 
 // 手动借款
 
-export function manualLoan (data) {
+export function manualLoan(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.manualLoan',
         method: 'post',
@@ -750,7 +750,7 @@ export function manualLoan (data) {
 }
 
 /* 查询借还款流水列表 */
-export function queryLiabilitiesWaterByPage (data) {
+export function queryLiabilitiesWaterByPage(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.queryLiabilitiesWaterByPage',
         method: 'post',
@@ -762,7 +762,7 @@ export function queryLiabilitiesWaterByPage (data) {
 }
 
 /* 成交记录 */
-export function tradeRecordList (data) {
+export function tradeRecordList(data) {
     return request({
         url: '/global/tradeapi.app.OrderApiService.queryTradeRecordPage',
         method: 'post',
@@ -775,7 +775,7 @@ export function tradeRecordList (data) {
 }
 
 /* 取款货币列表 */
-export function withdrawCurrencyList (data) {
+export function withdrawCurrencyList(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.withdrawCurrencyList',
         method: 'post',
@@ -787,7 +787,7 @@ export function withdrawCurrencyList (data) {
 }
 
 /* 资金划转 */
-export function capitalTransfer (data) {
+export function capitalTransfer(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.capitalTransfer',
         method: 'post',
@@ -799,7 +799,7 @@ export function capitalTransfer (data) {
 }
 
 /* 划转记录 */
-export function capitalTransferRecord (data) {
+export function capitalTransferRecord(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.capitalTransferRecord',
         method: 'post',
@@ -811,7 +811,7 @@ export function capitalTransferRecord (data) {
 }
 
 /* 实时账户资金信息 */
-export function queryAccountById (data) {
+export function queryAccountById(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.queryAccountById',
         method: 'post',
@@ -822,7 +822,7 @@ export function queryAccountById (data) {
     })
 }
 /* 批量增加玩法账户信息 */
-export function increasAccount (data) {
+export function increasAccount(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.openAccount',
         method: 'post',
@@ -835,7 +835,7 @@ export function increasAccount (data) {
 }
 
 /* 查询客户总资产 */
-export function queryCustomerAssets (data) {
+export function queryCustomerAssets(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.queryCustomerAssets',
         method: 'post',
@@ -848,7 +848,7 @@ export function queryCustomerAssets (data) {
 }
 
 /* 谷歌登录token校验 */
-export function googleLoginVerify (data) {
+export function googleLoginVerify(data) {
     return request({
         url: '/third/login/customer.app.CustomerThirdLoginService.googleVerify',
         method: 'post',
@@ -861,7 +861,7 @@ export function googleLoginVerify (data) {
 }
 
 /* 谷歌登录校验token有效性 */
-export function facebookLoginVerify (data) {
+export function facebookLoginVerify(data) {
     return request({
         url: '/third/login/customer.app.CustomerThirdLoginService.facebookVerify',
         method: 'post',
@@ -874,7 +874,7 @@ export function facebookLoginVerify (data) {
 }
 
 /* twitter登录校验token有效性 */
-export function twitterLoginVerify (data) {
+export function twitterLoginVerify(data) {
     return request({
         url: '/third/login/customer.app.CustomerThirdLoginService.twitterVerify',
         method: 'post',
@@ -887,7 +887,7 @@ export function twitterLoginVerify (data) {
 }
 
 /* 第三方登录 */
-export function thirdLogin (data) {
+export function thirdLogin(data) {
     return request({
         url: '/third/login/customer.app.CustomerThirdLoginService.login',
         method: 'post',
@@ -900,7 +900,7 @@ export function thirdLogin (data) {
 }
 
 /* 第三方注册 */
-export function thirdRegist (data) {
+export function thirdRegist(data) {
     return request({
         url: '/third/login/customer.app.CustomerThirdLoginService.register',
         method: 'post',
@@ -913,7 +913,7 @@ export function thirdRegist (data) {
 }
 
 /* 设置资金密码 */
-export function bindAssertsPwd (data) {
+export function bindAssertsPwd(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.bindAssertsPwd',
         method: 'post',
@@ -925,7 +925,7 @@ export function bindAssertsPwd (data) {
     })
 }
 /* 修改资金密码 */
-export function updateAssertsPwd (data) {
+export function updateAssertsPwd(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.updateAssertsPwd',
         method: 'post',
@@ -938,7 +938,7 @@ export function updateAssertsPwd (data) {
 }
 
 /* 忘记资金密码 */
-export function forgetAssertsPwd (data) {
+export function forgetAssertsPwd(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.forgetAssertsPwd',
         method: 'post',
@@ -951,7 +951,7 @@ export function forgetAssertsPwd (data) {
 }
 
 /* 忘记资金密码 MFA */
-export function forgetAssertsPwdV1v1v2 (data) {
+export function forgetAssertsPwdV1v1v2(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.forgetAssertsPwdV1v1v2',
         method: 'post',
@@ -964,7 +964,7 @@ export function forgetAssertsPwdV1v1v2 (data) {
 }
 
 /* 获取客户支持的存款币种列表 */
-export function getDepositCoinList (data) {
+export function getDepositCoinList(data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.getDepositCoinList',
         method: 'post',
@@ -977,7 +977,7 @@ export function getDepositCoinList (data) {
 }
 
 /* 获取客户支持的取款账户币种列表 */
-export function getWithdrawAccountCurrencyList (data) {
+export function getWithdrawAccountCurrencyList(data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.getWithdrawAccountCurrencyList',
         method: 'post',
@@ -990,7 +990,7 @@ export function getWithdrawAccountCurrencyList (data) {
 }
 
 /* 检测客户是否开启GoogleMFA */
-export function checkGoogleMFAStatus (data) {
+export function checkGoogleMFAStatus(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.checkGoogleMFAStatus',
         method: 'post',
@@ -1002,7 +1002,7 @@ export function checkGoogleMFAStatus (data) {
     })
 }
 /* 生成谷歌验证账号 */
-export function generateGoogleAccount (data) {
+export function generateGoogleAccount(data) {
     return request({
         url: '/global/customer.app.GoogleVerifyApiService.generateGoogleAccount',
         method: 'post',
@@ -1014,7 +1014,7 @@ export function generateGoogleAccount (data) {
 }
 
 /* 谷歌验证码绑定与解除 */
-export function enableOrForbidMFA (data) {
+export function enableOrForbidMFA(data) {
     return request({
         url: '/global/customer.app.CustomerWebApiService.enableOrForbidMFA',
         method: 'post',
@@ -1026,7 +1026,7 @@ export function enableOrForbidMFA (data) {
 }
 
 /* 保存用户扩展信息 */
-export function saveCustomerExtend (data) {
+export function saveCustomerExtend(data) {
     return request({
         url: '/global/customer.app.CustomerExtendWebApiService.saveCustomerExtend',
         method: 'post',
@@ -1038,7 +1038,7 @@ export function saveCustomerExtend (data) {
 }
 
 /* 查询用户扩展信息 */
-export function findCustomerExtend (data) {
+export function findCustomerExtend(data) {
     return request({
         url: '/global/customer.app.CustomerExtendWebApiService.findCustomerExtend',
         method: 'post',
@@ -1049,7 +1049,6 @@ export function findCustomerExtend (data) {
         data
     })
 }
-
 
 /* 获取客户API列表 */
 export function getCustomerApiList(data) {
@@ -1107,6 +1106,45 @@ export function delCustomerApi(data) {
 export function editCustomerApiSave(data) {
     return request({
         url: '/global/customer.app.CustomerApiWebService.editApiPermission',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取公告列表 */
+export function getNoticeList(data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewNoticePage',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取公告详情 */
+export function getNoticeDetail(data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewNoticeDetail',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取公告弹窗 */
+export function getNoticePop(data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewNoticePopup',
         method: 'post',
         toastErr: false,
         headers: {

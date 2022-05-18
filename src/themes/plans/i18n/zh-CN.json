@@ -123,7 +123,10 @@
         "fundRedemption": "基金赎回",
         "transfer": "划转",
         "fundRules": "交易规则",
-        "spotTrade": "现货交易"
+        "spotTrade": "现货交易",
+        "noticeTitle": "公告消息",
+        "notice": "公告",
+        "msg": "消息"
     },
     "search": {
         "keywords": "请输入产品名称/代码/拼音搜索",

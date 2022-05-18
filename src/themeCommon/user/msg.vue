@@ -1,22 +1,73 @@
 <template>
-    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
-
+    <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
+    <Loading :show='pageLoading' />
     <van-tabs v-model:active='activeIndex' class='publicPage' @click-tab='onClickTab'>
-        <van-tab name='public' title='标签 1'>
-            <div class=''>
-                <van-dropdown-menu :active-color='$style.primary'>
-                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
-                </van-dropdown-menu>
-            </div>
-            <Loading :show='pageLoading' />
+        <van-tab name='public' :title='$t("route.notice")'>
             <div class='msg-list'>
-                <p class='header'>
+                <!-- <p class='header'>
                     {{ $t('cRoute.msg') }}
-                </p>
-                <div v-if='list.length === 0'>
+                </p> -->
+                <div v-if='listNotice.length === 0'>
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
                 <van-pull-refresh
+                    v-else
+                    v-model='loading'
+                    :loading-text="$t('compLang.loading')"
+                    :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                    :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                    @refresh='onRefreshNotice'
+                >
+                    <van-list
+                        v-model:error='isError'
+                        v-model:loading='loading'
+                        :error-text='errorTip'
+                        :finished='finishedNt'
+                        :finished-text='$t("common.noMore")'
+                        :loading-text="$t('compLang.loading')"
+                        @load='onLoadNotice'
+                    >
+                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item'>
+                            <p class='msg-title'>
+                                {{ item.title === 'null'? '': item.title }}
+                            </p>
+                            <p class='msg-content'>
+                                {{ computeHtmlTime(item.content) }}
+                            </p>
+                            <p class='msg-time'>
+                                {{ formatTime(item.createTime) }}
+                            </p>
+                        </div>
+                    </van-list>
+                </van-pull-refresh>
+            </div>
+        </van-tab>
+        <van-tab name='msg' :title='$t("route.msg")'>
+            <div class='operate'>
+                <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
+                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+                </van-dropdown-menu>
+            </div>
+
+            <div class='msg-list'>
+                <!-- <p class='header'>
+                    {{ $t('cRoute.msg') }}
+                </p> -->
+                <div v-if='list.length === 0'>
+                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                </div>
+                <div v-for='(item,index) in list' v-else :key='index' class='msg-item'>
+                    <p class='msg-title'>
+                        {{ item.title === 'null'? '': item.title }}
+                    </p>
+                    <p class='msg-content'>
+                        {{ computeHtmlTime(item.content) }}
+                    </p>
+                    <p class='msg-time'>
+                        {{ formatTime(item.createTime) }}
+                    </p>
+                </div>
+                <!-- <van-pull-refresh
                     v-else
                     v-model='loading'
                     :loading-text="$t('compLang.loading')"
@@ -45,11 +96,8 @@
                             </p>
                         </div>
                     </van-list>
-                </van-pull-refresh>
+                </van-pull-refresh> -->
             </div>
-        </van-tab>
-        <van-tab name='msg' title='标签 2'>
-            内容 2
         </van-tab>
     </van-tabs>
 </template>
@@ -57,10 +105,11 @@
 <script>
 
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref } from 'vue'
-import { queryPlatFormMessageLogList } from '@/api/user'
+import { queryPlatFormMessageLogList, getNoticeList } from '@/api/user'
+
 import { useStore } from 'vuex'
 import Top from '@/components/top'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
 
@@ -73,10 +122,18 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             list: [],
+            listNotice: [],
             loading: false,
-            finished: false,
+            lang: getCookie('lang') || 'zh-CN',
+
+            finished: false, // 消息列表
             pageLoading: false,
             current: 1,
+
+            finishedNt: false, // 公告列表
+            pageLoadingNt: false,
+            currentNt: 1,
+
             type: '',
             errorTip: '',
             rightAction: { title: 444 },
@@ -143,6 +200,39 @@ export default {
             })
         }
 
+        // 获取公告列表
+        const getNoticeData = () => {
+            // state.pageLoading = true
+            state.errorTip = ''
+            console.log(customInfo.value)
+
+            getNoticeList({
+                current: state.currentNt,
+                pubTimeFrom: '',
+                pubTimeTo: '',
+                lang: state.lang,
+                size: 10,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                state.loading = false
+                state.pageLoading = false
+                if (res.check()) {
+                    if (res.data.records && res.data.records.length > 0) {
+                        state.listNotice = state.listNotice.concat(res.data.records)
+                    }
+
+                    // 数据全部加载完成
+                    if (res.data.size * res.data.current >= res.data.total) {
+                        state.finishedNt = true
+                    }
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
+        }
+
         const computeHtmlTime = (content) => {
             try {
                 const reg = /<?time[^>]*>[^<]*<\/time>/gi
@@ -170,23 +260,37 @@ export default {
         }
         document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
-            getMsgList()
+            // getMsgList()
+            getNoticeData()
         })
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_notice', gotMsg)
         })
 
-        // 上拉刷新
+        // msg上拉刷新
         const onRefresh = () => {
             state.current = 1
             state.finished = false
             state.list = []
             getMsgList()
         }
-        // 底部加载更多
+        // msg底部加载更多
         const onLoad = () => {
             state.current++
             getMsgList()
+        }
+
+        // notice上拉刷新
+        const onRefreshNotice = () => {
+            state.currentNt = 1
+            state.finishedNt = false
+            state.listNotice = []
+            // getNoticeData()
+        }
+        // notice底部加载更多
+        const onLoadNotice = () => {
+            // state.currentNt++
+            // getNoticeData()
         }
 
         const formatTime = (val) => {
@@ -195,7 +299,10 @@ export default {
 
         return {
             getMsgList,
+            onRefreshNotice,
+            onLoadNotice,
             isError,
+            getNoticeData,
             customInfo,
             formatTime,
             onRefresh,
@@ -222,23 +329,29 @@ export default {
     position: absolute;
     width: 100%;
 }
-:deep(.van-dropdown-menu__bar){
+:deep(.van-dropdown-menu__bar) {
     box-shadow: none;
+
     --van-dropdown-menu-title-font-size: 12px;
 }
-.publicPage{
+.publicPage {
     flex: 1;
     height: 100%;
-    overflow: auto;
     padding-top: rem(110px);
+    overflow: auto;
     background-color: var(--bgColor);
+    .operate {
+        text-align: left;
+        .msg-filter {
+            display: inline-block;
+        }
+    }
 }
 .msg-list {
-
-    .header{
-        font-size: rem(48px);
-        padding-left: rem(30px);
+    .header {
         padding-bottom: rem(30px);
+        padding-left: rem(30px);
+        font-size: rem(48px);
         background: var(--contentColor);
     }
     .msg-item {
@@ -265,6 +378,5 @@ export default {
             line-height: rem(60px);
         }
     }
-
 }
 </style>
