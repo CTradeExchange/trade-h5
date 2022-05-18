@@ -166,20 +166,23 @@ export default {
                 size: 30,
                 current: 1
             }
-            // console.log(window.dayjs(new Date(1652258165624)).format('YYYY-MM-DD'))
             getCustomerApiList(params).then(res => {
                 state.loading = false
-                console.log(res)
+                // console.log(res)
                 if (Number(res.code) === 0) {
                     const tempArr = []
                     res.data.records.filter(item => {
-                        // const _timeLeft = window.dayjs(new Date(item.expiredTime)).diff(new Date(item.createTime), 'day')
                         let _timeLeft = ''
-                        if (item.validityDays !== undefined) {
-                            if (item.validityDays === -1) {
+                        const vday = item.validityDays
+                        if (vday !== undefined) {
+                            if (vday === -1) {
                                 _timeLeft = t('api.timeTips3')
                             } else {
-                                _timeLeft = t('api.timeleft') + item.validityDays + t('api.timeleftCell')
+                                if (vday === null) {
+                                    _timeLeft = t('api.timeleftCell2')
+                                } else {
+                                    _timeLeft = t('api.timeleft') + vday + t('api.timeleftCell')
+                                }
                             }
                         } else {
                             _timeLeft = t('api.timeleftCell2')

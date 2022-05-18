@@ -158,18 +158,23 @@ export default {
             }
             getCustomerApiList(params).then(res => {
                 state.loading = false
-                console.log(res)
+                // console.log(res)
                 if (Number(res.code) === 0) {
                     const tempArr = []
                     let _timeLeft = ''
                     let whiteIpsStr = ''
                     res.data.records.filter(item => {
                         _timeLeft = ''
-                        if (item.validityDays !== undefined) {
-                            if (item.validityDays === -1) {
+                        const vday = item.validityDays
+                        if (vday !== undefined) {
+                            if (vday === -1) {
                                 _timeLeft = t('api.timeTips3')
                             } else {
-                                _timeLeft = t('api.timeleft') + item.validityDays + t('api.timeleftCell')
+                                if (vday === null) {
+                                    _timeLeft = t('api.timeleftCell2')
+                                } else {
+                                    _timeLeft = t('api.timeleft') + vday + t('api.timeleftCell')
+                                }
                             }
                         } else {
                             _timeLeft = t('api.timeleftCell2')
