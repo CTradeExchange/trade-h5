@@ -19,12 +19,12 @@
             </listVue>
         </div>
     </div>
-    <van-dialog v-model:show='show' title='申购明细'>
+    <van-dialog v-model:show='show' :title="$t('fundInfo.applyDetail')">
         <div class='info-wrap'>
             <p class='info-item header'>
-                <span>申购资产</span>
-                <span>申购金额</span>
-                <span>申购手续费</span>
+                <span>{{ $t('fundInfo.applyAssets') }}</span>
+                <span>{{ $t('fundInfo.applyAmount') }}</span>
+                <span>{{ $t('fundInfo.applyFees') }}</span>
             </p>
             <p v-for='item in showInfo' :key='item.currency' class='info-item'>
                 <span>{{ item.currency }}</span>

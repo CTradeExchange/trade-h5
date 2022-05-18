@@ -64,7 +64,7 @@
             </p>
             <div class='header'>
                 <span>{{ $t('fundInfo.assets') }}</span>
-                <span>支付数量</span>
+                <span>{{ $t('fundInfo.payCount') }}</span>
             </div>
             <ul class='content'>
                 <li v-for='item in lastAssetsPay' :key='item.currencyCode'>
@@ -81,7 +81,7 @@
                         <div class='cr-inline'>
                             <span>{{ item.amountPay }}</span>
                             <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
-                                可用不足，需增加{{ item.depositAmount }}
+                                {{ $t('fundInfo.availableNot') }}{{ item.depositAmount }}
                             </p>
                         </div>
                         <div v-if='item.isShow' class='cr-icon'>
@@ -103,9 +103,9 @@
                 </li>
             </ul>
             <div class='notice'>
-                注：以上计算结果包含申购手续费，并且是预计值，具体以提交后实际成交为准，
+                {{ $t('fundInfo.applyCalculateTip') }}
                 <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
-                    查看规则
+                    {{ $t('fundInfo.viewRule') }}
                 </router-link>
             </div>
         </div>
@@ -225,7 +225,7 @@ const submitHandler = () => {
         return Toast(t('fundInfo.subScriptePlaceholder'))
     }
     if (Number(amountPay.value) < Number(activeAssets.value.minPurchaseNum)) {
-        return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
+        return Toast(t('fundInfo.applyMinTip') + activeAssets.value.minPurchaseNum)
     }
     let assetsTip = ''
     lastAssetsPay.value.map(elem => {
@@ -233,7 +233,7 @@ const submitHandler = () => {
     })
     if (assetsTip) {
         assetsTip = assetsTip.substring(0, assetsTip.length - 1)
-        assetsTip = assetsTip + '的可用余额不足'
+        assetsTip = assetsTip + t('fundInfo.applyNotTip')
         return Toast(assetsTip)
     }
     // 提交申购
