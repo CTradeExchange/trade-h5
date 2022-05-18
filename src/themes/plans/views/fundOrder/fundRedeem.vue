@@ -21,7 +21,7 @@
                 :currency='fund.shareTokenCode'
                 :digits='fund.shareTokenDigits || 0'
                 icon-content-type='fund'
-                label='您支付'
+                :label="$t('fundInfo.youPay')"
                 :placeholder='payPlaceholder'
                 @input='inputAmount'
             />
@@ -31,7 +31,7 @@
                 <div class='switch-text'>
                     <p>
                         <span class='muted'>
-                            手续费率:
+                            {{ $t('fundInfo.rate') }}:
                         </span>
                         <span>
                             {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
@@ -53,7 +53,7 @@
                 :currency='activeCurrency'
                 :fund-assets-list='fundAssetsList'
                 icon-content-type='asset'
-                label='您想要得到'
+                :label="$t('fundInfo.wantGet')"
                 :readonly='true'
                 @open='openCurrencyExplain'
                 @touchCurrency='touchCurrency'
@@ -61,7 +61,7 @@
         </div>
         <div class='pay-wrap'>
             <p class='title'>
-                预计得到以下资产
+                {{ $t('fundInfo.expectedGetAssets') }}
             </p>
             <!-- 一篮子资产 -->
             <div v-if="activeCurrency === 'self'" class='redeem-assets'>
@@ -69,8 +69,8 @@
                     <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
                         <p
                             style='padding: 5px;
-font-size: 10px;
-white-space: nowrap;'
+                            font-size: 10px;
+                            white-space: nowrap;'
                         >
                             {{ item.weight }}
                         </p>
@@ -92,8 +92,8 @@ white-space: nowrap;'
             <!-- 单资产 -->
             <div v-else class='redeem-type'>
                 <div class='header'>
-                    <span>资产</span>
-                    <span>预计获得金额</span>
+                    <span>{{ $t('fundInfo.assets') }}</span>
+                    <span>{{ $t('fundInfo.expectedGetAmount') }}</span>
                 </div>
                 <ul class='content'>
                     <li>
@@ -107,20 +107,20 @@ white-space: nowrap;'
                             </span>
                         </div>
                         <div class='c-right'>
-                            <span>T+2日确认份额后的基金净值价格计算金额</span>
+                            <span>{{ $t('fundInfo.t2Tip1') }}</span>
                         </div>
                     </li>
                 </ul>
             </div>
             <div v-if="activeCurrency === 'self'" class='notice'>
-                注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
+                {{ $t('fundInfo.t2Tip2') }}
                 <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
-                    查看规则
+                    {{ $t('fundInfo.viewRule') }}
                 </router-link>
             </div>
             <div v-else class='notice' style='text-align: right;'>
                 <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
-                    查看规则
+                    {{ $t('fundInfo.viewRule') }}
                 </router-link>
             </div>
         </div>
@@ -240,7 +240,7 @@ const submitHandler = () => {
         return Toast(t('fundInfo.redeemNumPlaceholder'))
     }
     if (Number(amountPay.value) < Number(activeAssets.value.minRedemptionNum)) {
-        return Toast('单笔最小赎回份额是' + activeAssets.value.minRedemptionNum)
+        return Toast(t('fundInfo.redeemMinTip') + activeAssets.value.minRedemptionNum)
     }
     // 提交赎回
     submitFundRedeem({

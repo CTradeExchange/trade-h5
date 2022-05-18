@@ -759,7 +759,23 @@
         "rate": "手续费率",
         "wantGet": "您想要得到",
         "inputCount": "输入数量",
-        "needAssets": "您需要支付以下资产"
+        "needAssets": "您需要支付以下资产",
+        "availableNot": "可用不足，需增加",
+        "applyCalculateTip": "注：以上计算结果包含申购手续费，并且是预计值，具体以提交后实际成交为准，",
+        "viewRule": "查看规则",
+        "payCount": "支付数量",
+        "applyMinTip": "单笔最小申购份额是",
+        "applyNotTip": "的可用余额不足",
+        "expectedGetAssets": "预计得到以下资产",
+        "expectedGetAmount": "预计获得金额",
+        "t2Tip1": "T+2日确认份额后的基金净值价格计算金额",
+        "t2Tip2": "注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。",
+        "redeemMinTip": "单笔最小赎回份额是",
+        "basketAssets": "一篮子资产",
+        "applyCountTip": "通过支付{count}个资产购买基金",
+        "redeemCountTip": "分别获得{count}个资产",
+        "chooseRedeemWay": "选择赎回方式",
+        "payBuyFund": "支付{currency}购买基金"
     },
     "home": {
         "quick": {
