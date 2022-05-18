@@ -2,7 +2,7 @@
     <div class='handle-module'>
         <div class='block'>
             <p class='title'>
-                您支付 <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
+                {{ $t('fundInfo.youPay') }} <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
 
             <div class='box'>
@@ -17,18 +17,18 @@
                     <el-option
                         v-for='(item, index) in selectActions'
                         :key='index'
-                        :label='item.currencyCode === "self" ? "一篮子资产": item.currencyCode'
+                        :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
                         :value='item.currencyCode'
                     >
                         <div v-if="item.currencyCode === 'self'" class='asset-item'>
                             <div class='top'>
                                 <CurrencyIcon :currency='item.currencyCode' :size='24' />
                                 <span class='currency-text'>
-                                    一篮子资产
+                                    {{ $t('fundInfo.basketAssets') }}
                                 </span>
                             </div>
                             <div>
-                                <p>支付一篮子资产购买基金</p>
+                                <p>  {{ $t('fundInfo.payBasketBuy') }}</p>
                                 <currencyIcon
                                     v-for='(elem, i) in fundAssetsList'
                                     :key='i'
@@ -44,7 +44,7 @@
                                 </span>
                             </div>
                             <div>
-                                支付 {{ item.currencyCode }} 购买基金
+                                {{ $t('fundInfo.payCurrencyBuy', { currency: item.currencyCode }) }}
                             </div>
                         </div>
                     </el-option>
@@ -66,7 +66,7 @@
             <div class='switch-text'>
                 <p>
                     <span class='muted'>
-                        手续费率:
+                        {{ $t('fundInfo.rate') }}:
                     </span>
                     <span>
                         {{ mul(activeAssets.purchaseFeeProportion,100) }}%
@@ -85,7 +85,7 @@
 
         <div class='block'>
             <p class='title'>
-                您想要得到
+                {{ $t('fundInfo.wantGet') }}
             </p>
             <div class='box'>
                 <label class='label'>
@@ -99,7 +99,7 @@
                     <!-- {{ sharesPlaceholder }} -->
                     <el-input
                         v-model='amountPay'
-                        placeholder='输入申购份额'
+                        :placeholder="$t('fundInfo.inputCount')"
                         size='normal'
                         @input='onInput'
                     />
@@ -109,11 +109,11 @@
 
         <div class='pay-wrap'>
             <p class='title'>
-                您需要支付以下资产
+                {{ $t('fundInfo.needAssets') }}
             </p>
             <div class='header'>
-                <span>资产</span>
-                <span>支付数量</span>
+                <span> {{ $t('trade.asset') }}</span>
+                <span> {{ $t('fundInfo.payCount') }}</span>
             </div>
             <ul class='content'>
                 <li v-for='item in lastAssetsPay' :key='item.currencyCode'>
@@ -130,7 +130,7 @@
                         <div class='cr-inline'>
                             <span>{{ item.amountPay }}</span>
                             <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
-                                可用不足，需增加{{ item.depositAmount }}
+                                {{ $t('fundInfo.availableNot') }}  {{ item.depositAmount }}
                             </p>
                         </div>
                         <div v-if='item.isShow' class='cr-icon'>
@@ -150,15 +150,15 @@
                                     />
                                 </template>
                                 <div class='add-wrap'>
-                                    <h2>选择获取该资产的方式</h2>
+                                    <h2> {{ $t('fundInfo.chooseGetAssets') }} </h2>
                                     <div class='type' @click='toDeposit(item)'>
                                         <div class='left'>
                                             <i
                                                 class='icon iconfont icon_icon_assets'
                                             ></i>
                                             <div class='text'>
-                                                <h3>存款</h3>
-                                                <h5>通过存款的方式存入该资产</h5>
+                                                <h3> {{ $t('fundInfo.deposit') }}</h3>
+                                                <h5> {{ $t('fundInfo.depositTip') }}</h5>
                                             </div>
                                         </div>
                                         <van-icon name='arrow' />
@@ -167,8 +167,8 @@
                                         <div class='left'>
                                             <img alt='' class='icon trade-icon' src='/images/trade.png' />
                                             <div class='text'>
-                                                <h3>买入</h3>
-                                                <h5>通过交易的方式买入该资产</h5>
+                                                <h3> {{ $t('trade.buy') }}</h3>
+                                                <h5> {{ $t('fundInfo.buyTip') }}</h5>
                                             </div>
                                         </div>
                                         <van-icon name='arrow' />
@@ -187,7 +187,7 @@
                 </li>
             </ul>
             <div class='notice'>
-                注：以上计算结果包含申购手续费，并且是预计值，具体以提交后实际成交为准
+                {{ $t('fundInfo.applyCalculateTip') }}
             </div>
         </div>
 
@@ -386,7 +386,7 @@ const toOrderFund = currency => {
     if (!product) {
         product = productList.find(el => el.baseCurrency === currency && el.tradeType === 5)
     }
-    if (!product) {
+    if (!product || product.baseCurrency === product.profitCurrency) {
         return Toast(t('fundInfo.noTradeMarket'))
     }
     router.replace(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)

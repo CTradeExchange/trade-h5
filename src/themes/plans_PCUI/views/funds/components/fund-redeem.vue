@@ -2,7 +2,7 @@
     <div class='handle-module'>
         <div class='block'>
             <p class='title'>
-                您支付
+                {{ $t('fundInfo.youPay') }}
             </p>
             <div class='box-bg'>
                 <div class='box'>
@@ -30,7 +30,7 @@
             <div class='switch-text'>
                 <p>
                     <span class='muted'>
-                        手续费率:
+                        {{ $t('fundInfo.rate') }}:
                     </span>
                     <span>
                         {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
@@ -49,7 +49,7 @@
         <div class='block'>
             <p class='title'>
                 <!-- {{ $t('fundInfo.redeemAssets') }} -->
-                您想要得到
+                {{ $t('fundInfo.wantGet') }}
                 <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
             <div class='box-bg'>
@@ -65,18 +65,18 @@
                         <el-option
                             v-for='(item, index) in selectActions'
                             :key='index'
-                            :label='item.currencyCode === "self" ? "一篮子资产" : item.currencyCode'
+                            :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets") : item.currencyCode'
                             :value='item.currencyCode'
                         >
                             <div v-if="item.currencyCode === 'self'" class='asset-item'>
                                 <div class='top'>
                                     <CurrencyIcon :currency='item.currencyCode' :size='24' />
                                     <span class='currency-text'>
-                                        一篮子资产
+                                        {{ $t('fundInfo.basketAssets') }}
                                     </span>
                                 </div>
                                 <div class='asset-list'>
-                                    <p>获得一篮子资产</p>
+                                    <p> {{ $t('fundInfo.getBasketAssets') }}</p>
                                     <currencyIcon
                                         v-for='(elem, i) in fundAssetsList'
                                         :key='i'
@@ -97,12 +97,12 @@
                     </el-select>
                 </div>
                 <p v-if="activeCurrency === 'self'" class='desc'>
-                    分别获得{{ fundAssetsList.length }}个资产
+                    {{ $t('fundInfo.redeemCountTip',{ count: fundAssetsList.length }) }}
                 </p>
             </div>
             <div class='pay-wrap'>
                 <p class='title'>
-                    预计得到以下资产
+                    {{ $t('fundInfo.expectedGetAssets') }}
                 </p>
                 <!-- 一篮子资产 -->
                 <div v-if="activeCurrency === 'self'" class='redeem-assets'>
@@ -122,8 +122,8 @@
                 <!-- 单资产 -->
                 <div v-else class='redeem-type'>
                     <div class='header'>
-                        <span>资产</span>
-                        <span>预计获得金额</span>
+                        <span> {{ $t('trade.asset') }} </span>
+                        <span> {{ $t('fundInfo.expectedGetAmount') }}</span>
                     </div>
                     <ul class='content'>
                         <li>
@@ -137,13 +137,13 @@
                                 </span>
                             </div>
                             <div class='c-right'>
-                                <span>T+2日确认份额后的基金净值价格计算金额</span>
+                                <span> {{ $t('fundInfo.t2Tip1') }}</span>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div v-if="activeCurrency === 'self'" class='notice'>
-                    注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
+                    {{ $t('fundInfo.t2Tip2') }}
                 </div>
             </div>
         </div>
