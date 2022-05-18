@@ -8,7 +8,10 @@
         <ul class='infos' :class='{ "full": full || index===0 }'>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.applyAmount') }}({{ data.currencyPay }})
+                    {{ $t('fundInfo.applyAmount') }}
+                    <em v-if="data.currencyPay !== 'self'">
+                        ({{ data.currencyPay }})
+                    </em>
                 </span>
                 <span v-if="data.currencyPay === 'self'" class='href' @click='showDetail(data)'>
                     {{ $t('common.look') }}
@@ -25,7 +28,10 @@
             </li>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.applyFees') }}({{ data.currencyPay }})
+                    {{ $t('fundInfo.applyFees') }}
+                    <em v-if="data.currencyPay !== 'self'">
+                        ({{ data.currencyPay }})
+                    </em>
                 </span>
                 <span v-if="data.currencyPay === 'self'" class='href' @click='showDetail(data.proposalNo)'>
                     {{ $t('common.look') }}
@@ -66,18 +72,6 @@
             </li>
         </ul>
     </div>
-    <van-dialog v-model:show='show' title='申购金额'>
-        <div class='info-wrap'>
-            <p class='info-item header'>
-                <span>申购资产</span>
-                <span>手续费</span>
-            </p>
-            <p v-for='item in showInfo' :key='item.currency' class='info-item'>
-                <span>{{ item.amount }} {{ item.currency }}</span>
-                <span>{{ item.fees }} {{ item.currency }}</span>
-            </p>
-        </div>
-    </van-dialog>
 </template>
 
 <script setup>
@@ -85,16 +79,14 @@ import { defineProps, ref, defineEmits } from 'vue'
 import { Dialog } from 'vant'
 defineProps({
     data: Object,
-    index: Number,
-    showInfo: Array
+    index: Number
 })
 
 const emit = defineEmits(['showDetail'])
 const full = ref(false)
-const show = ref(false)
+
 const showDetail = (item) => {
     emit('showDetail')
-    show.value = true
 }
 
 </script>
@@ -141,28 +133,14 @@ const showDetail = (item) => {
         }
         .label {
             color: var(--minorColor);
+            em {
+                font-style: normal;
+            }
         }
         .href {
             color: var(--primary);
         }
     }
 }
-.info-wrap {
-    padding: rem(30px) rem(60px);
-    .info-item {
-        display: flex;
-        justify-content: space-between;
-        margin-top: rem(20px);
-        span {
-            color: var(--normalColor);
-            font-size: rem(24px);
-        }
-        &.header {
-            span {
-                color: var(--minorColor);
-                font-weight: bold;
-            }
-        }
-    }
-}
+
 </style>

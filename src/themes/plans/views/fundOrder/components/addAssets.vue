@@ -4,27 +4,28 @@
         position='bottom'
         round
         @close='close'
+        @open='open'
     >
         <div class='add-wrap'>
-            <h2>选择获取该资产的方式</h2>
-            <div class='type' @click="way = 'deposit'">
+            <h2>{{ $t('fundInfo.chooseGetAssets') }}</h2>
+            <div class='item' @click="way = 'deposit'">
                 <div class='left'>
                     <i
                         class='icon iconfong icon_icon_assets'
                     ></i>
                     <div class='text'>
-                        <h3>存款</h3>
-                        <h5>通过存款的方式存入该资产</h5>
+                        <h3>{{ $t('fundInfo.deposit') }}</h3>
+                        <h5>{{ $t('fundInfo.depositTip') }}</h5>
                     </div>
                 </div>
                 <van-icon :color="way === 'deposit' ? $style.success : $style.minorColor" name='checked' size='22' />
             </div>
-            <div class='type' @click="way = 'trade'">
+            <div class='item' @click="way = 'trade'">
                 <div class='left'>
-                    <img alt='' class='icon' src='../../../images/trade.png' />
+                    <img alt='' class='icon' src='/images/trade.png' />
                     <div class='text'>
-                        <h3>买入</h3>
-                        <h5>通过交易的方式买入该资产</h5>
+                        <h3>{{ $t('trade.buy') }}</h3>
+                        <h5>{{ $t('fundInfo.buyTip') }}</h5>
                     </div>
                 </div>
                 <van-icon :color="way === 'trade' ? $style.success : $style.minorColor" name='checked' size='22' />
@@ -37,6 +38,7 @@
 </template>
 
 <script setup>
+import { getDepositCoinList } from '@/api/user'
 import { ref, computed, defineProps, defineEmits } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
@@ -68,13 +70,28 @@ const props = defineProps({
 // 现货玩法的账户列表
 const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5) || [])
 // 当前账户
-const curAccount = computed(() => accountList.value.find(el => el.currency === props.currency))
+const curAccount = ref(null)
 // 新增资产方式 deposit:存款 trade:买入
-const way = ref('')
+const way = ref('deposit')
+
+// 获取客户支持的存款币种列表
+const queryDepositCoinList = () => {
+    getDepositCoinList({ clientType: 'mobile' }).then(res => {
+        const data = res.data
+        const list = accountList.value.filter(el => data.includes(el.currency))
+        curAccount.value = list.find(el => el.currency === props.currency)
+    })
+}
+
+// 打开弹窗
+const open = () => {
+    way.value = 'deposit'
+    // 获取客户支持的存款币种列表
+    queryDepositCoinList()
+}
 
 // 关闭弹窗
 const close = () => {
-    way.value = ''
     emit('update:show', false)
 }
 
@@ -82,7 +99,7 @@ const close = () => {
 const onConfirm = () => {
     switch (way.value) {
         case '':
-            Toast('选择获取该资产的方式')
+            Toast(t('fundInfo.chooseGetAssets'))
             break
         // 存款
         case 'deposit':
@@ -97,6 +114,9 @@ const onConfirm = () => {
 
 // 跳转到充值页面
 const toDeposit = () => {
+    if (!curAccount.value) {
+        return Toast(t('fundInfo.notDepositTip'))
+    }
     close()
     router.push({
         path: '/depositChoose',
@@ -115,10 +135,11 @@ const toOrderFund = () => {
     if (!product) {
         product = productList.find(el => el.baseCurrency === props.currency && el.tradeType === 5)
     }
-    if (!product) {
+    if (!product || product.baseCurrency === product.profitCurrency) {
         return Toast(t('fundInfo.noTradeMarket'))
     }
-    router.replace(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
+    close()
+    router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
 }
 </script>
 
@@ -130,7 +151,7 @@ const toOrderFund = () => {
         margin: rem(20px) 0 rem(40px) 0;
         text-align: center;
     }
-    .type {
+    .item {
         display: flex;
         align-items: center;
         justify-content: space-between;

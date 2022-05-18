@@ -348,9 +348,8 @@ export default {
     width: 100%;
     height: 100%;
     margin-top: rem(110px);
-    background-color: var(--contentColor);
     overflow: auto;
-
+    background-color: var(--contentColor);
     :deep(.topNav .main) {
         max-width: 100%;
     }
@@ -360,54 +359,70 @@ export default {
     .descEditTxt {
         padding: rem(20px);
         color: var(--warn);
-        font-size: rem(28px);
+        font-size: rem(22px);
         text-align: left;
     }
     .sub-title {
-        font-size: rem(32px);
         padding: 0 rem(28px) rem(15px) rem(28px);
         color: var(--color);
+        font-size: rem(32px);
     }
-    .sub-title-minor{
-        font-size: rem(24px);
+    .sub-title-minor {
         color: var(--minorColor);
+        font-size: rem(24px);
     }
-
-    .bottom-btn{
+    .bottom-btn {
         padding: rem(20px);
     }
-    .api-input{
+    .api-input {
         margin: rem(20px);
-        .van-field{
-            border: rem(1px) solid #dedede;
+        .van-field {
+            border: rem(1px) solid #DEDEDE;
             border-radius: rem(8px);
         }
     }
-    .purview-set{
+    .purview-set {
         margin: rem(20px);
     }
-    .van-checkbox{
-        border: rem(1px) solid var(--minorColor);
-        padding: rem(10px) rem(30px);
-        border-radius: rem(6px);
+    .van-checkbox {
+        position: relative;
         margin-bottom: rem(30px);
-
-        :deep(.van-checkbox__label){
-            display:inline-block;
+        padding: rem(10px) rem(30px);
+        border: rem(1px) solid var(--minorColor);
+        border-radius: rem(6px);
+        :deep(.van-checkbox__label) {
+            display: inline-block;
             min-width: rem(140px);
-            text-align: center;
             font-size: rem(24px);
+            text-align: center;
         }
-
         :deep(.van-icon) {
             display: none;
         }
-        :deep(.van-checkbox__label){margin-left:0}
-
-        &[aria-checked="true"]{
+        :deep(.van-checkbox__label) {
+            margin-left: 0;
+        }
+        &[aria-checked='true'] {
             border: rem(1px) solid var(--primary);
-            :deep(.van-checkbox__label){
+            :deep(.van-checkbox__label) {
                 color: var(--primary);
+            }
+            :deep(.van-icon) {
+                position: absolute;
+                top: -1px;
+                right: -1px;
+                display: inline-block;
+                font-size: rem(22px);
+                line-height: rem(18px);
+                background: var(--primary);
+                border-color: var(--primary);
+            }
+        }
+        :deep(.van-checkbox__icon--disabled.van-checkbox__icon--checked) {
+            .van-icon {
+                color: var(--contentColor);
+                background: var(--primary);
+                border-color: var(--primary);
             }
         }
     }
@@ -416,35 +431,35 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-dialog{
+.custom-dialog {
     display: flex;
     flex-direction: column;
     max-height: 85%;
     overflow: hidden;
     background: var(--bgColor);
-    .header{
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         padding: rem(37px) rem(30px) rem(50px);
-        .header-title{
-            font-size: rem(36px);
-            font-weight: bold;
+        .header-title {
             color: var(--color);
-        }
-        .icon_guanbi{
-            font-size: rem(30px);
             font-weight: bold;
+            font-size: rem(36px);
+        }
+        .icon_guanbi {
+            font-weight: bold;
+            font-size: rem(30px);
         }
     }
     .page-wrap {
-        margin-top:0;
-        padding-top: 0;
+        margin-top: 0;
         padding: rem(20px);
-        font-size: rem(28px);
-        color: var(--normalColor);
-        line-height: rem(42px);
+        padding-top: 0;
         overflow: auto;
+        color: var(--normalColor);
+        font-size: rem(28px);
+        line-height: rem(42px);
     }
 }
 </style>

@@ -11,13 +11,15 @@
                     <CurrencyIcon class='currencyImg' :currency='currency' size='22px' />
                     <div>
                         <p class='currency'>
-                            {{ currency === 'self' ? '一篮子资产' : currency }}
+                            {{ currency === 'self' ? $t('fundInfo.basketAssets') : currency }}
                         </p>
                         <p v-if="currency === 'self'" class='assets'>
                             <span v-if="direction === 'buy'">
-                                通过支付{{ fundAssetsList.length }}个资产购买基金
+                                {{ $t('fundInfo.applyCountTip', { count: fundAssetsList.length }) }}
                             </span>
-                            <span>分别获得{{ fundAssetsList.length }}个资产</span>
+                            <span v-else>
+                                {{ $t('fundInfo.redeemCountTip', { count: fundAssetsList.length }) }}
+                            </span>
                         </p>
                     </div>
                 </div>

@@ -8,7 +8,7 @@
         <ul class='infos' :class='{ "full": full || index===0 }'>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.redeemShares') }}({{ data.currencyShares }})
+                    {{ $t('fundInfo.redeemShares') }}
                 </span>
                 <span>{{ data.shares }}</span>
             </li>
@@ -22,13 +22,18 @@
                 <span class='label'>
                     {{ $t('fundInfo.sureSharesStatus') }}
                 </span>
-                <span>{{ data.sharesStatus===1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
+                <span>{{ data.sharesStatus === 1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
                     {{ $t('fundInfo.customerAsset') }}
                 </span>
-                <span>{{ data.currencyRedeem }}</span>
+                <span v-if="data.currencyRedeem === 'self'">
+                    {{ $t('fundInfo.basketAssets') }}
+                </span>
+                <span v-else>
+                    {{ data.currencyRedeem }}
+                </span>
             </li>
             <li class='item'>
                 <span class='label'>
@@ -55,10 +60,9 @@ import { defineProps, ref } from 'vue'
 
 defineProps({
     data: Object,
-    index: Number,
+    index: Number
 })
 const full = ref(false)
-
 </script>
 
 <style lang="scss" scoped>

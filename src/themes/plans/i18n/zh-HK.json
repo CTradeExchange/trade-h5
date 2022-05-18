@@ -774,6 +774,7 @@
         "timeleft": "剩餘有效期",
         "timeleftCell": "天",
         "timeleftCell2": "無期限",
+        "timeTips3": "已失效",
         "createTips": "Secret Key僅在此頁面展示，遺失後不可找回，請妥善保存，創建後48小時內不可通過API提現",
         "verify": "安全驗證",
         "listnone": "暫無數據",
@@ -789,7 +790,7 @@
         "editSubTit1": "綁定IP地址的密鑰長期有效，未綁定則有效期90天",
         "keyplaceholder": "請輸入API的密鑰標籤",
         "keyplaceholder2": "請輸入綁定IP地址",
-        "editHelpTxt": "讀取權限是指用戶僅能通過此API進行查詢賬戶信息，資金流程及訂單信息等只讀操作</br>提現權限是指用戶可通過此API進行提現操作</br>現貨交易權限指用戶可通過此API對現貨進行下單、撤單等交易操作</br>合約交易權限指用戶可通過此API對合約進行下單、撤單等交易操作",
+        "editHelpTxt": "讀取權限是指用戶僅能通過此API進行查詢賬戶信息，資金流程及訂單信息等只讀操作</br>提現權限是指用戶可通過此API進行提現操作</br>交易權限指用戶可通過此API進行下單、撤單等交易操作",
         "phoneSmsTips": "請獲取動態手機驗證碼",
         "emailSmsTips": "請獲取動態郵箱驗證碼"
     }

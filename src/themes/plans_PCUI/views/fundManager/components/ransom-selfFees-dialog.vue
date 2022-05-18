@@ -9,11 +9,13 @@
         >
             <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
                 <el-table-column align='center' :label='thList[0]' prop='currency' />
-                <el-table-column align='center' :label='thList[1]'>
+                <el-table-column align='center' :label='thList[1]' prop='fees' />
+                <el-table-column align='center' :label='thList[2]' prop='amount' />
+                <!-- <el-table-column align='center' :label='thList[1]'>
                     <template #default='scope'>
                         <span>{{ type==='fee' ? scope.row.fees : scope.row.amount }}</span>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <template #footer>
                 <button class='confirm-btn' @click='onConfirm'>

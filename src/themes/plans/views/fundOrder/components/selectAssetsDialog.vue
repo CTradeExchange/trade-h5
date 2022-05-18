@@ -8,7 +8,7 @@
     >
         <div class='popup-assets-list'>
             <p class='title'>
-                选择支付资产
+                {{ direction === 'buy' ? $t('fundInfo.choosePayAsset') : $t('fundInfo.chooseRedeemWay') }}
             </p>
             <div v-for='item in list' :key='item.currencyCode' class='asset-item' @click='switchCurrency(item)'>
                 <div class='left'>
@@ -18,15 +18,15 @@
                             size='24'
                         />
                         <span class='currency'>
-                            {{ item.currencyCode === 'self' ? '一篮子资产' : item.currencyCode }}
+                            {{ item.currencyCode === 'self' ? $t('fundInfo.basketAssets') : item.currencyCode }}
                         </span>
                     </div>
                     <p v-if="item.currencyCode === 'self'" class='desc'>
-                        {{ direction === 'buy' ? '支付一篮子资产购买基金' : '获得一篮子资产' }}
+                        {{ direction === 'buy' ? $t('fundInfo.payBasketBuy') : $t('fundInfo.getBasketAssets') }}
                     </p>
                     <p v-else class='desc'>
                         <span v-if="direction === 'buy'">
-                            支付 {{ item.currencyCode }} 购买基金
+                            {{ $t('fundInfo.payCurrencyBuy', { currency: item.currencyCode }) }}
                         </span>
                     </p>
                     <div v-if="item.currencyCode === 'self'" class='currency-list'>

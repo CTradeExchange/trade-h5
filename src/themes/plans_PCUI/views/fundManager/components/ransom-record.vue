@@ -253,11 +253,11 @@ const showSelfFeesDialog = (item, type = 'fee') => {
     selfFeesDialogData.value = item
     selfFeesDialogType.value = type
     selfFeesDialogShow.value = true
-    selfFeesDialogTitle.value = type === 'fee' ? t('fundManager.ransom.fees') : t('fundManager.ransom.moneyTotal')
+    selfFeesDialogTitle.value = t('fundManager.buy.redeemDetail')
     if (type === 'fee') {
-        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.fees')]
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.fees'), t('fundManager.ransom.moneyTotal')]
     } else {
-        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.moneyTotal')]
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.fees'), t('fundManager.ransom.moneyTotal')]
     }
 }
 const purchaseCurrencySetting = ref([]) // 申购资产设置

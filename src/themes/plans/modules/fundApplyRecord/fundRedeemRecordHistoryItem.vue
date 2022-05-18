@@ -18,7 +18,10 @@
             </li>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.redeemFees') }}({{ data.currencyRedeem }})
+                    {{ $t('fundInfo.redeemFees') }}
+                    <em v-if="data.currencyRedeem !== 'self'">
+                        ({{ data.currencyRedeem }})
+                    </em>
                 </span>
                 <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data.proposalNo)'>
                     {{ $t('common.look') }}
@@ -29,9 +32,12 @@
             </li>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.redeemAmount') }}({{ data.currencyRedeem }})
+                    {{ $t('fundInfo.redeemAmount') }}
+                    <em v-if="data.currencyRedeem !== 'self'">
+                        ({{ data.currencyRedeem }})
+                    </em>
                 </span>
-                <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data)'>
+                <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data.proposalNo)'>
                     {{ $t('common.look') }}
                 </span>
                 <span v-else>
@@ -48,7 +54,7 @@
                 <span class='label'>
                     {{ $t('fundInfo.sureSharesStatus') }}
                 </span>
-                <span>{{ data.sharesStatus===1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
+                <span>{{ data.sharesStatus === 1 ? $t("fundInfo.confirmed") : $t("fundInfo.confirmFailure") }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
@@ -64,18 +70,6 @@
             </li>
         </ul>
     </div>
-    <van-dialog v-model:show='show' title='申购金额'>
-        <div class='info-wrap'>
-            <p class='info-item header'>
-                <span>赎回资产</span>
-                <span>手续费</span>
-            </p>
-            <p v-for='item in showInfo' :key='item.currency' class='info-item'>
-                <span>{{ item.amount }} {{ item.currency }}</span>
-                <span>{{ item.fees }} {{ item.currency }}</span>
-            </p>
-        </div>
-    </van-dialog>
 </template>
 
 <script setup>
@@ -87,10 +81,9 @@ defineProps({
     showInfo: Array
 })
 const emit = defineEmits(['showDetail'])
-const show = ref(false)
+
 const showDetail = (item) => {
     emit('showDetail')
-    show.value = true
 }
 const full = ref(false)
 </script>
@@ -143,22 +136,5 @@ const full = ref(false)
         }
     }
 }
-.info-wrap {
-    padding: rem(30px) rem(60px);
-    .info-item {
-        display: flex;
-        justify-content: space-between;
-        margin-top: rem(20px);
-        span {
-            color: var(--normalColor);
-            font-size: rem(24px);
-        }
-        &.header {
-            span {
-                color: var(--minorColor);
-                font-weight: bold;
-            }
-        }
-    }
-}
+
 </style>

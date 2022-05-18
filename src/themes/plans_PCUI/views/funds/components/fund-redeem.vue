@@ -2,61 +2,150 @@
     <div class='handle-module'>
         <div class='block'>
             <p class='title'>
-                {{ $t('fundInfo.inputRedeemShares') }}
+                {{ $t('fundInfo.youPay') }}
             </p>
-            <div class='box'>
-                <label class='label'>
-                    <CurrencyIcon :currency='fund.shareTokenCode' :size='24' />
-                    <span class='name'>
-                        {{ fund.shareTokenCode }}
+            <div class='box-bg'>
+                <div class='box'>
+                    <label class='label'>
+                        <CurrencyIcon :currency='fund.shareTokenCode' :size='24' />
+                        <span class='name'>
+                            {{ fund.shareTokenCode }}
+                        </span>
+                    </label>
+                    <span class='line'></span>
+                    <el-input
+                        v-model='amountPay'
+                        clearable
+                        :disabled='fund.canRedemption !== 1 || !customerInfo'
+                        :placeholder='payPlaceholder'
+                        type='number'
+                        @input='onInput'
+                    />
+                </div>
+            </div>
+        </div>
+        <!-- 切换 -->
+        <div class='switch-block'>
+            <i class='switch-icon icon_huidui' @click='switchWay'></i>
+            <div class='switch-text'>
+                <p>
+                    <span class='muted'>
+                        {{ $t('fundInfo.rate') }}:
                     </span>
-                </label>
-                <span class='line'></span>
-                <el-input
-                    v-model='amountPay'
-                    clearable
-                    :disabled='fund.canRedemption !== 1 || !customerInfo'
-                    :placeholder='payPlaceholder'
-                    type='number'
-                    @input='onInput'
-                />
+                    <span>
+                        {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
+                    </span>
+                </p>
+                <p>
+                    <span>
+                        1 {{ fund.shareTokenCode }} =
+                    </span>
+                    <span>
+                        {{ fund.netValue }}{{ fund.currency }}
+                    </span>
+                </p>
             </div>
         </div>
         <div class='block'>
             <p class='title'>
-                {{ $t('fundInfo.redeemAssets') }}
+                <!-- {{ $t('fundInfo.redeemAssets') }} -->
+                {{ $t('fundInfo.wantGet') }}
+                <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
-            <div class='box'>
-                <el-select
-                    v-model='activeCurrency'
-                    :placeholder="$t('fundInfo.redeemAssets')"
-                    @change='onSelect'
-                >
-                    <template #prefix>
-                        <CurrencyIcon :currency='activeCurrency' :size='24' />
-                    </template>
-                    <el-option
-                        v-for='(item, index) in selectActions'
-                        :key='index'
-                        :label='item.currencyCode'
-                        :value='item.currencyCode'
-                    />
-                </el-select>
-                <span class='line'></span>
-                <span class='value'>
-                    {{ $t('fundInfo.redeemPlaceholder') }}
-                </span>
+            <div class='box-bg'>
+                <div class='box'>
+                    <el-select
+                        v-model='activeCurrency'
+                        :placeholder="$t('fundInfo.redeemAssets')"
+                        @change='selectAssets'
+                    >
+                        <template #prefix>
+                            <CurrencyIcon :currency='activeCurrency' :size='24' />
+                        </template>
+                        <el-option
+                            v-for='(item, index) in selectActions'
+                            :key='index'
+                            :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets") : item.currencyCode'
+                            :value='item.currencyCode'
+                        >
+                            <div v-if="item.currencyCode === 'self'" class='asset-item'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                    <span class='currency-text'>
+                                        {{ $t('fundInfo.basketAssets') }}
+                                    </span>
+                                </div>
+                                <div class='asset-list'>
+                                    <p> {{ $t('fundInfo.getBasketAssets') }}</p>
+                                    <currencyIcon
+                                        v-for='(elem, i) in fundAssetsList'
+                                        :key='i'
+                                        class='icon-asset'
+                                        :currency='elem.currencyCode'
+                                    />
+                                </div>
+                            </div>
+                            <div v-else class='asset-item'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                    <span class='currency-text'>
+                                        {{ item.currencyCode }}
+                                    </span>
+                                </div>
+                            </div>
+                        </el-option>
+                    </el-select>
+                </div>
+                <p v-if="activeCurrency === 'self'" class='desc'>
+                    {{ $t('fundInfo.redeemCountTip',{ count: fundAssetsList.length }) }}
+                </p>
             </div>
-        </div>
-        <div class='total'>
-            <p>
-                <span>{{ $t('fundInfo.canRedeemMax') }}：</span>
-                <strong>{{ fundAccount?.available || 0 }} {{ fund.shareTokenCode }}</strong>
-            </p>
-            <p>
-                <span>{{ $t('fundInfo.redeemFeeRate') }}：</span>
-                <strong>{{ redeemFeeRate || '--' }}</strong>
-            </p>
+            <div class='pay-wrap'>
+                <p class='title'>
+                    {{ $t('fundInfo.expectedGetAssets') }}
+                </p>
+                <!-- 一篮子资产 -->
+                <div v-if="activeCurrency === 'self'" class='redeem-assets'>
+                    <div v-for='(item, index) in fundAssetsList' :key='index' class='redeem-asset-item'>
+                        <currencyIcon
+                            :currency='item.currencyCode'
+                            size='24'
+                        />
+                        <p class='currency'>
+                            {{ item.currencyCode }}
+                        </p>
+                        <p class='percent'>
+                            {{ item.weight }}
+                        </p>
+                    </div>
+                </div>
+                <!-- 单资产 -->
+                <div v-else class='redeem-type'>
+                    <div class='header'>
+                        <span> {{ $t('trade.asset') }} </span>
+                        <span> {{ $t('fundInfo.expectedGetAmount') }}</span>
+                    </div>
+                    <ul class='content'>
+                        <li>
+                            <div class='c-left'>
+                                <currencyIcon
+                                    :currency='activeCurrency'
+                                    size='18'
+                                />
+                                <span class='currency-text'>
+                                    {{ activeCurrency }}
+                                </span>
+                            </div>
+                            <div class='c-right'>
+                                <span> {{ $t('fundInfo.t2Tip1') }}</span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div v-if="activeCurrency === 'self'" class='notice'>
+                    {{ $t('fundInfo.t2Tip2') }}
+                </div>
+            </div>
         </div>
         <!-- 已登录 -->
         <div v-if='isLogin'>
@@ -93,20 +182,32 @@
 
     <!-- 赎回规则弹窗 -->
     <redeemRulesDialog ref='redeemRulesDialogRef' />
+
+    <!-- 资产说明弹窗 -->
+    <CurrencyExplainDialog
+        v-model:show='currencyExplainShow'
+        :currency='activeCurrency'
+        direction='sell'
+        :fund='fund'
+        :fund-assets-list='fundAssetsList'
+        :list='selectActions'
+    />
 </template>
 
 <script setup>
+import CurrencyExplainDialog from './currency-explain-dialog.vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import redeemRulesDialog from './redeem-rules-dialog.vue'
-import { computed, unref, ref, defineProps, inject } from 'vue'
+import { computed, unref, ref, defineProps, inject, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
-import { limitNumber, limitDecimal, toFixed } from '@/utils/calculation'
+import { limitNumber, limitDecimal, toFixed, mul } from '@/utils/calculation'
 import { getCookie } from '@/utils/util.js'
 
+const emit = defineEmits(['switchDirection'])
 const router = useRouter()
 const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
@@ -124,6 +225,7 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 const lang = getCookie('lang')
 // 组件ref
 const redeemRulesDialogRef = ref(null)
+const currencyExplainShow = ref(false)
 
 const {
     accountList,
@@ -132,7 +234,13 @@ const {
     selectActions,
     onSelect,
     activeCurrency,
-    isLogin
+    isLogin,
+    calcApplyShares,
+    fundAssetsList,
+    lastAssetsPay,
+    activeAssets,
+    queryFundNetValue
+
 } = orderHook({ fund: props.fund, direction: 'sell' })
 
 const fundAccount = computed(() => accountList.value?.find(el => el.currency === props.fund?.shareTokenCode))
@@ -149,6 +257,7 @@ const amountPay = ref('')
 
 // 输入事件控制
 const onInput = (value) => {
+    queryFundNetValue()
     const newval = limitNumber(value)
     amountPay.value = newval
     const digits = fundAccount.value?.digits || 0
@@ -166,10 +275,16 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
-            Dialog.alert({
+            Dialog.confirm({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),
-            }).then(() => {})
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow'),
+            }).then(() => {
+                openRedeemRecords()
+            }).catch(() => {
+                // on cancel
+            })
         }
     })
 }
@@ -179,14 +294,26 @@ const openRedeemRecords = () => {
     changeShowModel('fundRecord', 'redeem')
 }
 
+// 选择资产
+const selectAssets = (item) => {
+    const action = selectActions.value.find(el => el.currencyCode === item)
+    onSelect(action)
+    queryFundNetValue()
+}
+
 // 打开规则弹窗
 const openRules = () => {
     redeemRulesDialogRef.value.open()
 }
+
+// 切换申购赎回
+const switchWay = () => {
+    emit('switchDirection', 'apply')
+}
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/mixin.scss";
+@import '@/sass/mixin.scss';
 .handle-module {
     .block {
         margin-bottom: 30px;
@@ -194,41 +321,51 @@ const openRules = () => {
             margin-bottom: 0;
         }
         .title {
-            font-size: 14px;
             margin-bottom: 8px;
-        }
-        .box {
-            display: flex;
-            align-items: center;
-            height: 50px;
-            background: var(--assistColor);
-            border-radius: 5px;
-            .line {
-                width: 1px;
-                height: 30px;
-                background: var(--lineColor);
+            font-size: 14px;
+            .icon-question {
+                cursor: pointer;
             }
-            .label {
-                display: inline-flex;
+        }
+        .box-bg {
+            background: #F4F4F4;
+            .box {
+                display: flex;
                 align-items: center;
-                width: 120px;
-                height: 100%;
-                padding: 0 12px;
-                .name {
-                    margin-left: 5px;
+                height: 50px;
+                background: var(--assistColor);
+                border-radius: 5px;
+                .line {
+                    width: 1px;
+                    height: 30px;
+                    background: var(--lineColor);
+                }
+                .label {
+                    display: inline-flex;
+                    align-items: center;
+                    width: 120px;
+                    height: 100%;
+                    padding: 0 12px;
+                    .name {
+                        margin-left: 5px;
+                    }
+                }
+                .value {
+                    display: inline-flex;
+                    flex: 1;
+                    align-items: center;
+                    height: 100%;
+                    padding: 0 15px;
                 }
             }
-            .value {
-                flex: 1;
-                display: inline-flex;
-                align-items: center;
-                height: 100%;
-                padding: 0 15px;
+            .desc {
+                padding: 0 0 8px 40px;
+                color: var(--minorColor);
             }
         }
         &:deep {
             .el-select {
-                width: 120px;
+                width: 100%;
                 .el-input__inner {
                     padding-left: 40px !important;
                 }
@@ -247,32 +384,135 @@ const openRules = () => {
                 background: none !important;
             }
         }
+        .pay-wrap {
+            margin: rem(30px) 0;
+            padding: rem(30px) 0;
+            background: var(--contentColor);
+            .title {
+                font-size: rem(30px);
+                text-align: center;
+            }
+            .redeem-type {
+                overflow: hidden;
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    margin: rem(30px) 0;
+                }
+                .content {
+                    margin: rem(30px) 0;
+                    li {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-bottom: rem(30px);
+                        .c-left {
+                            display: flex;
+                            align-items: center;
+                            height: 100%;
+                            .currency-text {
+                                margin-top: rem(4px);
+                                margin-left: rem(10px);
+                            }
+                        }
+                        .c-right {
+                            display: flex;
+                            align-items: center;
+                            text-align: right;
+                            .icon_success {
+                                margin-left: rem(20px);
+                                color: var(--success);
+                                font-size: rem(28px);
+                            }
+                            .icon_icon_assets {
+                                margin-left: rem(20px);
+                                color: var(--primary);
+                                font-size: rem(28px);
+                            }
+                            .van-icon {
+                                position: relative;
+                                top: -2px;
+                                display: inline-block;
+                                margin-left: rem(20px);
+                                vertical-align: -12%;
+                            }
+                            .error-text {
+                                color: var(--warn);
+                            }
+                            .cr-inline {
+                                display: inline-block;
+                            }
+                        }
+                    }
+                }
+            }
+            .redeem-assets {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                .redeem-asset-item {
+                    flex: 1;
+                    width: calc((100% - 20px) / 3);  // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
+                    min-width: calc((100% - 20px) / 3); // 加入这两个后每个item的宽度就生效了
+                    max-width: calc((100% - 20px) / 3);
+                    margin-right: 10px;
+                    margin-bottom: 10px;
+                    padding: 10px 0;
+                    text-align: center;
+                    background-color: var(--bgColor);
+                    border: solid 1px var(--lineColor);
+                    &:nth-child(3n) { // 去除第3n个的margin-right
+                        margin-right: 0;
+                    }
+                    .currency {
+                        margin: 5px 0 3px;
+                        font-weight: bold;
+                        font-size: 14px;
+                    }
+                    .percent {
+                        color: var(--minorColor);
+                        font-size: 10px;
+                    }
+                }
+            }
+            .notice {
+                padding: 0 15px;
+                color: var(--minorColor);
+                .toRule {
+                    color: var(--primary);
+                }
+            }
+        }
     }
-    .total {
-        margin-top: 10px;
-        font-size: 12px;
-        p {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            strong {
-                font-weight: normal;
+    .switch-block {
+        display: flex;
+        align-items: center;
+        margin: 12px 0;
+        .switch-icon {
+            margin-right: 10px;
+            color: var(--primary);
+            font-size: 30px;
+            cursor: pointer;
+        }
+        .switch-text {
+            p {
+                line-height: 1.6;
             }
         }
     }
     .handle-button {
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         height: 50px;
         margin-top: 30px;
+        color: #FFF;
         font-size: 14px;
-        color: #fff;
         background: var(--primary);
         border-radius: 5px;
         cursor: pointer;
         &:hover {
-            opacity: .7;
+            opacity: 0.7;
         }
         &.disable {
             background: var(--lineColor);
@@ -288,8 +528,8 @@ const openRules = () => {
         margin-top: 30px;
         button {
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: 100%;
             height: 50px;
             margin-bottom: 20px;
@@ -297,7 +537,7 @@ const openRules = () => {
             border-radius: 5px;
             cursor: pointer;
             &.register-btn {
-                color: #fff;
+                color: #FFF;
                 background: var(--primary);
             }
             &.login-btn {
@@ -308,8 +548,8 @@ const openRules = () => {
     }
     .rules-link {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         margin-top: 10px;
         span {
             color: var(--primary);
@@ -319,5 +559,25 @@ const openRules = () => {
             }
         }
     }
+}
+.el-select-dropdown__item {
+    padding: 0;
+    .asset-item {
+        margin: 15px 15px 0;
+        padding: 5px 15px;
+        background: var(--bgColor);
+        .currencyIcon {
+            margin-right: 10px;
+        }
+        .asset-list {
+            .icon-asset {
+                margin-right: -3px;
+            }
+        }
+    }
+}
+.el-select-dropdown__item {
+    height: auto;
+    overflow: auto;
 }
 </style>

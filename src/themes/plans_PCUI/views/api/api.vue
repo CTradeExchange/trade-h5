@@ -71,7 +71,7 @@
                                     <van-icon class='copy-btn' :data-clipboard-text='item.apiKey' name='description' :title="$t('compLang.copy')" @click='copyCustomerNo' />
                                     <!-- <i class='icon_fuzhi copy-btn' :data-clipboard-text='item.apiKey' @click='copyCustomerNo'></i> -->
                                 </van-col>
-                                <van-col class='item-right' span='12'>
+                                <van-col class='item-right col_black' span='12'>
                                     {{ item.createTime }}
                                 </van-col>
                             </van-row>
@@ -85,10 +85,10 @@
                             </van-row>
                             <van-row>
                                 <van-col class='item-left tags' span='12'>
-                                    <span v-for='(it,a) in item.permissionDTOList' :key='a' class='perItem'>
-                                        <span v-if='it.status === 1'>
+                                    <span v-for='(it,a) in item.permissionDTOList' :key='a'>
+                                        <em v-if='it.status === 1' class='perItem'>
                                             {{ it.name }}
-                                        </span>
+                                        </em>
                                     </span>
                                 </van-col>
                                 <van-col class='item-right' span='12'>
@@ -173,8 +173,19 @@ export default {
                 if (Number(res.code) === 0) {
                     const tempArr = []
                     res.data.records.filter(item => {
-                        const _timeLeft = window.dayjs(new Date(item.expiredTime)).diff(new Date(item.createTime), 'day')
-                        var whiteIpsStr = ''
+                        // const _timeLeft = window.dayjs(new Date(item.expiredTime)).diff(new Date(item.createTime), 'day')
+                        let _timeLeft = ''
+                        if (item.validityDays !== undefined) {
+                            if (item.validityDays === -1) {
+                                _timeLeft = t('api.timeTips3')
+                            } else {
+                                _timeLeft = t('api.timeleft') + item.validityDays + t('api.timeleftCell')
+                            }
+                        } else {
+                            _timeLeft = t('api.timeleftCell2')
+                        }
+
+                        let whiteIpsStr = ''
                         if (item.whiteIps === null) {
                             whiteIpsStr = '--'
                         } else {
@@ -193,7 +204,7 @@ export default {
                             whiteIps: whiteIpsStr,
                             createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
                             tag: item.tag,
-                            timeleft: _timeLeft > 0 ? t('api.timeleft') + _timeLeft + t('api.timeleftCell') : t('api.timeleftCell2')
+                            timeleft: _timeLeft
                         })
                     })
                     state.apiList = tempArr
@@ -393,110 +404,115 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.wrapper{
+.wrapper {
     width: 1200px;
     margin: 20px auto;
-    .page-title{
-        font-size: 32px;
+    .page-title {
         font-weight: bold;
+        font-size: 32px;
     }
-    .api-create{
+    .api-create {
         width: 460px;
         margin: 40px auto;
-        .desc{
+        .desc {
+            margin-bottom: 20px;
             color: var(--minorColor);
             font-size: 14px;
             line-height: 24px;
-            margin-bottom: 20px;
-            a{
+            a {
                 color: var(--riseColor);
             }
         }
-        .min-tit{
+        .min-tit {
             font-size: 18px;
         }
-        .api-input{
+        .api-input {
             margin: 20px 0;
         }
     }
-
-    .sub-title{
+    .sub-title {
         font-size: 24px;
     }
-
-    .list{
-        background-color: var(--contentColor);
-        border: 1px solid #dedede;
+    .list {
         margin-top: 15px;
-
-        :deep(.van-cell__right-icon){
-            font-size: rem(50px);
+        background-color: var(--contentColor);
+        border: 1px solid #DEDEDE;
+        :deep(.van-cell__right-icon) {
             margin-top: 5px;
+            font-size: rem(50px);
         }
-
-        .operaRight{
-            span{
+        .operaRight {
+            span {
                 display: inline-block;
-                margin: 0px 15px 0 15px;
+                margin: 0 15px;
                 font-size: 14px;
             }
         }
-        .item{
-            font-size: rem(28px);
+        .item {
+            margin-bottom: 0;
             color: var(--minorColor);
-            margin-bottom: rem(0px);
-            .van-row{
-                padding:rem(10px) 0;
+            font-size: rem(28px);
+            .van-row {
+                padding: rem(10px) 0;
             }
-            h6{
-                font-size: rem(32px);
-                font-weight: normal;
-                margin-bottom: rem(0px);
+            h6 {
+                margin-bottom: 0;
                 color: var(--color);
+                font-weight: normal;
+                font-size: rem(32px);
             }
-            p{
+            p {
                 color: var(--minorColor);
             }
-            .copy-btn{
-                font-size: 18px;
+            .copy-btn {
                 margin-left: 10px;
+                font-size: 18px;
                 cursor: pointer;
             }
-            .tags{
-                span{
-                    padding: 0 rem(5px);
+            .tags {
+                span em {
                     display: inline-block;
-                    background-color: var(--quoteFallBg);
                     margin-right: rem(10px);
                     margin-bottom: rem(8px);
+                    padding: 0 rem(10px);
+                    color: var(--normalColor);
                     font-size: rem(24px);
+                    font-style: normal;
+                    background-color: var(--lineColor);
                 }
             }
-            .txtWrap{
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            .txtWrap {
+                display: inline-block;
                 width: auto;
                 max-width: 70%;
-                display: inline-block;
+                overflow: hidden;
+                color: var(--normalColor);
+                white-space: nowrap;
+                text-overflow: ellipsis;
                 vertical-align: middle;
             }
-            .whiteIps{
+            .whiteIps {
+                color: var(--normalColor);
                 white-space: normal;
-                word-break: break-all;
                 word-wrap: break-word;
+                word-break: break-all;
             }
         }
     }
+    .col_black {
+        color: var(--normalColor);
+    }
 }
+
 @media screen and (max-width: 1200px) {
-	.wrapper {
-		width: 980px;
-	}
+    .wrapper {
+        width: 980px;
+    }
 }
+
 @media screen and (max-width: 980px) {
-	.wrapper {
-		width: 720px;
-	}
+    .wrapper {
+        width: 720px;
+    }
 }
 </style>

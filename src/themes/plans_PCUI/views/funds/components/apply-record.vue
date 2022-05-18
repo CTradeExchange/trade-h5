@@ -6,7 +6,12 @@
             <el-table-column :label="$t('fundInfo.shareCurrency')" :min-width='100' prop='currencyShares' />
             <el-table-column :label="$t('fundInfo.buyMoney')" :min-width='minWidth'>
                 <template #default='scope'>
-                    <span>{{ scope.row.amountPay }} {{ scope.row.currencyPay }}</span>
+                    <span v-if="scope.row.currencyPay === 'self'" class='href' @click='showDetail(scope.row)'>
+                        {{ $t('common.look') }}
+                    </span>
+                    <span v-else>
+                        {{ scope.row.amountPay }}{{ scope.row.currencyPay }}
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundInfo.realtimeJZ')" :min-width='minWidth'>
@@ -16,7 +21,12 @@
             </el-table-column>
             <el-table-column :label="$t('fundInfo.buyFee')" :min-width='minWidth'>
                 <template #default='scope'>
-                    <span>{{ scope.row.fees }} {{ scope.row.currencyPay }}</span>
+                    <span v-if="scope.row.currencyPay === 'self'" class='href' @click='showDetail(scope.row)'>
+                        {{ $t('common.look') }}
+                    </span>
+                    <span v-else>
+                        {{ scope.row.fees }}{{ scope.row.currencyPay }}
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundInfo.buyShare')" :min-width='minWidth'>
@@ -52,12 +62,27 @@
             />
         </div>
     </div>
+
+    <van-dialog v-model:show='show' title='$t("fundInfo.applyDetail")' width='30%'>
+        <div class='info-wrap'>
+            <p class='info-item header'>
+                <span> {{ $t('fundInfo.applyAssets') }}</span>
+                <span> {{ $t('fundInfo.applyAmount') }}</span>
+                <span> {{ $t('fundInfo.applyFees') }}</span>
+            </p>
+            <p v-for='item in showInfo' :key='item.currency' class='info-item'>
+                <span>{{ item.currency }}</span>
+                <span>{{ item.amount }}</span>
+                <span>{{ item.fees }} </span>
+            </p>
+        </div>
+    </van-dialog>
 </template>
 
 <script setup>
 import { ref, defineProps, defineExpose, computed } from 'vue'
 import { useStore } from 'vuex'
-import { fundApplyRecord } from '@/api/fund.js'
+import { fundApplyRecord, getFundCurrencyList } from '@/api/fund.js'
 
 defineProps({
     // table最大高度
@@ -91,6 +116,10 @@ const params = ref({
     startTime: ''
 })
 
+const show = ref(false)
+// 一篮子申购记录弹窗内容
+const showInfo = ref('')
+
 // 改变当前页数
 const changePage = (value) => {
     params.value.current = value
@@ -120,6 +149,27 @@ const getData = (data = {}) => {
     })
 }
 
+const showDetail = row => {
+    show.value = true
+    getFundCurrencyList({
+        customerNo: customerInfo.value.customerNo,
+        proposalNo: row.proposalNo,
+    }).then(res => {
+        if (res.check()) {
+            if (res.data?.length > 0) {
+                showInfo.value = []
+                res.data.forEach(el => {
+                    showInfo.value.push({
+                        currency: el.currency,
+                        amount: el.amount,
+                        fees: el.fees
+                    })
+                })
+            }
+        }
+    })
+}
+
 // 暴露子组件属性或方法
 defineExpose({
     getData
@@ -131,8 +181,41 @@ defineExpose({
 @import '../table.scss';
 .handle-action {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+    justify-content: flex-end;
     height: 60px;
+}
+.href {
+    color: var(--primary);
+    cursor: pointer;
+}
+.info-wrap {
+    padding: 15px 30px;
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        &:last-of-type {
+            span {
+                border-bottom: 1px solid var(--minorColor);
+            }
+        }
+        span {
+            flex: 1;
+            padding: 0.2rem;
+            color: var(--normalColor);
+            font-size: 12px;
+            border-top: 1px solid var(--minorColor);
+            border-left: 1px solid var(--minorColor);
+            &:nth-of-type(3n) {
+                border-right: 1px solid var(--minorColor);
+            }
+        }
+        &.header {
+            span {
+                color: var(--minorColor);
+                font-weight: bold;
+            }
+        }
+    }
 }
 </style>
