@@ -9,6 +9,7 @@
                     <source src='https://www.vitatoken.io/site/about-us.mp4' type='video/mp4' />
                 </video>
             </div>
+            <!-- 基金信息 -->
             <div class='fund-info max-limit'>
                 <ul>
                     <li>
@@ -24,7 +25,7 @@
                             Fund Size (USDT):
                         </span>
                         <span class='value'>
-                            20
+                            {{ fund.totalBalance }}
                         </span>
                     </li>
                     <li>
@@ -40,7 +41,7 @@
                             Date of Establishment:
                         </span>
                         <span class='value'>
-                            May, 2022
+                            {{ fund.upDate }}
                         </span>
                     </li>
                     <li>
@@ -48,7 +49,7 @@
                             Establishment Revenue:
                         </span>
                         <span class='value'>
-                            80%
+                            {{ fund.marketPrice }}
                         </span>
                     </li>
                     <li>
@@ -61,12 +62,17 @@
                     </li>
                 </ul>
             </div>
+            <!-- 图表视图 -->
+            <div class='max-limit'>
+                <ChartView :fund-id='fundId' />
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
 import Swiper from './components/swiper.vue'
+import ChartView from './components/chart-view.vue'
 import { onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
@@ -139,6 +145,13 @@ onMounted(() => {
             }
         }
     }
+    :deep {
+        .chart-view {
+            height: 490px;
+            margin-top: 60px;
+            padding: 20px 0 0;
+        }
+    }
 }
 .h5-content {
     padding: 40px 20px 88px;
@@ -147,6 +160,13 @@ onMounted(() => {
     }
     .fund-info {
         margin-top: 40px;
+    }
+    :deep {
+        .chart-view {
+            height: 350px;
+            margin-top: 40px;
+            padding: 20px 20px 0;
+        }
     }
 }
 .max-limit {
