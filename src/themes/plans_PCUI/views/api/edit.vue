@@ -35,7 +35,7 @@
                 {{ $t("api.editTitle2") }} <van-icon name='question-o' @click='showHelper' />
             </div>
             <van-checkbox-group v-model='query.purview' class='purview-set' direction='horizontal' inset>
-                <van-checkbox v-for='(item,index) in detailData.permissionDTOList' :key='index' :disabled='item.canEdit != true' :name='item.code'>
+                <van-checkbox v-for='(item,index) in detailData.permissionDTOList' :key='index' :disabled='item.canEdit != true' :name='item.code' shape='success'>
                     {{ item.name }}
                 </van-checkbox>
             </van-checkbox-group>
@@ -345,44 +345,42 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.wrapper{
+.wrapper {
     width: 1200px;
     margin: 20px auto;
-    .page-title{
-        font-size: 32px;
+    .page-title {
         font-weight: bold;
-        .back-icon{
+        font-size: 32px;
+        .back-icon {
             cursor: pointer;
         }
     }
-    .api-create{
+    .api-create {
         width: 460px;
         margin: 40px auto;
-        .desc{
+        .desc {
+            margin-bottom: 20px;
             color: var(--minorColor);
             font-size: 14px;
             line-height: 24px;
-            margin-bottom: 20px;
-            a{
+            a {
                 color: var(--riseColor);
             }
         }
-        .min-tit{
+        .min-tit {
             font-size: 18px;
         }
-        .api-input{
-            margin: 0px 0 20px 0;
+        .api-input {
+            margin: 0 0 20px;
         }
     }
-
-    .sub-title{
+    .sub-title {
         font-size: 24px;
     }
-
-    .api-input{
-        margin: rem(0px);
-        .van-field{
-            border: rem(1px) solid #dedede;
+    .api-input {
+        margin: 0;
+        .van-field {
+            border: rem(1px) solid #DEDEDE;
             border-radius: rem(8px);
         }
     }
@@ -393,80 +391,96 @@ export default {
         text-align: left;
     }
     .sub-title {
-        font-size: rem(32px);
-        padding: 0 rem(28px) rem(15px) rem(0px);
+        padding: 0 rem(28px) rem(15px) 0;
         color: var(--color);
+        font-size: rem(32px);
     }
-    .sub-title-minor{
-        font-size: rem(24px);
+    .sub-title-minor {
         color: var(--minorColor);
+        font-size: rem(24px);
     }
-    .purview-set{
+    .purview-set {
         margin: rem(20px);
     }
-    .van-checkbox{
-        border: rem(1px) solid var(--lineColor);
-        padding: rem(10px) rem(30px);
-        border-radius: rem(6px);
+    .van-checkbox {
+        position: relative;
         margin-bottom: rem(30px);
-
-        :deep(.van-checkbox__label){
-            display:inline-block;
-            min-width: rem(140px);
-            text-align: center;
+        padding: rem(10px) rem(30px);
+        border: rem(1px) solid var(--minorColor);
+        border-radius: rem(6px);
+        :deep(.van-checkbox__label) {
+            display: inline-block;
+            min-width: rem(160px);
             font-size: rem(24px);
+            text-align: center;
         }
-
         :deep(.van-icon) {
             display: none;
         }
-        :deep(.van-checkbox__label){margin-left:0}
-
-        &[aria-checked="true"]{
+        :deep(.van-checkbox__label) {
+            margin-left: 0;
+        }
+        &[aria-checked='true'] {
             border: rem(1px) solid var(--primary);
-            :deep(.van-checkbox__label){
+            :deep(.van-checkbox__label) {
                 color: var(--primary);
+            }
+            :deep(.van-icon) {
+                position: absolute;
+                top: -1px;
+                right: -1px;
+                display: inline-block;
+                font-size: rem(22px);
+                line-height: rem(18px);
+                background: var(--primary);
+                border-color: var(--primary);
+            }
+        }
+        :deep(.van-checkbox__icon--disabled.van-checkbox__icon--checked) {
+            .van-icon {
+                color: var(--contentColor);
+                background: var(--primary);
+                border-color: var(--primary);
             }
         }
     }
-
 }
 </style>
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-dialog{
+.custom-dialog {
     display: flex;
     flex-direction: column;
     max-height: 60%;
     overflow: hidden;
     background: var(--bgColor);
-    .header{
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
-        padding: 8px 15px 8px 15px;
+        justify-content: space-between;
+        padding: 8px 15px;
         background-color: var(--contentColor);
-        .header-title{
-            font-size: rem(48px);
-            font-weight: bold;
-            color: var(--color);
-            text-align: center;
+        .header-title {
             flex: 1;
+            color: var(--color);
+            font-weight: bold;
+            font-size: rem(48px);
+            text-align: center;
         }
-        .van-icon{
+        .van-icon {
             font-size: 24px;
             cursor: pointer;
         }
     }
     .page-wrap {
-        margin-top:0;
-        padding-top: 0;
+        margin-top: 0;
         padding: 15px;
-        font-size: 14px;
-        color: var(--normalColor);
-        line-height: 32px;
+        padding-top: 0;
         overflow: auto;
+        color: var(--normalColor);
+        font-size: 14px;
+        line-height: 32px;
     }
 }
 </style>

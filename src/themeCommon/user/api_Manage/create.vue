@@ -72,10 +72,10 @@
                     {{ $t('api.createSubTit3') }}
                 </div>
                 <div class='backContent'>
-                    <span v-for='(item,i) in backData.permissionDTOList' :key='i' class='perItem'>
-                        <span v-if='item.status == 1'>
+                    <span v-for='(item,i) in backData.permissionDTOList' :key='i'>
+                        <em v-if='item.status == 1' class='perItem'>
                             {{ item.name }}
-                        </span>
+                        </em>
                     </span>
                 </div>
                 <div class='sub-title'>
@@ -326,7 +326,7 @@ export default {
             color: var(--warn);
         }
         .sub-createTipsTxt{
-            color: var(--minorColor);
+            color: var(--color);
         }
         .perItem{
             display: inline-block;
