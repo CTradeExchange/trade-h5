@@ -28,10 +28,13 @@
 
 <script>
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { onActivated, computed, ref, toRefs, reactive } from 'vue'
+import { onActivated, computed, ref, toRefs, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { NoticeBar } from 'vant' // vant公告组件
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { getNoticeList } from '@/api/user'
+import { isEmpty, getCookie } from '@/utils/util'
 
 export default {
     name: 'Home',
@@ -39,9 +42,13 @@ export default {
         const store = useStore()
         const pageModules = ref([])
         const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const customerGroupId = computed(() => store.getters.customerGroupId)
         // 暂时只在319公司显示
         const isCompanyIdShow = computed(() => Number(store.state._base.wpCompanyInfo.companyId) === 319)
+
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
 
         const state = reactive({
             data: {
@@ -60,7 +67,9 @@ export default {
                         href: { 'name': 'Quote' }
                     }
                 ]
-            }
+            },
+            lang: getCookie('lang') || 'zh-CN',
+            currentNt: 1
         })
         const products = []
 
@@ -71,6 +80,35 @@ export default {
 
         const publicLink = () => {
             router.push('/msg')
+        }
+
+        // 获取公告列表
+        const getNoticeData = () => {
+            console.log(customInfo.value)
+            getNoticeList({
+                current: state.currentNt,
+                // pubTimeFrom: '',
+                // pubTimeTo: '',
+                lang: state.lang,
+                size: 10,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                console.log(res)
+                if (res.check()) {
+                    // if (res.data.records && res.data.records.length > 0) {
+                    //     state.listNotice = state.listNotice.concat(res.data.records)
+                    // }
+
+                    // // 数据全部加载完成
+                    // if (res.data.size * res.data.current >= res.data.total) {
+                    //     state.finishedNt = true
+                    // }
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
         }
 
         store.dispatch('_base/getPageConfig', 'Home').then(res => {
@@ -95,9 +133,14 @@ export default {
             // 订阅产品
             sendSubscribe()
         })
+        onMounted(() => {
+            // getNoticeData()
+        })
         return {
             pageModules,
+            customInfo,
             publicLink,
+            getNoticeData,
             isCompanyIdShow,
             ...toRefs(state)
         }
@@ -111,25 +154,22 @@ export default {
     height: 100%;
     //overflow: auto;
     background: var(--contentColor);
-
-    .marginbottom{
+    .marginbottom {
         padding-bottom: rem(100px);
     }
-
-    .top-notice{
+    .top-notice {
         width: 100%;
-        background: var(--primaryAssistColor);
         color: var(--color);
-
-        .van-icon{
-            vertical-align: middle;
+        background: var(--primaryAssistColor);
+        .van-icon {
             font-size: rem(36px);
+            vertical-align: middle;
         }
-        .van-row{
+        .van-row {
             font-size: rem(24px);
         }
     }
-    :deep(.van-notice-bar__content){
+    :deep(.van-notice-bar__content) {
         width: 100%;
     }
 }
@@ -140,5 +180,5 @@ export default {
 .notice-swipe {
     height: 32px;
     line-height: 32px;
-  }
+}
 </style>

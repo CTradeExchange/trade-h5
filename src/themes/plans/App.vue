@@ -168,11 +168,12 @@ import { useRouter } from 'vue-router'
 import { Dialog, Popup } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { localGet, getQueryVariable, sessionSet, unzip } from '@/utils/util'
+import { localGet, getQueryVariable, sessionSet, unzip, getCookie } from '@/utils/util'
 import Base from '@/store/modules/base'
 import { setRootVariable } from '@plans/colorVariables'
 import onWindowMessage from '@/plugins/onWindowMessage/onMessage'
 import { configSystem } from '@/api/base'
+import { getNoticeList } from '@/api/user'
 
 export default {
     components: {
@@ -185,8 +186,13 @@ export default {
         const cacheViews = computed(() => store.state.cacheViews)
         const googleAnalytics = computed(() => store.state._base.wpCompanyInfo.googleAnalytics)
         const tipTextCountDown = ref(t('confirm') + '(3s)')
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+        const _storeState = computed(() => store.state)
         const state = reactive({
-            publicShow: false
+            publicShow: false,
+            lang: getCookie('lang') || 'zh-CN',
+            currentNt: 1
         })
         window.store = store
         if (getQueryVariable('b_superiorAgent')) {
@@ -269,11 +275,43 @@ export default {
             } catch (error) {
 
             }
-            getPublicData()
+            getNoticeData()
+            // getPublicData()
         })
 
-        const getPublicData = () => {
-            state.publicShow = true
+        const getPublicData = (val) => {
+            state.publicShow = val
+        }
+
+        // 获取公告列表
+        const getNoticeData = () => {
+            console.log(_storeState)
+            console.log(customInfo)
+            console.log(customInfo.value)
+            getNoticeList({
+                current: state.currentNt,
+                // pubTimeFrom: '',
+                // pubTimeTo: '',
+                lang: state.lang,
+                size: 10,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                console.log(res)
+                if (res.check()) {
+                    // if (res.data.records && res.data.records.length > 0) {
+                    //     state.listNotice = state.listNotice.concat(res.data.records)
+                    // }
+
+                    // // 数据全部加载完成
+                    // if (res.data.size * res.data.current >= res.data.total) {
+                    //     state.finishedNt = true
+                    // }
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
         }
 
         document.documentElement.classList.add(store.state.invertColor)
@@ -289,6 +327,10 @@ export default {
 
         return {
             cacheViews,
+            customInfo,
+            _storeState,
+            getNoticeData,
+            getPublicData,
             ...toRefs(state)
         }
     },
@@ -307,43 +349,36 @@ export default {
 
 <style lang="scss" scoped >
 @import '~@/sass/mixin.scss';
-.public-pop{
+.public-pop {
     border-radius: rem(10px);
-
-    .pop-top{
-        line-height: rem(120px);
-        font-size: rem(36px);
+    .pop-top {
         padding-left: rem(30px);
+        font-size: rem(36px);
+        line-height: rem(120px);
     }
-
-    .van-popup__close-icon{
-        right: rem(20px);
+    .van-popup__close-icon {
         top: rem(20px);
+        right: rem(20px);
     }
-
-    .pop-content{
-        padding: rem(0px) rem(30px) rem(20px) rem(30px);
+    .pop-content {
         max-height: 80%;
+        padding: 0 rem(30px) rem(20px) rem(30px);
         overflow: auto;
     }
-
-    .public-list{
-        margin: 0 rem(0px);
-
-        .item{
-            margin: rem(15px) rem(0px) rem(25px) rem(0px);
-
-            .item-tit{
-                font-size: rem(28px);
-                color: var(--color);
+    .public-list {
+        margin: 0;
+        .item {
+            margin: rem(15px) 0 rem(25px) 0;
+            .item-tit {
                 margin-bottom: rem(10px);
+                color: var(--color);
+                font-size: rem(28px);
             }
-            .item-time{
-                font-size: rem(24px);
+            .item-time {
                 color: var(--minorColor);
+                font-size: rem(24px);
             }
         }
     }
-
 }
 </style>

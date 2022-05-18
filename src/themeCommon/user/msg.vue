@@ -27,12 +27,9 @@
                         :loading-text="$t('compLang.loading')"
                         @load='onLoadNotice'
                     >
-                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item'>
+                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click='goNoticeDetails(item.id)'>
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
-                            </p>
-                            <p class='msg-content'>
-                                {{ computeHtmlTime(item.content) }}
                             </p>
                             <p class='msg-time'>
                                 {{ formatTime(item.createTime) }}
@@ -112,6 +109,7 @@ import Top from '@/components/top'
 import { isEmpty, getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
+import { useRouter, useRoute } from 'vue-router'
 
 export default {
     components: {
@@ -119,6 +117,8 @@ export default {
     },
     setup (props) {
         const store = useStore()
+        const router = useRouter()
+        const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             list: [],
@@ -164,6 +164,11 @@ export default {
         const activeIndex = ref(0)
         const onClickTab = ({ title, name }) => {
             console.log(title, name)
+            if (name === 'public') {
+                getNoticeData()
+            } else {
+                getMsgList()
+            }
         }
 
         const changeType = (val) => {
@@ -175,6 +180,18 @@ export default {
             getMsgList()
         }
 
+        // 跳转到公告详情页
+        const goNoticeDetails = (id) => {
+            console.log(id)
+            router.push({
+                path: '/noticeDetail',
+                query: {
+                    id: id
+                }
+            })
+        }
+
+        // 获取消息列表
         const getMsgList = () => {
             state.pageLoading = true
             state.errorTip = ''
@@ -208,8 +225,8 @@ export default {
 
             getNoticeList({
                 current: state.currentNt,
-                pubTimeFrom: '',
-                pubTimeTo: '',
+                // pubTimeFrom: '',
+                // pubTimeTo: '',
                 lang: state.lang,
                 size: 10,
                 companyId: customInfo.value.companyId,
@@ -285,12 +302,12 @@ export default {
             state.currentNt = 1
             state.finishedNt = false
             state.listNotice = []
-            // getNoticeData()
+            getNoticeData()
         }
         // notice底部加载更多
         const onLoadNotice = () => {
-            // state.currentNt++
-            // getNoticeData()
+            state.currentNt++
+            getNoticeData()
         }
 
         const formatTime = (val) => {
@@ -308,6 +325,7 @@ export default {
             onRefresh,
             onLoad,
             changeType,
+            goNoticeDetails,
             computeHtmlTime,
             activeIndex,
             onClickTab,
