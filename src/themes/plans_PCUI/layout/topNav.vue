@@ -53,6 +53,13 @@
                         </span>
                     </router-link>
                 </div>
+                <div :class="['item', { 'active': $route.path.startsWith('/fundV10') }]">
+                    <router-link to='/fundV10/in'>
+                        <span class='link'>
+                            V10基金
+                        </span>
+                    </router-link>
+                </div>
             </div>
         </div>
         <div class='nav-right'>

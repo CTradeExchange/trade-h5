@@ -488,31 +488,6 @@ const routes = [
             title: 'api.editHeader'
         }
     },
-    {
-        path: '/fundV10/index',
-        name: 'FundV10',
-        component: () => import(/* webpackChunkName: "fundV10" */ '../user/fundV10/v10.vue'),
-        meta: {
-            title: 'api.editHeader'
-        }
-    },
-    {
-        path: '/fundV10/contact',
-        name: 'v10Contact',
-        component: () => import(/* webpackChunkName: "fundV10" */ '../user/fundV10/contact.vue'),
-        meta: {
-            title: 'api.editHeader'
-        }
-    },
-    {
-        path: '/fundV10/in',
-        name: 'v10InFundManager',
-        component: () => import(/* webpackChunkName: "fundV10" */ '../user/fundV10/inFundManager.vue'),
-        meta: {
-            title: 'api.editHeader'
-        }
-    },
-
 ]
 
 export default routes
