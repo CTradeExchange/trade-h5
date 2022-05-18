@@ -1,5 +1,27 @@
 <template>
     <div id='homeContent' ref='homeContent' class='home' :class='{ hasNav: $hasNav }'>
+        <!-- 公告 -->
+        <div class='topp-public'>
+            <van-notice-bar class='top-notice' left-icon='volume-o' :scrollable='false'>
+                <van-row>
+                    <van-col span='22'>
+                        <van-swipe
+                            :autoplay='3000'
+                            class='notice-swipe'
+                            :show-indicators='false'
+                            vertical
+                        >
+                            <van-swipe-item>明月直入，无心可猜。</van-swipe-item>
+                            <van-swipe-item>仙人抚我顶，结发受长生。</van-swipe-item>
+                            <van-swipe-item>今人不见古时月，今月曾经照古人。</van-swipe-item>
+                        </van-swipe>
+                    </van-col>
+                    <van-col align='center' span='2'>
+                        <van-icon name='more-o' @click='publicLink' />
+                    </van-col>
+                </van-row>
+            </van-notice-bar>
+        </div>
         <PageComp class='marginbottom' :data='pageModules' />
     </div>
 </template>
@@ -8,12 +30,15 @@
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { onActivated, computed, ref, toRefs, reactive } from 'vue'
 import { useStore } from 'vuex'
+import { NoticeBar } from 'vant' // vant公告组件
+import { useRouter } from 'vue-router'
 
 export default {
     name: 'Home',
     setup () {
         const store = useStore()
         const pageModules = ref([])
+        const router = useRouter()
         const customerGroupId = computed(() => store.getters.customerGroupId)
         // 暂时只在319公司显示
         const isCompanyIdShow = computed(() => Number(store.state._base.wpCompanyInfo.companyId) === 319)
@@ -43,6 +68,11 @@ export default {
         const sendSubscribe = () => {
             if (products.length > 0) QuoteSocket.send_subscribe24H(products)
         }
+
+        const publicLink = () => {
+            router.push('/msg')
+        }
+
         store.dispatch('_base/getPageConfig', 'Home').then(res => {
             console.log(res)
             pageModules.value = res
@@ -67,6 +97,7 @@ export default {
         })
         return {
             pageModules,
+            publicLink,
             isCompanyIdShow,
             ...toRefs(state)
         }
@@ -80,12 +111,34 @@ export default {
     height: 100%;
     //overflow: auto;
     background: var(--contentColor);
+
     .marginbottom{
         padding-bottom: rem(100px);
+    }
+
+    .top-notice{
+        width: 100%;
+        background: var(--primaryAssistColor);
+        color: var(--color);
+
+        .van-icon{
+            vertical-align: middle;
+            font-size: rem(36px);
+        }
+        .van-row{
+            font-size: rem(24px);
+        }
+    }
+    :deep(.van-notice-bar__content){
+        width: 100%;
     }
 }
 .noticeBar,
 .newBar {
     margin-top: rem(20px);
 }
+.notice-swipe {
+    height: 32px;
+    line-height: 32px;
+  }
 </style>

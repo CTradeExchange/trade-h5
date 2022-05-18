@@ -1,61 +1,69 @@
 <template>
-    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")'>
-        <template #right>
-            <van-dropdown-menu :active-color='$style.primary'>
-                <van-dropdown-item v-model='type' :options='options' @change='changeType' />
-            </van-dropdown-menu>
-        </template>
-    </LayoutTop>
+    <LayoutTop :back='true' :menu='false' :title='$t("route.mine")' />
 
-    <Loading :show='pageLoading' />
-    <div class='msg-list'>
-        <p class='header'>
-            {{ $t('cRoute.msg') }}
-        </p>
-        <div v-if='list.length === 0'>
-            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-        </div>
-        <van-pull-refresh
-            v-else
-            v-model='loading'
-            :loading-text="$t('compLang.loading')"
-            :loosing-text="$t('compLang.vanPullRefresh.loosing')"
-            :pulling-text="$t('compLang.vanPullRefresh.pulling')"
-            @refresh='onRefresh'
-        >
-            <van-list
-                v-model:error='isError'
-                v-model:loading='loading'
-                :error-text='errorTip'
-                :finished='finished'
-                :finished-text='$t("common.noMore")'
-                :loading-text="$t('compLang.loading')"
-                @load='onLoad'
-            >
-                <div v-for='(item,index) in list' :key='index' class='msg-item'>
-                    <p class='msg-title'>
-                        {{ item.title === 'null'? '': item.title }}
-                    </p>
-                    <p class='msg-content'>
-                        {{ computeHtmlTime(item.content) }}
-                    </p>
-                    <p class='msg-time'>
-                        {{ formatTime(item.createTime) }}
-                    </p>
+    <van-tabs v-model:active='activeIndex' class='publicPage' @click-tab='onClickTab'>
+        <van-tab name='public' title='标签 1'>
+            <div class=''>
+                <van-dropdown-menu :active-color='$style.primary'>
+                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+                </van-dropdown-menu>
+            </div>
+            <Loading :show='pageLoading' />
+            <div class='msg-list'>
+                <p class='header'>
+                    {{ $t('cRoute.msg') }}
+                </p>
+                <div v-if='list.length === 0'>
+                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
-            </van-list>
-        </van-pull-refresh>
-    </div>
+                <van-pull-refresh
+                    v-else
+                    v-model='loading'
+                    :loading-text="$t('compLang.loading')"
+                    :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                    :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                    @refresh='onRefresh'
+                >
+                    <van-list
+                        v-model:error='isError'
+                        v-model:loading='loading'
+                        :error-text='errorTip'
+                        :finished='finished'
+                        :finished-text='$t("common.noMore")'
+                        :loading-text="$t('compLang.loading')"
+                        @load='onLoad'
+                    >
+                        <div v-for='(item,index) in list' :key='index' class='msg-item'>
+                            <p class='msg-title'>
+                                {{ item.title === 'null'? '': item.title }}
+                            </p>
+                            <p class='msg-content'>
+                                {{ computeHtmlTime(item.content) }}
+                            </p>
+                            <p class='msg-time'>
+                                {{ formatTime(item.createTime) }}
+                            </p>
+                        </div>
+                    </van-list>
+                </van-pull-refresh>
+            </div>
+        </van-tab>
+        <van-tab name='msg' title='标签 2'>
+            内容 2
+        </van-tab>
+    </van-tabs>
 </template>
 
 <script>
 
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref } from 'vue'
 import { queryPlatFormMessageLogList } from '@/api/user'
 import { useStore } from 'vuex'
 import Top from '@/components/top'
 import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
+import { Toast } from 'vant'
+
 export default {
     components: {
         Top,
@@ -95,6 +103,11 @@ export default {
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
+
+        const activeIndex = ref(0)
+        const onClickTab = ({ title, name }) => {
+            console.log(title, name)
+        }
 
         const changeType = (val) => {
             console.log(val)
@@ -189,6 +202,8 @@ export default {
             onLoad,
             changeType,
             computeHtmlTime,
+            activeIndex,
+            onClickTab,
             ...toRefs(state)
         }
     }
@@ -211,12 +226,15 @@ export default {
     box-shadow: none;
     --van-dropdown-menu-title-font-size: 12px;
 }
-.msg-list {
+.publicPage{
     flex: 1;
     height: 100%;
     overflow: auto;
     padding-top: rem(110px);
     background-color: var(--bgColor);
+}
+.msg-list {
+
     .header{
         font-size: rem(48px);
         padding-left: rem(30px);

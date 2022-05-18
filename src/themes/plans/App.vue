@@ -13,6 +13,143 @@
                     <component :is='Component' :key='route.meta.usePathKey ? route.path : undefined' />
                 </keep-alive>
                 <!-- </transition> -->
+
+                <!-- 公告弹窗 -->
+                <van-popup
+                    v-model:show='publicShow'
+                    class='public-pop'
+                    closeable
+                    position='center'
+                    :style="{ height: '60%',width: '80%' }"
+                >
+                    <div class='pop-top'>
+                        最新公告
+                    </div>
+                    <div class='pop-content'>
+                        <div class='public-list'>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                            <div class='item'>
+                                <div class='item-tit'>
+                                    数字货币及交易对上新
+                                </div>
+                                <div class='item-time'>
+                                    2022.4.12  12:00:00
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </van-popup>
             </router-view>
         </template>
         <template #fallback>
@@ -26,9 +163,9 @@
 <script>
 import Notice from '@plans/components/notice'
 import { useStore } from 'vuex'
-import { computed, onMounted, onUnmounted, ref, nextTick } from 'vue'
+import { computed, onMounted, onUnmounted, ref, reactive, toRefs, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { Dialog } from 'vant'
+import { Dialog, Popup } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { localGet, getQueryVariable, sessionSet, unzip } from '@/utils/util'
@@ -48,6 +185,9 @@ export default {
         const cacheViews = computed(() => store.state.cacheViews)
         const googleAnalytics = computed(() => store.state._base.wpCompanyInfo.googleAnalytics)
         const tipTextCountDown = ref(t('confirm') + '(3s)')
+        const state = reactive({
+            publicShow: false
+        })
         window.store = store
         if (getQueryVariable('b_superiorAgent')) {
             sessionSet('b_superiorAgent', getQueryVariable('b_superiorAgent'))
@@ -129,7 +269,12 @@ export default {
             } catch (error) {
 
             }
+            getPublicData()
         })
+
+        const getPublicData = () => {
+            state.publicShow = true
+        }
 
         document.documentElement.classList.add(store.state.invertColor)
 
@@ -143,7 +288,8 @@ export default {
         })
 
         return {
-            cacheViews
+            cacheViews,
+            ...toRefs(state)
         }
     },
     created () {
@@ -157,4 +303,47 @@ export default {
 @import '~@plans/font/iconfont.css';
 @import '~@/sass/mixin.scss';
 
+</style>
+
+<style lang="scss" scoped >
+@import '~@/sass/mixin.scss';
+.public-pop{
+    border-radius: rem(10px);
+
+    .pop-top{
+        line-height: rem(120px);
+        font-size: rem(36px);
+        padding-left: rem(30px);
+    }
+
+    .van-popup__close-icon{
+        right: rem(20px);
+        top: rem(20px);
+    }
+
+    .pop-content{
+        padding: rem(0px) rem(30px) rem(20px) rem(30px);
+        max-height: 80%;
+        overflow: auto;
+    }
+
+    .public-list{
+        margin: 0 rem(0px);
+
+        .item{
+            margin: rem(15px) rem(0px) rem(25px) rem(0px);
+
+            .item-tit{
+                font-size: rem(28px);
+                color: var(--color);
+                margin-bottom: rem(10px);
+            }
+            .item-time{
+                font-size: rem(24px);
+                color: var(--minorColor);
+            }
+        }
+    }
+
+}
 </style>
