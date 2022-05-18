@@ -166,7 +166,15 @@ const h5Children = [
         }
     },
     {
-        path: 'withdrawRecord', // 选择提现币种
+        path: 'withdrawRedeem', // 提现Payredeem
+        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRedeem.vue'),
+        meta: {
+            title: 'cRoute.withdraw',
+            roles: ['User']
+        }
+    },
+    {
+        path: 'withdrawRecord',
         component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRecord.vue'),
         meta: {
             title: 'cRoute.withdrawRecord',
@@ -245,6 +253,20 @@ const h5Children = [
         component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/bind.vue'),
         meta: {
             title: 'route.MFA_bind',
+        }
+    },
+    {
+        path: 'googleSecurityCheck/index',
+        component: () => import(/* webpackChunkName: "googleSecurityCheck" */ '../views/googleSecurityCheck/index.vue'),
+        meta: {
+            title: 'route.MFA_check',
+        }
+    },
+    {
+        path: 'api/createSuccess',
+        component: () => import(/* webpackChunkName: "googleSecurityCheck" */ '../views/api/createSuccess.vue'),
+        meta: {
+            title: 'api.createTitle',
         }
     }
 ]
@@ -328,7 +350,6 @@ const routes = [
             title: 'cRoute.resetPwdFaid'
         }
     },
-
     {
         path: '/',
         redirect: '/home',
@@ -388,15 +409,6 @@ const routes = [
                 children: h5Children
             },
             {
-                path: 'fund',
-                name: 'Fund',
-                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
-            },
-            {
                 path: 'fees',
                 name: 'Fees',
                 component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
@@ -415,9 +427,9 @@ const routes = [
                 children: h5Children
             },
             {
-                path: 'cookies-policy',
-                name: 'CookiesPolicy',
-                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/cookiesPolicy/index.vue'),
+                path: 'fund',
+                name: 'Fund',
+                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
                 meta: {
                     title: '',
                 },
@@ -469,41 +481,31 @@ const routes = [
                 }
             },
             {
-                path: 'faqs', // faqs
-                name: 'Faqs',
-                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/faqs/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
-            },
-            {
-                path: 'privacy-policy',
-                name: 'privacy-policy',
-                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/privacyPolicy/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
-            },
-            {
-                path: 'terms-conditions',
-                name: 'terms-conditions',
-                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/terms/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
-            },
-            {
                 path: '/ranking',
                 name: 'Ranking',
                 component: () => import(/* webpackChunkName: "resetFail" */ '../views/ranking/ranking.vue'),
                 meta: {
                     title: 'route.ranking'
                 }
-            }
-
+            },
+            {
+                path: '/api',
+                name: 'Api',
+                component: () => import(/* webpackChunkName: "api" */ '../views/api/api.vue'),
+                meta: {
+                    title: 'route.api'
+                },
+                children: h5Children
+            },
+            {
+                path: '/apiEdit',
+                name: 'ApiEdit',
+                component: () => import(/* webpackChunkName: "api" */ '../views/api/edit.vue'),
+                meta: {
+                    title: 'route.api'
+                },
+                children: h5Children
+            },
         ],
     },
     // {

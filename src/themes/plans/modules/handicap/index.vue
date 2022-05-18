@@ -48,7 +48,7 @@
                     {{ item.unitNum === 0 ? '': item.unitNum }}
                 </span> -->
                 <span class='quantity alignLeft'>
-                    {{ item.volume_ask }}
+                    {{ formatAmount(item.volume_ask) }}
                 </span>
                 <span
                     class='histogram sell-histogram'
@@ -66,7 +66,7 @@
                     {{ item.price_bid }}
                 </span>
                 <span class='quantity alignRight'>
-                    {{ item.volume_bid }}
+                    {{ formatAmount(item.volume_bid) }}
                 </span>
                 <!-- <span v-if='showField' class='label alignRight riseColor'>
                     {{ item.unitNum === 0 ? '': item.unitNum }}
@@ -86,7 +86,7 @@ import { computed, reactive, toRefs, watch, onBeforeUnmount, watchEffect } from 
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { pow } from '@/utils/calculation'
+import { pow, formatAmount } from '@/utils/calculation'
 import { localGet } from '@/utils/util'
 import computeHandicap from '@plans/hooks/handicap'
 export default {
@@ -192,6 +192,7 @@ export default {
             digitLevelList,
             ...toRefs(state),
             showField,
+            formatAmount,
             handicapResult
             // handicapResult
         }

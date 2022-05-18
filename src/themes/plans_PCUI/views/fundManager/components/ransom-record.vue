@@ -24,7 +24,7 @@
                     filterable
                     :placeholder="$t('fundManager.ransom.receiveCurrency')"
                 >
-                    <el-option v-for='item in assetsList' :key='item.code' :label='item.code' :value='item.code' />
+                    <el-option v-for='item in purchaseCurrencySetting' :key='item.currencyCode' :label='item.currencyName' :value='item.currencyCode' />
                 </el-select>
             </div>
             <div class='item-date'>
@@ -53,7 +53,16 @@
                     <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='150'>
+                <template #default='scope'>
+                    <span v-if="scope.row.currencyRedeem==='self'">
+                        一篮子资产
+                    </span>
+                    <span v-else>
+                        {{ scope.row.currencyRedeem }}
+                    </span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='150'>
                 <template #default='scope'>
                     <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
@@ -61,12 +70,22 @@
             </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.fees')" :min-width='150'>
                 <template #default='scope'>
-                    <span>{{ scope.row.fees }}{{ scope.row.currencyRedeem }}</span>
+                    <a v-if="scope.row.currencyRedeem==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "fee")'>
+                        查看
+                    </a>
+                    <span v-else>
+                        {{ scope.row.fees }}{{ scope.row.currencyRedeem }}
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='150'>
                 <template #default='scope'>
-                    <span>{{ scope.row.amountRedeem }}{{ scope.row.currencyRedeem }}</span>
+                    <a v-if="scope.row.currencyRedeem==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "amount")'>
+                        查看
+                    </a>
+                    <span v-else>
+                        {{ scope.row.amountRedeem }}{{ scope.row.currencyRedeem }}
+                    </span>
                 </template>
             </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.status')" :min-width='160'>
@@ -103,14 +122,26 @@
             />
         </div>
     </div>
+    <!-- 一篮子手续费弹窗 -->
+    <ransomSelfFeesDialog
+        ref='buyDialogRef'
+        v-model='selfFeesDialogShow'
+        :data='selfFeesDialogData'
+        :th-list='selfFeesDialogTHList'
+        :title='selfFeesDialogTitle'
+        :type='selfFeesDialogType'
+    />
 </template>
 
 <script setup>
-import { getCompanyList, getCompanyAssets, getFundRedeemList } from '@/api/fund'
+import ransomSelfFeesDialog from './ransom-selfFees-dialog.vue'
+import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundInfoByCustomerNo } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { useStore } from 'vuex'
 import { onMounted, ref, reactive, computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n({ useScope: 'global' })
 const store = useStore()
 // 用户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
@@ -122,6 +153,13 @@ const companyList = ref([])
 const assetsList = ref([])
 // 选择的区间
 const timeRange = ref(null)
+// 一篮子手续费弹窗是否显示
+const selfFeesDialogShow = ref(false)
+const selfFeesDialogData = ref({})
+const selfFeesDialogType = ref('fee') // fee 手续费   amount 最终申购金额
+const selfFeesDialogTitle = ref('') // 弹窗标题
+const selfFeesDialogTHList = ref([]) // 弹窗的table列表表头
+
 // 搜索参数
 const searchParams = reactive({
     // 赎回状态
@@ -210,6 +248,32 @@ const onSearch = () => {
     searchParams.current = 1
     queryFundRedeemList()
 }
+// 获取一篮子基金的申购手续费
+const showSelfFeesDialog = (item, type = 'fee') => {
+    selfFeesDialogData.value = item
+    selfFeesDialogType.value = type
+    selfFeesDialogShow.value = true
+    selfFeesDialogTitle.value = t('fundManager.buy.redeemDetail')
+    if (type === 'fee') {
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.fees'), t('fundManager.ransom.moneyTotal')]
+    } else {
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.fees'), t('fundManager.ransom.moneyTotal')]
+    }
+}
+const purchaseCurrencySetting = ref([]) // 申购资产设置
+// 获取基金产品详情
+const getFundInfo = () => {
+    getFundInfoByCustomerNo().then(res => {
+        if (res.check()) {
+            purchaseCurrencySetting.value = res.data.purchaseCurrencySetting.map(el => {
+                return {
+                    ...el,
+                    currencyName: el.currencyCode === 'self' ? t('fundManager.buy.basketAssets') : el.currencyName
+                }
+            })
+        }
+    })
+}
 
 onMounted(() => {
     // 获取公司列表
@@ -218,6 +282,8 @@ onMounted(() => {
     queryAssetsList()
     // 获取基金赎回列表
     queryFundRedeemList()
+    // 获取基金产品详情
+    getFundInfo()
 })
 </script>
 

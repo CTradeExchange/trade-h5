@@ -10,30 +10,51 @@
             >
                 <template #default='{ list }'>
                     <div v-for='item in list' :key='item.id' class='li'>
-                        <fundApplyRecordItem :data='item' />
+                        <fundApplyRecordItem
+                            :data='item'
+                            @showDetail='showDetail(item)'
+                        />
                     </div>
                 </template>
             </listVue>
         </div>
     </div>
+    <van-dialog v-model:show='show' title='申购明细'>
+        <div class='info-wrap'>
+            <p class='info-item header'>
+                <span>申购资产</span>
+                <span>申购金额</span>
+                <span>申购手续费</span>
+            </p>
+            <p v-for='item in showInfo' :key='item.currency' class='info-item'>
+                <span>{{ item.currency }}</span>
+                <span>{{ item.amount }}</span>
+                <span>{{ item.fees }}</span>
+            </p>
+        </div>
+    </van-dialog>
 </template>
 
 <script setup>
 import listVue from '@plans/views/record/components/list.vue'
 import fundApplyRecordItem from '@plans/modules/fundApplyRecord/fundApplyRecordItem.vue'
 import filterBox from './filterBox.vue'
-import { fundApplyRecord } from '@/api/fund'
+import { fundApplyRecord, getFundCurrencyList } from '@/api/fund'
 import { hooks } from './hooks'
-import { ref, unref } from 'vue'
+import { useStore } from 'vuex'
+import { ref, unref, computed } from 'vue'
 
 const params = {}
 const { assetsList } = hooks()
-
+const store = useStore()
 const listRef = ref(null)
+const showInfo = ref([])
+const show = ref(false)
 const refresh = () => {
     unref(listRef) && unref(listRef).refresh()
 }
-
+// 获取账户信息
+const customerNo = computed(() => store.state._user.customerInfo.customerNo)
 // 筛选日期
 const assetChange = val => {
     params.currencyShares = val || ''
@@ -46,18 +67,68 @@ const dateChange = val => {
     params.endTime = endTime
     refresh()
 }
+
+const showDetail = item => {
+    getFundCurrencyList({
+        customerNo: customerNo.value,
+        proposalNo: item.proposalNo,
+    }).then(res => {
+        if (res.check()) {
+            if (res.data?.length > 0) {
+                show.value = true
+                showInfo.value = []
+                res.data.forEach(el => {
+                    showInfo.value.push({
+                        currency: el.currency,
+                        amount: el.amount,
+                        fees: el.fees
+                    })
+                })
+            }
+        }
+    })
+}
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.applyRecord{
-    height: 100%;
+.applyRecord {
     display: flex;
     flex-flow: column;
-    .listContainer{
-        background: var(--contentColor);
+    height: 100%;
+    .listContainer {
         flex: 1;
         overflow-y: auto;
+        background: var(--contentColor);
+    }
+}
+.info-wrap {
+    padding: rem(30px) rem(60px);
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        &:last-of-type {
+            span {
+                border-bottom: 1px solid var(--minorColor);
+            }
+        }
+        span {
+            flex: 1;
+            padding: rem(15px);
+            color: var(--normalColor);
+            font-size: rem(24px);
+            border-top: 1px solid var(--minorColor);
+            border-left: 1px solid var(--minorColor);
+            &:nth-of-type(3n) {
+                border-right: 1px solid var(--minorColor);
+            }
+        }
+        &.header {
+            span {
+                color: var(--normalColor);
+                font-weight: bold;
+            }
+        }
     }
 }
 </style>

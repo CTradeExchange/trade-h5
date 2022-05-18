@@ -1,6 +1,10 @@
 <template>
     <div ref='scrollParent' class='pageWrapp'>
-        <LayoutTop :back='true' :menu='false' />
+        <LayoutTop :back='true' :menu='false' :title='$t("fundInfo.fundsList")'>
+            <template #right>
+                <i class='icon_mingxi1' @click='toRecords'></i>
+            </template>
+        </LayoutTop>
         <div v-if='fundProductList.length === 0'>
             <van-empty :description='$t("common.noData")' image='/images/empty.png' />
         </div>
@@ -46,6 +50,16 @@ const lazyDataDebounce = debounce(() => {
     })
 })
 
+// 跳转申购赎回记录
+const toRecords = () => {
+    router.push({
+        path: '/fundRecord',
+        query: {
+            direction: 'buy'
+        }
+    })
+}
+
 // 页面激活时设置滚动条位置
 onActivated(() => {
     scrollParent.value.scrollTop = pageScrollTop
@@ -73,9 +87,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.pageWrapp{
-    margin-top: rem(110px);
+.pageWrapp {
     flex: 1;
+    margin-top: rem(110px);
     overflow-y: auto;
+    .icon_mingxi1 {
+        font-size: rem(42px);
+    }
 }
 </style>

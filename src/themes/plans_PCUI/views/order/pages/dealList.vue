@@ -22,7 +22,7 @@
                 <span :class="[Number(item.trade_direction)===1?'riseColor':'fallColor']">
                     {{ item.price }}
                 </span>
-                <span>{{ item.volume }}</span>
+                <span>{{ formatAmount(item.volume) }}</span>
             </div>
         </div>
     </div>
@@ -31,6 +31,7 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
+import { formatAmount } from '@/utils/calculation'
 export default {
     name: 'DealList',
     props: ['symbolId'],
@@ -47,6 +48,7 @@ export default {
 
         return {
             dealList,
+            formatAmount,
             formatTime
         }
     }

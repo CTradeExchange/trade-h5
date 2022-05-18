@@ -15,123 +15,234 @@
         </div>
 
         <div class='tradeFormBar'>
-            <div class='tradeTypeTab'>
-                <a class='item ' href='javascript:;' @click='toApply'>
-                    {{ $t('fundInfo.buy') }}
-                </a>
-                <a class='item active' href='javascript:;'>
-                    {{ $t('fundInfo.sell') }}
-                </a>
-            </div>
             <TradeAssetBar
                 v-model='amountPay'
                 :can-choose-currency='false'
                 :currency='fund.shareTokenCode'
-                :digits='fundAccount? fundAccount?.digits : 0'
-                :label=" $t('fundInfo.inputRedeemShares')"
+                :digits='fund.shareTokenDigits || 0'
+                icon-content-type='fund'
+                label='您支付'
                 :placeholder='payPlaceholder'
+                @input='inputAmount'
             />
-            <p class='iconArrowWrapper'>
-                <span>
-                    <i class='iconArrowDown icon_paixuxiaojiantou_xiangxia'></i>
-                </span>
-            </p>
+            <!-- 切换 -->
+            <div class='switch-block'>
+                <i class='switch-icon icon_huidui' @click='switchWay'></i>
+                <div class='switch-text'>
+                    <p>
+                        <span class='muted'>
+                            手续费率:
+                        </span>
+                        <span>
+                            {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
+                        </span>
+                    </p>
+                    <p>
+                        <span>
+                            1 {{ fund.shareTokenCode }} =
+                        </span>
+                        <span>
+                            {{ fund.netValue }}{{ fund.currency }}
+                        </span>
+                    </p>
+                </div>
+            </div>
             <TradeAssetBar
                 v-model='sharesPlaceholder'
                 :can-choose-currency='true'
-                class='tradeBarMtop'
                 :currency='activeCurrency'
-                :label="$t('fundInfo.redeemAssets')"
+                :fund-assets-list='fundAssetsList'
+                icon-content-type='asset'
+                label='您想要得到'
                 :readonly='true'
+                @open='openCurrencyExplain'
                 @touchCurrency='touchCurrency'
             />
-            <div class='fee'>
-                <p></p>
-                <p>
-                    <span class='mleft muted'>
-                        {{ $t('fundInfo.redeemFeeRate') }}：
-                    </span>
-                    {{ redeemFeeRate || '--' }}
-                </p>
+        </div>
+        <div class='pay-wrap'>
+            <p class='title'>
+                预计得到以下资产
+            </p>
+            <!-- 一篮子资产 -->
+            <div v-if="activeCurrency === 'self'" class='redeem-assets'>
+                <div v-for='(item, index) in fundAssetsList' :key='index' class='redeem-asset-item'>
+                    <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
+                        <p
+                            style='padding: 5px;
+                            font-size: 10px;
+                            white-space: nowrap;'
+                        >
+                            {{ item.weight }}
+                        </p>
+                        <template #reference>
+                            <currencyIcon
+                                :currency='item.currencyCode'
+                                size='24'
+                            />
+                            <p class='currency'>
+                                {{ item.currencyCode }}
+                            </p>
+                            <p class='percent'>
+                                {{ formatWeight(item.weight) }}
+                            </p>
+                        </template>
+                    </van-popover>
+                </div>
             </div>
-            <div class='footerBtn'>
-                <van-button block :disabled='loading || fund.canRedemption!==1' size='normal' @click='submitHandler'>
-                    {{ fund.canRedemption===1 ? $t('fundInfo.sell'):$t('fundInfo.disabledSell') }}
-                </van-button>
+            <!-- 单资产 -->
+            <div v-else class='redeem-type'>
+                <div class='header'>
+                    <span>资产</span>
+                    <span>预计获得金额</span>
+                </div>
+                <ul class='content'>
+                    <li>
+                        <div class='c-left'>
+                            <currencyIcon
+                                :currency='activeCurrency'
+                                size='18'
+                            />
+                            <span class='currency-text'>
+                                {{ activeCurrency }}
+                            </span>
+                        </div>
+                        <div class='c-right'>
+                            <span>T+2日确认份额后的基金净值价格计算金额</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div v-if="activeCurrency === 'self'" class='notice'>
+                注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
+                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
+                    查看规则
+                </router-link>
+            </div>
+            <div v-else class='notice' style='text-align: right;'>
+                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
+                    查看规则
+                </router-link>
             </div>
         </div>
 
-        <!-- 申购赎回记录 -->
-        <recordList ref='recordListRef' />
+        <div class='footerBtn'>
+            <van-button block :disabled='loading || fund.canRedemption!==1' size='normal' @click='submitHandler'>
+                {{ fund.canRedemption===1 ? $t('fundInfo.sell'):$t('fundInfo.disabledSell') }}
+            </van-button>
+        </div>
 
+        <!-- 加载效果 -->
         <loadingVue :show='loading' />
-
-        <van-action-sheet v-model:show='selectShow' :actions='selectActions' @select='onSelect' />
+        <!-- 选择资产弹窗 -->
+        <SelectAssetsDialog
+            v-model:show='selectShow'
+            :active-currency='activeCurrency'
+            :fund-assets-list='fundAssetsList'
+            :list='selectActions'
+            @select='selectAssets'
+        />
+        <!-- 资产说明弹窗 -->
+        <CurrencyExplainDialog
+            v-model:show='currencyExplainShow'
+            :currency='activeCurrency'
+            :fund='fund'
+            :fund-assets-list='fundAssetsList'
+            :list='selectActions'
+        />
     </div>
 </template>
 
 <script setup>
+import loadingVue from '@/components/loading.vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import TradeAssetBar from './components/tradeAssetBar.vue'
-import recordList from './components/recordList/recordList.vue'
-import loadingVue from '@/components/loading.vue'
+import SelectAssetsDialog from './components/selectAssetsDialog.vue'
+import CurrencyExplainDialog from './components/currencyExplainDialog.vue'
 import { orderHook } from './orderHook'
 import { computed, unref, ref } from 'vue'
-import { toFixed } from '@/utils/calculation'
 import { useRoute, useRouter } from 'vue-router'
-import { Dialog } from 'vant'
+import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
+import { isEmpty } from '@/utils/util'
+import { mul, retainDecimal } from '@/utils/calculation'
 
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
-const { fundId } = route.query
-const recordListRef = ref(null)
+const { direction, fundId } = route.query
 const {
-    pageTitle,
     fund,
+    fundAssetsList,
     accountList,
     loading,
+    queryFundNetValue,
     submitFundRedeem,
     selectShow,
     selectActions,
     onSelect,
     activeCurrency,
+    activeAssets
 } = orderHook()
 
-// 切换到申购基金
-const toApply = () => {
-    router.replace({
-        name: 'FundApply',
-        query: {
-            ...route.query,
-            direction: 'buy'
-        }
-    })
-}
-
 const fundAccount = computed(() => accountList.value?.find(el => el.currency === fund.value?.shareTokenCode))
-const redeemFeeRate = computed(() => {
-    return toFixed(fund.value?.redemptionFeeProportion * 100, 2) + '%'
-})
 
 // 赎回份额输入框的placeholder
 const payPlaceholder = computed(() => {
     const text = t('fundInfo.canRedeemMax') + (fundAccount.value?.available || 0)
     return text
 })
+// 赎回的数量
 const amountPay = ref('')
 
 // 份额输入框的placeholder
 const sharesPlaceholder = computed(() => {
     return t('fundInfo.redeemPlaceholder')
 })
+
+// 是否显示资产说明弹窗
+const currencyExplainShow = ref(false)
+
+// 输入数量
+const inputAmount = () => {
+    queryFundNetValue()
+}
+// 格式化权重
+const formatWeight = (value) => {
+    value = Number(value.replace('%', ''))
+    value = retainDecimal(value, 2)
+    return value + '%'
+}
+// 显示选择资产弹窗
 const touchCurrency = () => {
     selectShow.value = true
+}
+// 选择资产
+const selectAssets = (item) => {
+    onSelect(item)
+    queryFundNetValue()
+}
+// 显示资产说明弹窗
+const openCurrencyExplain = () => {
+    currencyExplainShow.value = true
+}
+// 点击切换申购
+const switchWay = () => {
+    router.replace({
+        name: 'FundApply',
+        query: { direction: 'buy', fundId }
+    })
 }
 
 // 提交申购或者赎回
 const submitHandler = () => {
+    // 验证参数
+    if (isEmpty(amountPay.value)) {
+        return Toast(t('fundInfo.redeemNumPlaceholder'))
+    }
+    if (Number(amountPay.value) < Number(activeAssets.value.minRedemptionNum)) {
+        return Toast('单笔最小赎回份额是' + activeAssets.value.minRedemptionNum)
+    }
+    // 提交赎回
     submitFundRedeem({
         fundId: parseInt(fundId),
         shares: unref(amountPay),
@@ -139,13 +250,20 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
-            unref(recordListRef) && unref(recordListRef).refresh()
-            Dialog.alert({
+            queryFundNetValue()
+            Dialog.confirm({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow')
             }).then(() => {
-                // on close
-            })
+                router.push({
+                    path: '/fundRecord',
+                    query: {
+                        direction: 'sell'
+                    }
+                })
+            }).catch(() => {})
         }
     })
 }
@@ -154,94 +272,189 @@ const submitHandler = () => {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.pageWrapp{
-    margin-top: rem(110px);
+.pageWrapp {
     height: 100%;
+    margin-top: rem(110px);
+    margin-bottom: rem(88px);
     overflow-y: auto;
     .text {
         color: var(--color);
     }
-    .currencyBar{
-        background: var(--contentColor);
-        margin: rem(30px) 0;
+    .currencyBar {
+        margin-top: rem(20px);
         padding: rem(30px) rem(30px);
         line-height: 28px;
+        background: var(--contentColor);
     }
-    .fundCurrency{
+    .fundCurrency {
+        margin-left: 0.5em;
         font-size: rem(32px);
-        margin-left: .5em;
         vertical-align: middle;
     }
-    .tradeBarMtop{
+    .tradeBarMtop {
         margin-top: 25px;
     }
 }
-.tradeFormBar{
-    position: relative;
-    background: var(--contentColor);
-    margin-top: rem(30px);
+.tradeFormBar {
+    margin-top: rem(20px);
     padding: rem(30px);
-
-    .fee{
-        margin-top: rem(30px);
-        font-size: rem(26px);
+    background: var(--contentColor);
+    .switch-block {
         display: flex;
-        justify-content: space-between;
-    }
-    .mleft{
-        margin-left: 10px;
-    }
-}
-.tradeTypeTab{
-    margin-top: rem(10px);
-    margin-bottom: rem(30px);
-    display: grid;
-    grid-column-gap: rem(10px);
-    grid-template-columns: 1fr 1fr;
-    text-align: center;
-    .item{
-        height: rem(80px);
-        line-height: rem(80px);
-        background: var(--bgColor);
-        color: var(--color);
-        font-size: rem(30px);
-        border-radius: rem(5px);
-        &.active{
-            background-color: var(--primary);
-            color: #fff;
+        align-items: center;
+        margin: rem(25px) 0;
+        .switch-icon {
+            margin-right: rem(20px);
+            color: var(--primary);
+            font-size: rem(60px);
+        }
+        .switch-text {
+            p {
+                line-height: 1.6;
+            }
         }
     }
 }
-.iconArrowWrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: rem(60px);
-    position: relative;
-    text-align: center;
-    span {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: rem(60px);
-        height: rem(60px);
-        background: var(--primary);
-        border-radius: 50%;
+.pay-wrap {
+    margin: rem(30px) 0;
+    padding: rem(30px) 0;
+    background: var(--contentColor);
+    .title {
+        font-size: rem(30px);
+        text-align: center;
     }
-    .iconArrowDown{
-        font-size: rem(36px);
-        color: #fff;
+    .redeem-type {
+        overflow: hidden;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin: rem(30px) 0;
+            padding: 0 rem(40px);
+        }
+        .content {
+            margin: rem(30px) 0;
+            padding: 0 rem(30px);
+            li {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: rem(30px);
+                .c-left {
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    .currency-text {
+                        margin-top: rem(4px);
+                        margin-left: rem(10px);
+                    }
+                }
+                .c-right {
+                    display: flex;
+                    align-items: center;
+                    text-align: right;
+                    .icon_success {
+                        margin-left: rem(20px);
+                        color: var(--success);
+                        font-size: rem(28px);
+                    }
+                    .icon_icon_assets {
+                        margin-left: rem(20px);
+                        color: var(--primary);
+                        font-size: rem(28px);
+                    }
+                    .van-icon {
+                        position: relative;
+                        top: -2px;
+                        display: inline-block;
+                        margin-left: rem(20px);
+                        vertical-align: -12%;
+                    }
+                    .error-text {
+                        color: var(--warn);
+                    }
+                    .cr-inline {
+                        display: inline-block;
+                    }
+                }
+            }
+        }
+    }
+    .redeem-assets {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        margin: rem(30px) rem(30px) 0;
+        .redeem-asset-item {
+            flex: 1;
+            width: calc((100% - 45px) / 4);  // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
+            min-width: calc((100% - 45px) / 4); // 加入这两个后每个item的宽度就生效了
+            max-width: calc((100% - 45px) / 4);
+            margin-right: 15px;
+            margin-bottom: 15px;
+            padding: rem(10px) 0;
+            text-align: center;
+            background-color: var(--bgColor);
+            border: solid 1px var(--lineColor);
+            &:nth-child(4n) { // 去除第3n个的margin-right
+                margin-right: 0;
+            }
+            .currency {
+                margin: rem(10px) 0 rem(5px);
+                font-weight: bold;
+                font-size: rem(28px);
+            }
+            .percent {
+                color: var(--minorColor);
+                font-size: rem(20px);
+            }
+        }
+    }
+    .notice {
+        padding: 0 rem(30px);
+        color: var(--minorColor);
+        .toRule {
+            color: var(--primary);
+        }
     }
 }
-.footerBtn{
+.footerBtn {
+    position: fixed;
+    bottom: 0;
     display: block;
-    margin-top: rem(40px);
-
-    .van-button{
+    width: 100%;
+    .van-button {
+        color: #FFF;
+        font-size: 15px;
         background: var(--primary);
         border-color: var(--primary);
-        color: #fff;
-        font-size: 15px;
+    }
+}
+.popup-assets-list {
+    padding: rem(30px);
+    .title {
+        font-size: rem(32px);
+        text-align: center;
+    }
+    .asset-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: rem(40px);
+        padding: rem(30px);
+        background: var(--bgColor);
+        border-radius: rem(12px);
+        .top-block {
+            margin-bottom: rem(10px);
+            >span {
+                margin-left: rem(10px);
+                color: var(--color);
+                vertical-align: middle;
+            }
+        }
+        .desc {
+            margin-bottom: rem(20px);
+            color: var(--minorColor);
+        }
     }
 }
 </style>

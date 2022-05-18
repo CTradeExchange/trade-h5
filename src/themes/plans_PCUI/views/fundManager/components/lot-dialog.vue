@@ -4,29 +4,38 @@
             v-model='show'
             :before-close='close'
             :close-on-click-modal='false'
-            :title="$t('fundManager.ransom.confirmLot')"
+            :title="type==='preview' ? $t('fundManager.ransom.preview') : $t('fundManager.ransom.confirmLot')"
             width='520px'
         >
-            <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
-                <el-table-column align='center' :label="$t('fundManager.ransom.totalLot')">
+            <p v-if="type==='confirm'" class='p'>
+                {{ $t('fundManager.ransom.totalLot') }}:
+                {{ calcData.sharesTotal }}
+                {{ calcData.currencyShares }}
+            </p>
+            <p v-if="type==='confirm'" class='p'>
+                {{ $t('fundManager.ransom.totalMoney') }}：
+            </p>
+            <el-table v-if="type==='preview'" v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
+                <el-table-column align='center' :label='$t("fundManager.ransom.totalMoney") '>
                     <template #default='scope'>
-                        <span>{{ scope.row.sharesTotal }}{{ scope.row.currencyShares }}</span>
+                        <span>{{ scope.row.value }}{{ scope.row.currency }}</span>
                     </template>
                 </el-table-column>
-                <el-table-column align='center'>
-                    <template #header>
-                        <span>{{ $t('fundManager.ransom.totalMoney') }}</span>
-                        <el-tooltip
-                            :content="$t('fundManager.ransom.tip2')"
-                            effect='light'
-                            placement='bottom'
-                            trigger='hover'
-                        >
-                            <van-icon class='question' name='question-o' />
-                        </el-tooltip>
-                    </template>
+                <el-table-column align='center' :label='$t("fundManager.ransom.ableBalance")'>
                     <template #default='scope'>
-                        <span>{{ scope.row.amountTotal }}{{ scope.row.currencyRedeem }}</span>
+                        <span>{{ scope.row.balance }}{{ scope.row.currency }}</span>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-table v-else v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
+                <el-table-column align='center' :label=' $t("fundManager.ransom.RedeemAssets")'>
+                    <template #default='scope'>
+                        <span>{{ scope.row.currency }}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column align='center' :label='$t("contract.amount")'>
+                    <template #default='scope'>
+                        <span>{{ scope.row.value }}</span>
                     </template>
                 </el-table-column>
             </el-table>
@@ -41,17 +50,20 @@
 
 <script setup>
 import { getFundRedeemMoney, confirmFundRedeem } from '@/api/fund'
-import { ref, unref, computed, defineEmits, defineExpose } from 'vue'
+import { ref, unref, computed, defineEmits, defineProps, defineExpose } from 'vue'
 import { useStore } from 'vuex'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 
+const props = defineProps({
+    type: String
+})
 const emit = defineEmits(['confirm'])
 const store = useStore()
 const { t } = useI18n({ useScope: 'global' })
 
 // 用户信息
-const customerInfo = unref(computed(() => store.state._user.customerInfo))
+const customerInfo = computed(() => store.state._user.customerInfo)
 // 是否显示弹窗
 const show = ref(false)
 // 是否加载中
@@ -62,19 +74,35 @@ const isSubmit = ref(false)
 const ids = ref([])
 // 列表数据
 const tableData = ref([])
+const calcData = ref({})
 
 // 获取基金产品赎回总金额
 const queryFundRedeemMoney = () => {
     isLoading.value = true
     getFundRedeemMoney({
-        fundIdList: ids.value
+        fundIdList: ids.value,
+        checkTag: props.type === 'confirm'
     }).then(res => {
         isLoading.value = false
         if (res.check()) {
             isSubmit.value = false
             show.value = true
             const { data } = res
-            tableData.value = [data]
+            if (props.type === 'confirm') {
+                tableData.value = Object.keys(data.redeemAssetMap).map(key => ({ currency: key, value: data.redeemAssetMap[key] }))
+            } else {
+                tableData.value = Object.keys(data.redeemAssetMap).map(key => {
+                    const curAsset = customerInfo.value.accountList.find(el => el.currency === key && el.tradeType === 5)
+                    const result = {
+                        currency: key,
+                        value: data.redeemAssetMap[key],
+                        balance: curAsset.balance
+                    }
+
+                    return result
+                })
+            }
+            calcData.value = data
         }
     })
 }
@@ -90,6 +118,10 @@ const close = () => {
 }
 // 点击确定
 const onConfirm = () => {
+    if (props.type === 'preview') {
+        show.value = false
+        return false
+    }
     if (isSubmit.value) return
     isSubmit.value = true
     confirmFundRedeem({
@@ -114,28 +146,31 @@ defineExpose({
 
 <style lang="scss" scoped>
 .question {
-    margin-left: 2px;
-    font-size: 16px;
     position: relative;
     top: 2px;
+    margin-left: 2px;
+    font-size: 16px;
     cursor: pointer;
 }
 .dialog-layer {
     .confirm-btn {
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         width: 320px;
         height: 48px;
         margin: 0 auto;
+        color: #FFF;
         font-size: 16px;
-        color: #fff;
         background: var(--primary);
         border-radius: 24px;
         cursor: pointer;
         &:hover {
-            opacity: .9;
+            opacity: 0.9;
         }
+    }
+    .p {
+        padding: 5px 0;
     }
 }
 </style>

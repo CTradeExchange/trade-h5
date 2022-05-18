@@ -249,3 +249,38 @@ export function getIndexSimplePerformance (data) {
         data
     })
 }
+
+/* 基金经理 获取一篮子资产列表 */
+export function getFundCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.FundApplyAppDubboService.getFundCurrencyList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 根据提按号获取赎回的金额、手续费等信息 */
+export function getFundRedeemCurrencyList (data) {
+    return request({
+        url: '/global/fund.app.FundRedeemAppDubboService.getFundRedeemCurrencyList',
+        method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 基金经理获取基金产品详情 */
+export function getFundInfoByCustomerNo (data = {}) {
+    return request({
+        url: '/global/config.app.AppSymbolDubboService.getFundInfoByCustomerNo',
+        method: 'post',
+        headers: {
+        },
+        data
+    })
+}

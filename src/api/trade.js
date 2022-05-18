@@ -315,5 +315,3 @@ export function batchMarketPerformance (data) {
         data
     })
 }
-
-/* 现货撮合取消委托单 */

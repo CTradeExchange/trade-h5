@@ -3,6 +3,7 @@
         <el-tabs v-model='activeName'>
             <el-tab-pane :label="$t('fundManager.buy.title1')" name='wait' />
             <el-tab-pane :label="$t('fundManager.buy.title2')" name='record' />
+            <el-tab-pane :label="$t('fundManager.buy.title6')" name='recordAll' />
         </el-tabs>
         <!-- 申购待执行 -->
         <div v-if="activeName === 'wait'">
@@ -12,12 +13,17 @@
         <div v-if="activeName === 'record'">
             <buy-record />
         </div>
+        <!-- 全部申购记录 -->
+        <div v-if="activeName === 'recordAll'">
+            <buy-record-all />
+        </div>
     </div>
 </template>
 
 <script setup>
 import buyWait from './buy-wait.vue'
 import buyRecord from './buy-record.vue'
+import buyRecordAll from './buy-record-all.vue'
 import { ElTabs, ElTabPane } from 'element-plus'
 import { ref } from 'vue'
 
@@ -28,11 +34,11 @@ const activeName = ref('wait')
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .module-content {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    overflow: hidden;
     position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    overflow: hidden;
     &:deep {
         .el-tabs {
             height: 60px;
@@ -50,9 +56,9 @@ const activeName = ref('wait')
             height: 3px;
         }
         .el-tabs__item {
-            font-size: 16px;
-            color: var(--normalColor);
             height: 60px;
+            color: var(--normalColor);
+            font-size: 16px;
             line-height: 60px;
             &.is-active {
                 color: var(--primary);

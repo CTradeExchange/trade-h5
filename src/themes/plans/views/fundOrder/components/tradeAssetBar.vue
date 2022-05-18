@@ -1,22 +1,48 @@
 <template>
     <div class='tradeAssetBar'>
-        <p class='label'>
-            {{ label }}
-        </p>
-        <div class='assetCell'>
-            <div class='leftCell' @click='chooseCurrency'>
-                <CurrencyIcon class='currencyImg' :currency='currency' size='18px' />
-                <span class='currency'>
-                    {{ currency }}
-                </span>
-                <i v-if='canChooseCurrency' class='arrowDown'></i>
+        <!-- 选择框 -->
+        <div v-if='canChooseCurrency' class='cell' @click='chooseCurrency'>
+            <div class='leftCell'>
+                <p class='label'>
+                    <span>{{ label }}</span>
+                    <van-icon name='question-o' size='18' @click.stop="emit('open')" />
+                </p>
+                <div class='row'>
+                    <CurrencyIcon class='currencyImg' :currency='currency' size='22px' />
+                    <div>
+                        <p class='currency'>
+                            {{ currency === 'self' ? '一篮子资产' : currency }}
+                        </p>
+                        <p v-if="currency === 'self'" class='assets'>
+                            <span v-if="direction === 'buy'">
+                                通过支付{{ fundAssetsList.length }}个资产购买基金
+                            </span>
+                            <span v-else>
+                                分别获得{{ fundAssetsList.length }}个资产
+                            </span>
+                        </p>
+                    </div>
+                </div>
             </div>
             <div class='rightCell'>
-                <span v-if='readonly'>
-                    {{ modelValue }}
-                </span>
+                <i class='arrowDown'></i>
+            </div>
+        </div>
+        <!-- 输入框 -->
+        <div v-if='!canChooseCurrency' class='cell'>
+            <div class='leftCell'>
+                <p class='label'>
+                    <span>{{ label }}</span>
+                </p>
+                <div class='row'>
+                    <CurrencyIcon class='currencyImg' :currency='currency' size='22px' />
+                    <p class='currency'>
+                        {{ currency }}
+                    </p>
+                </div>
+            </div>
+            <div class='rightCell'>
                 <input
-                    v-else
                     :placeholder='placeholder'
                     type='text'
                     :value='modelValue'
@@ -32,8 +58,8 @@
 import CurrencyIcon from '@/components/currencyIcon.vue'
 import { getDecimalNum, toFixed } from '@/utils/calculation'
 import { debounce } from '@/utils/util'
-
-import { ref, defineProps, defineEmits, computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { ref, computed, defineProps, defineEmits } from 'vue'
 const props = defineProps({
     readonly: Boolean,
     canChooseCurrency: {
@@ -44,9 +70,19 @@ const props = defineProps({
     label: String,
     currency: String,
     placeholder: String,
-    modelValue: String
+    modelValue: String,
+    // 基金底层资产列表
+    fundAssetsList: {
+        type: Array,
+        default: () => []
+    }
 })
-const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue'])
+const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue', 'open'])
+const router = useRouter()
+const route = useRoute()
+
+// 申购、赎回类型
+const { direction, fundId } = route.query
 
 // 切换币种
 const chooseCurrency = () => {
@@ -94,51 +130,73 @@ const inputHandler = debounce((e) => {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.tradeAssetBar{
-    .label{
-        font-size: rem(48px);
-    }
-    .assetCell{
-        margin-top: rem(20px);
-        border-radius: 6px;
-        height: rem(100px);
-        background: var(--assistColor);
-        padding: 10px 0;
+.tradeAssetBar {
+    --van-tab-active-text-color: var(--primary);
+    .cell {
         display: flex;
         align-items: center;
-    }
-    .leftCell{
-        padding: 0 15px;
-        border-right: 1px solid var(--lineColor);
-        width: 40%;
-        margin-right: 1em;
-        line-height: rem(45px);
-        position: relative;
-        .arrowDown{
-            position: absolute;
-            top:7px;
-            right: 10px;
+        padding: rem(30px);
+        background: var(--assistColor);
+        border-radius: 6px;
+        .leftCell {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            height: 100%;
+            margin-right: rem(30px);
+            .label {
+                display: flex;
+                align-items: center;
+                font-size: rem(34px);
+                color: var(--minorColor);
+                span {
+                    margin-right: rem(10px);
+                }
+                :deep(.van-icon) {
+                    margin-top: rem(-4px);
+                }
+            }
+            .row {
+                display: inline-flex;
+                align-items: center;
+                margin-top: rem(20px);
+                .currency {
+                    font-size: rem(30px);
+                    font-weight: bold;
+                    margin-top: rem(4px);
+                }
+                .currencyImg {
+                    align-self: flex-start;
+                    margin-right: rem(15px);
+                }
+                .assets {
+                    margin-top: rem(15px);
+                    font-size: rem(26px);
+                    color: var(--minorColor);
+                }
+            }
+        }
+        .rightCell {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            input {
+                width: rem(300px);
+                height: 100%;
+                text-align: right;
+                font-size: rem(28px);
+            }
+            .arrowDown {
+                width: 0;
+                height: 0;
+                vertical-align: middle;
+                border: 7px solid var(--placeholdColor);
+                border-color: var(--placeholdColor) transparent transparent transparent;
+                border-bottom: 0;
+                border-radius: 3px;
+            }
         }
     }
-    .rightCell{
-        flex: 1;
-    }
-    .currency{
-        vertical-align: middle;
-        font-size: rem(30px);
-    }
-    .currencyImg{
-        margin-right: 5px;
-        margin-bottom: 3px;
-    }
-}
-.arrowDown{
-    width: 0;
-    height: 0;
-    border: 7px solid var(--placeholdColor);
-    border-radius: 3px;
-    border-color: var(--placeholdColor) transparent transparent transparent;
-    border-bottom: 0;
-    vertical-align: middle;
 }
 </style>

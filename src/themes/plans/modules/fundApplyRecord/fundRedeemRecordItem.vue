@@ -1,12 +1,14 @@
 <template>
     <div class='fundApplyRecordItem' @click='full=true'>
         <p class='title'>
-            {{ $t('fundInfo.sell') }}  {{ data.fundName }}
+            <span class='fallColor'>
+                {{ $t('fundInfo.sell') }}
+            </span>  {{ data.fundName }}
         </p>
         <ul class='infos' :class='{ "full": full || index===0 }'>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.redeemShares') }}({{ data.currencyShares }})
+                    {{ $t('fundInfo.redeemShares') }}
                 </span>
                 <span>{{ data.shares }}</span>
             </li>
@@ -20,13 +22,18 @@
                 <span class='label'>
                     {{ $t('fundInfo.sureSharesStatus') }}
                 </span>
-                <span>{{ data.sharesStatus===1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
+                <span>{{ data.sharesStatus === 1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
                     {{ $t('fundInfo.customerAsset') }}
                 </span>
-                <span>{{ data.currencyRedeem }}</span>
+                <span v-if="data.currencyRedeem === 'self'">
+                    一篮子资产
+                </span>
+                <span v-else>
+                    {{ data.currencyRedeem }}
+                </span>
             </li>
             <li class='item'>
                 <span class='label'>
@@ -53,33 +60,31 @@ import { defineProps, ref } from 'vue'
 
 defineProps({
     data: Object,
-    index: Number,
+    index: Number
 })
 const full = ref(false)
-
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.fundApplyRecordItem{
-    padding: rem(10px) rem(30px);
+.fundApplyRecordItem {
     margin-bottom: rem(20px);
+    padding: rem(10px) rem(30px);
     background: var(--contentColor);
-    .title{
+    .title {
         font-size: rem(28px);
         line-height: 2;
     }
-    .infos{
+    .infos {
         position: relative;
-        line-height: rem(42px);
         display: grid;
         grid-column-gap: rem(20px);
         grid-template-columns: 1fr;
-        font-size: rem(24px);
         height: 7em;
         overflow: hidden;
-        &::before{
-            content: "";
+        font-size: rem(24px);
+        line-height: rem(42px);
+        &::before {
             position: absolute;
             bottom: 0;
             left: 47%;
@@ -88,18 +93,19 @@ const full = ref(false)
             border: 5px solid var(--placeholdColor);
             border-color: var(--placeholdColor) transparent transparent transparent;
             border-bottom: 0;
+            content: '';
         }
-        &.full{
+        &.full {
             height: auto;
-            &::before{
+            &::before {
                 display: none;
             }
         }
-        .item{
+        .item {
             display: flex;
             justify-content: space-between;
         }
-        .label{
+        .label {
             color: var(--minorColor);
         }
     }

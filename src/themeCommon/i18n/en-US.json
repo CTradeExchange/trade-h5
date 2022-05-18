@@ -77,7 +77,7 @@
         "inputCountry": "Please add your country information.",
         "loginOrRegist": "Log In / Register",
         "loginSuccess": "Log In Success",
-		"loginIng": "Log In...",
+        "loginIng": "Log In...",
         "loginByPersonal": "Personal",
         "loginByCorporate": "Enterprise"
     },
@@ -129,8 +129,8 @@
         "dollar": "USD",
         "submiting": "submit...",
         "loading": "Loading...",
-		"more": "Pull up to load more",
-		"noneText": "No display content",
+        "more": "Pull up to load more",
+        "noneText": "No display content",
         "back": "Back",
         "chart": "Chart",
         "fee": "Fee",
@@ -197,8 +197,8 @@
         "symbolCode": "Product Code",
         "warning": "Warning",
         "fundPwd": "Fund Password",
-        "fundPwdTip":"Password is 6 digits",
-        "inputFundPwd":"Input Fund Password",
+        "fundPwdTip": "Password is 6 digits",
+        "inputFundPwd": "Input Fund Password",
         "version": "Version",
         "sendToYou": "Verification code will send to your",
         "sendToYourEmail": "Verification code will send to your new email",
@@ -215,10 +215,10 @@
         "invite": "invite",
         "remove": "Remove",
         "add": "Add ",
-		"24hHigh": "24H High",
-		"24hLow": "24H Low",
-		"24hNumber": "24H Vol",
-		"24hAmount": "24H Amt",
+        "24hHigh": "24H High",
+        "24hLow": "24H Low",
+        "24hNumber": "24H Vol",
+        "24hAmount": "24H Amt",
         "viewMore": "View more markets"
     },
     "faceAuth": {
@@ -271,7 +271,7 @@
         "newPwdLogin": "Please login with New password",
         "tip1": "For security reason, withdrawal is not permitted in recent 24 hours",
         "goLogin": "Log In",
-        "fundPwdSuccess":"Fund Password reset success",
+        "fundPwdSuccess": "Fund Password reset success",
         "fundPwdModifySuccess": "Fund Password Changed Successfully",
         "fundPwdSetSuccess": "Fund Password Set Successfully"
     },
@@ -301,7 +301,7 @@
         "pleaseEnter": "Please enter ",
         "businessOpen": "Create Corporate Account",
         "reGet": "Get again",
-        "input":"Please input your email / mobile"
+        "input": "Please input your email / mobile"
     },
     "chart": {
         "candleStick": "Candle Stick",
@@ -599,8 +599,7 @@
                 "57003": "Redeem fee"
             }
         },
-        "directionBtns": [
-            {
+        "directionBtns": [{
                 "name": "All details",
                 "value": 0
             },
@@ -613,8 +612,7 @@
                 "value": 2
             }
         ],
-        "dateBtns": [
-            {
+        "dateBtns": [{
                 "name": "All date",
                 "value": 0
             },
@@ -850,7 +848,7 @@
         "rule": "View Referral Rules",
         "ruleContent": "Activity rules: Every time the recommender successfully recommends a new user to vitatoken, he can receive a commission from the transaction fee when the new recommended user trades in any spot or fund. This means that you are free to invite users instantly through the referral link, and both offer commissions. Friends can also enjoy the transaction fee discount you set when registering using your referral link.",
         "spot": "Spot",
-        "netDeposit":"Inviter's net deposit",
+        "netDeposit": "Inviter's net deposit",
         "rate": "Inviter's rebate rate",
         "inviteRate": "The percentage of commission received by the inviter",
         "rebackRate": "Invitee's cashback percentage",
@@ -869,7 +867,7 @@
         "c11": "4. vitatoken reserves the right to modify, change or cancel this announcement for any reason at its sole discretion at any time without prior notice.",
         "c12": "5. Risk warning: There are risks in cryptocurrency transactions, please purchase with caution and pay attention to transaction risks. Please note that vitaken is not responsible for any guarantee, compensation, etc. for any of your transactions"
     },
-    "businessKYC":{
+    "businessKYC": {
         "currentCountry": " Your Current Country/Region",
         "next": "Next",
         "prev": "Previous",
@@ -900,22 +898,22 @@
         "CertificateIssued": "Register of Directors / Certificate of Incumbency issued ",
         "tip1": "The last 12 months, including details of Directors",
         "tip2": "Register of Directors / Certificate of Incumbency issued ",
-        "tip3":  "A link to the government website that contains your company details, including Directors and Shareholders details within the last 12 months   ",
+        "tip3": "A link to the government website that contains your company details, including Directors and Shareholders details within the last 12 months   ",
         "ownershipStructure": "Ownership Structure",
         "tip4": "List out all Ultimate Beneficial Owners (UBO) (25% or above), and signed by Directors with dates.",
         "sanctionQuestionnaire": "Sanction Questionnaire",
-        "letterOfAuthorization": "An Letter of Authorization" ,
-        "businessConditions":  "Business Conditions",
+        "letterOfAuthorization": "An Letter of Authorization",
+        "businessConditions": "Business Conditions",
         "tip5": "Please provide any of below (within latest 3 months)     ",
         "tip6": "1）A full screenshot from government website which contains the current company details. Kindly make sure the system clock and date on the desktop is included；",
         "tip7": " 2）Certificate of Incumbency",
-        "tip8": "3）Certificate of Good Standing" ,
+        "tip8": "3）Certificate of Good Standing",
         "tip9": "Shareholders details (Companies with direct/indirect ownership of 25% or above：",
         "tip10": "1 ）List of Shareholders / Certificate of Incumbency ",
         "tip11": "2）Certificate of Good Standing / Certificate of Incumbency",
         "supplementaryDocuments": "Optional - Supplementary documents",
         "website": "Company website (if no, fill N/A)",
-        "directors":  "Verify Directors",
+        "directors": "Verify Directors",
         "firstName": "First Name",
         "lastName": "Last Name",
         "birth": "Date of Birth",
@@ -923,19 +921,19 @@
         "regionIssue": "Country/Region of Issue",
         "identificationFile": "Identification File",
         "portraitPhoto": "Portrait Photo",
-        "verify":"Verify UBOs",
+        "verify": "Verify UBOs",
         "traders": "Verify Dealers/Traders",
         "mainTraders": "Main Verify Dealers/Traders",
         "tip12": "Need Account holder to verify identity",
         "tip13": "Before Identity verification, make sure you are the Account holder",
         "information": "Confirm information",
-        "tip14":  "When submitting the above information and documents, I fully understand and confirm on behalf of the company:",
+        "tip14": "When submitting the above information and documents, I fully understand and confirm on behalf of the company:",
         "tip15": " 1、I/We have full authority to open a Vitatoken business account and sign relevant terms and agreements on behalf of the applicant company",
-        "tip16":  " 2、I/We have read, understood and agree to be bound by the applicable terms and conditions published by Vitatoken, including but not limited to contractual service agreement terms and conditions and privacy policy",
-        "tip17":  " 3、I/We understand that the application company account information provided is truthful and complete",
-        "tip18":  " 4、I/We will notify Vitatoken or its affiliates (if applicable) of any changes in the information provided within a minimum of 7 working days",
-        "tip19":   "I/We understand and agree to this statement",
-        "draftSaved":  "Draft Saved",
+        "tip16": " 2、I/We have read, understood and agree to be bound by the applicable terms and conditions published by Vitatoken, including but not limited to contractual service agreement terms and conditions and privacy policy",
+        "tip17": " 3、I/We understand that the application company account information provided is truthful and complete",
+        "tip18": " 4、I/We will notify Vitatoken or its affiliates (if applicable) of any changes in the information provided within a minimum of 7 working days",
+        "tip19": "I/We understand and agree to this statement",
+        "draftSaved": "Draft Saved",
         "accountInfo": "Account Info",
         "pleaseUpload": "Please Upload ",
         "UploadId": "Upload identification documents",
@@ -951,7 +949,7 @@
         "mainTradersTips": "Main Verify's identificationFile and portraitPhoto",
         "infoList": "Before starting your enterprise verification, please prepare the following documents:"
     },
-    "newHomeFooter":{ 
+    "newHomeFooter": {
         "product": "Products",
         "trading": "Spot Trading",
         "fund": "Index Fund",

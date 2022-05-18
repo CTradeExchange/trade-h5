@@ -20,13 +20,23 @@
                 <span class='label'>
                     {{ $t('fundInfo.redeemFees') }}({{ data.currencyRedeem }})
                 </span>
-                <span>{{ data.fees }}</span>
+                <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data.proposalNo)'>
+                    {{ $t('common.look') }}
+                </span>
+                <span v-else>
+                    {{ data.fees }}
+                </span>
             </li>
             <li class='item'>
                 <span class='label'>
                     {{ $t('fundInfo.redeemAmount') }}({{ data.currencyRedeem }})
                 </span>
-                <span>{{ data.amountRedeem }}</span>
+                <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data.proposalNo)'>
+                    {{ $t('common.look') }}
+                </span>
+                <span v-else>
+                    {{ data.amountRedeem }}
+                </span>
             </li>
             <li class='item'>
                 <span class='label'>
@@ -38,7 +48,7 @@
                 <span class='label'>
                     {{ $t('fundInfo.sureSharesStatus') }}
                 </span>
-                <span>{{ data.sharesStatus===1 ? $t("fundInfo.confirmed") : $t("fundInfo.willConfirmed") }}</span>
+                <span>{{ data.sharesStatus === 1 ? $t("fundInfo.confirmed") : $t("fundInfo.confirmFailure") }}</span>
             </li>
             <li class='item'>
                 <span class='label'>
@@ -57,36 +67,41 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue'
+import { defineProps, ref, defineEmits } from 'vue'
 
 defineProps({
     data: Object,
     index: Number,
+    showInfo: Array
 })
+const emit = defineEmits(['showDetail'])
+
+const showDetail = (item) => {
+    emit('showDetail')
+}
 const full = ref(false)
 </script>
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.fundApplyRecordItem{
-    padding: rem(10px) rem(30px);
+.fundApplyRecordItem {
     margin-bottom: rem(20px);
+    padding: rem(10px) rem(30px);
     background: var(--contentColor);
-    .title{
+    .title {
         font-size: rem(28px);
         line-height: 2;
     }
-    .infos{
+    .infos {
         position: relative;
-        line-height: rem(42px);
         display: grid;
         grid-column-gap: rem(20px);
         grid-template-columns: 1fr;
-        font-size: rem(24px);
         height: 7em;
         overflow: hidden;
-        &::before{
-            content: "";
+        font-size: rem(24px);
+        line-height: rem(42px);
+        &::before {
             position: absolute;
             bottom: 0;
             left: 47%;
@@ -95,20 +110,25 @@ const full = ref(false)
             border: 5px solid var(--placeholdColor);
             border-color: var(--placeholdColor) transparent transparent transparent;
             border-bottom: 0;
+            content: '';
         }
-        &.full{
+        &.full {
             height: auto;
-            &::before{
+            &::before {
                 display: none;
             }
         }
-        .item{
+        .item {
             display: flex;
             justify-content: space-between;
         }
-        .label{
+        .label {
             color: var(--minorColor);
+        }
+        .href {
+            color: var(--primary);
         }
     }
 }
+
 </style>

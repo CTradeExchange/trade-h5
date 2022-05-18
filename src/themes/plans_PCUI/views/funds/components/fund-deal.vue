@@ -20,8 +20,16 @@
             </div>
         </div>
         <div class='deal-case'>
-            <fundApply v-if="activeName === 'apply'" :fund='fund' />
-            <fundRedeem v-if="activeName === 'redeem'" :fund='fund' />
+            <fundApply
+                v-if="activeName === 'apply'"
+                :fund='fund'
+                @switchDirection='switchDirection'
+            />
+            <fundRedeem
+                v-if="activeName === 'redeem'"
+                :fund='fund'
+                @switchDirection='switchDirection'
+            />
             <spot-trade v-if="activeName === 'trade'" />
         </div>
     </div>
@@ -50,6 +58,11 @@ const switchTab = value => {
         activeName.value = value
     }
 }
+
+// 接收事件
+const switchDirection = value => {
+    switchTab(value)
+}
 </script>
 
 <style lang='scss' scoped>
@@ -60,32 +73,32 @@ const switchTab = value => {
     .item {
         display: inline-flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         width: 72px;
         height: 72px;
-        line-height: 1;
         margin-right: 16px;
         color: var(--mainColor);
+        line-height: 1;
         background: var(--contentColor);
         border-radius: 15px;
         box-shadow: 3px 3px 20px rgb(0 0 0 / 9%);
-        transition: all .2s ease-in-out;
         cursor: pointer;
+        transition: all 0.2s ease-in-out;
         &.active {
             border: 1px solid var(--primary);
         }
         &:hover {
-            transform: scale(1.05);
             border: 1px solid var(--primary);
+            transform: scale(1.05);
         }
         img {
             width: 42px;
             height: 42px;
         }
         span {
-            font-size: 14px;
             font-weight: 400;
+            font-size: 14px;
         }
     }
     .group {

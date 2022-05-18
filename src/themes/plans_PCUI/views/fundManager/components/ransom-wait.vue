@@ -24,7 +24,7 @@
                     filterable
                     :placeholder="$t('fundManager.ransom.receiveCurrency')"
                 >
-                    <el-option v-for='item in assetsList' :key='item.code' :label='item.code' :value='item.code' />
+                    <el-option v-for='item in purchaseCurrencySetting' :key='item.currencyCode' :label='item.currencyName' :value='item.currencyCode' />
                 </el-select>
             </div>
             <div class='item-date'>
@@ -54,7 +54,16 @@
                     <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='140' prop='currencyRedeem' />
+            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='160'>
+                <template #default='scope'>
+                    <span v-if="scope.row.currencyRedeem==='self'">
+                        一篮子资产
+                    </span>
+                    <span v-else>
+                        {{ scope.row.currencyRedeem }}
+                    </span>
+                </template>
+            </el-table-column>
             <el-table-column :label="$t('fundManager.ransom.status')" :min-width='160'>
                 <template #default='scope'>
                     <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
@@ -73,13 +82,16 @@
         </el-table>
         <div v-if='tableData.length > 0' class='handle-action'>
             <div class='left'>
-                <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog'>
+                <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog("preview")'>
+                    {{ $t('fundManager.ransom.preview') }}
+                </button>
+                <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog("confirm")'>
                     {{ $t('fundManager.ransom.confirmLot') }}
                 </button>
-                <template v-if='!disableBtn'>
-                    <span>{{ $t('fundManager.ransom.totalMoney') }}: {{ totalLot }} {{ currency }}</span>
+                <!-- <template v-if='!disableBtn'>
+                    <span>{{ $t('fundManager.ransom.totalLot') }}: {{ totalLot }} {{ currency }}</span>
                     <span>{{ $t('assets.free') }}: {{ usable }} {{ currency }}</span>
-                </template>
+                </template> -->
             </div>
             <el-pagination
                 v-model:currentPage='searchParams.current'
@@ -94,15 +106,15 @@
     </div>
 
     <!-- 确认份额弹窗 -->
-    <lot-dialog ref='lotDialogRef' @confirm='onConfirm' />
+    <lot-dialog ref='lotDialogRef' :type='lotDialogType' @confirm='onConfirm' />
 </template>
 
 <script setup>
 import lotDialog from './lot-dialog.vue'
-import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundRedeemMoney } from '@/api/fund'
+import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundRedeemMoney, getFundInfoByCustomerNo } from '@/api/fund'
 import { ElInput, ElDatePicker } from 'element-plus'
 import { Toast } from 'vant'
-import { onMounted, ref, reactive, watch, computed } from 'vue'
+import { onMounted, ref, reactive, watch, computed, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
@@ -112,7 +124,7 @@ const { t } = useI18n({ useScope: 'global' })
 const customerInfo = computed(() => store.state._user.customerInfo)
 // 可用
 const usable = computed(() => {
-    if (currency.value) {
+    if (currency.value && currency.value !== 'self') {
         const accountList = customerInfo.value?.accountList.filter(el => Number(el.tradeType) === 5)
         const account = accountList.find(el => el.currency === currency.value)
         return Number(account.available)
@@ -129,6 +141,8 @@ const assetsList = ref([])
 const tableRef = ref(null)
 // 批量下单元素
 const lotDialogRef = ref(null)
+// 弹窗类型
+const lotDialogType = ref('preview') // preview 预览  confirm 确认份额
 // 选择的区间
 const timeRange = ref(null)
 // 搜索参数
@@ -213,7 +227,7 @@ const queryFundRedeemMoney = () => {
     }).then(res => {
         if (res.check()) {
             const { data } = res
-            totalLot.value = Number(data.amountTotal)
+            totalLot.value = Number(data.sharesTotal)
         }
     })
 }
@@ -257,12 +271,14 @@ const selectionChange = (list) => {
     }
 }
 // 打开确认份额弹窗
-const openLotDialog = () => {
+const openLotDialog = async (type = 'preview') => {
     if (disableBtn.value) return
-    if (Number(totalLot.value) > Number(usable.value)) {
-        return Toast(t('fundManager.ransom.tip1'))
-    }
+    // if (Number(totalLot.value) > Number(usable.value)) {
+    //     return Toast(t('fundManager.ransom.tip1'))
+    // }
     const ids = selectList.value.map(elem => elem.id)
+    lotDialogType.value = type
+    await nextTick()
     lotDialogRef.value.open(ids)
 }
 // 确认份额
@@ -274,6 +290,20 @@ const onConfirm = () => {
     // 查询用户信息
     store.dispatch('_user/findCustomerInfo', false)
 }
+const purchaseCurrencySetting = ref([]) // 申购资产设置
+// 获取基金产品详情
+const getFundInfo = () => {
+    getFundInfoByCustomerNo().then(res => {
+        if (res.check()) {
+            purchaseCurrencySetting.value = res.data.purchaseCurrencySetting.map(el => {
+                return {
+                    ...el,
+                    currencyName: el.currencyCode === 'self' ? t('fundManager.buy.basketAssets') : el.currencyName
+                }
+            })
+        }
+    })
+}
 
 onMounted(() => {
     // 获取公司列表
@@ -282,6 +312,8 @@ onMounted(() => {
     queryAssetsList()
     // 获取基金赎回列表
     queryFundRedeemList()
+    // 获取基金产品详情
+    getFundInfo()
 })
 </script>
 

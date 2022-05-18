@@ -76,10 +76,10 @@ export default {
         height: rem(58px);
         color: var(--normalColor);
         font-weight: 500;
+        font-size: rem(30px);
         line-height: rem(58px);
         text-align: center;
         border-radius: 3px;
-        font-size: rem(30px);
     }
 }
 </style>

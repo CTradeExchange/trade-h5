@@ -28,7 +28,7 @@
                     {{ item.price_ask }}
                 </span>
                 <span class='ft'>
-                    {{ item.volume_ask }}
+                    {{ formatAmount(item.volume_ask) }}
                 </span>
                 <span v-if='item.width' class='volunmePercent buy' :style="{ width:item.width+'%' }"></span>
             </p>
@@ -42,7 +42,7 @@
                     {{ item.price_bid }}
                 </span>
                 <span class='ft'>
-                    {{ item.volume_bid }}
+                    {{ formatAmount(item.volume_bid) }}
                 </span>
                 <span v-if='item.width' class='volunmePercent' :style="{ width:item.width+'%' }"></span>
             </p>
@@ -54,7 +54,7 @@
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
 import computeHandicap from '@plans/hooks/handicap'
-import { lt, pow, gte, lte, toFixed, plus, div } from '@/utils/calculation'
+import { lt, pow, formatAmount, gte, lte, toFixed, plus, div } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
 export default {
     props: ['product'],
@@ -181,6 +181,7 @@ export default {
             ...toRefs(state),
             onSelect,
             handicapList,
+            formatAmount,
             lastPrice,
             ask_deep,
             bid_deep,

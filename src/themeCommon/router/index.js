@@ -463,6 +463,31 @@ const routes = [
             title: 'cRoute.rule'
         }
     },
+	// api管理模块
+    {
+        path: '/apiManage/list',
+        name: 'Api_manage',
+        component: () => import(/* webpackChunkName: "api_Manage" */ '../user/api_Manage/list.vue'),
+        meta: {
+            title: 'api.title'
+        }
+    },
+    {
+        path: '/apiManage/create',
+        name: 'Api_create',
+        component: () => import(/* webpackChunkName: "api_Manage" */ '../user/api_Manage/create.vue'),
+        meta: {
+            title: 'api.createHeader'
+        }
+    },
+    {
+        path: '/apiManage/edit',
+        name: 'Api_edit',
+        component: () => import(/* webpackChunkName: "api_Manage" */ '../user/api_Manage/edit.vue'),
+        meta: {
+            title: 'api.editHeader'
+        }
+    },
 
 ]
 

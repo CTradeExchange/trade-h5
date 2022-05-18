@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "26591497",
+      "name": "汇兑",
+      "font_class": "huidui",
+      "unicode": "e6ab",
+      "unicode_decimal": 59051
+    },
+    {
       "icon_id": "1304951",
       "name": "列表",
       "font_class": "liebiao",

@@ -57,14 +57,16 @@ export function compareAssets (customerInfo = {}, registList) {
 
     // 用户信息的资产根据玩法tradeType将资产分类
     const userPlans = {}
-    accountList.forEach(el => {
-        const { currency, tradeType } = el
-        if (userPlans[tradeType]) {
-            userPlans[tradeType].push(currency)
-        } else {
-            userPlans[tradeType] = [currency]
-        }
-    })
+    if (accountList) {
+        accountList.forEach(el => {
+            const { currency, tradeType } = el
+            if (userPlans[tradeType]) {
+                userPlans[tradeType].push(currency)
+            } else {
+                userPlans[tradeType] = [currency]
+            }
+        })
+    }
     Object.keys(userPlans).forEach(el => {
         userPlans[el] = userPlans[el].sort((a, b) => a && a.localeCompare(b)).join()
     })
