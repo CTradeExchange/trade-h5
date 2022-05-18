@@ -697,7 +697,7 @@
         "redeemSubmiteedDesc": "It is expected that the share will be confirmed before T+2, please pay attention to the share confirmation message",
         "disabledBuy": "Suspend purchase",
         "disabledSell": "Suspend Redeem",
-        "subScriptePlaceholder": "Please enter the purchase amount",
+        "subScriptePlaceholder": "Please enter the purchase shares",
         "redeemNumPlaceholder": "Please enter Redeem shares",
         "available": "Avbl",
         "indexSample": "Index sample",
@@ -895,6 +895,7 @@
         "timeleft": "Valid date remain",
         "timeleftCell": "Day",
         "timeleftCell2": "No expiry",
+        "timeTips3": "Expired",
         "createTips": "Secret Key displays here only, cannot be retrieved once it lost, please keep it safely, withdrawal via API is not available within 48 hours after creation",
         "verify": "Safety verification",
         "listnone": "No data",
@@ -910,7 +911,7 @@
         "editSubTit1": "Key binded to IP address is long term effective; if it is not binded, effective 90 days",
         "keyplaceholder": "Please input API key label",
         "keyplaceholder2": "Please input binded IP address",
-        "editHelpTxt": "Read permission means user can only query the account information, fund flow and order details via this API</br>Withdrawal permission allows users to withdraw through the current API Key.</br>Spot trading rights means that users can use this API to place orders, cancel orders and other trading operations on Spot.</br> Contract trading rights means that users can use this API to place orders, cancel orders and other trading operations on Contracts",
+        "editHelpTxt": "Read permission means user can only query the account information, fund flow and order details via this API</br>Withdrawal permission allows users to withdraw through the current API Key.</br>Trading rights means that users can use this API to place orders, cancel orders and other trading operations",
         "phoneSmsTips": "Please get the dynamic mobile phone verification code",
         "emailSmsTips": "Please get the dynamic email verification code"
     }

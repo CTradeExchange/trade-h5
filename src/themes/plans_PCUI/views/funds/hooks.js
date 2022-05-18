@@ -68,13 +68,13 @@ export const orderHook = (params) => {
         // 一篮子资产
 
         if (activeCurrency.value === 'self') {
-            fundAssetsList.value.map(elem => {
+            fundAssetsList.value && fundAssetsList.value.map(elem => {
                 const item = {
                     currency: elem.currencyCode,
                     amountPay: '0.00',
                     isShow: false
                 }
-                const account = accountList.value.find(el => el.currency === item.currency)
+                const account = accountList.value?.find(el => el.currency === item.currency)
                 const payItem = selfAssetsList.value.find(el => el.currency === item.currency)
                 if (account && payItem) {
                     item.isShow = true
@@ -92,7 +92,7 @@ export const orderHook = (params) => {
                 amountPay: '0.00',
                 isShow: false
             }
-            const account = accountList.value.find(el => el.currency === item.currency)
+            const account = accountList.value?.find(el => el.currency === item.currency)
             const payItem = singleAssetsPay.value
             if (account && payItem) {
                 item.isShow = true
@@ -156,6 +156,9 @@ export const orderHook = (params) => {
         if (!params?.shares) {
             return Promise.resolve().then(() => Toast(t('fundInfo.redeemNumPlaceholder')))
         }
+        if (Number(params?.shares) < Number(activeAssets.value.minRedemptionNum)) {
+            return Toast(t('fundInfo.redeemMinTip') + activeAssets.value.minRedemptionNum)
+        }
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false
@@ -207,7 +210,7 @@ export const orderHook = (params) => {
         if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
             singleAssetsPay.value = null
             selfAssetsList.value = []
-            return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
+            return Toast(t('fundInfo.applyMinTip') + ' ' + activeAssets.value.minPurchaseNum)
         }
 
         fundCalcApplyShares({

@@ -2,7 +2,7 @@
     <div class='handle-module'>
         <div class='block'>
             <p class='title'>
-                您支付 <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
+                {{ $t('fundInfo.youPay') }} <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
 
             <div class='box'>
@@ -17,18 +17,18 @@
                     <el-option
                         v-for='(item, index) in selectActions'
                         :key='index'
-                        :label='item.currencyCode === "self" ? "一篮子资产": item.currencyCode'
+                        :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
                         :value='item.currencyCode'
                     >
                         <div v-if="item.currencyCode === 'self'" class='asset-item'>
                             <div class='top'>
                                 <CurrencyIcon :currency='item.currencyCode' :size='24' />
                                 <span class='currency-text'>
-                                    一篮子资产
+                                    {{ $t('fundInfo.basketAssets') }}
                                 </span>
                             </div>
                             <div>
-                                <p>支付一篮子资产购买基金</p>
+                                <p>  {{ $t('fundInfo.payBasketBuy') }}</p>
                                 <currencyIcon
                                     v-for='(elem, i) in fundAssetsList'
                                     :key='i'
@@ -44,7 +44,7 @@
                                 </span>
                             </div>
                             <div>
-                                支付 {{ item.currencyCode }} 购买基金
+                                {{ $t('fundInfo.payCurrencyBuy', { currency: item.currencyCode }) }}
                             </div>
                         </div>
                     </el-option>
@@ -62,21 +62,26 @@
         </div>
         <!-- 切换 -->
         <div class='switch-block'>
-            <i class='switch-icon icon_huidui' @click='switchWay'></i>
+            <!-- <i class='switch-icon icon_huidui' @click='switchWay'></i> -->
+            <div class='switch'>
+                <img alt='' class='switch-icon' src='/images/transfer.svg' srcset='' @click='switchWay' />
+                <div class='line'></div>
+            </div>
+
             <div class='switch-text'>
                 <p>
                     <span class='muted'>
-                        手续费率:
+                        {{ $t('fundInfo.rate') }}:
                     </span>
-                    <span>
+                    <span v-if='activeAssets.purchaseFeeProportion' class='muted'>
                         {{ mul(activeAssets.purchaseFeeProportion,100) }}%
                     </span>
                 </p>
                 <p>
-                    <span>
+                    <span class='muted'>
                         1 {{ fund.shareTokenCode }} =
                     </span>
-                    <span>
+                    <span class='muted'>
                         {{ fund.netValue }}{{ fund.currency }}
                     </span>
                 </p>
@@ -85,7 +90,7 @@
 
         <div class='block'>
             <p class='title'>
-                您想要得到
+                {{ $t('fundInfo.wantGet') }}
             </p>
             <div class='box'>
                 <label class='label'>
@@ -99,7 +104,7 @@
                     <!-- {{ sharesPlaceholder }} -->
                     <el-input
                         v-model='amountPay'
-                        placeholder='输入申购份额'
+                        :placeholder="$t('fundInfo.inputCount')"
                         size='normal'
                         @input='onInput'
                     />
@@ -109,11 +114,11 @@
 
         <div class='pay-wrap'>
             <p class='title'>
-                您需要支付以下资产
+                {{ $t('fundInfo.needAssets') }}
             </p>
             <div class='header'>
-                <span>资产</span>
-                <span>支付数量</span>
+                <span> {{ $t('trade.asset') }}</span>
+                <span> {{ $t('fundInfo.payCount') }}</span>
             </div>
             <ul class='content'>
                 <li v-for='item in lastAssetsPay' :key='item.currencyCode'>
@@ -130,7 +135,7 @@
                         <div class='cr-inline'>
                             <span>{{ item.amountPay }}</span>
                             <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
-                                可用不足，需增加{{ item.depositAmount }}
+                                {{ $t('fundInfo.availableNot') }}  {{ item.depositAmount }}
                             </p>
                         </div>
                         <div v-if='item.isShow' class='cr-icon'>
@@ -150,25 +155,25 @@
                                     />
                                 </template>
                                 <div class='add-wrap'>
-                                    <h2>选择获取该资产的方式</h2>
+                                    <h2> {{ $t('fundInfo.chooseGetAssets') }} </h2>
                                     <div class='type' @click='toDeposit(item)'>
                                         <div class='left'>
                                             <i
                                                 class='icon iconfont icon_icon_assets'
                                             ></i>
                                             <div class='text'>
-                                                <h3>存款</h3>
-                                                <h5>通过存款的方式存入该资产</h5>
+                                                <h3> {{ $t('fundInfo.deposit') }}</h3>
+                                                <h5> {{ $t('fundInfo.depositTip') }}</h5>
                                             </div>
                                         </div>
                                         <van-icon name='arrow' />
                                     </div>
-                                    <div class='type' @click='toOrderFund'>
+                                    <div class='type' @click='toOrderFund(item.currency)'>
                                         <div class='left'>
                                             <img alt='' class='icon trade-icon' src='/images/trade.png' />
                                             <div class='text'>
-                                                <h3>买入</h3>
-                                                <h5>通过交易的方式买入该资产</h5>
+                                                <h3> {{ $t('trade.buy') }}</h3>
+                                                <h5> {{ $t('fundInfo.buyTip') }}</h5>
                                             </div>
                                         </div>
                                         <van-icon name='arrow' />
@@ -187,7 +192,7 @@
                 </li>
             </ul>
             <div class='notice'>
-                注：以上计算结果包含申购手续费，并且是预计值，具体以提交后实际成交为准
+                {{ $t('fundInfo.applyCalculateTip') }}
             </div>
         </div>
 
@@ -251,7 +256,6 @@ import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal, mul } from '@/utils/calculation'
 import { debounce, getCookie } from '@/utils/util'
 import { log } from '@public/libs/adapter-latest'
-
 const emit = defineEmits(['switchDirection'])
 
 const router = useRouter()
@@ -263,6 +267,7 @@ const props = defineProps({
         default: () => {}
     }
 })
+
 const changeShowModel = inject('changeShowModel')
 const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
 // 客户信息
@@ -270,8 +275,7 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 
 // 选择的币种account
 const activeAccount = computed(() => accountList.value.find(el => el.currency === props.currency))
-// 当前语言
-const lang = getCookie('lang')
+
 // 组件ref
 const applyRulesDialogRef = ref(null)
 const currencyExplainShow = ref(false)
@@ -294,6 +298,7 @@ const {
     lastAssetsPay,
     activeAssets,
     onSelect,
+    fund,
     queryFundNetValue
 } = orderHook({ fund: props.fund, direction: 'buy' })
 
@@ -301,10 +306,9 @@ const amountPay = ref('')
 
 // 输入事件控制
 const onInput = value => {
-    console.log('==============', value)
     const newval = limitNumber(value)
     amountPay.value = newval
-    const digits = curAccount.value?.digits || 0
+    const digits = fund.shareTokenDigits || 0
     amountPay.value = limitDecimal(newval, digits)
     inputHandler()
 }
@@ -336,10 +340,15 @@ const submitHandler = () => {
         if (res.check()) {
             amountPay.value = ''
             calcApplyShares()
-            Dialog.alert({
+            Dialog.confirm({
                 title: t('fundInfo.applySuccessed'),
-                message: '',
-            }).then(() => {})
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow'),
+            }).then(() => {
+                openApplyRecords()
+            }).catch(() => {
+                // on cancel
+            })
         }
     })
 }
@@ -376,13 +385,13 @@ const toDeposit = (item) => {
 }
 
 // 点击前往交易页面的对应产品
-const toOrderFund = () => {
+const toOrderFund = currency => {
     const productList = store.state._quote.productList
-    let product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.profitCurrency === 'USDT' && el.tradeType === 5)
+    let product = productList.find(el => el.baseCurrency === currency && el.profitCurrency === 'USDT' && el.tradeType === 5)
     if (!product) {
-        product = productList.find(el => el.baseCurrency === props.fund.shareTokenCode && el.tradeType === 5)
+        product = productList.find(el => el.baseCurrency === currency && el.tradeType === 5)
     }
-    if (!product) {
+    if (!product || product.baseCurrency === product.profitCurrency) {
         return Toast(t('fundInfo.noTradeMarket'))
     }
     router.replace(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
@@ -399,6 +408,7 @@ const toOrderFund = () => {
         }
         .title {
             margin-bottom: 8px;
+            color: var(--minorColor);
             font-size: 14px;
             .icon-question {
                 cursor: pointer;
@@ -422,7 +432,7 @@ const toOrderFund = () => {
                 height: 100%;
                 padding: 0 12px;
                 .name {
-                    margin-left: 5px;
+                    margin-left: 10px;
                 }
             }
             .value {
@@ -449,6 +459,7 @@ const toOrderFund = () => {
             }
             .el-input__inner {
                 height: 50px;
+                text-align: right;
             }
             .is-disabled .el-input__inner {
                 background: none !important;
@@ -458,11 +469,25 @@ const toOrderFund = () => {
     .switch-block {
         display: flex;
         align-items: center;
-        margin: 12px 0;
+        margin: 20px 0;
+        .switch {
+            position: relative;
+            .line {
+                position: absolute;
+                top: -15px;
+                right: 25px;
+                z-index: 0;
+                height: 60px;
+                border-right: 1px dashed var(--placeholdColor);
+            }
+        }
         .switch-icon {
+            position: relative;
+            z-index: 1;
+            width: 28px;
+            height: 28px;
             margin-right: 10px;
             color: var(--primary);
-            font-size: 30px;
             cursor: pointer;
         }
         .switch-text {
@@ -476,6 +501,8 @@ const toOrderFund = () => {
         padding: 15px 0;
         background: var(--contentColor);
         .title {
+            color: var(--color);
+            font-weight: bold;
             font-size: 15px;
             text-align: center;
         }

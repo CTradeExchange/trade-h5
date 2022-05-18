@@ -696,7 +696,7 @@
         "redeemSubmiteedDesc": "预计T+2日前确认份额，请留意份额确认消息",
         "disabledBuy": "不支持申购",
         "disabledSell": "不支持赎回",
-        "subScriptePlaceholder": "请输入申购金额",
+        "subScriptePlaceholder": "请输入申购份额",
         "redeemNumPlaceholder": "请输入赎回份额",
         "available": "可用",
         "indexSample": "指数样本",
@@ -894,6 +894,7 @@
         "timeleft": "剩余有效期",
         "timeleftCell": "天",
         "timeleftCell2": "无期限",
+        "timeTips3": "已失效",
         "createTips": "Secret Key仅在此页面展示，遗失后不可找回，请妥善保存，创建后48小时内不可通过API提现",
         "verify": "安全验证",
         "listnone": "暂无数据",
@@ -909,7 +910,7 @@
         "editSubTit1": "绑定IP地址的密钥长期有效，未绑定则有效期90天",
         "keyplaceholder": "请输入API的密钥标签",
         "keyplaceholder2": "请输入绑定IP地址",
-        "editHelpTxt": "读取权限是指用户仅能通过此API进行查询账户信息，资金流程及订单信息等只读操作</br>提现权限是指用户可通过此API进行提现操作</br>现货交易权限指用户可通过此API对现货进行下单、撤单等交易操作</br>合约交易权限指用户可通过此API对合约进行下单、撤单等交易操作",
+        "editHelpTxt": "读取权限是指用户仅能通过此API进行查询账户信息，资金流程及订单信息等只读操作</br>提现权限是指用户可通过此API进行提现操作</br>交易权限指用户可通过此API进行下单、撤单等交易操作",
         "phoneSmsTips": "请获取动态手机验证码",
         "emailSmsTips": "请获取动态邮箱验证码"
     }

@@ -38,10 +38,10 @@
                     {{ $t('api.createSubTit3') }}
                 </div>
                 <div class='backContent'>
-                    <span v-for='(item,i) in backData.permissionDTOList' :key='i' class='perItem'>
-                        <span v-if='item.status == 1'>
+                    <span v-for='(item,i) in backData.permissionDTOList' :key='i'>
+                        <em v-if='item.status == 1' class='perItem'>
                             {{ item.name }}
-                        </span>
+                        </em>
                     </span>
                 </div>
                 <div class='sub-title'>
@@ -199,25 +199,25 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-dialog{
+.custom-dialog {
     display: flex;
     flex-direction: column;
     height: 92%;
     overflow: hidden;
     background: var(--bgColor);
-    .header{
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         padding: rem(37px) rem(30px) rem(50px);
-        .header-title{
-            font-size: rem(48px);
-            font-weight: bold;
+        .header-title {
             color: var(--color);
-        }
-        .icon_guanbi{
-            font-size: rem(30px);
             font-weight: bold;
+            font-size: rem(48px);
+        }
+        .icon_guanbi {
+            font-weight: bold;
+            font-size: rem(30px);
         }
     }
 }
@@ -225,7 +225,6 @@ export default {
 
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
-
 .page-wrap {
     width: 100%;
     height: 100%;
@@ -236,7 +235,7 @@ export default {
         max-width: 100%;
     }
     .formBox {
-        margin: 50px 15px 15px 15px;
+        margin: 50px 15px 15px;
         .cell {
             margin-bottom: 10px;
         }
@@ -247,53 +246,51 @@ export default {
             padding-bottom: 10px;
         }
     }
-
-    .sub-title{
-        padding: 5px 28px 5px 0px;
+    .sub-title {
+        padding: 5px 28px 5px 0;
         color: var(--minorColor);
         font-size: 14;
         line-height: 24px;
     }
-    .sub-title.col-black{
+    .sub-title.col-black {
         color: var(--normalColor);
     }
-
-    .create-tips{
+    .create-tips {
         margin: 20px 0;
-        font-size: 16px;
         color: var(--warn);
+        font-size: 16px;
         line-height: 24px;
     }
-    .sub-createTipsTxt{
+    .sub-createTipsTxt {
         color: var(--minorColor);
         line-height: 24px;
     }
-    .copy-btnPop{
-        font-size: 18px;
+    .copy-btnPop {
         margin-left: 10px;
+        font-size: 18px;
         cursor: pointer;
     }
-    .perItem{
+    .perItem {
         display: inline-block;
         margin-right: 10px;
+        padding: 0 5px;
         color: var(--normalColor);
-        background-color: var(--assistColor);
-        padding: 5px;
+        font-size: rem(24px);
+        font-style: normal;
         line-height: 24px;
+        background-color: var(--lineColor);
     }
-    .txtWrap{
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    .txtWrap {
         width: auto;
-        line-height: 24px;
         min-height: auto;
+        overflow: hidden;
+        line-height: 24px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
-
-    .confirm-btn{
+    .confirm-btn {
         margin-top: 20px;
     }
-
 }
 
 </style>
