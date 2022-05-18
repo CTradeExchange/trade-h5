@@ -8,13 +8,13 @@
     >
         <div class='popup-assets'>
             <van-tabs v-model:active='active' color='$style.primary'>
-                <van-tab v-for='item in list' :key='item.currencyCode' :name='item.currencyCode' :title="item.currencyCode === 'self' ? '一篮子基金' : item.currencyCode">
+                <van-tab v-for='item in list' :key='item.currencyCode' :name='item.currencyCode' :title="item.currencyCode === 'self' ? $t('fundInfo.basketAssets') : item.currencyCode">
                     <!-- 申购 -->
                     <div v-if="direction === 'buy'">
                         <!-- 一篮子资产 -->
                         <div v-if="item.currencyCode === 'self'">
                             <div class='content'>
-                                投资者用一篮子资产向基金公司提出申购申请，一篮子资产指的是和基金的投资构成完全一致，比例也完全一致的一组加密货币
+                                {{ $t('fundInfo.applyBasketExplain') }}
                             </div>
                             <div class='direction'>
                                 <div class='currency-list'>
@@ -40,7 +40,7 @@
                         <!-- 单资产 -->
                         <div v-else>
                             <div class='content'>
-                                投资者用{{ item.currencyCode }}向基金公司申购基金
+                                {{ $t('fundInfo.applyCurrencyExplain', { currency: item.currencyCode }) }}
                             </div>
                             <div class='direction'>
                                 <div class='from'>
@@ -72,7 +72,7 @@
                         <!-- 一篮子资产 -->
                         <div v-if="item.currencyCode === 'self'">
                             <div class='content'>
-                                投资者用基金份额向基金公司申请赎回与基金投资构成完全一致，比例也完全一致的一篮子资产
+                                {{ $t('fundInfo.redeemBasketExplain') }}
                             </div>
                             <div class='direction'>
                                 <div class='to'>
@@ -98,9 +98,9 @@
                         <!-- 单资产 -->
                         <div v-else>
                             <div class='content'>
-                                <p>投资者用基金份额向基金公司发起赎回申请，基金公司向投资者支付{{ item.currencyCode }}金额</p>
+                                <p>{{ $t('fundInfo.redeemCurrencyExplain', { currency: item.currencyCode }) }}</p>
                                 <p class='equation'>
-                                    金额=份额*净值
+                                    {{ $t('fundInfo.amountCalculation') }}
                                 </p>
                             </div>
                             <div class='direction'>

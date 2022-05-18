@@ -7,15 +7,15 @@
         @open='open'
     >
         <div class='add-wrap'>
-            <h2>选择获取该资产的方式</h2>
+            <h2>{{ $t('fundInfo.chooseGetAssets') }}</h2>
             <div class='item' @click="way = 'deposit'">
                 <div class='left'>
                     <i
                         class='icon iconfong icon_icon_assets'
                     ></i>
                     <div class='text'>
-                        <h3>存款</h3>
-                        <h5>通过存款的方式存入该资产</h5>
+                        <h3>{{ $t('fundInfo.deposit') }}</h3>
+                        <h5>{{ $t('fundInfo.depositTip') }}</h5>
                     </div>
                 </div>
                 <van-icon :color="way === 'deposit' ? $style.success : $style.minorColor" name='checked' size='22' />
@@ -24,8 +24,8 @@
                 <div class='left'>
                     <img alt='' class='icon' src='/images/trade.png' />
                     <div class='text'>
-                        <h3>买入</h3>
-                        <h5>通过交易的方式买入该资产</h5>
+                        <h3>{{ $t('trade.buy') }}</h3>
+                        <h5>{{ $t('fundInfo.buyTip') }}</h5>
                     </div>
                 </div>
                 <van-icon :color="way === 'trade' ? $style.success : $style.minorColor" name='checked' size='22' />
@@ -99,7 +99,7 @@ const close = () => {
 const onConfirm = () => {
     switch (way.value) {
         case '':
-            Toast('选择获取该资产的方式')
+            Toast(t('fundInfo.chooseGetAssets'))
             break
         // 存款
         case 'deposit':
@@ -115,7 +115,7 @@ const onConfirm = () => {
 // 跳转到充值页面
 const toDeposit = () => {
     if (!curAccount.value) {
-        return Toast('该资产暂不支持存款')
+        return Toast(t('fundInfo.notDepositTip'))
     }
     close()
     router.push({

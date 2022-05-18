@@ -775,7 +775,23 @@
         "applyCountTip": "通过支付{count}个资产购买基金",
         "redeemCountTip": "分别获得{count}个资产",
         "chooseRedeemWay": "选择赎回方式",
-        "payBuyFund": "支付{currency}购买基金"
+        "payCurrencyBuy": "支付{currency}购买基金",
+        "payBasketBuy": "支付一篮子资产购买基金",
+        "getBasketAssets": "获得一篮子资产",
+        "applyBasketExplain": "投资者用一篮子资产向基金公司提出申购申请，一篮子资产指的是和基金的投资构成完全一致，比例也完全一致的一组加密货币",
+        "applyCurrencyExplain": "投资者用{currency}向基金公司申购基金",
+        "redeemBasketExplain": "投资者用基金份额向基金公司申请赎回与基金投资构成完全一致，比例也完全一致的一篮子资产",
+        "redeemCurrencyExplain": "投资者用基金份额向基金公司发起赎回申请，基金公司向投资者支付{currency}金额",
+        "amountCalculation": "金额=份额*净值",
+        "chooseGetAssets": "选择获取该资产的方式",
+        "deposit": "存款",
+        "depositTip": "通过存款的方式存入该资产",
+        "buyTip": "通过交易的方式买入该资产",
+        "notDepositTip": "该资产暂不支持存款",
+        "applyDetail": "申购明细",
+        "applyAssets": "申购资产",
+        "redeemDetail": "赎回明细",
+        "redeemAssetsTitle": "赎回资产"
     },
     "home": {
         "quick": {
