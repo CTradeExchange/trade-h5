@@ -511,7 +511,8 @@ const routes = [
                 name: 'FundV10',
                 component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/home/v10.vue'),
                 meta: {
-                    title: 'api.editHeader'
+                    title: 'api.editHeader',
+                    isPC: true
                 }
             },
             {
