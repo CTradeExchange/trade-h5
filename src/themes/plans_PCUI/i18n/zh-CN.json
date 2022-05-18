@@ -864,7 +864,7 @@
         "redeemSubmiteedDesc": "预计T+2日前确认份额，请留意份额确认消息",
         "disabledBuy": "不支持申购",
         "disabledSell": "不支持赎回",
-        "subScriptePlaceholder": "请输入申购金额",
+        "subScriptePlaceholder": "请输入申购份额",
         "redeemNumPlaceholder": "请输入赎回份额",
         "available": "可用",
         "indexSample": "指数样本",
@@ -886,7 +886,8 @@
         "confirmTime": "确认时间",
         "sharesStatus": {
             "0": "待确认",
-            "1": "已确认"
+            "1": "已确认",
+            "2": "确认失败"
         },
         "currentRedeem": "当前赎回",
         "historyRedeem": "历史赎回",

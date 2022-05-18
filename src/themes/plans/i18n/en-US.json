@@ -697,7 +697,7 @@
         "redeemSubmiteedDesc": "It is expected that the share will be confirmed before T+2, please pay attention to the share confirmation message",
         "disabledBuy": "Suspend purchase",
         "disabledSell": "Suspend Redeem",
-        "subScriptePlaceholder": "Please enter the purchase amount",
+        "subScriptePlaceholder": "Please enter the purchase shares",
         "redeemNumPlaceholder": "Please enter Redeem shares",
         "available": "Avbl",
         "indexSample": "Index sample",

@@ -935,7 +935,7 @@
         "redeemSubmiteedDesc": "預計T+2日前確認份額，請留意份額確認訊息",
         "disabledBuy": "不支援申購",
         "disabledSell": "不支援贖回",
-        "subScriptePlaceholder": "請匯入申購金額",
+        "subScriptePlaceholder": "請匯入申購份額",
         "redeemNumPlaceholder": "請匯入贖回份額",
         "available": "可用",
         "indexSample": "指數樣本",
@@ -957,7 +957,8 @@
         "confirmTime": "確認時間",
         "sharesStatus": {
             "0": "待確認",
-            "1": "已確認"
+            "1": "已確認",
+            "2": "確認失敗"
         },
         "currentRedeem": "目前贖回",
         "historyRedeem": "曆史贖回",

@@ -26,21 +26,25 @@
         </div>
         <!-- 切换 -->
         <div class='switch-block'>
-            <i class='switch-icon icon_huidui' @click='switchWay'></i>
+            <div class='switch'>
+                <img alt='' class='switch-icon' src='/images/transfer.svg' srcset='' @click='switchWay' />
+                <div class='line'></div>
+            </div>
+
             <div class='switch-text'>
                 <p>
                     <span class='muted'>
                         {{ $t('fundInfo.rate') }}:
                     </span>
-                    <span>
+                    <span v-if='activeAssets.redemptionFeeProportion' class='muted'>
                         {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
                     </span>
                 </p>
                 <p>
-                    <span>
+                    <span class='muted'>
                         1 {{ fund.shareTokenCode }} =
                     </span>
-                    <span>
+                    <span class='muted'>
                         {{ fund.netValue }}{{ fund.currency }}
                     </span>
                 </p>
@@ -316,12 +320,13 @@ const switchWay = () => {
 @import '@/sass/mixin.scss';
 .handle-module {
     .block {
-        margin-bottom: 30px;
+        margin-bottom: 10px;
         &:nth-of-type(2) {
             margin-bottom: 0;
         }
         .title {
             margin-bottom: 8px;
+            color: var(--minorColor);
             font-size: 14px;
             .icon-question {
                 cursor: pointer;
@@ -359,7 +364,7 @@ const switchWay = () => {
                 }
             }
             .desc {
-                padding: 0 0 8px 40px;
+                padding: 0 0 8px 15px;
                 color: var(--minorColor);
             }
         }
@@ -379,17 +384,20 @@ const switchWay = () => {
             }
             .el-input__inner {
                 height: 50px;
+                text-align: right;
             }
             .is-disabled .el-input__inner {
                 background: none !important;
             }
         }
         .pay-wrap {
-            margin: rem(30px) 0;
-            padding: rem(30px) 0;
+            margin: 15px 0;
+            padding: 15px 0;
             background: var(--contentColor);
             .title {
-                font-size: rem(30px);
+                color: var(--color);
+                font-weight: bold;
+                font-size: 15px;
                 text-align: center;
             }
             .redeem-type {
@@ -487,8 +495,23 @@ const switchWay = () => {
     .switch-block {
         display: flex;
         align-items: center;
-        margin: 12px 0;
+        margin: 20px 0;
+        .switch {
+            position: relative;
+            .line {
+                position: absolute;
+                top: -15px;
+                right: 25px;
+                z-index: 0;
+                height: 60px;
+                border-right: 1px dashed var(--placeholdColor);
+            }
+        }
         .switch-icon {
+            position: relative;
+            z-index: 1;
+            width: 28px;
+            height: 28px;
             margin-right: 10px;
             color: var(--primary);
             font-size: 30px;
