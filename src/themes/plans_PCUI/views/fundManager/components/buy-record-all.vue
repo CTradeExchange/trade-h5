@@ -275,11 +275,11 @@ const showSelfFeesDialog = (item, type = 'fee') => {
     selfFeesDialogData.value = item
     selfFeesDialogType.value = type
     selfFeesDialogShow.value = true
-    selfFeesDialogTitle.value = type === 'fee' ? t('fundManager.buy.fees') : t('fundManager.buy.finalMoney')
+    selfFeesDialogTitle.value = t('fundManager.buy.subscriptionDetail')
     if (type === 'fee') {
-        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.buy.fees')]
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.buy.fees'), t('fundManager.buy.finalMoney')]
     } else {
-        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.buy.finalMoney')]
+        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.buy.fees'), t('fundManager.buy.finalMoney')]
     }
 }
 

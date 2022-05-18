@@ -9,7 +9,7 @@
                 <el-select
                     v-model='activeCurrency'
                     :placeholder="$t('fundInfo.choosePayAsset')"
-                    @change='onSelect'
+                    @change='selectAssets'
                 >
                     <template #prefix>
                         <CurrencyIcon :currency='activeCurrency' :size='24' />
@@ -24,10 +24,11 @@
                             <div class='top'>
                                 <CurrencyIcon :currency='item.currencyCode' :size='24' />
                                 <span class='currency-text'>
-                                    支付一篮子资产购买基金
+                                    一篮子资产
                                 </span>
                             </div>
                             <div>
+                                <p>支付一篮子资产购买基金</p>
                                 <currencyIcon
                                     v-for='(elem, i) in fundAssetsList'
                                     :key='i'
@@ -68,7 +69,7 @@
                         手续费率:
                     </span>
                     <span>
-                        {{ activeAssets.purchaseFeeProportion }}%
+                        {{ mul(activeAssets.purchaseFeeProportion,100) }}%
                     </span>
                 </p>
                 <p>
@@ -230,6 +231,7 @@
     <CurrencyExplainDialog
         v-model:show='currencyExplainShow'
         :currency='activeCurrency'
+        direction='buy'
         :fund='fund'
         :fund-assets-list='fundAssetsList'
         :list='selectActions'
@@ -246,7 +248,7 @@ import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
-import { limitNumber, limitDecimal } from '@/utils/calculation'
+import { limitNumber, limitDecimal, mul } from '@/utils/calculation'
 import { debounce, getCookie } from '@/utils/util'
 import { log } from '@public/libs/adapter-latest'
 
@@ -290,7 +292,9 @@ const {
     isLogin,
     fundAssetsList,
     lastAssetsPay,
-    activeAssets
+    activeAssets,
+    onSelect,
+    queryFundNetValue
 } = orderHook({ fund: props.fund, direction: 'buy' })
 
 const amountPay = ref('')
@@ -306,12 +310,16 @@ const onInput = value => {
 }
 
 // 选择资产
-const onSelect = (item) => {
+const selectAssets = (item) => {
+    const action = selectActions.value.find(el => el.currencyCode === item)
+    onSelect(action)
+    queryFundNetValue()
     calcApplyShares(amountPay.value)
 }
 
 // 输入事件，防抖
 const inputHandler = debounce(() => {
+    queryFundNetValue()
     calcApplyShares(amountPay.value)
 }, 300)
 
@@ -597,7 +605,7 @@ const toOrderFund = () => {
 .add-wrap {
     padding: 15px;
     h2 {
-        margin: 10ox 0 20px;
+        margin: 10px 0 20px;
         text-align: center;
     }
     .type {

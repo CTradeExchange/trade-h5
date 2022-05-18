@@ -4,6 +4,7 @@ import { useStore } from 'vuex'
 import { debounce } from '@/utils/util'
 import { fundCalcApplyShares, fundApply, fundRedeem } from '@/api/fund'
 import { Toast } from 'vant'
+import { minus } from '@/utils/calculation'
 
 export const useFund = () => {
     const store = useStore()
@@ -65,6 +66,7 @@ export const orderHook = (params) => {
     const lastAssetsPay = computed(() => {
         const result = []
         // 一篮子资产
+
         if (activeCurrency.value === 'self') {
             fundAssetsList.value.map(elem => {
                 const item = {
@@ -79,7 +81,7 @@ export const orderHook = (params) => {
                     item.available = account.available
                     item.amountPay = payItem.amount
                     // 计算需要充值的金额
-                    item.depositAmount = Number(item.amountPay) - Number(item.available)
+                    item.depositAmount = minus(item.amountPay, item.available)
                 }
                 result.push(item)
             })
@@ -97,7 +99,7 @@ export const orderHook = (params) => {
                 item.available = account.available
                 item.amountPay = payItem.amountPay
                 // 计算需要充值的金额
-                item.depositAmount = Number(item.amountPay) - Number(item.available)
+                item.depositAmount = minus(item.amountPay, item.available)
             }
             result.push(item)
         }
@@ -127,6 +129,11 @@ export const orderHook = (params) => {
     // 获取申购手续费
     const calcApplyShares = (val) => {
         getCalcApplyFee(val, activeCurrency.value)
+    }
+
+    // 获取基金净值等数据
+    const queryFundNetValue = () => {
+        store.dispatch('_quote/fundNetValue', { fundId: fund.fundId })
     }
 
     // 点击申购
@@ -172,10 +179,9 @@ export const orderHook = (params) => {
 
     // 选择资产
     const onSelect = (value) => {
-        activeCurrency.value = value
+        activeCurrency.value = value.currencyCode
         activeAssets.value = value
         updateAccountAssetsInfo(value)
-        // calcApplyShares(value)
     }
 
     // 更新单个资产详情
@@ -193,9 +199,7 @@ export const orderHook = (params) => {
     const calcSharesNet = ref('') // 获取申购手净值
     const getCalcApplyFee = (amountPay, currencyPay) => {
         if (!amountPay) {
-            calcApplyFee.value = ''
-            calcShares.value = ''
-            calcSharesNet.value = ''
+            singleAssetsPay.value = null
             selfAssetsList.value = []
             return false
         }
@@ -227,6 +231,9 @@ export const orderHook = (params) => {
         })
     }
 
+    // 获取基金净值等数据
+    queryFundNetValue()
+
     return {
         fund,
         accountList,
@@ -247,6 +254,7 @@ export const orderHook = (params) => {
         isLogin,
         lastAssetsPay,
         activeAssets,
-        fundAssetsList
+        fundAssetsList,
+        queryFundNetValue
     }
 }
