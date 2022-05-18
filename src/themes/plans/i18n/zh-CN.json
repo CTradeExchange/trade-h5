@@ -894,6 +894,7 @@
         "timeleft": "剩余有效期",
         "timeleftCell": "天",
         "timeleftCell2": "无期限",
+        "timeTips3": "已失效",
         "createTips": "Secret Key仅在此页面展示，遗失后不可找回，请妥善保存，创建后48小时内不可通过API提现",
         "verify": "安全验证",
         "listnone": "暂无数据",

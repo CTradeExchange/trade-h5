@@ -853,6 +853,7 @@
         "timeleft": "Valid date remain",
         "timeleftCell": "Day",
         "timeleftCell2": "No expiry",
+        "timeTips3": "Expired",
         "createTips": "Secret Key displays here only, cannot be retrieved once it lost, please keep it safely, withdrawal via API is not available within 48 hours after creation",
         "verify": "Safety verification",
         "listnone": "No data",
