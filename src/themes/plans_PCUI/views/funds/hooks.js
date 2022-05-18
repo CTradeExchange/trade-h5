@@ -221,6 +221,8 @@ export const orderHook = (params) => {
         }).then(res => {
             if (res.check()) {
                 const { data } = res
+                // 更新单个基金产品信息
+                store.commit('_quote/Update_fundProduct', { netValue: data.sharesNet })
                 if (activeCurrency.value === 'self') {
                     selfAssetsList.value = data.list || []
                 } else {

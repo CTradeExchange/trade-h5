@@ -63,7 +63,7 @@
         </div>
     </div>
 
-    <van-dialog v-model:show='show' title='$t("fundInfo.applyDetail")' width='30%'>
+    <van-dialog v-model:show='show' :title='$t("fundInfo.applyDetail")' width='30%'>
         <div class='info-wrap'>
             <p class='info-item header'>
                 <span> {{ $t('fundInfo.applyAssets') }}</span>

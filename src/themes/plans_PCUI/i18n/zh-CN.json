@@ -954,7 +954,10 @@
         "applyDetail": "申购明细",
         "applyAssets": "申购资产",
         "redeemDetail": "赎回明细",
-        "redeemAssetsTitle": "赎回资产"
+        "redeemAssetsTitle": "赎回资产",
+        "applyAmount": "申购金额",
+        "redeemAmount": "赎回金额",
+        "applyFees": "申购手续费"
 
     },
     "funds": {

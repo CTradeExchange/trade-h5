@@ -183,7 +183,7 @@
 
                             <van-icon
                                 v-else
-                                :color='$style.success'
+                                :color='$style.placeholdColor'
                                 name='checked'
                                 size='22'
                             />
@@ -532,11 +532,10 @@ const toOrderFund = currency => {
                     text-align: right;
                     .icon_success {
                         margin-left: 10px;
-                        color: var(--success);
+                        color: var(--normalColor);
                         font-size: 14px;
                     }
                     .van-icon {
-                        margin-top: -8px;
                         margin-left: 10px;
                         &.icon-add {
                             cursor: pointer;
