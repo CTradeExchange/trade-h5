@@ -88,8 +88,6 @@ export default {
             }
             // 订阅资产数据
             MsgSocket.subscribeAsset(state.tradeType)
-            // 拉取用户信息
-            store.dispatch('_user/findCustomerInfo', false)
         }
 
         // 获取持仓列表数据
@@ -120,8 +118,11 @@ export default {
         }
 
         onMounted(() => {
-            // 初始化数据
-            initData()
+            // 拉取用户信息
+            store.dispatch('_user/findCustomerInfo', false).then(() => {
+                // 初始化数据
+                initData()
+            })
         })
 
         onBeforeUnmount(() => {
