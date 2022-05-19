@@ -885,7 +885,7 @@
         "sharesStatus": {
             "0": "Unconfirmed",
             "1": "Confirmed",
-            "2": "Confirm failure"
+            "2": "Failed"
         },
         "currentRedeem": "Open Redeem",
         "historyRedeem": "History Redeem",
