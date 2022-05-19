@@ -57,7 +57,73 @@
                 <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
             <div class='box-bg'>
-                <div class='box'>
+                <el-popover
+                    v-model:visible='popoverVis'
+                    placement='bottom'
+                    popper-class='popover-select'
+                    trigger='click'
+                    :width='328'
+                >
+                    <template #reference>
+                        <div class='pay-bar'>
+                            <div class='left'>
+                                <CurrencyIcon :currency='activeCurrency' :size='24' />
+                                <div class='text'>
+                                    <p class='currenct'>
+                                        {{ activeCurrency === 'self' ? $t("fundInfo.basketAssets") : activeCurrency }}
+                                    </p>
+                                    <p v-if="activeCurrency === 'self'">
+                                        {{ $t('fundInfo.redeemCountTip',{ count: fundAssetsList.length }) }}
+                                    </p>
+                                </div>
+                            </div>
+                            <van-icon name='arrow-down' />
+                        </div>
+                    </template>
+                    <div class='select-wrap'>
+                        <div
+                            v-for='(item, index) in selectActions'
+                            :key='index'
+                            class='select-option'
+                            :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
+                            :value='item.currencyCode'
+                        >
+                            <div v-if="item.currencyCode === 'self'" class='asset-item' @click='selectAssets(item.currencyCode)'>
+                                <div class='top'>
+                                <!-- <CurrencyIcon :currency='item.currencyCode' :size='24' /> -->
+                                </div>
+                                <div>
+                                    <p class='currency-text'>
+                                        {{ $t('fundInfo.basketAssets') }}
+                                    </p>
+                                    <p class='mute'>
+                                        {{ $t('fundInfo.getBasketAssets') }}
+                                    </p>
+                                    <div class='asset-list'>
+                                        <currencyIcon
+                                            v-for='(elem, i) in fundAssetsList'
+                                            :key='i'
+                                            :currency='elem.currencyCode'
+                                            size='24'
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else class='asset-item' @click='selectAssets(item.currencyCode)'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                </div>
+                                <div>
+                                    <p class='currency-text'>
+                                        {{ item.currencyCode }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-popover>
+
+                <!-- <div class='box'>
                     <el-select
                         v-model='activeCurrency'
                         :placeholder="$t('fundInfo.redeemAssets')"
@@ -102,7 +168,7 @@
                 </div>
                 <p v-if="activeCurrency === 'self'" class='desc'>
                     {{ $t('fundInfo.redeemCountTip',{ count: fundAssetsList.length }) }}
-                </p>
+                </p> -->
             </div>
             <div class='pay-wrap'>
                 <p class='title'>
@@ -230,6 +296,7 @@ const lang = getCookie('lang')
 // 组件ref
 const redeemRulesDialogRef = ref(null)
 const currencyExplainShow = ref(false)
+const popoverVis = ref(false)
 
 const {
     accountList,
@@ -300,6 +367,7 @@ const openRedeemRecords = () => {
 
 // 选择资产
 const selectAssets = (item) => {
+    popoverVis.value = false
     const action = selectActions.value.find(el => el.currencyCode === item)
     onSelect(action)
     queryFundNetValue()
@@ -367,6 +435,31 @@ const switchWay = () => {
                 padding: 0 0 8px 15px;
                 color: var(--minorColor);
             }
+            .pay-bar {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 70px;
+                margin-bottom: 20px;
+                padding: 0 15px;
+                background: var(--assistColor);
+                border-radius: 5px;
+                cursor: pointer;
+                .left {
+                    display: flex;
+                    align-items: center;
+                    .text {
+                        margin-left: 10px;
+                        .currenct {
+                            color: var(--color);
+                            font-weight: bold;
+                        }
+                    }
+                }
+                &:hover {
+                    //border: solid 1px var(--primary);
+                }
+            }
         }
         &:deep {
             .el-select {
@@ -421,6 +514,7 @@ const switchWay = () => {
                             .currency-text {
                                 margin-top: rem(4px);
                                 margin-left: rem(10px);
+                                font-weight: bold;
                             }
                         }
                         .c-right {
@@ -583,19 +677,31 @@ const switchWay = () => {
         }
     }
 }
-.el-select-dropdown__item {
+.el-select-dropdown__item,
+.select-wrap {
     padding: 0;
     .asset-item {
-        margin: 15px 15px 0;
-        padding: 5px 15px;
-        background: var(--bgColor);
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 15px;
+        background: var(--contentColor);
+        cursor: pointer;
         .currencyIcon {
+            margin-right: -5px;
+        }
+        .currency-text {
+            font-weight: bold;
+        }
+        .mute {
+            color: var(--placeholdColor);
+        }
+        .top {
+            width: 24px;
             margin-right: 10px;
         }
         .asset-list {
-            .icon-asset {
-                margin-right: -3px;
-            }
+            margin-top: 15px;
         }
     }
 }
