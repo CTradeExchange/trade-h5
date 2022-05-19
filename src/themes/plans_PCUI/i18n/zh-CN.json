@@ -957,7 +957,8 @@
         "redeemAssetsTitle": "赎回资产",
         "applyAmount": "申购金额",
         "redeemAmount": "赎回金额",
-        "applyFees": "申购手续费"
+        "applyFees": "申购手续费",
+        "redeemFees": "赎回手续费"
 
     },
     "funds": {

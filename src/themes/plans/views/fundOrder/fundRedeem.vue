@@ -69,8 +69,8 @@
                     <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
                         <p
                             style='padding: 5px;
-                            font-size: 10px;
-                            white-space: nowrap;'
+font-size: 10px;
+white-space: nowrap;'
                         >
                             {{ item.weight }}
                         </p>
@@ -114,11 +114,6 @@
             </div>
             <div v-if="activeCurrency === 'self'" class='notice'>
                 {{ $t('fundInfo.t2Tip2') }}
-                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
-                    {{ $t('fundInfo.viewRule') }}
-                </router-link>
-            </div>
-            <div v-else class='notice' style='text-align: right;'>
                 <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
                     {{ $t('fundInfo.viewRule') }}
                 </router-link>

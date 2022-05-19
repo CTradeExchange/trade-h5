@@ -855,7 +855,7 @@
         "inputRedeemShares": "Enter Redeem share",
         "redeemAssets": "Choose to accept assets",
         "redeemFeeRate": "Redeem fee rate",
-        "canRedeemMax": "Redeemable",
+        "canRedeemMax": "Redeemable ",
         "redeemPlaceholder": "T+2 day nav calculation amount",
         "applySuccessed": "Purchased successfully",
         "redeemSubmiteed": "Redeem submitted",
@@ -925,7 +925,7 @@
         "needAssets": "Estimated amount you have to pay",
         "availableNot": "Insufficient balance, need to add",
         "applyCalculateTip": "Tips：The above estimated calculation includes Purchase fee, and it subject to actual transaction",
-        "viewRule": "Rule",
+        "viewRule": "Rules",
         "payCount": "Pay amount",
         "applyMinTip": "Minimum Purchase is",
         "applyNotTip": "insufficient balance",
@@ -942,7 +942,7 @@
         "payBasketBuy": "Pay basket of assets to purchase fund",
         "getBasketAssets": "Obtain basket of asset",
         "applyBasketExplain": "Investor use a basket of asset to submit Purchase to Fund company, a basket of asset mean the asset component and proportion are exactly the same as the fund",
-        "applyCurrencyExplain": "Investor use {currency} to submit fund subcription to fund company",
+        "applyCurrencyExplain": "Investor use {currency} to submit fund purchase to fund company",
         "redeemBasketExplain": "Investor submit redemption to fund company with fund shares, a bakset of assets with exactly the same composition and proportion with the fund",
         "redeemCurrencyExplain": "Investor submit redemption to fund company with fund shares, fund company pay {currency} to investor",
         "amountCalculation": "Amount=Shares*NAV",
@@ -956,7 +956,9 @@
         "redeemDetail": "Redeem details",
         "redeemAssetsTitle": "Redeem asset",
         "applyAmount": "Purchase amount",
-        "applyFees": "Subsription fee"
+        "applyFees": "Subsription fee",
+        "redeemAmount": "Redeem amount",
+        "redeemFees": "Redeem fee"
     },
     "funds": {
         "fundShare": "Fund Share",
