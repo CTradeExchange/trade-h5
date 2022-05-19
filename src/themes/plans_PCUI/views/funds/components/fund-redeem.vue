@@ -27,7 +27,7 @@
         <!-- 切换 -->
         <div class='switch-block'>
             <div class='switch'>
-                <img alt='' class='switch-icon' src='/images/transfer.svg' srcset='' @click='switchWay' />
+                <img alt='' class='switch-icon' src='/images/transfer.png' srcset='' @click='switchWay' />
                 <div class='line'></div>
             </div>
 

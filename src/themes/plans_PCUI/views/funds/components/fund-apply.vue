@@ -64,7 +64,7 @@
         <div class='switch-block'>
             <!-- <i class='switch-icon icon_huidui' @click='switchWay'></i> -->
             <div class='switch'>
-                <img alt='' class='switch-icon' src='/images/transfer.svg' srcset='' @click='switchWay' />
+                <img alt='' class='switch-icon' src='/images/transfer.png' srcset='' @click='switchWay' />
                 <div class='line'></div>
             </div>
 
