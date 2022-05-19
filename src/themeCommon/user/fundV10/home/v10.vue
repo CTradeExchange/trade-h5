@@ -196,6 +196,8 @@
                 </div>
             </div>
         </div>
+
+        <LayoutBottom />
     </div>
 </template>
 
@@ -203,6 +205,7 @@
 import Swiper from './components/swiper.vue'
 import ChartView from './components/chartView.vue'
 import CurrencyIcon from '@/components/currencyIcon'
+import LayoutBottom from '@plans/layout/layoutBottom'
 import { onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
