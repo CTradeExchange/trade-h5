@@ -43,9 +43,9 @@ export const orderHook = () => {
                 }
                 const account = accountList.value.find(el => el.currency === item.currency)
                 const payItem = selfAssetsList.value.find(el => el.currency === item.currency)
-                if (account && payItem) {
+                item.available = account?.available || 0
+                if (payItem) {
                     item.isShow = true
-                    item.available = account.available
                     item.amountPay = payItem.amount
                     // 计算需要充值的金额
                     item.depositAmount = minus(item.amountPay, item.available)
