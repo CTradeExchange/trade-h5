@@ -405,7 +405,7 @@ const switchWay = () => {
             .box {
                 display: flex;
                 align-items: center;
-                height: 50px;
+                height: 70px;
                 background: var(--assistColor);
                 border-radius: 5px;
                 .line {
