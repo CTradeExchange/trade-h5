@@ -851,9 +851,9 @@
             "standard": "下單執行標准",
             "fees": "申購手續費",
             "finalMoney": "最終申購金額",
-            "basketAssets": "一篮子资产",
-            "subscriptionDetail": "申购明细",
-            "redeemDetail": "赎回明细",
+            "basketAssets": "一籃子資產",
+            "subscriptionDetail": "申購明細",
+            "redeemDetail": "贖回明細",
             "lot": "申購份額"
         },
         "ransom": {
