@@ -516,17 +516,17 @@ const routes = [
                 }
             },
             {
-                path: '/fundV10/contact',
-                name: 'v10Contact',
-                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/contact.vue'),
+                path: '/fundV10/join',
+                name: 'v10Join',
+                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/join.vue'),
                 meta: {
                     title: 'api.editHeader'
                 }
             },
             {
-                path: '/fundV10/in',
-                name: 'v10InFundManager',
-                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/inFundManager.vue'),
+                path: '/fundV10/examine',
+                name: 'v10Examine',
+                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/examine.vue'),
                 meta: {
                     title: 'api.editHeader'
                 }

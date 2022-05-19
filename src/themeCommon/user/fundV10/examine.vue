@@ -79,7 +79,9 @@ export default {
         background: url('/images/V10/pc/METAVERSE.jpg') no-repeat center;
         // 适配移动端
         @media screen and (max-width: 768px){
-            background-image: url('/images/V10/pc/METAVERSE.jpg') no-repeat center;
+            height: 64vw;
+            background-image: url('/images/V10/h5/METAVERSE.jpg');
+            background-size: cover;
         }
     }
     .features {
