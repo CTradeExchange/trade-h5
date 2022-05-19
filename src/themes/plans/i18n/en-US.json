@@ -715,7 +715,7 @@
         "applyRule_tip2": "Purchase price is on the base of real time net asset value to execute",
         "applyRule_tip3": "After purchase flow finished, the fund token will deposit to your Spot wallet, purchase fee will direct debit from your Spot wallet",
         "applyRule_tip4": "USDT will be deducted as transaction fee when purchase using USDT to purchase; the transaction fee will be deducted from each asset according to the proportion of the fund when purchasing with a basket of assets.",
-        "jz_formula": "calculation formula",
+        "jz_formula": "Calculation formula",
         "jz_formulaContent": "Net asset value=Total asset value/Fund latest shares",
         "calcFormula": "计算公式",
         "fundFormula1": "净申购金额=申购申请金额-申购手续费",
