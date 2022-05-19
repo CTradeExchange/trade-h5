@@ -9,6 +9,7 @@
                     <source src='https://www.vitatoken.io/site/about-us.mp4' type='video/mp4' />
                 </video>
             </div>
+
             <!-- 基金信息 -->
             <div class='fund-info max-limit'>
                 <ul>
@@ -62,9 +63,119 @@
                     </li>
                 </ul>
             </div>
+
             <!-- 图表视图 -->
             <div class='max-limit'>
-                <ChartView :fund-id='fundId' />
+                <ChartView :fund-id='fundId' :is-p-c='isPC' />
+            </div>
+
+            <div class='module-case max-limit'>
+                <div class='trend-chart'>
+                    <h3 class='title'>
+                        Reflecting the trend of cryptocurrency in general
+                    </h3>
+                    <div class='block trend-block'>
+                        <div class='above'>
+                            <img class='pic' :src="isPC ? require('@public/images/V10/pc/trend_chart.png') : require('@public/images/V10/h5/trend_chart.png')" />
+                        </div>
+                        <div class='below'>
+                            <p class='text'>
+                                V10 contains the top 10 cryptocurrency according to market capitalization. It is relatively stable and reflects the overall trend in cryptocurrency. By holding V10, you do not need to worry about choosing which cryptocurrency to invest in and it becomes more accessible by lowering the entry barrier.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class='fund-assets'>
+                    <h3 class='title'>
+                        Fully Transparent
+                    </h3>
+                    <div class='block assets-block'>
+                        <div class='above'>
+                            <div class='assets-info'>
+                                <div class='header'>
+                                    <span>Currency</span>
+                                    <span>Percentage</span>
+                                </div>
+                                <ul class='list'>
+                                    <li v-for='(item, index) in fund.fundCurrencyList' :key='index'>
+                                        <div class='row'>
+                                            <CurrencyIcon class='icon' :currency='item.currencyCode' :size='24' />
+                                            <span class='currency'>
+                                                {{ item.currencyCode }}
+                                            </span>
+                                        </div>
+                                        <span>{{ item.weight }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class='below'>
+                            <p class='text'>
+                                The key features of V10 are that it is fully transparent, and it is able to provide the location of assets, as well as provide safe and reliable trading. With V10, you won’t miss out on investing in the fast-growing cryptocurrency market.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class='how-buy max-limit'>
+                <h3 class='title'>
+                    How to buy V10
+                </h3>
+                <div class='method'>
+                    <p class='name cell-1'>
+                        <strong>Method</strong>
+                    </p>
+                    <div class='handle'>
+                        <button class='cell-2'>
+                            Buy via Vitatoken
+                        </button>
+                        <button class='cell-3'>
+                            Buy via Issuing institution
+                        </button>
+                    </div>
+                </div>
+                <ul class='info'>
+                    <li>
+                        <strong class='cell-1'>
+                            Minimum Buy In Amount
+                        </strong>
+                        <div class='col'>
+                            <span class='cell-2'>
+                                10U起
+                            </span>
+                            <span class='cell-3'>
+                                5000u起
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <strong class='cell-1'>
+                            Rate
+                        </strong>
+                        <div class='col'>
+                            <span class='cell-2'>
+                                0.15%
+                            </span>
+                            <span class='cell-3'>
+                                0.2%
+                            </span>
+                        </div>
+                    </li>
+                    <li>
+                        <strong class='cell-1'>
+                            Arrival Time
+                        </strong>
+                        <div class='col'>
+                            <span class='cell-2'>
+                                Immediate Transaction
+                            </span>
+                            <span class='cell-3'>
+                                T+1
+                            </span>
+                        </div>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -72,7 +183,8 @@
 
 <script setup>
 import Swiper from './components/swiper.vue'
-import ChartView from './components/chart-view.vue'
+import ChartView from './components/chartView.vue'
+import CurrencyIcon from '@/components/currencyIcon'
 import { onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
@@ -128,7 +240,80 @@ onMounted(() => {
             }
         }
     }
+    .module-case {
+        .title {
+            font-weight: bold;
+            color: #333;
+        }
+        .assets-info {
+            .header {
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                color: #999;
+            }
+            .list {
+                margin-top: 20px;
+                li {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 12px;
+                    .row {
+                        display: inline-flex;
+                        align-items: center;
+                        .currency {
+                            margin-left: 12px;
+                            font-size: 14px;
+                            font-weight: 700;
+                            color: #333;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .how-buy {
+        background-color:#ffffff;
+        border-radius:20px;
+        box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
+        .title {
+            text-align: center;
+            font-weight: 700;
+            color: #333;
+            border-bottom: 1px solid #c2c2c2;
+        }
+        .method {
+            color: var(--primary);
+            font-weight: 700;
+            .handle {
+                button {
+                    background: none;
+                    border: 1px solid var(--primary);
+                    border-radius: 10px;
+                    cursor: pointer;
+                    &:hover {
+                        background: var(--primary);
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .info {
+            padding-bottom: 40px;
+            li {
+                display: flex;
+                font-size: 14px;
+                color: #333;
+                line-height: 20px;
+                strong {
+                    font-weight: 700;
+                }
+            }
+        }
+    }
 }
+
 .pc-content {
     padding: 60px 0 150px;
     .video-block {
@@ -145,14 +330,109 @@ onMounted(() => {
             }
         }
     }
-    :deep {
-        .chart-view {
-            height: 490px;
-            margin-top: 60px;
-            padding: 20px 0 0;
+    .module-case {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-top: 60px;
+        .title {
+            font-size: 30px;
+        }
+        .trend-chart {
+            width: 768px;
+        }
+        .fund-assets {
+            width: 412px;
+        }
+        .block {
+            margin-top: 32px;
+            padding: 0 30px;
+            background-color:#ffffff;
+            border-radius:20px;
+            box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
+            .above {
+                height: 465px;
+                border-bottom: 1px solid #c2c2c2;
+            }
+            .below {
+                height: 155px;
+                padding-top: 20px;
+                .text {
+                    line-height: 20px;
+                    font-size: 14px;
+                    color: #999;
+                }
+            }
+        }
+        .trend-block {
+            .above {
+                padding-top: 95px;
+            }
+            .pic {
+                display: block;
+                width: 100%;
+            }
+        }
+        .assets-block {
+            .above {
+                padding-top: 40px;
+            }
+        }
+    }
+    .how-buy {
+        margin-top: 60px;
+        padding: 0 130px;
+        .title {
+            padding: 32px 0;
+            font-size: 30px;
+        }
+        .method {
+            display: flex;
+            align-items: center;
+            padding: 32px 0 20px;
+            .name {
+                font-size: 16px;
+            }
+            .handle {
+                display: inline-flex;
+                justify-content: space-between;
+                flex: 1;
+                font-size: 14px;
+                button {
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 40px;
+                }
+            }
+        }
+        .info {
+            li {
+                margin-bottom: 20px;
+                &:last-of-type {
+                    margin-bottom: 0;
+                }
+                .col {
+                    display: inline-flex;
+                    justify-content: space-between;
+                    flex: 1;
+                }
+            }
+        }
+        .cell-1 {
+            width: 372px;
+        }
+        .cell-2 {
+            width: 190px;
+            text-align: center;
+        }
+        .cell-3 {
+            width: 245px;
+            text-align: center;
         }
     }
 }
+
 .h5-content {
     padding: 40px 20px 88px;
     .video-block {
@@ -161,11 +441,93 @@ onMounted(() => {
     .fund-info {
         margin-top: 40px;
     }
-    :deep {
-        .chart-view {
-            height: 350px;
+    .module-case {
+        .title {
+            line-height: 32px;
+            font-size: 24px;
+        }
+        > div {
             margin-top: 40px;
-            padding: 20px 20px 0;
+        }
+        .block {
+            margin-top: 32px;
+            padding: 40px 20px;
+            background-color:#ffffff;
+            border-radius:20px;
+            box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
+            .above {
+                padding-bottom: 20px;
+                border-bottom: 1px solid #c2c2c2;
+            }
+            .below {
+                padding-top: 20px;
+                .text {
+                    line-height: 16px;
+                    font-size: 12px;
+                    color: #999;
+                }
+            }
+        }
+        .trend-block {
+            .pic {
+                display: block;
+                width: 100%;
+            }
+        }
+    }
+    .how-buy {
+        margin-top: 30px;
+        padding: 0 20px;
+        .title {
+            padding: 40px 0 20px;
+            font-size: 24px;
+        }
+        .method {
+            display: flex;
+            justify-content: space-between;
+            padding: 20px 0;
+            .name {
+                flex: 1;
+                line-height: 40px;
+                font-size: 14px;
+            }
+            .handle {
+                display: inline-flex;
+                flex-direction: column;
+                align-content: flex-end;
+                font-size: 12px;
+                button {
+                    display: inline-flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 36px;
+                    margin-bottom: 10px;
+                    &:last-of-type {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+        }
+        .info {
+            li {
+                padding: 20px 0;
+                border-top: 1px solid #c2c2c2;
+                span {
+                    margin-right: 30px;
+                    &:last-of-type {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+        .cell-1 {
+            width: 80px;
+        }
+        .cell-2 {
+            width: 140px;
+        }
+        .cell-3 {
+            width: 190px;
         }
     }
 }

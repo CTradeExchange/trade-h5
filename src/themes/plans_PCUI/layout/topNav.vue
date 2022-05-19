@@ -54,7 +54,7 @@
                     </router-link>
                 </div>
                 <div :class="['item', { 'active': $route.path.startsWith('/fundV10') }]">
-                    <router-link to='/fundV10/in'>
+                    <router-link to='/fundV10/index'>
                         <span class='link'>
                             V10基金
                         </span>
