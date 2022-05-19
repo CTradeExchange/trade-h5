@@ -25,19 +25,19 @@ defineProps({
 // pc轮播图列表
 const pcBanners = [
     {
-        url: require('@public/images/V10/pc/banner_1.png')
+        url: require('@public/images/V10/pc/V10banneer.jpg')
     },
     {
-        url: require('@public/images/V10/pc/banner_1.png')
+        url: require('@public/images/V10/pc/V10banneer.jpg')
     }
 ]
 // h5轮播图列表
 const h5Banners = [
     {
-        url: require('@public/images/V10/h5/banner_1.png')
+        url: require('@public/images/V10/h5/V10banneer.jpg')
     },
     {
-        url: require('@public/images/V10/h5/banner_1.png')
+        url: require('@public/images/V10/h5/V10banneer.jpg')
     }
 ]
 // 点击轮播图

@@ -137,6 +137,7 @@ onMounted(() => {
         height: 42px;
         margin-left: 10px;
         border-radius: 5px;
+        transform: scale(.9);
         cursor: pointer;
         &.active {
             background: var(--lineColor);
