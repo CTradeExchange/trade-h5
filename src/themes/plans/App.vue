@@ -23,128 +23,16 @@
                     :style="{ height: '60%',width: '80%' }"
                 >
                     <div class='pop-top'>
-                        最新公告
+                        {{ $t('notice.poptitle') }}
                     </div>
                     <div class='pop-content'>
                         <div class='public-list'>
-                            <div class='item'>
+                            <div v-for='(item,index) in noticeData' :key='index' class='item' @click='goNoticeDetail(item.id)'>
                                 <div class='item-tit'>
-                                    数字货币及交易对上新
+                                    {{ item.title }}
                                 </div>
                                 <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
-                                </div>
-                            </div>
-                            <div class='item'>
-                                <div class='item-tit'>
-                                    数字货币及交易对上新
-                                </div>
-                                <div class='item-time'>
-                                    2022.4.12  12:00:00
+                                    {{ formatTime(item.pubTime) }}
                                 </div>
                             </div>
                         </div>
@@ -168,7 +56,7 @@ import { useRouter } from 'vue-router'
 import { Dialog, Popup } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { localGet, getQueryVariable, sessionSet, unzip, getCookie } from '@/utils/util'
+import { localGet, getQueryVariable, sessionSet, unzip, getCookie, setCookie } from '@/utils/util'
 import Base from '@/store/modules/base'
 import { setRootVariable } from '@plans/colorVariables'
 import onWindowMessage from '@/plugins/onWindowMessage/onMessage'
@@ -192,7 +80,9 @@ export default {
         const state = reactive({
             publicShow: false,
             lang: getCookie('lang') || 'zh-CN',
-            currentNt: 1
+            noticePubTime: getCookie('pubTimeUpdate'),
+            currentNt: 1,
+            noticeData: []
         })
         window.store = store
         if (getQueryVariable('b_superiorAgent')) {
@@ -275,8 +165,7 @@ export default {
             } catch (error) {
 
             }
-            getNoticeData()
-            // getPublicData()
+            // getNoticeData()
         })
 
         const getPublicData = (val) => {
@@ -285,9 +174,7 @@ export default {
 
         // 获取公告列表
         const getNoticeData = () => {
-            console.log(_storeState)
-            console.log(customInfo)
-            console.log(customInfo.value)
+            console.log(state.noticePubTime)
             getNoticeList({
                 current: state.currentNt,
                 // pubTimeFrom: '',
@@ -299,18 +186,24 @@ export default {
             }).then(res => {
                 console.log(res)
                 if (res.check()) {
-                    // if (res.data.records && res.data.records.length > 0) {
-                    //     state.listNotice = state.listNotice.concat(res.data.records)
-                    // }
-
-                    // // 数据全部加载完成
-                    // if (res.data.size * res.data.current >= res.data.total) {
-                    //     state.finishedNt = true
-                    // }
+                    if (res.data.records && res.data.records.length > 0) {
+                        state.noticeData = res.data.records
+                        getPublicData(true)
+                        console.log(state.noticeData[0].pubTime)
+                        setCookie('pubTimeUpdate', state.noticeData[0].pubTime)
+                    }
                 }
             }).catch(err => {
                 state.errorTip = t('c.loadError')
-                state.pageLoading = false
+            })
+        }
+
+        const goNoticeDetail = (id) => {
+            router.push({
+                path: '/noticeDetail',
+                query: {
+                    id: id
+                }
             })
         }
 
@@ -325,10 +218,16 @@ export default {
             document.body.removeEventListener('GotMsg_disconnect', disconnect, false)
         })
 
+        const formatTime = (val) => {
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+
         return {
             cacheViews,
             customInfo,
             _storeState,
+            goNoticeDetail,
+            formatTime,
             getNoticeData,
             getPublicData,
             ...toRefs(state)

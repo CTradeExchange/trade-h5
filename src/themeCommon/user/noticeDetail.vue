@@ -58,7 +58,7 @@ export default {
             getNoticeDetial()
         }
 
-        // 获取公告列表
+        // 获取公告详情
         const getNoticeDetial = () => {
             state.loading = true
             state.errorTip = ''

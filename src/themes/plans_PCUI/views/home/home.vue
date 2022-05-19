@@ -8,6 +8,33 @@
         <div class='relativeFloor'>
             <!-- 产品模块 -->
             <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' />
+            <!-- 公告 -->
+            <div class='top-public'>
+                <van-notice-bar class='top-notice' left-icon='volume-o' :scrollable='false'>
+                    <van-row>
+                        <van-col span='22'>
+                            <van-swipe
+                                :autoplay='3000'
+                                class='notice-swipe'
+                                :show-indicators='false'
+                                vertical
+                            >
+                                <van-swipe-item v-for='(item,index) in noticeData' :key='index' @click='goNoticeDetail(item.id)'>
+                                    <span class='pubTitle'>
+                                        {{ item.title }}
+                                    </span> <span class='pubTime'>
+                                        {{ formatTime(item.pubTime) }}
+                                    </span>
+                                </van-swipe-item>
+                            </van-swipe>
+                        </van-col>
+                        <van-col align='center' span='2'>
+                            <van-icon name='more-o' @click='publicLink' />
+                        </van-col>
+                    </van-row>
+                </van-notice-bar>
+            </div>
+
             <!-- 公共模块 -->
             <HomeNotice v-if='homeNoticeData' :data='homeNoticeData.data' />
             <!-- 内容模块 -->
@@ -38,7 +65,10 @@ import HomeNotice from '../../modules/homeNotice/homeNotice'
 import { reactive, toRefs, onMounted, onUnmounted, computed, watch } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { getCookie } from '@/utils/util'
+import { getNoticeList } from '@/api/user'
 export default {
     name: 'Home',
     components: {
@@ -54,6 +84,8 @@ export default {
     },
     setup () {
         const store = useStore()
+        const router = useRouter()
+        const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             // 当前信息流选项卡
             currentFlow: 1,
@@ -64,7 +96,12 @@ export default {
             // 行情组件symbolKey
             tradeKeys: [],
             // 需要订阅产品的symbolKey
-            allProductKeys: []
+            allProductKeys: [],
+
+            // 公告请求参数
+            lang: getCookie('lang') || 'zh-CN',
+            currentNt: 1,
+            noticeData: []
         })
 
         const fullBannerData = computed(() => state.pageModules.find(el => el.tag === 'fullBanner'))
@@ -72,6 +109,8 @@ export default {
         const homeNoticeData = computed(() => state.pageModules.find(el => el.tag === 'homeNotice'))
         const pageModulesList = computed(() => state.pageModules.filter(el => ['homeNotice', 'bannerProducts', 'fullBanner'].indexOf(el.tag) === -1))
         const subscribeList = computed(() => store.state.home.subscribeBannerList.concat(store.state.home.subscribeQuoteList))
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
 
         // 切换信息流
         const switchFlow = (num) => {
@@ -132,11 +171,56 @@ export default {
             window.open(newLinkList[index])
         }
 
+        // 获取公告列表
+        const getNoticeData = () => {
+            console.log(customInfo.value)
+            getNoticeList({
+                current: state.currentNt,
+                // pubTimeFrom: '',
+                // pubTimeTo: '',
+                lang: state.lang,
+                size: 10,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                console.log(res)
+                if (res.check()) {
+                    if (res.data.records && res.data.records.length > 0) {
+                        // state.listNotice = state.listNotice.concat(res.data.records)
+                        state.noticeData = res.data.records
+                    }
+
+                    // // 数据全部加载完成
+                    // if (res.data.size * res.data.current >= res.data.total) {
+                    //     state.finishedNt = true
+                    // }
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
+        }
+
+        const goNoticeDetail = (id) => {
+            router.push({
+                path: '/noticeDetail',
+                query: {
+                    id: id
+                }
+            })
+        }
+
+        const publicLink = () => {
+            router.push('/notice')
+        }
+
         // 发送行情订阅
         onMounted(() => {
             // 头部固定
             const headerEl = document.querySelector('.header-nav')
             if (headerEl) headerEl.classList.add('fixedHeader')
+            // 获取公告列表
+            getNoticeData()
         })
 
         // 取消行情订阅
@@ -149,11 +233,15 @@ export default {
         return {
             ...toRefs(state),
             jumpUrl,
+            customInfo,
             pageModulesList,
             fullBannerData,
             homeNoticeData,
             bannerProductsData,
             switchFlow,
+            getNoticeData,
+            publicLink,
+            goNoticeDetail
         }
     }
 }
@@ -168,6 +256,43 @@ export default {
     .relativeFloor {
         position: relative;
         z-index: 101;
+    }
+    .top-public {
+        background: var(--contentColor);
+        .top-notice {
+            width: 1200px;
+            margin: 0 auto;
+            color: var(--color);
+            background: var(--contentColor);
+            .van-icon {
+                margin-top: rem(15px);
+                font-size: rem(36px);
+                vertical-align: middle;
+            }
+            .van-row {
+                font-size: rem(24px);
+            }
+        }
+        .pubTitle {
+            display: inline-block;
+            max-width: 80%;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+        .pubTime {
+            display: inline-block;
+            color: var(--minorColor);
+            vertical-align: middle;
+        }
+        .notice-swipe {
+            height: 36px;
+            line-height: 38px;
+        }
+        :deep(.van-notice-bar__content) {
+            width: 100%;
+        }
     }
 }
 

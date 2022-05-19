@@ -4,9 +4,6 @@
     <van-tabs v-model:active='activeIndex' class='publicPage' @click-tab='onClickTab'>
         <van-tab name='public' :title='$t("route.notice")'>
             <div class='msg-list'>
-                <!-- <p class='header'>
-                    {{ $t('cRoute.msg') }}
-                </p> -->
                 <div v-if='listNotice.length === 0'>
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
@@ -47,24 +44,10 @@
             </div>
 
             <div class='msg-list'>
-                <!-- <p class='header'>
-                    {{ $t('cRoute.msg') }}
-                </p> -->
                 <div v-if='list.length === 0'>
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                 </div>
-                <div v-for='(item,index) in list' v-else :key='index' class='msg-item'>
-                    <p class='msg-title'>
-                        {{ item.title === 'null'? '': item.title }}
-                    </p>
-                    <p class='msg-content'>
-                        {{ computeHtmlTime(item.content) }}
-                    </p>
-                    <p class='msg-time'>
-                        {{ formatTime(item.createTime) }}
-                    </p>
-                </div>
-                <!-- <van-pull-refresh
+                <van-pull-refresh
                     v-else
                     v-model='loading'
                     :loading-text="$t('compLang.loading')"
@@ -93,7 +76,7 @@
                             </p>
                         </div>
                     </van-list>
-                </van-pull-refresh> -->
+                </van-pull-refresh>
             </div>
         </van-tab>
     </van-tabs>
@@ -102,14 +85,13 @@
 <script>
 
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref } from 'vue'
-import { queryPlatFormMessageLogList, getNoticeList } from '@/api/user'
-
 import { useStore } from 'vuex'
 import Top from '@/components/top'
 import { isEmpty, getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
+import { queryPlatFormMessageLogList, getNoticeList } from '@/api/user'
 
 export default {
     components: {
@@ -373,7 +355,7 @@ export default {
         background: var(--contentColor);
     }
     .msg-item {
-        margin: rem(10px) 0;
+        margin: rem(2px) 0 rem(10px) 0;
         padding: rem(30px);
         background-color: var(--contentColor);
         //border-top: solid rem(10px) var(--bgColor);

@@ -48,6 +48,13 @@
                         </span>
                     </router-link>
                 </div>
+                <div :class="['item', { 'active': $route.path === '/notice' }]">
+                    <router-link to='/notice'>
+                        <span class='link'>
+                            {{ $t('route.noticeTitle') }}
+                        </span>
+                    </router-link>
+                </div>
             </div>
         </div>
         <div class='nav-right'>
@@ -243,8 +250,8 @@ export default {
     position: relative;
     z-index: 100;
     display: flex;
-    justify-content: space-between;
     flex-shrink: 0;
+    justify-content: space-between;
     min-width: 1200px;
     height: 64px;
     padding: 0 16px;
@@ -291,13 +298,13 @@ export default {
                     color: var(--primary);
                 }
             }
-            .symbolUp{
+            .symbolUp {
                 display: inline-block;
-                margin-left: 4px;
-                vertical-align: middle;
-                margin-top: -2px;
                 width: 14px;
                 height: 14px;
+                margin-top: -2px;
+                margin-left: 4px;
+                vertical-align: middle;
                 background: url('/images/arrowUp.png') no-repeat;
                 background-size: cover;
             }
@@ -320,6 +327,7 @@ export default {
                 }
             }
             .register {
+                @include hover();
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -328,7 +336,6 @@ export default {
                 color: #FFF;
                 background: var(--primary);
                 border-radius: 4px;
-                @include hover();
             }
         }
         .handle-have {

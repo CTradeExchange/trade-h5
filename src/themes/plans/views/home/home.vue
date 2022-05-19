@@ -11,9 +11,9 @@
                             :show-indicators='false'
                             vertical
                         >
-                            <van-swipe-item>明月直入，无心可猜。</van-swipe-item>
-                            <van-swipe-item>仙人抚我顶，结发受长生。</van-swipe-item>
-                            <van-swipe-item>今人不见古时月，今月曾经照古人。</van-swipe-item>
+                            <van-swipe-item v-for='(item,index) in noticeData' :key='index' @click='goNoticeDetail(item.id)'>
+                                {{ item.title }}
+                            </van-swipe-item>
                         </van-swipe>
                     </van-col>
                     <van-col align='center' span='2'>
@@ -69,7 +69,8 @@ export default {
                 ]
             },
             lang: getCookie('lang') || 'zh-CN',
-            currentNt: 1
+            currentNt: 1,
+            noticeData: []
         })
         const products = []
 
@@ -96,9 +97,10 @@ export default {
             }).then(res => {
                 console.log(res)
                 if (res.check()) {
-                    // if (res.data.records && res.data.records.length > 0) {
-                    //     state.listNotice = state.listNotice.concat(res.data.records)
-                    // }
+                    if (res.data.records && res.data.records.length > 0) {
+                        // state.listNotice = state.listNotice.concat(res.data.records)
+                        state.noticeData = res.data.records
+                    }
 
                     // // 数据全部加载完成
                     // if (res.data.size * res.data.current >= res.data.total) {
@@ -108,6 +110,15 @@ export default {
             }).catch(err => {
                 state.errorTip = t('c.loadError')
                 state.pageLoading = false
+            })
+        }
+
+        const goNoticeDetail = (id) => {
+            router.push({
+                path: '/noticeDetail',
+                query: {
+                    id: id
+                }
             })
         }
 
@@ -134,11 +145,12 @@ export default {
             sendSubscribe()
         })
         onMounted(() => {
-            // getNoticeData()
+            getNoticeData()
         })
         return {
             pageModules,
             customInfo,
+            goNoticeDetail,
             publicLink,
             getNoticeData,
             isCompanyIdShow,
@@ -162,12 +174,17 @@ export default {
         color: var(--color);
         background: var(--primaryAssistColor);
         .van-icon {
+            margin-top: rem(15px);
             font-size: rem(36px);
             vertical-align: middle;
         }
         .van-row {
             font-size: rem(24px);
         }
+    }
+    .notice-swipe {
+        height: 36px;
+        line-height: 38px;
     }
     :deep(.van-notice-bar__content) {
         width: 100%;
@@ -177,8 +194,5 @@ export default {
 .newBar {
     margin-top: rem(20px);
 }
-.notice-swipe {
-    height: 32px;
-    line-height: 32px;
-}
+
 </style>

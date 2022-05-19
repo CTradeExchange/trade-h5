@@ -2,10 +2,10 @@ import themeRouter from '@/themeCommon/router'
 import Layout from '../layout/index'
 // import popupLayout from '../layout/popupLayout'
 
-const h5Children = [
-    {
+const h5Children = [{
         path: 'bindEmail', // 绑定邮箱
-        component: () => import(/* webpackChunkName: "Setting" */ '../views/setting/bindEmail.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Setting" */ '../views/setting/bindEmail.vue'),
         meta: {
             title: 'cRoute.bindEmail',
             footerMenu: false,
@@ -13,7 +13,8 @@ const h5Children = [
     },
     {
         path: 'bindMobile', // 绑定手机
-        component: () => import(/* webpackChunkName: "Setting" */ '../views/setting/bindMobile.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Setting" */ '../views/setting/bindMobile.vue'),
         meta: {
             title: 'cRoute.bindMobile',
             footerMenu: false,
@@ -21,7 +22,8 @@ const h5Children = [
     },
     {
         path: 'setLoginPwd', // 设置密码
-        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../views/setting/setLoginPwd.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "setLoginPwd" */ '../views/setting/setLoginPwd.vue'),
         meta: {
             title: 'cRoute.setLoginPwd',
             roles: ['User']
@@ -29,7 +31,8 @@ const h5Children = [
     },
     {
         path: 'setFundPwd', // 设置资金密码
-        component: () => import(/* webpackChunkName: "setLoginPwd" */ '../views/setting/setFundPwd.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "setLoginPwd" */ '../views/setting/setFundPwd.vue'),
         meta: {
             title: 'cRoute.setFundPwd',
             roles: ['User']
@@ -37,7 +40,8 @@ const h5Children = [
     },
     {
         path: 'bankList',
-        component: () => import(/* webpackChunkName: "bankList" */ '../views/user/bankList.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "bankList" */ '../views/user/bankList.vue'),
         meta: {
             title: 'cRoute.bankList',
             roles: ['User']
@@ -45,7 +49,8 @@ const h5Children = [
     },
     {
         path: 'addBank',
-        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/addBank.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "addBank" */ '../views/user/addBank.vue'),
         meta: {
             title: 'cRoute.addBank',
             roles: ['User']
@@ -54,7 +59,8 @@ const h5Children = [
     {
         path: 'authentication',
         // name: 'Authentication',
-        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/authentication.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "addBank" */ '../views/user/authentication.vue'),
         meta: {
             title: 'cRoute.authentication',
             // roles: ['User']
@@ -62,7 +68,8 @@ const h5Children = [
     },
     {
         path: 'authForm',
-        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/authForm.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "addBank" */ '../views/user/authForm.vue'),
         meta: {
             title: 'cRoute.authForm',
             // roles: ['User']
@@ -71,7 +78,8 @@ const h5Children = [
     {
         path: 'kycCommitted',
         // name: 'KycCommitted',
-        component: () => import(/* webpackChunkName: "addBank" */ '../views/user/kycCommitted.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "addBank" */ '../views/user/kycCommitted.vue'),
         meta: {
             title: 'cRoute.kycCommitted',
             // roles: ['User']
@@ -79,7 +87,8 @@ const h5Children = [
     },
     {
         path: 'contract',
-        component: () => import(/* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "contract" */ '../views/contract/contract.vue'),
         meta: {
             title: '',
             roles: ['User']
@@ -87,7 +96,8 @@ const h5Children = [
     },
     {
         path: 'transfer', // 划转
-        component: () => import(/* webpackChunkName: "transfer" */ '../views/transfer/transfer.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "transfer" */ '../views/transfer/transfer.vue'),
         meta: {
             title: 'route.transfer',
             roles: ['User']
@@ -95,7 +105,8 @@ const h5Children = [
     },
     {
         path: 'chooseAccount', // 选择币种
-        component: () => import(/* webpackChunkName: "chooseAccount" */ '../views/chooseAccount/chooseAccount.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "chooseAccount" */ '../views/chooseAccount/chooseAccount.vue'),
         meta: {
             title: 'cRoute.chooseCurrency',
             roles: ['User']
@@ -103,7 +114,8 @@ const h5Children = [
     },
     {
         path: 'depositChoose', // 选择充值方式
-        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/choose.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "deposit" */ '../views/deposit/choose.vue'),
         meta: {
             title: 'cRoute.deposit',
             roles: ['User']
@@ -111,7 +123,8 @@ const h5Children = [
     },
     {
         path: 'depositDirect', // 直充
-        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/direct.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "deposit" */ '../views/deposit/direct.vue'),
         meta: {
             title: 'cRoute.deposit',
             roles: ['User']
@@ -119,7 +132,8 @@ const h5Children = [
     },
     {
         path: 'deposit', // 汇兑
-        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/deposit.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "deposit" */ '../views/deposit/deposit.vue'),
         meta: {
             title: 'cRoute.deposit',
             roles: ['User']
@@ -127,7 +141,8 @@ const h5Children = [
     },
     {
         path: 'depositRecord', // 入金记录
-        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositRecord.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "deposit" */ '../views/deposit/depositRecord.vue'),
         meta: {
             title: 'cRoute.depositRecord',
             roles: ['User']
@@ -135,7 +150,8 @@ const h5Children = [
     },
     {
         path: 'depositCb', // 入金结果
-        component: () => import(/* webpackChunkName: "deposit" */ '../views/deposit/depositCb.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "deposit" */ '../views/deposit/depositCb.vue'),
         meta: {
             title: 'cRoute.despositCb',
             roles: ['User']
@@ -143,7 +159,8 @@ const h5Children = [
     },
     {
         path: 'withdrawAccount', // 选择提现币种
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawAccount.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawAccount.vue'),
         meta: {
             title: 'cRoute.withdrawAccount',
             roles: ['User']
@@ -151,7 +168,8 @@ const h5Children = [
     },
     {
         path: 'withdrawMoney', // 提现
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawMoney.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawMoney.vue'),
         meta: {
             title: 'cRoute.withdraw',
             roles: ['User']
@@ -159,7 +177,8 @@ const h5Children = [
     },
     {
         path: 'withdrawCoin', // 提币
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawCoin.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawCoin.vue'),
         meta: {
             title: 'cRoute.withdraw',
             roles: ['User']
@@ -167,7 +186,8 @@ const h5Children = [
     },
     {
         path: 'withdrawRedeem', // 提现Payredeem
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRedeem.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRedeem.vue'),
         meta: {
             title: 'cRoute.withdraw',
             roles: ['User']
@@ -175,7 +195,8 @@ const h5Children = [
     },
     {
         path: 'withdrawRecord',
-        component: () => import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRecord.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRecord.vue'),
         meta: {
             title: 'cRoute.withdrawRecord',
             roles: ['User']
@@ -183,14 +204,16 @@ const h5Children = [
     },
     {
         path: 'authentication', // 身份认证
-        component: () => import(/* webpackChunkName: "authentication" */ '../views/authentication/authentication.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "authentication" */ '../views/authentication/authentication.vue'),
         meta: {
             title: 'cRoute.authentication',
         }
     },
     {
         path: 'walletAdd', // 添加钱包
-        component: () => import(/* webpackChunkName: "Bank" */ '../views/wallet/walletAdd.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Bank" */ '../views/wallet/walletAdd.vue'),
         meta: {
             title: 'cRoute.walletAdd',
             roles: ['User']
@@ -198,7 +221,8 @@ const h5Children = [
     },
     {
         path: 'loan', // 借款
-        component: () => import(/* webpackChunkName: "loan" */ '../views/loan/loan.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "loan" */ '../views/loan/loan.vue'),
         meta: {
             title: 'route.loan',
             roles: ['User']
@@ -206,7 +230,8 @@ const h5Children = [
     },
     {
         path: 'returnMoney', // 还款
-        component: () => import(/* webpackChunkName: "returnMoney" */ '../views/returnMoney/returnMoney.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "returnMoney" */ '../views/returnMoney/returnMoney.vue'),
         meta: {
             title: 'route.returnMoney',
             roles: ['User']
@@ -214,7 +239,8 @@ const h5Children = [
     },
     {
         path: 'record', // 资金记录
-        component: () => import(/* webpackChunkName: "returnMoney" */ '../views/record/record.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "returnMoney" */ '../views/record/record.vue'),
         meta: {
             title: 'route.records',
             roles: ['User']
@@ -222,49 +248,56 @@ const h5Children = [
     },
     {
         path: 'regKyc', // 注册KYC
-        component: () => import(/* webpackChunkName: "RegKyc" */ '../views/register/regKyc.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "RegKyc" */ '../views/register/regKyc.vue'),
         meta: {
             title: 'route.RegKyc',
         }
     },
     {
         path: 'googleMFA/status',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/status.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "google_MFA" */ '../views/google_MFA/status.vue'),
         meta: {
             title: 'route.MFA_status',
         }
     },
     {
         path: 'googleMFA/install',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/install.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "google_MFA" */ '../views/google_MFA/install.vue'),
         meta: {
             title: 'route.MFA_status',
         }
     },
     {
         path: 'googleMFA/secretKey',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/secretKey.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "google_MFA" */ '../views/google_MFA/secretKey.vue'),
         meta: {
             title: 'route.MFA_bind',
         }
     },
     {
         path: 'googleMFA/bind',
-        component: () => import(/* webpackChunkName: "google_MFA" */ '../views/google_MFA/bind.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "google_MFA" */ '../views/google_MFA/bind.vue'),
         meta: {
             title: 'route.MFA_bind',
         }
     },
     {
         path: 'googleSecurityCheck/index',
-        component: () => import(/* webpackChunkName: "googleSecurityCheck" */ '../views/googleSecurityCheck/index.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "googleSecurityCheck" */ '../views/googleSecurityCheck/index.vue'),
         meta: {
             title: 'route.MFA_check',
         }
     },
     {
         path: 'api/createSuccess',
-        component: () => import(/* webpackChunkName: "googleSecurityCheck" */ '../views/api/createSuccess.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "googleSecurityCheck" */ '../views/api/createSuccess.vue'),
         meta: {
             title: 'api.createTitle',
         }
@@ -276,7 +309,8 @@ const routes = [
     {
         path: '/login',
         name: 'Login',
-        component: () => import(/* webpackChunkName: "Login" */ '../views/login/login.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Login" */ '../views/login/login.vue'),
         meta: {
             title: 'route.login',
             roles: [],
@@ -285,7 +319,8 @@ const routes = [
     {
         path: '/register',
         name: 'Register',
-        component: () => import(/* webpackChunkName: "Register" */ '../views/register/register.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Register" */ '../views/register/register.vue'),
         meta: {
             title: 'route.register',
             roles: [],
@@ -295,7 +330,8 @@ const routes = [
     {
         path: '/register/success',
         name: 'RegisterSuccess',
-        component: () => import(/* webpackChunkName: "Register" */ '../views/register/registerSuccess.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Register" */ '../views/register/registerSuccess.vue'),
         meta: {
             title: 'route.registerSuccess',
             roles: [],
@@ -305,7 +341,8 @@ const routes = [
     {
         path: '/forgot',
         name: 'Forgot',
-        component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/forgot.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Forgot" */ '../views/forgot/forgot.vue'),
         meta: {
             title: 'route.forgot',
             roles: [],
@@ -315,7 +352,8 @@ const routes = [
     {
         path: '/resetPwd',
         name: 'ResetPwd',
-        component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/resetPwd.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Forgot" */ '../views/forgot/resetPwd.vue'),
         meta: {
             title: 'route.resetPwd',
             // keepAlive: true,
@@ -325,7 +363,8 @@ const routes = [
     {
         path: '/resetFundPwd',
         name: 'ResetFundPwd',
-        component: () => import(/* webpackChunkName: "Forgot" */ '../views/forgot/resetFundPwd.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "Forgot" */ '../views/forgot/resetFundPwd.vue'),
         meta: {
             title: 'route.resetFundPwd',
             // keepAlive: true,
@@ -337,7 +376,8 @@ const routes = [
     {
         path: '/resetSuccess',
         name: 'ResetSuccess',
-        component: () => import(/* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "resetSuccess" */ '../views/forgot/resetSuccess.vue'),
         meta: {
             title: 'cRoute.resetPwdSuccess'
         }
@@ -345,7 +385,8 @@ const routes = [
     {
         path: '/resetFail',
         name: 'ResetFail',
-        component: () => import(/* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
+        component: () =>
+            import ( /* webpackChunkName: "resetFail" */ '../views/forgot/resetFail.vue'),
         meta: {
             title: 'cRoute.resetPwdFaid'
         }
@@ -356,11 +397,11 @@ const routes = [
         name: 'Layout',
         component: Layout,
         // keepAlive: true,
-        children: [
-            {
+        children: [{
                 path: 'home',
                 name: 'Home',
-                component: () => import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "Home" */ '../views/home/home.vue'),
                 meta: {
                     title: 'route.home',
                     // keepAlive: true,
@@ -371,7 +412,8 @@ const routes = [
             {
                 path: 'quote',
                 name: 'Quote',
-                component: () => import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
                 meta: {
                     title: 'route.quote',
                     roles: [],
@@ -381,7 +423,8 @@ const routes = [
             {
                 path: 'order',
                 name: 'Order',
-                component: () => import(/* webpackChunkName: "Order" */ '../views/order/order.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "Order" */ '../views/order/order.vue'),
                 meta: {
                     title: 'route.order',
                     roles: [],
@@ -391,7 +434,8 @@ const routes = [
             {
                 path: 'assets',
                 name: 'Assets',
-                component: () => import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
                 meta: {
                     title: 'route.assets',
                     roles: []
@@ -401,7 +445,8 @@ const routes = [
             {
                 path: 'transRecords',
                 name: 'TransRecords',
-                component: () => import(/* webpackChunkName: "Quote" */ '../views/transRecords/transRecords.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "Quote" */ '../views/transRecords/transRecords.vue'),
                 meta: {
                     title: 'route.transRecords',
                     roles: [],
@@ -411,7 +456,8 @@ const routes = [
             {
                 path: 'fees',
                 name: 'Fees',
-                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
                 meta: {
                     title: '',
                 },
@@ -420,7 +466,8 @@ const routes = [
             {
                 path: 'about',
                 name: 'About',
-                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
                 meta: {
                     title: '',
                 },
@@ -429,7 +476,8 @@ const routes = [
             {
                 path: 'fund',
                 name: 'Fund',
-                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
                 meta: {
                     title: '',
                 },
@@ -438,7 +486,8 @@ const routes = [
             {
                 path: 'fundManager', // 基金操作专区
                 name: 'FundManager',
-                component: () => import(/* webpackChunkName: "returnMoney" */ '../views/fundManager/index.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "returnMoney" */ '../views/fundManager/index.vue'),
                 meta: {
                     title: 'route.fundManager',
                     roles: ['User']
@@ -448,7 +497,8 @@ const routes = [
             {
                 path: 'businessKYC/index',
                 name: 'BusinessKYC',
-                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/index.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "businessKYC" */ '../views/businessKYC/index.vue'),
                 meta: {
                     title: '企业KYC',
                 },
@@ -457,7 +507,8 @@ const routes = [
             {
                 path: 'businessKYC',
                 name: 'BusinessKYCList',
-                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/kycList.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "businessKYC" */ '../views/businessKYC/kycList.vue'),
                 meta: {
                     title: '企业KYC',
                 },
@@ -466,7 +517,8 @@ const routes = [
             {
                 path: '/businessKYC/content',
                 name: 'BusinessKYCContent',
-                component: () => import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
                 meta: {
                     title: '企业KYC',
                 },
@@ -475,7 +527,8 @@ const routes = [
             {
                 path: '/download',
                 name: 'Download',
-                component: () => import(/* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
                 meta: {
                     title: 'route.download'
                 }
@@ -483,7 +536,8 @@ const routes = [
             {
                 path: '/ranking',
                 name: 'Ranking',
-                component: () => import(/* webpackChunkName: "resetFail" */ '../views/ranking/ranking.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "resetFail" */ '../views/ranking/ranking.vue'),
                 meta: {
                     title: 'route.ranking'
                 }
@@ -491,7 +545,8 @@ const routes = [
             {
                 path: '/api',
                 name: 'Api',
-                component: () => import(/* webpackChunkName: "api" */ '../views/api/api.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "api" */ '../views/api/api.vue'),
                 meta: {
                     title: 'route.api'
                 },
@@ -500,9 +555,30 @@ const routes = [
             {
                 path: '/apiEdit',
                 name: 'ApiEdit',
-                component: () => import(/* webpackChunkName: "api" */ '../views/api/edit.vue'),
+                component: () =>
+                    import ( /* webpackChunkName: "api" */ '../views/api/edit.vue'),
                 meta: {
                     title: 'route.api'
+                },
+                children: h5Children
+            },
+            {
+                path: '/notice',
+                name: 'Notice',
+                component: () =>
+                    import ( /* webpackChunkName: "api" */ '../views/notice/index.vue'),
+                meta: {
+                    title: 'route.noticeTitle'
+                },
+                children: h5Children
+            },
+            {
+                path: '/noticeDetail',
+                name: 'NoticeDetail',
+                component: () =>
+                    import ( /* webpackChunkName: "api" */ '../views/notice/detail.vue'),
+                meta: {
+                    title: 'route.noticeTitle'
                 },
                 children: h5Children
             },
