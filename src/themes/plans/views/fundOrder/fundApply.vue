@@ -94,7 +94,7 @@
                             />
                             <van-icon
                                 v-else
-                                :color='$style.success'
+                                :color='$style.placeholdColor'
                                 name='checked'
                                 size='22'
                             />

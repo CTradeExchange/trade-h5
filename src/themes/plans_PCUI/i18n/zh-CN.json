@@ -867,7 +867,7 @@
         "redeemSubmiteedDesc": "预计T+2日前确认份额，请留意份额确认消息",
         "disabledBuy": "不支持申购",
         "disabledSell": "不支持赎回",
-        "subScriptePlaceholder": "请输入申购金额",
+        "subScriptePlaceholder": "请输入申购份额",
         "redeemNumPlaceholder": "请输入赎回份额",
         "available": "可用",
         "indexSample": "指数样本",
@@ -889,7 +889,8 @@
         "confirmTime": "确认时间",
         "sharesStatus": {
             "0": "待确认",
-            "1": "已确认"
+            "1": "已确认",
+            "2": "确认失败"
         },
         "currentRedeem": "当前赎回",
         "historyRedeem": "历史赎回",
@@ -956,7 +957,11 @@
         "applyDetail": "申购明细",
         "applyAssets": "申购资产",
         "redeemDetail": "赎回明细",
-        "redeemAssetsTitle": "赎回资产"
+        "redeemAssetsTitle": "赎回资产",
+        "applyAmount": "申购金额",
+        "redeemAmount": "赎回金额",
+        "applyFees": "申购手续费",
+        "redeemFees": "赎回手续费"
 
     },
     "funds": {
@@ -1079,7 +1084,7 @@
         "title": "API管理",
         "createHeader": "创建API",
         "editHeader": "编辑API",
-        "text1": "创建API密钥可让第三方网站或应用访问本平台查询行情或进行实时交易，申请API前请先完成KYC认证开启谷歌验证。",
+        "text1": "创建API密钥可让第三方网站或应用访问本平台查询行情或进行实时交易，申请API前请先完成KYC认证并开启谷歌验证。",
         "listTitle": "我的API",
         "linkTxt": "详看API接口文档",
         "listApiHelp": "详看API接口文档",
@@ -1096,11 +1101,11 @@
         "createSubTit3": "权限",
         "createSubTit4": "绑定IP",
         "createSubTit5": "温馨提示：",
-        "createSubTit6": "创建时间",
+        "createSubTit6": "更新時間",
         "createTipsTxt": "1、请不要泄露您的Acces Key及Secret Key，以免产生资产损失</br>2、如忘记了Secret Key，请删除该API并重新申请</br>3、如需更多权限，请通过编辑进行添加",
         "timeleft": "剩余有效期",
         "timeleftCell": "天",
-        "timeleftCell2": "无期限",
+        "timeleftCell2": "长期有效",
         "timeTips3": "已失效",
         "createTips": "Secret Key仅在此页面展示，遗失后不可找回，请妥善保存，创建后48小时内不可通过API提现",
         "verify": "安全验证",

@@ -49,6 +49,7 @@
                     @blur='onBlur'
                     @input='onInput'
                 />
+                <a v-if='modelValue' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
             </div>
         </div>
     </div>
@@ -77,7 +78,7 @@ const props = defineProps({
         default: () => []
     }
 })
-const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue', 'open'])
+const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue', 'open', 'clear'])
 const router = useRouter()
 const route = useRoute()
 
@@ -106,6 +107,7 @@ const onInput = (e) => {
 
     inputUpdate(e)
 }
+
 // 离开输入框焦点再次验证
 const onBlur = (e) => {
     let value = e.target.value
@@ -121,10 +123,17 @@ const inputUpdate = (e) => {
     emit('update:modelValue', e.target.value)
     inputHandler(e)
 }
+
 const inputHandler = debounce((e) => {
     if (props.readonly) return false
     emit('input', e.target.value, e)
 }, 800)
+
+// 点击清空
+const onClear = () => {
+    emit('update:modelValue', '')
+    emit('input', '')
+}
 
 </script>
 
@@ -198,5 +207,11 @@ const inputHandler = debounce((e) => {
             }
         }
     }
+}
+.van-icon-clear {
+    margin-left: rem(12px);
+    margin-top: rem(-10px);
+    color: var(--minorColor);
+    font-size: rem(36px);
 }
 </style>

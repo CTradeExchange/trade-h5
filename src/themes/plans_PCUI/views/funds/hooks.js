@@ -156,6 +156,9 @@ export const orderHook = (params) => {
         if (!params?.shares) {
             return Promise.resolve().then(() => Toast(t('fundInfo.redeemNumPlaceholder')))
         }
+        if (Number(params?.shares) < Number(activeAssets.value.minRedemptionNum)) {
+            return Toast(t('fundInfo.redeemMinTip') + activeAssets.value.minRedemptionNum)
+        }
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false
@@ -207,7 +210,7 @@ export const orderHook = (params) => {
         if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
             singleAssetsPay.value = null
             selfAssetsList.value = []
-            return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
+            return Toast(t('fundInfo.applyMinTip') + ' ' + activeAssets.value.minPurchaseNum)
         }
 
         fundCalcApplyShares({
@@ -218,6 +221,8 @@ export const orderHook = (params) => {
         }).then(res => {
             if (res.check()) {
                 const { data } = res
+                // 更新单个基金产品信息
+                store.commit('_quote/Update_fundProduct', { netValue: data.sharesNet })
                 if (activeCurrency.value === 'self') {
                     selfAssetsList.value = data.list || []
                 } else {

@@ -186,6 +186,7 @@ const close = () => {
 
 <style lang="scss" scoped>
 .popup-assets {
+    height: rem(700px);
     padding: rem(40px);
     --van-tabs-bottom-bar-color: var(--primary);
     .content {

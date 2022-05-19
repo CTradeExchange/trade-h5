@@ -2,10 +2,83 @@
     <div class='handle-module'>
         <div class='block'>
             <p class='title'>
-                {{ $t('fundInfo.youPay') }} <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
+                {{ $t('fundInfo.youPay') }}
+                <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
 
-            <div class='box'>
+            <el-popover
+                v-model:visible='popoverVis'
+                placement='bottom'
+                popper-class='popover-select'
+                trigger='click'
+                :width='328'
+            >
+                <template #reference>
+                    <div class='pay-bar'>
+                        <div class='left'>
+                            <CurrencyIcon :currency='activeCurrency' :size='24' />
+                            <div class='text'>
+                                <p class='currenct'>
+                                    {{ activeCurrency === 'self' ? $t("fundInfo.basketAssets") : activeCurrency }}
+                                </p>
+                                <p v-if="activeCurrency === 'self'">
+                                    {{ $t('fundInfo.applyCountTip',{ count: fundAssetsList.length }) }}
+                                </p>
+                                <p v-else>
+                                    {{ $t('fundInfo.payCurrencyBuy', { currency: activeCurrency }) }}
+                                </p>
+                            </div>
+                        </div>
+                        <van-icon name='arrow-down' />
+                    </div>
+                </template>
+                <div class='select-wrap'>
+                    <div
+                        v-for='(item, index) in selectActions'
+                        :key='index'
+                        class='select-option'
+                        :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
+                        :value='item.currencyCode'
+                    >
+                        <div v-if="item.currencyCode === 'self'" class='asset-item' @click='selectAssets(item.currencyCode)'>
+                            <div class='top'>
+                                <!-- <CurrencyIcon :currency='item.currencyCode' :size='24' /> -->
+                            </div>
+                            <div>
+                                <p class='currency-text'>
+                                    {{ $t('fundInfo.basketAssets') }}
+                                </p>
+                                <p class='mute'>
+                                    {{ $t('fundInfo.payBasketBuy') }}
+                                </p>
+                                <div class='asset-list'>
+                                    <currencyIcon
+                                        v-for='(elem, i) in fundAssetsList'
+                                        :key='i'
+                                        :currency='elem.currencyCode'
+                                        size='24'
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class='asset-item' @click='selectAssets(item.currencyCode)'>
+                            <div class='top'>
+                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                            </div>
+                            <div>
+                                <p class='currency-text'>
+                                    {{ item.currencyCode }}
+                                </p>
+                                <p class='mute'>
+                                    {{ $t('fundInfo.payCurrencyBuy', { currency: item.currencyCode }) }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </el-popover>
+
+            <!-- <div class='box'>
                 <el-select
                     v-model='activeCurrency'
                     :placeholder="$t('fundInfo.choosePayAsset')"
@@ -49,34 +122,39 @@
                         </div>
                     </el-option>
                 </el-select>
-                <!-- <span class='line'></span> -->
-                <!-- <el-input
-                    v-model='amountPay'
-                    clearable
-                    :disabled='fund.canPurchase !== 1 || !customerInfo'
-                    :placeholder='payPlaceholder'
-                    type='number'
-                    @input='onInput'
-                /> -->
-            </div>
+                <span class='line'></span>
+            <el-input
+                v-model='amountPay'
+                clearable
+                :disabled='fund.canPurchase !== 1 || !customerInfo'
+                :placeholder='payPlaceholder'
+                type='number'
+                @input='onInput'
+            />
+        </div>-->
         </div>
         <!-- 切换 -->
         <div class='switch-block'>
-            <i class='switch-icon icon_huidui' @click='switchWay'></i>
+            <!-- <i class='switch-icon icon_huidui' @click='switchWay'></i> -->
+            <div class='switch'>
+                <img alt='' class='switch-icon' src='/images/transfer.png' srcset='' @click='switchWay' />
+                <div class='line'></div>
+            </div>
+
             <div class='switch-text'>
                 <p>
                     <span class='muted'>
                         {{ $t('fundInfo.rate') }}:
                     </span>
-                    <span>
+                    <span v-if='activeAssets.purchaseFeeProportion' class='muted'>
                         {{ mul(activeAssets.purchaseFeeProportion,100) }}%
                     </span>
                 </p>
                 <p>
-                    <span>
+                    <span class='muted'>
                         1 {{ fund.shareTokenCode }} =
                     </span>
-                    <span>
+                    <span class='muted'>
                         {{ fund.netValue }}{{ fund.currency }}
                     </span>
                 </p>
@@ -130,7 +208,7 @@
                         <div class='cr-inline'>
                             <span>{{ item.amountPay }}</span>
                             <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
-                                {{ $t('fundInfo.availableNot') }}  {{ item.depositAmount }}
+                                * {{ $t('fundInfo.availableNot') }}  {{ item.depositAmount }}
                             </p>
                         </div>
                         <div v-if='item.isShow' class='cr-icon'>
@@ -145,7 +223,7 @@
                                         class='icon-add'
                                         :color='$style.primary'
                                         name='add'
-                                        size='22'
+                                        size='20'
                                         @click='openAddAssets(item)'
                                     />
                                 </template>
@@ -178,9 +256,9 @@
 
                             <van-icon
                                 v-else
-                                :color='$style.success'
+                                :color='$style.placeholdColor'
                                 name='checked'
-                                size='22'
+                                size='20'
                             />
                         </div>
                     </div>
@@ -278,6 +356,7 @@ const currencyExplainShow = ref(false)
 const addAssetShow = ref(false)
 // 新增资产的货币
 const addAssetsCurrency = ref('')
+const popoverVis = ref(false)
 
 const {
     loading,
@@ -310,6 +389,7 @@ const onInput = value => {
 
 // 选择资产
 const selectAssets = (item) => {
+    popoverVis.value = false
     const action = selectActions.value.find(el => el.currencyCode === item)
     onSelect(action)
     queryFundNetValue()
@@ -403,15 +483,41 @@ const toOrderFund = currency => {
         }
         .title {
             margin-bottom: 8px;
+            color: var(--minorColor);
             font-size: 14px;
             .icon-question {
                 cursor: pointer;
             }
         }
+        .pay-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+            margin-bottom: 20px;
+            padding: 0 15px;
+            background: var(--assistColor);
+            border-radius: 5px;
+            cursor: pointer;
+            .left {
+                display: flex;
+                align-items: center;
+                .text {
+                    margin-left: 10px;
+                    .currenct {
+                        color: var(--color);
+                        font-weight: bold;
+                    }
+                }
+            }
+            &:hover {
+                //border: solid 1px var(--primary);
+            }
+        }
         .box {
             display: flex;
             align-items: center;
-            height: 50px;
+            height: 70px;
             background: var(--assistColor);
             border-radius: 5px;
             .line {
@@ -435,6 +541,10 @@ const toOrderFund = currency => {
                 align-items: center;
                 height: 100%;
                 padding: 0 15px;
+                :deep(.el-input__inner) {
+                    padding: 0 5px 0 0;
+                    text-align: right;
+                }
             }
         }
         &:deep {
@@ -462,11 +572,25 @@ const toOrderFund = currency => {
     .switch-block {
         display: flex;
         align-items: center;
-        margin: 12px 0;
+        margin: 20px 0;
+        .switch {
+            position: relative;
+            .line {
+                position: absolute;
+                top: -15px;
+                right: 25px;
+                z-index: 0;
+                height: 60px;
+                border-right: 1px dashed var(--placeholdColor);
+            }
+        }
         .switch-icon {
+            position: relative;
+            z-index: 1;
+            width: 28px;
+            height: 28px;
             margin-right: 10px;
             color: var(--primary);
-            font-size: 30px;
             cursor: pointer;
         }
         .switch-text {
@@ -477,9 +601,11 @@ const toOrderFund = currency => {
     }
     .pay-wrap {
         margin: 15px 0;
-        padding: 15px 0;
+        padding: 15px 0 0;
         background: var(--contentColor);
         .title {
+            color: var(--color);
+            font-weight: bold;
             font-size: 15px;
             text-align: center;
         }
@@ -489,6 +615,8 @@ const toOrderFund = currency => {
             margin: 15px 0;
         }
         .content {
+            margin-bottom: 15px;
+            border-bottom: solid 1px var(--lineColor);
             li {
                 display: flex;
                 align-items: center;
@@ -501,6 +629,7 @@ const toOrderFund = currency => {
                     .currency-text {
                         margin-top: 2px;
                         margin-left: 5px;
+                        font-weight: bold;
                     }
                 }
                 .c-right {
@@ -509,11 +638,10 @@ const toOrderFund = currency => {
                     text-align: right;
                     .icon_success {
                         margin-left: 10px;
-                        color: var(--success);
+                        color: var(--normalColor);
                         font-size: 14px;
                     }
                     .van-icon {
-                        margin-top: -8px;
                         margin-left: 10px;
                         &.icon-add {
                             cursor: pointer;
@@ -529,10 +657,7 @@ const toOrderFund = currency => {
             }
         }
         .notice {
-            .toRule {
-                color: var(--primary);
-                cursor: pointer;
-            }
+            color: var(--minorColor);
         }
     }
     .handle-button {
@@ -595,14 +720,31 @@ const toOrderFund = currency => {
         }
     }
 }
-.el-select-dropdown__item {
+.el-select-dropdown__item,
+.select-wrap {
     padding: 0;
     .asset-item {
-        margin: 15px 15px 0;
-        padding: 5px 15px;
-        background: var(--bgColor);
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 15px;
+        background: var(--contentColor);
+        cursor: pointer;
         .currencyIcon {
+            margin-right: -5px;
+        }
+        .currency-text {
+            font-weight: bold;
+        }
+        .mute {
+            color: var(--placeholdColor);
+        }
+        .top {
+            width: 24px;
             margin-right: 10px;
+        }
+        .asset-list {
+            margin-top: 15px;
         }
     }
 }
@@ -648,5 +790,11 @@ const toOrderFund = currency => {
 .el-select-dropdown__item {
     height: auto;
     overflow: auto;
+}
+</style>
+
+<style>
+body .popover-select {
+    background-color: var(--bgColor) !important;
 }
 </style>

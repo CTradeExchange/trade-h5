@@ -168,7 +168,7 @@ export const orderHook = () => {
         if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
             singleAssetsPay.value = null
             selfAssetsList.value = []
-            return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
+            return Toast(t('fundInfo.applyMinTip') + activeAssets.value.minPurchaseNum)
         }
         fundCalcApplyShares({
             amountPay,
@@ -178,6 +178,8 @@ export const orderHook = () => {
         }).then(res => {
             if (res.check()) {
                 const { data } = res
+                // 更新单个基金产品信息
+                store.commit('_quote/Update_fundProduct', { netValue: data.sharesNet })
                 if (activeCurrency.value === 'self') {
                     selfAssetsList.value = data.list || []
                 } else {

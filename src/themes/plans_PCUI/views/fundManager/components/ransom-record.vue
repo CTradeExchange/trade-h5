@@ -56,7 +56,7 @@
             <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='150'>
                 <template #default='scope'>
                     <span v-if="scope.row.currencyRedeem==='self'">
-                        一篮子资产
+                        {{ $t('fundInfo.basketAssets') }}
                     </span>
                     <span v-else>
                         {{ scope.row.currencyRedeem }}
@@ -71,7 +71,7 @@
             <el-table-column :label="$t('fundManager.ransom.fees')" :min-width='150'>
                 <template #default='scope'>
                     <a v-if="scope.row.currencyRedeem==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "fee")'>
-                        查看
+                        {{ $t('trade.check') }}
                     </a>
                     <span v-else>
                         {{ scope.row.fees }}{{ scope.row.currencyRedeem }}
