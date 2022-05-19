@@ -30,7 +30,7 @@
                             3
                         </span>
                         <span class='value'>
-                            使用USDT申购将会扣除USDT手续费，使用一篮子资产申购，会根据比例在每一项资产中扣除手续费
+                            {{ $t('fundInfo.applyRule_tip4') }}
                         </span>
                     </p>
                     <p class='row'>

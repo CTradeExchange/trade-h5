@@ -714,6 +714,7 @@
         "applyRule_tip1": "Purchase in share, mean when purchase fund, fill the purchase Share only",
         "applyRule_tip2": "Purchase price is on the base of real time net asset value to execute",
         "applyRule_tip3": "After purchase flow finished, the fund token will deposit to your Spot wallet, purchase fee will direct debit from your Spot wallet",
+        "applyRule_tip4": "使用USDT申购将会扣除USDT手续费，使用一篮子资产申购，会根据比例在每一项资产中扣除手续费",
         "jz_formula": "calculation formula",
         "jz_formulaContent": "Net asset value=Total asset value/Fund latest shares",
         "calcFormula": "计算公式",
