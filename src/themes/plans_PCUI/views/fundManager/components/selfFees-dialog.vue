@@ -9,8 +9,8 @@
         >
             <el-table v-loading='isLoading' border :cell-style="{ background:'none' }" :data='tableData'>
                 <el-table-column align='center' :label='thList[0]' prop='currency' />
-                <el-table-column align='center' :label='thList[2]' prop='amount' />
-                <el-table-column align='center' :label='thList[1]' prop='fees' />
+                <el-table-column align='center' :label='thList[1]' prop='amount' />
+                <el-table-column align='center' :label='thList[2]' prop='fees' />
                 <!-- <el-table-column align='center' :label='thList[1]'>
                     <template #default='scope'>
                         <span>{{ type==='fee' ? scope.row.fees : scope.row.amount }}</span>
