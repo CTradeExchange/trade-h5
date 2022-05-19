@@ -244,9 +244,8 @@ export default {
     width: 100%;
     height: 100%;
     margin-top: rem(110px);
-    background-color: var(--contentColor);
     overflow: auto;
-
+    background-color: var(--contentColor);
     :deep(.topNav .main) {
         max-width: 100%;
     }
@@ -257,14 +256,13 @@ export default {
         text-align: left;
     }
     .sub-title {
-        font-size: rem(32px);
-        padding: 0 rem(28px) rem(15px) rem(28px) ;
+        padding: 0 rem(28px) rem(15px) rem(28px);
         color: var(--color);
+        font-size: rem(32px);
     }
-
     .confirm-btn {
         position: fixed;
-        bottom: rem(0px);
+        bottom: 0;
         height: rem(90px);
         background: var(--primary);
         border-color: var(--primary);
@@ -273,75 +271,73 @@ export default {
             font-size: rem(32px);
         }
     }
-    .api-input{
+    .api-input {
         margin: rem(20px);
-        .van-field{
-            border: rem(1px) solid #dedede;
+        .van-field {
+            border: rem(1px) solid #DEDEDE;
             border-radius: rem(8px);
         }
     }
-
 }
 </style>
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-dialog{
+.custom-dialog {
     display: flex;
     flex-direction: column;
     height: 90%;
     overflow: hidden;
     background: var(--bgColor);
-    .header{
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         padding: rem(37px) rem(30px) rem(50px);
-        .header-title{
-            font-size: rem(48px);
-            font-weight: bold;
+        .header-title {
             color: var(--color);
-        }
-        .icon_guanbi{
-            font-size: rem(30px);
             font-weight: bold;
+            font-size: rem(48px);
+        }
+        .icon_guanbi {
+            font-weight: bold;
+            font-size: rem(30px);
         }
     }
     .page-wrap {
         margin-top: 0;
         padding: rem(20px);
-        .sub-title{
-            padding: rem(20px) rem(28px) rem(15px) rem(0px);
+        .sub-title {
+            margin-top: rem(20px);
+            padding: rem(20px) rem(28px) rem(15px) 0;
             color: var(--minorColor);
             font-size: rem(28px);
-            margin-top: rem(20px);
         }
-        .sub-title.col-black{
+        .sub-title.col-black {
             color: var(--normalColor);
         }
-
-        .create-tips{
+        .create-tips {
             margin-bottom: rem(40px);
-            font-size: rem(32px);
             color: var(--warn);
+            font-size: rem(22px);
         }
-        .sub-createTipsTxt{
+        .sub-createTipsTxt {
             color: var(--color);
         }
-        .perItem{
+        .perItem {
             display: inline-block;
             margin-right: rem(10px);
-            color: var(--normalColor);
-            background-color: var(--assistColor);
             padding: rem(5px);
+            color: var(--normalColor);
+            font-style: normal;
+            background-color: var(--assistColor);
         }
-        .txtWrap{
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        .txtWrap {
             width: auto;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
-
 }
 </style>
