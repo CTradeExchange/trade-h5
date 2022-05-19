@@ -8,23 +8,21 @@
 
         <van-tabs v-model:active='active' class='noticePage'>
             <van-tab :title="$t('route.notice')">
-                内容 1
+                <div class='list'>
+                    <Loading :show='loading' />
+                    <div class='listScroll'>
+                    </div>
+                    <van-empty
+                        v-if='apiList.length === 0'
+                        :description="$t('api.listnone')"
+                        image='/images/empty.png'
+                    />
+                </div>
             </van-tab>
-            <van-tab :title="$t('route.notice')">
+            <van-tab :title="$t('route.msg')">
                 内容 2
             </van-tab>
         </van-tabs>
-
-        <div class='list'>
-            <Loading :show='loading' />
-            <div class='listScroll'>
-            </div>
-            <van-empty
-                v-if='apiList.length === 0'
-                :description="$t('api.listnone')"
-                image='/images/empty.png'
-            />
-        </div>
     </div>
 </template>
 
@@ -177,17 +175,42 @@ export default {
         font-weight: bold;
         font-size: 32px;
     }
-    .noticePage {
-        :deep(.van-tabs__wrap) {
-            float: left;
-            width: 200px;
+    :deep(.noticePage) {
+        display: flex;
+        margin-top: 30px;
+        overflow: hidden;
+        .van-tabs__nav {
+            display: block;
+            background: none;
+        }
+        .van-tabs__wrap {
+            width: 160px;
+            height: auto;
+            margin-right: 20px;
         }
         .van-tabs__content {
-            float: left;
+            flex: 1;
         }
-        :deep(.van-tab) {
-            display: inline-block;
+        .van-tab {
+            display: block;
             flex: inherit;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            font-size: 16px;
+            line-height: 32px;
+            text-align: center;
+            background: var(--lineColor);
+            border-radius: 10px;
+            &.van-tab--active {
+                background: var(--primary);
+                .van-tab__text {
+                    color: var(--assistColor);
+                }
+            }
+        }
+        .van-tabs__line {
+            display: none;
         }
     }
     .col_black {
