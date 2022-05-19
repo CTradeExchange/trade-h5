@@ -26,7 +26,7 @@
                                 </div>
                                 <div class='indicate'>
                                     <div class='row'>
-                                        <van-icon color='#fff' name='down' size='20' />
+                                        <img alt='' src='/images/arrow-down.png' srcset='' />
                                     </div>
                                 </div>
                                 <div class='to'>
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class='indicate'>
                                     <div class='row'>
-                                        <van-icon color='#fff' name='down' size='20' />
+                                        <img alt='' src='/images/arrow-down.png' srcset='' />
                                     </div>
                                 </div>
                                 <div class='to'>
@@ -83,7 +83,7 @@
                                 </div>
                                 <div class='indicate'>
                                     <div class='row'>
-                                        <van-icon color='#fff' name='down' size='20' />
+                                        <img alt='' src='/images/arrow-down.png' srcset='' />
                                     </div>
                                 </div>
                                 <div class='currency-list'>
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class='indicate'>
                                     <div class='row'>
-                                        <van-icon color='#fff' name='down' size='20' />
+                                        <img alt='' src='/images/arrow-down.png' srcset='' />
                                     </div>
                                 </div>
                                 <div class='from'>
@@ -188,6 +188,10 @@ const close = () => {
 .popup-assets {
     height: rem(700px);
     padding: rem(40px);
+    :deep(.van-tabs__wrap) {
+        border-bottom: solid 1px var(--lineColor);
+    }
+
     --van-tabs-bottom-bar-color: var(--primary);
     .content {
         margin: rem(40px) 0;
@@ -204,14 +208,13 @@ const close = () => {
     .indicate {
         display: flex;
         justify-content: center;
-        margin: rem(40px) 0;
+        margin: rem(70px) 0;
         .row {
             display: inline-flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: rem(60px);
             height: rem(60px);
-            background: var(--primary);
             border-radius: 50%;
             :deep(.van-icon-down) {
                 margin-top: rem(-4px);

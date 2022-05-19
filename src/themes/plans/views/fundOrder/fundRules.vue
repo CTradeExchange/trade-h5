@@ -26,6 +26,12 @@
                     <li>
                         <i class='n'>
                             3
+                        </i>
+                        使用USDT申购将会扣除USDT手续费，使用一篮子资产申购，会根据比例在每一项资产中扣除手续费
+                    </li>
+                    <li>
+                        <i class='n'>
+                            4
                         </i>{{ $t('fundInfo.applyRule_tip3') }}
                     </li>
                 </ol>
@@ -34,7 +40,31 @@
                 <h2 class='jz_formula'>
                     {{ $t('fundInfo.jz_formula') }}
                 </h2>
-                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                <p class='text'>
+                    1、{{ $t('fundInfo.jz_formulaContent') }}
+                </p>
+                <p class='text'>
+                    2、使用USDT申购，支付费用计算：
+                </p>
+                <p class='text indent'>
+                    申购支付费用=申购份额*基金净值*（1+手续费率）
+                </p>
+                <p class='text'>
+                    3、使用一篮子资产申购，支付费用计算：
+                </p>
+                <p class='text indent'>
+                    资产1支付费用：
+
+                    资产1=投资构成1/基金份额*申购份额*（1+手续费率）
+                </p>
+                <p class='text indent'>
+                    资产2支付费用：
+
+                    资产2=投资构成2/基金份额*申购份额*（1+手续费率）
+                </p>
+                <p class='text indent'>
+                    ...
+                </p>
             </section>
         </div>
 
@@ -73,13 +103,44 @@
                             3
                         </i>{{ $t('fundInfo.redeem_tip3') }}
                     </li>
+                    <li>
+                        <i class='n'>
+                            4
+                        </i>
+                        赎回USDT时将会扣除USDT手续费，赎回一篮子资产时，会根据比例在每一项资产中扣除手续费
+                    </li>
                 </ol>
             </section>
             <section class='block'>
                 <h2 class='title'>
                     {{ $t('fundInfo.jz_formula') }}
                 </h2>
-                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                <p class='text'>
+                    1、{{ $t('fundInfo.jz_formulaContent') }}
+                </p>
+                <p class='text'>
+                    2、 赎回USDT的计算：
+                </p>
+                <p class='text indent'>
+                    收到的USDT=赎回份额*基金净值*（1-手续费率%）
+                </p>
+                <p class='text'>
+                    3、赎回一篮子资产的计算：
+                </p>
+                <p class='text indent'>
+                    获得多少资产1：
+
+                    资产1=投资构成1/基金份额*赎回份额*（1-手续费率%）
+                </p>
+                <p class='text indent'>
+                    获得多少资产2：
+                </p>
+                <p class='text indent'>
+                    资产2=投资构成2/基金份额*申购份额*（1-手续费率%）
+                </p>
+                <p class='text indent'>
+                    ...
+                </p>
             </section>
         </div>
     </div>
@@ -107,9 +168,21 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
         background: var(--contentColor);
         .title {
             padding: 10px 0;
+            .text {
+                margin-top: rem(20px);
+                &.indent {
+                    padding-left: 22px;
+                }
+            }
         }
         .olList {
             line-height: 2;
+        }
+        .text {
+            margin-top: rem(20px);
+            &.indent {
+                padding-left: 22px;
+            }
         }
     }
     .n {

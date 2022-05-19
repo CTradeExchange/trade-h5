@@ -46,12 +46,46 @@
                             {{ $t('fundInfo.redeem_tip3') }}
                         </span>
                     </p>
+
+                    <p class='row'>
+                        <span class='no'>
+                            4
+                        </span>
+                        <span class='value'>
+                            赎回USDT时将会扣除USDT手续费，赎回一篮子资产时，会根据比例在每一项资产中扣除手续费
+                        </span>
+                    </p>
                 </div>
                 <div class='block'>
                     <p class='title'>
                         {{ $t('fundInfo.jz_formula') }}
                     </p>
-                    <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                    <p class='text'>
+                        1、{{ $t('fundInfo.jz_formulaContent') }}
+                    </p>
+                    <p class='text'>
+                        2、 赎回USDT的计算：
+                    </p>
+                    <p class='text indent'>
+                        收到的USDT=赎回份额*基金净值*（1-手续费率%）
+                    </p>
+                    <p class='text'>
+                        3、赎回一篮子资产的计算：
+                    </p>
+                    <p class='text indent'>
+                        获得多少资产1：
+
+                        资产1=投资构成1/基金份额*赎回份额*（1-手续费率%）
+                    </p>
+                    <p class='text indent'>
+                        获得多少资产2：
+                    </p>
+                    <p class='text indent'>
+                        资产2=投资构成2/基金份额*申购份额*（1-手续费率%）
+                    </p>
+                    <p class='text indent'>
+                        ...
+                    </p>
                 </div>
             </div>
         </el-dialog>
@@ -82,14 +116,14 @@ defineExpose({
         margin-bottom: 10px;
         .no {
             display: inline-flex;
-            justify-content: center;
-            align-items: center;
             flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
             width: 20px;
             height: 20px;
-            line-height: 1;
             margin-right: 5px;
-            color: #fff;
+            color: #FFF;
+            line-height: 1;
             background: var(--primary);
             border-radius: 50%;
         }
@@ -103,43 +137,51 @@ defineExpose({
             color: var(--color);
             font-size: 20px;
         }
+        .text {
+            margin-top: rem(20px);
+            &.indent {
+                padding-left: 22px;
+            }
+        }
     }
     .tDate {
+        position: relative;
         display: flex;
         justify-content: space-between;
-        position: relative;
         padding-top: 15px;
         padding-bottom: rem(30px);
         &::before {
-            content: "";
             position: absolute;
-            height: 1px;
-            left: 15px;
-            right: 15px;
             top: 5px;
+            right: 15px;
+            left: 15px;
+            height: 1px;
             background: var(--primary);
+            content: '';
         }
         .end {
             text-align: right;
         }
-        .start,.center,.end{
+        .start,
+        .center,
+        .end {
             position: relative;
             &::before {
-                content: "";
                 position: absolute;
-                height: 5px;
-                width: 5px;
-                left: 10px;
                 top: -14px;
-                border-radius: 100%;
+                left: 10px;
+                width: 5px;
+                height: 5px;
                 background: var(--contentColor);
                 border: 2px solid var(--primary);
+                border-radius: 100%;
+                content: '';
             }
         }
-        .end{
-            &::before{
-                left: initial;
+        .end {
+            &::before {
                 right: 10px;
+                left: initial;
             }
         }
     }

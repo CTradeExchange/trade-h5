@@ -47,6 +47,7 @@ export const orderHook = (params) => {
     const selfAssetsList = ref([])
     // 当前选择的资产数据
     const activeAssets = ref({})
+    const calcLoading = ref(false)
 
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
     const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
@@ -212,13 +213,14 @@ export const orderHook = (params) => {
             selfAssetsList.value = []
             return Toast(t('fundInfo.applyMinTip') + ' ' + activeAssets.value.minPurchaseNum)
         }
-
+        calcLoading.value = true
         fundCalcApplyShares({
             amountPay,
             currencyPay,
             applyType: 2,
             fundId: parseInt(fund.fundId)
         }).then(res => {
+            calcLoading.value = false
             if (res.check()) {
                 const { data } = res
                 // 更新单个基金产品信息
@@ -260,6 +262,7 @@ export const orderHook = (params) => {
         lastAssetsPay,
         activeAssets,
         fundAssetsList,
-        queryFundNetValue
+        queryFundNetValue,
+        calcLoading
     }
 }

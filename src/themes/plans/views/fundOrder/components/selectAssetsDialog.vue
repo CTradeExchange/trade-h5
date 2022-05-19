@@ -14,6 +14,7 @@
                 <div class='left'>
                     <div class='top-block'>
                         <currencyIcon
+                            v-if="item.currencyCode !== 'self'"
                             :currency='item.currencyCode'
                             size='24'
                         />
@@ -101,6 +102,7 @@ const switchCurrency = (item) => {
 <style lang="scss" scoped>
 .popup-assets-list {
     padding: rem(30px);
+    background: var(--bgColor);
     .title {
         font-size: rem(32px);
         text-align: center;
@@ -109,24 +111,25 @@ const switchCurrency = (item) => {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: rem(40px);
+        margin-top: rem(30px);
         padding: rem(30px);
-        background: var(--bgColor);
+        background: var(--contentColor);
         border-radius: rem(12px);
         .top-block {
             .currency {
                 margin-left: rem(15px);
                 color: var(--color);
+                font-weight: bold;
                 vertical-align: middle;
             }
         }
         .desc {
             margin-top: rem(10px);
-            font-weight: bold;
             color: var(--minorColor);
+            font-weight: bold;
         }
         .currency-list {
-            margin-top: rem(12px);
+            margin-top: rem(30px);
             margin-left: 10px;
             :deep(.currencyIcon) {
                 width: 20px;

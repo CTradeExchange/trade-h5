@@ -179,7 +179,7 @@
                     <div v-for='(item, index) in fundAssetsList' :key='index' class='redeem-asset-item'>
                         <currencyIcon
                             :currency='item.currencyCode'
-                            size='24'
+                            size='30'
                         />
                         <p class='currency'>
                             {{ item.currencyCode }}
@@ -559,10 +559,11 @@ const switchWay = () => {
                     max-width: calc((100% - 20px) / 3);
                     margin-right: 10px;
                     margin-bottom: 10px;
-                    padding: 10px 0;
+                    padding: 13px 0;
                     text-align: center;
-                    background-color: var(--bgColor);
+                    background-color: var(--contentColor);
                     border: solid 1px var(--lineColor);
+                    border-radius: 10px;
                     &:nth-child(3n) { // 去除第3n个的margin-right
                         margin-right: 0;
                     }
@@ -572,7 +573,6 @@ const switchWay = () => {
                         font-size: 14px;
                     }
                     .percent {
-                        color: var(--minorColor);
                         font-size: 10px;
                     }
                 }
@@ -582,6 +582,7 @@ const switchWay = () => {
                 color: var(--minorColor);
                 .toRule {
                     color: var(--primary);
+                    text-decoration: underline;
                 }
             }
         }

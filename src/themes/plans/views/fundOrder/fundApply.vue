@@ -26,21 +26,25 @@
             />
             <!-- 切换 -->
             <div class='switch-block'>
-                <i class='switch-icon icon_huidui' @click='switchWay'></i>
+                <!-- <i class='switch-icon icon_huidui' @click='switchWay'></i> -->
+                <div class='switch'>
+                    <img alt='' class='switch-icon' src='/images/transfer.png' srcset='' @click='switchWay' />
+                    <div class='line'></div>
+                </div>
                 <div class='switch-text'>
                     <p>
                         <span class='muted'>
                             {{ $t('fundInfo.rate') }}:
                         </span>
-                        <span>
+                        <span class='muted'>
                             {{ mul(activeAssets.purchaseFeeProportion, 100) }}%
                         </span>
                     </p>
                     <p>
-                        <span>
+                        <span class='muted'>
                             1 {{ fund.shareTokenCode }} =
                         </span>
-                        <span>
+                        <span class='muted'>
                             {{ fund.netValue }}{{ fund.currency }}
                         </span>
                     </p>
@@ -66,40 +70,48 @@
                 <span>{{ $t('fundInfo.assets') }}</span>
                 <span>{{ $t('fundInfo.payCount') }}</span>
             </div>
+            <van-loading
+                v-if='calcLoading'
+                class='loading-block'
+                :color='$style.primary'
+                size='24'
+            />
             <ul class='content'>
                 <li v-for='item in lastAssetsPay' :key='item.currencyCode'>
-                    <div class='c-left'>
-                        <currencyIcon
-                            :currency='item.currency'
-                            size='18'
-                        />
-                        <span class='currency-text'>
-                            {{ item.currency }}
-                        </span>
-                    </div>
-                    <div class='c-right'>
-                        <div class='cr-inline'>
-                            <span>{{ item.amountPay }}</span>
-                            <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
-                                {{ $t('fundInfo.availableNot') }}{{ item.depositAmount }}
-                            </p>
-                        </div>
-                        <div v-if='item.isShow' class='cr-icon'>
-                            <van-icon
-                                v-if='item.depositAmount > 0'
-                                :color='$style.primary'
-                                name='add'
-                                size='22'
-                                @click='openAddAssets(item)'
+                    <div class='flex'>
+                        <div class='c-left'>
+                            <currencyIcon
+                                :currency='item.currency'
+                                size='18'
                             />
-                            <van-icon
-                                v-else
-                                :color='$style.placeholdColor'
-                                name='checked'
-                                size='22'
-                            />
+                            <span class='currency-text'>
+                                {{ item.currency }}
+                            </span>
+                        </div>
+                        <div class='c-right'>
+                            <div class='cr-inline'>
+                                <span>{{ item.amountPay }}</span>
+                            </div>
+                            <div v-if='item.isShow' class='cr-icon'>
+                                <van-icon
+                                    v-if='item.depositAmount > 0'
+                                    :color='$style.primary'
+                                    name='add'
+                                    size='20'
+                                    @click='openAddAssets(item)'
+                                />
+                                <van-icon
+                                    v-else
+                                    :color='$style.placeholdColor'
+                                    name='checked'
+                                    size='20'
+                                />
+                            </div>
                         </div>
                     </div>
+                    <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
+                        * {{ $t('fundInfo.availableNot') }}{{ item.depositAmount }}
+                    </p>
                 </li>
             </ul>
             <div class='notice'>
@@ -109,38 +121,38 @@
                 </router-link>
             </div>
         </div>
-
-        <div class='footerBtn'>
-            <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
-                {{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
-            </van-button>
-        </div>
-
-        <!-- 加载效果 -->
-        <loadingVue :show='loading' />
-        <!-- 选择资产弹窗 -->
-        <SelectAssetsDialog
-            v-model:show='selectShow'
-            :active-currency='activeCurrency'
-            :fund-assets-list='fundAssetsList'
-            :list='selectActions'
-            @select='selectAssets'
-        />
-        <!-- 添加资产弹窗 -->
-        <AddAssets
-            v-model:show='addAssetShow'
-            :currency='addAssetsCurrency'
-            :fund='fund'
-        />
-        <!-- 资产说明弹窗 -->
-        <CurrencyExplainDialog
-            v-model:show='currencyExplainShow'
-            :currency='activeCurrency'
-            :fund='fund'
-            :fund-assets-list='fundAssetsList'
-            :list='selectActions'
-        />
     </div>
+
+    <div class='footerBtn'>
+        <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
+            {{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
+        </van-button>
+    </div>
+
+    <!-- 加载效果 -->
+    <loadingVue :show='loading' />
+    <!-- 选择资产弹窗 -->
+    <SelectAssetsDialog
+        v-model:show='selectShow'
+        :active-currency='activeCurrency'
+        :fund-assets-list='fundAssetsList'
+        :list='selectActions'
+        @select='selectAssets'
+    />
+    <!-- 添加资产弹窗 -->
+    <AddAssets
+        v-model:show='addAssetShow'
+        :currency='addAssetsCurrency'
+        :fund='fund'
+    />
+    <!-- 资产说明弹窗 -->
+    <CurrencyExplainDialog
+        v-model:show='currencyExplainShow'
+        :currency='activeCurrency'
+        :fund='fund'
+        :fund-assets-list='fundAssetsList'
+        :list='selectActions'
+    />
 </template>
 
 <script setup>
@@ -174,7 +186,8 @@ const {
     activeAssets,
     selectShow,
     selectActions,
-    onSelect
+    onSelect,
+    calcLoading
 } = orderHook()
 
 // 输入的基金份额
@@ -301,11 +314,26 @@ const submitHandler = () => {
     .switch-block {
         display: flex;
         align-items: center;
-        margin: rem(25px) 0;
+        margin: rem(50px) 0;
+        .switch {
+            position: relative;
+            .line {
+                position: absolute;
+                top: rem(-30px);
+                right: rem(50px);
+                z-index: 0;
+                height: rem(120px);
+                border-right: 1px dashed var(--placeholdColor);
+            }
+        }
         .switch-icon {
+            position: relative;
+            z-index: 1;
+            width: rem(56px);
+            height: rem(56px);
             margin-right: rem(20px);
             color: var(--primary);
-            font-size: rem(60px);
+            cursor: pointer;
         }
         .switch-text {
             p {
@@ -315,10 +343,17 @@ const submitHandler = () => {
     }
 }
 .pay-wrap {
+    position: relative;
     margin: rem(30px) 0;
     padding: rem(30px) 0;
     background: var(--contentColor);
+    .loading-block {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+    }
     .title {
+        font-weight: bold;
         font-size: rem(30px);
         text-align: center;
     }
@@ -329,46 +364,51 @@ const submitHandler = () => {
         padding: 0 rem(40px);
     }
     .content {
-        margin: rem(30px) 0;
-        padding: 0 rem(30px);
+        margin: rem(30px);
+        border-bottom: solid 1px var(--lineColor);
         li {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: rem(30px);
-            .c-left {
+            margin-bottom: rem(40px);
+            .flex {
                 display: flex;
                 align-items: center;
-                height: 100%;
-                .currency-text {
-                    margin-top: rem(4px);
-                    margin-left: rem(10px);
+                justify-content: space-between;
+                .c-left {
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                    .currency-text {
+                        margin-top: rem(4px);
+                        margin-left: rem(10px);
+                        font-weight: bold;
+                    }
+                }
+                .c-right {
+                    display: flex;
+                    align-items: center;
+                    text-align: right;
+                    .icon_success {
+                        margin-left: rem(20px);
+                        color: var(--success);
+                        font-size: rem(28px);
+                    }
+                    .icon_icon_assets {
+                        margin-left: rem(20px);
+                        color: var(--primary);
+                        font-size: rem(28px);
+                    }
+                    .van-icon {
+                        margin-top: rem(-16px);
+                        margin-left: rem(20px);
+                    }
+                    .cr-inline {
+                        display: inline-block;
+                    }
                 }
             }
-            .c-right {
-                display: flex;
-                align-items: center;
+            .error-text {
+                margin-top: rem(10px);
+                color: var(--warn);
                 text-align: right;
-                .icon_success {
-                    margin-left: rem(20px);
-                    color: var(--success);
-                    font-size: rem(28px);
-                }
-                .icon_icon_assets {
-                    margin-left: rem(20px);
-                    color: var(--primary);
-                    font-size: rem(28px);
-                }
-                .van-icon {
-                    margin-top: rem(-16px);
-                    margin-left: rem(20px);
-                }
-                .error-text {
-                    color: var(--warn);
-                }
-                .cr-inline {
-                    display: inline-block;
-                }
             }
         }
     }
@@ -377,6 +417,7 @@ const submitHandler = () => {
         color: var(--minorColor);
         .toRule {
             color: var(--primary);
+            text-decoration: underline;
         }
     }
 }

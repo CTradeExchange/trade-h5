@@ -12,6 +12,7 @@ export const orderHook = () => {
     const route = useRoute()
     const store = useStore()
     const loading = ref(false)
+    const calcLoading = ref(false)
     const { direction, fundId } = route.query
     let pageTitle = direction === 'buy' ? t('fundInfo.buy') : t('fundInfo.sell')
     pageTitle = t('fundInfo.fund') + pageTitle
@@ -30,6 +31,7 @@ export const orderHook = () => {
     const singleAssetsPay = ref(null)
     // 一篮子需要支付的资产
     const selfAssetsList = ref([])
+
     // 处理后需要支付的资产
     const lastAssetsPay = computed(() => {
         const result = []
@@ -170,12 +172,14 @@ export const orderHook = () => {
             selfAssetsList.value = []
             return Toast(t('fundInfo.applyMinTip') + activeAssets.value.minPurchaseNum)
         }
+        calcLoading.value = true
         fundCalcApplyShares({
             amountPay,
             currencyPay: activeCurrency.value,
             fundId: parseInt(fundId),
             applyType: 2
         }).then(res => {
+            calcLoading.value = false
             if (res.check()) {
                 const { data } = res
                 // 更新单个基金产品信息
@@ -201,6 +205,7 @@ export const orderHook = () => {
         lastAssetsPay,
         accountList,
         loading,
+        calcLoading,
         queryFundNetValue,
         calcApplyShares,
         submitFundApply,

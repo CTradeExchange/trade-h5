@@ -24,19 +24,19 @@
                                             v-for='(elem, index) in fundAssetsList'
                                             :key='index'
                                             :currency='elem.currencyCode'
-                                            size='40'
+                                            size='24'
                                         />
                                     </div>
 
                                     <div class='indicate'>
                                         <div class='row'>
-                                            <van-icon color='#fff' name='down' size='20' />
+                                            <img alt='' src='/images/arrow-down.png' srcset='' />
                                         </div>
                                     </div>
                                     <div class='to'>
                                         <currencyIcon
                                             :currency='fund.shareTokenCode'
-                                            size='60'
+                                            size='34'
                                         />
                                         <p class='currency-text'>
                                             {{ fund.shareTokenCode }}
@@ -54,7 +54,7 @@
                                     <div class='from'>
                                         <currencyIcon
                                             :currency='item.currencyCode'
-                                            size='40'
+                                            size='34'
                                         />
                                         <p class='currency-text'>
                                             {{ item.currencyCode }}
@@ -63,11 +63,11 @@
 
                                     <div class='indicate'>
                                         <div class='row'>
-                                            <van-icon color='#fff' name='down' size='20' />
+                                            <img alt='' src='/images/arrow-down.png' srcset='' />
                                         </div>
                                     </div>
                                     <div class='to'>
-                                        <currencyIcon :currency='fund.shareTokenCode' size='40' />
+                                        <currencyIcon :currency='fund.shareTokenCode' size='34' />
                                         <p class='currency-text'>
                                             {{ fund.shareTokenCode }}
                                         </p>
@@ -94,7 +94,7 @@
 
                                     <div class='indicate'>
                                         <div class='row'>
-                                            <van-icon color='#fff' name='down' size='20' />
+                                            <img alt='' src='/images/arrow-down.png' srcset='' />
                                         </div>
                                     </div>
                                     <div class='currency-list'>
@@ -102,7 +102,7 @@
                                             v-for='(elem, index) in fundAssetsList'
                                             :key='index'
                                             :currency='elem.currencyCode'
-                                            size='40'
+                                            size='24'
                                         />
                                     </div>
                                 </div>
@@ -128,7 +128,7 @@
 
                                     <div class='indicate'>
                                         <div class='row'>
-                                            <van-icon color='#fff' name='down' size='20' />
+                                            <img alt='' src='/images/arrow-down.png' srcset='' />
                                         </div>
                                     </div>
                                     <div class='from'>
@@ -214,12 +214,20 @@ const close = () => {
 <style lang="scss" scoped>
 .popup-assets {
     --van-tabs-bottom-bar-color: var(--primary);
+    :deep(.van-tabs__wrap) {
+        width: 300px;
+        margin: 0 auto;
+        border-bottom: solid 1px var(--lineColor);
+        .van-tab {
+            padding: 0;
+        }
+    }
     .content {
         margin: 20px 0 60px;
     }
     .currency-list {
         :deep(.currencyIcon) {
-            margin-left: -10px;
+            margin-left: -5px;
         }
     }
     .equation {
@@ -228,14 +236,13 @@ const close = () => {
     .indicate {
         display: flex;
         justify-content: center;
-        margin: 40px 0;
+        margin: 50px 0;
         .row {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             width: 30px;
             height: 30px;
-            background: var(--primary);
             border-radius: 50%;
             :deep(.van-icon-down) {
                 margin-top: -2px;
