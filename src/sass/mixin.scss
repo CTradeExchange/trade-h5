@@ -208,3 +208,12 @@
 @mixin font() {
     font-family: 'Microsoft Yahei';
 }
+
+// 兼容PC/mobile 1px的函数
+@mixin bd {
+    height: 1px;
+    background-color: #dedede;
+    @media screen and (min-resolution: 2dppx) {
+        transform: scaleY(.5);
+    }
+}
