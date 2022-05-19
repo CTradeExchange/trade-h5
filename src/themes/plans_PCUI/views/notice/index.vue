@@ -178,6 +178,13 @@ export default {
         font-size: 32px;
     }
     .noticePage {
+        :deep(.van-tabs__wrap) {
+            float: left;
+            width: 200px;
+        }
+        .van-tabs__content {
+            float: left;
+        }
         :deep(.van-tab) {
             display: inline-block;
             flex: inherit;
