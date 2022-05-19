@@ -734,7 +734,7 @@
         "fundRedeemFormula11": "收到的USDT=赎回份额*基金净值*（1-手续费率%）",
         "fundRedeemFormula12": "赎回一篮子资产的计算：",
         "fundRedeemFormula13": " 获得多少资产{number}：",
-        "fundRedeemFormula14": "资产{number}v=投资构成{number}/基金份额*赎回份额*（{number}-手续费率%）",
+        "fundRedeemFormula14": "资产{number}=投资构成{number}/基金份额*赎回份额*（1-手续费率%）",
         "fundRedeemFormula15": "",
         "fundRedeemFormula16": "",
         "fundRedeemFormula17": "",

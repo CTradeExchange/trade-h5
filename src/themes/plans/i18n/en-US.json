@@ -745,7 +745,7 @@
         "redeem_tip3": "After the Redeem process finished, the fund tokens you redeemed will be deposited to your Spot wallet with the selected receiving assets",
         "applyAmount": "Purchase amount",
         "redeemAmount": "Redeem amount",
-        "applyFees": "Subsription fee",
+        "applyFees": "Purchase fee",
         "redeemFees": "Redeem fee",
         "applyShares": "Purchase shares",
         "redeemShares": "Redeem shares",
