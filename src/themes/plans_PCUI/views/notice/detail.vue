@@ -98,10 +98,11 @@ export default {
             }
         })
 
-        // 跳转到编辑页
+        // 跳转返回
         const back = (id) => {
-            console.log(id)
-            router.back()
+            router.push({
+                path: '/notice'
+            })
         }
 
         const showApiHelp = () => {
@@ -156,6 +157,18 @@ export default {
             word-break: break-all;
             background: var(--contentColor);
         }
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .wrapper {
+        width: 980px;
+    }
+}
+
+@media screen and (max-width: 980px) {
+    .wrapper {
+        width: 720px;
     }
 }
 </style>

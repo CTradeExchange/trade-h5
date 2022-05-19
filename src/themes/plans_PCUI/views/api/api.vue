@@ -122,9 +122,6 @@ import { getCustomerApiList, checkKycApply, delCustomerApi, createCustomerApiDet
 import Clipboard from 'clipboard'
 
 export default {
-    components: {
-
-    },
 
     setup () {
         const router = useRouter()

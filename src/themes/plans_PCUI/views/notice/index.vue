@@ -6,21 +6,52 @@
             {{ $t('route.noticeTitle') }}
         </div>
 
-        <van-tabs v-model:active='active' class='noticePage'>
+        <van-tabs v-model:active='active' class='noticePage' @click-tab='onClickTab'>
             <van-tab :title="$t('route.notice')">
                 <div class='list'>
-                    <Loading :show='loading' />
-                    <div class='listScroll'>
+                    <!-- <Loading :show='loading' /> -->
+                    <van-loading v-if='loading' />
+                    <div class='msg-list'>
+                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click='goNoticeDetails(item.id)'>
+                            <p class='msg-title'>
+                                {{ item.title === 'null'? '': item.title }}
+                            </p>
+                            <p class='msg-time'>
+                                {{ formatTime(item.createTime) }}
+                            </p>
+                        </div>
+                        <!-- <van-pagination v-model='currentNt' :items-per-page='5' :total-items='totalNt' /> -->
                     </div>
                     <van-empty
-                        v-if='apiList.length === 0'
+                        v-if='listNotice.length === 0'
                         :description="$t('api.listnone')"
                         image='/images/empty.png'
                     />
                 </div>
             </van-tab>
             <van-tab :title="$t('route.msg')">
-                内容 2
+                <div class='list'>
+                    <!-- <Loading :show='loading' /> -->
+                    <van-loading v-if='loading' />
+                    <div class='msg-list'>
+                        <div v-for='(item,index) in msgList' :key='index' class='msg-item'>
+                            <p class='msg-title'>
+                                {{ item.title === 'null'? '': item.title }}
+                            </p>
+                            <p class='msg-content'>
+                                {{ computeHtmlTime(item.content) }}
+                            </p>
+                            <p class='msg-time'>
+                                {{ formatTime(item.createTime) }}
+                            </p>
+                        </div>
+                    </div>
+                    <van-empty
+                        v-if='msgList.length === 0'
+                        :description="$t('api.listnone')"
+                        image='/images/empty.png'
+                    />
+                </div>
             </van-tab>
         </van-tabs>
     </div>
@@ -33,7 +64,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Toast, Dialog } from 'vant'
 import { queryPlatFormMessageLogList, getNoticeList } from '@/api/user'
-import Clipboard from 'clipboard'
+import { isEmpty, getCookie } from '@/utils/util'
 
 export default {
     components: {
@@ -54,7 +85,18 @@ export default {
                 tag: ''
             },
             apiList: [],
-            isReLoad: false
+            listNotice: [],
+            msgList: [],
+
+            finished: false, // 消息列表
+            pageLoading: false,
+            current: 1,
+            total: 0,
+
+            finishedNt: false, // 公告列表
+            pageLoadingNt: false,
+            currentNt: 1,
+            totalNt: 0,
         })
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
@@ -67,35 +109,20 @@ export default {
             return (location.href.includes('uat') && companyId.value === 1) || (location.href.includes('pre') && companyId.value === 360) || (companyId.value === 11)
         })
 
-        const onSiderBarChange = (index) => {
-            console.log(index)
-        }
-
-        // 跳转到编辑页
-        const goDetails = (id) => {
-            console.log(id)
-            router.push({
-                path: '/apiEdit',
-                query: {
-                    id: id
-                }
-            })
-        }
-
         // 获取消息列表
         const getMsgList = () => {
-            state.pageLoading = true
+            state.loading = true
             state.errorTip = ''
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
             }).then(res => {
                 state.loading = false
-                state.pageLoading = false
                 if (res.check()) {
-                    if (res.data.records && res.data.records.length > 0) {
-                        state.list = state.list.concat(res.data.records)
-                    }
+                    // if (res.data.records && res.data.records.length > 0) {
+                    //     state.msgList = state.msgList.concat(res.data.records)
+                    // }
+                    state.msgList = res.data.records
 
                     // 数据全部加载完成
                     if (res.data.size * res.data.current >= res.data.total) {
@@ -104,16 +131,15 @@ export default {
                 }
             }).catch(err => {
                 state.errorTip = t('c.loadError')
-                state.pageLoading = false
+                state.loading = false
             })
         }
 
         // 获取公告列表
         const getNoticeData = () => {
-            // state.pageLoading = true
+            state.loading = true
             state.errorTip = ''
-            console.log(customInfo.value)
-
+            // console.log(customInfo.value)
             getNoticeList({
                 current: state.currentNt,
                 // pubTimeFrom: '',
@@ -124,12 +150,11 @@ export default {
                 customerNo: customInfo.value.customerNo
             }).then(res => {
                 state.loading = false
-                state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.listNotice = state.listNotice.concat(res.data.records)
                     }
-
+                    state.totalNt = res.data.total
                     // 数据全部加载完成
                     if (res.data.size * res.data.current >= res.data.total) {
                         state.finishedNt = true
@@ -137,8 +162,53 @@ export default {
                 }
             }).catch(err => {
                 state.errorTip = t('c.loadError')
-                state.pageLoading = false
+                state.loading = false
             })
+        }
+
+        const onClickTab = (item) => {
+            console.log(item)
+            if (item.name === 0) {
+                state.listNotice = []
+                getNoticeData()
+            }
+
+            if (item.name === 1) {
+                state.msgList = []
+                getMsgList()
+            }
+        }
+
+        // 跳转到公告详情页
+        const goNoticeDetails = (id) => {
+            console.log(id)
+            router.push({
+                path: '/noticeDetail',
+                query: {
+                    id: id
+                }
+            })
+        }
+
+        const computeHtmlTime = (content) => {
+            try {
+                const reg = /<?time[^>]*>[^<]*<\/time>/gi
+                const tag = content.match(reg)
+                let returnVal
+                if (!isEmpty(tag) && tag.length > 0) {
+                    tag.forEach(item => {
+                        returnVal = content.replace(reg, function (matchStr) {
+                            const time = matchStr.toString().replace(/<\/?time>/g, '')
+                            return window.dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                        })
+                    })
+                    return returnVal
+                } else {
+                    return content
+                }
+            } catch (error) {
+                console.log(error)
+            }
         }
 
         const handRoutTo = (path, tag) => router.push({
@@ -150,16 +220,17 @@ export default {
         })
 
         onMounted(() => {
-            // getAPIList()
+            getNoticeData()
         })
 
         return {
             handRoutTo,
-            onSiderBarChange,
-            goDetails,
+            computeHtmlTime,
+            goNoticeDetails,
             getNoticeData,
             getMsgList,
             inviteVis,
+            onClickTab,
             ...toRefs(state)
         }
     }
@@ -190,6 +261,7 @@ export default {
         }
         .van-tabs__content {
             flex: 1;
+            min-height: 600px;
         }
         .van-tab {
             display: block;
@@ -215,6 +287,38 @@ export default {
     }
     .col_black {
         color: var(--normalColor);
+    }
+    .msg-list {
+        .header {
+            padding-bottom: rem(30px);
+            padding-left: rem(30px);
+            font-size: rem(48px);
+            background: var(--contentColor);
+        }
+        .msg-item {
+            margin: rem(2px) 0 rem(10px) 0;
+            padding: rem(30px);
+            background-color: var(--contentColor);
+            //border-top: solid rem(10px) var(--bgColor);
+            .msg-title {
+                color: var(--color);
+                font-weight: bold;
+                font-size: rem(28px);
+                line-height: rem(60px);
+            }
+            .msg-content {
+                color: var(--color);
+                font-weight: 500;
+                font-size: rem(24px);
+                line-height: rem(40px);
+            }
+            .msg-time {
+                color: var(--minorColor);
+                font-weight: 400;
+                font-size: rem(20px);
+                line-height: rem(60px);
+            }
+        }
     }
 }
 

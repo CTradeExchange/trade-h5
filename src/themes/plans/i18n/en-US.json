@@ -914,5 +914,8 @@
         "editHelpTxt": "Read permission means user can only query the account information, fund flow and order details via this API</br>Withdrawal permission allows users to withdraw through the current API Key.</br>Trading rights means that users can use this API to place orders, cancel orders and other trading operations",
         "phoneSmsTips": "Please get the dynamic mobile phone verification code",
         "emailSmsTips": "Please get the dynamic email verification code"
+    },
+    "notice": {
+        "poptitle": "Latest Notice"
     }
 }
