@@ -197,6 +197,8 @@ export const orderHook = () => {
     queryFundInfo()
     // 获取基金净值等数据
     queryFundNetValue()
+    // 获取账户信息
+    store.dispatch('_user/findCustomerInfo', false)
 
     return {
         pageTitle,

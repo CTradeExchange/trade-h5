@@ -50,23 +50,25 @@
                         1、{{ $t('fundInfo.jz_formulaContent') }}
                     </p>
                     <p class='text'>
-                        2、使用USDT申购，支付费用计算：
+                        2、{{ $t('fundInfo.fundRedeemFormula4') }}
                     </p>
                     <p class='text indent'>
-                        申购支付费用=申购份额*基金净值*（1+手续费率）
+                        {{ $t('fundInfo.fundRedeemFormula5') }}
                     </p>
                     <p class='text'>
-                        3、使用一篮子资产申购，支付费用计算：
+                        3、{{ $t('fundInfo.fundRedeemFormula6') }}
                     </p>
                     <p class='text indent'>
-                        资产1支付费用：
-
-                        资产1=投资构成1/基金份额*申购份额*（1+手续费率）
+                        {{ $t('fundInfo.fundRedeemFormula7',{ number: 1 }) }}
                     </p>
                     <p class='text indent'>
-                        资产2支付费用：
-
-                        资产2=投资构成2/基金份额*申购份额*（1+手续费率）
+                        {{ $t('fundInfo.fundRedeemFormula8',{ number: 1 }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula7',{ number: 2 }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula8',{ number: 2 }) }}
                     </p>
                     <p class='text indent'>
                         ...

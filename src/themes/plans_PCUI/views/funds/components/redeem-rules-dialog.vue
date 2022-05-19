@@ -52,7 +52,7 @@
                             4
                         </span>
                         <span class='value'>
-                            赎回USDT时将会扣除USDT手续费，赎回一篮子资产时，会根据比例在每一项资产中扣除手续费
+                            {{ $t('fundInfo.fundRedeemFormula9') }}
                         </span>
                     </p>
                 </div>
@@ -64,24 +64,25 @@
                         1、{{ $t('fundInfo.jz_formulaContent') }}
                     </p>
                     <p class='text'>
-                        2、 赎回USDT的计算：
+                        2、{{ $t('fundInfo.fundRedeemFormula10') }}
                     </p>
                     <p class='text indent'>
-                        收到的USDT=赎回份额*基金净值*（1-手续费率%）
+                        {{ $t('fundInfo.fundRedeemFormula11') }}
                     </p>
                     <p class='text'>
-                        3、赎回一篮子资产的计算：
+                        3、{{ $t('fundInfo.fundRedeemFormula12') }}
                     </p>
                     <p class='text indent'>
-                        获得多少资产1：
-
-                        资产1=投资构成1/基金份额*赎回份额*（1-手续费率%）
+                        {{ $t('fundInfo.fundRedeemFormula13',{ number: 1 }) }}
                     </p>
                     <p class='text indent'>
-                        获得多少资产2：
+                        {{ $t('fundInfo.fundRedeemFormula14',{ number: 1 }) }}
                     </p>
                     <p class='text indent'>
-                        资产2=投资构成2/基金份额*申购份额*（1-手续费率%）
+                        {{ $t('fundInfo.fundRedeemFormula13',{ number: 2 }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula14',{ number: 2 }) }}
                     </p>
                     <p class='text indent'>
                         ...
