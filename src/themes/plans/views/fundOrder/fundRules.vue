@@ -53,16 +53,16 @@
                     3、{{ $t('fundInfo.fundRedeemFormula6') }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula7',{ number: 1 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula7',{ number: 'A' }) }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula8',{ number: 1 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula8',{ number: 'A' }) }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula7',{ number: 2 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula7',{ number: 'B' }) }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula8',{ number: 2 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula8',{ number: 'B' }) }}
                 </p>
                 <p class='text indent'>
                     ...
@@ -130,16 +130,16 @@
                     3、{{ $t('fundInfo.fundRedeemFormula12') }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula13',{ number: 1 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula13',{ number: 'A' }) }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula14',{ number: 1 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula14',{ number: 'A' }) }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula13',{ number: 2 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula13',{ number: 'B' }) }}
                 </p>
                 <p class='text indent'>
-                    {{ $t('fundInfo.fundRedeemFormula14',{ number: 2 }) }}
+                    {{ $t('fundInfo.fundRedeemFormula14',{ number: 'B' }) }}
                 </p>
                 <p class='text indent'>
                     ...

@@ -740,7 +740,7 @@
         "tDate": "T Date",
         "redeemSubmit": "Redeem submit",
         "fundArrive": "Fund arrive",
-        "redeem_tip1": "Redeem in amount, mean when redeem fund, fill the Redeem amount only",
+        "redeem_tip1": "Redeem in share, mean when redeem fund, fill the Redeem share only",
         "redeem_tip2": "Redeem price base on unknown price principle, estimate to be executed according to the net asset value price after share confirmation on T+2",
         "redeem_tip3": "After the Redeem process finished, the fund tokens you redeemed will be deposited to your Spot wallet with the selected receiving assets",
         "applyAmount": "Purchase amount",
