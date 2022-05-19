@@ -55,10 +55,6 @@ export default {
             sessionSet('b_superiorAgent', getQueryVariable('b_superiorAgent'))
         }
 
-        onMounted(() => {
-            // getNoticeData()
-        })
-
         const getPublicData = (val) => {
             state.publicShow = val
         }
@@ -97,6 +93,10 @@ export default {
                 }
             })
         }
+
+        onMounted(() => {
+            getNoticeData()
+        })
 
         onUnmounted(() => {
 

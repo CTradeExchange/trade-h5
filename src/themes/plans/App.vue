@@ -13,8 +13,6 @@
                     <component :is='Component' :key='route.meta.usePathKey ? route.path : undefined' />
                 </keep-alive>
                 <!-- </transition> -->
-
-                <!-- 公告弹窗 -->
             </router-view>
         </template>
         <template #fallback>
@@ -29,19 +27,18 @@
 </template>
 
 <script>
-
+import Notice from '@plans/components/notice'
 import { useStore } from 'vuex'
-import { computed, onMounted, onUnmounted, ref, reactive, toRefs, nextTick } from 'vue'
+import { computed, onMounted, onUnmounted, ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { Dialog, Popup } from 'vant'
+import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { localGet, getQueryVariable, sessionSet, unzip, getCookie, setCookie } from '@/utils/util'
+import { localGet, getQueryVariable, sessionSet, unzip } from '@/utils/util'
 import Base from '@/store/modules/base'
 import { setRootVariable } from '@plans/colorVariables'
 import onWindowMessage from '@/plugins/onWindowMessage/onMessage'
 import { configSystem } from '@/api/base'
-import Notice from '@plans/components/notice'
 import NoticePublic from '@plans/components/noticePublic'
 
 export default {
@@ -136,7 +133,6 @@ export default {
             } catch (error) {
 
             }
-            // getNoticeData()
         })
 
         document.documentElement.classList.add(store.state.invertColor)
