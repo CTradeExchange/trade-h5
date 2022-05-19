@@ -208,6 +208,7 @@ export default {
                         })
                     })
                     state.apiList = tempArr
+                    noticePopShow(true)
                 } else {
                     Toast(res.msg)
                 }
@@ -229,11 +230,6 @@ export default {
 
         const showApiHelp = () => {
             state.helpPopupShow = true
-        }
-
-        const isReLoad = () => {
-            console.log('isReLoad()')
-            getAPIList()
         }
 
         const handleCreate = (id) => {
@@ -391,7 +387,6 @@ export default {
             goDetails,
             checkKycApplyFn,
             getAPIList,
-            isReLoad,
             inviteVis,
             copyCustomerNo,
             accountList,

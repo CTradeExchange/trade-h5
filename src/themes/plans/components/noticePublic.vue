@@ -27,7 +27,7 @@
 <script>
 
 import { useStore } from 'vuex'
-import { computed, onMounted, onUnmounted, ref, reactive, toRefs } from 'vue'
+import { computed, onMounted, onUnmounted, ref, reactive, toRefs, provide } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getQueryVariable, sessionSet, getCookie, setCookie } from '@/utils/util'
@@ -38,7 +38,6 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
-        const cacheViews = computed(() => store.state.cacheViews)
 
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -50,10 +49,14 @@ export default {
             currentNt: 1,
             noticeData: []
         })
-        window.store = store
-        if (getQueryVariable('b_superiorAgent')) {
-            sessionSet('b_superiorAgent', getQueryVariable('b_superiorAgent'))
-        }
+
+        // 设定全局的 noticePopShow，在任何地方均可调用
+        provide('noticePopShow', (value) => {
+            // state.isReLoad = value
+            if (value === true) {
+                getNoticeData()
+            }
+        })
 
         const getPublicData = (val) => {
             state.publicShow = val
@@ -61,7 +64,7 @@ export default {
 
         // 获取公告列表
         const getNoticeData = () => {
-            console.log(state.noticePubTime)
+            // console.log(state.noticePubTime)
             getNoticeList({
                 current: state.currentNt,
                 // pubTimeFrom: '',
@@ -76,8 +79,8 @@ export default {
                     if (res.data.records && res.data.records.length > 0) {
                         state.noticeData = res.data.records
                         getPublicData(true)
-                        console.log(state.noticeData[0].pubTime)
-                        setCookie('pubTimeUpdate', state.noticeData[0].pubTime)
+                        // console.log(state.noticeData[0].pubTime)
+                        setCookie('pubTimeUpdate', state.noticeData[0].pubTime, '1y')
                     }
                 }
             }).catch(err => {
@@ -95,7 +98,8 @@ export default {
         }
 
         onMounted(() => {
-            getNoticeData()
+            // getNoticeData()
+            console.log(getCookie('pubTimeUpdate'))
         })
 
         onUnmounted(() => {
@@ -107,7 +111,6 @@ export default {
         }
 
         return {
-            cacheViews,
             customInfo,
             goNoticeDetail,
             formatTime,

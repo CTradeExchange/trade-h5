@@ -20,9 +20,6 @@
         </template>
     </Suspense>
     <Notice />
-
-    <!-- 统一公告弹窗 -->
-    <NoticePublic />
     <!-- <router-view />  -->
 </template>
 
@@ -39,11 +36,10 @@ import Base from '@/store/modules/base'
 import { setRootVariable } from '@plans/colorVariables'
 import onWindowMessage from '@/plugins/onWindowMessage/onMessage'
 import { configSystem } from '@/api/base'
-import NoticePublic from '@plans/components/noticePublic'
 
 export default {
     components: {
-        Notice, NoticePublic
+        Notice
     },
     setup () {
         const store = useStore()

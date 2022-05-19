@@ -54,10 +54,6 @@ export default {
 
         window.store = store
 
-        onMounted(() => {
-            // getNoticeData()
-        })
-
         const getPublicData = (val) => {
             state.publicShow = val
         }
@@ -80,7 +76,7 @@ export default {
                         state.noticeData = res.data.records
                         getPublicData(true)
                         console.log(state.noticeData[0].pubTime)
-                        setCookie('pubTimeUpdate', state.noticeData[0].pubTime)
+                        setCookie('pubTimeUpdate', state.noticeData[0].pubTime, '1y')
                     }
                 }
             }).catch(err => {
@@ -100,6 +96,11 @@ export default {
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
+
+        onMounted(() => {
+            // getNoticeData()
+            console.log(getCookie('pubTimeUpdate'))
+        })
 
         onUnmounted(() => {
 

@@ -16,6 +16,8 @@
         </template>
     </Suspense>
     <footerNav :data='footerData' />
+    <!-- 统一公告弹窗 -->
+    <NoticePublic />
 </template>
 
 <script>
@@ -23,11 +25,15 @@ import { computed } from 'vue'
 import { useStore } from 'vuex'
 import topNav from './topNav'
 import footerNav from '../modules/footer/footer.vue'
+import NoticePublic from '@planspc/components/noticePublic'
+
 export default {
     name: 'Layout',
     components: {
         topNav,
-        footerNav
+        footerNav,
+        NoticePublic
+
     },
     computed: {
         footerData () {
