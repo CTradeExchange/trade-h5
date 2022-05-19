@@ -307,6 +307,7 @@ export default {
             }
             if (ipArray.length > 20) {
                 Toast(t('api.cellLimite'))
+                return false
             }
             const newIP = ipArray.join() // 转成字符串格式
             console.log(newIP)

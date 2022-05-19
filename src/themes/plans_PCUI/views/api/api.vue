@@ -72,7 +72,7 @@
                                     <!-- <i class='icon_fuzhi copy-btn' :data-clipboard-text='item.apiKey' @click='copyCustomerNo'></i> -->
                                 </van-col>
                                 <van-col class='item-right col_black' span='12'>
-                                    {{ item.createTime }}
+                                    {{ item.updateTime }}
                                 </van-col>
                             </van-row>
                             <van-row>
@@ -205,7 +205,7 @@ export default {
                             pubKey: item.pubKey,
                             permissionDTOList: item.permissionDTOList,
                             whiteIps: whiteIpsStr,
-                            createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
+                            updateTime: window.dayjs(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss'),
                             tag: item.tag,
                             timeleft: _timeLeft
                         })

@@ -258,11 +258,11 @@ export default {
     .create-tips {
         margin: 20px 0;
         color: var(--warn);
-        font-size: 16px;
+        font-size: 14px;
         line-height: 24px;
     }
     .sub-createTipsTxt {
-        color: var(--minorColor);
+        color: var(--normalColor);
         line-height: 24px;
     }
     .copy-btnPop {
