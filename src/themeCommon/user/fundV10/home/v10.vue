@@ -198,7 +198,7 @@
         </div>
 
         <!-- 基金交易弹窗 -->
-        <FundTradeDialog v-model='showFundDialog' />
+        <FundTradeDialog v-if='isPC' v-model='showFundDialog' />
     </div>
 </template>
 

@@ -1,13 +1,14 @@
 <template>
-    <van-popup
-        v-model:show='modelValue'
-        class='popup-wrap'
-        :closeable='true'
-        :round='true'
-        @close='close'
-    >
-        <div class='popup-content'></div>
-    </van-popup>
+    <div class='popup-wrap'>
+        <van-popup
+            v-model:show='modelValue'
+            :closeable='true'
+            :round='true'
+            @close='close'
+        >
+            <div class='popup-content'></div>
+        </van-popup>
+    </div>
 </template>
 
 <script setup>
@@ -29,13 +30,15 @@ const close = () => {
 
 <style scoped lang="scss">
 .popup-wrap {
-    .van-icon {
-        color: #000;
+    :deep {
+        .van-icon {
+            color: #000;
+        }
     }
 }
 .popup-content {
     width: 750px;
-    height: 600px;
+    height: calc(100vh - 100px);
     background: #fff;
     border-radius: 20px;
 }
