@@ -196,19 +196,26 @@
                 </div>
             </div>
         </div>
+
+        <!-- 基金交易弹窗 -->
+        <FundTradeDialog v-model='showFundDialog' />
     </div>
 </template>
 
 <script setup>
 import Swiper from './components/swiper.vue'
 import ChartView from './components/chartView.vue'
-import CurrencyIcon from '@/components/currencyIcon'
-import { onMounted, computed } from 'vue'
+import FundTradeDialog from './components/fundTradeDialog.vue'
+import CurrencyIcon from '@/components/currencyIcon.vue'
+import { ref, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { Toast } from 'vant'
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
+const { t } = useI18n({ useScope: 'global' })
 
 // 当前平台是否为PC
 const { isPC } = route.meta
@@ -216,6 +223,8 @@ const { isPC } = route.meta
 const fundId = 18
 // 基金信息
 const fund = computed(() => store.state._quote.fundInfo || {})
+// 是否显示基金弹窗
+const showFundDialog = ref(true)
 
 // 获取基金详情
 const queryFundInfo = () => {
@@ -236,10 +245,32 @@ const goExamine = () => {
 
 // 点击购买基金
 const onFund = () => {
-
+    if (isPC) {
+        showFundDialog.value = true
+    } else {
+        router.push({
+            path: '/fundApply',
+            query: {
+                direction: 'buy',
+                fundId
+            }
+        })
+    }
 }
 
 // 点击交易
+const onTrade = () => {
+    const productList = store.state._quote.productList
+    let product = productList.find(el => el.baseCurrency === fund.value.shareTokenCode && el.profitCurrency === 'USDT' && el.tradeType === 5)
+    if (!product) {
+        product = productList.find(el => el.baseCurrency === fund.value.shareTokenCode && el.tradeType === 5)
+    }
+    if (!product || product.baseCurrency === product.profitCurrency) {
+        return Toast(t('fundInfo.noTradeMarket'))
+    }
+
+    router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
+}
 
 onMounted(() => {
     // 获取基金详情
