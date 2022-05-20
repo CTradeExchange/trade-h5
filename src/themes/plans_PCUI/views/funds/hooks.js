@@ -142,6 +142,21 @@ export const orderHook = (params) => {
         if (!params?.amountPay) {
             return Toast(t('fundInfo.subScriptePlaceholder'))
         }
+
+        if (Number(params?.amountPay) < Number(activeAssets.value.minPurchaseNum)) {
+            return Toast(t('fundInfo.applyMinTip') + activeAssets.value.minPurchaseNum)
+        }
+
+        let assetsTip = ''
+        lastAssetsPay.value.map(elem => {
+            if (elem.depositAmount > 0) assetsTip += elem.currency + '、'
+        })
+        if (assetsTip) {
+            assetsTip = assetsTip.substring(0, assetsTip.length - 1)
+            assetsTip = assetsTip + ' \n' + t('fundInfo.applyNotTip')
+            return Toast(assetsTip)
+        }
+
         loading.value = true
         return fundApply(params).then(res => {
             loading.value = false
@@ -160,6 +175,7 @@ export const orderHook = (params) => {
         if (Number(params?.shares) < Number(activeAssets.value.minRedemptionNum)) {
             return Toast(t('fundInfo.redeemMinTip') + activeAssets.value.minRedemptionNum)
         }
+
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false
