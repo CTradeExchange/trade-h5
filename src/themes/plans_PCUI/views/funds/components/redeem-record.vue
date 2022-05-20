@@ -20,7 +20,7 @@
             <el-table-column v-if='params.sharesStatus === 0' :label="$t('fundInfo.receiveCurrency')" :min-width='minWidth' prop='currencyRedeem'>
                 <template #default='scope'>
                     <span v-if="scope.row.currencyRedeem === 'self'">
-                        {{ $t('fundManager.buy.basketAssets') }}
+                        {{ $t('fundInfo.basketAssets') }}
                     </span>
                     <span v-else>
                         {{ scope.row.currencyRedeem }}
@@ -88,12 +88,12 @@
         </div>
     </div>
 
-    <van-dialog v-model:show='show' title='赎回明细' width='30%'>
+    <van-dialog v-model:show='show' :title='$t("fundInfo.redeemDetail")' width='30%'>
         <div class='info-wrap'>
             <p class='info-item header'>
-                <span>赎回资产</span>
-                <span>赎回金额</span>
-                <span>赎回手续费</span>
+                <span> {{ $t('fundInfo.redeemAssetsTitle') }}</span>
+                <span> {{ $t('fundInfo.redeemAmount') }}</span>
+                <span> {{ $t('fundInfo.redeemFees') }}</span>
             </p>
             <p v-for='item in showInfo' :key='item.currency' class='info-item'>
                 <span> {{ item.currency }}</span>

@@ -47,6 +47,7 @@ export const orderHook = (params) => {
     const selfAssetsList = ref([])
     // 当前选择的资产数据
     const activeAssets = ref({})
+    const calcLoading = ref(false)
 
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
     const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
@@ -68,17 +69,17 @@ export const orderHook = (params) => {
         // 一篮子资产
 
         if (activeCurrency.value === 'self') {
-            fundAssetsList.value.map(elem => {
+            fundAssetsList.value && fundAssetsList.value.map(elem => {
                 const item = {
                     currency: elem.currencyCode,
                     amountPay: '0.00',
                     isShow: false
                 }
-                const account = accountList.value.find(el => el.currency === item.currency)
+                const account = accountList.value?.find(el => el.currency === item.currency)
                 const payItem = selfAssetsList.value.find(el => el.currency === item.currency)
-                if (account && payItem) {
+                item.available = account?.available || 0
+                if (payItem) {
                     item.isShow = true
-                    item.available = account.available
                     item.amountPay = payItem.amount
                     // 计算需要充值的金额
                     item.depositAmount = minus(item.amountPay, item.available)
@@ -92,7 +93,7 @@ export const orderHook = (params) => {
                 amountPay: '0.00',
                 isShow: false
             }
-            const account = accountList.value.find(el => el.currency === item.currency)
+            const account = accountList.value?.find(el => el.currency === item.currency)
             const payItem = singleAssetsPay.value
             if (account && payItem) {
                 item.isShow = true
@@ -156,6 +157,9 @@ export const orderHook = (params) => {
         if (!params?.shares) {
             return Promise.resolve().then(() => Toast(t('fundInfo.redeemNumPlaceholder')))
         }
+        if (Number(params?.shares) < Number(activeAssets.value.minRedemptionNum)) {
+            return Toast(t('fundInfo.redeemMinTip') + activeAssets.value.minRedemptionNum)
+        }
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false
@@ -207,17 +211,20 @@ export const orderHook = (params) => {
         if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
             singleAssetsPay.value = null
             selfAssetsList.value = []
-            return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
+            return Toast(t('fundInfo.applyMinTip') + ' ' + activeAssets.value.minPurchaseNum)
         }
-
+        calcLoading.value = true
         fundCalcApplyShares({
             amountPay,
             currencyPay,
             applyType: 2,
             fundId: parseInt(fund.fundId)
         }).then(res => {
+            calcLoading.value = false
             if (res.check()) {
                 const { data } = res
+                // 更新单个基金产品信息
+                store.commit('_quote/Update_fundProduct', { netValue: data.sharesNet })
                 if (activeCurrency.value === 'self') {
                     selfAssetsList.value = data.list || []
                 } else {
@@ -233,6 +240,8 @@ export const orderHook = (params) => {
 
     // 获取基金净值等数据
     queryFundNetValue()
+    // 获取账户信息
+    store.dispatch('_user/findCustomerInfo', false)
 
     return {
         fund,
@@ -255,6 +264,7 @@ export const orderHook = (params) => {
         lastAssetsPay,
         activeAssets,
         fundAssetsList,
-        queryFundNetValue
+        queryFundNetValue,
+        calcLoading
     }
 }

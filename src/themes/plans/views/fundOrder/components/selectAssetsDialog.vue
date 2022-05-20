@@ -8,25 +8,26 @@
     >
         <div class='popup-assets-list'>
             <p class='title'>
-                {{ direction === 'buy' ? '选择支付资产' : '选择赎回方式' }}
+                {{ direction === 'buy' ? $t('fundInfo.choosePayAsset') : $t('fundInfo.chooseRedeemWay') }}
             </p>
             <div v-for='item in list' :key='item.currencyCode' class='asset-item' @click='switchCurrency(item)'>
                 <div class='left'>
                     <div class='top-block'>
                         <currencyIcon
+                            v-if="item.currencyCode !== 'self'"
                             :currency='item.currencyCode'
                             size='24'
                         />
                         <span class='currency'>
-                            {{ item.currencyCode === 'self' ? '一篮子资产' : item.currencyCode }}
+                            {{ item.currencyCode === 'self' ? $t('fundInfo.basketAssets') : item.currencyCode }}
                         </span>
                     </div>
                     <p v-if="item.currencyCode === 'self'" class='desc'>
-                        {{ direction === 'buy' ? '支付一篮子资产购买基金' : '获得一篮子资产' }}
+                        {{ direction === 'buy' ? $t('fundInfo.payBasketBuy') : $t('fundInfo.getBasketAssets') }}
                     </p>
                     <p v-else class='desc'>
                         <span v-if="direction === 'buy'">
-                            支付 {{ item.currencyCode }} 购买基金
+                            {{ $t('fundInfo.payCurrencyBuy', { currency: item.currencyCode }) }}
                         </span>
                     </p>
                     <div v-if="item.currencyCode === 'self'" class='currency-list'>
@@ -101,6 +102,7 @@ const switchCurrency = (item) => {
 <style lang="scss" scoped>
 .popup-assets-list {
     padding: rem(30px);
+    background: var(--bgColor);
     .title {
         font-size: rem(32px);
         text-align: center;
@@ -109,24 +111,25 @@ const switchCurrency = (item) => {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        margin-top: rem(40px);
+        margin-top: rem(30px);
         padding: rem(30px);
-        background: var(--bgColor);
+        background: var(--contentColor);
         border-radius: rem(12px);
         .top-block {
             .currency {
                 margin-left: rem(15px);
                 color: var(--color);
+                font-weight: bold;
                 vertical-align: middle;
             }
         }
         .desc {
             margin-top: rem(10px);
-            font-weight: bold;
             color: var(--minorColor);
+            font-weight: bold;
         }
         .currency-list {
-            margin-top: rem(12px);
+            margin-top: rem(30px);
             margin-left: 10px;
             :deep(.currencyIcon) {
                 width: 20px;

@@ -29,12 +29,12 @@
             </listVue>
         </div>
     </div>
-    <van-dialog v-model:show='show' title='赎回明细'>
+    <van-dialog v-model:show='show' :title="$t('fundInfo.redeemDetail')">
         <div class='info-wrap'>
             <p class='info-item header'>
-                <span>赎回资产</span>
-                <span>赎回金额</span>
-                <span>赎回手续费</span>
+                <span>{{ $t('fundInfo.redeemAssetsTitle') }}</span>
+                <span>{{ $t('fundInfo.redeemAmount') }}</span>
+                <span>{{ $t('fundInfo.redeemFees') }}</span>
             </p>
             <p v-for='item in showInfo' :key='item.currency' class='info-item'>
                 <span>{{ item.currency }}</span>
