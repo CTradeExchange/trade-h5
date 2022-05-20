@@ -149,8 +149,7 @@ export default {
         }
 
         onMounted(() => {
-            // getNoticeData()
-            console.log(getCookie('pubTimeUpdate'))
+            getNoticeData()
         })
 
         onUnmounted(() => {
