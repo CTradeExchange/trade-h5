@@ -39,7 +39,7 @@
         <p class='mark'>
             Immediately receive three benefits
         </p>
-        <button class='btnBottom'>
+        <button class='btnBottom' @click="$router.push('/fundV10/join')">
             Get Started
         </button>
     </div>
@@ -88,7 +88,7 @@ export default {
         max-width: 590px;
         font-size: 20px;
         margin: 0 auto;
-        padding-top: 80px;
+        padding-top: 64px;
         line-height: 48px;
         &::after{
             content: "";
@@ -127,7 +127,7 @@ export default {
         }
     }
     .say{
-        margin-top: 50px;
+        margin-top: 68px;
         font-size: 30px;
         line-height: 36px;
         text-align: center;
@@ -141,10 +141,11 @@ export default {
         }
     }
     .mark{
-        margin-top: 30px;
+        margin-top: 27px;
         font-size: 20px;
         line-height: 24px;
         text-align: center;
+        letter-spacing: 1px;
         font-weight: bold;
         color: var(--primary);
         // 适配移动端
