@@ -47,6 +47,9 @@
                 <!-- <why /> -->
             </div>
         </div>
+
+        <!-- 统一公告弹窗 -->
+        <NoticePublic />
     </div>
 </template>
 
@@ -61,13 +64,14 @@ import seven from './components/seven.vue'
 import FullBanner from '../../modules/fullBanner/fullBanner'
 import BannerProducts from '../../modules/bannerProducts/bannerProducts'
 import HomeNotice from '../../modules/homeNotice/homeNotice'
+import NoticePublic from '@planspc/components/noticePublic'
 
 import { reactive, toRefs, onMounted, onUnmounted, computed, watch } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { getCookie } from '@/utils/util'
+import { getCookie, localGet, localSet } from '@/utils/util'
 import { getNoticeList } from '@/api/user'
 export default {
     name: 'Home',
@@ -81,6 +85,7 @@ export default {
         HomeNotice,
         FullBanner,
         BannerProducts,
+        NoticePublic
     },
     setup () {
         const store = useStore()
@@ -173,17 +178,17 @@ export default {
 
         // 获取公告列表
         const getNoticeData = () => {
-            console.log(customInfo.value)
+            // console.log(customInfo.value)
             getNoticeList({
                 current: state.currentNt,
                 // pubTimeFrom: '',
                 // pubTimeTo: '',
                 lang: state.lang,
-                size: 10,
+                size: 5,
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo
             }).then(res => {
-                console.log(res)
+                // console.log(res)
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         // state.listNotice = state.listNotice.concat(res.data.records)
@@ -197,7 +202,7 @@ export default {
                 }
             }).catch(err => {
                 state.errorTip = t('c.loadError')
-                state.pageLoading = false
+                // state.pageLoading = false
             })
         }
 

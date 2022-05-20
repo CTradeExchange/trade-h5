@@ -16,24 +16,21 @@
         </template>
     </Suspense>
     <footerNav :data='footerData' />
-    <!-- 统一公告弹窗 -->
-    <NoticePublic />
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, reactive, toRefs, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import topNav from './topNav'
 import footerNav from '../modules/footer/footer.vue'
-import NoticePublic from '@planspc/components/noticePublic'
+
+import { localRemove } from '@/utils/util'
 
 export default {
     name: 'Layout',
     components: {
         topNav,
-        footerNav,
-        NoticePublic
-
+        footerNav
     },
     computed: {
         footerData () {
@@ -44,8 +41,16 @@ export default {
     setup () {
         const store = useStore()
         const cacheViews = computed(() => store.state.cacheViews)
+        const state = reactive({
+            noticePopShow: false
+        })
+
+        onUnmounted(() => {
+            localRemove('noticeParams')
+        })
         return {
             cacheViews,
+            ...toRefs(state)
         }
     }
 }

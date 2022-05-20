@@ -18,21 +18,18 @@
         </template>
     </Suspense>
     <footerMenu v-if='navData' id='footerMenu' class='footerMenu' :data='navData.data' />
-
-    <!-- 统一公告弹窗 -->
-    <NoticePublic />
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import footerMenu from '../modules/nav/nav'
-import NoticePublic from '@plans/components/noticePublic'
+import { localRemove } from '@/utils/util'
+
 export default {
     name: 'Layout',
     components: {
-        footerMenu,
-        NoticePublic
+        footerMenu
     },
     setup () {
         const store = useStore()
@@ -40,6 +37,9 @@ export default {
         const navData = computed(() => store.state._base.wpNav.find(el => el.tag === 'nav'))
         store.dispatch('_base/getPageConfig', 'Nav').then(res => {
             store.commit('_base/UPDATE_wpNav', res)
+        })
+        onUnmounted(() => {
+            localRemove('noticeParams')
         })
         return {
             cacheViews,

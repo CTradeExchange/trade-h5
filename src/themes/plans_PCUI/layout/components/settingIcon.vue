@@ -52,7 +52,7 @@
 import { reactive, ref, computed, toRefs } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { localGet, localSet, isEmpty } from '@/utils/util'
+import { localGet, localSet, isEmpty, localRemove } from '@/utils/util'
 import { colors, setRootVariable } from '@planspc/colorVariables'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { useRouter, useRoute } from 'vue-router'
@@ -102,6 +102,7 @@ export default {
         // 退出登录
         const logoutHandler = () => {
             MsgSocket.logout()
+            localRemove('noticeParams')
             Promise.resolve().then(() => {
                 return store.dispatch('_user/logout')
             }).then(() => {
@@ -133,46 +134,48 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .icon {
-    font-size: 16px;
     color: #D6DAE1;
+    font-size: 16px;
     cursor: pointer;
 }
-.settingDrapdown{
+.settingDrapdown {
     font-size: 14px;
-    .item{
+    .item {
         position: relative;
-        padding: 0 10px 0 17px;
         height: 40px;
+        padding: 0 10px 0 17px;
         color: var(--color);
-        border-radius: 5px;
         line-height: 40px;
+        border-radius: 5px;
         cursor: pointer;
-        .arrowIcon{
-            float: right;
+        .arrowIcon {
             display: none;
+            float: right;
         }
-        &:hover, &.active{
+        &:hover,
+        &.active {
             color: var(--primary);
-            .arrowIcon,.subDrapdown{
+            .arrowIcon,
+            .subDrapdown {
                 display: block;
             }
         }
     }
-    .flexBetween{
+    .flexBetween {
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
-    .subDrapdown{
-        display: none;
+    .subDrapdown {
         position: absolute;
-        border-radius: 5px;
-        background: var(--contentColor);
+        top: 0;
+        right: 100%;
+        display: none;
+        width: 150%;
         padding: 8px;
         color: var(--color);
-        right: 100%;
-        top: 0;
-        width: 150%;
+        background: var(--contentColor);
+        border-radius: 5px;
         box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     }
 }

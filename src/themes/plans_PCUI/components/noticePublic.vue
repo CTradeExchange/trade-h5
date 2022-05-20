@@ -27,17 +27,18 @@
 <script>
 import dayjs from 'dayjs'
 import { useStore } from 'vuex'
-import { computed, onMounted, onUnmounted, ref, reactive, toRefs, nextTick } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch, reactive, toRefs, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog, Popup } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { localGet, getQueryVariable, sessionSet, unzip, getCookie, setCookie } from '@/utils/util'
+import { localGet, getQueryVariable, sessionSet, unzip, localSet, getCookie, localRemove } from '@/utils/util'
 import { configSystem } from '@/api/base'
 import { getNoticeList } from '@/api/user'
 
 export default {
-    setup (props) {
+    props: ['noticePopShow'],
+    setup (props, context) {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
@@ -47,36 +48,92 @@ export default {
         const state = reactive({
             publicShow: false,
             lang: getCookie('lang') || 'zh-CN',
-            noticePubTime: getCookie('pubTimeUpdate'),
+            noticePubTime: '',
             currentNt: 1,
             noticeData: []
         })
 
         window.store = store
+        watch(
+            () => state.noticePopShow, val => {
+                context.emit('update:noticePopShow', val)
+            }
+        )
 
         const getPublicData = (val) => {
             state.publicShow = val
         }
 
-        // 获取公告列表
+        // 公告弹窗
         const getNoticeData = () => {
-            console.log(state.noticePubTime)
-            getNoticeList({
+            var params = {
                 current: state.currentNt,
-                // pubTimeFrom: '',
-                // pubTimeTo: '',
                 lang: state.lang,
-                size: 10,
-                companyId: customInfo.value.companyId,
-                customerNo: customInfo.value.customerNo
-            }).then(res => {
-                console.log(res)
+                size: 5,
+            }
+            if (customInfo.value.companyId) {
+                params.companyId = customInfo.value.companyId
+            }
+            if (customInfo.value.customerNo) {
+                params.customerNo = customInfo.value.customerNo
+            }
+            console.log(localGet('noticeParams'))
+            // 判断是否新游客
+            if (localGet('noticeParams')) { // 不是
+                var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
+                if (nData.type === 'user') { // 已登录用户
+                    params.pubTimeFrom = nData.pubTime
+                }
+                // if (nData.type === 'guest') { // 已登录用户
+                // }
+            } else { // 是
+                // 获取当日的所有公告，显示完且缓存弹出次数
+            }
+
+            getNoticeList(params).then(res => {
+                // console.log(res)
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.noticeData = res.data.records
-                        getPublicData(true)
-                        console.log(state.noticeData[0].pubTime)
-                        setCookie('pubTimeUpdate', state.noticeData[0].pubTime, '1y')
+                        // 获取公告列表后，再缓存最新的一条的pubTime在本地
+                        let noticeParams = {}
+                        // 判断是否新游客
+                        // console.log(localGet('noticeParams'))
+                        if (localGet('noticeParams')) { // 不是
+                            var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
+                            if (customInfo.value.customerNo) { // 已登录用户
+                                if (nData.popShowNum < 2) {
+                                    getPublicData(true) // 普通游客第一次显示公告弹窗
+                                }
+                                noticeParams = {
+                                    type: 'user', // 'user' ? 'guest'
+                                    pubTime: state.noticeData[0].pubTime,
+                                    popShowNum: nData.popShowNum + 1,
+                                    userNo: customInfo.value.companyId
+                                }
+                            } else { // 未登录
+                                if (nData.popShowNum === 0) {
+                                    getPublicData(true) // 普通游客第一次显示公告弹窗
+                                }
+                                noticeParams = {
+                                    type: 'guest', // 'user' ? 'guest'
+                                    pubTime: '',
+                                    popShowNum: nData.popShowNum + 1,
+                                    userNo: ''
+                                }
+                            }
+                        } else { // 是新游客
+                            getPublicData(true) // 普通游客第一次显示公告弹窗
+                            // 获取当日的所有公告，显示完且缓存弹出次数
+                            noticeParams = {
+                                type: 'guest', // 'user' ? 'guest'
+                                pubTime: '',
+                                popShowNum: 1,
+                                userNo: ''
+                            }
+                        }
+                        console.log(noticeParams)
+                        localSet('noticeParams', JSON.stringify(noticeParams))
                     }
                 }
             }).catch(err => {
@@ -98,8 +155,8 @@ export default {
         }
 
         onMounted(() => {
-            // getNoticeData()
-            console.log(getCookie('pubTimeUpdate'))
+            getNoticeData()
+            // localRemove('noticeParams')
         })
 
         onUnmounted(() => {

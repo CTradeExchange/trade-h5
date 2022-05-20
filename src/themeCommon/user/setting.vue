@@ -28,7 +28,7 @@
 import { toRefs, reactive, computed, getCurrentInstance, onBeforeMount } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
-import { isEmpty, removeLoginParams, localSet, localGet } from '@/utils/util'
+import { isEmpty, removeLoginParams, localSet, localGet, localRemove } from '@/utils/util'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { changeLang } from '@/api/base'
@@ -74,6 +74,7 @@ export default {
         }
 
         const handleLogout = () => {
+            localRemove('noticeParams')
             Dialog.confirm({
                 title: t('common.tip'),
                 message: t('setting.logoutConfirm'),

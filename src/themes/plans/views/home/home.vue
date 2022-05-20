@@ -23,6 +23,8 @@
             </van-notice-bar>
         </div>
         <PageComp class='marginbottom' :data='pageModules' />
+        <!-- 统一公告弹窗 -->
+        <NoticePublic />
     </div>
 </template>
 
@@ -35,9 +37,13 @@ import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getNoticeList } from '@/api/user'
 import { isEmpty, getCookie } from '@/utils/util'
+import NoticePublic from '@plans/components/noticePublic'
 
 export default {
     name: 'Home',
+    components: {
+        NoticePublic
+    },
     setup () {
         const store = useStore()
         const pageModules = ref([])

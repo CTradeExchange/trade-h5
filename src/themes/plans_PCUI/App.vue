@@ -14,7 +14,6 @@
         </template>
     </Suspense>
     <Notice />
-
     <!-- <router-view />  -->
 </template>
 
@@ -27,7 +26,6 @@ import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { getQueryVariable, sessionSet, unzip } from '@/utils/util'
 import { configSystem } from '@/api/base'
-
 export default {
     setup () {
         const store = useStore()
