@@ -250,7 +250,6 @@ import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal, mul } from '@/utils/calculation'
 import { debounce, getCookie } from '@/utils/util'
-import { log } from '@public/libs/adapter-latest'
 
 const emit = defineEmits(['switchDirection'])
 

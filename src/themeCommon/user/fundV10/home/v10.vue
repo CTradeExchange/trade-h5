@@ -198,7 +198,7 @@
         </div>
 
         <!-- 基金交易弹窗 -->
-        <FundTradeDialog v-if='isPC' v-model='showFundDialog' />
+        <FundTradeDialog v-if='isPC' v-model='showFundDialog' :fund='fund' />
     </div>
 </template>
 
@@ -207,7 +207,7 @@ import Swiper from './components/swiper.vue'
 import ChartView from './components/chartView.vue'
 import FundTradeDialog from './components/fundTradeDialog.vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -224,7 +224,7 @@ const fundId = 18
 // 基金信息
 const fund = computed(() => store.state._quote.fundInfo || {})
 // 是否显示基金弹窗
-const showFundDialog = ref(true)
+const showFundDialog = ref(false)
 
 // 获取基金详情
 const queryFundInfo = () => {
