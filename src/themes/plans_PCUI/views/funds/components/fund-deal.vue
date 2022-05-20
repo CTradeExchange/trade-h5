@@ -48,6 +48,8 @@ defineProps({
     }
 })
 const dealAcitve = inject('dealAcitve')
+// 更新基金净值
+const updateSharesNet = inject('updateSharesNet')
 
 // 当前选择选项卡 apply:申购 redeem:赎回 trade:现货买卖
 const activeName = ref(dealAcitve.value || 'apply')
@@ -56,6 +58,7 @@ const activeName = ref(dealAcitve.value || 'apply')
 const switchTab = value => {
     if (activeName.value !== value) {
         activeName.value = value
+        updateSharesNet('')
     }
 }
 
