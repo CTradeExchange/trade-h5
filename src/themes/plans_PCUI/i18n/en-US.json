@@ -946,7 +946,7 @@
         "expectedGetAmount": "Estimate amount to receive",
         "t2Tip1": "T+2 day NAV calulation amount",
         "t2Tip2": "Tip：The estimated amount based on the calculation of NAV amount after share confirmation on T+2, after the total redemption amount is determined, the redemption amount of a each asset is calculated according to the weight of a basket of currencies.",
-        "redeemMinTip": "Minimum redeem shares is",
+        "redeemMinTip": "Minimum redeem shares is ",
         "basketAssets": "Basket of assets",
         "applyCountTip": "Pay {count} asset to purchase fund",
         "redeemCountTip": "Get {count} asset",

@@ -246,7 +246,7 @@ const submitHandler = () => {
     })
     if (assetsTip) {
         assetsTip = assetsTip.substring(0, assetsTip.length - 1)
-        assetsTip = assetsTip + t('fundInfo.applyNotTip')
+        assetsTip = assetsTip + ' \n' + t('fundInfo.applyNotTip')
         return Toast(assetsTip)
     }
     // 提交申购

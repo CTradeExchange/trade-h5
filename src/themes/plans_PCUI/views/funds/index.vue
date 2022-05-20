@@ -88,6 +88,8 @@ const netValueArrs = ref([])
 const marketPriceArrs = ref([])
 // 基金列表接口定时器
 const fundTimer = ref(null)
+// 最新的基金净值
+const sharesNet = ref('')
 
 // 批量获取市场表现走势图
 const batchMarketPerformanceData = () => {
@@ -125,12 +127,14 @@ const batchMarketPerformanceData = () => {
 const selectFund = (value, active) => {
     const model = value ? 'fundDetail' : 'fundModule'
     fundId.value = value
+    sharesNet.value = ''
     changeShowModel(model, active)
 }
 
 // 改变当前显示的模块
 const changeShowModel = (model, active) => {
     showModel.value = model
+    sharesNet.value = ''
     if (model === 'fundDetail') {
         dealActive.value = active || ''
     }
@@ -151,6 +155,10 @@ provide('dealAcitve', dealActive)
 provide('fundRecordAcitve', fundRecordAcitve)
 provide('selectFund', selectFund)
 provide('changeShowModel', changeShowModel)
+provide('sharesNet', sharesNet)
+provide('updateSharesNet', (value) => {
+    sharesNet.value = value
+})
 
 onMounted(() => {
     document.body.style.overflow = 'hidden'

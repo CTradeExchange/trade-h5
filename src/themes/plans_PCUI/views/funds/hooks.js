@@ -1,4 +1,4 @@
-import { computed, ref, unref } from 'vue'
+import { computed, ref, unref, inject } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
 import { debounce } from '@/utils/util'
@@ -38,7 +38,10 @@ export const orderHook = (params) => {
     const { t } = useI18n({ useScope: 'global' })
     const store = useStore()
 
+    // 加载中
     const loading = ref(false)
+    // 更新基金净值
+    const updateSharesNet = inject('updateSharesNet')
     // 基金底层资产列表
     const fundAssetsList = ref([])
     // 单资产需要支付的资产
@@ -142,6 +145,21 @@ export const orderHook = (params) => {
         if (!params?.amountPay) {
             return Toast(t('fundInfo.subScriptePlaceholder'))
         }
+
+        if (Number(params?.amountPay) < Number(activeAssets.value.minPurchaseNum)) {
+            return Toast(t('fundInfo.applyMinTip') + activeAssets.value.minPurchaseNum)
+        }
+
+        let assetsTip = ''
+        lastAssetsPay.value.map(elem => {
+            if (elem.depositAmount > 0) assetsTip += elem.currency + '、'
+        })
+        if (assetsTip) {
+            assetsTip = assetsTip.substring(0, assetsTip.length - 1)
+            assetsTip = assetsTip + ' \n' + t('fundInfo.applyNotTip')
+            return Toast(assetsTip)
+        }
+
         loading.value = true
         return fundApply(params).then(res => {
             loading.value = false
@@ -160,6 +178,7 @@ export const orderHook = (params) => {
         if (Number(params?.shares) < Number(activeAssets.value.minRedemptionNum)) {
             return Toast(t('fundInfo.redeemMinTip') + activeAssets.value.minRedemptionNum)
         }
+
         loading.value = true
         return fundRedeem(params).then(res => {
             loading.value = false
@@ -203,12 +222,14 @@ export const orderHook = (params) => {
     const calcSharesNet = ref('') // 获取申购手净值
     const getCalcApplyFee = (amountPay, currencyPay) => {
         if (!amountPay) {
+            updateSharesNet('')
             singleAssetsPay.value = null
             selfAssetsList.value = []
             return false
         }
 
         if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
+            updateSharesNet('')
             singleAssetsPay.value = null
             selfAssetsList.value = []
             return Toast(t('fundInfo.applyMinTip') + ' ' + activeAssets.value.minPurchaseNum)
@@ -223,17 +244,12 @@ export const orderHook = (params) => {
             calcLoading.value = false
             if (res.check()) {
                 const { data } = res
-                // 更新单个基金产品信息
-                store.commit('_quote/Update_fundProduct', { netValue: data.sharesNet })
+                updateSharesNet(data.sharesNet)
                 if (activeCurrency.value === 'self') {
                     selfAssetsList.value = data.list || []
                 } else {
                     singleAssetsPay.value = data
                 }
-                // calcApplyFee.value = data.fees
-                // calcShares.value = data.shares
-                // calcSharesNet.value = data.sharesNet
-                // getFundValue()
             }
         })
     }

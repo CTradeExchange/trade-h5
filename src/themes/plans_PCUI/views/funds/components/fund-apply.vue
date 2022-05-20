@@ -100,7 +100,7 @@
                         1 {{ fund.shareTokenCode }} =
                     </span>
                     <span class='muted'>
-                        {{ fund.netValue }}{{ fund.currency }}
+                        {{ sharesNet || fund.netValue }}{{ fund.currency }}
                     </span>
                 </p>
             </div>
@@ -281,7 +281,6 @@ import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal, mul } from '@/utils/calculation'
 import { debounce, getCookie } from '@/utils/util'
-import { log } from '@public/libs/adapter-latest'
 const emit = defineEmits(['switchDirection'])
 
 const router = useRouter()
@@ -295,6 +294,8 @@ const props = defineProps({
 })
 
 const changeShowModel = inject('changeShowModel')
+// 最新基金净值
+const sharesNet = inject('sharesNet')
 const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
 // 客户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
