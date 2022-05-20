@@ -42,7 +42,7 @@
                                 {{ fund.totalBalance }}
                             </span>
                         </li>
-                        <li>
+                        <li class='href' @click='goExamine'>
                             <span class='name'>
                                 Issuing institution:
                             </span>
@@ -143,10 +143,10 @@
                                 <strong>Method</strong>
                             </p>
                             <div class='handle'>
-                                <button class='cell-2'>
+                                <button class='cell-2' @click='onFund'>
                                     Buy via Vitatoken
                                 </button>
-                                <button class='cell-3'>
+                                <button class='cell-3' @click='onTrade'>
                                     Buy via Issuing institution
                                 </button>
                             </div>
@@ -161,7 +161,7 @@
                                         10U起
                                     </span>
                                     <span class='cell-3'>
-                                        5000u起
+                                        5000U起
                                     </span>
                                 </div>
                             </li>
@@ -196,8 +196,6 @@
                 </div>
             </div>
         </div>
-
-        <LayoutBottom />
     </div>
 </template>
 
@@ -205,12 +203,12 @@
 import Swiper from './components/swiper.vue'
 import ChartView from './components/chartView.vue'
 import CurrencyIcon from '@/components/currencyIcon'
-import LayoutBottom from '@plans/layout/layoutBottom'
 import { onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const store = useStore()
 const route = useRoute()
+const router = useRouter()
 
 // 当前平台是否为PC
 const { isPC } = route.meta
@@ -228,6 +226,20 @@ const queryFundInfo = () => {
 const queryFundNetValue = () => {
     store.dispatch('_quote/fundNetValue', { fundId })
 }
+
+// 跳转到查验页面
+const goExamine = () => {
+    router.push({
+        path: '/fundV10/examine'
+    })
+}
+
+// 点击购买基金
+const onFund = () => {
+
+}
+
+// 点击交易
 
 onMounted(() => {
     // 获取基金详情
@@ -293,6 +305,12 @@ onMounted(() => {
             li {
                 margin-top: 28px;
                 line-height: 28px;
+                &.href {
+                    cursor: pointer;
+                    &:hover {
+                        color: var(--primary);
+                    }
+                }
             }
         }
     }

@@ -19,28 +19,32 @@
             Loading...
         </template>
     </Suspense>
-    <!-- <footerMenu v-if='navData' id='footerMenu' class='footerMenu' :data='navData.data' /> -->
+
+    <Bottom v-if='route.meta?.showFooter' />
 </template>
 
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import footerMenu from '../modules/nav/nav'
+import { useRoute } from 'vue-router'
 import Top from './layoutTop.vue'
+import Bottom from './layoutBottom.vue'
 export default {
     name: 'Layout',
     components: {
         Top,
-        footerMenu
+        Bottom
     },
     setup () {
         const store = useStore()
+        const route = useRoute()
         const cacheViews = computed(() => store.state.cacheViews)
         const navData = computed(() => store.state._base.wpNav.find(el => el.tag === 'nav'))
         store.dispatch('_base/getPageConfig', 'Nav').then(res => {
             store.commit('_base/UPDATE_wpNav', res)
         })
         return {
+            route,
             cacheViews,
             navData
         }

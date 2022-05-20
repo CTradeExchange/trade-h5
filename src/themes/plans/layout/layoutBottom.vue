@@ -97,10 +97,13 @@
                 Vitatoken © 2022
             </div>
         </div>
+
+        <LangPop v-model='langShow' />
     </div>
 </template>
 
 <script setup>
+import LangPop from '@plans/components/langPop.vue'
 import { getCookie } from '@/utils/util'
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
@@ -114,6 +117,7 @@ const langObj = ref({
     'zh-CN': '简体中文',
     'en-US': 'English',
 })
+const lang = ref(getCookie('lang') || 'zh-CN')
 const aboutVis = ref(false)
 const serviceVis = ref(false)
 const productVis = ref(false)
@@ -289,7 +293,7 @@ const jumpUrl = (index) => {
             background: #999;
             border-color: #999;
         }
-        .van-button__text {
+        :deep(.van-button__text) {
             display: flex;
             justify-content: space-between;
             width: 100%;

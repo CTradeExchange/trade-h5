@@ -29,6 +29,7 @@ const routes = [
                 meta: {
                     title: 'route.home',
                     keepAlive: true,
+                    showFooter: true
                 }
             },
             {
@@ -151,7 +152,8 @@ const routes = [
                 name: 'FundV10',
                 component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/home/v10.vue'),
                 meta: {
-                    title: 'api.editHeader'
+                    title: 'api.editHeader',
+                    showFooter: true
                 }
             },
             {
@@ -159,7 +161,8 @@ const routes = [
                 name: 'v10Join',
                 component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/join.vue'),
                 meta: {
-                    title: 'api.editHeader'
+                    title: 'api.editHeader',
+                    showFooter: true
                 }
             },
             {
@@ -167,7 +170,8 @@ const routes = [
                 name: 'v10Examine',
                 component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/examine.vue'),
                 meta: {
-                    title: 'api.editHeader'
+                    title: 'api.editHeader',
+                    showFooter: true
                 }
             },
         ]
