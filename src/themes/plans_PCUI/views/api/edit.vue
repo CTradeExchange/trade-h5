@@ -194,7 +194,10 @@ export default {
                     console.log(res)
                     Toast(t('api.editSuccess'))
                     setTimeout(() => {
-                        router.back()
+                        // router.back()
+                        router.push({
+                            path: '/api'
+                        })
                     }, 1500)
                 } else {
                     Toast(res.msg)
@@ -317,7 +320,8 @@ export default {
         // 跳转到编辑页
         const back = (id) => {
             console.log(id)
-            router.back()
+            // router.back()
+            router.push({ path: '/api' })
         }
 
         const showApiHelp = () => {
