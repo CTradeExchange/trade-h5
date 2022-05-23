@@ -20,7 +20,26 @@
                                 {{ formatTime(item.createTime) }}
                             </p>
                         </div>
-                        <!-- <van-pagination v-model='currentNt' :items-per-page='5' :total-items='totalNt' /> -->
+                        <div class='list-page-box'>
+                            <van-pagination
+                                v-model='currentNt'
+                                class='list-page'
+                                force-ellipses
+                                :items-per-page='10'
+                                :total-items='totalNt'
+                                @change='changePageNt'
+                            >
+                                <template #prev-text>
+                                    <van-icon name='arrow-left' />
+                                </template>
+                                <template #next-text>
+                                    <van-icon name='arrow' />
+                                </template>
+                                <template #page='{ text }'>
+                                    {{ text }}
+                                </template>
+                            </van-pagination>
+                        </div>
                     </div>
                     <van-empty
                         v-if='listNotice.length === 0'
@@ -46,6 +65,26 @@
                             </p>
                         </div>
                     </div>
+                    <div class='list-page-box'>
+                        <van-pagination
+                            v-model='current'
+                            class='list-page'
+                            force-ellipses
+                            :items-per-page='10'
+                            :total-items='total'
+                            @change='changePage'
+                        >
+                            <template #prev-text>
+                                <van-icon name='arrow-left' />
+                            </template>
+                            <template #next-text>
+                                <van-icon name='arrow' />
+                            </template>
+                            <template #page='{ text }'>
+                                {{ text }}
+                            </template>
+                        </van-pagination>
+                    </div>
                     <van-empty
                         v-if='msgList.length === 0'
                         :description="$t('api.listnone')"
@@ -62,7 +101,7 @@ import { computed, toRefs, reactive, onMounted, ref, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Toast, Dialog } from 'vant'
+import { Toast, Dialog, Pagination } from 'vant'
 import { queryPlatFormMessageLogList, getNoticeList } from '@/api/user'
 import { isEmpty, getCookie } from '@/utils/util'
 
@@ -135,6 +174,14 @@ export default {
             })
         }
 
+        const changePage = () => {
+            getMsgList()
+        }
+
+        const changePageNt = () => {
+            getNoticeData()
+        }
+
         // 获取公告列表
         const getNoticeData = () => {
             state.loading = true
@@ -151,6 +198,7 @@ export default {
             }).then(res => {
                 state.loading = false
                 if (res.check()) {
+                    state.listNotice = []
                     if (res.data.records && res.data.records.length > 0) {
                         state.listNotice = state.listNotice.concat(res.data.records)
                     }
@@ -227,6 +275,8 @@ export default {
             handRoutTo,
             computeHtmlTime,
             goNoticeDetails,
+            changePage,
+            changePageNt,
             getNoticeData,
             getMsgList,
             inviteVis,
@@ -289,6 +339,7 @@ export default {
         color: var(--normalColor);
     }
     .msg-list {
+        background: var(--contentColor);
         .header {
             padding-bottom: rem(30px);
             padding-left: rem(30px);
@@ -317,6 +368,18 @@ export default {
                 font-weight: 400;
                 font-size: rem(20px);
                 line-height: rem(60px);
+            }
+        }
+    }
+    .list-page-box {
+        text-align: center;
+        .list-page {
+            display: inline-block;
+            width: auto;
+            max-width: 400px;
+            margin: 30px 0;
+            button {
+                cursor: pointer;
             }
         }
     }
