@@ -97,7 +97,7 @@ export default {
                 // pubTimeFrom: '',
                 // pubTimeTo: '',
                 lang: state.lang,
-                size: 10,
+                size: 3,
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo
             }).then(res => {
