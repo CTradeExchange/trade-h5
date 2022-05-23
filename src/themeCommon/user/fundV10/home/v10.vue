@@ -49,6 +49,7 @@
                             <span class='value'>
                                 Metaverse Era Capital
                             </span>
+                            <img class='badge' :src="require('@public/images/V10/badge.jpg')" />
                         </li>
                         <li>
                             <span class='name'>
@@ -236,7 +237,7 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 // 当前平台是否为PC
 const { isPC } = route.meta
 // 当前基金id
-const fundId = 18
+const fundId = window['V10'] || 368
 // 是否显示基金弹窗
 const showFundDialog = ref(false)
 // 是否显示基金记录弹窗
@@ -392,7 +393,11 @@ onUnmounted(() => {
         color: #333;
         position: relative;
         ul {
+            position: relative;
+            z-index: 100;
             li {
+                display: flex;
+                align-items: center;
                 margin-top: 28px;
                 line-height: 28px;
                 &.href {
@@ -400,6 +405,11 @@ onUnmounted(() => {
                     &:hover {
                         color: var(--primary);
                     }
+                }
+                .badge {
+                    width: 30px;
+                    height: 30px;
+                    margin-left: 5px;
                 }
             }
         }
