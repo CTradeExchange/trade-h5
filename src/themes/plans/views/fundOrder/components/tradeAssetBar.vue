@@ -11,14 +11,14 @@
                     <CurrencyIcon class='currencyImg' :currency='currency' size='22px' />
                     <div>
                         <p class='currency'>
-                            {{ currency === 'self' ? '一篮子资产' : currency }}
+                            {{ currency === 'self' ? $t('fundInfo.basketAssets') : currency }}
                         </p>
                         <p v-if="currency === 'self'" class='assets'>
                             <span v-if="direction === 'buy'">
-                                通过支付{{ fundAssetsList.length }}个资产购买基金
+                                {{ $t('fundInfo.applyCountTip', { count: fundAssetsList.length }) }}
                             </span>
                             <span v-else>
-                                分别获得{{ fundAssetsList.length }}个资产
+                                {{ $t('fundInfo.redeemCountTip', { count: fundAssetsList.length }) }}
                             </span>
                         </p>
                     </div>
@@ -49,6 +49,7 @@
                     @blur='onBlur'
                     @input='onInput'
                 />
+                <a v-if='modelValue' class='van-icon van-icon-clear' href='javascript:;' @click='onClear'></a>
             </div>
         </div>
     </div>
@@ -77,7 +78,7 @@ const props = defineProps({
         default: () => []
     }
 })
-const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue', 'open'])
+const emit = defineEmits(['input', 'touchCurrency', 'update:modelValue', 'open', 'clear'])
 const router = useRouter()
 const route = useRoute()
 
@@ -106,6 +107,7 @@ const onInput = (e) => {
 
     inputUpdate(e)
 }
+
 // 离开输入框焦点再次验证
 const onBlur = (e) => {
     let value = e.target.value
@@ -121,10 +123,17 @@ const inputUpdate = (e) => {
     emit('update:modelValue', e.target.value)
     inputHandler(e)
 }
+
 const inputHandler = debounce((e) => {
     if (props.readonly) return false
     emit('input', e.target.value, e)
 }, 800)
+
+// 点击清空
+const onClear = () => {
+    emit('update:modelValue', '')
+    emit('input', '')
+}
 
 </script>
 
@@ -140,16 +149,15 @@ const inputHandler = debounce((e) => {
         border-radius: 6px;
         .leftCell {
             display: flex;
+            flex: 1;
             flex-direction: column;
             justify-content: center;
-            flex: 1;
             height: 100%;
-            margin-right: rem(30px);
             .label {
                 display: flex;
                 align-items: center;
-                font-size: rem(34px);
                 color: var(--minorColor);
+                font-size: rem(34px);
                 span {
                     margin-right: rem(10px);
                 }
@@ -162,9 +170,9 @@ const inputHandler = debounce((e) => {
                 align-items: center;
                 margin-top: rem(20px);
                 .currency {
-                    font-size: rem(30px);
-                    font-weight: bold;
                     margin-top: rem(4px);
+                    font-weight: bold;
+                    font-size: rem(30px);
                 }
                 .currencyImg {
                     align-self: flex-start;
@@ -172,8 +180,8 @@ const inputHandler = debounce((e) => {
                 }
                 .assets {
                     margin-top: rem(15px);
-                    font-size: rem(26px);
                     color: var(--minorColor);
+                    font-size: rem(26px);
                 }
             }
         }
@@ -184,8 +192,8 @@ const inputHandler = debounce((e) => {
             input {
                 width: rem(300px);
                 height: 100%;
-                text-align: right;
                 font-size: rem(28px);
+                text-align: right;
             }
             .arrowDown {
                 width: 0;
@@ -198,5 +206,11 @@ const inputHandler = debounce((e) => {
             }
         }
     }
+}
+.van-icon-clear {
+    margin-top: rem(-10px);
+    margin-left: rem(12px);
+    color: var(--minorColor);
+    font-size: rem(36px);
 }
 </style>

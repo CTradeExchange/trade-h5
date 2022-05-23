@@ -18,7 +18,10 @@
             </li>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.redeemFees') }}({{ data.currencyRedeem }})
+                    {{ $t('fundInfo.redeemFees') }}
+                    <em v-if="data.currencyRedeem !== 'self'">
+                        ({{ data.currencyRedeem }})
+                    </em>
                 </span>
                 <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data.proposalNo)'>
                     {{ $t('common.look') }}
@@ -29,7 +32,10 @@
             </li>
             <li class='item'>
                 <span class='label'>
-                    {{ $t('fundInfo.redeemAmount') }}({{ data.currencyRedeem }})
+                    {{ $t('fundInfo.redeemAmount') }}
+                    <em v-if="data.currencyRedeem !== 'self'">
+                        ({{ data.currencyRedeem }})
+                    </em>
                 </span>
                 <span v-if="data.currencyRedeem === 'self'" class='href' @click='showDetail(data.proposalNo)'>
                     {{ $t('common.look') }}

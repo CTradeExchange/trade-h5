@@ -29,7 +29,7 @@
                     {{ $t('fundInfo.customerAsset') }}
                 </span>
                 <span v-if="data.currencyRedeem === 'self'">
-                    一篮子资产
+                    {{ $t('fundInfo.basketAssets') }}
                 </span>
                 <span v-else>
                     {{ data.currencyRedeem }}

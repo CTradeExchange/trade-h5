@@ -2,43 +2,49 @@
     <div class='handle-module'>
         <div class='block'>
             <p class='title'>
-                您支付
+                {{ $t('fundInfo.youPay') }}
             </p>
-            <div class='box'>
-                <label class='label'>
-                    <CurrencyIcon :currency='fund.shareTokenCode' :size='24' />
-                    <span class='name'>
-                        {{ fund.shareTokenCode }}
-                    </span>
-                </label>
-                <span class='line'></span>
-                <el-input
-                    v-model='amountPay'
-                    clearable
-                    :disabled='fund.canRedemption !== 1 || !customerInfo'
-                    :placeholder='payPlaceholder'
-                    type='number'
-                    @input='onInput'
-                />
+            <div class='box-bg'>
+                <div class='box'>
+                    <label class='label'>
+                        <CurrencyIcon :currency='fund.shareTokenCode' :size='24' />
+                        <span class='name'>
+                            {{ fund.shareTokenCode }}
+                        </span>
+                    </label>
+                    <span class='line'></span>
+                    <el-input
+                        v-model='amountPay'
+                        clearable
+                        :disabled='fund.canRedemption !== 1 || !customerInfo'
+                        :placeholder='payPlaceholder'
+                        type='number'
+                        @input='onInput'
+                    />
+                </div>
             </div>
         </div>
         <!-- 切换 -->
         <div class='switch-block'>
-            <i class='switch-icon icon_huidui' @click='switchWay'></i>
+            <div class='switch'>
+                <img alt='' class='switch-icon' src='/images/transfer.png' srcset='' @click='switchWay' />
+                <div class='line'></div>
+            </div>
+
             <div class='switch-text'>
                 <p>
                     <span class='muted'>
-                        手续费率:
+                        {{ $t('fundInfo.rate') }}:
                     </span>
-                    <span>
+                    <span v-if='activeAssets.redemptionFeeProportion' class='muted'>
                         {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
                     </span>
                 </p>
                 <p>
-                    <span>
+                    <span class='muted'>
                         1 {{ fund.shareTokenCode }} =
                     </span>
-                    <span>
+                    <span class='muted'>
                         {{ fund.netValue }}{{ fund.currency }}
                     </span>
                 </p>
@@ -47,61 +53,133 @@
         <div class='block'>
             <p class='title'>
                 <!-- {{ $t('fundInfo.redeemAssets') }} -->
-                您想要得到
+                {{ $t('fundInfo.wantGet') }}
                 <van-icon class='icon-question' name='question-o' size='14' @click='currencyExplainShow=true' />
             </p>
-            <div class='box'>
-                <el-select
-                    v-model='activeCurrency'
-                    :placeholder="$t('fundInfo.redeemAssets')"
-                    @change='selectAssets'
+            <div class='box-bg'>
+                <el-popover
+                    v-model:visible='popoverVis'
+                    placement='bottom'
+                    popper-class='popover-select'
+                    trigger='click'
+                    :width='328'
                 >
-                    <template #prefix>
-                        <CurrencyIcon :currency='activeCurrency' :size='24' />
+                    <template #reference>
+                        <div class='pay-bar'>
+                            <div class='left'>
+                                <CurrencyIcon :currency='activeCurrency' :size='24' />
+                                <div class='text'>
+                                    <p class='currenct'>
+                                        {{ activeCurrency === 'self' ? $t("fundInfo.basketAssets") : activeCurrency }}
+                                    </p>
+                                    <p v-if="activeCurrency === 'self'">
+                                        {{ $t('fundInfo.redeemCountTip',{ count: fundAssetsList.length }) }}
+                                    </p>
+                                </div>
+                            </div>
+                            <van-icon name='arrow-down' />
+                        </div>
                     </template>
-                    <el-option
-                        v-for='(item, index) in selectActions'
-                        :key='index'
-                        :label='item.currencyCode === "self" ? "一篮子资产" : item.currencyCode'
-                        :value='item.currencyCode'
+                    <div class='select-wrap'>
+                        <div
+                            v-for='(item, index) in selectActions'
+                            :key='index'
+                            class='select-option'
+                            :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
+                            :value='item.currencyCode'
+                        >
+                            <div v-if="item.currencyCode === 'self'" class='asset-item' @click='selectAssets(item.currencyCode)'>
+                                <div class='top'>
+                                <!-- <CurrencyIcon :currency='item.currencyCode' :size='24' /> -->
+                                </div>
+                                <div>
+                                    <p class='currency-text'>
+                                        {{ $t('fundInfo.basketAssets') }}
+                                    </p>
+                                    <p class='mute'>
+                                        {{ $t('fundInfo.getBasketAssets') }}
+                                    </p>
+                                    <div class='asset-list'>
+                                        <currencyIcon
+                                            v-for='(elem, i) in fundAssetsList'
+                                            :key='i'
+                                            :currency='elem.currencyCode'
+                                            size='24'
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else class='asset-item' @click='selectAssets(item.currencyCode)'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                </div>
+                                <div>
+                                    <p class='currency-text'>
+                                        {{ item.currencyCode }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </el-popover>
+
+                <!-- <div class='box'>
+                    <el-select
+                        v-model='activeCurrency'
+                        :placeholder="$t('fundInfo.redeemAssets')"
+                        @change='selectAssets'
                     >
-                        <div v-if="item.currencyCode === 'self'" class='asset-item'>
-                            <div class='top'>
-                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
-                                <span class='currency-text'>
-                                    一篮子资产
-                                </span>
+                        <template #prefix>
+                            <CurrencyIcon :currency='activeCurrency' :size='24' />
+                        </template>
+                        <el-option
+                            v-for='(item, index) in selectActions'
+                            :key='index'
+                            :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets") : item.currencyCode'
+                            :value='item.currencyCode'
+                        >
+                            <div v-if="item.currencyCode === 'self'" class='asset-item'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                    <span class='currency-text'>
+                                        {{ $t('fundInfo.basketAssets') }}
+                                    </span>
+                                </div>
+                                <div class='asset-list'>
+                                    <p> {{ $t('fundInfo.getBasketAssets') }}</p>
+                                    <currencyIcon
+                                        v-for='(elem, i) in fundAssetsList'
+                                        :key='i'
+                                        class='icon-asset'
+                                        :currency='elem.currencyCode'
+                                    />
+                                </div>
                             </div>
-                            <div>
-                                <p>获得一篮子资产</p>
-                                <currencyIcon
-                                    v-for='(elem, i) in fundAssetsList'
-                                    :key='i'
-                                    :currency='elem.currencyCode'
-                                />
+                            <div v-else class='asset-item'>
+                                <div class='top'>
+                                    <CurrencyIcon :currency='item.currencyCode' :size='24' />
+                                    <span class='currency-text'>
+                                        {{ item.currencyCode }}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                        <div v-else class='asset-item'>
-                            <div class='top'>
-                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
-                                <span class='currency-text'>
-                                    {{ item.currencyCode }}
-                                </span>
-                            </div>
-                        </div>
-                    </el-option>
-                </el-select>
+                        </el-option>
+                    </el-select>
+                </div>
+                <p v-if="activeCurrency === 'self'" class='desc'>
+                    {{ $t('fundInfo.redeemCountTip',{ count: fundAssetsList.length }) }}
+                </p> -->
             </div>
             <div class='pay-wrap'>
                 <p class='title'>
-                    您预计赎回以下资产及金额
+                    {{ $t('fundInfo.expectedGetAssets') }}
                 </p>
                 <!-- 一篮子资产 -->
                 <div v-if="activeCurrency === 'self'" class='redeem-assets'>
                     <div v-for='(item, index) in fundAssetsList' :key='index' class='redeem-asset-item'>
                         <currencyIcon
                             :currency='item.currencyCode'
-                            size='24'
+                            size='30'
                         />
                         <p class='currency'>
                             {{ item.currencyCode }}
@@ -114,8 +192,8 @@
                 <!-- 单资产 -->
                 <div v-else class='redeem-type'>
                     <div class='header'>
-                        <span>资产</span>
-                        <span>预计获得金额</span>
+                        <span> {{ $t('trade.asset') }} </span>
+                        <span> {{ $t('fundInfo.expectedGetAmount') }}</span>
                     </div>
                     <ul class='content'>
                         <li>
@@ -129,13 +207,13 @@
                                 </span>
                             </div>
                             <div class='c-right'>
-                                <span>T+2日确认份额后的基金净值价格计算金额</span>
+                                <span> {{ $t('fundInfo.t2Tip1') }}</span>
                             </div>
                         </li>
                     </ul>
                 </div>
                 <div v-if="activeCurrency === 'self'" class='notice'>
-                    注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
+                    {{ $t('fundInfo.t2Tip2') }}
                 </div>
             </div>
         </div>
@@ -218,6 +296,7 @@ const lang = getCookie('lang')
 // 组件ref
 const redeemRulesDialogRef = ref(null)
 const currencyExplainShow = ref(false)
+const popoverVis = ref(false)
 
 const {
     accountList,
@@ -267,10 +346,16 @@ const submitHandler = () => {
     }).then(res => {
         if (res?.check && res.check()) {
             amountPay.value = ''
-            Dialog.alert({
+            Dialog.confirm({
                 title: t('fundInfo.redeemSubmiteed'),
                 message: t('fundInfo.redeemSubmiteedDesc'),
-            }).then(() => {})
+                confirmButtonText: t('fundInfo.records'),
+                cancelButtonText: t('fundInfo.iknow'),
+            }).then(() => {
+                openRedeemRecords()
+            }).catch(() => {
+                // on cancel
+            })
         }
     })
 }
@@ -282,6 +367,7 @@ const openRedeemRecords = () => {
 
 // 选择资产
 const selectAssets = (item) => {
+    popoverVis.value = false
     const action = selectActions.value.find(el => el.currencyCode === item)
     onSelect(action)
     queryFundNetValue()
@@ -302,44 +388,77 @@ const switchWay = () => {
 @import '@/sass/mixin.scss';
 .handle-module {
     .block {
-        margin-bottom: 30px;
+        margin-bottom: 10px;
         &:nth-of-type(2) {
             margin-bottom: 0;
         }
         .title {
             margin-bottom: 8px;
+            color: var(--minorColor);
             font-size: 14px;
             .icon-question {
                 cursor: pointer;
             }
         }
-        .box {
-            display: flex;
-            align-items: center;
-            height: 50px;
-            background: var(--assistColor);
-            border-radius: 5px;
-            .line {
-                width: 1px;
-                height: 30px;
-                background: var(--lineColor);
-            }
-            .label {
-                display: inline-flex;
+        .box-bg {
+            background: #F4F4F4;
+            .box {
+                display: flex;
                 align-items: center;
-                width: 120px;
-                height: 100%;
-                padding: 0 12px;
-                .name {
-                    margin-left: 5px;
+                height: 70px;
+                background: var(--assistColor);
+                border-radius: 5px;
+                .line {
+                    width: 1px;
+                    height: 30px;
+                    background: var(--lineColor);
+                }
+                .label {
+                    display: inline-flex;
+                    align-items: center;
+                    width: 120px;
+                    height: 100%;
+                    padding: 0 12px;
+                    .name {
+                        margin-left: 5px;
+                    }
+                }
+                .value {
+                    display: inline-flex;
+                    flex: 1;
+                    align-items: center;
+                    height: 100%;
+                    padding: 0 15px;
                 }
             }
-            .value {
-                display: inline-flex;
-                flex: 1;
+            .desc {
+                padding: 0 0 8px 15px;
+                color: var(--minorColor);
+            }
+            .pay-bar {
+                display: flex;
                 align-items: center;
-                height: 100%;
+                justify-content: space-between;
+                height: 70px;
+                margin-bottom: 20px;
                 padding: 0 15px;
+                background: var(--assistColor);
+                border-radius: 5px;
+                cursor: pointer;
+                .left {
+                    display: flex;
+                    align-items: center;
+                    .text {
+                        margin-left: 10px;
+                        .currenct {
+                            color: var(--color);
+                            font-weight: bold;
+                        }
+                    }
+                }
+                &:hover {
+                    //border: solid 1px var(--primary);
+                }
             }
         }
         &:deep {
@@ -358,17 +477,20 @@ const switchWay = () => {
             }
             .el-input__inner {
                 height: 50px;
+                text-align: right;
             }
             .is-disabled .el-input__inner {
                 background: none !important;
             }
         }
         .pay-wrap {
-            margin: rem(30px) 0;
-            padding: rem(30px) 0;
+            margin: 15px 0;
+            padding: 15px 0;
             background: var(--contentColor);
             .title {
-                font-size: rem(30px);
+                color: var(--color);
+                font-weight: bold;
+                font-size: 15px;
                 text-align: center;
             }
             .redeem-type {
@@ -392,6 +514,7 @@ const switchWay = () => {
                             .currency-text {
                                 margin-top: rem(4px);
                                 margin-left: rem(10px);
+                                font-weight: bold;
                             }
                         }
                         .c-right {
@@ -436,10 +559,11 @@ const switchWay = () => {
                     max-width: calc((100% - 20px) / 3);
                     margin-right: 10px;
                     margin-bottom: 10px;
-                    padding: 10px 0;
+                    padding: 13px 0;
                     text-align: center;
-                    background-color: var(--bgColor);
+                    background-color: var(--contentColor);
                     border: solid 1px var(--lineColor);
+                    border-radius: 10px;
                     &:nth-child(3n) { // 去除第3n个的margin-right
                         margin-right: 0;
                     }
@@ -449,7 +573,6 @@ const switchWay = () => {
                         font-size: 14px;
                     }
                     .percent {
-                        color: var(--minorColor);
                         font-size: 10px;
                     }
                 }
@@ -459,6 +582,7 @@ const switchWay = () => {
                 color: var(--minorColor);
                 .toRule {
                     color: var(--primary);
+                    text-decoration: underline;
                 }
             }
         }
@@ -466,8 +590,23 @@ const switchWay = () => {
     .switch-block {
         display: flex;
         align-items: center;
-        margin: 12px 0;
+        margin: 20px 0;
+        .switch {
+            position: relative;
+            .line {
+                position: absolute;
+                top: -15px;
+                right: 25px;
+                z-index: 0;
+                height: 60px;
+                border-right: 1px dashed var(--placeholdColor);
+            }
+        }
         .switch-icon {
+            position: relative;
+            z-index: 1;
+            width: 28px;
+            height: 28px;
             margin-right: 10px;
             color: var(--primary);
             font-size: 30px;
@@ -539,14 +678,31 @@ const switchWay = () => {
         }
     }
 }
-.el-select-dropdown__item {
+.el-select-dropdown__item,
+.select-wrap {
     padding: 0;
     .asset-item {
-        margin: 15px 15px 0;
-        padding: 5px 15px;
-        background: var(--bgColor);
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 15px;
+        background: var(--contentColor);
+        cursor: pointer;
         .currencyIcon {
+            margin-right: -5px;
+        }
+        .currency-text {
+            font-weight: bold;
+        }
+        .mute {
+            color: var(--placeholdColor);
+        }
+        .top {
+            width: 24px;
             margin-right: 10px;
+        }
+        .asset-list {
+            margin-top: 15px;
         }
     }
 }

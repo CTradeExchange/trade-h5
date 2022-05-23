@@ -12,6 +12,7 @@ export const orderHook = () => {
     const route = useRoute()
     const store = useStore()
     const loading = ref(false)
+    const calcLoading = ref(false)
     const { direction, fundId } = route.query
     let pageTitle = direction === 'buy' ? t('fundInfo.buy') : t('fundInfo.sell')
     pageTitle = t('fundInfo.fund') + pageTitle
@@ -30,6 +31,7 @@ export const orderHook = () => {
     const singleAssetsPay = ref(null)
     // 一篮子需要支付的资产
     const selfAssetsList = ref([])
+
     // 处理后需要支付的资产
     const lastAssetsPay = computed(() => {
         const result = []
@@ -43,9 +45,9 @@ export const orderHook = () => {
                 }
                 const account = accountList.value.find(el => el.currency === item.currency)
                 const payItem = selfAssetsList.value.find(el => el.currency === item.currency)
-                if (account && payItem) {
+                item.available = account?.available || 0
+                if (payItem) {
                     item.isShow = true
-                    item.available = account.available
                     item.amountPay = payItem.amount
                     // 计算需要充值的金额
                     item.depositAmount = minus(item.amountPay, item.available)
@@ -168,16 +170,20 @@ export const orderHook = () => {
         if (Number(amountPay) < Number(activeAssets.value.minPurchaseNum)) {
             singleAssetsPay.value = null
             selfAssetsList.value = []
-            return Toast('单笔最小申购份额是' + activeAssets.value.minPurchaseNum)
+            return Toast(t('fundInfo.applyMinTip') + activeAssets.value.minPurchaseNum)
         }
+        calcLoading.value = true
         fundCalcApplyShares({
             amountPay,
             currencyPay: activeCurrency.value,
             fundId: parseInt(fundId),
             applyType: 2
         }).then(res => {
+            calcLoading.value = false
             if (res.check()) {
                 const { data } = res
+                // 更新单个基金产品信息
+                store.commit('_quote/Update_fundProduct', { netValue: data.sharesNet })
                 if (activeCurrency.value === 'self') {
                     selfAssetsList.value = data.list || []
                 } else {
@@ -191,6 +197,8 @@ export const orderHook = () => {
     queryFundInfo()
     // 获取基金净值等数据
     queryFundNetValue()
+    // 获取账户信息
+    store.dispatch('_user/findCustomerInfo', false)
 
     return {
         pageTitle,
@@ -199,6 +207,7 @@ export const orderHook = () => {
         lastAssetsPay,
         accountList,
         loading,
+        calcLoading,
         queryFundNetValue,
         calcApplyShares,
         submitFundApply,
