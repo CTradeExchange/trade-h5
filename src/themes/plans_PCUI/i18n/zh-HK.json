@@ -123,7 +123,11 @@
         "MFA_check": "谷歌安全驗證",
         "download": "下载",
         "ranking": "排行榜",
-        "about": "关于我们"
+        "about": "关于我们",
+        "noticeTitle": "公告消息",
+        "notice": "公告",
+        "msg": "系统消息",
+        "msgCustomer": "個人消息"
     },
     "historyList": {
         "noMore": "沒有更多了"
@@ -1105,6 +1109,7 @@
         "emailSmsTips": "請獲取動態郵箱驗證碼"
     },
     "notice": {
-        "poptitle": "最新公告"
+        "poptitle": "最新公告",
+        "detailHeader": "公告消息详情"
     }
 }

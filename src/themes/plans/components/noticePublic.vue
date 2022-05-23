@@ -7,7 +7,7 @@
         :style="{ height: '60%',width: '80%' }"
     >
         <div class='pop-top'>
-            {{ $t('notice.poptitle') }}
+            {{ $t('notice.detaiHeader') }}
         </div>
         <div class='pop-content'>
             <div class='public-list'>

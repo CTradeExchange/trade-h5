@@ -24,7 +24,7 @@
                         :loading-text="$t('compLang.loading')"
                         @load='onLoadNotice'
                     >
-                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click='goNoticeDetails(item.id)'>
+                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
@@ -72,7 +72,46 @@
                                 {{ computeHtmlTime(item.content) }}
                             </p>
                             <p class='msg-time'>
-                                {{ formatTime(item.createTime) }}
+                                {{ formatTime(item.pubTime) }}
+                            </p>
+                        </div>
+                    </van-list>
+                </van-pull-refresh>
+            </div>
+        </van-tab>
+
+        <!-- 个人消息 展示白标后台给客户发布的指定站内信 -->
+        <van-tab name='msgps' :title='$t("route.msgCustomer")'>
+            <div class='msg-list'>
+                <div v-if='listCustomer.length === 0'>
+                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                </div>
+                <van-pull-refresh
+                    v-else
+                    v-model='loading'
+                    :loading-text="$t('compLang.loading')"
+                    :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                    :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                    @refresh='onRefreshPs'
+                >
+                    <van-list
+                        v-model:error='isError'
+                        v-model:loading='loading'
+                        :error-text='errorTip'
+                        :finished='finishedPs'
+                        :finished-text='$t("common.noMore")'
+                        :loading-text="$t('compLang.loading')"
+                        @load='onLoadPs'
+                    >
+                        <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer')">
+                            <p class='msg-title'>
+                                {{ item.title === 'null'? '': item.title }}
+                            </p>
+                            <p class='msg-content'>
+                                {{ computeHtmlTime(item.content) }}
+                            </p>
+                            <p class='msg-time'>
+                                {{ formatTime(item.pubTime) }}
                             </p>
                         </div>
                     </van-list>
@@ -91,7 +130,7 @@ import { isEmpty, getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPlatFormMessageLogList, getNoticeList } from '@/api/user'
+import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '@/api/user'
 
 export default {
     components: {
@@ -105,6 +144,7 @@ export default {
         const state = reactive({
             list: [],
             listNotice: [],
+            listCustomer: [],
             loading: false,
             lang: getCookie('lang') || 'zh-CN',
 
@@ -115,6 +155,10 @@ export default {
             finishedNt: false, // 公告列表
             pageLoadingNt: false,
             currentNt: 1,
+
+            finishedPs: false, // 个人消息列表
+            pageLoadingPs: false,
+            currentPs: 1,
 
             type: '',
             errorTip: '',
@@ -148,7 +192,11 @@ export default {
             console.log(title, name)
             if (name === 'public') {
                 getNoticeData()
-            } else {
+            }
+            if (name === 'msgps') {
+                getCustomerMsgListData()
+            }
+            if (name === 'msg') {
                 getMsgList()
             }
         }
@@ -163,12 +211,13 @@ export default {
         }
 
         // 跳转到公告详情页
-        const goNoticeDetails = (id) => {
+        const goNoticeDetails = (id, type) => {
             console.log(id)
             router.push({
                 path: '/noticeDetail',
                 query: {
-                    id: id
+                    id: id,
+                    type: type
                 }
             })
         }
@@ -191,6 +240,39 @@ export default {
                     // 数据全部加载完成
                     if (res.data.size * res.data.current >= res.data.total) {
                         state.finished = true
+                    }
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
+        }
+
+        // 获取个人消息列表
+        const getCustomerMsgListData = () => {
+            state.pageLoading = true
+            state.errorTip = ''
+            console.log(customInfo.value)
+
+            getCustomerMsgList({
+                current: state.currentNt,
+                // pubTimeFrom: '',
+                // pubTimeTo: '',
+                lang: state.lang,
+                size: 10,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                state.loading = false
+                state.pageLoading = false
+                if (res.check()) {
+                    if (res.data.records && res.data.records.length > 0) {
+                        state.listCustomer = state.listCustomer.concat(res.data.records)
+                    }
+
+                    // 数据全部加载完成
+                    if (res.data.size * res.data.current >= res.data.total) {
+                        state.finishedPs = true
                     }
                 }
             }).catch(err => {
@@ -292,6 +374,19 @@ export default {
             getNoticeData()
         }
 
+        // msgCustomer上拉刷新
+        const onRefreshPs = () => {
+            state.currentPs = 1
+            state.finishedPs = false
+            state.listCustomer = []
+            getCustomerMsgListData()
+        }
+        // notice底部加载更多
+        const onLoadPs = () => {
+            state.currentPs++
+            getCustomerMsgListData()
+        }
+
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
@@ -302,10 +397,13 @@ export default {
             onLoadNotice,
             isError,
             getNoticeData,
+            getCustomerMsgListData,
             customInfo,
             formatTime,
             onRefresh,
             onLoad,
+            onRefreshPs,
+            onLoadPs,
             changeType,
             goNoticeDetails,
             computeHtmlTime,
@@ -366,10 +464,15 @@ export default {
             line-height: rem(60px);
         }
         .msg-content {
+            display: -webkit-box;
+            overflow: hidden;
             color: var(--color);
             font-weight: 500;
             font-size: rem(24px);
             line-height: rem(40px);
+            text-overflow: ellipsis;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
         }
         .msg-time {
             color: var(--minorColor);

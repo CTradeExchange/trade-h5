@@ -122,7 +122,11 @@
         "download": "Download",
         "ranking": "Rankings",
         "MFA_check": "Google Security Verification",
-        "about": "About us"
+        "about": "About us",
+        "noticeTitle": "Notice & Message",
+        "notice": "Notice",
+        "msg": "System",
+        "msgCustomer": "Personal"
     },
     "historyList": {
         "noMore": "No more"
@@ -1121,6 +1125,7 @@
         "emailSmsTips": "Please get the dynamic email verification code"
     },
     "notice": {
-        "poptitle": "Latest Notice"
+        "poptitle": "Latest Notice",
+        "detailHeader": "Detail"
     }
 }

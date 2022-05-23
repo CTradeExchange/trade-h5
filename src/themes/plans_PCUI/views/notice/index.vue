@@ -7,17 +7,17 @@
         </div>
 
         <van-tabs v-model:active='active' class='noticePage' @click-tab='onClickTab'>
-            <van-tab :title="$t('route.notice')">
+            <van-tab name='notice' :title="$t('route.notice')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
                     <div class='msg-list'>
-                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click='goNoticeDetails(item.id)'>
+                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
                             <p class='msg-time'>
-                                {{ formatTime(item.createTime) }}
+                                {{ formatTime(item.pubTime) }}
                             </p>
                         </div>
                         <div class='list-page-box'>
@@ -48,7 +48,7 @@
                     />
                 </div>
             </van-tab>
-            <van-tab :title="$t('route.msg')">
+            <van-tab name='msg' :title="$t('route.msg')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
@@ -92,6 +92,47 @@
                     />
                 </div>
             </van-tab>
+            <van-tab name='msgps' :title="$t('route.msgCustomer')">
+                <div class='list'>
+                    <!-- <Loading :show='loading' /> -->
+                    <van-loading v-if='loading' />
+                    <div class='msg-list'>
+                        <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'msgcustomer')">
+                            <p class='msg-title'>
+                                {{ item.title === 'null'? '': item.title }}
+                            </p>
+                            <p class='msg-time'>
+                                {{ formatTime(item.pubTime) }}
+                            </p>
+                        </div>
+                        <div class='list-page-box'>
+                            <van-pagination
+                                v-model='currentPs'
+                                class='list-page'
+                                force-ellipses
+                                :items-per-page='10'
+                                :total-items='totalPs'
+                                @change='changePagePs'
+                            >
+                                <template #prev-text>
+                                    <van-icon name='arrow-left' />
+                                </template>
+                                <template #next-text>
+                                    <van-icon name='arrow' />
+                                </template>
+                                <template #page='{ text }'>
+                                    {{ text }}
+                                </template>
+                            </van-pagination>
+                        </div>
+                    </div>
+                    <van-empty
+                        v-if='listNotice.length === 0'
+                        :description="$t('api.listnone')"
+                        image='/images/empty.png'
+                    />
+                </div>
+            </van-tab>
         </van-tabs>
     </div>
 </template>
@@ -102,7 +143,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Toast, Dialog, Pagination } from 'vant'
-import { queryPlatFormMessageLogList, getNoticeList } from '@/api/user'
+import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '@/api/user'
 import { isEmpty, getCookie } from '@/utils/util'
 
 export default {
@@ -123,9 +164,10 @@ export default {
             query: {
                 tag: ''
             },
-            apiList: [],
+            listCustomer: [],
             listNotice: [],
             msgList: [],
+            lang: getCookie('lang') || 'zh-CN',
 
             finished: false, // 消息列表
             pageLoading: false,
@@ -136,6 +178,11 @@ export default {
             pageLoadingNt: false,
             currentNt: 1,
             totalNt: 0,
+
+            finishedPs: false, // 个人消息列表
+            pageLoadingPs: false,
+            currentPs: 1,
+            totalPs: 0
         })
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
@@ -154,6 +201,7 @@ export default {
             state.errorTip = ''
             queryPlatFormMessageLogList({
                 current: state.current,
+                lang: state.lang,
                 parentType: state.type,
             }).then(res => {
                 state.loading = false
@@ -182,6 +230,10 @@ export default {
             getNoticeData()
         }
 
+        const changePagePs = () => {
+            getCustomerMsgListData()
+        }
+
         // 获取公告列表
         const getNoticeData = () => {
             state.loading = true
@@ -200,7 +252,7 @@ export default {
                 if (res.check()) {
                     state.listNotice = []
                     if (res.data.records && res.data.records.length > 0) {
-                        state.listNotice = state.listNotice.concat(res.data.records)
+                        state.listNotice = res.data.records
                     }
                     state.totalNt = res.data.total
                     // 数据全部加载完成
@@ -214,26 +266,63 @@ export default {
             })
         }
 
+        // 获取个人消息列表
+        const getCustomerMsgListData = () => {
+            state.pageLoading = true
+            state.errorTip = ''
+            console.log(customInfo.value)
+
+            getCustomerMsgList({
+                current: state.currentNt,
+                // pubTimeFrom: '',
+                // pubTimeTo: '',
+                lang: state.lang,
+                size: 10,
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                state.loading = false
+                state.pageLoading = false
+                if (res.check()) {
+                    if (res.data.records && res.data.records.length > 0) {
+                        state.listCustomer = res.data.records
+                    }
+
+                    // 数据全部加载完成
+                    if (res.data.size * res.data.current >= res.data.total) {
+                        state.finishedPs = true
+                    }
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
+        }
+
         const onClickTab = (item) => {
             console.log(item)
-            if (item.name === 0) {
+            if (item.name === 'notice') {
                 state.listNotice = []
                 getNoticeData()
             }
 
-            if (item.name === 1) {
+            if (item.name === 'msg') {
                 state.msgList = []
                 getMsgList()
+            }
+            if (item.name === 'msgps') {
+                getCustomerMsgListData()
             }
         }
 
         // 跳转到公告详情页
-        const goNoticeDetails = (id) => {
+        const goNoticeDetails = (id, type) => {
             console.log(id)
             router.push({
                 path: '/noticeDetail',
                 query: {
-                    id: id
+                    id: id,
+                    type: type
                 }
             })
         }
@@ -276,9 +365,11 @@ export default {
             computeHtmlTime,
             goNoticeDetails,
             changePage,
+            changePagePs,
             changePageNt,
             getNoticeData,
             getMsgList,
+            getCustomerMsgListData,
             inviteVis,
             onClickTab,
             ...toRefs(state)
@@ -350,6 +441,11 @@ export default {
             margin: rem(2px) 0 rem(10px) 0;
             padding: rem(30px);
             background-color: var(--contentColor);
+            border-bottom: 1px solid var(--lineColor);
+            transition: ease-in 0.2s;
+            &:hover {
+                background: var(--primaryAssistColor);
+            }
             //border-top: solid rem(10px) var(--bgColor);
             .msg-title {
                 color: var(--color);

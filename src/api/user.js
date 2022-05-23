@@ -1115,6 +1115,32 @@ export function editCustomerApiSave(data) {
     })
 }
 
+/* 获取个人消息列表 */
+export function getCustomerMsgList(data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewMsgPage',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取个人消息详情 */
+export function getCustomerMsgDetail(data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewMsgDetail',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 获取公告列表 */
 export function getNoticeList(data) {
     return request({

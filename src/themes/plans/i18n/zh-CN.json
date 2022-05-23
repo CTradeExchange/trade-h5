@@ -126,7 +126,8 @@
         "spotTrade": "现货交易",
         "noticeTitle": "公告消息",
         "notice": "公告",
-        "msg": "消息"
+        "msg": "系统消息",
+        "msgCustomer": "个人消息"
     },
     "search": {
         "keywords": "请输入产品名称/代码/拼音搜索",
@@ -918,6 +919,7 @@
         "emailSmsTips": "请获取动态邮箱验证码"
     },
     "notice": {
-        "poptitle": "最新公告"
+        "poptitle": "最新公告",
+        "detailHeader": "公告消息详情"
     }
 }

@@ -24,7 +24,7 @@ import Top from '@/components/top'
 import { isEmpty, getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
-import { getNoticeDetail } from '@/api/user'
+import { getNoticeDetail, getCustomerMsgDetail } from '@/api/user'
 import { useRouter, useRoute } from 'vue-router'
 
 export default {
@@ -53,31 +53,51 @@ export default {
 
         // 初始获取详情
         const initData = () => {
-            const id = route.query.id
+            const { id, type } = route.query
             state.noticeId = id
-            getNoticeDetial()
+            state.type = type
+            getNoticeDetial(type)
         }
 
         // 获取公告详情
-        const getNoticeDetial = () => {
+        const getNoticeDetial = (type) => {
             state.loading = true
             state.errorTip = ''
             console.log(customInfo.value)
 
-            getNoticeDetail({
-                current: state.currentNt,
-                id: state.noticeId,
-                lang: state.lang,
-                companyId: customInfo.value.companyId
-            }).then(res => {
-                state.loading = false
-                console.log(res)
-                if (res.check()) {
-                    state.detailData = res.data
-                }
-            }).catch(err => {
-                state.errorTip = t('c.loadError')
-            })
+            if (type === 'notice') {
+                getNoticeDetail({
+                    current: state.currentNt,
+                    id: state.noticeId,
+                    lang: state.lang,
+                    companyId: customInfo.value.companyId
+                }).then(res => {
+                    state.loading = false
+                    console.log(res)
+                    if (res.check()) {
+                        state.detailData = res.data
+                    }
+                }).catch(err => {
+                    state.errorTip = t('c.loadError')
+                })
+            }
+
+            if (type === 'msgcustomer') {
+                getCustomerMsgDetail({
+                    current: state.currentNt,
+                    id: state.noticeId,
+                    lang: state.lang,
+                    companyId: customInfo.value.companyId
+                }).then(res => {
+                    state.loading = false
+                    console.log(res)
+                    if (res.check()) {
+                        state.detailData = res.data
+                    }
+                }).catch(err => {
+                    state.errorTip = t('c.loadError')
+                })
+            }
         }
 
         onBeforeMount(() => {
