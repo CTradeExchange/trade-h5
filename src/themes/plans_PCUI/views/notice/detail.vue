@@ -30,6 +30,7 @@ import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Toast, Dialog } from 'vant'
+import { isEmpty, getCookie } from '@/utils/util'
 import { getNoticeDetail, getCustomerMsgDetail } from '@/api/user'
 
 export default {
@@ -43,6 +44,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             loading: false,
+            lang: getCookie('lang') || 'zh-CN',
             query: {
                 purview: [],
                 tag: '',
