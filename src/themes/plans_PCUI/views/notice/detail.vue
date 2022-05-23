@@ -150,9 +150,11 @@ export default {
             text-align: center;
         }
         .content {
+            min-height: 400px;
             margin-top: 20px;
             padding: 20px 30px;
-            line-height: 42px;
+            color: var(--normalColor);
+            line-height: 30px;
             white-space: normal;
             word-break: break-all;
             background: var(--contentColor);
