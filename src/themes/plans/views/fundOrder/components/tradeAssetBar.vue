@@ -149,16 +149,15 @@ const onClear = () => {
         border-radius: 6px;
         .leftCell {
             display: flex;
+            flex: 1;
             flex-direction: column;
             justify-content: center;
-            flex: 1;
             height: 100%;
-            margin-right: rem(30px);
             .label {
                 display: flex;
                 align-items: center;
-                font-size: rem(34px);
                 color: var(--minorColor);
+                font-size: rem(34px);
                 span {
                     margin-right: rem(10px);
                 }
@@ -171,9 +170,9 @@ const onClear = () => {
                 align-items: center;
                 margin-top: rem(20px);
                 .currency {
-                    font-size: rem(30px);
-                    font-weight: bold;
                     margin-top: rem(4px);
+                    font-weight: bold;
+                    font-size: rem(30px);
                 }
                 .currencyImg {
                     align-self: flex-start;
@@ -181,8 +180,8 @@ const onClear = () => {
                 }
                 .assets {
                     margin-top: rem(15px);
-                    font-size: rem(26px);
                     color: var(--minorColor);
+                    font-size: rem(26px);
                 }
             }
         }
@@ -193,8 +192,8 @@ const onClear = () => {
             input {
                 width: rem(300px);
                 height: 100%;
-                text-align: right;
                 font-size: rem(28px);
+                text-align: right;
             }
             .arrowDown {
                 width: 0;
@@ -209,8 +208,8 @@ const onClear = () => {
     }
 }
 .van-icon-clear {
-    margin-left: rem(12px);
     margin-top: rem(-10px);
+    margin-left: rem(12px);
     color: var(--minorColor);
     font-size: rem(36px);
 }

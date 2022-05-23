@@ -33,7 +33,7 @@
                             @mouseleave='showPopover1=false'
                         >
                             <span>{{ $t('fundInfo.realtimeJZ') }}({{ fund.currencyCode }})</span>
-                            <strong>{{ toFixed(fund.netValue) }}</strong>
+                            <strong>{{ sharesNet || fund.netValue }}</strong>
                         </div>
                     </template>
                 </van-popover>
@@ -48,7 +48,7 @@
                             @mouseleave='showPopover2=false'
                         >
                             <span>{{ $t('trade.priceLabel') }}({{ fund.currencyCode }})</span>
-                            <strong>{{ toFixed(fund.marketPrice) }}</strong>
+                            <strong>{{ fund.marketPrice }}</strong>
                         </div>
                     </template>
                 </van-popover>
@@ -66,7 +66,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { ref, defineProps, inject } from 'vue'
 import { toFixed } from '@/utils/calculation.js'
 import currencyIcon from '@/components/currencyIcon.vue'
 
@@ -77,6 +77,9 @@ defineProps({
         default: () => {}
     }
 })
+
+// 最新基金净值
+const sharesNet = inject('sharesNet')
 
 // 提示
 const showPopover1 = ref(false)

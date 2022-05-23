@@ -46,12 +46,47 @@
                             {{ $t('fundInfo.redeem_tip3') }}
                         </span>
                     </p>
+
+                    <p class='row'>
+                        <span class='no'>
+                            4
+                        </span>
+                        <span class='value'>
+                            {{ $t('fundInfo.fundRedeemFormula9') }}
+                        </span>
+                    </p>
                 </div>
                 <div class='block'>
                     <p class='title'>
                         {{ $t('fundInfo.jz_formula') }}
                     </p>
-                    <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                    <p class='text'>
+                        1、{{ $t('fundInfo.jz_formulaContent') }}
+                    </p>
+                    <p class='text'>
+                        2、{{ $t('fundInfo.fundRedeemFormula10') }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula11') }}
+                    </p>
+                    <p class='text'>
+                        3、{{ $t('fundInfo.fundRedeemFormula12') }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula13',{ number: 'A' }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula14',{ number: 'A' }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula13',{ number: 'B' }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula14',{ number: 'B' }) }}
+                    </p>
+                    <p class='text indent'>
+                        ...
+                    </p>
                 </div>
             </div>
         </el-dialog>
@@ -82,14 +117,14 @@ defineExpose({
         margin-bottom: 10px;
         .no {
             display: inline-flex;
-            justify-content: center;
-            align-items: center;
             flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
             width: 20px;
             height: 20px;
-            line-height: 1;
             margin-right: 5px;
-            color: #fff;
+            color: #FFF;
+            line-height: 1;
             background: var(--primary);
             border-radius: 50%;
         }
@@ -103,43 +138,51 @@ defineExpose({
             color: var(--color);
             font-size: 20px;
         }
+        .text {
+            margin-top: rem(20px);
+            &.indent {
+                padding-left: 22px;
+            }
+        }
     }
     .tDate {
+        position: relative;
         display: flex;
         justify-content: space-between;
-        position: relative;
         padding-top: 15px;
         padding-bottom: rem(30px);
         &::before {
-            content: "";
             position: absolute;
-            height: 1px;
-            left: 15px;
-            right: 15px;
             top: 5px;
+            right: 15px;
+            left: 15px;
+            height: 1px;
             background: var(--primary);
+            content: '';
         }
         .end {
             text-align: right;
         }
-        .start,.center,.end{
+        .start,
+        .center,
+        .end {
             position: relative;
             &::before {
-                content: "";
                 position: absolute;
-                height: 5px;
-                width: 5px;
-                left: 10px;
                 top: -14px;
-                border-radius: 100%;
+                left: 10px;
+                width: 5px;
+                height: 5px;
                 background: var(--contentColor);
                 border: 2px solid var(--primary);
+                border-radius: 100%;
+                content: '';
             }
         }
-        .end{
-            &::before{
-                left: initial;
+        .end {
+            &::before {
                 right: 10px;
+                left: initial;
             }
         }
     }

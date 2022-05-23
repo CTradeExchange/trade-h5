@@ -77,61 +77,6 @@
                     </div>
                 </div>
             </el-popover>
-
-            <!-- <div class='box'>
-                <el-select
-                    v-model='activeCurrency'
-                    :placeholder="$t('fundInfo.choosePayAsset')"
-                    @change='selectAssets'
-                >
-                    <template #prefix>
-                        <CurrencyIcon :currency='activeCurrency' :size='24' />
-                    </template>
-                    <el-option
-                        v-for='(item, index) in selectActions'
-                        :key='index'
-                        :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
-                        :value='item.currencyCode'
-                    >
-                        <div v-if="item.currencyCode === 'self'" class='asset-item'>
-                            <div class='top'>
-                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
-                                <span class='currency-text'>
-                                    {{ $t('fundInfo.basketAssets') }}
-                                </span>
-                            </div>
-                            <div>
-                                <p>  {{ $t('fundInfo.payBasketBuy') }}</p>
-                                <currencyIcon
-                                    v-for='(elem, i) in fundAssetsList'
-                                    :key='i'
-                                    :currency='elem.currencyCode'
-                                />
-                            </div>
-                        </div>
-                        <div v-else class='asset-item'>
-                            <div class='top'>
-                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
-                                <span class='currency-text'>
-                                    {{ item.currencyCode }}
-                                </span>
-                            </div>
-                            <div>
-                                {{ $t('fundInfo.payCurrencyBuy', { currency: item.currencyCode }) }}
-                            </div>
-                        </div>
-                    </el-option>
-                </el-select>
-                <span class='line'></span>
-            <el-input
-                v-model='amountPay'
-                clearable
-                :disabled='fund.canPurchase !== 1 || !customerInfo'
-                :placeholder='payPlaceholder'
-                type='number'
-                @input='onInput'
-            />
-        </div>-->
         </div>
         <!-- 切换 -->
         <div class='switch-block'>
@@ -155,7 +100,7 @@
                         1 {{ fund.shareTokenCode }} =
                     </span>
                     <span class='muted'>
-                        {{ fund.netValue }}{{ fund.currency }}
+                        {{ sharesNet || fund.netValue }}{{ fund.currency }}
                     </span>
                 </p>
             </div>
@@ -193,75 +138,83 @@
                 <span> {{ $t('trade.asset') }}</span>
                 <span> {{ $t('fundInfo.payCount') }}</span>
             </div>
+            <van-loading
+                v-if='calcLoading'
+                class='loading-block'
+                :color='$style.primary'
+                size='24'
+            />
             <ul class='content'>
                 <li v-for='item in lastAssetsPay' :key='item.currencyCode'>
-                    <div class='c-left'>
-                        <currencyIcon
-                            :currency='item.currency'
-                            size='18'
-                        />
-                        <span class='currency-text'>
-                            {{ item.currency }}
-                        </span>
-                    </div>
-                    <div class='c-right'>
-                        <div class='cr-inline'>
-                            <span>{{ item.amountPay }}</span>
-                            <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
-                                * {{ $t('fundInfo.availableNot') }}  {{ item.depositAmount }}
-                            </p>
-                        </div>
-                        <div v-if='item.isShow' class='cr-icon'>
-                            <el-popover
-                                v-if='item.depositAmount > 0'
-                                placement='left'
-                                trigger='hover'
-                                :width='400'
-                            >
-                                <template #reference>
-                                    <van-icon
-                                        class='icon-add'
-                                        :color='$style.primary'
-                                        name='add'
-                                        size='20'
-                                        @click='openAddAssets(item)'
-                                    />
-                                </template>
-                                <div class='add-wrap'>
-                                    <h2> {{ $t('fundInfo.chooseGetAssets') }} </h2>
-                                    <div class='type' @click='toDeposit(item)'>
-                                        <div class='left'>
-                                            <i
-                                                class='icon iconfont icon_icon_assets'
-                                            ></i>
-                                            <div class='text'>
-                                                <h3> {{ $t('fundInfo.deposit') }}</h3>
-                                                <h5> {{ $t('fundInfo.depositTip') }}</h5>
-                                            </div>
-                                        </div>
-                                        <van-icon name='arrow' />
-                                    </div>
-                                    <div class='type' @click='toOrderFund(item.currency)'>
-                                        <div class='left'>
-                                            <img alt='' class='icon trade-icon' src='/images/trade.png' />
-                                            <div class='text'>
-                                                <h3> {{ $t('trade.buy') }}</h3>
-                                                <h5> {{ $t('fundInfo.buyTip') }}</h5>
-                                            </div>
-                                        </div>
-                                        <van-icon name='arrow' />
-                                    </div>
-                                </div>
-                            </el-popover>
-
-                            <van-icon
-                                v-else
-                                :color='$style.placeholdColor'
-                                name='checked'
-                                size='20'
+                    <div class='flex'>
+                        <div class='c-left'>
+                            <currencyIcon
+                                :currency='item.currency'
+                                size='18'
                             />
+                            <span class='currency-text'>
+                                {{ item.currency }}
+                            </span>
+                        </div>
+                        <div class='c-right'>
+                            <div class='cr-inline'>
+                                <span>{{ item.amountPay }}</span>
+                            </div>
+                            <div v-if='item.isShow' class='cr-icon'>
+                                <el-popover
+                                    v-if='item.depositAmount > 0'
+                                    placement='left'
+                                    trigger='hover'
+                                    :width='400'
+                                >
+                                    <template #reference>
+                                        <van-icon
+                                            class='icon-add'
+                                            :color='$style.primary'
+                                            name='add'
+                                            size='20'
+                                            @click='openAddAssets(item)'
+                                        />
+                                    </template>
+                                    <div class='add-wrap'>
+                                        <h2> {{ $t('fundInfo.chooseGetAssets') }} </h2>
+                                        <div class='type' @click='toDeposit(item)'>
+                                            <div class='left'>
+                                                <i
+                                                    class='icon iconfont icon_icon_assets'
+                                                ></i>
+                                                <div class='text'>
+                                                    <h3> {{ $t('fundInfo.deposit') }}</h3>
+                                                    <h5> {{ $t('fundInfo.depositTip') }}</h5>
+                                                </div>
+                                            </div>
+                                            <van-icon name='arrow' />
+                                        </div>
+                                        <div class='type' @click='toOrderFund(item.currency)'>
+                                            <div class='left'>
+                                                <img alt='' class='icon trade-icon' src='/images/trade.png' />
+                                                <div class='text'>
+                                                    <h3> {{ $t('trade.buy') }}</h3>
+                                                    <h5> {{ $t('fundInfo.buyTip') }}</h5>
+                                                </div>
+                                            </div>
+                                            <van-icon name='arrow' />
+                                        </div>
+                                    </div>
+                                </el-popover>
+
+                                <van-icon
+                                    v-else
+                                    :color='$style.placeholdColor'
+                                    name='checked'
+                                    size='20'
+                                />
+                            </div>
                         </div>
                     </div>
+                    <p v-if='item.isShow && item.depositAmount > 0' class='error-text'>
+                        * {{ $t('fundInfo.availableNot') }}  {{ item.depositAmount }}
+                    </p>
                 </li>
             </ul>
             <div class='notice'>
@@ -328,7 +281,6 @@ import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal, mul } from '@/utils/calculation'
 import { debounce, getCookie } from '@/utils/util'
-import { log } from '@public/libs/adapter-latest'
 const emit = defineEmits(['switchDirection'])
 
 const router = useRouter()
@@ -342,6 +294,8 @@ const props = defineProps({
 })
 
 const changeShowModel = inject('changeShowModel')
+// 最新基金净值
+const sharesNet = inject('sharesNet')
 const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
 // 客户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
@@ -373,7 +327,8 @@ const {
     activeAssets,
     onSelect,
     fund,
-    queryFundNetValue
+    queryFundNetValue,
+    calcLoading
 } = orderHook({ fund: props.fund, direction: 'buy' })
 
 const amountPay = ref('')
@@ -600,9 +555,15 @@ const toOrderFund = currency => {
         }
     }
     .pay-wrap {
+        position: relative;
         margin: 15px 0;
         padding: 15px 0 0;
         background: var(--contentColor);
+        .loading-block {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
         .title {
             color: var(--color);
             font-weight: bold;
@@ -618,42 +579,45 @@ const toOrderFund = currency => {
             margin-bottom: 15px;
             border-bottom: solid 1px var(--lineColor);
             li {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
                 margin-bottom: 15px;
-                .c-left {
+                .flex {
                     display: flex;
                     align-items: center;
-                    height: 100%;
-                    .currency-text {
-                        margin-top: 2px;
-                        margin-left: 5px;
-                        font-weight: bold;
-                    }
-                }
-                .c-right {
-                    display: flex;
-                    align-items: center;
-                    text-align: right;
-                    .icon_success {
-                        margin-left: 10px;
-                        color: var(--normalColor);
-                        font-size: 14px;
-                    }
-                    .van-icon {
-                        margin-left: 10px;
-                        &.icon-add {
-                            cursor: pointer;
+                    justify-content: space-between;
+                    .c-left {
+                        display: flex;
+                        align-items: center;
+                        height: 100%;
+                        .currency-text {
+                            margin-top: 2px;
+                            margin-left: 5px;
+                            font-weight: bold;
                         }
                     }
-                    .error-text {
-                        color: var(--warn);
-                    }
-                    .cr-inline {
-                        display: inline-block;
+                    .c-right {
+                        display: flex;
+                        align-items: center;
+                        text-align: right;
+                        .icon_success {
+                            margin-left: 10px;
+                            color: var(--normalColor);
+                            font-size: 14px;
+                        }
+                        .van-icon {
+                            margin-left: 10px;
+                            &.icon-add {
+                                cursor: pointer;
+                            }
+                        }
+                        .cr-inline {
+                            display: inline-block;
+                        }
                     }
                 }
+            }
+            .error-text {
+                color: var(--warn);
+                text-align: right;
             }
         }
         .notice {

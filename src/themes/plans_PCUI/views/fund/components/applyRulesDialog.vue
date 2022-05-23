@@ -68,14 +68,14 @@ defineExpose({
         margin-bottom: 10px;
         .no {
             display: inline-flex;
-            justify-content: center;
-            align-items: center;
             flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
             width: 20px;
             height: 20px;
-            line-height: 1;
             margin-right: 5px;
-            color: #fff;
+            color: #FFF;
+            line-height: 1;
             background: var(--primary);
             border-radius: 50%;
         }
