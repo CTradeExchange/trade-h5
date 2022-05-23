@@ -118,6 +118,7 @@ export default {
         text-align: center;
     }
     .content {
+        min-height: rem(600px);
         margin-top: rem(20px);
         padding: rem(20px) rem(30px);
         line-height: rem(42px);
