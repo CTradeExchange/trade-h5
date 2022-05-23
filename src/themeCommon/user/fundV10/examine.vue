@@ -1,5 +1,5 @@
 <template>
-    <div class='inFundManager'>
+    <div class='inFundManager' :class='{ isPC: isPC }'>
         <div class='banner'></div>
         <ul class='features'>
             <li class='item'>
@@ -55,6 +55,7 @@ export default {
         })
 
         return {
+            isPC: process.env.VUE_APP_theme === 'plans_PCUI',
             ...toRefs(state),
         }
     }
@@ -63,11 +64,13 @@ export default {
 
 <style lang="scss" scoped>
 .inFundManager {
-    min-height: calc(100vh - 444px);
     padding: 0 0 100px;
     margin: 0 auto;
     font-size: 14px;
     background: var(--bgColor);
+    &.isPC{
+        min-height: calc(100vh - 444px);
+    }
     // 适配移动端
     @media screen and (max-width: 768px){
         padding: 0 0 100px;

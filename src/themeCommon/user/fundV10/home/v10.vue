@@ -235,7 +235,7 @@ const fund = computed(() => store.state._quote.fundInfo || {})
 const customerInfo = computed(() => store.state._user.customerInfo)
 
 // 当前平台是否为PC
-const { isPC } = route.meta
+const isPC = process.env.VUE_APP_theme === 'plans_PCUI'
 // 当前基金id
 const fundId = window['V10'] || 368
 // 是否显示基金弹窗

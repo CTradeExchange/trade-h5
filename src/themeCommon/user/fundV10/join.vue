@@ -1,5 +1,5 @@
 <template>
-    <div class='joinWrapper'>
+    <div class='joinWrapper' :class='{ isPC:isPC }'>
         <div class='banner'></div>
         <ul class='features'>
             <li class='item'>
@@ -57,6 +57,7 @@ export default {
     setup () {
         const { bodyWidth } = useViewport()
         return {
+            isPC: process.env.VUE_APP_theme === 'plans_PCUI',
             bodyWidth
         }
     }
@@ -65,8 +66,10 @@ export default {
 
 <style lang="scss" scoped>
 .joinWrapper {
-    min-height: calc(100vh - 444px);
     padding-bottom: 150px;
+    &.isPC{
+        min-height: calc(100vh - 444px);
+    }
 }
 .banner {
     width: 100%;
