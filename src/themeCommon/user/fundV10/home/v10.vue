@@ -109,6 +109,7 @@
                                     <div class='header'>
                                         <span>Currency</span>
                                         <span>Percentage</span>
+                                        <span>Main Chain</span>
                                     </div>
                                     <ul class='list'>
                                         <li v-for='(item, index) in fund.fundCurrencyList' :key='index'>
@@ -119,6 +120,14 @@
                                                 </span>
                                             </div>
                                             <span>{{ item.weight }}</span>
+                                            <span>
+                                                <a v-if='getAddress(item.currencyCode)' :href='getAddress(item.currencyCode)?.url' target='open'>
+                                                    {{ getAddress(item.currencyCode)?.url }}
+                                                </a>
+                                                <em v-else>
+                                                    --
+                                                </em>
+                                            </span>
                                         </li>
                                     </ul>
                                 </div>
@@ -199,6 +208,8 @@
 
         <!-- 基金交易弹窗 -->
         <FundTradeDialog v-if='isPC' v-model='showFundDialog' :fund='fund' />
+        <!-- 基金记录弹窗 -->
+        <FundRecordDialog v-if='isPC' v-model='showRecordDialog' />
     </div>
 </template>
 
@@ -206,8 +217,9 @@
 import Swiper from './components/swiper.vue'
 import ChartView from './components/chartView.vue'
 import FundTradeDialog from './components/fundTradeDialog.vue'
+import FundRecordDialog from './components/fundRecordDialog.vue'
 import CurrencyIcon from '@/components/currencyIcon.vue'
-import { ref, onMounted, computed, provide } from 'vue'
+import { ref, onMounted, onUnmounted, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
@@ -227,6 +239,23 @@ const { isPC } = route.meta
 const fundId = 18
 // 是否显示基金弹窗
 const showFundDialog = ref(false)
+// 是否显示基金记录弹窗
+const showRecordDialog = ref(false)
+// 当前显示的基金记录模块
+const fundRecordAcitve = ref('')
+// 地址列表数据
+const addressList = ref([
+    { currency: 'BNB', url: 'https://bscscan.com/address/0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
+    { currency: 'BTC', url: 'https://blockchair.com/bitcoin/address/bc1qfsnn2uzcqeq93w2qvadejajydvd2g760gp7pmf' },
+    { currency: 'ETH', url: 'https://etherscan.io/address/0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
+    { currency: 'ADA', url: 'https://blockchair.com/zh/cardano/address/addr1q8hj69af9xahpttcw9qk5jydtn088yutsadkcqtnajzf6jk965yzd5llf238cxcz3d3m7haplcdre3h48ghvlfhhvyjsteyysw' },
+    { currency: 'AVAX', url: 'https://explorer-xp.avax.network/address/X-avax1xcp3tjp7yq9z0jxtq8q4nl5nspv4zrf86v4kg0' },
+    { currency: 'DOT', url: 'https://blockchair.com/zh/polkadot/address/15Qx2UbhktiNED9bmudpv9W1cDfAybwWP2G18a6eNQKJDGKr' },
+    { currency: 'LUNA', url: 'https://finder.terra.money/mainnet/address/terra10pnx4gkygn5rprxg5twvc0fypwsm43d8k7yn6u' },
+    { currency: 'SHIB', url: 'https://bscscan.com/token/0x2859e4544c4bb03966803b044a93563bd2d0dd4d?a=0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
+    { currency: 'SOL', url: 'https://explorer.solana.com/address/EzWS7qR4s9W2BPeZ4vZeX3FQhD5m8HdMWwXkwTHcPodH' },
+    { currency: 'XRP', url: 'https://xrpscan.com/account/rHLQjqbJWEjcwxtepJX9WFQqWjToaFqkZn' }
+])
 
 // 获取基金详情
 const queryFundInfo = () => {
@@ -236,6 +265,12 @@ const queryFundInfo = () => {
 // 获取基金净值等数据
 const queryFundNetValue = () => {
     store.dispatch('_quote/fundNetValue', { fundId })
+}
+
+// 获取地址
+const getAddress = (currency) => {
+    const item = addressList.value.find(el => el.currency === currency)
+    return item || ''
 }
 
 // 跳转到查验页面
@@ -278,11 +313,29 @@ const onTrade = () => {
     router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
 }
 
+// 更新基金净值
+provide('updateSharesNet', () => {})
+// 改变显示的模块
+provide('changeShowModel', (model, active) => {
+    showFundDialog.value = false
+    showRecordDialog.value = true
+    fundRecordAcitve.value = active
+})
+// 当前显示基金记录的模块
+provide('fundRecordAcitve', fundRecordAcitve)
+
 onMounted(() => {
     // 获取基金详情
     queryFundInfo()
     // 获取基金净值等数据
     queryFundNetValue()
+    // body添加类名
+    document.body.classList.add('V10')
+})
+
+onUnmounted(() => {
+    // body移除类名
+    document.body.classList.remove('V10')
 })
 </script>
 
@@ -361,15 +414,16 @@ onMounted(() => {
         .assets-info {
             .header {
                 display: flex;
-                justify-content: space-between;
                 font-size: 14px;
                 color: #999;
+                span {
+                    flex: 1;
+                }
             }
             .list {
                 margin-top: 20px;
                 li {
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
                     margin-bottom: 12px;
                     .row {
@@ -381,6 +435,13 @@ onMounted(() => {
                             font-weight: 700;
                             color: #333;
                         }
+                    }
+                    div, span {
+                        @include single-line-clamp;
+                        flex: 1;
+                    }
+                    a {
+                        color: var(--primary);
                     }
                 }
             }

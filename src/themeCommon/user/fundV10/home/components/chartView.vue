@@ -1,7 +1,7 @@
 <template>
     <div :class="['chart-view', isPC ? 'pc-chart-view' : 'h5-chart-view']">
         <div class='chart-block'>
-            <van-tabs v-model:active='activeName' :swipe-threshold='2'>
+            <van-tabs v-model:active='activeName' :line-width='80' :swipe-threshold='2'>
                 <van-tab name='fundNet' title='Market Price vs Fund NAV'>
                     <div class='chart-box'>
                         <FundNet :fund-id='fundId' />
@@ -62,9 +62,16 @@ const activeName = ref('fundNet')
         margin: 0 auto;
     }
     :deep {
+        .van-tabs__wrap {
+            border-bottom: 1px solid #eaeaea;;
+        }
         .van-tabs__nav {
             padding-left: 0;
             padding-right: 0;
+        }
+        .van-tab {
+            flex: none;
+            padding: 0;
         }
         .van-tab__text {
             font-weight: 700;
@@ -82,6 +89,12 @@ const activeName = ref('fundNet')
         margin-top: 60px;
     }
     :deep {
+        .van-tab {
+            margin-right: 40px;
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
         .chartDom {
             height: 300px;
         }
@@ -95,6 +108,12 @@ const activeName = ref('fundNet')
         margin-top: 20px;
     }
     :deep {
+        .van-tab {
+            margin-right: 20px;
+            &:last-of-type {
+                margin-right: 0;
+            }
+        }
        .chartDom {
             height: 240px;
         }

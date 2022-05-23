@@ -6,9 +6,10 @@
             :closeable='true'
             :round='true'
             @close='close'
+            @open='open'
         >
             <div class='popup-content'>
-                <p class='text'>
+                <p class='describe'>
                     You are about to purchase the Metaverse Era Capital issued by V10
                     <br />
                     The vitatoken account can be used to execute the V10 fund KYC and accept V10 assets
@@ -60,6 +61,11 @@ const switchTab = value => {
     }
 }
 
+// 打开弹窗
+const open = () => {
+    activeName.value = 'apply'
+}
+
 // 关闭弹窗
 const close = () => {
     emit('update:modelValue', false)
@@ -68,31 +74,46 @@ const close = () => {
 
 <style scoped lang="scss">
 .popup-wrap {
+    position: relative;
+    z-index: 1000;
     :deep {
-        .van-icon {
-            color: #000;
+        .van-popup {
+            width: 750px;
+            height: calc(100vh - 100px);
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            .popup-content {
+                height: 100%;
+                overflow-y: auto;
+            }
+            .van-popup__close-icon {
+                color: #000;
+                position: absolute;
+                top: 15px;
+                right: 25px;
+            }
+            .describe {
+                width: 625px;
+                text-align: center;
+                line-height: 24px;
+                margin: 40px auto 0;
+                font-size: 16px;
+                color: #333;
+            }
+            .fund-handle {
+                width: 500px;
+                margin: 40px auto 60px;
+            }
         }
     }
 }
-.popup-content {
-    width: 750px;
-    height: calc(100vh - 100px);
-    background: #fff;
-    border-radius: 20px;
-    box-sizing: border-box;
-    .text {
-        width: 625px;
-        text-align: center;
-        line-height: 24px;
-        margin: 0 auto;
-        padding-top: 40px;
-        font-size: 16px;
-        color: #333;
+</style>
+
+<style lang="scss">
+.V10 {
+    .popover-select {
+        width: 500px !important;
     }
-}
-.fund-handle {
-    width: 500px;
-    margin: 40px auto 0;
-    padding-bottom: 60px;
 }
 </style>
