@@ -56,7 +56,7 @@
             <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='150'>
                 <template #default='scope'>
                     <span v-if="scope.row.currencyRedeem==='self'">
-                        一篮子资产
+                        {{ $t('fundInfo.basketAssets') }}
                     </span>
                     <span v-else>
                         {{ scope.row.currencyRedeem }}
@@ -71,7 +71,7 @@
             <el-table-column :label="$t('fundManager.ransom.fees')" :min-width='150'>
                 <template #default='scope'>
                     <a v-if="scope.row.currencyRedeem==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "fee")'>
-                        查看
+                        {{ $t('common.look') }}
                     </a>
                     <span v-else>
                         {{ scope.row.fees }}{{ scope.row.currencyRedeem }}
@@ -81,7 +81,7 @@
             <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='150'>
                 <template #default='scope'>
                     <a v-if="scope.row.currencyRedeem==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "amount")'>
-                        查看
+                        {{ $t('common.look') }}
                     </a>
                     <span v-else>
                         {{ scope.row.amountRedeem }}{{ scope.row.currencyRedeem }}
@@ -255,9 +255,9 @@ const showSelfFeesDialog = (item, type = 'fee') => {
     selfFeesDialogShow.value = true
     selfFeesDialogTitle.value = t('fundManager.buy.redeemDetail')
     if (type === 'fee') {
-        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.fees'), t('fundManager.ransom.moneyTotal')]
+        selfFeesDialogTHList.value = [t('fundInfo.assets'), t('fundManager.ransom.moneyTotal'), t('fundManager.ransom.fees')]
     } else {
-        selfFeesDialogTHList.value = [t('common.currency'), t('fundManager.ransom.fees'), t('fundManager.ransom.moneyTotal')]
+        selfFeesDialogTHList.value = [t('fundInfo.assets'), t('fundManager.ransom.moneyTotal'), t('fundManager.ransom.fees')]
     }
 }
 const purchaseCurrencySetting = ref([]) // 申购资产设置

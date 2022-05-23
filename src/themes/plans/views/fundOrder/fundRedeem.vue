@@ -21,27 +21,31 @@
                 :currency='fund.shareTokenCode'
                 :digits='fund.shareTokenDigits || 0'
                 icon-content-type='fund'
-                label='您支付'
+                :label="$t('fundInfo.youPay')"
                 :placeholder='payPlaceholder'
                 @input='inputAmount'
             />
             <!-- 切换 -->
             <div class='switch-block'>
-                <i class='switch-icon icon_huidui' @click='switchWay'></i>
+                <!-- <i class='switch-icon icon_huidui' @click='switchWay'></i> -->
+                <div class='switch'>
+                    <img alt='' class='switch-icon' src='/images/transfer.png' srcset='' @click='switchWay' />
+                    <div class='line'></div>
+                </div>
                 <div class='switch-text'>
                     <p>
                         <span class='muted'>
-                            手续费率:
+                            {{ $t('fundInfo.rate') }}:
                         </span>
-                        <span>
+                        <span class='muted'>
                             {{ mul(activeAssets.redemptionFeeProportion, 100) }}%
                         </span>
                     </p>
                     <p>
-                        <span>
+                        <span class='muted'>
                             1 {{ fund.shareTokenCode }} =
                         </span>
-                        <span>
+                        <span class='muted'>
                             {{ fund.netValue }}{{ fund.currency }}
                         </span>
                     </p>
@@ -53,7 +57,7 @@
                 :currency='activeCurrency'
                 :fund-assets-list='fundAssetsList'
                 icon-content-type='asset'
-                label='您想要得到'
+                :label="$t('fundInfo.wantGet')"
                 :readonly='true'
                 @open='openCurrencyExplain'
                 @touchCurrency='touchCurrency'
@@ -61,7 +65,7 @@
         </div>
         <div class='pay-wrap'>
             <p class='title'>
-                预计得到以下资产
+                {{ $t('fundInfo.expectedGetAssets') }}
             </p>
             <!-- 一篮子资产 -->
             <div v-if="activeCurrency === 'self'" class='redeem-assets'>
@@ -77,7 +81,7 @@
                         <template #reference>
                             <currencyIcon
                                 :currency='item.currencyCode'
-                                size='24'
+                                size='30'
                             />
                             <p class='currency'>
                                 {{ item.currencyCode }}
@@ -92,8 +96,8 @@
             <!-- 单资产 -->
             <div v-else class='redeem-type'>
                 <div class='header'>
-                    <span>资产</span>
-                    <span>预计获得金额</span>
+                    <span>{{ $t('fundInfo.assets') }}</span>
+                    <span>{{ $t('fundInfo.expectedGetAmount') }}</span>
                 </div>
                 <ul class='content'>
                     <li>
@@ -107,20 +111,15 @@
                             </span>
                         </div>
                         <div class='c-right'>
-                            <span>T+2日确认份额后的基金净值价格计算金额</span>
+                            <span>{{ $t('fundInfo.t2Tip1') }}</span>
                         </div>
                     </li>
                 </ul>
             </div>
             <div v-if="activeCurrency === 'self'" class='notice'>
-                注：预计按T+2日确认份额后的基金净值价格计算金额，总赎回金额确定后再根据一篮子货币权重计算单个资产的赎回金额。
+                {{ $t('fundInfo.t2Tip2') }}
                 <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
-                    查看规则
-                </router-link>
-            </div>
-            <div v-else class='notice' style='text-align: right;'>
-                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
-                    查看规则
+                    {{ $t('fundInfo.viewRule') }}
                 </router-link>
             </div>
         </div>
@@ -240,7 +239,7 @@ const submitHandler = () => {
         return Toast(t('fundInfo.redeemNumPlaceholder'))
     }
     if (Number(amountPay.value) < Number(activeAssets.value.minRedemptionNum)) {
-        return Toast('单笔最小赎回份额是' + activeAssets.value.minRedemptionNum)
+        return Toast(t('fundInfo.redeemMinTip') + activeAssets.value.minRedemptionNum)
     }
     // 提交赎回
     submitFundRedeem({
@@ -302,11 +301,26 @@ const submitHandler = () => {
     .switch-block {
         display: flex;
         align-items: center;
-        margin: rem(25px) 0;
+        margin: rem(50px) 0;
+        .switch {
+            position: relative;
+            .line {
+                position: absolute;
+                top: rem(-30px);
+                right: rem(50px);
+                z-index: 0;
+                height: rem(120px);
+                border-right: 1px dashed var(--placeholdColor);
+            }
+        }
         .switch-icon {
+            position: relative;
+            z-index: 1;
+            width: rem(56px);
+            height: rem(56px);
             margin-right: rem(20px);
             color: var(--primary);
-            font-size: rem(60px);
+            cursor: pointer;
         }
         .switch-text {
             p {
@@ -320,6 +334,7 @@ const submitHandler = () => {
     padding: rem(30px) 0;
     background: var(--contentColor);
     .title {
+        font-weight: bold;
         font-size: rem(30px);
         text-align: center;
     }
@@ -346,6 +361,7 @@ const submitHandler = () => {
                     .currency-text {
                         margin-top: rem(4px);
                         margin-left: rem(10px);
+                        font-weight: bold;
                     }
                 }
                 .c-right {
@@ -386,25 +402,26 @@ const submitHandler = () => {
         margin: rem(30px) rem(30px) 0;
         .redeem-asset-item {
             flex: 1;
-            width: calc((100% - 45px) / 4);  // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
-            min-width: calc((100% - 45px) / 4); // 加入这两个后每个item的宽度就生效了
-            max-width: calc((100% - 45px) / 4);
+            width: calc((100% - 30px) / 3);  // 这里的10px = (分布个数3-1)*间隙5px, 可以根据实际的分布个数和间隙区调整
+            min-width: calc((100% - 30px) / 3); // 加入这两个后每个item的宽度就生效了
+            max-width: calc((100% - 30px) / 3);
             margin-right: 15px;
             margin-bottom: 15px;
-            padding: rem(10px) 0;
+            padding: rem(30px) 0;
             text-align: center;
-            background-color: var(--bgColor);
+            background-color: var(--contentColor);
             border: solid 1px var(--lineColor);
-            &:nth-child(4n) { // 去除第3n个的margin-right
+            border-radius: rem(10px);
+            &:nth-child(3n) { // 去除第3n个的margin-right
                 margin-right: 0;
             }
             .currency {
                 margin: rem(10px) 0 rem(5px);
+                color: var(--color);
                 font-weight: bold;
                 font-size: rem(28px);
             }
             .percent {
-                color: var(--minorColor);
                 font-size: rem(20px);
             }
         }
@@ -414,6 +431,7 @@ const submitHandler = () => {
         color: var(--minorColor);
         .toRule {
             color: var(--primary);
+            text-decoration: underline;
         }
     }
 }

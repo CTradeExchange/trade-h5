@@ -30,6 +30,14 @@
                             3
                         </span>
                         <span class='value'>
+                            {{ $t('fundInfo.applyRule_tip4') }}
+                        </span>
+                    </p>
+                    <p class='row'>
+                        <span class='no'>
+                            4
+                        </span>
+                        <span class='value'>
                             {{ $t('fundInfo.applyRule_tip3') }}
                         </span>
                     </p>
@@ -38,7 +46,33 @@
                     <p class='title'>
                         {{ $t('fundInfo.jz_formula') }}
                     </p>
-                    <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                    <p class='text'>
+                        1、{{ $t('fundInfo.jz_formulaContent') }}
+                    </p>
+                    <p class='text'>
+                        2、{{ $t('fundInfo.fundRedeemFormula4') }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula5') }}
+                    </p>
+                    <p class='text'>
+                        3、{{ $t('fundInfo.fundRedeemFormula6') }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula7',{ number: 'A' }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula8',{ number: 'A' }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula7',{ number: 'B' }) }}
+                    </p>
+                    <p class='text indent'>
+                        {{ $t('fundInfo.fundRedeemFormula8',{ number: 'B' }) }}
+                    </p>
+                    <p class='text indent'>
+                        ...
+                    </p>
                 </div>
             </div>
         </el-dialog>
@@ -68,14 +102,14 @@ defineExpose({
         margin-bottom: 10px;
         .no {
             display: inline-flex;
-            justify-content: center;
-            align-items: center;
             flex-shrink: 0;
+            align-items: center;
+            justify-content: center;
             width: 20px;
             height: 20px;
-            line-height: 1;
             margin-right: 5px;
-            color: #fff;
+            color: #FFF;
+            line-height: 1;
             background: var(--primary);
             border-radius: 50%;
         }
@@ -88,6 +122,12 @@ defineExpose({
         .title {
             color: var(--color);
             font-size: 20px;
+        }
+        .text {
+            margin-top: rem(20px);
+            &.indent {
+                padding-left: 22px;
+            }
         }
     }
 }

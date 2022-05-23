@@ -74,7 +74,8 @@
 </template>
 
 <script setup>
-import { ref, watchEffect, provide, inject } from 'vue'
+import { ref, computed, watchEffect, provide, inject } from 'vue'
+import { useStore } from 'vuex'
 import { useFund } from '../hooks.js'
 import { toFixed } from '@/utils/calculation.js'
 import fundInfo from './fund-info.vue'
@@ -84,21 +85,23 @@ import performance from '@planspc/components/fundInformation/performance.vue'
 import realtimeInvestCompose from '@planspc/components/fundInformation/realtimeInvestCompose.vue'
 import bottomTip from '@planspc/components/fundInformation/bottomTip.vue'
 
+const store = useStore()
 const fundId = inject('fundId')
 const selectFund = inject('selectFund')
-provide('fundId', fundId.value)
 // 基金产品列表
 const { fundProductList } = useFund()
-// 当前基金
-const fund = ref({})
+// 基金产品信息
+const fund = computed(() => store.state._quote.fundInfo)
 // 当前基金产品索引
 const fundIndex = ref('')
+
+provide('fundId', fundId.value)
 
 // 监听基金id
 watchEffect(() => {
     const result = fundProductList.value.find(el => el.fundId === fundId.value)
     const index = fundProductList.value.findIndex(el => el.fundId === fundId.value)
-    fund.value = result || {}
+    store.commit('_quote/Update_fundProduct', { ...result })
     fundIndex.value = index
 })
 

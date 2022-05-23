@@ -49,8 +49,8 @@
                                     </div>
                                     <i class='icon_fuzhi copy-btn' :data-clipboard-text='item.apiKey' @click='copyCustomerNo'></i>
                                 </van-col>
-                                <van-col class='item-right' span='6'>
-                                    {{ item.createTime }}
+                                <van-col class='item-right col_black' span='6'>
+                                    {{ item.updateTime }}
                                 </van-col>
                             </van-row>
                             <van-row>
@@ -63,10 +63,10 @@
                             </van-row>
                             <van-row>
                                 <van-col class='item-left tags' span='12'>
-                                    <span v-for='(it,a) in item.permissionDTOList' :key='a' class='perItem'>
-                                        <span v-if='it.status === 1'>
+                                    <span v-for='(it,a) in item.permissionDTOList' :key='a'>
+                                        <em v-if='it.status === 1' class='perItem'>
                                             {{ it.name }}
-                                        </span>
+                                        </em>
                                     </span>
                                 </van-col>
                                 <van-col class='item-right' span='12'>
@@ -156,15 +156,30 @@ export default {
                 size: 30,
                 current: 1
             }
-            // console.log(window.dayjs(new Date(1652258165624)).format('YYYY-MM-DD'))
             getCustomerApiList(params).then(res => {
                 state.loading = false
-                console.log(res)
+                // console.log(res)
                 if (Number(res.code) === 0) {
                     const tempArr = []
+                    let _timeLeft = ''
+                    let whiteIpsStr = ''
                     res.data.records.filter(item => {
-                        const _timeLeft = window.dayjs(new Date(item.expiredTime)).diff(new Date(item.createTime), 'day')
-                        var whiteIpsStr = ''
+                        _timeLeft = ''
+                        const vday = item.validityDays
+                        if (vday !== undefined) {
+                            if (vday === -1) {
+                                _timeLeft = t('api.timeTips3')
+                            } else {
+                                if (vday === null) {
+                                    _timeLeft = t('api.timeleftCell2')
+                                } else {
+                                    _timeLeft = t('api.timeleft') + vday + t('api.timeleftCell')
+                                }
+                            }
+                        } else {
+                            _timeLeft = t('api.timeleftCell2')
+                        }
+
                         if (item.whiteIps === null) {
                             whiteIpsStr = '--'
                         } else {
@@ -182,9 +197,9 @@ export default {
                             pubKey: item.pubKey,
                             permissionDTOList: item.permissionDTOList,
                             whiteIps: whiteIpsStr,
-                            createTime: window.dayjs(new Date(item.createTime)).format('YYYY-MM-DD HH:mm:ss'),
+                            updateTime: window.dayjs(new Date(item.updateTime)).format('YYYY-MM-DD HH:mm:ss'),
                             tag: item.tag,
-                            timeleft: _timeLeft > 0 ? t('api.timeleft') + _timeLeft + t('api.timeleftCell') : t('api.timeleftCell2')
+                            timeleft: _timeLeft
                         })
                     })
                     state.apiList = tempArr
@@ -341,7 +356,6 @@ export default {
     margin-top: rem(110px);
     overflow: auto;
     background: var(--contentColor);
-
     :deep(.topNav .main) {
         max-width: 100%;
     }
@@ -354,17 +368,16 @@ export default {
         font-size: rem(28px);
         text-align: left;
     }
-    .a-link{
+    .a-link {
         color: var(--primary);
     }
     .sub-title {
-        font-size: rem(42px);
         padding: rem(28px);
+        font-size: rem(42px);
     }
-
     .confirm-btn {
         position: fixed;
-        bottom: rem(0px);
+        bottom: 0;
         height: rem(90px);
         background: var(--primary);
         border-color: var(--primary);
@@ -373,106 +386,108 @@ export default {
             font-size: rem(32px);
         }
     }
-    .reloadList{
-        font-size: rem(24px);
-        color: var(--primary);
+    .reloadList {
         margin-left: rem(20px);
+        color: var(--primary);
+        font-size: rem(24px);
     }
-    .list{
-        padding:0 rem(0px) rem(140px)rem(0px);
-
-        :deep(.van-cell__right-icon){
-            font-size: rem(50px);
+    .list {
+        padding: 0 0 rem(140px) 0;
+        :deep(.van-cell__right-icon) {
             margin-top: rem(25px);
+            font-size: rem(50px);
         }
-
-        .operaRight{
-            .van-icon{
-                font-size: rem(50px);
+        .operaRight {
+            .van-icon {
                 margin: rem(12px) rem(15px) 0 rem(15px);
+                font-size: rem(50px);
             }
         }
-        .item{
-            font-size: rem(28px);
+        .item {
+            margin-bottom: 0;
             color: var(--minorColor);
-            margin-bottom: rem(0px);
-
-            .van-row{
-                padding:rem(10px) 0;
+            font-size: rem(28px);
+            .van-row {
+                padding: rem(5px) 0;
             }
-            h6{
-                font-size: rem(32px);
-                font-weight: normal;
-                margin-bottom: rem(0px);
+            h6 {
+                margin-bottom: 0;
                 color: var(--color);
+                font-weight: normal;
+                font-size: rem(32px);
             }
-            p{
+            p {
                 color: var(--minorColor);
             }
-            .tags{
-                span{
-                    padding: 0 rem(5px);
+            .tags {
+                span em {
                     display: inline-block;
-                    background-color: var(--quoteFallBg);
                     margin-right: rem(10px);
                     margin-bottom: rem(8px);
+                    padding: 0 rem(5px);
                     font-size: rem(24px);
+                    font-style: normal;
+                    background-color: var(--quoteFallBg);
                 }
             }
-
-            .txtWrap{
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+            .txtWrap {
+                display: inline-block;
                 width: auto;
                 max-width: 70%;
-                display: inline-block;
+                overflow: hidden;
+                color: var(--color);
+                white-space: nowrap;
+                text-overflow: ellipsis;
                 vertical-align: middle;
             }
-            .item-right{
-                text-align:right;
+            .item-right {
+                text-align: right;
             }
-            .whiteIps{
+            .whiteIps {
+                color: var(--color);
                 white-space: normal;
-                word-break: break-all;
                 word-wrap: break-word;
+                word-break: break-all;
             }
         }
+    }
+    .col_black {
+        color: var(--color);
     }
 }
 </style>
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-dialog{
+.custom-dialog {
     display: flex;
     flex-direction: column;
     max-height: 85%;
     overflow: hidden;
     background: var(--bgColor);
-    .header{
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         padding: rem(37px) rem(30px) rem(50px);
-        .header-title{
-            font-size: rem(48px);
-            font-weight: bold;
+        .header-title {
             color: var(--color);
-        }
-        .icon_guanbi{
-            font-size: rem(30px);
             font-weight: bold;
+            font-size: rem(48px);
+        }
+        .icon_guanbi {
+            font-weight: bold;
+            font-size: rem(30px);
         }
     }
     .page-wrap {
-        margin-top:0;
-        padding-top: 0;
+        margin-top: 0;
         padding: rem(20px);
-        font-size: rem(28px);
-        color: var(--normalColor);
-        line-height: rem(42px);
+        padding-top: 0;
         overflow: auto;
+        color: var(--normalColor);
+        font-size: rem(28px);
+        line-height: rem(42px);
     }
 }
 </style>

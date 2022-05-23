@@ -26,6 +26,12 @@
                     <li>
                         <i class='n'>
                             3
+                        </i>
+                        {{ $t('fundInfo.applyRule_tip4') }}
+                    </li>
+                    <li>
+                        <i class='n'>
+                            4
                         </i>{{ $t('fundInfo.applyRule_tip3') }}
                     </li>
                 </ol>
@@ -34,7 +40,33 @@
                 <h2 class='jz_formula'>
                     {{ $t('fundInfo.jz_formula') }}
                 </h2>
-                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                <p class='text'>
+                    1、{{ $t('fundInfo.jz_formulaContent') }}
+                </p>
+                <p class='text'>
+                    2、{{ $t('fundInfo.fundRedeemFormula4') }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula5') }}
+                </p>
+                <p class='text'>
+                    3、{{ $t('fundInfo.fundRedeemFormula6') }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula7',{ number: 'A' }) }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula8',{ number: 'A' }) }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula7',{ number: 'B' }) }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula8',{ number: 'B' }) }}
+                </p>
+                <p class='text indent'>
+                    ...
+                </p>
             </section>
         </div>
 
@@ -73,13 +105,45 @@
                             3
                         </i>{{ $t('fundInfo.redeem_tip3') }}
                     </li>
+                    <li>
+                        <i class='n'>
+                            4
+                        </i>
+                        {{ $t('fundInfo.fundRedeemFormula9') }}
+                    </li>
                 </ol>
             </section>
             <section class='block'>
                 <h2 class='title'>
                     {{ $t('fundInfo.jz_formula') }}
                 </h2>
-                <p>{{ $t('fundInfo.jz_formulaContent') }}</p>
+                <p class='text'>
+                    1、{{ $t('fundInfo.jz_formulaContent') }}
+                </p>
+                <p class='text'>
+                    2、{{ $t('fundInfo.fundRedeemFormula10') }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula11') }}
+                </p>
+                <p class='text'>
+                    3、{{ $t('fundInfo.fundRedeemFormula12') }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula13',{ number: 'A' }) }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula14',{ number: 'A' }) }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula13',{ number: 'B' }) }}
+                </p>
+                <p class='text indent'>
+                    {{ $t('fundInfo.fundRedeemFormula14',{ number: 'B' }) }}
+                </p>
+                <p class='text indent'>
+                    ...
+                </p>
             </section>
         </div>
     </div>
@@ -107,9 +171,21 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
         background: var(--contentColor);
         .title {
             padding: 10px 0;
+            .text {
+                margin-top: rem(20px);
+                &.indent {
+                    padding-left: 22px;
+                }
+            }
         }
         .olList {
             line-height: 2;
+        }
+        .text {
+            margin-top: rem(20px);
+            &.indent {
+                padding-left: 22px;
+            }
         }
     }
     .n {

@@ -236,25 +236,25 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-dialog{
+.custom-dialog {
     display: flex;
     flex-direction: column;
     height: 92%;
     overflow: hidden;
     background: var(--bgColor);
-    .header{
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         padding: rem(37px) rem(30px) rem(50px);
-        .header-title{
-            font-size: rem(48px);
-            font-weight: bold;
+        .header-title {
             color: var(--color);
-        }
-        .icon_guanbi{
-            font-size: rem(30px);
             font-weight: bold;
+            font-size: rem(48px);
+        }
+        .icon_guanbi {
+            font-weight: bold;
+            font-size: rem(30px);
         }
     }
 }
@@ -262,7 +262,6 @@ export default {
 
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
-
 .page-wrap {
     width: 100%;
     height: 100%;
@@ -273,7 +272,7 @@ export default {
         max-width: 100%;
     }
     .formBox {
-        margin: 50px 15px 20px 15px;
+        margin: 50px 15px 20px;
         .cell {
             margin-bottom: rem(30px);
         }
@@ -290,6 +289,9 @@ export default {
             color: var(--primary);
             line-height: rem(66px);
             text-align: center;
+        }
+        .inputHeight {
+            padding: 4px 0 5px rem(20px);
         }
     }
     .footerBox {
