@@ -84,13 +84,15 @@ const close = () => {
         width: 625px;
         text-align: center;
         line-height: 24px;
-        margin: 60px auto 0;
+        margin: 0 auto;
+        padding-top: 40px;
         font-size: 16px;
         color: #333;
     }
 }
 .fund-handle {
     width: 500px;
-    margin: 40px auto 60px;
+    margin: 40px auto 0;
+    padding-bottom: 60px;
 }
 </style>

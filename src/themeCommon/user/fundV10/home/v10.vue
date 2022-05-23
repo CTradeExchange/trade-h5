@@ -216,13 +216,15 @@ const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const { t } = useI18n({ useScope: 'global' })
+// 基金信息
+const fund = computed(() => store.state._quote.fundInfo || {})
+// 用户信息
+const customerInfo = computed(() => store.state._user.customerInfo)
 
 // 当前平台是否为PC
 const { isPC } = route.meta
 // 当前基金id
 const fundId = 18
-// 基金信息
-const fund = computed(() => store.state._quote.fundInfo || {})
 // 是否显示基金弹窗
 const showFundDialog = ref(false)
 
@@ -246,7 +248,11 @@ const goExamine = () => {
 // 点击购买基金
 const onFund = () => {
     if (isPC) {
-        showFundDialog.value = true
+        if (!customerInfo.value) {
+            router.push({ path: '/login' })
+        } else {
+            showFundDialog.value = true
+        }
     } else {
         router.push({
             path: '/fundApply',
