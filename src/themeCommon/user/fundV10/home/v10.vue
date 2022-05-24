@@ -17,9 +17,15 @@
 
             <div class='tier-body'>
                 <div class='video-block max-limit'>
-                    <video id='V10_video' controls :poster="isPC ? require('@public/images/V10/pc/video_bg.png') : require('@public/images/V10/h5/video_bg.png')" preload>
+                    <video
+                        id='V10_video'
+                        controls
+                        playsinline
+                        :poster="isPC ? require('@public/images/V10/pc/video_bg.jpg') : require('@public/images/V10/h5/video_bg.jpg')"
+                        preload
+                    >
                         <source src='https://vitatoken.io/site/V10.mp4' type='video/mp4' />
-                    </video>
+                    </video>dddd
                     <div v-if='showPlay' class='mask' @click='onPlay'>
                         <div class='control'>
                             <p class='title'>
@@ -322,11 +328,7 @@ const goExamine = () => {
 // 点击购买基金
 const onFund = () => {
     if (isPC) {
-        if (!customerInfo.value) {
-            router.push({ name: 'Login', query: { activityBack: encodeURIComponent(route.fullPath) } })
-        } else {
-            showFundDialog.value = true
-        }
+        showFundDialog.value = true
     } else {
         router.push({
             path: '/fundApply',
@@ -469,7 +471,7 @@ onUnmounted(() => {
                 display: flex;
                 align-items: center;
                 flex-wrap: wrap;
-                margin-top: 28px;
+                margin-top: 25px;
                 line-height: 28px;
                 .name {
                     display: inline-flex;
@@ -612,7 +614,7 @@ onUnmounted(() => {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        margin-top: 60px;
+        margin-top: 45px;
         .ellipse-bg {
             position: absolute;
             top: -30px;
@@ -635,7 +637,7 @@ onUnmounted(() => {
             box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
             position: relative;
             .above {
-                height: 470px;
+                height: 510px;
                 border-bottom: 1px solid #c2c2c2;
             }
             .below {

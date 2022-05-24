@@ -86,7 +86,11 @@ const activeName = ref('fundNet')
     }
     :deep {
         .van-tabs__wrap {
+            height: 48px;
             border-bottom: 1px solid #eaeaea;;
+        }
+        .van-tabs__line {
+            background: var(--primary);
         }
         .van-tabs__nav {
             padding-left: 0;
@@ -98,9 +102,6 @@ const activeName = ref('fundNet')
         }
         .van-tab__text {
             font-weight: 700;
-        }
-        .van-tabs__line {
-            background: var(--primary);
         }
     }
 }
