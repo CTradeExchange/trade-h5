@@ -49,7 +49,7 @@
                             <span class='value'>
                                 Metaverse Era Capital
                             </span>
-                            <img class='badge' :src="require('@public/images/V10/badge.jpg')" />
+                            <img class='badge' :src="require('@public/images/V10/badge.png')" />
                         </li>
                         <li>
                             <span class='name'>
