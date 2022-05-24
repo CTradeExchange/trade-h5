@@ -83,7 +83,7 @@
                                 {{ fund.upDate ? fund.upDate.substring(0, fund.upDate.length - 3) : '' }}
                             </span>
                         </li>
-                        <li class='href' @click="openPDF('https://www.vitatoken.io/site/v10-fund-whitepaper.pdf')">
+                        <li class='href' @click="openPDF('https://vitatoken.io/site/V10_Index_Fund_WhitePaper.pdf')">
                             <span class='name'>
                                 For more information:
                             </span>
