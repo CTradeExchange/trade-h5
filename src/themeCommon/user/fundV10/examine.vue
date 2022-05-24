@@ -46,17 +46,17 @@
 </template>
 
 <script>
-import { reactive, ref, toRefs, computed, onMounted } from 'vue'
+import { onMounted } from 'vue'
 
 export default {
     name: 'V10InFundManager',
     setup () {
-        const state = reactive({
+        onMounted(() => {
+            document.documentElement.scrollTop = 0
         })
 
         return {
             isPC: process.env.VUE_APP_theme === 'plans_PCUI',
-            ...toRefs(state),
         }
     }
 }
