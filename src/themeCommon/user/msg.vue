@@ -29,14 +29,14 @@
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
                             <p class='msg-time'>
-                                {{ formatTime(item.createTime) }}
+                                {{ formatTime(item.pubTime) }}
                             </p>
                         </div>
                     </van-list>
                 </van-pull-refresh>
             </div>
         </van-tab>
-        <van-tab name='msg' :title='$t("route.msg")'>
+        <van-tab v-if='isUser' name='msg' :title='$t("route.msg")'>
             <div class='operate'>
                 <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
                     <van-dropdown-item v-model='type' :options='options' @change='changeType' />
@@ -81,7 +81,7 @@
         </van-tab>
 
         <!-- 个人消息 展示白标后台给客户发布的指定站内信 -->
-        <van-tab name='msgps' :title='$t("route.msgCustomer")'>
+        <van-tab v-if='isUser' name='msgps' :title='$t("route.msgCustomer")'>
             <div class='msg-list'>
                 <div v-if='listCustomer.length === 0'>
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
@@ -107,9 +107,9 @@
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
-                            <p class='msg-content'>
+                            <!-- <p class='msg-content'>
                                 {{ computeHtmlTime(item.content) }}
-                            </p>
+                            </p> -->
                             <p class='msg-time'>
                                 {{ formatTime(item.pubTime) }}
                             </p>
@@ -161,6 +161,7 @@ export default {
             currentPs: 1,
 
             type: '',
+            isUser: false,
             errorTip: '',
             rightAction: { title: 444 },
             options: [
@@ -191,12 +192,21 @@ export default {
         const onClickTab = ({ title, name }) => {
             console.log(title, name)
             if (name === 'public') {
+                state.currentNt = 1
+                state.finishedNt = false
+                state.listNotice = []
                 getNoticeData()
             }
             if (name === 'msgps') {
+                state.currentPs = 1
+                state.finishedPs = false
+                state.listCustomer = []
                 getCustomerMsgListData()
             }
             if (name === 'msg') {
+                state.current = 1
+                state.finished = false
+                state.list = []
                 getMsgList()
             }
         }
@@ -343,6 +353,12 @@ export default {
         onBeforeMount(() => {
             // getMsgList()
             getNoticeData()
+            console.log(customInfo.value)
+            if (customInfo.value) {
+                state.isUser = true
+            } else {
+                state.isUser = false
+            }
         })
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_notice', gotMsg)

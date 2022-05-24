@@ -22,9 +22,10 @@
                                 <van-swipe-item v-for='(item,index) in noticeData' :key='index' @click='goNoticeDetail(item.id)'>
                                     <span class='pubTitle'>
                                         {{ item.title }}
-                                    </span> <span class='pubTime'>
-                                        {{ formatTime(item.pubTime) }}
                                     </span>
+                                    <!-- <span class='pubTime'>
+                                        {{ formatTime(item.pubTime) }}
+                                    </span> -->
                                 </van-swipe-item>
                             </van-swipe>
                         </van-col>
@@ -210,7 +211,8 @@ export default {
             router.push({
                 path: '/noticeDetail',
                 query: {
-                    id: id
+                    id: id,
+                    type: 'notice'
                 }
             })
         }

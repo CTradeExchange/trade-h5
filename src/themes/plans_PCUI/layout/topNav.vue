@@ -80,9 +80,9 @@
                 <div class='item'>
                     <i class='icon icon_zichan' :title="$t('header.assets')" @click="$router.push('/assets')"></i>
                 </div>
-                <div class='item'>
+                <!-- <div class='item'>
                     <Msg />
-                </div>
+                </div> -->
                 <div class='item'>
                     <el-dropdown>
                         <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
