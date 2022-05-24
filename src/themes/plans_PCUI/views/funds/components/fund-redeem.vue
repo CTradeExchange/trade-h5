@@ -88,7 +88,7 @@
                             :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
                             :value='item.currencyCode'
                         >
-                            <div v-if="item.currencyCode === 'self'" class='asset-item' @click='selectAssets(item.currencyCode)'>
+                            <div v-if="item.currencyCode === 'self'" :class="['asset-item', { 'item-active': item.currencyCode === activeCurrency }]" @click='selectAssets(item.currencyCode)'>
                                 <div class='top'>
                                     <CurrencyIcon :currency='item.currencyCode' :size='24' />
                                 </div>
@@ -109,7 +109,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-else class='asset-item' @click='selectAssets(item.currencyCode)'>
+                            <div v-else :class="['asset-item', { 'item-active': item.currencyCode === activeCurrency }]" @click='selectAssets(item.currencyCode)'>
                                 <div class='top'>
                                     <CurrencyIcon :currency='item.currencyCode' :size='24' />
                                 </div>
@@ -704,6 +704,9 @@ const switchWay = () => {
         .asset-list {
             margin-top: 15px;
         }
+    }
+    .item-active {
+        border: 1px solid var(--primary);
     }
 }
 .el-select-dropdown__item {
