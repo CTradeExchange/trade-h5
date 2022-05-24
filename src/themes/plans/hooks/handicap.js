@@ -121,7 +121,7 @@ export const toolHooks = function () {
             },
             '2': {
                 handicap: true && !product.isIndex, // 非指数产品才显示盘口
-                pendingTab: false
+                pendingTab: true
             },
             '3': {
                 handicap: true && !product.isIndex,
@@ -129,7 +129,7 @@ export const toolHooks = function () {
             },
             '4': {
                 handicap: true && !product.isIndex,
-                pendingTab: false
+                pendingTab: true
             }
         }
     })
