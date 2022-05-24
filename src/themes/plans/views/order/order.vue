@@ -97,7 +97,7 @@
 <script>
 import { reactive, toRefs, computed, ref, watch, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { mul, pow } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -140,6 +140,7 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const originTitle = document.title
         const { t } = useI18n({ useScope: 'global' })
         const { symbolId, direction, tradeType } = route.query
@@ -395,6 +396,7 @@ export default {
 
         // 点击提交按钮
         const submitHandler = () => {
+            if (!customerInfo.value) return router.push({ name: 'Login', query: { back: encodeURIComponent(route.fullPath) } })
             const params = orderParams()
             if (!params) return
             if (state.loading) return false
