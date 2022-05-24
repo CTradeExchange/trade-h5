@@ -4,7 +4,7 @@
         class='public-pop'
         closeable
         position='center'
-        :style="{ height: '400px',width: '500px' }"
+        :style="{ width: '500px' }"
     >
         <div class='pop-top'>
             {{ $t('notice.poptitle') }}
@@ -34,7 +34,7 @@ import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
 import { localGet, getQueryVariable, sessionSet, unzip, localSet, getCookie, localRemove } from '@/utils/util'
 import { configSystem } from '@/api/base'
-import { getNoticeList } from '@/api/user'
+import { getNoticeList, getNoticePop } from '@/api/user'
 
 export default {
     props: ['noticePopShow'],
@@ -82,7 +82,7 @@ export default {
             if (localGet('noticeParams')) { // 不是
                 var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
                 if (nData.type === 'user') { // 已登录用户
-                    params.pubTimeFrom = nData.pubTime
+                    params.viewPubTime = nData.pubTime
                 }
                 // if (nData.type === 'guest') { // 已登录用户
                 // }
@@ -90,11 +90,11 @@ export default {
                 // 获取当日的所有公告，显示完且缓存弹出次数
             }
 
-            getNoticeList(params).then(res => {
+            getNoticePop(params).then(res => {
                 // console.log(res)
                 if (res.check()) {
-                    if (res.data.records && res.data.records.length > 0) {
-                        state.noticeData = res.data.records
+                    if (res.data && res.data.length > 0) {
+                        state.noticeData = res.data
                         // 获取公告列表后，再缓存最新的一条的pubTime在本地
                         let noticeParams = {}
                         // 判断是否新游客
@@ -190,7 +190,8 @@ export default {
         right: rem(20px);
     }
     .pop-content {
-        max-height: 80%;
+        max-height: rem(650px);
+        margin-bottom: rem(20px);
         padding: 0 rem(30px) rem(20px) rem(30px);
         overflow: auto;
     }
