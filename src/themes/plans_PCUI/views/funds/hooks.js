@@ -53,6 +53,7 @@ export const orderHook = (params) => {
     const calcLoading = ref(false)
 
     const activeCurrency = ref(null) // 申购的时候表示支付资产，赎回的时候表示接受资产
+    const customerInfo = computed(() => store.state._user.customerInfo) // 用户信息
     const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => el.tradeType === 5)) // 现货玩法的账户列表
     const curAccount = computed(() => accountList.value?.find(el => el.currency === activeCurrency.value))
     const isLogin = computed(() => !!store.state._user.customerInfo?.customerNo)
@@ -257,7 +258,9 @@ export const orderHook = (params) => {
     // 获取基金净值等数据
     queryFundNetValue()
     // 获取账户信息
-    store.dispatch('_user/findCustomerInfo', false)
+    if (customerInfo.value) {
+        store.dispatch('_user/findCustomerInfo', false)
+    }
 
     return {
         fund,

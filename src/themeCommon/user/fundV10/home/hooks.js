@@ -112,9 +112,9 @@ export const useChart = (params = {}) => {
                 data: [yData[0]?.name, yData[1]?.name], // ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
             },
             grid: {
-                left: '3%',
-                right: '6%',
-                bottom: '3%',
+                bottom: 0,
+                left: 0,
+                right: 0,
                 containLabel: true
             },
             xAxis: {
@@ -152,11 +152,9 @@ export const useChart = (params = {}) => {
                 top: 10,
                 bottom: '0',
                 right: 0,
-                // left: '60%',
-                // orient: 'vertical',
-                // type: 'scroll',
+                x: 'center',
                 textStyle: {
-                    color: '#888',
+                    color: '#333'
                 }
             },
             series: [
@@ -167,7 +165,6 @@ export const useChart = (params = {}) => {
                     avoidLabelOverlap: false,
                     top: '25%',
                     bottom: 0,
-                    // right: '30%',
                     label: {
                         show: false,
                         position: 'center'
@@ -225,10 +222,10 @@ export const useChart = (params = {}) => {
                 }
             },
             grid: {
-                left: '0',
-                top: '20',
-                bottom: '5',
-                right: '0',
+                top: 20,
+                bottom: 0,
+                left: 0,
+                right: 0,
                 containLabel: true
             },
             series: [

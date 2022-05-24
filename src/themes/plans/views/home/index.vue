@@ -3,12 +3,12 @@
         <div class='banner'>
             <van-swipe :autoplay='3000' class='my-swipe' indicator-color='white'>
                 <van-swipe-item>
-                    <router-link to='fundProductList'>
+                    <router-link to='/fundV10/index'>
                         <img alt='' :src='require("../../images/banner/h5banner5-"+ lang +".jpg")' srcset='' />
                     </router-link>
                 </van-swipe-item>
                 <van-swipe-item>
-                    <router-link to='fundProductList'>
+                    <router-link to='/fundV10/index'>
                         <img alt='' :src='require("../../images/banner/h5banner3-"+ lang +".png")' srcset='' />
                     </router-link>
                 </van-swipe-item>

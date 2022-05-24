@@ -17,9 +17,19 @@
 
             <div class='tier-body'>
                 <div class='video-block max-limit'>
-                    <video controls preload>
-                        <source src='https://www.vitatoken.io/site/about-us.mp4' type='video/mp4' />
+                    <video id='V10_video' controls :poster="isPC ? require('@public/images/V10/pc/video_bg.png') : require('@public/images/V10/h5/video_bg.png')" preload>
+                        <source src='https://vitatoken.io/site/V10.mp4' type='video/mp4' />
                     </video>
+                    <div v-if='showPlay' class='mask' @click='onPlay'>
+                        <div class='control'>
+                            <p class='title'>
+                                What is V10
+                            </p>
+                            <svg class='play' height='48' viewBox='0 0 48 48' width='48' xmlns='http://www.w3.org/2000/svg'>
+                                <path id='路径_88' d='M126.243,82.711a24.065,24.065,0,1,0,1.888,9.344A23.933,23.933,0,0,0,126.243,82.711Zm-22.112,30.842a21.5,21.5,0,1,1,21.5-21.5A21.524,21.524,0,0,1,104.131,113.553Zm7.189-21.7-10.152-7.137a.693.693,0,0,0-1.092.574V99.562a.693.693,0,0,0,1.092.574L111.325,93A.7.7,0,0,0,111.32,91.85Z' data-name='路径 88' fill='#fff' transform='translate(-80.131 -68.055)' />
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 基金信息 -->
@@ -28,7 +38,7 @@
                     <ul>
                         <li>
                             <span class='name'>
-                                Net Value:
+                                {{ $t('fundInfo.realtimeJZ') }}({{ fund.currency }}):
                             </span>
                             <span class='value'>
                                 {{ fund.netValue }}
@@ -36,10 +46,10 @@
                         </li>
                         <li>
                             <span class='name'>
-                                Fund Size (USDT):
+                                {{ $t('fundInfo.totalMarketValue') }}({{ fund.currency }}):
                             </span>
                             <span class='value'>
-                                {{ fund.totalBalance }}
+                                {{ formatAmount(fund.totalBalance) }}
                             </span>
                         </li>
                         <li class='href' @click='goExamine'>
@@ -48,26 +58,26 @@
                             </span>
                             <span class='value'>
                                 Metaverse Era Capital
-                            </span>
-                            <img class='badge' :src="require('@public/images/V10/badge.png')" />
-                        </li>
-                        <li>
-                            <span class='name'>
-                                Date of Establishment:
-                            </span>
-                            <span class='value'>
-                                {{ fund.upDate }}
+                                <img class='badge' :src="require('@public/images/V10/badge.png')" />
                             </span>
                         </li>
                         <li>
                             <span class='name'>
-                                Establishment Revenue:
+                                {{ $t('trade.priceLabel') }}({{ fund.currency }}):
                             </span>
                             <span class='value'>
                                 {{ fund.marketPrice }}
                             </span>
                         </li>
                         <li>
+                            <span class='name'>
+                                {{ $t('fundInfo.fundCreateTime') }}:
+                            </span>
+                            <span class='value'>
+                                {{ fund.upDate ? fund.upDate.substring(0, fund.upDate.length - 3) : '' }}
+                            </span>
+                        </li>
+                        <li class='href' @click="openPDF('https://www.vitatoken.io/site/v10-fund-whitepaper.pdf')">
                             <span class='name'>
                                 For more information:
                             </span>
@@ -113,17 +123,17 @@
                                         <span>Main Chain</span>
                                     </div>
                                     <ul class='list'>
-                                        <li v-for='(item, index) in fund.fundCurrencyList' :key='index'>
+                                        <li v-for='(item, index) in rangList' :key='index'>
                                             <div class='row'>
-                                                <CurrencyIcon class='icon' :currency='item.currencyCode' :size='24' />
+                                                <CurrencyIcon class='icon' :currency='item.asset' :size='24' />
                                                 <span class='currency'>
-                                                    {{ item.currencyCode }}
+                                                    {{ item.asset }}
                                                 </span>
                                             </div>
-                                            <span>{{ item.weight }}</span>
+                                            <span>{{ item.weightRealValue }}</span>
                                             <span>
-                                                <a v-if='getAddress(item.currencyCode)' :href='getAddress(item.currencyCode)?.url' target='open'>
-                                                    {{ getAddress(item.currencyCode)?.url }}
+                                                <a v-if='getAddress(item.asset)' :href='getAddress(item.asset)?.url' target='open'>
+                                                    {{ getAddress(item.asset)?.chain }}
                                                 </a>
                                                 <em v-else>
                                                     --
@@ -153,25 +163,25 @@
                                 <strong>Method</strong>
                             </p>
                             <div class='handle'>
-                                <button class='cell-2' @click='onFund'>
-                                    Buy via Vitatoken
+                                <button class='cell-2' @click='onTrade'>
+                                    Buy Via Vitatoken
                                 </button>
-                                <button class='cell-3' @click='onTrade'>
-                                    Buy via Issuing institution
+                                <button class='cell-3' @click='onFund'>
+                                    Buy Via Issuing Institution
                                 </button>
                             </div>
                         </div>
                         <ul class='info'>
                             <li>
                                 <strong class='cell-1'>
-                                    Minimum Buy In Amount
+                                    Minimum Purchase
                                 </strong>
                                 <div class='col'>
                                     <span class='cell-2'>
-                                        10U起
+                                        1 V10
                                     </span>
                                     <span class='cell-3'>
-                                        5000U起
+                                        1000 V10
                                     </span>
                                 </div>
                             </li>
@@ -197,7 +207,7 @@
                                         Immediate Transaction
                                     </span>
                                     <span class='cell-3'>
-                                        T+1
+                                        T+2
                                     </span>
                                 </div>
                             </li>
@@ -225,6 +235,8 @@ import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
+import { formatAmount } from '@/utils/calculation.js'
+import { investCombination } from '@/api/trade'
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
@@ -236,8 +248,14 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 
 // 当前平台是否为PC
 const isPC = process.env.VUE_APP_theme === 'plans_PCUI'
+// 视频元素
+let V10_video = null
+// 是否显示播放控制
+const showPlay = ref(true)
 // 当前基金id
 const fundId = window['V10'] || 368
+// 资产排名列表数据
+const rangList = ref([])
 // 是否显示基金弹窗
 const showFundDialog = ref(false)
 // 是否显示基金记录弹窗
@@ -246,16 +264,16 @@ const showRecordDialog = ref(false)
 const fundRecordAcitve = ref('')
 // 地址列表数据
 const addressList = ref([
-    { currency: 'BNB', url: 'https://bscscan.com/address/0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
-    { currency: 'BTC', url: 'https://blockchair.com/bitcoin/address/bc1qfsnn2uzcqeq93w2qvadejajydvd2g760gp7pmf' },
-    { currency: 'ETH', url: 'https://etherscan.io/address/0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
-    { currency: 'ADA', url: 'https://blockchair.com/zh/cardano/address/addr1q8hj69af9xahpttcw9qk5jydtn088yutsadkcqtnajzf6jk965yzd5llf238cxcz3d3m7haplcdre3h48ghvlfhhvyjsteyysw' },
-    { currency: 'AVAX', url: 'https://explorer-xp.avax.network/address/X-avax1xcp3tjp7yq9z0jxtq8q4nl5nspv4zrf86v4kg0' },
-    { currency: 'DOT', url: 'https://blockchair.com/zh/polkadot/address/15Qx2UbhktiNED9bmudpv9W1cDfAybwWP2G18a6eNQKJDGKr' },
-    { currency: 'LUNA', url: 'https://finder.terra.money/mainnet/address/terra10pnx4gkygn5rprxg5twvc0fypwsm43d8k7yn6u' },
-    { currency: 'SHIB', url: 'https://bscscan.com/token/0x2859e4544c4bb03966803b044a93563bd2d0dd4d?a=0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
-    { currency: 'SOL', url: 'https://explorer.solana.com/address/EzWS7qR4s9W2BPeZ4vZeX3FQhD5m8HdMWwXkwTHcPodH' },
-    { currency: 'XRP', url: 'https://xrpscan.com/account/rHLQjqbJWEjcwxtepJX9WFQqWjToaFqkZn' }
+    { currency: 'BNB', chain: '0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9', url: 'https://bscscan.com/address/0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
+    { currency: 'BTC', chain: 'bc1qfsnn2uzcqeq93w2qvadejajydvd2g760gp7pmf', url: 'https://blockchair.com/bitcoin/address/bc1qfsnn2uzcqeq93w2qvadejajydvd2g760gp7pmf' },
+    { currency: 'ETH', chain: '0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9', url: 'https://etherscan.io/address/0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
+    { currency: 'ADA', chain: 'addr1q8hj69af9xahpttcw9qk5jydtn088yutsadkcqtnajzf6jk965yzd5llf238cxcz3d3m7haplcdre3h48ghvlfhhvyjsteyysw', url: 'https://blockchair.com/zh/cardano/address/addr1q8hj69af9xahpttcw9qk5jydtn088yutsadkcqtnajzf6jk965yzd5llf238cxcz3d3m7haplcdre3h48ghvlfhhvyjsteyysw' },
+    { currency: 'AVAX', chain: 'X-avax1xcp3tjp7yq9z0jxtq8q4nl5nspv4zrf86v4kg0', url: 'https://explorer-xp.avax.network/address/X-avax1xcp3tjp7yq9z0jxtq8q4nl5nspv4zrf86v4kg0' },
+    { currency: 'DOT', chain: '15Qx2UbhktiNED9bmudpv9W1cDfAybwWP2G18a6eNQKJDGKr', url: 'https://blockchair.com/zh/polkadot/address/15Qx2UbhktiNED9bmudpv9W1cDfAybwWP2G18a6eNQKJDGKr' },
+    { currency: 'LUNA', chain: 'terra10pnx4gkygn5rprxg5twvc0fypwsm43d8k7yn6u', url: 'https://finder.terra.money/mainnet/address/terra10pnx4gkygn5rprxg5twvc0fypwsm43d8k7yn6u' },
+    { currency: 'SHIB', chain: '0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9', url: 'https://bscscan.com/token/0x2859e4544c4bb03966803b044a93563bd2d0dd4d?a=0x53eB4bD7a57B7CeA9aAA554dA6865fCaDF8010e9' },
+    { currency: 'SOL', chain: 'EzWS7qR4s9W2BPeZ4vZeX3FQhD5m8HdMWwXkwTHcPodH', url: 'https://explorer.solana.com/address/EzWS7qR4s9W2BPeZ4vZeX3FQhD5m8HdMWwXkwTHcPodH' },
+    { currency: 'XRP', chain: 'rHLQjqbJWEjcwxtepJX9WFQqWjToaFqkZn', url: 'https://xrpscan.com/account/rHLQjqbJWEjcwxtepJX9WFQqWjToaFqkZn' }
 ])
 
 // 获取基金详情
@@ -266,6 +284,26 @@ const queryFundInfo = () => {
 // 获取基金净值等数据
 const queryFundNetValue = () => {
     store.dispatch('_quote/fundNetValue', { fundId })
+}
+
+// 实时投资组合排名
+const getInvestCombination = () => {
+    investCombination({ fundId, statisticType: 1 }).then(res => {
+        if (res.check()) {
+            const list = res.data
+            rangList.value = list
+        }
+    })
+}
+
+// 点击播放视频
+const onPlay = () => {
+    V10_video.play()
+}
+
+// 打开pdf
+const openPDF = url => {
+    window.open(url)
 }
 
 // 获取地址
@@ -324,12 +362,23 @@ provide('changeShowModel', (model, active) => {
 })
 // 当前显示基金记录的模块
 provide('fundRecordAcitve', fundRecordAcitve)
+// 更新资产排名列表数据
+provide('updateRangList', list => {
+    rangList.value = list
+})
 
 onMounted(() => {
     // 获取基金详情
     queryFundInfo()
     // 获取基金净值等数据
     queryFundNetValue()
+    // 实时投资组合排名
+    getInvestCombination()
+    // 获取视频元素
+    V10_video = document.getElementById('V10_video')
+    V10_video.addEventListener('play', () => {
+        showPlay.value = false
+    })
     // body添加类名
     document.body.classList.add('V10')
 })
@@ -381,10 +430,31 @@ onUnmounted(() => {
         background-color: #000;
         border-radius: 20px;
         overflow: hidden;
+        position: relative;
         video {
             display: block;
             width: 100%;
             height: 100%;
+        }
+        .mask {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+        .control {
+            text-align: center;
+            .title {
+                margin-bottom: 20px;
+                font-weight: 700;
+                color: #fff;
+            }
         }
     }
     .fund-info {
@@ -398,8 +468,18 @@ onUnmounted(() => {
             li {
                 display: flex;
                 align-items: center;
+                flex-wrap: wrap;
                 margin-top: 28px;
                 line-height: 28px;
+                .name {
+                    display: inline-flex;
+                    align-items: center;
+                    margin-right: 3px;
+                }
+                .value {
+                    display: inline-flex;
+                    align-items: center;
+                }
                 &.href {
                     cursor: pointer;
                     &:hover {
@@ -409,7 +489,7 @@ onUnmounted(() => {
                 .badge {
                     width: 30px;
                     height: 30px;
-                    margin-left: 5px;
+                    margin-left: 2px;
                 }
             }
         }
@@ -435,7 +515,7 @@ onUnmounted(() => {
                 li {
                     display: flex;
                     align-items: center;
-                    margin-bottom: 12px;
+                    margin-bottom: 15px;
                     .row {
                         display: inline-flex;
                         align-items: center;
@@ -506,6 +586,11 @@ onUnmounted(() => {
     padding: 60px 0 150px;
     .video-block {
         height: 660px;
+        .control {
+            .title {
+                font-size: 30px;
+            }
+        }
     }
     .fund-info {
         margin-top: 60px;
@@ -550,11 +635,11 @@ onUnmounted(() => {
             box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
             position: relative;
             .above {
-                height: 465px;
+                height: 470px;
                 border-bottom: 1px solid #c2c2c2;
             }
             .below {
-                height: 155px;
+                height: 150px;
                 padding-top: 20px;
                 .text {
                     line-height: 20px;
@@ -643,6 +728,11 @@ onUnmounted(() => {
     padding: 40px 20px 88px;
     .video-block {
         height: 400px;
+        .control {
+            .title {
+                font-size: 24px;
+            }
+        }
     }
     .fund-info {
         margin-top: 40px;

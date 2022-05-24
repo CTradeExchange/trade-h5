@@ -70,14 +70,21 @@
 <script setup>
 import currencyIcon from '@/components/currencyIcon'
 import { useChart } from '../hooks.js'
-import { onMounted, ref, computed, nextTick, defineProps } from 'vue'
+import { onMounted, ref, computed, nextTick, defineProps, inject } from 'vue'
 const props = defineProps({
     // 基金id
     fundId: {
         fundId: String,
         default: ''
+    },
+    // 当前平台是否为PC
+    isPC: {
+        type: Boolean,
+        default: false
     }
 })
+// 更新资产排名列表数据
+const updateRangList = inject('updateRangList')
 
 const chartDom = ref(null)
 const { getInvestCombination, newPieDoughnutChart } = useChart({ fundId: props.fundId })
@@ -93,7 +100,11 @@ const chartData = computed(() => {
 })
 // 饼图高度
 const chartPieDOMHeight = computed(() => {
-    return 200 + rangList.value.length * 18 + 'px'
+    if (props.isPC) {
+        return 180 + rangList.value.length * 18 + 'px'
+    } else {
+        return 240 + rangList.value.length * 18 + 'px'
+    }
 })
 
 // 显示数据列表还是显示环形图
@@ -117,11 +128,16 @@ onMounted(() => {
             el.arrow = parseFloat(el.previousPeriodWeightCompare) < 0 ? 'downArrow' : 'upArrow'
             return el
         })
+        if (updateRangList) updateRangList(rangList.value)
     })
 })
 </script>
 
 <style scoped lang="scss">
+.merge-case {
+    max-width: 600px;
+    margin: 0 auto;
+}
 .chartDom {
     height: 300px;
 }
@@ -157,7 +173,7 @@ onMounted(() => {
         }
     }
 }
-.assetsList{
+.assetsList {
     margin-top: 20px;
     margin-bottom: 10px;
     font-size: 14px;
@@ -170,13 +186,12 @@ onMounted(() => {
 }
 .cellflex {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    text-align: right;
     .hd {
         display: inline-flex;
         align-items: center;
-        text-align: left;
-        flex: 1;
+        min-width: 80px;
         .name {
             line-height: 1;
             margin-left: 10px;
@@ -185,14 +200,19 @@ onMounted(() => {
             color: #333;
         }
     }
+    .bd {
+        min-width: 80px;
+        text-align: right;
+    }
     .ft {
-        width: 150px;
+        min-width: 130px;
+        text-align: right;
     }
     .small{
         font-size: 12px;
     }
 }
-.downArrow{
+.downArrow {
     display: inline-block;
     width: 0;
     height: 0;
@@ -202,7 +222,7 @@ onMounted(() => {
     border-width: 5px 5px 0 5px;
     border-top-color: var(--fallColor);
 }
-.upArrow{
+.upArrow {
     @extend .downArrow;
     border-width: 0 5px 5px 5px;
     border-top-color: transparent;
