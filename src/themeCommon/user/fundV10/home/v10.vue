@@ -6,13 +6,13 @@
         <div :class="['module-content', isPC ? 'pc-content' : 'h5-content']">
             <!-- PC背景 -->
             <div v-if='isPC' class='pc-bg'>
-                <img class='blue1-bg' :src="require('@public/images/V10/pc/blue1_bg.png')" />
-                <img class='blue2-bg' :src="require('@public/images/V10/pc/blue2_bg.png')" />
+                <img class='blue1-bg animation-spin' :src="require('@public/images/V10/pc/blue1_bg.png')" />
+                <img class='blue2-bg animation-spin' :src="require('@public/images/V10/pc/blue2_bg.png')" />
             </div>
             <!-- H5背景 -->
             <div v-else class='h5-bg'>
-                <img class='blue1-bg' :src="require('@public/images/V10/h5/blue1_bg.png')" />
-                <img class='blue2-bg' :src="require('@public/images/V10/h5/blue2_bg.png')" />
+                <img class='blue1-bg animation-spin' :src="require('@public/images/V10/h5/blue1_bg.png')" />
+                <img class='blue2-bg animation-spin' :src="require('@public/images/V10/h5/blue2_bg.png')" />
             </div>
 
             <div class='tier-body'>
@@ -34,7 +34,7 @@
 
                 <!-- 基金信息 -->
                 <div class='fund-info max-limit'>
-                    <img class='ellipse-bg' :src="require('@public/images/V10/ellipse_bg.png')" />
+                    <img class='ellipse-bg animation-spin' :src="require('@public/images/V10/ellipse_bg.png')" />
                     <ul>
                         <li>
                             <span class='name'>
@@ -94,7 +94,7 @@
                 </div>
 
                 <div class='module-case max-limit'>
-                    <img class='ellipse-bg' :src="require('@public/images/V10/ellipse_bg.png')" />
+                    <img class='ellipse-bg animation-spin' :src="require('@public/images/V10/ellipse_bg.png')" />
                     <div class='trend-chart'>
                         <h3 class='title'>
                             Reflecting the trend of cryptocurrency in general
@@ -153,7 +153,7 @@
                 </div>
 
                 <div class='how-case max-limit'>
-                    <img class='ellipse-bg' :src="require('@public/images/V10/ellipse_bg.png')" />
+                    <img class='ellipse-bg animation-spin' :src="require('@public/images/V10/ellipse_bg.png')" />
                     <div class='how-buy'>
                         <h3 class='title'>
                             How to buy V10
@@ -847,5 +847,26 @@ onUnmounted(() => {
 .max-limit {
     max-width: 1200px;
     margin: 0 auto;
+}
+
+.animation-spin {
+    animation: spin 10s linear infinite;
+}
+@keyframes spin {
+    0% {
+        transform: translate(-0%, -0%) scale(1);
+    }
+    25% {
+        transform: translate(-1%, -1%) scale(1.1);
+    }
+    50% {
+        transform: translate(-0%, -2%) scale(1.0);
+    }
+    75% {
+        transform: translate(1%, -1%) scale(1.1);
+    }
+    100% {
+        transform: translate(-0%, -0%) scale(1.0);
+    }
 }
 </style>
