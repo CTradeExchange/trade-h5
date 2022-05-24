@@ -166,7 +166,6 @@ export default {
         const updateGoogleSafetyData = val => {
             state.googleSafetyData = val
             if (state.googleSafetyData.googleCode) {
-                state.ggSafetyPopupShow = false
                 state.googleSafetyData.tag = state.query.tag
                 state.query = {
                     ...state.query,
@@ -224,6 +223,7 @@ export default {
                 if (Number(res.code) === 0) {
                     console.log(res)
                     Toast(t('api.editSuccess'))
+                    state.ggSafetyPopupShow = false
                     setTimeout(() => {
                         router.back()
                     }, 1500)

@@ -333,13 +333,14 @@ export default {
             if (!index) {
                 return false
             }
-            state.loading = true
+
             const params = {
                 id: index
             }
             state.apiList.map((item, index) => {
                 if (Number(item.id) === params.id) {
                     if (item.permissionDTOList === null) {
+                        state.loading = true
                         createCustomerApiDetail(params).then(res => {
                             state.loading = false
                             if (Number(res.code) === 0) {
