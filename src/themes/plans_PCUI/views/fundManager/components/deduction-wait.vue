@@ -25,9 +25,21 @@
             @selection-change='selectionChange'
         >
             <el-table-column type='selection' width='50' />
-            <el-table-column :label="$t('fundManager.deduction.column1')" :min-width='140' prop='proposalNo' />
-            <el-table-column :label="$t('fundManager.deduction.column2')" :min-width='minWidth' prop='companyName' />
-            <el-table-column :label="$t('fundManager.deduction.column3')" :min-width='minWidth' prop='customerNo' />
+            <el-table-column :label="$t('fundManager.deduction.column1')" :min-width='156' prop='deductDate'>
+                <template #default='scope'>
+                    <span>{{ formatTime(scope.row.deductDate) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.deduction.column2')" :min-width='140' prop='fees'>
+                <template #default='scope'>
+                    <span>{{ scope.row.fees + ' ' + scope.row.currencyFees }} </span>
+                </template>
+            </el-table-column>
+            <el-table-column :label="$t('fundManager.deduction.column3')" :min-width='minWidth' prop='deductStatus'>
+                <template #default='scope'>
+                    <span>{{ scope.row.deductStatus === 1 ? $t('fundManager.deduction.deductSuceess'): $t('fundManager.deduction.deductFail') }} </span>
+                </template>
+            </el-table-column>
             <template #empty>
                 <span class='emptyText'>
                     {{ $t('c.noData') }}
@@ -41,23 +53,16 @@
         />
         <div v-if='tableData.length > 0' class='handle-action'>
             <div class='left'>
-                <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog("preview")'>
-                    {{ $t('fundManager.ransom.preview') }}
-                </button>
                 <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog("confirm")'>
                     {{ $t('fundManager.ransom.confirmLot') }}
                 </button>
-                <!-- <template v-if='!disableBtn'>
-                    <span>{{ $t('fundManager.ransom.totalLot') }}: {{ totalLot }} {{ currency }}</span>
-                    <span>{{ $t('assets.free') }}: {{ usable }} {{ currency }}</span>
-                </template> -->
             </div>
             <el-pagination
                 v-model:currentPage='listQuery.current'
                 layout='prev, pager, next, sizes'
                 :page-size='listQuery.size'
-                :page-sizes='[10, 50, 100, 200]'
-                :total='listQuery.total'
+                :page-sizes='[10, 20, 50, 100]'
+                :total='total'
                 @current-change='changePage'
                 @size-change='changeSize'
             />
@@ -65,20 +70,38 @@
     </div>
 
     <!-- 确认份额弹窗 -->
-    <lot-dialog ref='lotDialogRef' :type='lotDialogType' @confirm='onConfirm' />
+    <el-dialog
+        v-model='showPop'
+        :close-on-click-modal='false'
+        :title="type==='preview' ? $t('fundManager.ransom.preview') : $t('fundManager.ransom.confirmLot')"
+        width='520px'
+    >
+        <p class='p'>
+            {{ $t('fundManager.ransom.totalLot') }}:
+            {{ calcData.sharesTotal }}
+            {{ calcData.currencyShares }}
+        </p>
+        <p class='p'>
+            {{ $t('fundManager.ransom.totalMoney') }}：
+        </p>
+
+        <template #footer v-if='!isLoading'>
+            <button v-loading='isSubmit' class='confirm-btn' @click='onConfirm'>
+                {{ $t('confirm') }}
+            </button>
+        </template>
+    </el-dialog>
 </template>
 
 <script>
 import { computed, toRefs, reactive, onMounted, ref, nextTick, watch } from 'vue'
-import lotDialog from './lot-dialog.vue'
+import { Toast, Dialog } from 'vant'
 import { getManagementFeesList, getFundRedeemMoney } from '@/api/fund'
-import { Toast } from 'vant'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 
 export default {
     components: {
-        lotDialog
     },
 
     setup () {
@@ -103,10 +126,13 @@ export default {
                 customerNo: customInfo.value.customerNo,
                 companyId: customInfo.value.companyId,
                 deductDate: null,
-                deductStatus: 1,
+                deductStatus: 2,
                 current: 1,
                 size: 10
             },
+            isSubmit: false,
+            calcData: {},
+            showPop: false,
             loading: false,
             isLoading: false,
             companyList: [],
@@ -125,11 +151,6 @@ export default {
         // 弹窗类型
         // const lotDialogType = ref('preview') // preview 预览  confirm 确认份额
 
-        // 监听选择的列表数据
-        watch(state.selectList, () => {
-            state.disableBtn = state.selectList.length === 0
-        })
-
         // 获取基金赎回列表
         const queryFundRedeemList = () => {
             const params = state.listQuery
@@ -143,6 +164,9 @@ export default {
                     const { data } = res
                     state.tableData = data.records
                     state.total = data.total
+                } else {
+                    state.tableData = []
+                    state.total = 0
                 }
             }).catch(() => {
                 state.isLoading = false
@@ -164,7 +188,7 @@ export default {
         const selectTime = () => {
             const value = state.listQuery.deductDate
             if (value) {
-                state.listQuery.deductDate = window.dayjs(value).valueOf()
+                state.listQuery.deductDate = window.dayjs(value).format('YYYY-MM-DD')
             } else {
                 state.listQuery.deductDate = null
             }
@@ -188,34 +212,49 @@ export default {
         // 选择列表
         const selectionChange = (list) => {
             state.selectList = list
-            if (list.length > 0) {
-                // 获取基金产品赎回总金额
-                queryFundRedeemMoney()
-                state.listQuery.currency = list[0].currencyRedeem
-            } else {
-                state.totalLot = 0
-                state.listQuery.currency = ''
-            }
+            // if (list.length > 0) {
+            //     // 获取基金产品赎回总金额
+            //     queryFundRedeemMoney()
+            //     state.listQuery.currency = list[0].id
+            // } else {
+            //     state.totalLot = 0
+            //     state.listQuery.currency = ''
+            // }
+            console.log(state.selectList)
+            state.disableBtn = state.selectList.length === 0
         }
+        // // 打开确认份额弹窗
+        // const openLotDialog = async (type = 'preview') => {
+        //     if (state.disableBtn) return
+        //     // if (Number(totalLot) > Number(usable)) {
+        //     //     return Toast(t('fundManager.ransom.tip1'))
+        //     // }
+        //     const ids = state.selectList.map(elem => elem.id)
+        //     state.lotDialogType = type
+        //     await nextTick()
+        //     state.lotDialogRef.open(ids)
+        // }
         // 打开确认份额弹窗
-        const openLotDialog = async (type = 'preview') => {
+        const openLotDialog = (type) => {
             if (state.disableBtn) return
             // if (Number(totalLot) > Number(usable)) {
             //     return Toast(t('fundManager.ransom.tip1'))
             // }
             const ids = state.selectList.map(elem => elem.id)
             state.lotDialogType = type
-            await nextTick()
-            state.lotDialogRef.open(ids)
+            console.log(ids)
+            // await nextTick()
+            // state.lotDialogRef.open(ids)
+            state.showPop = true
         }
         // 确认份额
         const onConfirm = () => {
-            state.selectList = []
             state.tableRef.clearSelection()
             state.searchParams.current = 1
             queryFundRedeemList()
             // 查询用户信息
-            store.dispatch('_user/findCustomerInfo', false)
+            // store.dispatch('_user/findCustomerInfo', false)
+            state.selectList = []
         }
         const purchaseCurrencySetting = ref([]) // 申购资产设置
         // 获取基金产品详情
@@ -232,6 +271,10 @@ export default {
             })
         }
 
+        const formatTime = (val) => {
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+
         onMounted(() => {
             // 获取基金赎回列表
             queryFundRedeemList()
@@ -240,6 +283,7 @@ export default {
         return {
             customInfo,
             usable,
+            formatTime,
             // queryCompanyList,
             // queryAssetsList,
             queryFundRedeemList,

@@ -1,24 +1,12 @@
 <template>
     <div class='header-case'>
         <div class='filter'>
-            <div class='item fixedWidth'>
-                <el-select
-                    v-model='searchParams.currencyRedeem'
-                    clearable
-                    filterable
-                    :placeholder="$t('fundManager.ransom.receiveCurrency')"
-                >
-                    <el-option v-for='item in purchaseCurrencySetting' :key='item.currencyCode' :label='item.currencyName' :value='item.currencyCode' />
-                </el-select>
-            </div>
             <div class='item-date'>
                 <el-date-picker
-                    v-model='timeRange'
-                    :end-placeholder="$t('compLang.endTime')"
-                    range-separator='-'
-                    :start-placeholder="$t('compLang.startTime')"
-                    type='datetimerange'
-                    value-format='YYYY-MM-DD HH:mm:ss'
+                    v-model='listQuery.deductDate'
+                    :placeholder="$t('fundManager.deduction.date')"
+                    type='date'
+                    value-format='YYYY-MM-DD'
                     @change='selectTime'
                 />
             </div>
@@ -28,63 +16,28 @@
         </div>
     </div>
     <div v-loading='isLoading' class='body-case'>
-        <el-table ref='tableRef' :cell-style="{ background:'none' }" :data='tableData' :empty-text="$t('c.noData')">
-            <el-table-column :label="$t('fundManager.ransom.orderNo')" :min-width='140' prop='proposalNo' />
-            <el-table-column :label="$t('fundManager.ransom.woName')" :min-width='minWidth' prop='companyName' />
-            <el-table-column :label="$t('fundManager.ransom.customerNo')" :min-width='minWidth' prop='customerNo' />
-            <el-table-column :label="$t('fundManager.ransom.lot')" :min-width='minWidth'>
+        <el-table
+            v-if='tableData.length > 0'
+            ref='tableRef'
+            :cell-style="{ background:'none' }"
+            :data='tableData'
+            :empty-text="$t('c.noData')"
+            @selection-change='selectionChange'
+        >
+            <el-table-column type='selection' width='50' />
+            <el-table-column :label="$t('fundManager.deduction.column1')" :min-width='156' prop='deductDate'>
                 <template #default='scope'>
-                    <span>{{ scope.row.shares }}{{ scope.row.currencyShares }}</span>
+                    <span>{{ formatTime(scope.row.deductDate) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.receiveCurrency')" :min-width='150'>
+            <el-table-column :label="$t('fundManager.deduction.column2')" :min-width='140' prop='fees'>
                 <template #default='scope'>
-                    <span v-if="scope.row.currencyRedeem==='self'">
-                        {{ $t('fundInfo.basketAssets') }}
-                    </span>
-                    <span v-else>
-                        {{ scope.row.currencyRedeem }}
-                    </span>
+                    <span>{{ scope.row.fees + ' ' + scope.row.currencyFees }} </span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.networth')" :min-width='150'>
+            <el-table-column :label="$t('fundManager.deduction.column3')" :min-width='minWidth' prop='deductStatus'>
                 <template #default='scope'>
-                    <span>{{ scope.row.sharesNet }}{{ scope.row.currencyNet }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.fees')" :min-width='150'>
-                <template #default='scope'>
-                    <a v-if="scope.row.currencyRedeem==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "fee")'>
-                        {{ $t('common.look') }}
-                    </a>
-                    <span v-else>
-                        {{ scope.row.fees }}{{ scope.row.currencyRedeem }}
-                    </span>
-                </template>
-            </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.moneyTotal')" :min-width='150'>
-                <template #default='scope'>
-                    <a v-if="scope.row.currencyRedeem==='self'" class='link' href='javascript:;' @click='showSelfFeesDialog(scope.row, "amount")'>
-                        {{ $t('common.look') }}
-                    </a>
-                    <span v-else>
-                        {{ scope.row.amountRedeem }}{{ scope.row.currencyRedeem }}
-                    </span>
-                </template>
-            </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.status')" :min-width='160'>
-                <template #default='scope'>
-                    <span>{{ $t('fundManager.confirmStatus.' + scope.row.sharesStatus) }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.applyTime')" :min-width='156' prop='createTime'>
-                <template #default='scope'>
-                    <span>{{ formatTime(scope.row.createTime) }}</span>
-                </template>
-            </el-table-column>
-            <el-table-column :label="$t('fundManager.ransom.lastTime')" :min-width='156' prop='updateTime'>
-                <template #default='scope'>
-                    <span>{{ formatTime(scope.row.updateTime) }}</span>
+                    <span>{{ scope.row.deductStatus === 1 ? $t('fundManager.deduction.deductSuceess'): $t('fundManager.deduction.deductFail') }} </span>
                 </template>
             </el-table-column>
             <template #empty>
@@ -93,182 +46,232 @@
                 </span>
             </template>
         </el-table>
+        <van-empty
+            v-if='tableData.length === 0'
+            :description="$t('api.listnone')"
+            image='/images/empty.png'
+        />
         <div v-if='tableData.length > 0' class='handle-action'>
-            <span></span>
+            <div class='left'>
+                <!-- <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog("preview")'>
+                    {{ $t('fundManager.ransom.preview') }}
+                </button>
+                <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog("confirm")'>
+                    {{ $t('fundManager.ransom.confirmLot') }}
+                </button> -->
+            </div>
             <el-pagination
-                v-model:currentPage='searchParams.current'
+                v-model:currentPage='listQuery.current'
                 layout='prev, pager, next, sizes'
-                :page-size='searchParams.size'
-                :page-sizes='[10, 50, 100, 200]'
+                :page-size='listQuery.size'
+                :page-sizes='[10, 20, 50, 100]'
                 :total='total'
                 @current-change='changePage'
                 @size-change='changeSize'
             />
         </div>
     </div>
-    <!-- 一篮子手续费弹窗 -->
-    <ransomSelfFeesDialog
-        ref='buyDialogRef'
-        v-model='selfFeesDialogShow'
-        :data='selfFeesDialogData'
-        :th-list='selfFeesDialogTHList'
-        :title='selfFeesDialogTitle'
-        :type='selfFeesDialogType'
-    />
+
+    <!-- 确认份额弹窗 -->
+    <lot-dialog ref='lotDialogRef' :type='lotDialogType' @confirm='onConfirm' />
 </template>
 
-<script setup>
-import ransomSelfFeesDialog from './ransom-selfFees-dialog.vue'
-import { getCompanyList, getCompanyAssets, getFundRedeemList, getFundInfoByCustomerNo } from '@/api/fund'
-import { ElInput, ElDatePicker } from 'element-plus'
+<script>
+import { computed, toRefs, reactive, onMounted, ref, nextTick, watch } from 'vue'
+import lotDialog from './lot-dialog.vue'
+import { getManagementFeesList, getFundRedeemMoney } from '@/api/fund'
 import { useStore } from 'vuex'
-import { onMounted, ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n({ useScope: 'global' })
-const store = useStore()
-// 用户信息
-const customerInfo = computed(() => store.state._user.customerInfo)
-// 加载状态
-const isLoading = ref(false)
-// 公司列表
-const companyList = ref([])
-// 资产列表
-const assetsList = ref([])
-// 选择的区间
-const timeRange = ref(null)
-// 一篮子手续费弹窗是否显示
-const selfFeesDialogShow = ref(false)
-const selfFeesDialogData = ref({})
-const selfFeesDialogType = ref('fee') // fee 手续费   amount 最终申购金额
-const selfFeesDialogTitle = ref('') // 弹窗标题
-const selfFeesDialogTHList = ref([]) // 弹窗的table列表表头
+export default {
+    components: {
+        lotDialog
+    },
 
-// 搜索参数
-const searchParams = reactive({
-    // 赎回状态
-    sharesStatus: 1,
-    // 订单号
-    proposalNoList: '',
-    // 白标名称
-    customerCompanyId: null,
-    // 客户编号
-    customerNoList: '',
-    // 客户接受资产
-    currencyRedeem: '',
-    // 开始时间
-    startTime: null,
-    // 结束时间
-    endTime: null,
-    // 当前分页页数
-    current: 1,
-    // 分页数量
-    size: 10
-})
-// 列表数据
-const tableData = ref([])
+    setup () {
+        const store = useStore()
+        const { t } = useI18n({ useScope: 'global' })
+        // 用户信息
+        // 获取账户信息
+        const customInfo = computed(() => store.state._user.customerInfo)
+        const companyId = computed(() => customInfo.value.companyId)
+        // 可用
+        const usable = computed(() => {
+            if (currency && currency !== 'self') {
+                const accountList = customInfo.value?.accountList.filter(el => Number(el.tradeType) === 5)
+                const account = accountList.find(el => el.currency === currency)
+                return Number(account.available)
+            }
+            return ''
+        })
 
-// 列表最小宽度
-const minWidth = ref(120)
-// 列表总数据量
-const total = ref(100)
+        const state = reactive({
+            listQuery: {
+                customerNo: customInfo.value.customerNo,
+                companyId: customInfo.value.companyId,
+                deductDate: null,
+                deductStatus: 1,
+                current: 1,
+                size: 10
+            },
+            loading: false,
+            isLoading: false,
+            companyList: [],
+            tableRef: null,
+            tableData: [],
+            assetsList: [],
+            minWidth: 130,
+            total: 0,
+            selectList: [],
+            disableBtn: true,
+            totalLot: 0,
+            lotDialogRef: null,
+            lotDialogType: 'preview'
+        })
 
-// 获取公司列表
-const queryCompanyList = () => {
-    getCompanyList().then(res => {
-        companyList.value = res.data
-    })
-}
-// 获取公司资产列表
-const queryAssetsList = () => {
-    getCompanyAssets({
-        companyId: customerInfo.value.companyId
-    }).then(res => {
-        assetsList.value = res.data
-    })
-}
-// 获取基金赎回列表
-const queryFundRedeemList = () => {
-    const params = Object.assign({}, searchParams)
-    params.proposalNoList = params.proposalNoList ? params.proposalNoList.split(',') : null
-    params.customerNoList = params.customerNoList ? params.customerNoList.split(',') : null
-    params.customerCompanyId = params.customerCompanyId || null
-    isLoading.value = true
-    getFundRedeemList(params).then(res => {
-        isLoading.value = false
-        if (res.check()) {
-            const { data } = res
-            tableData.value = data.records
-            total.value = data.total
+        // 弹窗类型
+        // const lotDialogType = ref('preview') // preview 预览  confirm 确认份额
+
+        // 监听选择的列表数据
+        watch(state.selectList, () => {
+            state.disableBtn = state.selectList.length === 0
+        })
+
+        // 获取基金赎回列表
+        const queryFundRedeemList = () => {
+            const params = state.listQuery
+            // params.deductDate = params.deductDate || null
+            state.isLoading = true
+            console.log(params)
+            getManagementFeesList(params).then(res => {
+                state.isLoading = false
+                console.log(res)
+                if (res.check()) {
+                    const { data } = res
+                    state.tableData = data.records
+                    state.total = data.total
+                } else {
+                    state.tableData = []
+                    state.total = 0
+                }
+            }).catch(() => {
+                state.isLoading = false
+            })
         }
-    }).catch(() => {
-        isLoading.value = false
-    })
-}
-// 选择时间
-const selectTime = () => {
-    const value = timeRange.value
-    if (value) {
-        searchParams.startTime = window.dayjs(value[0]).valueOf()
-        searchParams.endTime = window.dayjs(value[1]).valueOf()
-    } else {
-        searchParams.startTime = ''
-        searchParams.endTime = ''
-    }
-}
-// 改变当前页数
-const changePage = (value) => {
-    searchParams.current = value
-    queryFundRedeemList()
-}
-// 改变分页数量
-const changeSize = (value) => {
-    searchParams.size = value
-    searchParams.current = 1
-    queryFundRedeemList()
-}
-// 点击搜索
-const onSearch = () => {
-    searchParams.current = 1
-    queryFundRedeemList()
-}
-// 获取一篮子基金的申购手续费
-const showSelfFeesDialog = (item, type = 'fee') => {
-    selfFeesDialogData.value = item
-    selfFeesDialogType.value = type
-    selfFeesDialogShow.value = true
-    selfFeesDialogTitle.value = t('fundManager.buy.redeemDetail')
-    if (type === 'fee') {
-        selfFeesDialogTHList.value = [t('fundInfo.assets'), t('fundManager.ransom.moneyTotal'), t('fundManager.ransom.fees')]
-    } else {
-        selfFeesDialogTHList.value = [t('fundInfo.assets'), t('fundManager.ransom.moneyTotal'), t('fundManager.ransom.fees')]
-    }
-}
-const purchaseCurrencySetting = ref([]) // 申购资产设置
-// 获取基金产品详情
-const getFundInfo = () => {
-    getFundInfoByCustomerNo().then(res => {
-        if (res.check()) {
-            purchaseCurrencySetting.value = res.data.purchaseCurrencySetting.map(el => {
-                return {
-                    ...el,
-                    currencyName: el.currencyCode === 'self' ? t('fundManager.buy.basketAssets') : el.currencyName
+        // 获取基金产品赎回总金额
+        const queryFundRedeemMoney = () => {
+            const ids = state.selectList.map(elem => elem.id)
+            getFundRedeemMoney({
+                fundIdList: ids
+            }).then(res => {
+                if (res.check()) {
+                    const { data } = res
+                    state.totalLot = Number(data.sharesTotal)
                 }
             })
         }
-    })
-}
+        // 选择时间
+        const selectTime = () => {
+            const value = state.listQuery.deductDate
+            if (value) {
+                state.listQuery.deductDate = window.dayjs(value).format('YYYY-MM-DD')
+            } else {
+                state.listQuery.deductDate = null
+            }
+        }
+        // 改变当前页数
+        const changePage = (value) => {
+            state.listQuery.current = value
+            queryFundRedeemList()
+        }
+        // 改变分页数量
+        const changeSize = (value) => {
+            state.listQuery.current = 1
+            state.listQuery.size = value
+            queryFundRedeemList()
+        }
+        // 点击搜索
+        const onSearch = () => {
+            state.listQuery.current = 1
+            queryFundRedeemList()
+        }
+        // 选择列表
+        const selectionChange = (list) => {
+            state.selectList = list
+            if (list.length > 0) {
+                // 获取基金产品赎回总金额
+                queryFundRedeemMoney()
+                state.listQuery.currency = list[0].currencyRedeem
+            } else {
+                state.totalLot = 0
+                state.listQuery.currency = ''
+            }
+        }
+        // 打开确认份额弹窗
+        const openLotDialog = async (type = 'preview') => {
+            if (state.disableBtn) return
+            // if (Number(totalLot) > Number(usable)) {
+            //     return Toast(t('fundManager.ransom.tip1'))
+            // }
+            const ids = state.selectList.map(elem => elem.id)
+            state.lotDialogType = type
+            await nextTick()
+            state.lotDialogRef.open(ids)
+        }
+        // 确认份额
+        const onConfirm = () => {
+            state.selectList = []
+            state.tableRef.clearSelection()
+            state.searchParams.current = 1
+            queryFundRedeemList()
+            // 查询用户信息
+            store.dispatch('_user/findCustomerInfo', false)
+        }
+        const purchaseCurrencySetting = ref([]) // 申购资产设置
+        // 获取基金产品详情
+        const getFundInfo = () => {
+            getFundInfoByCustomerNo().then(res => {
+                if (res.check()) {
+                    purchaseCurrencySetting = res.data.purchaseCurrencySetting.map(el => {
+                        return {
+                    ...el,
+                    currencyName: el.currencyCode === 'self' ? t('fundManager.buy.basketAssets') : el.currencyName
+                        }
+                    })
+                }
+            })
+        }
 
-onMounted(() => {
-    // 获取公司列表
-    queryCompanyList()
-    // 获取公司资产列表
-    queryAssetsList()
-    // 获取基金赎回列表
-    queryFundRedeemList()
-    // 获取基金产品详情
-    getFundInfo()
-})
+        const formatTime = (val) => {
+            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+
+        onMounted(() => {
+            // 获取基金赎回列表
+            queryFundRedeemList()
+        })
+
+        return {
+            customInfo,
+            usable,
+            formatTime,
+            // queryCompanyList,
+            // queryAssetsList,
+            queryFundRedeemList,
+            // queryFundRedeemMoney,
+            selectTime,
+            changePage,
+            changeSize,
+            onSearch,
+            selectionChange,
+            openLotDialog,
+            onConfirm,
+            purchaseCurrencySetting,
+            getFundInfo,
+            ...toRefs(state)
+        }
+    }
+}
 </script>
 
 <style lang="scss" scoped>

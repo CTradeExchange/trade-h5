@@ -1,15 +1,17 @@
 <template>
     <div class='module-content'>
         <el-tabs v-model='activeName'>
-            <el-tab-pane :label="$t('fundManager.deduction.waitRecord')" name='wait'>
-                <!-- 待扣减记录 -->
-                <deduction-wait />
-            </el-tab-pane>
-            <el-tab-pane :label="$t('fundManager.deduction.doneRecord')" name='record'>
-                <!-- 已扣减记录 -->
-                <deduction-record />
-            </el-tab-pane>
+            <el-tab-pane :label="$t('fundManager.deduction.waitRecord')" name='wait' />
+            <el-tab-pane :label="$t('fundManager.deduction.doneRecord')" name='record' />
         </el-tabs>
+        <!-- 待扣减记录 -->
+        <div v-if="activeName === 'wait'">
+            <deduction-wait />
+        </div>
+        <!-- 已扣减记录 -->
+        <div v-if="activeName === 'record'">
+            <deduction-record />
+        </div>
     </div>
 </template>
 

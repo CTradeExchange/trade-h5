@@ -829,7 +829,9 @@
             "date": "扣减日期",
             "column1": "管理费扣减日期(UTC)",
             "column2": "应扣金额",
-            "column3": "扣款状态"
+            "column3": "扣款状态",
+            "deductSuceess": "扣除成功",
+            "deductFail": "扣除成功"
         }
     },
     "fundInfo": {
