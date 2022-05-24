@@ -746,7 +746,8 @@
             "title": "基金操作专区",
             "buy": "申购管理",
             "ransom": "赎回管理",
-            "standard": "下单执行标准"
+            "standard": "下单执行标准",
+            "deduction": "管理费扣减记录"
         },
         "executeStatus": {
             "0": "未确认",
@@ -821,6 +822,14 @@
             "tip2": "输入下单比例",
             "tip3": "暂未设置下单执行标准，请添加！",
             "tip5": "所有下单比例加起来不能大于100%"
+        },
+        "deduction": {
+            "waitRecord": "待扣减记录",
+            "doneRecord": "已扣减记录",
+            "date": "扣减日期",
+            "column1": "管理费扣减日期(UTC)",
+            "column2": "应扣金额",
+            "column3": "扣款状态"
         }
     },
     "fundInfo": {

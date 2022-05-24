@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 /* 获取公司列表 */
-export function getCompanyList (data = {}) {
+export function getCompanyList(data = {}) {
     return request({
         url: '/global/admin.app.AppCompanyService.listAll',
         method: 'post',
@@ -10,7 +10,7 @@ export function getCompanyList (data = {}) {
 }
 
 /* 获取公司资产列表 */
-export function getCompanyAssets (data) {
+export function getCompanyAssets(data) {
     return request({
         url: '/global/config.app.AppAssetsDubboService.getAssetsList',
         method: 'post',
@@ -19,7 +19,7 @@ export function getCompanyAssets (data) {
 }
 
 /* 获取所有可设置的下单执行标准的产品 */
-export function getAllOrderProducts (data) {
+export function getAllOrderProducts(data) {
     return request({
         url: '/global/fund.app.FundsOrderExecuteStandardService.getOrderExecuteStandardConfigSymbolList',
         method: 'post',
@@ -31,7 +31,7 @@ export function getAllOrderProducts (data) {
 }
 
 /* 获取下单执行标准 */
-export function getOrderStandard (data) {
+export function getOrderStandard(data) {
     return request({
         url: '/global/fund.app.FundsOrderExecuteStandardService.getOrderExecuteStandardConfigs',
         method: 'post',
@@ -43,7 +43,7 @@ export function getOrderStandard (data) {
 }
 
 /* 保存下单执行标准 */
-export function saveOrderStandard (data) {
+export function saveOrderStandard(data) {
     return request({
         url: '/global/fund.app.FundsOrderExecuteStandardService.saveOrderExecuteStandardConfigs',
         method: 'post',
@@ -55,7 +55,7 @@ export function saveOrderStandard (data) {
 }
 
 /* 基金经理-查询基金产品申购列表 */
-export function getFundApplyList (data) {
+export function getFundApplyList(data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.page',
         method: 'post',
@@ -67,7 +67,7 @@ export function getFundApplyList (data) {
 }
 
 /* 基金经理-获取基金产品申购执行信息 */
-export function getFundApplyInfo (data) {
+export function getFundApplyInfo(data) {
     return request({
         url: '/global/fund.app.FundsApplyExecuteService.getFundsApplyExecuteInfo',
         method: 'post',
@@ -79,7 +79,7 @@ export function getFundApplyInfo (data) {
 }
 
 /* 基金经理-确认基金产品申购执行 */
-export function confirmFundApply (data) {
+export function confirmFundApply(data) {
     return request({
         url: '/global/fund.app.FundsApplyExecuteService.confirmFundsApplyExecuteInfo',
         method: 'post',
@@ -91,7 +91,7 @@ export function confirmFundApply (data) {
 }
 
 /* 基金经理-查询基金产品赎回列表 */
-export function getFundRedeemList (data) {
+export function getFundRedeemList(data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.queryManagerPage',
         method: 'post',
@@ -103,7 +103,7 @@ export function getFundRedeemList (data) {
 }
 
 /* 基金经理-获取基金产品赎回总金额 */
-export function getFundRedeemMoney (data) {
+export function getFundRedeemMoney(data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.calShares',
         method: 'post',
@@ -115,7 +115,7 @@ export function getFundRedeemMoney (data) {
 }
 
 /* 基金经理-确认基金产品赎回 */
-export function confirmFundRedeem (data) {
+export function confirmFundRedeem(data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.checkShares',
         method: 'post',
@@ -128,7 +128,7 @@ export function confirmFundRedeem (data) {
 /* 基金相关接口 */
 
 /* 基金详情 */
-export function getFundInfo (data) {
+export function getFundInfo(data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.getFundInfo',
         method: 'post',
@@ -137,7 +137,7 @@ export function getFundInfo (data) {
 }
 
 /* 分页获取基金产品列表 */
-export function findFundPage (data) {
+export function findFundPage(data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.findFundPage',
         method: 'post',
@@ -146,7 +146,7 @@ export function findFundPage (data) {
 }
 
 /* 分页获取基金产品列表（带实时信息） */
-export function findFundPageRealTime (data) {
+export function findFundPageRealTime(data) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.findFundPageWithRealTimeInfo',
         method: 'post',
@@ -155,7 +155,7 @@ export function findFundPageRealTime (data) {
 }
 
 /* 基金净值涨跌比 */
-export function fundNetValueChangeQuote (data) {
+export function fundNetValueChangeQuote(data) {
     return request({
         url: '/global/report.app.ReportDatadDubboService.fundNetValueChangeQuote',
         method: 'post',
@@ -167,7 +167,7 @@ export function fundNetValueChangeQuote (data) {
 }
 
 /* 客户赎回基金 */
-export function fundRedeem (data) {
+export function fundRedeem(data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.createFundRedeem',
         method: 'post',
@@ -179,7 +179,7 @@ export function fundRedeem (data) {
 }
 
 /* 客户申购基金 */
-export function fundApply (data) {
+export function fundApply(data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.apply',
         method: 'post',
@@ -191,7 +191,7 @@ export function fundApply (data) {
 }
 
 /* 客户申购-计算手续费、份额 */
-export function fundCalcApplyShares (data) {
+export function fundCalcApplyShares(data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.calcApplyShares',
         method: 'post',
@@ -203,7 +203,7 @@ export function fundCalcApplyShares (data) {
 }
 
 /* 客户获取基金申购列表 */
-export function fundApplyRecord (data) {
+export function fundApplyRecord(data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.customerPage',
         method: 'post',
@@ -215,7 +215,7 @@ export function fundApplyRecord (data) {
 }
 
 /* 查询基金赎回列表 */
-export function fundRedeemRecord (data) {
+export function fundRedeemRecord(data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.page',
         method: 'post',
@@ -226,8 +226,32 @@ export function fundRedeemRecord (data) {
     })
 }
 
+/* 分页获取基金管理手续费列表 */
+export function getManagementFeesList(data) {
+    return request({
+        url: '/global/fund.app.FundManagementFeesAppDubboService.page',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 分页获取基金管理费 手动扣费 */
+export function getManagementFeesDeduct(data) {
+    return request({
+        url: '/global/fund.app.FundManagementFeesAppDubboService.deduct',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
 /* 获取指数样本 基金净值涨跌比 */
-export function getIndexSample (data) {
+export function getIndexSample(data) {
     return request({
         url: '/global/report.app.ReportDatadDubboService.indexSample',
         method: 'post',
@@ -239,7 +263,7 @@ export function getIndexSample (data) {
 }
 
 /* 获取指数单资产表现柱状图 */
-export function getIndexSimplePerformance (data) {
+export function getIndexSimplePerformance(data) {
     return request({
         url: '/global/report.app.ReportDatadDubboService.indexSimplePerformance',
         method: 'post',
@@ -251,7 +275,7 @@ export function getIndexSimplePerformance (data) {
 }
 
 /* 基金经理 获取一篮子资产列表 */
-export function getFundCurrencyList (data) {
+export function getFundCurrencyList(data) {
     return request({
         url: '/global/fund.app.FundApplyAppDubboService.getFundCurrencyList',
         method: 'post',
@@ -263,7 +287,7 @@ export function getFundCurrencyList (data) {
 }
 
 /* 根据提按号获取赎回的金额、手续费等信息 */
-export function getFundRedeemCurrencyList (data) {
+export function getFundRedeemCurrencyList(data) {
     return request({
         url: '/global/fund.app.FundRedeemAppDubboService.getFundRedeemCurrencyList',
         method: 'post',
@@ -275,12 +299,11 @@ export function getFundRedeemCurrencyList (data) {
 }
 
 /* 基金经理获取基金产品详情 */
-export function getFundInfoByCustomerNo (data = {}) {
+export function getFundInfoByCustomerNo(data = {}) {
     return request({
         url: '/global/config.app.AppSymbolDubboService.getFundInfoByCustomerNo',
         method: 'post',
-        headers: {
-        },
+        headers: {},
         data
     })
 }
