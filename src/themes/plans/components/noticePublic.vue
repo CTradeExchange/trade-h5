@@ -144,7 +144,8 @@ export default {
             router.push({
                 path: '/noticeDetail',
                 query: {
-                    id: id
+                    id: id,
+                    type: 'notice'
                 }
             })
         }

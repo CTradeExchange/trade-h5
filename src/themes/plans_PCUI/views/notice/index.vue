@@ -22,6 +22,7 @@
                         </div>
                         <div class='list-page-box'>
                             <van-pagination
+                                v-if='listNotice.length > 0'
                                 v-model='currentNt'
                                 class='list-page'
                                 force-ellipses
@@ -48,7 +49,7 @@
                     />
                 </div>
             </van-tab>
-            <van-tab name='msg' :title="$t('route.msg')">
+            <van-tab v-if='isUser' name='msg' :title="$t('route.msg')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
@@ -67,6 +68,7 @@
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
+                            v-if='msgList.length > 0'
                             v-model='current'
                             class='list-page'
                             force-ellipses
@@ -92,7 +94,7 @@
                     />
                 </div>
             </van-tab>
-            <van-tab name='msgps' :title="$t('route.msgCustomer')">
+            <van-tab v-if='isUser' name='msgps' :title="$t('route.msgCustomer')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
@@ -107,6 +109,7 @@
                         </div>
                         <div class='list-page-box'>
                             <van-pagination
+                                v-if='listCustomer.length > 0'
                                 v-model='currentPs'
                                 class='list-page'
                                 force-ellipses
@@ -182,7 +185,9 @@ export default {
             finishedPs: false, // 个人消息列表
             pageLoadingPs: false,
             currentPs: 1,
-            totalPs: 0
+            totalPs: 0,
+
+            isUser: false,
         })
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
@@ -301,17 +306,23 @@ export default {
 
         const onClickTab = (item) => {
             console.log(item)
-            if (item.name === 'notice') {
+            if (item.name === 'public') {
+                state.currentNt = 1
+                state.finishedNt = false
                 state.listNotice = []
                 getNoticeData()
             }
-
-            if (item.name === 'msg') {
-                state.msgList = []
-                getMsgList()
-            }
             if (item.name === 'msgps') {
+                state.currentPs = 1
+                state.finishedPs = false
+                state.listCustomer = []
                 getCustomerMsgListData()
+            }
+            if (item.name === 'msg') {
+                state.current = 1
+                state.finished = false
+                state.list = []
+                getMsgList()
             }
         }
 
@@ -358,6 +369,11 @@ export default {
 
         onMounted(() => {
             getNoticeData()
+            if (customInfo.value) {
+                state.isUser = true
+            } else {
+                state.isUser = false
+            }
         })
 
         return {
