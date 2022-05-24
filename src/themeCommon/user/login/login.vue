@@ -218,8 +218,9 @@ export default {
 
         // 登录成功跳转
         const loginToPath = () => {
-            // const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-            router.replace('/')
+            const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
+            const backURL = route.query.activityBack ? decodeURIComponent(route.query.activityBack) : toURL // 返回活动页面的链接
+            router.replace(backURL)
         }
 
         // 发送登录接

@@ -323,7 +323,7 @@ const goExamine = () => {
 const onFund = () => {
     if (isPC) {
         if (!customerInfo.value) {
-            router.push({ path: '/login' })
+            router.push({ name: 'Login', query: { activityBack: encodeURIComponent(route.fullPath) } })
         } else {
             showFundDialog.value = true
         }
