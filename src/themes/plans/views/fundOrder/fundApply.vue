@@ -124,8 +124,8 @@
     </div>
 
     <div class='footerBtn'>
-        <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
-            {{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
+        <van-button block :disabled='loading || fund?.canPurchase!==1' size='normal' @click='submitHandler'>
+            {{ fund?.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
         </van-button>
     </div>
 

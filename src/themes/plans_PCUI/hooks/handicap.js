@@ -115,19 +115,31 @@ export const toolHooks = function () {
         return {
             '1': {
                 handicap: false,
-                pendingTab: true
+                pendingTab: {
+                    tradeType: [1, 2, 3, 5], // 哪些玩法显示限价单
+                    show: true, // 限价单是否显示
+                }
             },
             '2': {
                 handicap: true,
-                pendingTab: false
+                pendingTab: {
+                    tradeType: [1, 2, 3, 5], // 哪些玩法显示限价单
+                    show: false, // 限价单是否显示
+                }
             },
             '3': {
                 handicap: true,
-                pendingTab: true
+                pendingTab: {
+                    tradeType: [1, 2, 3, 5], // 哪些玩法显示限价单
+                    show: true, // 限价单是否显示
+                }
             },
             '4': {
                 handicap: true,
-                pendingTab: false
+                pendingTab: {
+                    tradeType: [5], // 哪些玩法显示限价单
+                    show: true, // 限价单是否显示
+                }
             }
         }
     })
