@@ -42,7 +42,7 @@
                     >
                         <div v-if="item.currencyCode === 'self'" class='asset-item' @click='selectAssets(item.currencyCode)'>
                             <div class='top'>
-                                <!-- <CurrencyIcon :currency='item.currencyCode' :size='24' /> -->
+                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
                             </div>
                             <div>
                                 <p class='currency-text'>

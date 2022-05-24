@@ -4,7 +4,7 @@
         class='public-pop'
         closeable
         position='center'
-        :style="{ height: '60%',width: '80%' }"
+        :style="{ width: '80%' }"
     >
         <div class='pop-top'>
             {{ $t('route.noticeTitle') }}
@@ -31,7 +31,7 @@ import { computed, onMounted, onUnmounted, ref, reactive, toRefs, provide } from
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getCookie, localGet, localRemove, localSet } from '@/utils/util'
-import { getNoticeList } from '@/api/user'
+import { getNoticeList, getNoticePop } from '@/api/user'
 
 export default {
     setup () {
@@ -80,7 +80,7 @@ export default {
             if (localGet('noticeParams')) { // 不是
                 var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
                 if (nData.type === 'user') { // 已登录用户
-                    params.pubTimeFrom = nData.pubTime
+                    params.viewPubTime = nData.pubTime
                 }
                 // if (nData.type === 'guest') { // 已登录用户
                 // }
@@ -88,15 +88,15 @@ export default {
                 // 获取当日的所有公告，显示完且缓存弹出次数
             }
 
-            getNoticeList(params).then(res => {
+            getNoticePop(params).then(res => {
                 // console.log(res)
                 if (res.check()) {
-                    if (res.data.records && res.data.records.length > 0) {
-                        state.noticeData = res.data.records
+                    if (res.data && res.data.length > 0) {
+                        state.noticeData = res.data
                         // 获取公告列表后，再缓存最新的一条的pubTime在本地
                         let noticeParams = {}
                         // 判断是否新游客
-                        // console.log(localGet('noticeParams'))
+                        console.log(localGet('noticeParams'))
                         if (localGet('noticeParams')) { // 不是
                             var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
                             if (customInfo.value.customerNo) { // 已登录用户
@@ -131,6 +131,7 @@ export default {
                             }
                         }
                         console.log(noticeParams)
+                        // getPublicData(true)
                         localSet('noticeParams', JSON.stringify(noticeParams))
                     }
                 }
@@ -150,6 +151,7 @@ export default {
 
         onMounted(() => {
             getNoticeData()
+            // localRemove('noticeParams')
         })
 
         onUnmounted(() => {
@@ -172,10 +174,17 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped >
+<style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
+:deep(.van-popup--center) {
+    --van-dialog-border-radius: 20px;
+    border-radius: rem(20px);
+}
 .public-pop {
-    border-radius: rem(10px);
+    padding-bottom: rem(20px);
+    border-radius: rem(20px);
+
+    --van-dialog-border-radius: 20px;
     .pop-top {
         padding-left: rem(30px);
         font-size: rem(36px);
@@ -186,7 +195,8 @@ export default {
         right: rem(20px);
     }
     .pop-content {
-        max-height: 80%;
+        max-height: rem(650px);
+        margin-bottom: rem(20px);
         padding: 0 rem(30px) rem(20px) rem(30px);
         overflow: auto;
     }
@@ -206,4 +216,5 @@ export default {
         }
     }
 }
+
 </style>

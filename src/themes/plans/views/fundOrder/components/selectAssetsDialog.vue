@@ -14,7 +14,6 @@
                 <div class='left'>
                     <div class='top-block'>
                         <currencyIcon
-                            v-if="item.currencyCode !== 'self'"
                             :currency='item.currencyCode'
                             size='24'
                         />
