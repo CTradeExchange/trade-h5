@@ -438,6 +438,7 @@
         "pendingPriceError": "The order price is incorrect",
         "handicap": "Order Book",
         "nullAssets": "No account asset",
+        "noAssets": "No account asset",
         "yi": "Use",
         "huan": "Repay",
         "daihuan": "Outstanding",

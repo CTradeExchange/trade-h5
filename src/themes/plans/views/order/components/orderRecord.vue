@@ -31,6 +31,7 @@
         <positionList v-if="current === 'position'" :show-header='false' />
         <!-- 资产 -->
         <div v-if="current === 'assets'" class='assets-list'>
+            <van-empty v-if='accountList.length === 0' :description='$t("trade.noAssets")' image='/images/empty.png' />
             <assetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
         </div>
     </div>
@@ -82,7 +83,8 @@ export default {
         })
 
         // 账户列表
-        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.tradeType)))
+        const accountList = computed(() => store.state._user.customerInfo?.accountList?.filter(el => Number(el.tradeType) === Number(props.tradeType)) || [])
+        const customerInfo = computed(() => store.state._user.customerInfo)
         // 当前委托、当前挂单数据
         const pendingList = computed(() => store.state._trade.pendingList[props.tradeType] || [])
 
@@ -153,14 +155,17 @@ export default {
                     break
                 case 'assets':
                     // 每次切换资产页面拉取用户信息
-                    store.dispatch('_user/findCustomerInfo', false)
-                    getAssetsInfo()
+                    if (customerInfo.value) {
+                        store.dispatch('_user/findCustomerInfo', false)
+                        getAssetsInfo()
+                    }
                     break
             }
         }
 
         // 获取成交记录数据
         function getDealRecord () {
+            if (!customerInfo.value) return
             const params = {
                 current: 1,
                 size: 10,
@@ -285,7 +290,6 @@ export default {
     }
 }
 .assets-list {
-    margin-top: rem(20px);
     padding: 0 rem(20px);
     .block {
         margin-bottom: rem(20px);

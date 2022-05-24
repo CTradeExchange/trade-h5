@@ -437,6 +437,7 @@
         "pendingPriceError": "挂单价格不正确",
         "handicap": "盘口",
         "nullAssets": "没有该资产账户",
+        "noAssets": "暂无资产",
         "yi": "以",
         "huan": "还",
         "daihuan": "待还",

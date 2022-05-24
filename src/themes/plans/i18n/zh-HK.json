@@ -436,6 +436,7 @@
         "pendingPriceError": "掛單價格不正確",
         "handicap": "槃口",
         "nullAssets": "沒有該資產賬戶",
+        "noAssets": "暂无資產",
         "yi": "以",
         "huan": "還",
         "daihuan": "待還",

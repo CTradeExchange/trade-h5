@@ -230,7 +230,7 @@ export default {
             const proCurrency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
-            else Toast(t('trade.nullAssets'))
+            else if (customerInfo.value) Toast(t('trade.nullAssets'))
         }
 
         // 设置按额或者按手数，切换产品或者切换方向时需要重新设置；现货撮合、杠杆玩法下单买入按额，其他都是按手数交易
@@ -454,6 +454,7 @@ export default {
         return {
             ...toRefs(state),
             init,
+            customerInfo,
             plansList,
             dealModeShowMap,
             productTradeType,
