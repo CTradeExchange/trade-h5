@@ -40,9 +40,9 @@
                         :label='item.currencyCode === "self" ? $t("fundInfo.basketAssets"): item.currencyCode'
                         :value='item.currencyCode'
                     >
-                        <div v-if="item.currencyCode === 'self'" class='asset-item' @click='selectAssets(item.currencyCode)'>
+                        <div v-if="item.currencyCode === 'self'" :class="['asset-item', { 'item-active': item.currencyCode === activeCurrency }]" @click='selectAssets(item.currencyCode)'>
                             <div class='top'>
-                                <!-- <CurrencyIcon :currency='item.currencyCode' :size='24' /> -->
+                                <CurrencyIcon :currency='item.currencyCode' :size='24' />
                             </div>
                             <div>
                                 <p class='currency-text'>
@@ -61,7 +61,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div v-else class='asset-item' @click='selectAssets(item.currencyCode)'>
+                        <div v-else :class="['asset-item', { 'item-active': item.currencyCode === activeCurrency }]" @click='selectAssets(item.currencyCode)'>
                             <div class='top'>
                                 <CurrencyIcon :currency='item.currencyCode' :size='24' />
                             </div>
@@ -122,6 +122,7 @@
                     <!-- {{ sharesPlaceholder }} -->
                     <el-input
                         v-model='amountPay'
+                        :disabled='fund.canPurchase !== 1 || !customerInfo'
                         :placeholder="$t('fundInfo.inputCount')"
                         size='normal'
                         @input='onInput'
@@ -710,6 +711,9 @@ const toOrderFund = currency => {
         .asset-list {
             margin-top: 15px;
         }
+    }
+    .item-active {
+        border: 1px solid var(--primary);
     }
 }
 .add-wrap {
