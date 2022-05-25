@@ -3,7 +3,7 @@ import { findFundPage, findFundPageRealTime, fundNetValueChangeQuote, getFundInf
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet, sessionGet } from '@/utils/util.js'
-import { createListByPlans, planMapToArray } from './storeUtil.js'
+import { createListByPlans, fillProductLabel, planMapToArray } from './storeUtil.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
@@ -346,9 +346,7 @@ export default {
                     if (res.check()) {
                         res.data.forEach(el => {
                             el.symbol_id = el.symbolId
-                            const labelsArr = el.labels?.split(',') ?? []
-                            el.isIndex = labelsArr.includes('index')
-                            el.isCryptocurrency = labelsArr.includes('cryptocurrency')
+                            fillProductLabel(el)
                             commit('Update_product', el)
                         })
                     }
@@ -376,9 +374,7 @@ export default {
                     if (res.check() && res.data) {
                         const data = res.data
                         data.tradeType = params.tradeType
-                        const labelsArr = data.labels?.split(',') ?? []
-                        data.isIndex = labelsArr.includes('index')
-                        data.isCryptocurrency = labelsArr.includes('cryptocurrency')
+                        fillProductLabel(data)
                         commit('Update_product', data)
                         if (res.data.etf) dispatch('queryEquityPremiumRate', { symbolId, tradeType })
                         if (rootState._quote.productActivedID === symbolKey) {

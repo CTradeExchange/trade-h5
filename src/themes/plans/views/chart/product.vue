@@ -359,7 +359,7 @@ import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
 import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick, onBeforeUnmount } from 'vue'
 import KIcon from './icons/kIcon.vue'
-import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
+import { MAINSTUDIES, SUBSTUDIES, VolumeStudy } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
@@ -914,6 +914,17 @@ export default {
                 downColor = '#26a69a'
             }
 
+            // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
+            const canUseVolume = !product.value.isFX && !product.value.isCommodites
+            console.log(canUseVolume)
+            // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
+            if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
+                SUBSTUDIES.unshift(VolumeStudy)
+            } else if (!canUseVolume) {
+                const volumeIndex = SUBSTUDIES.findIndex(el => el.name === 'Volume')
+                if (volumeIndex > -1) SUBSTUDIES.splice(volumeIndex, 1)
+            }
+            state.sideStudyList = SUBSTUDIES.slice(0, 5)
             if (isEmpty(locChartConfig) || !locChartConfig.chartType) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -965,6 +976,10 @@ export default {
             } else {
                 state.mainStudy = JSON.parse(locChartConfig.mainStudy)?.name
                 state.subStudy = JSON.parse(locChartConfig.subStudy)?.name
+                if (state.subStudy === 'Volume' && !canUseVolume) {
+                    state.subStudy = SUBSTUDIES[0].name
+                    localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                }
 
                 state.klineType = locChartConfig.chartType
                 state.settingList = locChartConfig.lineSetList
@@ -1111,11 +1126,11 @@ export default {
             router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
         }
 
-        // 初始化图表配置
-        initChartData()
-
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() })
+        store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() }).then(() => {
+            // 初始化图表配置
+            initChartData()
+        })
 
         // 获取基金列表
         getFundPage()
@@ -1157,6 +1172,7 @@ export default {
                 if (query.symbolId) {
                     symbolId.value = parseInt(query.symbolId)
                     tradeType.value = parseInt(query.tradeType)
+                    store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() })
                     store.commit('_quote/Update_productActivedID', `${query.symbolId}_${query.tradeType}`)
                     await nextTick()
                     const product = store.getters.productActived

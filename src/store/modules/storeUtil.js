@@ -107,3 +107,12 @@ function assetsIncludes (a, b) {
     b = b.split(',')
     return b.every(cur => a.includes(cur))
 }
+
+// 处理产品标签
+export const fillProductLabel = (product) => {
+    const labelsArr = product.labels?.split(',') ?? []
+    product.isIndex = labelsArr.includes('index') // 指数产品
+    product.isCryptocurrency = labelsArr.includes('cryptocurrency') // 加密货币
+    product.isFX = labelsArr.includes('FX') // 外汇产品
+    product.isCommodites = labelsArr.includes('commodites') // 商品
+}

@@ -218,6 +218,14 @@ export const SUBSTUDIES = [
     },
 ]
 
+// 副图成交量指标，产品标签为非【外汇】【贵金属】的产品支持
+export const VolumeStudy = {
+        label: 'Volume',
+        name: 'Volume',
+        params: [false, false, [20]],
+        type: 'subStudy'
+    }
+
 //图表样式名称对应关系
 export const styleNameMap = {
     0: 'barStyle',
