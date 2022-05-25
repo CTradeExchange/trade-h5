@@ -80,8 +80,8 @@
                     <h3 class='title1'>
                         {{ $t('fundInfo.deductRuletxt1') }}
                     </h3>
-                    <div v-if='fundData.value.purchaseCurrencySetting !== undefined' class=''>
-                        <van-row v-for='(item,index) in fundData.value.purchaseCurrencySetting' :key='index' class='txt-row child'>
+                    <div v-if='purchaseCurrencySetting !== {}' class=''>
+                        <van-row v-for='(item,index) in purchaseCurrencySetting.value' :key='index' class='txt-row child'>
                             <van-col span='12'>
                                 {{ item.currencyCode === 'self' ? $t('fundInfo.basketAssets') : item.currencyName }}
                             </van-col>
@@ -117,6 +117,7 @@ import { getFundInfo } from '@/api/fund'
 // 是否显示弹窗
 const show = ref(false)
 const fundId = ref()
+const purchaseCurrencySetting = ref({})
 
 // 打开弹窗
 const open = (showType, id) => {
@@ -136,6 +137,7 @@ const getFundInfoFn = () => {
         if (res.check()) {
             if (res.data) {
                 fundData.value = ref(res.data)
+                purchaseCurrencySetting.value = ref(res.data.purchaseCurrencySetting)
             }
         }
     })
