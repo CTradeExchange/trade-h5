@@ -244,8 +244,13 @@ defineExpose({
             padding-left: rem(40px);
         }
     }
+    .title {
+        font-weight: normal;
+        font-size: 16px;
+    }
     .title1 {
         margin-top: 10px;
+        font-weight: normal;
         font-size: 16px;
     }
 }

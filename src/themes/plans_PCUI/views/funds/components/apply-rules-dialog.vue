@@ -203,6 +203,11 @@ defineExpose({
     }
     .title1 {
         margin-top: 10px;
+        font-weight: normal;
+        font-size: 16px;
+    }
+    .title {
+        font-weight: normal;
         font-size: 16px;
     }
 }
