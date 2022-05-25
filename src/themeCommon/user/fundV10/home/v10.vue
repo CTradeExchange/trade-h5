@@ -816,7 +816,7 @@ onUnmounted(() => {
                     justify-content: center;
                     align-items: center;
                     height: 36px;
-                    padding: 0 5px;
+                    padding: 0 8px;
                     &:first-of-type {
                         margin-right: 5px;
                     }
