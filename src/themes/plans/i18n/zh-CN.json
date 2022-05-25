@@ -817,7 +817,14 @@
         "applyDetail": "申购明细",
         "applyAssets": "申购资产",
         "redeemDetail": "赎回明细",
-        "redeemAssetsTitle": "赎回资产"
+        "redeemAssetsTitle": "赎回资产",
+        "deductRuletit1": "费用类别",
+        "deductRuletxt1": "申购费",
+        "deductRuletxt2": "管理费",
+        "deductRuletxt3": "(每年)",
+        "deductRuletxt4": "赎回费",
+        "deductRuledesc": "基金管理费指基金管理人管理基金资产所收取的报酬.基金管理费从基金资产中每日{time}结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付.",
+        "deductRuledesc2": "赎回费指赎回基金的时候产生的手续费，一次性收取"
     },
     "home": {
         "quick": {

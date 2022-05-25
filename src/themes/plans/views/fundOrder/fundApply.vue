@@ -2,9 +2,12 @@
     <div v-if='fund' class='pageWrapp'>
         <LayoutTop :back='true' :menu='false'>
             <template #right>
-                <router-link class='text' href='javascript:;' to='/fundRules?direction=buy'>
+                <!-- <router-link class='text' href='javascript:;' to='/fundRules?direction=buy'>
                     {{ $t('fundInfo.applyRules1') }}
-                </router-link>
+                </router-link> -->
+                <span class='text' @click='goFundRulesPage'>
+                    {{ $t('fundInfo.applyRules1') }}
+                </span>
             </template>
         </LayoutTop>
         <div class='currencyBar'>
@@ -276,6 +279,16 @@ const submitHandler = () => {
                 .catch(() => {
                     // on cancel
                 })
+        }
+    })
+}
+
+const goFundRulesPage = () => {
+    router.push({
+        path: '/fundRules',
+        query: {
+            direction: 'buy',
+            fundId: fundId
         }
     })
 }

@@ -2,7 +2,6 @@
     <div class='dialog-layer'>
         <el-dialog
             v-model='show'
-            :before-close='close'
             :close-on-click-modal='false'
             :title="$t('fundInfo.redeemRules')"
             width='520px'
@@ -88,19 +87,68 @@
                         ...
                     </p>
                 </div>
+
+                <section class='block'>
+                    <h2 class='title'>
+                        {{ $t('fundInfo.deductRuletit1') }}
+                    </h2>
+                    <h3 class='title1'>
+                        {{ $t('fundInfo.deductRuletxt4') }}
+                    </h3>
+                    <div v-if='fundData.value.redemptionCurrencySetting !== undefined'>
+                        <van-row v-for='(item,index) in fundData.value.redemptionCurrencySetting' :key='index' class='txt-row child'>
+                            <van-col span='12'>
+                                {{ item.currencyCode === 'SELF' ? $t('fundInfo.basketAssets') : item.currencyName }}
+                            </van-col>
+                            <van-col align='right' span='12'>
+                                {{ item.redemptionFeeProportion? divData(item.redemptionFeeProportion):0 }}%
+                            </van-col>
+                        </van-row>
+                    </div>
+                    <p class='text'>
+                        {{ $t('fundInfo.deductRuledesc2') }}
+                    </p>
+                </section>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script setup>
-import { ref, defineExpose } from 'vue'
+import { ref, defineExpose, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { div } from '@/utils/calculation'
+import { getFundInfo } from '@/api/fund'
 // 是否显示弹窗
 const show = ref(false)
+const fundId = ref()
 
 // 打开弹窗
-const open = () => {
-    show.value = true
+const open = (showType, id) => {
+    show.value = showType
+    fundId.value = id
+    getFundInfoFn()
+}
+const fundData = ref({})
+const { t } = useI18n({ useScope: 'global' })
+
+// 获取基金产品详情
+const getFundInfoFn = () => {
+    const param = {
+        fundId: fundId.value
+    }
+    getFundInfo(param).then(res => {
+        if (res.check()) {
+            if (res.data) {
+                fundData.value = ref(res.data)
+            }
+        }
+    })
+}
+
+const divData = (value) => {
+    return div(value, 100)
 }
 
 defineExpose({
@@ -185,6 +233,18 @@ defineExpose({
                 left: initial;
             }
         }
+    }
+    .txt-row {
+        padding: rem(20px) 0 rem(20px) 0;
+        font-size: 14px;
+        border-bottom: 1px solid var(--lineColor);
+        &.child {
+            padding-left: rem(40px);
+        }
+    }
+    .title1 {
+        margin-top: 10px;
+        font-size: 16px;
     }
 }
 </style>

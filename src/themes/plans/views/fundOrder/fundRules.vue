@@ -68,6 +68,33 @@
                     ...
                 </p>
             </section>
+            <section class='block'>
+                <h2 class='title'>
+                    {{ $t('fundInfo.deductRuletit1') }}
+                </h2>
+                <h3 class='title1'>
+                    {{ $t('fundInfo.deductRuletxt1') }}
+                </h3>
+                <van-row v-for='(item,index) in fundData.value.purchaseCurrencySetting' :key='index' class='txt-row child'>
+                    <van-col span='12'>
+                        {{ item.currencyCode === 'self' ? $t('fundInfo.basketAssets') : item.currencyName }}
+                    </van-col>
+                    <van-col align='right' span='12'>
+                        {{ item.purchaseFeeProportion? divData(item.purchaseFeeProportion):0 }}%
+                    </van-col>
+                </van-row>
+                <van-row class='txt-row'>
+                    <van-col span='12'>
+                        {{ $t('fundInfo.deductRuletxt2') }}
+                    </van-col>
+                    <van-col align='right' span='12'>
+                        {{ fundData.managementFee? divData(fundData.managementFee):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
+                    </van-col>
+                </van-row>
+                <p class='text'>
+                    {{ $t('fundInfo.deductRuledesc',{ time: fundData.dailySettlementTime?fundData.dailySettlementTime: '00:00' }) }}
+                </p>
+            </section>
         </div>
 
         <!-- 赎回规则 -->
@@ -145,15 +172,66 @@
                     ...
                 </p>
             </section>
+
+            <section class='block'>
+                <h2 class='title'>
+                    {{ $t('fundInfo.deductRuletit1') }}
+                </h2>
+                <h3 class='title1'>
+                    {{ $t('fundInfo.deductRuletxt4') }}
+                </h3>
+                <van-row v-for='(item,index) in fundData.value.redemptionCurrencySetting' :key='index' class='txt-row child'>
+                    <van-col span='12'>
+                        {{ item.currencyCode === 'self' ? $t('fundInfo.basketAssets') : item.currencyName }}
+                    </van-col>
+                    <van-col align='right' span='12'>
+                        {{ item.redemptionFeeProportion? divData(item.redemptionFeeProportion):0 }}%
+                    </van-col>
+                </van-row>
+
+                <p class='text'>
+                    {{ $t('fundInfo.deductRuledesc2') }}
+                </p>
+            </section>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { div } from '@/utils/calculation'
+import { getFundInfo } from '@/api/fund'
+
 const route = useRoute()
 const active = ref(route.query.direction === 'buy' ? 0 : 1)
+const { fundId } = route.query
+const fundData = ref({})
+const { t } = useI18n({ useScope: 'global' })
+
+// 获取基金产品详情
+const getFundInfoFn = () => {
+    getFundInfo({ fundId }).then(res => {
+        if (res.check()) {
+            console.log(res)
+            if (res.data) {
+                fundData.value = ref(res.data)
+            }
+            console.log(fundData.value)
+        }
+    })
+}
+
+const divData = (value) => {
+    return div(value, 100)
+}
+
+onMounted(() => {
+    // 获取基金产品详情
+    getFundInfoFn()
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -186,6 +264,17 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
             &.indent {
                 padding-left: 22px;
             }
+        }
+        .txt-row {
+            padding: rem(20px) 0 rem(20px) 0;
+            font-size: rem(20px);
+            border-bottom: 1px solid var(--lineColor);
+            &.child {
+                padding-left: rem(40px);
+            }
+        }
+        .title1 {
+            font-size: rem(26px);
         }
     }
     .n {

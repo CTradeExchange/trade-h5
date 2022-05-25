@@ -746,8 +746,7 @@
             "title": "基金操作专区",
             "buy": "申购管理",
             "ransom": "赎回管理",
-            "standard": "下单执行标准",
-            "deduction": "管理费扣减记录"
+            "standard": "下单执行标准"
         },
         "executeStatus": {
             "0": "未确认",
@@ -822,20 +821,6 @@
             "tip2": "输入下单比例",
             "tip3": "暂未设置下单执行标准，请添加！",
             "tip5": "所有下单比例加起来不能大于100%"
-        },
-        "deduction": {
-            "waitRecord": "待扣减记录",
-            "doneRecord": "已扣减记录",
-            "date": "扣减日期",
-            "column1": "管理费扣减日期(UTC)",
-            "column2": "应扣金额",
-            "column3": "扣款状态",
-            "deductSuceess": "扣除成功",
-            "deductFail": "扣除失败",
-            "deductPopTitle": "扣减确认",
-            "deductPopTxt1": "总扣减金额",
-            "tip1": "USDT资产可用余额不足",
-            "tip2": "管理费扣减成功"
         }
     },
     "fundInfo": {
@@ -989,7 +974,14 @@
         "applyAmount": "申购金额",
         "redeemAmount": "赎回金额",
         "applyFees": "申购手续费",
-        "redeemFees": "赎回手续费"
+        "redeemFees": "赎回手续费",
+        "deductRuletit1": "费用类别",
+        "deductRuletxt1": "申购费",
+        "deductRuletxt2": "管理费",
+        "deductRuletxt3": "(每年)",
+        "deductRuletxt4": "赎回费",
+        "deductRuledesc": "基金管理费指基金管理人管理基金资产所收取的报酬.基金管理费从基金资产中每日{time}结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付.",
+        "deductRuledesc2": "赎回费指赎回基金的时候产生的手续费，一次性收取"
 
     },
     "funds": {
