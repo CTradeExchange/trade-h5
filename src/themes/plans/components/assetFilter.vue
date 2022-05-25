@@ -6,12 +6,12 @@
             shape='round'
             @change='changeState'
         >
-            隐藏0资产
+            {{ $t('assets.hideAsset') }}
         </van-checkbox>
         <van-search
             v-model='searchText'
             input-align='center'
-            placeholder='搜索资产'
+            :placeholder='$t("assets.searchAsset")'
             @clear='clear'
             @update:model-value='search'
         />

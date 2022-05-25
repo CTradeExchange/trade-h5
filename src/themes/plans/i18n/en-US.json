@@ -606,7 +606,9 @@
         "transferTip6": "The transfer amount cannot be less than0",
         "transferSuccess": "Transfer success",
         "transferAsset": "Transfer asset",
-        "assets": "Assets"
+        "assets": "Assets",
+        "hideAsset": "Hide 0 assets",
+        "searchAsset":"Search"
     },
     "record": {
         "repaymentAmount": "Repayment quantity",

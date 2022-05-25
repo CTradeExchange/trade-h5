@@ -49,7 +49,7 @@
         <div class='assets-body'>
             <!-- 资产搜索 -->
             <AssetFilter @changeState='changeState' @searchAsset='searchAsset' />
-            <el-table :cell-style="{ background: 'none' }" :data='accountList' :empty-text="$t('c.noData')" height='100%'>
+            <el-table :cell-style="{ background: 'none' }" :data='accountList' :empty-text="$t('c.noData')">
                 <el-table-column :label="$t('trade.name')" min-width='150' prop='currency' />
                 <el-table-column :label="$t('trade.totalAssets')" min-width='150' prop='balance' />
                 <el-table-column :label="$t('trade.free')" min-width='150' prop='available' />

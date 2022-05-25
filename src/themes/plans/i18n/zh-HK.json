@@ -603,7 +603,9 @@
         "transferTip6": "划轉金額無法小於0",
         "transferSuccess": "划轉成功",
         "transferAsset": "划轉資產",
-        "assets": "資產賬戶"
+        "assets": "資產賬戶",
+        "hideAsset": "隱藏0資產",
+        "searchAsset":"搜索資產"
     },
     "record": {
         "repaymentAmount": "還款數量",
