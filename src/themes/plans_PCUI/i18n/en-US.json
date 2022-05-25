@@ -988,7 +988,15 @@
         "applyAmount": "Purchase amount",
         "applyFees": "Purchase fee",
         "redeemAmount": "Redeem amount",
-        "redeemFees": "Redeem fee"
+        "redeemFees": "Redeem fee",
+
+        "deductRuletit1": "Cost Category",
+        "deductRuletxt1": "Subscription fee",
+        "deductRuletxt2": "management fee",
+        "deductRuletxt3": "(Per year)",
+        "deductRuletxt4": "redemption fee",
+        "deductRuledesc": "Fund management fee refers to the remuneration charged by the fund manager for managing the fund assets. The fund management fee is settled from the fund assets at {time} every day, and the net value of the fund after settlement has already deducted the corresponding fees, and investors do not need to pay separately in each transaction..",
+        "deductRuledesc2": "Redemption fee refers to the handling fee incurred when redeeming the fund, which is charged at one time"
     },
     "funds": {
         "fundShare": "Fund Share",
