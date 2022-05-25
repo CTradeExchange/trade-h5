@@ -7,7 +7,6 @@
                     :placeholder="$t('fundManager.deduction.date')"
                     type='date'
                     value-format='YYYY-MM-DD'
-                    @change='selectTime'
                 />
             </div>
             <button class='btn' @click='onSearch'>
@@ -24,7 +23,6 @@
             :empty-text="$t('c.noData')"
             @selection-change='selectionChange'
         >
-            <el-table-column type='selection' width='50' />
             <el-table-column :label="$t('fundManager.deduction.column1')" :min-width='156' prop='deductDate'>
                 <template #default='scope'>
                     <span>{{ formatTime(scope.row.deductDate) }}</span>
@@ -132,20 +130,17 @@ export default {
         // 弹窗类型
         // const lotDialogType = ref('preview') // preview 预览  confirm 确认份额
 
-        // 监听选择的列表数据
-        watch(state.selectList, () => {
-            state.disableBtn = state.selectList.length === 0
-        })
-
         // 获取基金赎回列表
         const queryFundRedeemList = () => {
-            const params = state.listQuery
+            const params = Object.assign({}, state.listQuery)
             // params.deductDate = params.deductDate || null
             state.isLoading = true
-            console.log(params)
+            params.deductDate = params.deductDate ? window.dayjs(params.deductDate).valueOf() : null
+
+            // console.log(params)
             getManagementFeesList(params).then(res => {
                 state.isLoading = false
-                console.log(res)
+                // console.log(res)
                 if (res.check()) {
                     const { data } = res
                     state.tableData = data.records
@@ -170,15 +165,7 @@ export default {
                 }
             })
         }
-        // 选择时间
-        const selectTime = () => {
-            const value = state.listQuery.deductDate
-            if (value) {
-                state.listQuery.deductDate = window.dayjs(value).format('YYYY-MM-DD')
-            } else {
-                state.listQuery.deductDate = null
-            }
-        }
+
         // 改变当前页数
         const changePage = (value) => {
             state.listQuery.current = value
@@ -227,20 +214,6 @@ export default {
             // 查询用户信息
             store.dispatch('_user/findCustomerInfo', false)
         }
-        const purchaseCurrencySetting = ref([]) // 申购资产设置
-        // 获取基金产品详情
-        const getFundInfo = () => {
-            getFundInfoByCustomerNo().then(res => {
-                if (res.check()) {
-                    purchaseCurrencySetting = res.data.purchaseCurrencySetting.map(el => {
-                        return {
-                    ...el,
-                    currencyName: el.currencyCode === 'self' ? t('fundManager.buy.basketAssets') : el.currencyName
-                        }
-                    })
-                }
-            })
-        }
 
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
@@ -255,19 +228,13 @@ export default {
             customInfo,
             usable,
             formatTime,
-            // queryCompanyList,
-            // queryAssetsList,
             queryFundRedeemList,
-            // queryFundRedeemMoney,
-            selectTime,
             changePage,
             changeSize,
             onSearch,
             selectionChange,
             openLotDialog,
             onConfirm,
-            purchaseCurrencySetting,
-            getFundInfo,
             ...toRefs(state)
         }
     }

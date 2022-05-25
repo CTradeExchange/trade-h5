@@ -6,7 +6,7 @@
             {{ $t('route.noticeTitle') }}
         </div>
 
-        <van-tabs v-model:active='active' class='noticePage' @click-tab='onClickTab'>
+        <van-tabs v-model='active' class='noticePage' @click-tab='onClickTab'>
             <van-tab name='notice' :title="$t('route.notice')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
@@ -141,17 +141,35 @@
 </template>
 
 <script>
-import { computed, toRefs, reactive, onMounted, ref, provide } from 'vue'
+import { computed, toRefs, reactive, onMounted, ref, beforeRouteEnter } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Toast, Dialog, Pagination } from 'vant'
 import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '@/api/user'
-import { isEmpty, getCookie } from '@/utils/util'
+import { isEmpty, getCookie, localSet, localGet } from '@/utils/util'
 
 export default {
     components: {
 
+    },
+    beforeRouteEnter (to, from, next) {
+        // balabala
+        next(vm => {
+            // console.log(to)
+            console.log(from)
+            vm.pathUrl = from.fullPath
+            let active = ''
+            if (from.query.type === 'msgcustomer') {
+                active = 'msgps'
+            }
+
+            if (from.query.type === 'notice') {
+                active = 'notice'
+            }
+            console.log(active)
+            localSet('noticeActive', active)
+        })
     },
 
     setup () {
@@ -162,7 +180,7 @@ export default {
         const { type } = route.query
         const state = reactive({
             loading: false,
-            active: ref(0),
+            active: 2,
             showApiHelp: false,
             query: {
                 tag: ''
@@ -306,7 +324,7 @@ export default {
 
         const onClickTab = (item) => {
             console.log(item)
-            if (item.name === 'public') {
+            if (item.name === 'notice') {
                 state.currentNt = 1
                 state.finishedNt = false
                 state.listNotice = []
@@ -374,6 +392,27 @@ export default {
             } else {
                 state.isUser = false
             }
+            const index = localGet('noticeActive')
+            console.log(index)
+            state.active = 'msgps'
+            // if (index === 'notice') {
+            //     state.currentNt = 1
+            //     state.finishedNt = false
+            //     state.listNotice = []
+            //     getNoticeData()
+            // }
+            // if (index === 'msgps') {
+            //     state.currentPs = 1
+            //     state.finishedPs = false
+            //     state.listCustomer = []
+            //     getCustomerMsgListData()
+            // }
+            // if (index === 'msg') {
+            //     state.current = 1
+            //     state.finished = false
+            //     state.list = []
+            //     getMsgList()
+            // }
         })
 
         return {

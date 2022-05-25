@@ -831,7 +831,11 @@
             "column2": "应扣金额",
             "column3": "扣款状态",
             "deductSuceess": "扣除成功",
-            "deductFail": "扣除成功"
+            "deductFail": "扣除失败",
+            "deductPopTitle": "扣减确认",
+            "deductPopTxt1": "总扣减金额",
+            "tip1": "USDT资产可用余额不足",
+            "tip2": "管理费扣减成功"
         }
     },
     "fundInfo": {

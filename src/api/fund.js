@@ -238,10 +238,22 @@ export function getManagementFeesList(data) {
     })
 }
 
-/* 分页获取基金管理费 手动扣费 */
+/* 基金管理费 手动扣费 */
 export function getManagementFeesDeduct(data) {
     return request({
         url: '/global/fund.app.FundManagementFeesAppDubboService.deduct',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
+
+/* 基金管理费 计算总和 */
+export function getManagementFeesCalc(data) {
+    return request({
+        url: '/global/fund.app.FundManagementFeesAppDubboService.calcDeduct',
         method: 'post',
         headers: {
             version: '0.0.1',

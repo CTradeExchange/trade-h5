@@ -15,7 +15,7 @@
                             @click='switchMenu(item)'
                         >
                             <i :class='item.icon'></i>
-                            <span>{{ item.name }}</span>
+                            <span>{{ item.name }} <i v-if="item.value === 'deduction' && deductHot === true" class='hot-num'></i></span>
                         </li>
                     </ul>
                 </div>
@@ -38,13 +38,26 @@ import buyModule from './components/buy-module.vue'
 import ransomModule from './components/ransom-module.vue'
 import standardModule from './components/standard-module.vue'
 import deductionModule from './components/deduction-module.vue'
-import { onMounted, ref, computed } from 'vue'
+import { onMounted, ref, computed, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { getManagementFeesList } from '@/api/fund'
 const store = useStore()
 const router = useRouter()
 const { t } = useI18n({ useScope: 'global' })
+// 获取账户信息
+const customInfo = computed(() => store.state._user.customerInfo)
+const companyId = computed(() => customInfo.value.companyId)
+
+const listQuery = {
+    customerNo: customInfo.value.customerNo,
+    companyId: customInfo.value.companyId,
+    deductDate: null,
+    deductStatus: 2,
+    current: 1,
+    size: 10
+}
 
 // 用户信息
 const customerInfo = computed(() => store.state._user.customerInfo)
@@ -64,11 +77,36 @@ const switchMenu = (item) => {
     }
 }
 
+const deductHot = ref(false)
+
+provide('deductHot', (value) => {
+    deductHot.value = value
+})
+
+// 获取列表数据
+const queryFundRedeemList = () => {
+    const params = Object.assign({}, listQuery)
+    getManagementFeesList(params).then(res => {
+        if (res.check()) {
+            if (res.data.records.length > 0) {
+                deductHot.value = true
+            } else {
+                deductHot.value = false
+            }
+        } else {
+            deductHot.value = false
+        }
+    }).catch(() => {
+        // state.isLoading = false
+    })
+}
+
 onMounted(() => {
     // 不是基金账号跳转到首页
     if (customerInfo.value.isFund !== 1) {
         router.replace({ name: 'Home' })
     }
+    queryFundRedeemList()
 })
 </script>
 
@@ -124,6 +162,22 @@ onMounted(() => {
                     }
                     span {
                         color: #FFF;
+                    }
+                }
+                span {
+                    position: relative;
+                    display: inline-block;
+                    .hot-num {
+                        position: absolute;
+                        top: 0;
+                        right: -10px;
+                        display: inline-block;
+                        width: 10px;
+                        height: 10px;
+                        margin: 0;
+                        font-style: normal;
+                        background: var(--warn);
+                        border-radius: 100%;
                     }
                 }
             }

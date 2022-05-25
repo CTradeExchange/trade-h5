@@ -892,6 +892,20 @@
             "tip2": "匯入下單比例",
             "tip3": "暫未設定下單執行標准，請添加！",
             "tip5": "所有下單比例加起來無法大於100%"
+        },
+        "deduction": {
+            "waitRecord": "待扣减记录",
+            "doneRecord": "已扣减记录",
+            "date": "扣减日期",
+            "column1": "管理费扣减日期(UTC)",
+            "column2": "应扣金额",
+            "column3": "扣款状态",
+            "deductSuceess": "扣除成功",
+            "deductFail": "扣除失败",
+            "deductPopTitle": "扣减确认",
+            "deductPopTxt1": "总扣减金额",
+            "tip1": "USDT资产可用余额不足",
+            "tip2": "管理费扣减成功"
         }
     },
     "fundInfo": {

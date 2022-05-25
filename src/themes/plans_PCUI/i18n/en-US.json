@@ -819,6 +819,20 @@
             "tip2": "Enter proportion",
             "tip3": "The order execution standard has not been set yet, please add！",
             "tip5": "The sum of all percentages cannot be greater than 100%"
+        },
+        "deduction": {
+            "waitRecord": "Pending deduction record",
+            "doneRecord": "Deduction record",
+            "date": "Deduction date",
+            "column1": "Fee Deduction Date(UTC)",
+            "column2": "Amount",
+            "column3": "Status",
+            "deductSuceess": "succeeded",
+            "deductFail": "fail",
+            "deductPopTitle": "Deduction Confirm",
+            "deductPopTxt1": "Amount",
+            "tip1": "Insufficient available balance of USDT assets",
+            "tip2": "Management fee deduction successfully"
         }
     },
     "fundInfo": {
