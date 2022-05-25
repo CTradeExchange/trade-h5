@@ -47,7 +47,7 @@
                                 {{ $t('fundInfo.realtimeJZ') }}({{ fund.currency }}):
                             </span>
                             <span class='value'>
-                                {{ fund.netValue }}
+                                &nbsp{{ fund.netValue }}
                             </span>
                         </li>
                         <li>
@@ -55,15 +55,12 @@
                                 {{ $t('fundInfo.totalMarketValue') }}({{ fund.currency }}):
                             </span>
                             <span class='value'>
-                                {{ formatAmount(fund.totalBalance) }}
+                                &nbsp{{ formatAmount(fund.totalBalance) }}
                             </span>
                         </li>
                         <li class='href' @click='goExamine'>
                             <span class='name'>
-                                Issuing institution:
-                            </span>
-                            <span class='value'>
-                                Metaverse Era Capital
+                                Issuing Institution: Metaverse Era Capital
                                 <img class='badge' :src="require('@public/images/V10/badge.png')" />
                             </span>
                         </li>
@@ -72,7 +69,7 @@
                                 {{ $t('trade.priceLabel') }}({{ fund.currency }}):
                             </span>
                             <span class='value'>
-                                {{ fund.marketPrice }}
+                                &nbsp{{ fund.marketPrice }}
                             </span>
                         </li>
                         <li>
@@ -80,15 +77,12 @@
                                 {{ $t('fundInfo.fundCreateTime') }}:
                             </span>
                             <span class='value'>
-                                {{ fund.upDate ? fund.upDate.substring(0, fund.upDate.length - 3) : '' }}
+                                &nbsp{{ fund.upDate ? fund.upDate.substring(0, fund.upDate.length - 3) : '' }}
                             </span>
                         </li>
                         <li class='href' @click="openPDF('https://vitatoken.io/site/V10_Index_Fund_WhitePaper.pdf')">
                             <span class='name'>
-                                For more information:
-                            </span>
-                            <span class='value'>
-                                V10 White Paper
+                                For More Information: V10 White Paper
                             </span>
                         </li>
                     </ul>
@@ -111,7 +105,7 @@
                             </div>
                             <div class='below'>
                                 <p class='text'>
-                                    V10 contains the top 10 cryptocurrency according to market capitalization. It is relatively stable and reflects the overall trend in cryptocurrency. By holding V10, you do not need to worry about choosing which cryptocurrency to invest in and it becomes more accessible by lowering the entry barrier.
+                                    V10 contains 10 major cryptocurrencies. The underlying assets’ weighting will be rebalanced on a monthly basis based on their average daily volume within the past 120 days. V10 reflects the overall trend in cryptocurrency with asset transparency. By holding V10, you do not need to worry about choosing which cryptocurrency to invest.
                                 </p>
                             </div>
                         </div>
@@ -460,8 +454,6 @@ onUnmounted(() => {
         }
     }
     .fund-info {
-        font-size: 20px;
-        font-weight: 700;
         color: #333;
         position: relative;
         ul {
@@ -471,27 +463,19 @@ onUnmounted(() => {
                 display: flex;
                 align-items: center;
                 flex-wrap: wrap;
-                margin-top: 25px;
-                line-height: 28px;
-                .name {
-                    display: inline-flex;
-                    align-items: center;
-                    margin-right: 3px;
-                }
-                .value {
-                    display: inline-flex;
-                    align-items: center;
-                }
                 &.href {
                     cursor: pointer;
                     &:hover {
                         color: var(--primary);
                     }
                 }
+                .name {
+                    display: flex;
+                    align-items: center;
+                }
                 .badge {
                     width: 30px;
                     height: 30px;
-                    margin-left: 2px;
                 }
             }
         }
@@ -608,6 +592,10 @@ onUnmounted(() => {
             margin-top: -28px;
             li {
                 width: calc(100% / 3);
+                margin-top: 25px;
+                line-height: 28px;
+                font-size: 20px;
+                font-weight: 700;
             }
         }
     }
@@ -740,6 +728,21 @@ onUnmounted(() => {
     }
     .fund-info {
         margin-top: 40px;
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+            li {
+                margin-top: 10px;
+                font-size: 14px;
+                min-width: 140px;
+                &:nth-of-type(3) {
+                    order: 5;
+                }
+                &:nth-of-type(6) {
+                    order: 6;
+                }
+            }
+        }
         .ellipse-bg {
             position: absolute;
             top: 65px;
