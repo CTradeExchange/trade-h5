@@ -170,10 +170,10 @@
                             </p>
                             <div class='handle'>
                                 <button class='cell-2' @click='onTrade'>
-                                    Buy Via Vitatoken
+                                    Via Vitatoken
                                 </button>
                                 <button class='cell-3' @click='onFund'>
-                                    Buy Via Issuing Institution
+                                    Via Issuing Institution
                                 </button>
                             </div>
                         </div>
@@ -437,6 +437,7 @@ onUnmounted(() => {
             display: block;
             width: 100%;
             height: 100%;
+            object-fit: cover;
         }
         .mask {
             display: flex;
@@ -453,7 +454,6 @@ onUnmounted(() => {
         .control {
             text-align: center;
             .title {
-                margin-bottom: 20px;
                 font-weight: 700;
                 color: #fff;
             }
@@ -590,6 +590,7 @@ onUnmounted(() => {
         height: 660px;
         .control {
             .title {
+                margin-bottom: 20px;
                 font-size: 30px;
             }
         }
@@ -729,9 +730,10 @@ onUnmounted(() => {
 .h5-content {
     padding: 40px 20px 88px;
     .video-block {
-        height: 400px;
+        height: 210px;
         .control {
             .title {
+                margin-bottom: 10px;
                 font-size: 24px;
             }
         }
@@ -808,17 +810,15 @@ onUnmounted(() => {
             }
             .handle {
                 display: inline-flex;
-                flex-direction: column;
-                align-content: flex-end;
                 font-size: 12px;
                 button {
                     display: inline-flex;
                     justify-content: center;
                     align-items: center;
                     height: 36px;
-                    margin-bottom: 10px;
-                    &:last-of-type {
-                        margin-bottom: 0;
+                    padding: 0 5px;
+                    &:first-of-type {
+                        margin-right: 5px;
                     }
                 }
             }
@@ -833,16 +833,10 @@ onUnmounted(() => {
                         margin-right: 0;
                     }
                 }
+                .cell-1 {
+                    width: 80px;
+                }
             }
-        }
-        .cell-1 {
-            width: 80px;
-        }
-        .cell-2 {
-            width: 140px;
-        }
-        .cell-3 {
-            width: 190px;
         }
     }
 }
