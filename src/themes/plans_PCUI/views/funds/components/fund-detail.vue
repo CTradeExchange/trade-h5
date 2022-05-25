@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class='btnBox'>
-                <button class='btn' @click="openPDF('https://www.vitatoken.io/site/v10-whitepaper.pdf')">
+                <button class='btn' @click="openPDF('https://vitatoken.io/site/V10_Index_Fund_WhitePaper.pdf')">
                     {{ $t('home.fundDesc.text3') }}
                 </button>
             </div>
