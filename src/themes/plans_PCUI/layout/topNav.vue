@@ -7,14 +7,21 @@
                 </h1>
             </router-link>
             <div class='menus'>
-                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
+                <div :class="['item', { 'active': $route.path.startsWith('/fundV10') }]">
+                    <router-link to='/fundV10/index'>
+                        <span class='link'>
+                            V10
+                        </span>
+                    </router-link>
+                </div>
+                <!-- <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
                     <router-link to='/fund'>
                         <span class='link'>
                             {{ $t('header.fund') }}
                         </span>
                         <span class='symbolUp'></span>
                     </router-link>
-                </div>
+                </div> -->
                 <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
                     <span class='link'>
                         {{ $t('tradeType.5') }}
@@ -50,13 +57,6 @@
                     <router-link to='/fundManager'>
                         <span class='link'>
                             {{ $t('header.fundManager') }}
-                        </span>
-                    </router-link>
-                </div>
-                <div :class="['item', { 'active': $route.path.startsWith('/fundV10') }]">
-                    <router-link to='/fundV10/index'>
-                        <span class='link'>
-                            V10
                         </span>
                     </router-link>
                 </div>

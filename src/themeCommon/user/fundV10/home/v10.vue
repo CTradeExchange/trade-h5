@@ -107,7 +107,7 @@
                         </h3>
                         <div class='block trend-block'>
                             <div class='above'>
-                                <img class='pic' :src="isPC ? require('@public/images/V10/pc/trend_chart.png') : require('@public/images/V10/h5/trend_chart.png')" />
+                                <img class='pic' :src="isPC ? require('@public/images/V10/pc/trend_chart.jpg') : require('@public/images/V10/h5/trend_chart.jpg')" />
                             </div>
                             <div class='below'>
                                 <p class='text'>
@@ -210,7 +210,7 @@
                                 </strong>
                                 <div class='col'>
                                     <span class='cell-2'>
-                                        Immediate Transaction
+                                        Immediate<br />Transaction
                                     </span>
                                     <span class='cell-3'>
                                         T+2
@@ -801,7 +801,6 @@ onUnmounted(() => {
         }
         .method {
             display: flex;
-            justify-content: space-between;
             padding: 20px 0;
             .name {
                 flex: 1;
@@ -816,7 +815,6 @@ onUnmounted(() => {
                     justify-content: center;
                     align-items: center;
                     height: 36px;
-                    padding: 0 8px;
                     &:first-of-type {
                         margin-right: 5px;
                     }
@@ -827,16 +825,20 @@ onUnmounted(() => {
             li {
                 padding: 20px 0;
                 border-top: 1px solid #c2c2c2;
-                span {
-                    margin-right: 30px;
-                    &:last-of-type {
-                        margin-right: 0;
-                    }
-                }
-                .cell-1 {
-                    width: 80px;
+                .col {
+                    display: flex;
+                    text-align: center;
                 }
             }
+        }
+        .cell-1 {
+            width: 80px;
+        }
+        .cell-2 {
+            width: 92px;
+        }
+        .cell-3 {
+            width: 142px;
         }
     }
 }
