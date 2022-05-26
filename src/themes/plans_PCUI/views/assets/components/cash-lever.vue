@@ -116,7 +116,7 @@ export default {
             const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
 
             if (hideAsset.value) {
-                return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+                return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
             }
             return list.filter(item => item.currency.toUpperCase().includes(searchText.value.toUpperCase())) || []
         })

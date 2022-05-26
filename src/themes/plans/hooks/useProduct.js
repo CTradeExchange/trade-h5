@@ -11,9 +11,6 @@ export default function ({ tradeType, categoryType }) {
     const userProductCategory = computed(() => store.getters.userProductCategory)
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList)
 
-    // 产品排序顺序
-    const currencys = ['V10', 'BTC', 'ETH', 'BNB', 'SOL', 'ADA', 'XRP', 'LUNA', 'DOT', 'AVAX', 'DOGE', 'MATIC', 'SHIB', 'LINK', 'NEAR', 'UNI', 'ALGO', 'LTC', 'ATOM', 'ICP', 'BCH', 'TRX', 'XLM', 'FTM', 'FTT', 'MANA', 'HBAR', 'VET', 'AXS', 'FIL', 'SAND']
-
     // 所选玩法的板块列表
     const categoryList = computed(() => {
         const listByUser = unref(userSelfSymbolList)[unref(tradeType)] || []
@@ -37,8 +34,7 @@ export default function ({ tradeType, categoryType }) {
     // 所选板块的产品列表
     const productList = computed(() => {
         const productMapVal = unref(productMap)
-        let arr = []
-        let resultList = []
+        const arr = []
 
         unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
             const newId = `${id}_${unref(tradeType)}`
@@ -47,53 +43,43 @@ export default function ({ tradeType, categoryType }) {
             }
         })
 
-        // 产品排序
-        currencys.map(currency => {
-            arr.map(elem => {
-                if (elem.baseCurrency === currency) {
-                    resultList.push(elem)
-                    arr = arr.filter(el => el.symbolId !== elem.symbolId)
-                }
-            })
-        })
-        resultList = resultList.concat(arr)
-
         // 按字段排序
-        if (unref(sortField) && unref(sortType)) {
-            resultList.sort((a, b) => {
-                // 根据享元模式封装，默认是asc排序
-                let firstEl = a
-                let secondEl = b
-                const defaultInfinity = sortType.value === 'asc' ? Infinity : -Infinity
+        arr.sort((a, b) => {
+            // 根据享元模式封装，默认是asc排序
+            let firstEl = a
+            let secondEl = b
+            const defaultInfinity = sortType.value === 'asc' ? Infinity : -Infinity
 
-                if (sortType.value === 'desc') {
-                    firstEl = b
-                    secondEl = a
-                }
-                if (sortField.value === 'symbolName') {
-                    // 将有报价的产品排序到前面
-                    if (parseFloat(firstEl['rolling_last_price']) && parseFloat(secondEl['rolling_last_price'])) {
-                        return firstEl[sortField.value].localeCompare(secondEl[sortField.value])
-                    } else if (parseFloat(firstEl['rolling_last_price']) || parseFloat(secondEl['rolling_last_price'])) {
-                        const firtstValue = firstEl['rolling_last_price'] || defaultInfinity
-                        const secondValue = secondEl['rolling_last_price'] || defaultInfinity
-                        return gte(firtstValue, secondValue) ? 1 : -1
-                    } else {
-                        return 0
-                    }
-                } else if (sortField.value === 'rolling_upDownWidth') {
-                    const firtstValue = parseFloat(firstEl[sortField.value]) || defaultInfinity
-                    const secondValue = parseFloat(secondEl[sortField.value]) || defaultInfinity
-                    return firtstValue - secondValue
-                } else {
-                    const firtstValue = firstEl[sortField.value] || defaultInfinity
-                    const secondValue = secondEl[sortField.value] || defaultInfinity
+            if (sortType.value === 'desc') {
+                firstEl = b
+                secondEl = a
+            }
+            if (sortField.value === 'symbolName') {
+                // 将有报价的产品排序到前面
+                if (parseFloat(firstEl['rolling_last_price']) && parseFloat(secondEl['rolling_last_price'])) {
+                    return firstEl[sortField.value].localeCompare(secondEl[sortField.value])
+                } else if (parseFloat(firstEl['rolling_last_price']) || parseFloat(secondEl['rolling_last_price'])) {
+                    const firtstValue = firstEl['rolling_last_price'] || defaultInfinity
+                    const secondValue = secondEl['rolling_last_price'] || defaultInfinity
                     return gte(firtstValue, secondValue) ? 1 : -1
+                } else {
+                    return 0
                 }
-            })
-        }
+            } else if (sortField.value === 'rolling_upDownWidth') {
+                const firtstValue = parseFloat(firstEl[sortField.value]) || defaultInfinity
+                const secondValue = parseFloat(secondEl[sortField.value]) || defaultInfinity
+                return firtstValue - secondValue
+            } else if (sortField.value === 'rolling_last_price') {
+                const firtstValue = firstEl[sortField.value] || defaultInfinity
+                const secondValue = secondEl[sortField.value] || defaultInfinity
+                return gte(firtstValue, secondValue) ? 1 : -1
+            } else {
+                // 默认按后台的排序
+                return firstEl.sortNum - secondEl.sortNum
+            }
+        })
 
-        return resultList
+        return arr
     })
 
     // 排序方法

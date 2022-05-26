@@ -1,6 +1,6 @@
 <template>
     <!-- 资产搜索 -->
-    <AssetFilter @changeState='changeState' @searchAsset='searchAsset' />
+    <AssetFilter v-if='[3,5].includes(tradeType)' @changeState='changeState' @searchAsset='searchAsset' />
     <customTable
         :component-refs='componentRefs'
         :data='tableData'
@@ -67,7 +67,11 @@ const accountList = computed(() => {
     const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
 
     if (hideAsset.value) {
-        return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+        if (Number(props.tradeType) === 3) {
+            return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+        } else if (Number(props.tradeType) === 5) {
+            return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+        }
     }
     return list.filter(item => item.currency.toUpperCase().includes(searchText.value.toUpperCase())) || []
 })

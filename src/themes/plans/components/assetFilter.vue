@@ -19,16 +19,17 @@
 </template>
 
 <script setup>
-import { defineProps, ref, defineEmits } from 'vue'
+import { defineProps, ref, defineEmits, defineExpose, watch } from 'vue'
 import { localGet, debounce, localSet, isEmpty } from '@/utils/util'
 const emit = defineEmits(['changeState', 'searchAsset'])
-defineProps({
-    data: Object,
-    index: Number
+const props = defineProps({
+    hideAsset: Boolean
 })
+
 const checked = ref(JSON.parse(localGet('hideAsset')))
+
 const searchText = ref('')
-console.log('checked====', checked)
+console.log('checked====', checked, props.hideAsset)
 
 if (isEmpty(localGet('hideAsset'))) {
     localSet('hideAsset', false)
@@ -49,6 +50,11 @@ const clear = () => {
     searchText.value = ''
     emit('searchAsset', '')
 }
+
+watch(() => props.hideAsset, val => {
+    checked.value = val
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -56,6 +62,7 @@ const clear = () => {
 .filter-block {
     display: flex;
     justify-content: space-between;
+    height: rem(100px);
     padding: 0 rem(30px);
     background: var(--contentColor);
     border-bottom: solid 1px var(--lineColor);
