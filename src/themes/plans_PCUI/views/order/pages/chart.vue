@@ -260,7 +260,7 @@ import EtfIcon from '@planspc/components/etfIcon.vue'
 import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
-import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
+import { MAINSTUDIES, SUBSTUDIES, VolumeStudy } from '@/components/tradingview/datafeeds/userConfig/config'
 import Loading from '@/components/loading.vue'
 import { ElMessage } from 'element-plus'
 
@@ -657,10 +657,23 @@ export default {
         }
 
         // 设置图表设置缓存
-        const locChartConfig = JSON.parse(localGet('chartConfig'))
+        let locChartConfig = JSON.parse(localGet('chartConfig'))
         const initChartData = () => {
+            locChartConfig = JSON.parse(localGet('chartConfig'))
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
+
+            // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
+            const canUseVolume = !product.value.isFX && !product.value.isCommodites
+            console.log(canUseVolume, isEmpty(locChartConfig))
+            // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
+            if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
+                SUBSTUDIES.unshift(VolumeStudy)
+            } else if (!canUseVolume) {
+                const volumeIndex = SUBSTUDIES.findIndex(el => el.name === 'Volume')
+                if (volumeIndex > -1) SUBSTUDIES.splice(volumeIndex, 1)
+            }
+            state.sideStudyList = SUBSTUDIES.slice(0, 5)
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -707,6 +720,10 @@ export default {
             } else {
                 state.mainStudy = JSON.parse(locChartConfig.mainStudy)?.name
                 state.subStudy = JSON.parse(locChartConfig.subStudy)?.name
+                if (state.subStudy === 'Volume' && !canUseVolume) {
+                    state.subStudy = SUBSTUDIES[0].name
+                    localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                }
 
                 state.klineType = locChartConfig.chartType
                 state.settingList = locChartConfig.lineSetList

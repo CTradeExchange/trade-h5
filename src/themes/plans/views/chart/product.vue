@@ -916,7 +916,6 @@ export default {
 
             // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
             const canUseVolume = !product.value.isFX && !product.value.isCommodites
-            console.log(canUseVolume)
             // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
             if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
                 SUBSTUDIES.unshift(VolumeStudy)

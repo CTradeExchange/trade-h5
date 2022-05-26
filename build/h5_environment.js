@@ -29,7 +29,7 @@ const pre = [
     // 'https://prewppc_7.cats-trade.com/',
     // 'https://prewppc_8.cats-trade.com/',
     // 'https://prewppc_9.cats-trade.com/',
-    'https://prewppc_10.cats-trade.com/'
+    'http://prewppc-10.cats-trade.com/'
 ]
 
 module.exports = {
