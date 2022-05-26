@@ -236,7 +236,7 @@ export default {
                     //     state.msgList = state.msgList.concat(res.data.records)
                     // }
                     state.msgList = res.data.records
-
+                    state.total = res.data.total
                     // 数据全部加载完成
                     if (res.data.size * res.data.current >= res.data.total) {
                         state.finished = true
@@ -248,15 +248,18 @@ export default {
             })
         }
 
-        const changePage = () => {
+        const changePage = (val) => {
+            state.current = val
             getMsgList()
         }
 
-        const changePageNt = () => {
+        const changePageNt = (val) => {
+            state.currentNt = val
             getNoticeData()
         }
 
-        const changePagePs = () => {
+        const changePagePs = (val) => {
+            state.currentPs = val
             getCustomerMsgListData()
         }
 
@@ -299,7 +302,7 @@ export default {
             console.log(customInfo.value)
 
             getCustomerMsgList({
-                current: state.currentNt,
+                current: state.currentPs,
                 // pubTimeFrom: '',
                 // pubTimeTo: '',
                 lang: state.lang,
@@ -313,6 +316,7 @@ export default {
                     if (res.data.records && res.data.records.length > 0) {
                         state.listCustomer = res.data.records
                     }
+                    state.totalPs = res.data.total
 
                     // 数据全部加载完成
                     if (res.data.size * res.data.current >= res.data.total) {
