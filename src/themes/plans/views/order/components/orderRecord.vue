@@ -91,7 +91,8 @@ export default {
 
         // 账户列表
         const accountList = computed(() => {
-            const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
+            const accountList = store.state._user?.customerInfo?.accountList || []
+            const list = accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
 
             if (state.hideAsset) {
                 return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(state.searchText.toUpperCase()))
