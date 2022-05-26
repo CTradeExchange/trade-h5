@@ -104,7 +104,7 @@
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
                             <p class='msg-time'>
-                                {{ formatTime(item.pubTime) }}
+                                {{ formatTime(item.createTime) }}
                             </p>
                         </div>
                         <div class='list-page-box'>
@@ -225,6 +225,7 @@ export default {
             queryPlatFormMessageLogList({
                 current: state.current,
                 lang: state.lang,
+                size: 10,
                 parentType: state.type,
             }).then(res => {
                 state.loading = false

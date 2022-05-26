@@ -72,7 +72,7 @@
                                 {{ computeHtmlTime(item.content) }}
                             </p>
                             <p class='msg-time'>
-                                {{ formatTime(item.pubTime) }}
+                                {{ formatTime(item.createTime) }}
                             </p>
                         </div>
                     </van-list>
@@ -111,7 +111,7 @@
                                 {{ computeHtmlTime(item.content) }}
                             </p> -->
                             <p class='msg-time'>
-                                {{ formatTime(item.pubTime) }}
+                                {{ formatTime(item.createTime) }}
                             </p>
                         </div>
                     </van-list>
@@ -132,10 +132,19 @@ import { Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '@/api/user'
 
+const fromPage = ref({})
+
 export default {
     components: {
         Top,
     },
+    // beforeRouteEnter (to, from, next) {
+    //     next(vm => {
+    //         fromPage.value = ref(from)
+    //         console.log(fromPage.value.fullPath)
+    //         console.log(fromPage.value.query.type)
+    //     })
+    // },
     setup (props) {
         const store = useStore()
         const router = useRouter()
@@ -188,7 +197,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        const activeIndex = ref(0)
+        const activeIndex = ref('public')
         const onClickTab = ({ title, name }) => {
             console.log(title, name)
             if (name === 'public') {
@@ -239,6 +248,7 @@ export default {
             queryPlatFormMessageLogList({
                 current: state.current,
                 parentType: state.type,
+                size: 10,
             }).then(res => {
                 state.loading = false
                 state.pageLoading = false
@@ -262,8 +272,7 @@ export default {
         const getCustomerMsgListData = () => {
             state.pageLoading = true
             state.errorTip = ''
-            console.log(customInfo.value)
-
+            // console.log(customInfo.value)
             getCustomerMsgList({
                 current: state.currentNt,
                 // pubTimeFrom: '',
@@ -293,10 +302,9 @@ export default {
 
         // 获取公告列表
         const getNoticeData = () => {
-            // state.pageLoading = true
+            state.pageLoading = true
             state.errorTip = ''
-            console.log(customInfo.value)
-
+            // console.log(customInfo.value)
             getNoticeList({
                 current: state.currentNt,
                 // pubTimeFrom: '',
@@ -353,13 +361,16 @@ export default {
         onBeforeMount(() => {
             // getMsgList()
             getNoticeData()
-            console.log(customInfo.value)
+            // console.log(customInfo.value)
             if (customInfo.value) {
                 state.isUser = true
             } else {
                 state.isUser = false
             }
+
+            console.log(route.Target)
         })
+
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_notice', gotMsg)
         })
