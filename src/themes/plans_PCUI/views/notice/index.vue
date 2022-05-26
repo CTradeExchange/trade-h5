@@ -6,7 +6,7 @@
             {{ $t('route.noticeTitle') }}
         </div>
 
-        <van-tabs v-model='active' class='noticePage' @click-tab='onClickTab'>
+        <van-tabs v-model:active='activeIndex' class='noticePage' @click-tab='onClickTab'>
             <van-tab name='notice' :title="$t('route.notice')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
@@ -49,7 +49,7 @@
                     />
                 </div>
             </van-tab>
-            <van-tab v-if='isUser' name='msg' :title="$t('route.msg')">
+            <van-tab v-show='isUser' name='msg' :title="$t('route.msg')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
@@ -94,7 +94,7 @@
                     />
                 </div>
             </van-tab>
-            <van-tab v-if='isUser' name='msgps' :title="$t('route.msgCustomer')">
+            <van-tab v-show='isUser' name='msgps' :title="$t('route.msgCustomer')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
@@ -150,27 +150,28 @@ import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '
 import { isEmpty, getCookie, localSet, localGet } from '@/utils/util'
 
 export default {
+    name: 'Notice',
     components: {
 
     },
-    beforeRouteEnter (to, from, next) {
-        // balabala
-        next(vm => {
-            // console.log(to)
-            console.log(from)
-            vm.pathUrl = from.fullPath
-            let active = ''
-            if (from.query.type === 'msgcustomer') {
-                active = 'msgps'
-            }
+    // beforeRouteEnter (to, from, next) {
+    //     // balabala
+    //     next(vm => {
+    //         // console.log(to)
+    //         console.log(from)
+    //         vm.pathUrl = from.fullPath
+    //         let active = ''
+    //         if (from.query.type === 'msgcustomer') {
+    //             active = 'msgps'
+    //         }
 
-            if (from.query.type === 'notice') {
-                active = 'notice'
-            }
-            console.log(active)
-            localSet('noticeActive', active)
-        })
-    },
+    //         if (from.query.type === 'notice') {
+    //             active = 'notice'
+    //         }
+    //         console.log(active)
+    //         localSet('noticeActive', active)
+    //     })
+    // },
 
     setup () {
         const router = useRouter()
@@ -206,10 +207,11 @@ export default {
             totalPs: 0,
 
             isUser: false,
+            activeIndex: ''
         })
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
-        const activeIndex = ref()
+
         // console.log(store.state)
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
@@ -393,27 +395,24 @@ export default {
             } else {
                 state.isUser = false
             }
-            const index = localGet('noticeActive')
-            console.log(index)
-            state.active = 'msgps'
-            // if (index === 'notice') {
-            //     state.currentNt = 1
-            //     state.finishedNt = false
-            //     state.listNotice = []
-            //     getNoticeData()
-            // }
-            // if (index === 'msgps') {
-            //     state.currentPs = 1
-            //     state.finishedPs = false
-            //     state.listCustomer = []
-            //     getCustomerMsgListData()
-            // }
-            // if (index === 'msg') {
-            //     state.current = 1
-            //     state.finished = false
-            //     state.list = []
-            //     getMsgList()
-            // }
+            // const index = localGet('noticeActive')
+            console.log(route.query.from)
+            if (route.query.from === 'notice') {
+                // activeIndex.value = ref('notice')
+                state.activeIndex = ref('notice')
+                state.currentNt = 1
+                state.finishedNt = false
+                state.listNotice = []
+                getNoticeData()
+            }
+            if (route.query.from === 'msgcustomer') {
+                // activeIndex.value = ref('msgps')
+                state.activeIndex = ref('msgps')
+                state.currentPs = 1
+                state.finishedPs = false
+                state.listCustomer = []
+                getCustomerMsgListData()
+            }
         })
 
         return {

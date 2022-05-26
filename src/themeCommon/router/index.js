@@ -236,6 +236,7 @@ const routes = [{
         meta: {
             title: 'cRoute.msg',
             footerMenu: false,
+            keepAlive: true,
             // roles: ['User'],
         }
     },

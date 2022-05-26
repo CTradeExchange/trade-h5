@@ -1,6 +1,6 @@
 <template>
     <div class='msgDetail'>
-        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
+        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
         <Loading :show='loading' />
         <div class='pageWrap'>
             <div class='detailTop'>
@@ -122,8 +122,9 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .pageWrap {
-    max-height: 95%;
+    max-height: 100%;
     padding-top: rem(120px);
+    padding-bottom: 0;
     overflow: auto;
     .detailTop {
         padding: rem(15px);

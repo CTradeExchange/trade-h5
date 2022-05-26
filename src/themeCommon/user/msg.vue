@@ -132,9 +132,8 @@ import { Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
 import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '@/api/user'
 
-const fromPage = ref({})
-
 export default {
+    name: 'Msg',
     components: {
         Top,
     },
@@ -367,8 +366,8 @@ export default {
             } else {
                 state.isUser = false
             }
-
-            console.log(route.Target)
+            debugger
+            console.log(route)
         })
 
         onUnmounted(() => {

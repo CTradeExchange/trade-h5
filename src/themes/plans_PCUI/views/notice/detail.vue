@@ -120,7 +120,10 @@ export default {
         // 跳转返回
         const back = (id) => {
             router.push({
-                path: '/notice'
+                path: '/notice',
+                query: {
+                    from: state.type
+                }
             })
         }
 
