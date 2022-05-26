@@ -805,7 +805,7 @@ export default {
             const that = this
             queryCountryList().then(res => {
                 if (res.success && res.data?.length) {
-                    const list = res.data
+                    const list = res.data.filter(el => el.country_code)
                     that.zoneList = list
                     // this.otherZoneList = list
                     if (that.form.registrable.length === 0) {

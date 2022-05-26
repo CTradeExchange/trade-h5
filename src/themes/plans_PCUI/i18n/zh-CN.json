@@ -722,7 +722,9 @@
         "transferTip5": "划转金额不能小于最小可划转金额",
         "transferTip6": "划转金额不能小于0",
         "transferSuccess": "划转成功",
-        "confirmClose": "确认平仓"
+        "confirmClose": "确认平仓",
+        "hideAsset": "隐藏0资产",
+        "searchAsset":"搜索资产"
     },
     "transRecords": {
         "searchPlaceholder": "请输入关键字搜索",

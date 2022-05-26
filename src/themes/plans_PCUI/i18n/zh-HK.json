@@ -793,7 +793,9 @@
         "transferTip5": "划轉金額無法小於最小可划轉金額",
         "transferTip6": "划轉金額無法小於0",
         "transferSuccess": "划轉成功",
-        "confirmClose": "確認平倉"
+        "confirmClose": "確認平倉",
+        "hideAsset": "隱藏0資產",
+        "searchAsset":"搜索資產"
     },
     "transRecords": {
         "searchPlaceholder": "請匯入關鍵字搜索",

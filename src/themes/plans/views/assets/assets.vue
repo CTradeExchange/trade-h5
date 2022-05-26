@@ -20,7 +20,11 @@
                 </div>
                 <div v-if='[3,9,5].indexOf(Number(item.id)) > -1' class='plans-item'>
                     <TotalAssets class='block' />
-                    <AssetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
+                    <AssetFilter @changeState='changeState' @searchAsset='searchAsset' />
+                    <div v-if='accountList.length > 0'>
+                        <AssetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
+                    </div>
+                    <van-empty v-else :description="$t('trade.noAssets')" />
                 </div>
             </van-swipe-item>
         </van-swipe>
@@ -31,16 +35,18 @@
 import TotalAssets from './components/totalAssets.vue'
 import TotalAssetsFullPosition from './components/totalAssetsFullPosition.vue'
 import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
+import AssetFilter from '@plans/components/assetFilter.vue'
 import AssetsItem from '@plans/modules/assets/assetsItem.vue'
 import PositionList from '@plans/modules/positionList/positionList'
 import { reactive, toRefs, nextTick, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { computed, watchEffect, watch, onUnmounted } from '@vue/runtime-core'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, localSet, localGet } from '@/utils/util'
 import { QuoteSocket, MsgSocket } from '@/plugins/socket/socket'
 import plansType from '@/themes/plans/components/plansType.vue'
 import { onBeforeRouteUpdate, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+
 export default {
     components: {
         PositionList,
@@ -48,7 +54,8 @@ export default {
         TotalAssets,
         TotalAssetsBywarehouse,
         TotalAssetsFullPosition,
-        plansType
+        plansType,
+        AssetFilter
     },
     setup () {
         const store = useStore()
@@ -56,15 +63,24 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         const assetsSwipe = ref(null)
         const curIndex = ref(0)
+
+        const hideAsset = ref(JSON.parse(localGet('hideAsset')))
+        const searchText = ref('')
         const state = reactive({
             duration: 0,
             alreadySub: false
         })
 
         // 获取账户列表
-        const accountList = computed(() =>
-            store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(tradeType.value))
-        )
+        const accountList = computed(() => {
+            const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(tradeType.value))
+
+            if (hideAsset.value) {
+                return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+            }
+            return list.filter(item => item.currency.toUpperCase().includes(searchText.value.toUpperCase())) || []
+        })
+
         const customerInfo = computed(() => store.state._user.customerInfo)
 
         // 获取玩法列表
@@ -156,6 +172,16 @@ export default {
             }
         })
 
+        // 隐藏0资产事件
+        const changeState = val => {
+            hideAsset.value = val
+        }
+
+        // 搜索资产
+        const searchAsset = val => {
+            searchText.value = val
+        }
+
         onMounted(() => {
             const index = tabIndex.value === -1 ? 0 : tabIndex.value
             assetsSwipe.value && assetsSwipe.value.swipeTo(index)
@@ -178,6 +204,8 @@ export default {
             tradeType,
             plans,
             handleTradeType,
+            changeState,
+            searchAsset,
             ...toRefs(state)
         }
     }

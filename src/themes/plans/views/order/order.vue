@@ -97,7 +97,7 @@
 <script>
 import { reactive, toRefs, computed, ref, watch, onBeforeUnmount } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { mul, pow } from '@/utils/calculation'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -140,6 +140,7 @@ export default {
     setup () {
         const store = useStore()
         const route = useRoute()
+        const router = useRouter()
         const originTitle = document.title
         const { t } = useI18n({ useScope: 'global' })
         const { symbolId, direction, tradeType } = route.query
@@ -230,7 +231,7 @@ export default {
             const proCurrency = state.direction === 'buy' ? product.value?.profitCurrency : product.value?.baseCurrency
             const curAccount = customerInfo.value?.accountList?.find(({ currency, tradeType }) => (currency === proCurrency && tradeType === product.value.tradeType))
             if (curAccount)store.dispatch('_user/queryAccountAssetsInfo', { accountId: curAccount.accountId, tradeType: product.value?.tradeType })
-            else Toast(t('trade.nullAssets'))
+            else if (customerInfo.value) Toast(t('trade.nullAssets'))
         }
 
         // 设置按额或者按手数，切换产品或者切换方向时需要重新设置；现货撮合、杠杆玩法下单买入按额，其他都是按手数交易
@@ -395,6 +396,7 @@ export default {
 
         // 点击提交按钮
         const submitHandler = () => {
+            if (!customerInfo.value) return router.push({ name: 'Login', query: { back: encodeURIComponent(route.fullPath) } })
             const params = orderParams()
             if (!params) return
             if (state.loading) return false
@@ -454,6 +456,7 @@ export default {
         return {
             ...toRefs(state),
             init,
+            customerInfo,
             plansList,
             dealModeShowMap,
             productTradeType,
