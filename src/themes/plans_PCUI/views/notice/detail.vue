@@ -16,9 +16,7 @@
                 <div class='time'>
                     {{ formatTime(detailData.pubTime) }}
                 </div>
-                <div class='content'>
-                    {{ detailData.content }}
-                </div>
+                <div class='content' v-html='detailData.content'></div>
             </div>
         </div>
     </div>

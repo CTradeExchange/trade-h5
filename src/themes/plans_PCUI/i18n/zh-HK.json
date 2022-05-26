@@ -817,7 +817,8 @@
             "title": "基金作業專區",
             "buy": "申購管理",
             "ransom": "贖回管理",
-            "standard": "下單執行標准"
+            "standard": "下單執行標准",
+            "deduction": "管理费扣减记录"
         },
         "executeStatus": {
             "0": "未確認",
