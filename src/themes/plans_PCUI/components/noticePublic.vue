@@ -102,7 +102,7 @@ export default {
                         if (localGet('noticeParams')) { // 不是
                             var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
                             if (customInfo.value.customerNo) { // 已登录用户
-                                if (nData.popShowNum < 2) {
+                                if (nData.popShowNum < 1) {
                                     getPublicData(true) // 普通游客第一次显示公告弹窗
                                 }
                                 noticeParams = {

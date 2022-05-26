@@ -746,7 +746,8 @@
             "title": "Fund Area",
             "buy": "Purchase management",
             "ransom": "Redeem management",
-            "standard": "Order execution standard"
+            "standard": "Order execution standard",
+            "deduction": "Management fee deduction"
         },
         "executeStatus": {
             "0": "Unconfirmed",
