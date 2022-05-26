@@ -440,6 +440,7 @@
         "pendingPriceError": "掛單價格不正確",
         "handicap": "槃口",
         "nullAssets": "沒有該資產賬戶",
+        "noAssets": "暂无資產",
         "yi": "以",
         "huan": "還",
         "daihuan": "待還",
@@ -606,7 +607,9 @@
         "transferTip6": "划轉金額無法小於0",
         "transferSuccess": "划轉成功",
         "transferAsset": "划轉資產",
-        "assets": "資產賬戶"
+        "assets": "資產賬戶",
+        "hideAsset": "隱藏0資產",
+        "searchAsset":"搜索資產"
     },
     "record": {
         "repaymentAmount": "還款數量",

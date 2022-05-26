@@ -441,6 +441,7 @@
         "pendingPriceError": "挂单价格不正确",
         "handicap": "盘口",
         "nullAssets": "没有该资产账户",
+        "noAssets": "暂无资产",
         "yi": "以",
         "huan": "还",
         "daihuan": "待还",
@@ -608,7 +609,9 @@
         "transferTip6": "划转金额不能小于0",
         "transferSuccess": "划转成功",
         "transferAsset": "划转资产",
-        "assets": "资产账户"
+        "assets": "资产账户",
+        "hideAsset": "隐藏0资产",
+        "searchAsset":"搜索资产"
     },
     "record": {
         "repaymentAmount": "还款数量",

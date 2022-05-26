@@ -720,7 +720,9 @@
         "transferTip5": "Transfer amount cannot less than minimum available transfer amount",
         "transferTip6": "Transfer amount cannot less than 00",
         "transferSuccess": "Tranfer success",
-        "confirmClose": "Confirm close"
+        "confirmClose": "Confirm close",
+        "hideAsset": "Hide 0 assets",
+        "searchAsset":"Search"
     },
     "transRecords": {
         "searchPlaceholder": "Name/Symbol",
