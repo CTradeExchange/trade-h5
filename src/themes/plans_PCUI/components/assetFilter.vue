@@ -61,13 +61,13 @@ const clear = () => {
     border-bottom: solid 1px var(--lineColor);
     :deep(.van-checkbox) {
         //flex: 1;
-        width: 60%;
+        width: 200px;
         .van-checkbox__label {
             margin-top: 3px;
         }
     }
     :deep(.van-search) {
-        flex: 1;
+        width: 300px;
         margin: rem(20px) 0;
         padding: rem(10px) 0;
         //border: solid 1px var(--lineColor);

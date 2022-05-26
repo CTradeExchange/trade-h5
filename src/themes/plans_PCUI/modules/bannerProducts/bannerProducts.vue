@@ -55,7 +55,11 @@ export default {
         }).flat().slice(0, 5)
         const products = computed(() => {
             let resultList = []
-            resultList = symbolKeys.map(symbolKey => productMap.value[symbolKey]).filter(el => el)
+
+            resultList = symbolKeys.map(symbolKey => productMap.value[symbolKey]).filter(el => el).sort((a, b) => {
+                return a.sortNum - b.sortNum
+            })
+            console.log('resultList====', resultList)
             return resultList
         })
 
@@ -94,52 +98,52 @@ export default {
         height: 100%;
     }
     li {
+        position: relative;
         display: flex;
+        flex: 1;
         flex-direction: column;
         justify-content: center;
-        flex: 1;
         height: 100%;
         padding: 0 24px;
-        position: relative;
         cursor: pointer;
         &::after {
-            content: '';
-            width: 1px;
-            height: 72px;
-            background-color: rgba(255,255,255,.2);
             position: absolute;
             top: 50%;
             right: 0;
+            width: 1px;
+            height: 72px;
+            background-color: rgba(255, 255, 255, 0.2);
             transform: translateY(-50%);
+            content: '';
         }
         &:last-of-type::after {
             background-color: transparent;
         }
         .row_1 {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             span {
-                font-size: 16px;
                 color: #B7C0E7;
+                font-size: 16px;
             }
             strong {
-                font-size: 16px;
                 font-weight: normal;
+                font-size: 16px;
             }
         }
         .row_2 {
             margin-top: 3px;
             span {
-                font-size: 24px;
                 color: #B7C0E7;
+                font-size: 24px;
             }
         }
         .row_3 {
             margin-top: 3px;
             span {
-                font-size: 16px;
                 color: #5B658E;
+                font-size: 16px;
             }
         }
     }

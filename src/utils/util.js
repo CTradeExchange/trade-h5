@@ -9,8 +9,8 @@ export const randomId = () => {
     return r.toString().slice(2)
 }
 
-export function guid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+export function guid () {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         const r = (Math.random() * 16) | 0
         const v = c == 'x' ? r : (r & 0x3) | 0x8
         return v.toString(16)
@@ -19,7 +19,7 @@ export function guid() {
 
 // Gzip解压 对应wp接口数据
 window['unzip'] = unzip
-export function unzip(str) {
+export function unzip (str) {
     let strData = atob(str)
     const charData = strData.split('').map((t) => (t.charCodeAt(0)))
     const binData = new Uint8Array(charData)
@@ -32,13 +32,13 @@ export function unzip(str) {
     return strData
 }
 window['zip'] = zip
-    // Gzip数据压缩
-export function zip(str) {
+// Gzip数据压缩
+export function zip (str) {
     var binaryString = pako.gzip(encodeURIComponent(str), { to: 'string' })
     return btoa(binaryString)
 }
 // 获取设备类型
-export function getDevice() {
+export function getDevice () {
     let openFrom = 1 // h5
     const checkUA = navigator.userAgent.match(/(\(.+?\))/)
     if (!checkUA) {
@@ -62,7 +62,7 @@ export function getDevice() {
 }
 
 // 获取连接参数
-export function getQueryVariable(variable, search = location.search) {
+export function getQueryVariable (variable, search = location.search) {
     if (!search) {
         return undefined
     }
@@ -76,47 +76,47 @@ export function getQueryVariable(variable, search = location.search) {
 }
 
 // 获取登录参数
-export function getLoginParams() {
+export function getLoginParams () {
     return JSON.parse(localStorage.getItem('loginParams'))
 }
 // 删除登录参数
-export function removeLoginParams() {
+export function removeLoginParams () {
     localStorage.removeItem('loginParams')
     sessionStorage.removeItem('token')
 }
 // 设置登录token
-export function setToken(token) {
+export function setToken (token) {
     return sessionStorage.setItem('token', token)
 }
 // 获取登录token
-export function getToken() {
+export function getToken () {
     return sessionStorage.getItem('token')
 }
-export function localSet(key, val) {
+export function localSet (key, val) {
     return localStorage.setItem(key, val)
 }
-export function localGet(key) {
+export function localGet (key) {
     return localStorage.getItem(key)
 }
-export function localRemove(key) {
+export function localRemove (key) {
     return localStorage.removeItem(key)
 }
-export function sessionSet(key, val) {
+export function sessionSet (key, val) {
     return sessionStorage.setItem(key, val)
 }
-export function sessionGet(key) {
+export function sessionGet (key) {
     return sessionStorage.getItem(key)
 }
 
 // 格式化价格
-export function priceFormat(price, digits) {
+export function priceFormat (price, digits) {
     const _price = price / Math.pow(10, digits)
     return _price.toFixed(digits)
 }
 
 /* 延迟处理 */
 let awaitCount = 0
-export function delayAwait(fn, reset = true) {
+export function delayAwait (fn, reset = true) {
     if (reset) awaitCount = 0
     return new Promise((resolve, reject) => {
         console.log(`>> Await count:: ${awaitCount * 200}ms`)
@@ -134,7 +134,7 @@ export function delayAwait(fn, reset = true) {
     })
 }
 /* 延迟一段时间 */
-export function delayAwaitTime(time) {
+export function delayAwaitTime (time) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             resolve()
@@ -145,7 +145,7 @@ export function delayAwaitTime(time) {
 export const getLen = (str = '') => str.replace(/\p{Unified_Ideograph}/ug, '01').length
 
 /* 判断参数是否为空 */
-export function isEmpty(obj) {
+export function isEmpty (obj) {
     try {
         if (obj == null || obj == undefined) {
             return true
@@ -198,7 +198,7 @@ export function isEmpty(obj) {
 }
 
 /* 获取数组里面指定key = value的对象 */
-export function getArrayObj(arr, key, value) {
+export function getArrayObj (arr, key, value) {
     let temp = {}
     if (Array.isArray(arr)) {
         arr.forEach(item => {
@@ -211,14 +211,14 @@ export function getArrayObj(arr, key, value) {
 }
 
 /* 对象排序 */
-export function objArraySort(objArr, key) {
+export function objArraySort (objArr, key) {
     const result = objArr.slice(0)
     return result.sort((a, b) => a[key] - b[key])
 }
 
 /* 数组对象排序 */
-export function arrayObjSort(prop) {
-    return function(obj1, obj2) {
+export function arrayObjSort (prop) {
+    return function (obj1, obj2) {
         var val1 = obj1[prop]
         var val2 = obj2[prop]
         if (val1 < val2) {
@@ -232,7 +232,7 @@ export function arrayObjSort(prop) {
 }
 
 /* 检测用户KYC状态 */
-export function checkUserKYC({ res, Dialog, router, store, t }) {
+export function checkUserKYC ({ res, Dialog, router, store, t }) {
     // 登录KYC,0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
     // companyKycStatus 公司KYC开户状态，1开启 2未开启
     if (Number(res.data.companyKycStatus) === 1) {
@@ -278,9 +278,9 @@ export function checkUserKYC({ res, Dialog, router, store, t }) {
  * @param wait 延迟执行毫秒数
  * @param immediate true 表立即执行，false 表非立即执行
  */
-export function debounce(func, wait = 200, immediate = false) {
+export function debounce (func, wait = 200, immediate = false) {
     let timer
-    return function(...rest) {
+    return function (...rest) {
         if (timer) clearTimeout(timer)
         if (immediate) {
             const callNow = !timer
@@ -297,8 +297,8 @@ export function debounce(func, wait = 200, immediate = false) {
 }
 
 // 返回指定值之间的随机数。不小于 min（有可能等于），并且小于（不等于）max。
-export function getRandom(min, max) {
-    if (typeof(min) === 'undefined' || typeof(min) === 'undefined') return Math.random()
+export function getRandom (min, max) {
+    if (typeof (min) === 'undefined' || typeof (min) === 'undefined') return Math.random()
     return Math.random() * (max - min) + min
 }
 
@@ -310,7 +310,7 @@ h是指小时，如12小时则是：h12
 d是天数，30天则：d30
 y是年 1年则是 1y
 */
-export function setCookie(name, value, time) {
+export function setCookie (name, value, time) {
     var strsec = getsec(time)
     var exp = new Date()
     exp.setTime(exp.getTime() + strsec * 1)
@@ -318,7 +318,7 @@ export function setCookie(name, value, time) {
 }
 
 // 读取cookie
-export function getCookie(cookName) {
+export function getCookie (cookName) {
     var cookieStr = document.cookie.split(';')
     for (var i = 0; i < cookieStr.length; i++) {
         var val = cookieStr[i].split('=')
@@ -328,7 +328,7 @@ export function getCookie(cookName) {
     return null
 }
 
-function getsec(str) {
+function getsec (str) {
     var str1 = str.substring(1, str.length) * 1
     var str2 = str.substring(0, 1)
     if (str2 === 's') {
@@ -343,13 +343,13 @@ function getsec(str) {
 }
 
 /* 隐藏邮箱 */
-export function hideEmailInfo(email) {
+export function hideEmailInfo (email) {
     var reg = /(.{1}).+(.{2}@.+)/g
     return email.replace(reg, '$1****$2')
 }
 
 /* 隐藏 */
-export function hideMobileInfo(mobile) {
+export function hideMobileInfo (mobile) {
     let newMobile = ''
     if (mobile.length > 5) {
         newMobile = mobile.substr(0, 2) + '****' + mobile.substr(mobile.length - 2)
@@ -359,7 +359,7 @@ export function hideMobileInfo(mobile) {
     }
 }
 
-function isElement(node) {
+function isElement (node) {
     const ELEMENT_NODE_TYPE = 1
     return (
         node.tagName !== 'HTML' &&
@@ -368,7 +368,7 @@ function isElement(node) {
     )
 }
 // 获取父层的滚动DOM
-export function getScrollParent(el, root) {
+export function getScrollParent (el, root) {
     let node = el
     const overflowScrollReg = /scroll|auto/i
     while (node && node !== root && isElement(node)) {
@@ -380,4 +380,13 @@ export function getScrollParent(el, root) {
     }
 
     return root
+}
+
+// 排序
+export function compare (property) {
+    return function (a, b) {
+        var value1 = a[property]
+        var value2 = b[property]
+        return value1 - value2
+    }
 }

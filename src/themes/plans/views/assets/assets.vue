@@ -11,7 +11,9 @@
         >
             <van-swipe-item v-for='item in plans' :key='item.id'>
                 <div v-if='Number(item.id) === 1' class='plans-item'>
-                    <TotalAssetsFullPosition class='block' />
+                    <TotalAssetsFullPosition
+                        class='block'
+                    />
                     <PositionList />
                 </div>
                 <div v-if='Number(item.id) === 2' class='plans-item'>
@@ -20,9 +22,18 @@
                 </div>
                 <div v-if='[3,9,5].indexOf(Number(item.id)) > -1' class='plans-item'>
                     <TotalAssets class='block' />
-                    <AssetFilter @changeState='changeState' @searchAsset='searchAsset' />
+                    <AssetFilter
+                        :hide-asset='hideAsset'
+                        @changeState='changeState'
+                        @searchAsset='searchAsset'
+                    />
                     <div v-if='accountList.length > 0'>
-                        <AssetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
+                        <AssetsItem
+                            v-for='account in accountList'
+                            :key='account.accountId'
+                            class='block'
+                            :data='account'
+                        />
                     </div>
                     <van-empty v-else :description="$t('trade.noAssets')" />
                 </div>
@@ -38,7 +49,7 @@ import TotalAssetsBywarehouse from './components/totalAssetsBywarehouse.vue'
 import AssetFilter from '@plans/components/assetFilter.vue'
 import AssetsItem from '@plans/modules/assets/assetsItem.vue'
 import PositionList from '@plans/modules/positionList/positionList'
-import { reactive, toRefs, nextTick, ref, onMounted } from 'vue'
+import { reactive, toRefs, nextTick, ref, onMounted, unref, getCurrentInstance } from 'vue'
 import { useStore } from 'vuex'
 import { computed, watchEffect, watch, onUnmounted } from '@vue/runtime-core'
 import { isEmpty, localSet, localGet } from '@/utils/util'
@@ -74,9 +85,12 @@ export default {
         // 获取账户列表
         const accountList = computed(() => {
             const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(tradeType.value))
-
             if (hideAsset.value) {
-                return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+                if (Number(tradeType.value) === 3) {
+                    return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+                } else if (Number(tradeType.value) === 5) {
+                    return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+                }
             }
             return list.filter(item => item.currency.toUpperCase().includes(searchText.value.toUpperCase())) || []
         })
@@ -206,6 +220,7 @@ export default {
             handleTradeType,
             changeState,
             searchAsset,
+            hideAsset,
             ...toRefs(state)
         }
     }
