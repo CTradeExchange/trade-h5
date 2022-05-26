@@ -724,7 +724,7 @@
         "transferSuccess": "划转成功",
         "confirmClose": "确认平仓",
         "hideAsset": "隐藏0资产",
-        "searchAsset":"搜索资产"
+        "searchAsset": "搜索资产"
     },
     "transRecords": {
         "searchPlaceholder": "请输入关键字搜索",
@@ -1164,6 +1164,7 @@
     },
     "notice": {
         "poptitle": "最新公告",
-        "detailHeader": "公告消息详情"
+        "detailHeader": "公告消息详情",
+        "allReadedOk": "设置全部已读成功！"
     }
 }

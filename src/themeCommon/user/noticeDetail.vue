@@ -1,6 +1,6 @@
 <template>
     <div class='msgDetail'>
-        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
+        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
         <Loading :show='loading' />
         <div class='pageWrap'>
             <div class='detailTop'>

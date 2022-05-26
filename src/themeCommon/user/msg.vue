@@ -1,15 +1,11 @@
 <template>
     <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
-    <Loading :show='pageLoading' />
+    <!-- <Loading :show='pageLoading' /> -->
     <van-tabs v-model:active='activeIndex' class='publicPage' @click-tab='onClickTab'>
-        <van-tab name='public' :title='$t("route.notice")'>
+        <van-tab name='public'>
             <div class='msg-list'>
-                <div v-if='listNotice.length === 0'>
-                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-                </div>
                 <van-pull-refresh
-                    v-else
-                    v-model='loading'
+                    v-model='loadingNt'
                     :loading-text="$t('compLang.loading')"
                     :loosing-text="$t('compLang.vanPullRefresh.loosing')"
                     :pulling-text="$t('compLang.vanPullRefresh.pulling')"
@@ -17,13 +13,16 @@
                 >
                     <van-list
                         v-model:error='isError'
-                        v-model:loading='loading'
+                        v-model:loading='loadingNt'
                         :error-text='errorTip'
                         :finished='finishedNt'
                         :finished-text='$t("common.noMore")'
                         :loading-text="$t('compLang.loading')"
                         @load='onLoadNotice'
                     >
+                        <div v-if='listNotice.length === 0'>
+                            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                        </div>
                         <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
@@ -37,12 +36,6 @@
             </div>
         </van-tab>
         <van-tab v-if='isUser' name='msg' :title='$t("route.msg")'>
-            <div class='operate'>
-                <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
-                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
-                </van-dropdown-menu>
-            </div>
-
             <div class='msg-list'>
                 <div v-if='list.length === 0'>
                     <van-empty :description='$t("common.noData")' image='/images/empty.png' />
@@ -64,9 +57,23 @@
                         :loading-text="$t('compLang.loading')"
                         @load='onLoad'
                     >
+                        <div class='operate'>
+                            <van-row>
+                                <van-col span='12'>
+                                    <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
+                                        <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+                                    </van-dropdown-menu>
+                                </van-col>
+                            </van-row>
+                        </div>
                         <div v-for='(item,index) in list' :key='index' class='msg-item'>
                             <p class='msg-title'>
-                                {{ item.title === 'null'? '': item.title }}
+                                <span v-if='item.readStatus === "2"'>
+                                    {{ item.title === 'null'? '': item.title }}
+                                </span>
+                                <b v-if='item.readStatus === "1"'>
+                                    {{ item.title === 'null'? '': item.title }}
+                                </b>
                             </p>
                             <p class='msg-content'>
                                 {{ computeHtmlTime(item.content) }}
@@ -83,12 +90,8 @@
         <!-- 个人消息 展示白标后台给客户发布的指定站内信 -->
         <van-tab v-if='isUser' name='msgps' :title='$t("route.msgCustomer")'>
             <div class='msg-list'>
-                <div v-if='listCustomer.length === 0'>
-                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-                </div>
                 <van-pull-refresh
-                    v-else
-                    v-model='loading'
+                    v-model='loadingPs'
                     :loading-text="$t('compLang.loading')"
                     :loosing-text="$t('compLang.vanPullRefresh.loosing')"
                     :pulling-text="$t('compLang.vanPullRefresh.pulling')"
@@ -96,16 +99,39 @@
                 >
                     <van-list
                         v-model:error='isError'
-                        v-model:loading='loading'
+                        v-model:loading='loadingPs'
                         :error-text='errorTip'
                         :finished='finishedPs'
                         :finished-text='$t("common.noMore")'
                         :loading-text="$t('compLang.loading')"
                         @load='onLoadPs'
                     >
+                        <div class='operate'>
+                            <van-row>
+                                <!-- <van-col span='12'>
+                                <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
+                                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+                                </van-dropdown-menu>
+                            </van-col> -->
+                                <van-col align='right' span='24'>
+                                    <span class='all-read' @click='setAllMsgReaded'>
+                                        全部已读
+                                    </span>
+                                </van-col>
+                            </van-row>
+                        </div>
+                        <div v-if='listCustomer.length === 0'>
+                            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                        </div>
+
                         <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer')">
                             <p class='msg-title'>
-                                {{ item.title === 'null'? '': item.title }}
+                                <span v-if='item.readStatus === 2'>
+                                    {{ item.title === 'null'? '': item.title }}
+                                </span>
+                                <b v-if='item.readStatus === 1'>
+                                    {{ item.title === 'null'? '': item.title }}
+                                </b>
                             </p>
                             <!-- <p class='msg-content'>
                                 {{ computeHtmlTime(item.content) }}
@@ -130,20 +156,13 @@ import { isEmpty, getCookie } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
-import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '@/api/user'
+import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList, setMsgReaded, setMsgAllReaded } from '@/api/user'
 
 export default {
     name: 'Msg',
     components: {
         Top,
     },
-    // beforeRouteEnter (to, from, next) {
-    //     next(vm => {
-    //         fromPage.value = ref(from)
-    //         console.log(fromPage.value.fullPath)
-    //         console.log(fromPage.value.query.type)
-    //     })
-    // },
     setup (props) {
         const store = useStore()
         const router = useRouter()
@@ -153,17 +172,20 @@ export default {
             list: [],
             listNotice: [],
             listCustomer: [],
-            loading: false,
+
             lang: getCookie('lang') || 'zh-CN',
 
+            loading: false,
             finished: false, // 消息列表
             pageLoading: false,
             current: 1,
 
+            loadingNt: false,
             finishedNt: false, // 公告列表
             pageLoadingNt: false,
             currentNt: 1,
 
+            loadingPs: false,
             finishedPs: false, // 个人消息列表
             pageLoadingPs: false,
             currentPs: 1,
@@ -198,7 +220,7 @@ export default {
 
         const activeIndex = ref('public')
         const onClickTab = ({ title, name }) => {
-            console.log(title, name)
+            // console.log(title, name)
             if (name === 'public') {
                 state.currentNt = 1
                 state.finishedNt = false
@@ -220,7 +242,7 @@ export default {
         }
 
         const changeType = (val) => {
-            console.log(val)
+            // console.log(val)
             state.type = val
             state.current = 1
             state.finished = false
@@ -230,7 +252,21 @@ export default {
 
         // 跳转到公告详情页
         const goNoticeDetails = (id, type) => {
-            console.log(id)
+            // console.log(id)
+            if (type === 'msgcustomer') {
+                setMsgReadedFn(id)
+                var arr = []; var temp = {}
+                state.listCustomer.map((item) => {
+                    temp = item
+                    if (item.id === id) {
+                        if (item.readStatus === 1) {
+                            temp.readStatus = 2
+                        }
+                    }
+                    arr.push(temp)
+                })
+                state.listCustomer = arr
+            }
             router.push({
                 path: '/noticeDetail',
                 query: {
@@ -243,6 +279,7 @@ export default {
         // 获取消息列表
         const getMsgList = () => {
             state.pageLoading = true
+            state.loading = true
             state.errorTip = ''
             queryPlatFormMessageLogList({
                 current: state.current,
@@ -261,27 +298,27 @@ export default {
                         state.finished = true
                     }
                 }
+                console.log(state.loading)
             }).catch(err => {
                 state.errorTip = t('c.loadError')
                 state.pageLoading = false
+                state.loading = false
             })
         }
 
         // 获取个人消息列表
         const getCustomerMsgListData = () => {
             state.pageLoading = true
+            state.loadingPs = true
             state.errorTip = ''
-            // console.log(customInfo.value)
             getCustomerMsgList({
                 current: state.currentNt,
-                // pubTimeFrom: '',
-                // pubTimeTo: '',
                 lang: state.lang,
                 size: 10,
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo
             }).then(res => {
-                state.loading = false
+                state.loadingPs = false
                 state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
@@ -296,24 +333,24 @@ export default {
             }).catch(err => {
                 state.errorTip = t('c.loadError')
                 state.pageLoading = false
+                state.loadingPs = false
             })
         }
 
         // 获取公告列表
         const getNoticeData = () => {
             state.pageLoading = true
+            state.loadingNt = true
             state.errorTip = ''
             // console.log(customInfo.value)
             getNoticeList({
                 current: state.currentNt,
-                // pubTimeFrom: '',
-                // pubTimeTo: '',
                 lang: state.lang,
                 size: 10,
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo
             }).then(res => {
-                state.loading = false
+                state.loadingNt = false
                 state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
@@ -324,6 +361,49 @@ export default {
                     if (res.data.size * res.data.current >= res.data.total) {
                         state.finishedNt = true
                     }
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+                state.loadingNt = false
+            })
+        }
+
+        // 设置消息已读
+        const setMsgReadedFn = (id) => {
+            state.pageLoading = true
+            state.errorTip = ''
+            setMsgReaded({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                id: id
+            }).then(res => {
+                state.loading = false
+                state.pageLoading = false
+                if (res.check()) {
+                    // getCustomerMsgListData()
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
+        }
+
+        // 设置全部已读
+        const setAllMsgReaded = () => {
+            state.pageLoading = true
+            state.errorTip = ''
+            setMsgAllReaded({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                state.loading = false
+                state.pageLoading = false
+                if (res.check()) {
+                    state.currentPs = 1
+                    state.finishedPs = false
+                    state.listCustomer = []
+                    getCustomerMsgListData()
                 }
             }).catch(err => {
                 state.errorTip = t('c.loadError')
@@ -354,24 +434,20 @@ export default {
 
         // 获取到顶部消息通知，同时刷新消息列表
         const gotMsg = () => {
-            onRefresh()
+            // onRefresh()
         }
-        document.body.addEventListener('GotMsg_notice', gotMsg, false)
+        // document.body.addEventListener('GotMsg_notice', gotMsg, false)
         onBeforeMount(() => {
-            // getMsgList()
             getNoticeData()
-            // console.log(customInfo.value)
             if (customInfo.value) {
                 state.isUser = true
             } else {
                 state.isUser = false
             }
-            debugger
-            console.log(route)
         })
 
         onUnmounted(() => {
-            document.body.removeEventListener('GotMsg_notice', gotMsg)
+            // document.body.removeEventListener('GotMsg_notice', gotMsg)
         })
 
         // msg上拉刷新
@@ -383,8 +459,12 @@ export default {
         }
         // msg底部加载更多
         const onLoad = () => {
-            state.current++
-            getMsgList()
+            console.log('onLoad()')
+            console.log(state.loading)
+            if (!state.loading) {
+                state.current++
+                getMsgList()
+            }
         }
 
         // notice上拉刷新
@@ -396,12 +476,16 @@ export default {
         }
         // notice底部加载更多
         const onLoadNotice = () => {
-            state.currentNt++
-            getNoticeData()
+            console.log('onLoadNotice()')
+            if (!state.loadingNt) {
+                state.currentNt++
+                getNoticeData()
+            }
         }
 
         // msgCustomer上拉刷新
         const onRefreshPs = () => {
+            console.log('onRefreshPs')
             state.currentPs = 1
             state.finishedPs = false
             state.listCustomer = []
@@ -409,8 +493,11 @@ export default {
         }
         // notice底部加载更多
         const onLoadPs = () => {
-            state.currentPs++
-            getCustomerMsgListData()
+            console.log('onLoadPs()')
+            if (!state.loadingPs) {
+                state.currentPs++
+                getCustomerMsgListData()
+            }
         }
 
         const formatTime = (val) => {
@@ -435,6 +522,8 @@ export default {
             computeHtmlTime,
             activeIndex,
             onClickTab,
+            setMsgReadedFn,
+            setAllMsgReaded,
             ...toRefs(state)
         }
     }
@@ -472,6 +561,7 @@ export default {
     }
 }
 .msg-list {
+    margin-bottom: rem(50px);
     .header {
         padding-bottom: rem(30px);
         padding-left: rem(30px);
@@ -485,7 +575,6 @@ export default {
         //border-top: solid rem(10px) var(--bgColor);
         .msg-title {
             color: var(--color);
-            font-weight: bold;
             font-size: rem(28px);
             line-height: rem(60px);
         }
@@ -507,5 +596,10 @@ export default {
             line-height: rem(60px);
         }
     }
+}
+.all-read {
+    display: inline-block;
+    padding: rem(30px) rem(20px);
+    font-size: rem(24px);
 }
 </style>

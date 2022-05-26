@@ -49,11 +49,28 @@
                     />
                 </div>
             </van-tab>
-            <van-tab v-show='isUser' name='msg' :title="$t('route.msg')">
+            <van-tab v-if='isUser' name='msg' :title="$t('route.msg')">
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
-                    <van-loading v-if='loading' />
+                    <div class='operate'>
+                        <van-row>
+                            <van-col span='24'>
+                                <!-- <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
+                                    <van-dropdown-item v-model='type' :options='options' @change='changeType' />
+                                </van-dropdown-menu> -->
+                                <el-select v-model='type' class='msg-filter' placeholder='请选择' @change='changeType'>
+                                    <el-option
+                                        v-for='item in options'
+                                        :key='item.value'
+                                        :label='item.text'
+                                        :value='item.value'
+                                    />
+                                </el-select>
+                            </van-col>
+                        </van-row>
+                    </div>
                     <div class='msg-list'>
+                        <van-loading v-if='loading' />
                         <div v-for='(item,index) in msgList' :key='index' class='msg-item'>
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
@@ -65,6 +82,11 @@
                                 {{ formatTime(item.createTime) }}
                             </p>
                         </div>
+                        <van-empty
+                            v-if='msgList.length === 0'
+                            :description="$t('api.listnone')"
+                            image='/images/empty.png'
+                        />
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
@@ -87,21 +109,29 @@
                             </template>
                         </van-pagination>
                     </div>
-                    <van-empty
-                        v-if='msgList.length === 0'
-                        :description="$t('api.listnone')"
-                        image='/images/empty.png'
-                    />
                 </div>
             </van-tab>
-            <van-tab v-show='isUser' name='msgps' :title="$t('route.msgCustomer')">
+            <van-tab v-if='isUser' name='msgps' :title="$t('route.msgCustomer')">
                 <div class='list'>
-                    <!-- <Loading :show='loading' /> -->
+                    <div class='operate'>
+                        <van-row>
+                            <van-col align='right' span='24'>
+                                <el-button class='all-read' @click='setAllMsgReaded'>
+                                    全部已读
+                                </el-button>
+                            </van-col>
+                        </van-row>
+                    </div>
                     <van-loading v-if='loading' />
                     <div class='msg-list'>
                         <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'msgcustomer')">
                             <p class='msg-title'>
-                                {{ item.title === 'null'? '': item.title }}
+                                <b v-if='item.readStatus == 1'>
+                                    {{ item.title === 'null'? '': item.title }}
+                                </b>
+                                <span v-if='item.readStatus == 2'>
+                                    {{ item.title === 'null'? '': item.title }}
+                                </span>
                             </p>
                             <p class='msg-time'>
                                 {{ formatTime(item.createTime) }}
@@ -141,12 +171,12 @@
 </template>
 
 <script>
-import { computed, toRefs, reactive, onMounted, ref, beforeRouteEnter } from 'vue'
+import { computed, toRefs, reactive, onMounted, ref, onBeforeMount } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Toast, Dialog, Pagination } from 'vant'
-import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList } from '@/api/user'
+import { queryPlatFormMessageLogList, getNoticeList, getCustomerMsgList, setMsgReaded, setMsgAllReaded } from '@/api/user'
 import { isEmpty, getCookie, localSet, localGet } from '@/utils/util'
 
 export default {
@@ -154,31 +184,12 @@ export default {
     components: {
 
     },
-    // beforeRouteEnter (to, from, next) {
-    //     // balabala
-    //     next(vm => {
-    //         // console.log(to)
-    //         console.log(from)
-    //         vm.pathUrl = from.fullPath
-    //         let active = ''
-    //         if (from.query.type === 'msgcustomer') {
-    //             active = 'msgps'
-    //         }
-
-    //         if (from.query.type === 'notice') {
-    //             active = 'notice'
-    //         }
-    //         console.log(active)
-    //         localSet('noticeActive', active)
-    //     })
-    // },
-
     setup () {
         const router = useRouter()
         const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
-        const { type } = route.query
+        // const { type } = route.query
         const state = reactive({
             loading: false,
             active: 2,
@@ -207,7 +218,27 @@ export default {
             totalPs: 0,
 
             isUser: false,
-            activeIndex: ''
+            activeIndex: '',
+
+            type: '',
+            options: [
+                {
+                    'text': t('msg.all'),
+                    'value': ''
+                },
+                {
+                    'text': t('msg.accountMsg'),
+                    'value': 'USER_MESSAGE'
+                },
+                {
+                    'text': t('msg.assetsMsg'),
+                    'value': 'CASH_MESSAGE'
+                },
+                {
+                    'text': t('msg.tradeMsg'),
+                    'value': 'TRADE_MESSAGE'
+                }
+            ]
         })
 
         const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
@@ -232,11 +263,12 @@ export default {
             }).then(res => {
                 state.loading = false
                 if (res.check()) {
-                    // if (res.data.records && res.data.records.length > 0) {
-                    //     state.msgList = state.msgList.concat(res.data.records)
-                    // }
-                    state.msgList = res.data.records
-                    state.total = res.data.total
+                    if (res.data.records && res.data.records.length > 0) {
+                        // state.msgList = state.msgList.concat(res.data.records)
+                        state.msgList = res.data.records
+                        state.total = res.data.total
+                    }
+
                     // 数据全部加载完成
                     if (res.data.size * res.data.current >= res.data.total) {
                         state.finished = true
@@ -267,11 +299,8 @@ export default {
         const getNoticeData = () => {
             state.loading = true
             state.errorTip = ''
-            // console.log(customInfo.value)
             getNoticeList({
                 current: state.currentNt,
-                // pubTimeFrom: '',
-                // pubTimeTo: '',
                 lang: state.lang,
                 size: 10,
                 companyId: customInfo.value.companyId,
@@ -303,8 +332,6 @@ export default {
 
             getCustomerMsgList({
                 current: state.currentPs,
-                // pubTimeFrom: '',
-                // pubTimeTo: '',
                 lang: state.lang,
                 size: 10,
                 companyId: customInfo.value.companyId,
@@ -330,7 +357,7 @@ export default {
         }
 
         const onClickTab = (item) => {
-            console.log(item)
+            // console.log(item)
             if (item.name === 'notice') {
                 state.currentNt = 1
                 state.finishedNt = false
@@ -353,7 +380,21 @@ export default {
 
         // 跳转到公告详情页
         const goNoticeDetails = (id, type) => {
-            console.log(id)
+            // console.log(id)
+            if (type === 'msgcustomer') {
+                setMsgReadedFn(id)
+                var arr = []; var temp = {}
+                state.listCustomer.map((item) => {
+                    temp = item
+                    if (item.id === id) {
+                        if (item.readStatus === 1) {
+                            temp.readStatus = 2
+                        }
+                    }
+                    arr.push(temp)
+                })
+                state.listCustomer = arr
+            }
             router.push({
                 path: '/noticeDetail',
                 query: {
@@ -361,6 +402,58 @@ export default {
                     type: type
                 }
             })
+        }
+
+        // 设置消息已读
+        const setMsgReadedFn = (id) => {
+            state.pageLoading = true
+            state.errorTip = ''
+            setMsgReaded({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                id: id
+            }).then(res => {
+                state.loading = false
+                state.pageLoading = false
+                if (res.check()) {
+                    // getCustomerMsgListData()
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
+        }
+
+        // 设置全部已读
+        const setAllMsgReaded = () => {
+            state.pageLoading = true
+            state.errorTip = ''
+            setMsgAllReaded({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo
+            }).then(res => {
+                state.loading = false
+                state.pageLoading = false
+                if (res.check()) {
+                    state.currentPs = 1
+                    state.finishedPs = false
+                    state.listCustomer = []
+                    getCustomerMsgListData()
+                    Toast(t('notice.allReadedOk'))
+                }
+            }).catch(err => {
+                state.errorTip = t('c.loadError')
+                state.pageLoading = false
+            })
+        }
+
+        const changeType = (val) => {
+            console.log(val)
+            state.type = val
+            state.current = 1
+            state.finished = false
+            state.list = []
+            getMsgList()
         }
 
         const computeHtmlTime = (content) => {
@@ -392,31 +485,33 @@ export default {
             }
         })
 
-        onMounted(() => {
+        onBeforeMount(() => {
             getNoticeData()
+            console.log(customInfo.value)
             if (customInfo.value) {
                 state.isUser = true
+                if (route.query.from === 'notice') {
+                    // activeIndex.value = ref('notice')
+                    state.activeIndex = ref('notice')
+                    state.currentNt = 1
+                    state.finishedNt = false
+                    state.listNotice = []
+                    getNoticeData()
+                }
+                if (route.query.from === 'msgcustomer') {
+                    // activeIndex.value = ref('msgps')
+                    state.activeIndex = ref('msgps')
+                    state.currentPs = 1
+                    state.finishedPs = false
+                    state.listCustomer = []
+                    getCustomerMsgListData()
+                }
             } else {
                 state.isUser = false
             }
+            console.log(state.isUser)
             // const index = localGet('noticeActive')
             console.log(route.query.from)
-            if (route.query.from === 'notice') {
-                // activeIndex.value = ref('notice')
-                state.activeIndex = ref('notice')
-                state.currentNt = 1
-                state.finishedNt = false
-                state.listNotice = []
-                getNoticeData()
-            }
-            if (route.query.from === 'msgcustomer') {
-                // activeIndex.value = ref('msgps')
-                state.activeIndex = ref('msgps')
-                state.currentPs = 1
-                state.finishedPs = false
-                state.listCustomer = []
-                getCustomerMsgListData()
-            }
         })
 
         return {
@@ -431,6 +526,9 @@ export default {
             getCustomerMsgListData,
             inviteVis,
             onClickTab,
+            setMsgReadedFn,
+            setAllMsgReaded,
+            changeType,
             ...toRefs(state)
         }
     }
@@ -488,7 +586,23 @@ export default {
     .col_black {
         color: var(--normalColor);
     }
+    .operate {
+        padding: 15px;
+        text-align: right;
+        background: var(--contentColor);
+        border-bottom: 1px solid var(--lineColor);
+        .msg-filter {
+            display: inline-block;
+            width: 120px;
+            :deep(.el-input__inner) {
+                background: var(--contentColor);
+                border: 1px solid var(--lineColor);
+            }
+        }
+    }
     .msg-list {
+        min-height: 400px;
+        padding: 15px;
         background: var(--contentColor);
         .header {
             padding-bottom: rem(30px);
@@ -511,6 +625,9 @@ export default {
                 font-weight: bold;
                 font-size: rem(28px);
                 line-height: rem(60px);
+                span {
+                    font-weight: normal;
+                }
             }
             .msg-content {
                 color: var(--color);
@@ -537,6 +654,11 @@ export default {
                 cursor: pointer;
             }
         }
+    }
+    .all-read {
+        display: inline-block;
+        padding: 10px;
+        font-size: 14px;
     }
 }
 

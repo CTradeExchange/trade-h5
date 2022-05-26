@@ -1154,6 +1154,32 @@ export function getNoticeList(data) {
     })
 }
 
+/* 设置消息已读 */
+export function setMsgReaded(data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.msgRead',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 消息全部已读 */
+export function setMsgAllReaded(data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.msgAllRead',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
 /* 获取公告详情 */
 export function getNoticeDetail(data) {
     return request({

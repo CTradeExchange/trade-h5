@@ -722,7 +722,7 @@
         "transferSuccess": "Tranfer success",
         "confirmClose": "Confirm close",
         "hideAsset": "Hide 0 assets",
-        "searchAsset":"Search"
+        "searchAsset": "Search"
     },
     "transRecords": {
         "searchPlaceholder": "Name/Symbol",
@@ -1163,6 +1163,7 @@
     },
     "notice": {
         "poptitle": "Latest Notice",
-        "detailHeader": "Detail"
+        "detailHeader": "Detail",
+        "allReadedOk": "Set all read successfully！"
     }
 }
