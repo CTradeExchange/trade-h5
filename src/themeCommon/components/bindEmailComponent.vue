@@ -193,7 +193,6 @@ export default {
             const existParams = {
                 type: 1,
                 loginName: state.email,
-                phoneArea: state.zone,
                 emailArea: state.zone
             }
             state.loading = true

@@ -10,32 +10,19 @@
             <van-tab :title='$t("login.loginByPersonal")' />
             <van-tab :title='$t("login.loginByCorporate")' />
         </van-tabs>
-
-        <van-tabs
-            v-model:active='loginAccount'
-            class='mtop10'
-            :color='$style.primary'
-            shrink
-            :title-active-color='$style.primary'
-        >
-            <van-tab name='mobile' :title='$t("register.phoneNo")' />
-            <van-tab name='email' :title='$t("register.email")' />
-        </van-tabs>
-        <!-- <header class='header'>
+        <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
             </h1>
-        </header> -->
+        </header>
 
         <form class='loginForm'>
             <div v-if="loginAccount==='mobile'" class='field'>
-                <areaInput
+                <InputComp
                     v-model.trim='loginName'
-                    v-model:zone='zone'
                     clear
-                    :placeholder="$t('login.loginNamePlaceholder')"
+                    :label="$t('login.loginNamePlaceholder')"
                     @onBlur='checkUserMfa'
-                    @zoneSelect='zoneSelect'
                 />
             </div>
             <div v-else class='field'>
@@ -115,7 +102,6 @@
 
 <script>
 import Schema from 'async-validator'
-import areaInput from '@/components/form/areaInput'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
@@ -142,7 +128,6 @@ import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 export default {
     components: {
         Vline,
-        areaInput,
         InputComp,
         LoginByGoogle,
         LoginByFacebook,
@@ -164,13 +149,10 @@ export default {
             loginPwdPop: false,
             tabActive: 0,
             loginName: '',
-            email: '',
             pwd: '',
-            zone: localGet('loginZone') || '',
-            phoneArea: localGet('loginPhoneArea') || '',
             checkCode: '',
             loginType: 'password', // checkCode
-            loginAccount: localGet('loginAccount') || 'mobile',
+            loginAccount: 'mobile',
             bindAddShow: false,
             userId: '',
             googleCodeVis: false,
@@ -198,11 +180,6 @@ export default {
             state.googleCode = val
         }
 
-        // 选择登录手机号区号
-        const zoneSelect = (data) => {
-            state.phoneArea = data.code
-        }
-
         const loginHandle = () => {
             if (state.googleCodeVis && isEmpty(state.googleCode)) {
                 return Toast(t('common.inputGoogleCode'))
@@ -210,7 +187,6 @@ export default {
             const loginParams = {
                 type: state.loginName.includes('@') ? 1 : 2,
                 loginName: state.loginName,
-                phoneArea: state.phoneArea,
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
@@ -261,9 +237,6 @@ export default {
                 instance.appContext.config.globalProperties.$MsgSocket.login()
                 store.commit('del_cacheViews', 'Home')
                 store.commit('del_cacheViews', 'Layout')
-                localSet('loginAccount', state.loginAccount)
-                localSet('loginPhoneArea', state.phoneArea)
-                localSet('loginZone', state.zone)
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
@@ -326,7 +299,6 @@ export default {
             if (val) {
                 checkGoogleMFAStatus({
                     loginName: val,
-                    phoneArea: state.phoneArea,
                     type: val.includes('@') ? 1 : 2
                 }).then(res => {
                     if (res.check()) {
@@ -342,7 +314,6 @@ export default {
         const verifyCodeSendHandler = (callback) => {
             const verifyParams = {
                 type: state.loginName.includes('@') ? 1 : 2,
-                phoneArea: state.phoneArea,
                 loginName: state.loginName
             }
 
@@ -361,10 +332,10 @@ export default {
                             callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
-                            // state.zone = res.data.phoneArea
+                            state.zone = res.data.phoneArea
                             const params = {
                                 bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-                                toUser: state.loginName.includes('@') ? state.loginName : String(state.phoneArea) + ' ' + state.loginName,
+                                toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
                             }
                             verifyCodeSend(params).then(res => {
                                 if (res.check()) {
@@ -417,7 +388,6 @@ export default {
             ...toRefs(state),
             changeLoginType,
             rightAction,
-            zoneSelect,
             loginHandle,
             topRightClick,
             verifyCodeSendHandler,
@@ -473,7 +443,7 @@ export default {
     font-size: rem(34px);
 }
 .loginForm {
-    margin: rem(30px) rem(30px) rem(50px);
+    margin: rem(50px) rem(30px);
     .field {
         position: relative;
         display: flex;

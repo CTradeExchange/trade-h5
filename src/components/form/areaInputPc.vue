@@ -20,7 +20,6 @@
                 required
                 :type='inputType'
                 :value='modelValue'
-                @blur='onBlur'
                 @input='onInput'
             />
             <label v-if='label' class='label' :for='id'>
@@ -103,7 +102,7 @@ export default {
             }
         }
     },
-    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect', 'onBlur'],
+    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
@@ -129,9 +128,6 @@ export default {
                     this.$emit('zoneSelect', item)
                 }
             }
-        },
-        onBlur ($event) {
-            this.$emit('onBlur', $event.target.value)
         }
     }
 }
@@ -177,13 +173,11 @@ export default {
 .inputWrapper {
     position: relative;
     background-color: var(--assistColor) !important;
-    border-radius: 3px;
 }
 .input {
     width: 100%;
-    height: 48px;
-    padding: 0 10px;
-    border-radius: 3px;
+    height: rem(75px);
+    padding: 0 5px;
     &:focus~.label,
     &:valid~.label {
         transform: scale(0.8) translateY(-90%);

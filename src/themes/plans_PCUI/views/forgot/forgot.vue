@@ -27,12 +27,11 @@
                 <div class='tabs-content'>
                     <form v-show='curTab === 0' class='loginForm'>
                         <div v-if="type==='login'" class='field'>
-                            <areaInputPc
+                            <InputComp
                                 v-model.trim='mobile'
-                                v-model:zone='zone'
                                 class='forgotAccount'
                                 clear
-                                :placeholder='$t("common.inputPhone")'
+                                :label='$t("common.inputPhone")'
                                 @onBlur='checkUserMfa'
                             />
                         </div>
@@ -108,7 +107,6 @@
 <script>
 import topNav from '@planspc/layout/topNav'
 import userLayoutFooter from '@planspc/components/userLayoutFooter'
-import areaInputPc from '@/components/form/areaInputPc'
 import InputComp from '@/components/form/input'
 import { reactive, toRefs, computed } from 'vue'
 // import areaInput from '@/components/form/areaInput'
@@ -122,14 +120,13 @@ import RuleFn from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 import { checkUserStatus, checkGoogleMFAStatus } from '@/api/user'
-import { isEmpty, localGet } from '@/utils/util'
+import { isEmpty } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'Forgot',
     components: {
         topNav,
-        areaInputPc,
         InputComp,
         checkCode,
         googleVerifyCode,
@@ -148,8 +145,7 @@ export default {
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: localGet('loginZone') || '',
-            phoneArea: localGet('loginPhoneArea') || '',
+            zone: '',
             countryZone: '86',
             curTab: 0,
             tips: {
@@ -174,20 +170,6 @@ export default {
             }
         }
 
-        // 获取国家区号
-        store.dispatch('getCountryListByParentCode').then(res => {
-            if (res.check() && res.data.length) {
-                const countryList = store.state.countryList
-                const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
-                const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
-                if (defaultZoneConfig?.code && !state.zone) {
-                    state.countryVal = defaultZoneConfig.code
-                    state.zone = defaultZoneConfig.countryCode
-                    state.phoneArea = defaultZoneConfig.countryCode
-                }
-            }
-        })
-
         const customerInfo = computed(() => store.state._user.customerInfo)
         if (type === 'fund') {
             state.mobile = customerInfo.value?.phone
@@ -208,7 +190,6 @@ export default {
             if (val) {
                 checkGoogleMFAStatus({
                     loginName: val,
-                    phoneArea: state.phoneArea,
                     type: val.includes('@') ? 1 : 2
                 }).then(res => {
                     if (res.check()) {
@@ -350,7 +331,6 @@ export default {
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
-                                phoneArea: state.phoneArea,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
                                 googleCode: state.googleCode,
@@ -369,7 +349,6 @@ export default {
                     query: {
                         // verifyCodeToken: res.data.token,
                         sendToken: state.sendToken,
-                        phoneArea: state.phoneArea,
                         type: state.curTab === 0 ? 2 : 1,
                         loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                         verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
@@ -428,6 +407,9 @@ export default {
     flex-flow: column;
     height: 100%;
     background: var(--bgColor);
+    .forgotAccount {
+        background-color: var(--assistColor) !important;
+    }
     .container {
         display: flex;
         flex: 1;
