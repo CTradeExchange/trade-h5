@@ -20,27 +20,27 @@
                                 {{ formatTime(item.pubTime) }}
                             </p>
                         </div>
-                        <div class='list-page-box'>
-                            <van-pagination
-                                v-if='listNotice.length > 0'
-                                v-model='currentNt'
-                                class='list-page'
-                                force-ellipses
-                                :items-per-page='10'
-                                :total-items='totalNt'
-                                @change='changePageNt'
-                            >
-                                <template #prev-text>
-                                    <van-icon name='arrow-left' />
-                                </template>
-                                <template #next-text>
-                                    <van-icon name='arrow' />
-                                </template>
-                                <template #page='{ text }'>
-                                    {{ text }}
-                                </template>
-                            </van-pagination>
-                        </div>
+                    </div>
+                    <div class='list-page-box'>
+                        <van-pagination
+                            v-if='listNotice.length > 0'
+                            v-model='currentNt'
+                            class='list-page'
+                            force-ellipses
+                            :items-per-page='10'
+                            :total-items='totalNt'
+                            @change='changePageNt'
+                        >
+                            <template #prev-text>
+                                <van-icon name='arrow-left' />
+                            </template>
+                            <template #next-text>
+                                <van-icon name='arrow' />
+                            </template>
+                            <template #page='{ text }'>
+                                {{ text }}
+                            </template>
+                        </van-pagination>
                     </div>
                     <van-empty
                         v-if='listNotice.length === 0'
@@ -137,27 +137,27 @@
                                 {{ formatTime(item.createTime) }}
                             </p>
                         </div>
-                        <div class='list-page-box'>
-                            <van-pagination
-                                v-if='listCustomer.length > 0'
-                                v-model='currentPs'
-                                class='list-page'
-                                force-ellipses
-                                :items-per-page='10'
-                                :total-items='totalPs'
-                                @change='changePagePs'
-                            >
-                                <template #prev-text>
-                                    <van-icon name='arrow-left' />
-                                </template>
-                                <template #next-text>
-                                    <van-icon name='arrow' />
-                                </template>
-                                <template #page='{ text }'>
-                                    {{ text }}
-                                </template>
-                            </van-pagination>
-                        </div>
+                    </div>
+                    <div class='list-page-box'>
+                        <van-pagination
+                            v-if='listCustomer.length > 0'
+                            v-model='currentPs'
+                            class='list-page'
+                            force-ellipses
+                            :items-per-page='10'
+                            :total-items='totalPs'
+                            @change='changePagePs'
+                        >
+                            <template #prev-text>
+                                <van-icon name='arrow-left' />
+                            </template>
+                            <template #next-text>
+                                <van-icon name='arrow' />
+                            </template>
+                            <template #page='{ text }'>
+                                {{ text }}
+                            </template>
+                        </van-pagination>
                     </div>
                     <van-empty
                         v-if='listNotice.length === 0'
@@ -601,7 +601,7 @@ export default {
         }
     }
     .msg-list {
-        min-height: 400px;
+        min-height: 500px;
         padding: 15px;
         background: var(--contentColor);
         .header {

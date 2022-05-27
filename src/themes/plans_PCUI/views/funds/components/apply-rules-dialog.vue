@@ -83,10 +83,10 @@
                     <div v-if='purchaseCurrencySetting !== {}' class=''>
                         <van-row v-for='(item,index) in purchaseCurrencySetting.value' :key='index' class='txt-row child'>
                             <van-col span='12'>
-                                {{ item.currencyCode === 'self' ? $t('fundInfo.basketAssets') : item.currencyName }}
+                                {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
                             </van-col>
                             <van-col align='right' span='12'>
-                                {{ item.purchaseFeeProportion? divData(item.purchaseFeeProportion):0 }}%
+                                {{ item.purchaseFeeProportion? mulData(item.purchaseFeeProportion):0 }}%
                             </van-col>
                         </van-row>
                         <van-row class='txt-row'>
@@ -94,12 +94,12 @@
                                 {{ $t('fundInfo.deductRuletxt2') }}
                             </van-col>
                             <van-col align='right' span='12'>
-                                {{ fundData.managementFee? divData(fundData.managementFee):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
+                                {{ fundData.value.managementFee? mulData(fundData.value.managementFee):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
                             </van-col>
                         </van-row>
                     </div>
                     <p class='text'>
-                        {{ $t('fundInfo.deductRuledesc',{ time: fundData.dailySettlementTime?fundData.dailySettlementTime: '00:00' }) }}
+                        {{ $t('fundInfo.deductRuledesc',{ time: (fundData.value.dailySettlementTime?fundData.value.dailySettlementTime: '00:00') }) }}
                     </p>
                 </div>
             </div>
@@ -111,7 +111,7 @@
 import { ref, defineExpose, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { div } from '@/utils/calculation'
+import { div, mul } from '@/utils/calculation'
 import { getFundInfo } from '@/api/fund'
 
 // 是否显示弹窗
@@ -143,8 +143,8 @@ const getFundInfoFn = () => {
     })
 }
 
-const divData = (value) => {
-    return div(value, 100)
+const mulData = (value) => {
+    return mul(value, 100)
 }
 
 onMounted(() => {

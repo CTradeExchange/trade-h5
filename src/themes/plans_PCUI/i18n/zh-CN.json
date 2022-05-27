@@ -832,12 +832,14 @@
             "column1": "管理费扣减日期(UTC)",
             "column2": "应扣金额",
             "column3": "扣款状态",
-            "deductSuceess": "扣除成功",
-            "deductFail": "扣除失败",
+            "column4": "扣减金额",
+            "deductSuceess": "成功",
+            "deductFail": "失败",
             "deductPopTitle": "扣减确认",
             "deductPopTxt1": "总扣减金额",
             "tip1": "USDT资产可用余额不足",
-            "tip2": "管理费扣减成功"
+            "tip2": "管理费扣减成功",
+            "deductBtn": "执行扣减"
         }
     },
     "fundInfo": {

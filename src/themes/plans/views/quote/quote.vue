@@ -84,6 +84,8 @@ export default {
         const { categoryList, productList, sortField, sortType, sortFunc } = useProduct({
             tradeType, categoryType
         })
+        // console.log(categoryList)
+
         const plansLen = computed(() => {
             const userProductCategory = store.getters.userProductCategory
             let arr = Object.keys(userProductCategory)
@@ -113,6 +115,8 @@ export default {
             async () => {
                 await nextTick()
                 if (productListEl.value) productListEl.value.subscribeAll()
+                console.log(productList)
+                console.log(productListEl.value)
             }
         )
 

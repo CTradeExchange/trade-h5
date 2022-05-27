@@ -2,7 +2,7 @@
     <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
     <!-- <Loading :show='pageLoading' /> -->
     <van-tabs v-model:active='activeIndex' class='publicPage' @click-tab='onClickTab'>
-        <van-tab name='public'>
+        <van-tab name='public' :title='$t("route.notice")'>
             <div class='msg-list'>
                 <van-pull-refresh
                     v-model='loadingNt'

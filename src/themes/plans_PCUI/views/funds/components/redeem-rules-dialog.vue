@@ -98,10 +98,10 @@
                     <div v-if='redemptionCurrencySetting !== {}'>
                         <van-row v-for='(item,index) in redemptionCurrencySetting.value' :key='index' class='txt-row child'>
                             <van-col span='12'>
-                                {{ item.currencyCode === 'SELF' ? $t('fundInfo.basketAssets') : item.currencyName }}
+                                {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
                             </van-col>
                             <van-col align='right' span='12'>
-                                {{ item.redemptionFeeProportion? divData(item.redemptionFeeProportion):0 }}%
+                                {{ item.redemptionFeeProportion? mulData(item.redemptionFeeProportion):0 }}%
                             </van-col>
                         </van-row>
                     </div>
@@ -118,7 +118,7 @@
 import { ref, defineExpose, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { div } from '@/utils/calculation'
+import { div, mul } from '@/utils/calculation'
 import { getFundInfo } from '@/api/fund'
 // 是否显示弹窗
 const show = ref(false)
@@ -149,8 +149,8 @@ const getFundInfoFn = () => {
     })
 }
 
-const divData = (value) => {
-    return div(value, 100)
+const mulData = (value) => {
+    return mul(value, 100)
 }
 
 defineExpose({

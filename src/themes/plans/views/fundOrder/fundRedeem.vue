@@ -121,9 +121,12 @@ white-space: nowrap;'
             </div>
             <div v-if="activeCurrency === 'self'" class='notice'>
                 {{ $t('fundInfo.t2Tip2') }}
-                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
+                <!-- <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
                     {{ $t('fundInfo.viewRule') }}
-                </router-link>
+                </router-link> -->
+                <span class='toRule' @click='goFundRulesPage'>
+                    {{ $t('fundInfo.viewRule') }}
+                </span>
             </div>
         </div>
 

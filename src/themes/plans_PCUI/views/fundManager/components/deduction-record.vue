@@ -28,7 +28,7 @@
                     <span>{{ formatTime(scope.row.deductDate) }}</span>
                 </template>
             </el-table-column>
-            <el-table-column :label="$t('fundManager.deduction.column2')" :min-width='140' prop='fees'>
+            <el-table-column :label="$t('fundManager.deduction.column4')" :min-width='140' prop='fees'>
                 <template #default='scope'>
                     <span>{{ scope.row.fees + ' ' + scope.row.currencyFees }} </span>
                 </template>
@@ -216,7 +216,7 @@ export default {
         }
 
         const formatTime = (val) => {
-            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD')
         }
 
         onMounted(() => {

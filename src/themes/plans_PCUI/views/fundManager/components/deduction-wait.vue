@@ -53,7 +53,7 @@
         <div v-if='tableData.length > 0' class='handle-action'>
             <div class='left'>
                 <button :class="['btn', { 'disable': disableBtn }]" @click='openLotDialog("confirm")'>
-                    {{ $t('fundManager.ransom.confirmLot') }}
+                    {{ $t('fundManager.deduction.deductBtn') }}
                 </button>
 
                 <span>{{ $t('fundManager.deduction.deductPopTxt1') }}: {{ totalLot }} {{ totalLotCell }} 可用：{{ usable }} USDT</span>
@@ -263,7 +263,7 @@ export default {
         }
 
         const formatTime = (val) => {
-            return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+            return window.dayjs(val).format('YYYY-MM-DD')
         }
 
         onMounted(() => {
