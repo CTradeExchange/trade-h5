@@ -138,7 +138,7 @@ export const toolHooks = function () {
                 handicap: true,
                 pendingTab: {
                     tradeType: [5], // 哪些玩法显示限价单
-                    show: true, // 限价单是否显示
+                    show: false, // 限价单是否显示
                 }
             }
         }
