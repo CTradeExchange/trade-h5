@@ -80,7 +80,7 @@
                         {{ item.currencyCode === ('self'||'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
                     </van-col>
                     <van-col align='right' span='12'>
-                        {{ item.purchaseFeeProportion? item.purchaseFeeProportion:0 }}%
+                        {{ item.purchaseFeeProportion? mulData(item.purchaseFeeProportion,100):0 }}%
                     </van-col>
                 </van-row>
                 <van-row class='txt-row'>
@@ -88,7 +88,7 @@
                         {{ $t('fundInfo.deductRuletxt2') }}
                     </van-col>
                     <van-col align='right' span='12'>
-                        {{ fundData.value.managementFee? fundData.value.managementFee:0 }}% {{ $t('fundInfo.deductRuletxt3') }}
+                        {{ fundData.value.managementFee? mulData(fundData.value.managementFee,100):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
                     </van-col>
                 </van-row>
                 <p class='text'>
@@ -185,7 +185,7 @@
                         {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
                     </van-col>
                     <van-col align='right' span='12'>
-                        {{ item.redemptionFeeProportion? item.redemptionFeeProportion:0 }}%
+                        {{ item.redemptionFeeProportion? mulData(item.redemptionFeeProportion,100):0 }}%
                     </van-col>
                 </van-row>
 
@@ -201,7 +201,7 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { div } from '@/utils/calculation'
+import { div, mul } from '@/utils/calculation'
 import { getFundInfo } from '@/api/fund'
 
 const route = useRoute()
@@ -223,8 +223,8 @@ const getFundInfoFn = () => {
     })
 }
 
-const divData = (value) => {
-    return div(value, 100)
+const mulData = (value) => {
+    return mul(value, 100)
 }
 
 onMounted(() => {
