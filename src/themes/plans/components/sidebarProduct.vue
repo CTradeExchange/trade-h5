@@ -108,7 +108,7 @@ export default {
 
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
-            tradeType, categoryType
+            tradeType, categoryType, isSort: false
         })
 
         const onClick = product => {
