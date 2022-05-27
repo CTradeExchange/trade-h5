@@ -92,7 +92,7 @@
                     </van-col>
                 </van-row>
                 <p class='text'>
-                    {{ $t('fundInfo.deductRuledesc',{ time: (fundData.value.dailySettlementTime?fundData.value.dailySettlementTime: '00:00') }) }}
+                    {{ $t('fundInfo.deductRuledesc',{ time: calcTime(fundData.value.dailySettlementTime) }) }}
                 </p>
             </section>
         </div>
@@ -225,6 +225,16 @@ const getFundInfoFn = () => {
 
 const mulData = (value) => {
     return mul(value, 100)
+}
+
+const calcTime = (value) => {
+    const timeNum = 0; var hour; var min
+    console.log(value)
+    hour = value / 60
+    min = value % 60
+    console.log(hour)
+    console.log(min)
+    return timeNum === 0 ? '00:00' : timeNum
 }
 
 onMounted(() => {
