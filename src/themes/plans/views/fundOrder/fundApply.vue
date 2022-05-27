@@ -125,9 +125,9 @@
                 <!-- <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
                     {{ $t('fundInfo.viewRule') }}
                 </router-link> -->
-                <span class='text' @click='goFundRulesPage'>
+                <router-link class='toRule' href='javascript:;' @click='goFundRulesPage'>
                     {{ $t('fundInfo.viewRule') }}
-                </span>
+                </router-link>
             </div>
         </div>
     </div>
