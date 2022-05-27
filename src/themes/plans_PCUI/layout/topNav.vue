@@ -268,7 +268,7 @@ export default {
         align-items: center;
         height: 100%;
         .logo {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             margin-right: 32px;
         }

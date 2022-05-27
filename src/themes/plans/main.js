@@ -20,6 +20,7 @@ import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
+import { requestBusinessConfig } from '@/api/wpApi'
 // import VConsole from 'vconsole' // 调试工具
 
 // const Vconsole = new VConsole()
@@ -54,10 +55,14 @@ if (isEmpty(localGet('invertColor'))) {
 }
 
 setRouter(router)
-// setRootVariable(localGet('invertColor'))
 
 if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 else if (location.search.includes('from=officialWebsite')) loginParams = getPreDemoAccountParams() // 从官网过来自动分配pre的Demo账号
+
+// 加载业务渠道自定义配置json
+requestBusinessConfig().then(res => {
+    store.commit('Update_businessConfig', res)
+})
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {

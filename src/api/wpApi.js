@@ -78,6 +78,7 @@ export function pageConfig (id) {
 //     })
 // }
 
+// 获取业务配置文件
 export function requestBusinessConfig (params) {
     const url = '/bc/businessConfig.json'
     return axios({

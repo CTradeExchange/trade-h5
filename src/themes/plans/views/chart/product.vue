@@ -586,6 +586,9 @@ export default {
         // 颜色值
         const style = computed(() => store.state.style)
 
+        // 业务配置
+        const businessConfig = computed(() => store.state.businessConfig)
+
         // 订阅产品
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
@@ -1108,21 +1111,25 @@ export default {
 
         // 跳转到基金的产品详情
         const fundtokenLink = () => {
-            if (!unref(fundtoken)) {
-                return Toast(t('trade.noFeature'))
-            }
-            if (isUniapp && uni) {
-                return uni.postMessage({
-                    data: {
-                        action: 'message',
-                        type: 'fund',
-                        params: {
-                            fundId: fundtoken.value.fundId
+            if (unref(businessConfig)?.v10Link) {
+                router.push(unref(businessConfig).v10Link)
+            } else {
+                if (!unref(fundtoken)) {
+                    return Toast(t('trade.noFeature'))
+                }
+                if (isUniapp && uni) {
+                    return uni.postMessage({
+                        data: {
+                            action: 'message',
+                            type: 'fund',
+                            params: {
+                                fundId: fundtoken.value.fundId
+                            }
                         }
-                    }
-                })
+                    })
+                }
+                router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
             }
-            router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
         }
 
         // 获取产品详情
@@ -1425,9 +1432,9 @@ export default {
                 flex-direction: column;
                 margin-left: rem(40px);
                 &:first-child {
-                    margin-left: 0;
-                    width: 43%;
                     flex: none;
+                    width: 43%;
+                    margin-left: 0;
                 }
                 &:first-child {
                     margin-right: rem(5px);
@@ -1436,9 +1443,9 @@ export default {
                     display: flex;
                     flex-direction: row;
                     flex-wrap: nowrap;
+                    align-items: center;
                     justify-content: space-between;
                     white-space: nowrap;
-                    align-items: center;
                     &.priceBottom {
                         margin-bottom: rem(10px);
                     }
@@ -1809,19 +1816,19 @@ export default {
                 margin-right: rem(20px);
             }
             .fundTradeBtn {
-                width: rem(140px);
                 flex: none;
+                width: rem(140px);
                 margin-left: rem(20px);
-                white-space: normal;
-                word-break: break-word;
-                text-align: center;
-                background: none;
                 color: var(--primary);
+                white-space: normal;
+                text-align: center;
+                word-break: break-word;
+                background: none;
                 border: 1px solid var(--primary);
-                &.en-US{
+                &.en-US {
                     padding-top: rem(18px);
                     line-height: 1.2;
-                     .text{
+                    .text {
                         font-size: rem(26px);
                     }
                 }
