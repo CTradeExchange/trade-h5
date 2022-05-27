@@ -118,7 +118,7 @@ export const sortFunc = (field) => {
     } else {
         sortType.value = 'asc'
     }
-    sortField.value = field
-    localSet('productListSortField', field)
+    sortField.value = sortType.value ? field : ''
+    localSet('productListSortField', sortType.value ? field : '')
     localSet('productListSortType', sortType.value)
 }
