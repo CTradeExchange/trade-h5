@@ -11,6 +11,7 @@
                 required
                 :type='inputType'
                 :value='modelValue'
+                @blur='onBlur'
                 @input='onInput'
             />
             <label v-if='label' class='label' :for='id'>
@@ -98,7 +99,7 @@ export default {
             }
         }
     },
-    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],
+    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect', 'onBlur'],
     mounted () {
         this.$store.dispatch('getCountryListByParentCode').then(res => {
             if (res.data.length > 0) {
@@ -112,6 +113,9 @@ export default {
                     })
                 })
                 this.allCountryList = tempArr
+                if (this.zoneVal === '') {
+                    this.zoneOnSelect(tempArr[0])
+                }
             }
         })
     },
@@ -129,6 +133,9 @@ export default {
                 this.$emit('update:zone', item.name)
                 this.$emit('zoneSelect', item)
             }
+        },
+        onBlur ($event) {
+            this.$emit('onBlur', $event.target.value)
         }
     }
 }
