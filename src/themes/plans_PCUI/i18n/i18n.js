@@ -41,7 +41,8 @@ export async function loadLocaleMessages(i18n, locale) {
     // load locale messages with dynamic import
     const messages = await import(/* webpackChunkName: "locale-[request]" */ `./${locale}.json`)
     const commonMessages = await import(/* webpackChunkName: "locale-[request]" */ `@/themeCommon/i18n/${locale}.json`)
-    const newMessages = Object.assign({},commonMessages.default, messages.default)
+    const bsMessages = await import(/* webpackChunkName: "locale-[request]" */ `@/business/i18n/${locale}.json`)
+    const newMessages = Object.assign({},commonMessages.default, messages.default, bsMessages.default)
     // set locale and locale message
     i18n.global.setLocaleMessage(locale, newMessages)
 
