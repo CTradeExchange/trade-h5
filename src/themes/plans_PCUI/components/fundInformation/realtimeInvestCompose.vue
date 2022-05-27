@@ -52,7 +52,10 @@
                                 </p>
                                 <p class='ft'>
                                     <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
-                                        <p style='padding: 5px 10px; white-space: nowrap;'>
+                                        <p
+                                            style='padding: 5px 10px;
+white-space: nowrap;'
+                                        >
                                             {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
                                         </p>
                                         <template #reference>
@@ -211,7 +214,7 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.title{
+.title {
     display: flex;
     align-items: center;
     font-size: rem(32px);
@@ -222,8 +225,8 @@ onMounted(async () => {
         display: flex;
         .box {
             display: inline-flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: 42px;
             height: 42px;
             margin-left: 10px;
@@ -248,79 +251,80 @@ onMounted(async () => {
         }
     }
 }
-.rightSwitch{
+.rightSwitch {
     font-size: rem(28px);
     line-height: 1.5;
     cursor: pointer;
 }
-.assetsTitle{
+.assetsTitle {
     margin-top: rem(30px);
     color: var(--minorColor);
     font-size: rem(24px);
 }
-.assetsList{
+.assetsList {
     margin-top: rem(20px);
     margin-bottom: rem(20px);
     font-size: rem(28px);
-    li{
+    li {
         margin-bottom: 10px;
     }
 }
-.cellflex{
+.cellflex {
     display: flex;
     align-items: center;
     text-align: right;
-    .hd{
+    .hd {
         display: inline-flex;
         align-items: center;
         text-align: left;
         .name {
-            line-height: 1;
             margin-left: 10px;
+            line-height: 1;
         }
     }
-    .bd{
+    .bd {
         flex: 1;
     }
-    .ft{
+    .ft {
         width: rem(300px);
     }
-    .small{
+    .small {
         font-size: rem(22px);
     }
 }
-.block{
+.block {
     .question {
+        margin-top: -4px;
         margin-left: 5px;
-        font-size: 18px;
         color: var(--minorColor);
+        font-size: 18px;
         cursor: pointer;
     }
 }
-.chartPieDOM{
+.chartPieDOM {
     height: rem(400px);
 }
-.singleAssetTitle{
+.singleAssetTitle {
     padding: rem(30px) 0;
     font-size: rem(32px);
 }
-.chartBarDOM{
+.chartBarDOM {
     height: rem(500px);
 }
-.downArrow{
+.downArrow {
     display: inline-block;
     width: 0;
     height: 0;
     vertical-align: middle;
-    border:0 solid transparent;
-    border-radius: 3px;
-    border-width: 5px 5px 0 5px;
+    border: 0 solid transparent;
+    border-width: 5px 5px 0;
     border-top-color: var(--fallColor);
+    border-radius: 3px;
 }
-.upArrow{
-    @extend .downArrow;
-    border-width: 0 5px 5px 5px;
+.upArrow {
+    border-width: 0 5px 5px;
     border-top-color: transparent;
     border-bottom-color: var(--riseColor);
+    @extend .downArrow;
 }
 </style>
