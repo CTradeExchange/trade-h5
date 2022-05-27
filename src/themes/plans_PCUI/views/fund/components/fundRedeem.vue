@@ -169,12 +169,13 @@ const submitHandler = () => {
 
 // 打开规则弹窗
 const openRules = () => {
-    redeemRulesDialogRef.value.open()
+    const fund = props.fund
+    redeemRulesDialogRef.value.open(true, fund.fundId)
 }
 </script>
 
 <style lang="scss" scoped>
-@import "@/sass/mixin.scss";
+@import '@/sass/mixin.scss';
 .handle-module {
     padding-top: 20px;
     .block {
@@ -183,8 +184,8 @@ const openRules = () => {
             margin-bottom: 0;
         }
         .title {
-            font-size: 14px;
             margin-bottom: 8px;
+            font-size: 14px;
         }
         .box {
             display: flex;
@@ -208,8 +209,8 @@ const openRules = () => {
                 }
             }
             .value {
-                flex: 1;
                 display: inline-flex;
+                flex: 1;
                 align-items: center;
                 height: 100%;
                 padding: 0 15px;
@@ -236,8 +237,8 @@ const openRules = () => {
         font-size: 12px;
         p {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             strong {
                 font-weight: normal;
             }
@@ -245,17 +246,17 @@ const openRules = () => {
     }
     .handle-button {
         display: flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         height: 50px;
         margin-top: 30px;
+        color: #FFF;
         font-size: 14px;
-        color: #fff;
         background: var(--primary);
         border-radius: 5px;
         cursor: pointer;
         &:hover {
-            opacity: .7;
+            opacity: 0.7;
         }
         &.disable {
             background: var(--lineColor);
@@ -271,8 +272,8 @@ const openRules = () => {
         margin-top: 30px;
         button {
             display: flex;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             width: 100%;
             height: 50px;
             margin-bottom: 20px;
@@ -280,7 +281,7 @@ const openRules = () => {
             border-radius: 5px;
             cursor: pointer;
             &.register-btn {
-                color: #fff;
+                color: #FFF;
                 background: var(--primary);
             }
             &.login-btn {
@@ -290,8 +291,8 @@ const openRules = () => {
         }
     }
     .rules-link {
-        text-align: center;
         margin-top: 10px;
+        text-align: center;
         span {
             color: var(--primary);
             cursor: pointer;

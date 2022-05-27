@@ -119,9 +119,15 @@
             </ul>
             <div class='notice'>
                 {{ $t('fundInfo.applyCalculateTip') }}
-                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
+                <!-- <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
                     {{ $t('fundInfo.viewRule') }}
-                </router-link>
+                </router-link> -->
+                <!-- <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
+                    {{ $t('fundInfo.viewRule') }}
+                </router-link> -->
+                <span class='text' @click='goFundRulesPage'>
+                    {{ $t('fundInfo.viewRule') }}
+                </span>
             </div>
         </div>
     </div>

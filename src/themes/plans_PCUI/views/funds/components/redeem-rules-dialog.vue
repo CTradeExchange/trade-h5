@@ -98,10 +98,10 @@
                     <div v-if='redemptionCurrencySetting !== {}'>
                         <van-row v-for='(item,index) in redemptionCurrencySetting.value' :key='index' class='txt-row child'>
                             <van-col span='12'>
-                                {{ item.currencyCode === 'SELF' ? $t('fundInfo.basketAssets') : item.currencyName }}
+                                {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
                             </van-col>
                             <van-col align='right' span='12'>
-                                {{ item.redemptionFeeProportion? divData(item.redemptionFeeProportion):0 }}%
+                                {{ item.redemptionFeeProportion? item.redemptionFeeProportion:0 }}%
                             </van-col>
                         </van-row>
                     </div>

@@ -44,6 +44,7 @@ class SocketEvent {
         if (this.ws.readyState !== 1) return console.warn('行情websocket连接未准备好  readyState：', this.ws.readyState)
         const param = this.getParam(cmd_id, data)
         this.ws.send(JSON.stringify(param))
+		console.log(param)
         if (!this.timer) {
             this.timer = window.setInterval(() => {
                 const nowTime = new Date().getTime()

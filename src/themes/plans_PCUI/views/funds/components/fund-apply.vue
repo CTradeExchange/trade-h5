@@ -391,6 +391,7 @@ const openApplyRecords = () => {
 
 // 打开规则弹窗
 const openRules = () => {
+    const fund = props.fund
     applyRulesDialogRef.value.open(true, fund.fundId)
 }
 
