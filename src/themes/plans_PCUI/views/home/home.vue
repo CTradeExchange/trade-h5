@@ -23,9 +23,9 @@
                                     <span class='pubTitle'>
                                         {{ item.title }}
                                     </span>
-                                    <!-- <span class='pubTime'>
+                                    <span class='pubTime'>
                                         {{ formatTime(item.pubTime) }}
-                                    </span> -->
+                                    </span>
                                 </van-swipe-item>
                             </van-swipe>
                         </van-col>

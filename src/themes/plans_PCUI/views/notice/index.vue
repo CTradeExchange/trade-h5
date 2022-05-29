@@ -267,6 +267,9 @@ export default {
                         // state.msgList = state.msgList.concat(res.data.records)
                         state.msgList = res.data.records
                         state.total = res.data.total
+                    } else {
+                        state.msgList = []
+                        state.total = 0
                     }
 
                     // 数据全部加载完成
@@ -374,6 +377,7 @@ export default {
                 state.current = 1
                 state.finished = false
                 state.list = []
+                state.type = ''
                 getMsgList()
             }
         }

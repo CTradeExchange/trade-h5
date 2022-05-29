@@ -3,7 +3,7 @@
     <div class='wrapper'>
         <div class='page-title'>
             <span class='back-icon' @click='back'>
-                ＜
+                <van-icon name='arrow-left' />
             </span>
             {{ $t('notice.detailHeader') }}
         </div>

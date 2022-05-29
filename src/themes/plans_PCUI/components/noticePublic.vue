@@ -2,9 +2,11 @@
     <van-popup
         v-model:show='publicShow'
         class='public-pop'
+        close-icon-position='top-left'
         closeable
         position='center'
-        :style="{ width: '500px' }"
+        round
+        :style="{ width: '520px' }"
     >
         <div class='pop-top'>
             {{ $t('notice.poptitle') }}
@@ -89,7 +91,7 @@ export default {
             } else { // 是
                 // 获取当日的所有公告，显示完且缓存弹出次数
             }
-
+            // getPublicData(true)
             getNoticePop(params).then(res => {
                 // console.log(res)
                 if (res.check()) {
@@ -133,6 +135,7 @@ export default {
                             }
                         }
                         console.log(noticeParams)
+
                         localSet('noticeParams', JSON.stringify(noticeParams))
                     }
                 }
@@ -181,20 +184,21 @@ export default {
 @import '~@/sass/mixin.scss';
 .public-pop {
     border-radius: rem(10px);
+    --van-popup-round-border-radius: 10px;
+
     .pop-top {
         padding-left: rem(30px);
         font-size: rem(36px);
         line-height: rem(120px);
-    }
-    .van-popup__close-icon {
-        top: rem(20px);
-        right: rem(20px);
+        text-align: center;
     }
     .pop-content {
         max-height: rem(650px);
+        min-height: rem(550px);
         margin-bottom: rem(20px);
         padding: 0 rem(30px) rem(20px) rem(30px);
         overflow: auto;
+        background: var(--bgColor);
     }
     .public-list {
         margin: 0;
