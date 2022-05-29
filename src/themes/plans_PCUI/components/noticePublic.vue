@@ -196,14 +196,20 @@ export default {
         max-height: rem(650px);
         min-height: rem(550px);
         margin-bottom: rem(20px);
-        padding: 0 rem(30px) rem(20px) rem(30px);
+        padding: 0 rem(0px) rem(20px) rem(0px);
         overflow: auto;
         background: var(--bgColor);
     }
     .public-list {
         margin: 0;
         .item {
-            margin: rem(15px) 0 rem(25px) 0;
+            padding: rem(15px) rem(30px) rem(25px) rem(30px);
+            transition: ease-in .2s;
+
+            &:hover{
+                background-color: var(--contentColor);
+            }
+
             .item-tit {
                 margin-bottom: rem(10px);
                 color: var(--color);

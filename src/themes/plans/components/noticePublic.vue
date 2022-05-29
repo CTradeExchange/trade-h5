@@ -2,8 +2,10 @@
     <van-popup
         v-model:show='publicShow'
         class='public-pop'
+        close-icon-position='top-left'
         closeable
         position='center'
+        round
         :style="{ width: '80%' }"
     >
         <div class='pop-top'>
@@ -138,6 +140,7 @@ export default {
             }).catch(err => {
                 state.errorTip = t('c.loadError')
             })
+            // getPublicData(true)
         }
 
         const goNoticeDetail = (id) => {
@@ -190,6 +193,7 @@ export default {
         padding-left: rem(30px);
         font-size: rem(36px);
         line-height: rem(120px);
+        text-align: center;
     }
     .van-popup__close-icon {
         top: rem(20px);
@@ -197,14 +201,19 @@ export default {
     }
     .pop-content {
         max-height: rem(650px);
+        min-height: rem(550px);
         margin-bottom: rem(20px);
         padding: 0 rem(30px) rem(20px) rem(30px);
         overflow: auto;
+        background: var(--bgColor);
     }
     .public-list {
         margin: 0;
         .item {
             margin: rem(15px) 0 rem(25px) 0;
+            &:hover{
+                background-color: var(--contentColor);
+            }
             .item-tit {
                 margin-bottom: rem(10px);
                 color: var(--color);
