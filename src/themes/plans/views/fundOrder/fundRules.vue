@@ -75,24 +75,28 @@
                 <h3 class='title1'>
                     {{ $t('fundInfo.deductRuletxt1') }}
                 </h3>
-                <van-row v-for='(item,index) in fundData.value.purchaseCurrencySetting' :key='index' class='txt-row child'>
-                    <van-col span='12'>
-                        {{ item.currencyCode === ('self'||'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
-                    </van-col>
-                    <van-col align='right' span='12'>
-                        {{ item.purchaseFeeProportion? mulData(item.purchaseFeeProportion,100):0 }}%
-                    </van-col>
-                </van-row>
+                <div v-if='fundData.value' class=''>
+                    <van-row v-for='(item,index) in fundData.value.purchaseCurrencySetting' :key='index' class='txt-row child'>
+                        <van-col span='12'>
+                            {{ item.currencyCode === ('self'||'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
+                        </van-col>
+                        <van-col align='right' span='12'>
+                            {{ item.purchaseFeeProportion? mulData(item.purchaseFeeProportion,100):0 }}%
+                        </van-col>
+                    </van-row>
+                </div>
                 <van-row class='txt-row'>
                     <van-col span='12'>
                         {{ $t('fundInfo.deductRuletxt2') }}
                     </van-col>
                     <van-col align='right' span='12'>
-                        {{ fundData.value.managementFee? mulData(fundData.value.managementFee,100):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
+                        <span v-if='fundData.value !== undefined'>
+                            {{ fundData.value.managementFee? mulData(fundData.value.managementFee,100):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
+                        </span>
                     </van-col>
                 </van-row>
                 <p class='text'>
-                    {{ $t('fundInfo.deductRuledesc',{ time: calcTime(fundData.value.dailySettlementTime) }) }}
+                    {{ $t('fundInfo.deductRuledesc',{ time: dailySettlementTime.value }) }}
                 </p>
             </section>
         </div>
@@ -180,15 +184,16 @@
                 <h3 class='title1'>
                     {{ $t('fundInfo.deductRuletxt4') }}
                 </h3>
-                <van-row v-for='(item,index) in fundData.value.redemptionCurrencySetting' :key='index' class='txt-row child'>
-                    <van-col span='12'>
-                        {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
-                    </van-col>
-                    <van-col align='right' span='12'>
-                        {{ item.redemptionFeeProportion? mulData(item.redemptionFeeProportion,100):0 }}%
-                    </van-col>
-                </van-row>
-
+                <div v-if='fundData.value.redemptionCurrencySetting !== undefined' class=''>
+                    <van-row v-for='(item,index) in fundData.value.redemptionCurrencySetting' :key='index' class='txt-row child'>
+                        <van-col span='12'>
+                            {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
+                        </van-col>
+                        <van-col align='right' span='12'>
+                            {{ item.redemptionFeeProportion ? mulData(item.redemptionFeeProportion,100):0 }}%
+                        </van-col>
+                    </van-row>
+                </div>
                 <p class='text'>
                     {{ $t('fundInfo.deductRuledesc2') }}
                 </p>
@@ -198,17 +203,20 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { div, mul } from '@/utils/calculation'
+import { mul } from '@/utils/calculation'
 import { getFundInfo } from '@/api/fund'
+import { isEmpty } from '@/utils/util'
 
 const route = useRoute()
 const active = ref(route.query.direction === 'buy' ? 0 : 1)
 const { fundId } = route.query
 const fundData = ref({})
 const { t } = useI18n({ useScope: 'global' })
+const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || window.dayjs().utcOffset()
+const dailySettlementTime = ref('')
 
 // 获取基金产品详情
 const getFundInfoFn = () => {
@@ -227,17 +235,15 @@ const mulData = (value) => {
     return mul(value, 100)
 }
 
-const calcTime = (value) => {
-    const timeNum = 0; var hour; var min
-    console.log(value)
-    hour = value / 60
-    min = value % 60
-    console.log(hour)
-    console.log(min)
-    return timeNum === 0 ? '00:00' : timeNum
+const calcTimeH = (value) => {
+    if (!isEmpty(value)) {
+        dailySettlementTime.value = ref(window.dayjs().utc().startOf('day').utcOffset(utcOffset).add(parseInt(value), 'minute').format('HH:mm'))
+    } else {
+        dailySettlementTime.value = ref('')
+    }
 }
 
-onMounted(() => {
+onBeforeMount(() => {
     // 获取基金产品详情
     getFundInfoFn()
 })

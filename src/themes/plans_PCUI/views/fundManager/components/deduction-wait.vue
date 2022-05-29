@@ -75,6 +75,7 @@
         <el-dialog
             v-model='showPop'
             :close-on-click-modal='false'
+            :modal-append-to-body='true'
             :title="$t('fundManager.deduction.deductPopTitle')"
             width='520px'
         >
@@ -173,6 +174,9 @@ export default {
             }).catch(() => {
                 state.isLoading = false
             })
+
+            state.showPop = true
+            Toast('res.msg')
         }
 
         // 手动扣减管理费
@@ -184,22 +188,23 @@ export default {
             })
             state.isLoading = true
             // console.log(params)
-            getManagementFeesDeduct(params).then(res => {
-                state.isLoading = false
-                // console.log(res)
-                if (res.check()) {
-                    Toast(t('fundManager.deduction.tip2'))
-                    state.showPop = false
-                    queryFundRedeemList()
-                    state.selectList = []
-                    state.tableRef.clearSelection()
-                    state.searchParams.current = 1
-                } else {
-                    Toast(res.msg)
-                }
-            }).catch(() => {
-                state.isLoading = false
-            })
+            Toast('res.msg')
+            // getManagementFeesDeduct(params).then(res => {
+            //     state.isLoading = false
+            //     // console.log(res)
+            //     if (res.check()) {
+            //         Toast(t('fundManager.deduction.tip2'))
+            //         state.showPop = false
+            //         queryFundRedeemList()
+            //         state.selectList = []
+            //         state.tableRef.clearSelection()
+            //         state.searchParams.current = 1
+            //     } else {
+            //         Toast(res.msg)
+            //     }
+            // }).catch(() => {
+            //     state.isLoading = false
+            // })
         }
 
         // 获取基金扣费总和计算
