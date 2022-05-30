@@ -1,155 +1,149 @@
 <template>
-    <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
-    <!-- <Loading :show='pageLoading' /> -->
-    <van-tabs v-model:active='activeIndex' class='publicPage' @click-tab='onClickTab'>
-        <van-tab name='public' :title='$t("route.notice")'>
-            <div class='msg-list'>
-                <van-pull-refresh
-                    v-model='loadingNt'
-                    :loading-text="$t('compLang.loading')"
-                    :loosing-text="$t('compLang.vanPullRefresh.loosing')"
-                    :pulling-text="$t('compLang.vanPullRefresh.pulling')"
-                    @refresh='onRefreshNotice'
-                >
-                    <van-list
-                        v-model:error='isError'
-                        v-model:loading='loadingNt'
-                        :error-text='errorTip'
-                        :finished='finishedNt'
-                        :finished-text='$t("common.noMore")'
+    <div class='publicPage'>
+        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
+        <!-- <Loading :show='pageLoading' /> -->
+        <van-tabs v-model:active='activeIndex' @click-tab='onClickTab'>
+            <van-tab name='public' :title='$t("route.notice")'>
+                <div class='msg-list'>
+                    <van-pull-refresh
+                        v-model='loadingNt'
                         :loading-text="$t('compLang.loading')"
-                        @load='onLoadNotice'
+                        :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                        :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                        @refresh='onRefreshNotice'
                     >
-                        <div v-if='listNotice.length === 0'>
-                            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-                        </div>
-                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
-                            <p class='msg-title'>
-                                {{ item.title === 'null'? '': item.title }}
-                            </p>
-                            <p class='msg-time'>
-                                {{ formatTime(item.pubTime) }}
-                            </p>
-                        </div>
-                    </van-list>
-                </van-pull-refresh>
-            </div>
-        </van-tab>
-        <van-tab v-if='isUser' name='msg' :title='$t("route.msg")'>
-            <div class='msg-list'>
-                <div v-if='list.length === 0'>
-                    <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                        <van-list
+                            v-model='loadingNt'
+                            v-model:error='isError'
+                            :error-text='errorTip'
+                            :finished='finishedNt'
+                            :finished-text='$t("common.noMore")'
+                            :loading-text="$t('compLang.loading')"
+                            @load='onLoadNotice'
+                        >
+                            <div v-if='listNotice.length === 0'>
+                                <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                            </div>
+                            <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
+                                <p class='msg-title'>
+                                    {{ item.title === 'null'? '': item.title }}
+                                </p>
+                                <p class='msg-time'>
+                                    {{ formatTime(item.pubTime) }}
+                                </p>
+                            </div>
+                        </van-list>
+                    </van-pull-refresh>
                 </div>
-                <van-pull-refresh
-                    v-else
-                    v-model='loading'
-                    :loading-text="$t('compLang.loading')"
-                    :loosing-text="$t('compLang.vanPullRefresh.loosing')"
-                    :pulling-text="$t('compLang.vanPullRefresh.pulling')"
-                    @refresh='onRefresh'
-                >
-                    <van-list
-                        v-model:error='isError'
-                        v-model:loading='loading'
-                        :error-text='errorTip'
-                        :finished='finished'
-                        :finished-text='$t("common.noMore")'
-                        :loading-text="$t('compLang.loading')"
-                        @load='onLoad'
-                    >
-                        <div class='operate'>
-                            <van-row>
-                                <van-col span='12'>
-                                    <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
-                                        <van-dropdown-item v-model='type' :options='options' @change='changeType' />
-                                    </van-dropdown-menu>
-                                </van-col>
-                            </van-row>
-                        </div>
-                        <div v-for='(item,index) in list' :key='index' class='msg-item'>
-                            <p class='msg-title'>
-                                <span v-if='item.readStatus === "2"'>
-                                    {{ item.title === 'null'? '': item.title }}
-                                </span>
-                                <b v-if='item.readStatus === "1"'>
-                                    {{ item.title === 'null'? '': item.title }}
-                                </b>
-                            </p>
-                            <p class='msg-content'>
-                                {{ computeHtmlTime(item.content) }}
-                            </p>
-                            <p class='msg-time'>
-                                {{ formatTime(item.createTime) }}
-                            </p>
-                        </div>
-                    </van-list>
-                </van-pull-refresh>
-            </div>
-        </van-tab>
-
-        <!-- 个人消息 展示白标后台给客户发布的指定站内信 -->
-        <van-tab v-if='isUser' name='msgps' :title='$t("route.msgCustomer")'>
-            <div class='msg-list'>
-                <van-pull-refresh
-                    v-model='loadingPs'
-                    :loading-text="$t('compLang.loading')"
-                    :loosing-text="$t('compLang.vanPullRefresh.loosing')"
-                    :pulling-text="$t('compLang.vanPullRefresh.pulling')"
-                    @refresh='onRefreshPs'
-                >
-                    <van-list
-                        v-model:error='isError'
-                        v-model:loading='loadingPs'
-                        :error-text='errorTip'
-                        :finished='finishedPs'
-                        :finished-text='$t("common.noMore")'
-                        :loading-text="$t('compLang.loading')"
-                        @load='onLoadPs'
-                    >
-                        <div class='operate'>
-                            <van-row>
-                                <!-- <van-col span='12'>
+            </van-tab>
+            <van-tab v-if='isUser' name='msg' :title='$t("route.msg")'>
+                <div class='msg-list'>
+                    <div class='operate'>
+                        <van-row>
+                            <van-col span='12'>
                                 <van-dropdown-menu :active-color='$style.primary' class='msg-filter'>
                                     <van-dropdown-item v-model='type' :options='options' @change='changeType' />
                                 </van-dropdown-menu>
-                            </van-col> -->
-                                <van-col align='right' span='24'>
-                                    <span class='all-read' @click='setAllMsgReaded'>
-                                        全部已读
+                            </van-col>
+                        </van-row>
+                    </div>
+                    <div v-if='list.length === 0'>
+                        <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                    </div>
+                    <van-pull-refresh
+                        v-else
+                        v-model='loading'
+                        :loading-text="$t('compLang.loading')"
+                        :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                        :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                        @refresh='onRefresh'
+                    >
+                        <van-list
+                            v-model='loading'
+                            v-model:error='isError'
+                            :error-text='errorTip'
+                            :finished='finished'
+                            :finished-text='$t("common.noMore")'
+                            :loading-text="$t('compLang.loading')"
+                            @load='onLoad'
+                        >
+                            <div v-for='(item,index) in list' :key='index' class='msg-item'>
+                                <p class='msg-title'>
+                                    <span v-if='item.readStatus === "2"'>
+                                        {{ item.title === 'null'? '': item.title }}
                                     </span>
-                                </van-col>
-                            </van-row>
-                        </div>
-                        <div v-if='listCustomer.length === 0'>
-                            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-                        </div>
+                                    <b v-if='item.readStatus === "1"'>
+                                        {{ item.title === 'null'? '': item.title }}
+                                    </b>
+                                </p>
+                                <p class='msg-content'>
+                                    {{ computeHtmlTime(item.content) }}
+                                </p>
+                                <p class='msg-time'>
+                                    {{ formatTime(item.createTime) }}
+                                </p>
+                            </div>
+                        </van-list>
+                    </van-pull-refresh>
+                </div>
+            </van-tab>
 
-                        <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer')">
-                            <p class='msg-title'>
-                                <span v-if='item.readStatus === 2'>
-                                    {{ item.title === 'null'? '': item.title }}
-                                </span>
-                                <b v-if='item.readStatus === 1'>
-                                    {{ item.title === 'null'? '': item.title }}
-                                </b>
-                            </p>
-                            <!-- <p class='msg-content'>
-                                {{ computeHtmlTime(item.content) }}
-                            </p> -->
-                            <p class='msg-time'>
-                                {{ formatTime(item.createTime) }}
-                            </p>
-                        </div>
-                    </van-list>
-                </van-pull-refresh>
-            </div>
-        </van-tab>
-    </van-tabs>
+            <!-- 个人消息 展示白标后台给客户发布的指定站内信 -->
+            <van-tab v-if='isUser' name='msgps' :title='$t("route.msgCustomer")'>
+                <div class='msg-list'>
+                    <van-pull-refresh
+                        v-model='loadingPs'
+                        :loading-text="$t('compLang.loading')"
+                        :loosing-text="$t('compLang.vanPullRefresh.loosing')"
+                        :pulling-text="$t('compLang.vanPullRefresh.pulling')"
+                        @refresh='onRefreshPs'
+                    >
+                        <van-list
+                            v-model='loadingPs'
+                            v-model:error='isError'
+                            :error-text='errorTip'
+                            :finished='finishedPs'
+                            :finished-text='$t("common.noMore")'
+                            :loading-text="$t('compLang.loading')"
+                            @load='onLoadPs'
+                        >
+                            <div class='operate'>
+                                <van-row>
+                                    <van-col align='right' span='24'>
+                                        <span class='all-read' @click='setAllMsgReaded'>
+                                            全部已读
+                                        </span>
+                                    </van-col>
+                                </van-row>
+                            </div>
+                            <div v-if='listCustomer.length === 0'>
+                                <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                            </div>
+
+                            <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer')">
+                                <p class='msg-title'>
+                                    <span v-if='item.readStatus === 2'>
+                                        {{ item.title === 'null'? '': item.title }}
+                                    </span>
+                                    <b v-if='item.readStatus === 1'>
+                                        {{ item.title === 'null'? '': item.title }}
+                                    </b>
+                                </p>
+                                <p class='msg-time'>
+                                    {{ formatTime(item.createTime) }}
+                                </p>
+                            </div>
+                        </van-list>
+                    </van-pull-refresh>
+                </div>
+            </van-tab>
+        </van-tabs>
+    </div>
 </template>
 
 <script>
 
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref, watch, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import Top from '@/components/top'
 import { isEmpty, getCookie } from '@/utils/util'
@@ -220,7 +214,6 @@ export default {
 
         const activeIndex = ref('public')
         const onClickTab = ({ title, name }) => {
-            // console.log(title, name)
             if (name === 'public') {
                 state.currentNt = 1
                 state.finishedNt = false
@@ -237,12 +230,12 @@ export default {
                 state.current = 1
                 state.finished = false
                 state.list = []
+                state.type = ''
                 getMsgList()
             }
         }
 
         const changeType = (val) => {
-            // console.log(val)
             state.type = val
             state.current = 1
             state.finished = false
@@ -290,6 +283,7 @@ export default {
                 state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
+                        state.current++
                         state.list = state.list.concat(res.data.records)
                     }
 
@@ -312,7 +306,7 @@ export default {
             state.loadingPs = true
             state.errorTip = ''
             getCustomerMsgList({
-                current: state.currentNt,
+                current: state.currentPs,
                 lang: state.lang,
                 size: 10,
                 companyId: customInfo.value.companyId,
@@ -323,6 +317,7 @@ export default {
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         state.listCustomer = state.listCustomer.concat(res.data.records)
+                        state.currentPs++
                     }
 
                     // 数据全部加载完成
@@ -342,7 +337,6 @@ export default {
             state.pageLoading = true
             state.loadingNt = true
             state.errorTip = ''
-            // console.log(customInfo.value)
             getNoticeList({
                 current: state.currentNt,
                 lang: state.lang,
@@ -354,6 +348,7 @@ export default {
                 state.pageLoading = false
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
+                        state.currentNt++
                         state.listNotice = state.listNotice.concat(res.data.records)
                     }
 
@@ -362,6 +357,7 @@ export default {
                         state.finishedNt = true
                     }
                 }
+                console.loe(state.loadingNt)
             }).catch(err => {
                 state.errorTip = t('c.loadError')
                 state.pageLoading = false
@@ -432,24 +428,6 @@ export default {
             }
         }
 
-        // 获取到顶部消息通知，同时刷新消息列表
-        const gotMsg = () => {
-            // onRefresh()
-        }
-        // document.body.addEventListener('GotMsg_notice', gotMsg, false)
-        onBeforeMount(() => {
-            getNoticeData()
-            if (customInfo.value) {
-                state.isUser = true
-            } else {
-                state.isUser = false
-            }
-        })
-
-        onUnmounted(() => {
-            // document.body.removeEventListener('GotMsg_notice', gotMsg)
-        })
-
         // msg上拉刷新
         const onRefresh = () => {
             state.current = 1
@@ -459,10 +437,7 @@ export default {
         }
         // msg底部加载更多
         const onLoad = () => {
-            console.log('onLoad()')
-            console.log(state.loading)
             if (!state.loading) {
-                state.current++
                 getMsgList()
             }
         }
@@ -476,9 +451,7 @@ export default {
         }
         // notice底部加载更多
         const onLoadNotice = () => {
-            console.log('onLoadNotice()')
             if (!state.loadingNt) {
-                state.currentNt++
                 getNoticeData()
             }
         }
@@ -495,14 +468,42 @@ export default {
         const onLoadPs = () => {
             console.log('onLoadPs()')
             if (!state.loadingPs) {
-                state.currentPs++
                 getCustomerMsgListData()
             }
+        }
+
+        const initList = () => {
+            state.currentNt = 1
+            state.finishedNt = false
+            state.listNotice = []
+
+            state.current = 1
+            state.finished = false
+            state.list = []
+
+            state.currentPs = 1
+            state.finishedPs = false
+            state.listCustomer = []
+
+            getNoticeData()
         }
 
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
+
+        onBeforeMount(() => {
+            initList()
+            if (customInfo.value) {
+                state.isUser = true
+            } else {
+                state.isUser = false
+            }
+        })
+
+        onUnmounted(() => {
+
+        })
 
         return {
             getMsgList,
@@ -550,8 +551,8 @@ export default {
 .publicPage {
     flex: 1;
     height: 100%;
-    padding-top: rem(110px);
-    overflow: auto;
+    // padding-top: rem(110px);
+    // overflow: auto;
     background-color: var(--bgColor);
     .operate {
         text-align: left;
@@ -559,9 +560,12 @@ export default {
             display: inline-block;
         }
     }
+    :deep(.van-tabs) {
+        margin-top: rem(110px);
+    }
 }
 .msg-list {
-    margin-bottom: rem(50px);
+    // margin-bottom: rem(50px);
     .header {
         padding-bottom: rem(30px);
         padding-left: rem(30px);
