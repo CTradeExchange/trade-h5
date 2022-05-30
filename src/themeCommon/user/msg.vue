@@ -2,7 +2,7 @@
     <div class='publicPage'>
         <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
         <!-- <Loading :show='pageLoading' /> -->
-        <van-tabs v-model:active='activeIndex' @click-tab='onClickTab'>
+        <van-tabs v-model:active='activeIndex' sticky @click-tab='onClickTab'>
             <van-tab name='public' :title='$t("route.notice")'>
                 <div class='msg-list'>
                     <van-pull-refresh
@@ -143,7 +143,7 @@
 
 <script>
 
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref, watch, nextTick } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref, onMounted, nextTick } from 'vue'
 import { useStore } from 'vuex'
 import Top from '@/components/top'
 import { isEmpty, getCookie } from '@/utils/util'
@@ -492,8 +492,9 @@ export default {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
-        onBeforeMount(() => {
+        onMounted(() => {
             initList()
+            console.log(customInfo.value)
             if (customInfo.value) {
                 state.isUser = true
             } else {
