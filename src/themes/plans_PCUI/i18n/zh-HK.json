@@ -820,7 +820,7 @@
             "buy": "申購管理",
             "ransom": "贖回管理",
             "standard": "下單執行標准",
-            "deduction": "管理费扣减记录"
+            "deduction": "管理費扣減記錄"
         },
         "executeStatus": {
             "0": "未確認",
@@ -897,18 +897,20 @@
             "tip5": "所有下單比例加起來無法大於100%"
         },
         "deduction": {
-            "waitRecord": "待扣减记录",
-            "doneRecord": "已扣减记录",
-            "date": "扣减日期",
-            "column1": "管理费扣减日期(UTC)",
-            "column2": "应扣金额",
-            "column3": "扣款状态",
+            "waitRecord": "待扣減記錄",
+            "doneRecord": "已扣減記錄",
+            "date": "扣減日期",
+            "column1": "管理費扣減日期(UTC)",
+            "column2": "應扣金額",
+            "column3": "扣款狀態",
+            "column4": "扣減金額",
             "deductSuceess": "成功",
-            "deductFail": "失败",
-            "deductPopTitle": "扣减确认",
-            "deductPopTxt1": "总扣减金额",
-            "tip1": "USDT资产可用余额不足",
-            "tip2": "管理费扣减成功"
+            "deductFail": "失敗",
+            "deductPopTitle": "扣減確認",
+            "deductPopTxt1": "總扣減金額",
+            "tip1": "USDT資產可用餘額不足",
+            "tip2": "管理費扣減成功",
+            "deductBtn": "執行扣減"
         }
     },
     "fundInfo": {
@@ -1064,13 +1066,13 @@
         "applyFees": "申購手續費",
         "redeemFees": "贖回手續費",
         "redeemAmount": "贖回金額",
-        "deductRuletit1": "费用类别",
-        "deductRuletxt1": "申购费",
-        "deductRuletxt2": "管理费",
+        "deductRuletit1": "費用類別",
+        "deductRuletxt1": "申購費",
+        "deductRuletxt2": "管理費",
         "deductRuletxt3": "(每年)",
-        "deductRuletxt4": "赎回费",
-        "deductRuledesc": "基金管理费指基金管理人管理基金资产所收取的报酬.基金管理费从基金资产中每日{time}结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付.",
-        "deductRuledesc2": "赎回费指赎回基金的时候产生的手续费，一次性收取"
+        "deductRuletxt4": "贖回費",
+        "deductRuledesc": "基金管理費指基金管理人管理基金資產所收取的報酬.基金管理費從基金資產中每日{time}結算，結算後的基金淨值已經扣除相應費用，無需投資者在每筆交易中另行支付.",
+        "deductRuledesc2": "贖回費指贖回基金的時候產生的手續費，一次性收取"
     },
     "funds": {
         "fundShare": "基金份額",

@@ -183,7 +183,7 @@ export default {
                 companyId: state.listQuery.companyId,
                 idList: state.assetsList
             })
-            state.isLoading = true
+            // state.isLoading = true
             // console.log(params)
             // Toast('res.msg')
             getManagementFeesDeduct(params).then(res => {

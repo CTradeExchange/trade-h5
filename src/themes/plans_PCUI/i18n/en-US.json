@@ -747,7 +747,7 @@
             "buy": "Purchase management",
             "ransom": "Redeem management",
             "standard": "Order execution standard",
-            "deduction": "Management fee deduction"
+            "deduction": "Management Fee Record"
         },
         "executeStatus": {
             "0": "Unconfirmed",
@@ -824,18 +824,20 @@
             "tip5": "The sum of all percentages cannot be greater than 100%"
         },
         "deduction": {
-            "waitRecord": "Pending deduction record",
-            "doneRecord": "Deduction record",
-            "date": "Deduction date",
-            "column1": "Fee Deduction Date(UTC)",
-            "column2": "Amount",
+            "waitRecord": "To be deducted",
+            "doneRecord": "Record",
+            "date": "Date",
+            "column1": "Fee Deduction Date (UTC)",
+            "column2": "Amount to be deducted",
             "column3": "Status",
-            "deductSuceess": "succeeded",
-            "deductFail": "fail",
-            "deductPopTitle": "Deduction Confirm",
-            "deductPopTxt1": "Amount",
-            "tip1": "Insufficient available balance of USDT assets",
-            "tip2": "Management fee deduction successfully"
+            "column4": "Deduct Amount",
+            "deductSuceess": "Success",
+            "deductFail": "Failed",
+            "deductPopTitle": "Confirm to deduct",
+            "deductPopTxt1": "Total Deduct Amount",
+            "tip1": "USDT balance insufficient ",
+            "tip2": "Fee deduct success",
+            "deductBtn": "Execute Deduct"
         }
     },
     "fundInfo": {
@@ -993,13 +995,13 @@
         "redeemAmount": "Redeem amount",
         "redeemFees": "Redeem fee",
 
-        "deductRuletit1": "Cost Category",
-        "deductRuletxt1": "Subscription fee",
-        "deductRuletxt2": "management fee",
-        "deductRuletxt3": "(Per year)",
-        "deductRuletxt4": "redemption fee",
-        "deductRuledesc": "Fund management fee refers to the remuneration charged by the fund manager for managing the fund assets. The fund management fee is settled from the fund assets at {time} every day, and the net value of the fund after settlement has already deducted the corresponding fees, and investors do not need to pay separately in each transaction..",
-        "deductRuledesc2": "Redemption fee refers to the handling fee incurred when redeeming the fund, which is charged at one time"
+        "deductRuletit1": "Fee type",
+        "deductRuletxt1": "Purchase Fee",
+        "deductRuletxt2": "Management Fee",
+        "deductRuletxt3": "(Annually )",
+        "deductRuletxt4": "Redeem Fee",
+        "deductRuledesc": "Management fee refers to the cost of managing the fund from fund manager. Management fee is settled from fund asset each date {time}, NAV reflects the fee deducted, no further fee deduct from each trade.",
+        "deductRuledesc2": "Redeem fee refers to fee generated from redeem, which collect once only . "
     },
     "funds": {
         "fundShare": "Fund Share",
