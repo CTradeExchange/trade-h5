@@ -143,7 +143,7 @@
 
 <script>
 
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref, onMounted, nextTick } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, onUnmounted, ref, onMounted, watch } from 'vue'
 import { useStore } from 'vuex'
 import Top from '@/components/top'
 import { isEmpty, getCookie } from '@/utils/util'
@@ -234,6 +234,17 @@ export default {
                 getMsgList()
             }
         }
+
+        watch(
+            () => customInfo.value,
+            () => {
+                if (customInfo.value) {
+                    state.isUser = true
+                } else {
+                    state.isUser = false
+                }
+            }
+        )
 
         const changeType = (val) => {
             state.type = val
