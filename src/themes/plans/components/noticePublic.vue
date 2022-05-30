@@ -120,7 +120,7 @@ export default {
                                 // }
                                 noticeParams = {
                                     type: 'user', // 'user' ? 'guest'
-                                    pubTime: state.noticeData[0].pubTime,
+                                    pubTime: state.noticeData[0].pubTime, // 每次获取第一条为最新公告时间，记录到本地缓存
                                     popShowNum: nData.popShowNum + 1,
                                     userNo: customInfo.value.companyId
                                 }
