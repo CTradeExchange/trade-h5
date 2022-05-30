@@ -5,18 +5,36 @@
             <span class='back-icon' @click='back'>
                 <van-icon name='arrow-left' />
             </span>
-            {{ $t('notice.detailHeader') }}
+
+            <span v-if="type === 'notice'">
+                {{ $t('route.notice') }}{{ $t('notice.detailTxt') }}
+            </span>
+            <span v-if="type === 'msgcustomer'">
+                {{ $t('route.msgCustomer') }}{{ $t('notice.detailTxt') }}
+            </span>
         </div>
-        <div class='notice-detail'>
-            <Loading :show='loading' />
-            <div class='pageWrap'>
-                <div class='detailTop'>
-                    {{ detailData.title }}
+        <div class='detailContainer'>
+            <div class='sideBar'>
+                <ul>
+                    <li :class="type === 'notice' ? 'active': ''" @click="goPage('notice')">
+                        <van-icon name='coupon-o' />{{ $t('route.notice') }}
+                    </li>
+                    <li :class="type === 'msgcustomer' ? 'active': ''" @click="goPage('msgcustomer')">
+                        <van-icon name='friends-o' />{{ $t('route.msgCustomer') }}
+                    </li>
+                </ul>
+            </div>
+            <div class='notice-detail'>
+                <Loading :show='loading' />
+                <div class='pageWrap'>
+                    <div class='detailTop'>
+                        {{ detailData.title }}
+                    </div>
+                    <div class='time'>
+                        {{ formatTime(detailData.pubTime) }}
+                    </div>
+                    <div class='content' v-html='detailData.content'></div>
                 </div>
-                <div class='time'>
-                    {{ formatTime(detailData.pubTime) }}
-                </div>
-                <div class='content' v-html='detailData.content'></div>
             </div>
         </div>
     </div>
@@ -49,6 +67,7 @@ export default {
                 id: '',
                 whiteIps: ''
             },
+            type: null,
             detailData: {},
         })
 
@@ -66,6 +85,15 @@ export default {
             state.noticeId = id
             state.type = type
             getNoticeDetial(type)
+        }
+
+        const goPage = (type) => {
+            router.push({
+                path: '/notice',
+                query: {
+                    from: type
+                }
+            })
         }
 
         // 获取公告详情
@@ -142,6 +170,7 @@ export default {
             showApiHelp,
             inviteVis,
             back,
+            goPage,
             ...toRefs(state)
         }
     }
@@ -151,48 +180,90 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrapper {
-    width: 1200px;
-    margin: 20px auto;
+    // width: 1200px;
     .page-title {
+        padding: 20px 20px 0;
         font-weight: bold;
         font-size: 32px;
-        .back-icon {
-            cursor: pointer;
+    }
+    .back-icon {
+        cursor: pointer;
+    }
+    .detailContainer {
+        display: flex;
+        margin-top: 20px;
+        padding: 0;
+        overflow: hidden;
+        background: var(--contentColor);
+        .sideBar {
+            width: 200px;
+            li {
+                display: block;
+                width: 100%;
+                padding: 15px 0;
+                padding-left: 20px;
+                font-size: 16px;
+                line-height: 28px;
+                text-align: left;
+                background: none;
+                border-radius: 0;
+                cursor: pointer;
+                transition: ease 0.2s;
+                &.active {
+                    color: var(--mainColor);
+                    background: var(--lineColor);
+                }
+                &:hover {
+                    color: var(--mainColor);
+                    background: var(--primaryAssistColor);
+                }
+                .van-icon {
+                    margin-right: 10px;
+                    font-size: 24px;
+                    vertical-align: -5px;
+                }
+            }
+        }
+        .notice-detail {
+            flex: 1;
+            min-height: 600px;
+            background: var(--contentColor);
+            border-left: 1px solid var(--lineColor);
         }
     }
     .pageWrap {
         .detailTop {
-            padding: 15px;
-            font-size: 32px;
-            text-align: center;
+            padding: 15px 20px 0;
+            font-weight: 600;
+            font-size: 28px;
+            text-align: left;
         }
         .time {
-            padding: 15px;
+            padding: 0 20px;
             color: var(--minorColor);
-            text-align: center;
+            text-align: left;
         }
         .content {
-            min-height: 400px;
-            margin-top: 20px;
-            padding: 20px 30px;
+            min-height: 600px;
+            margin-top: 0;
+            padding: 20px;
             color: var(--normalColor);
             line-height: 30px;
             white-space: normal;
             word-break: break-all;
-            background: var(--contentColor);
         }
     }
 }
 
 @media screen and (max-width: 1200px) {
     .wrapper {
-        width: 980px;
+        width: 100%;
     }
 }
 
 @media screen and (max-width: 980px) {
     .wrapper {
-        width: 720px;
+        width: 100%;
     }
 }
 </style>

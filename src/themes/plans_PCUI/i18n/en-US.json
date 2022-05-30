@@ -1167,6 +1167,7 @@
         "poptitle": "Latest Notice",
         "detailHeader": "Detail",
         "allReadedOk": "Set all read successfully！",
-        "readAll":"Set read all"
+        "readAll":"Set read all",
+        "detailTxt":"details"
     }
 }

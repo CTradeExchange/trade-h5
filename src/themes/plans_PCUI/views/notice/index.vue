@@ -7,7 +7,10 @@
         </div>
 
         <van-tabs v-model:active='activeIndex' class='noticePage' @click-tab='onClickTab'>
-            <van-tab name='notice' :title="$t('route.notice')">
+            <van-tab name='notice'>
+                <template #title>
+                    <van-icon name='coupon-o' />{{ $t('route.notice') }}
+                </template>
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
@@ -49,7 +52,10 @@
                     />
                 </div>
             </van-tab>
-            <van-tab v-if='isUser' name='msg' :title="$t('route.msg')">
+            <van-tab v-if='isUser' name='msg'>
+                <template #title>
+                    <van-icon name='todo-list-o' />{{ $t('route.msg') }}
+                </template>
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <div class='operate'>
@@ -111,7 +117,10 @@
                     </div>
                 </div>
             </van-tab>
-            <van-tab v-if='isUser' name='msgps' :title="$t('route.msgCustomer')">
+            <van-tab v-if='isUser' name='msgps'>
+                <template #title>
+                    <van-icon name='friends-o' />{{ $t('route.msgCustomer') }}
+                </template>
                 <div class='list'>
                     <div class='operate'>
                         <van-row>
@@ -542,56 +551,60 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrapper {
-    width: 1200px;
-    margin: 20px auto;
+    // width: 1200px;
     .page-title {
+        padding: 20px 20px 0;
         font-weight: bold;
         font-size: 32px;
     }
     :deep(.noticePage) {
         display: flex;
-        margin-top: 30px;
+        margin-top: 20px;
+        padding: 0;
         overflow: hidden;
+        background: var(--contentColor);
         .van-tabs__nav {
             display: block;
             background: none;
         }
         .van-tabs__wrap {
-            width: 160px;
+            width: 200px;
             height: auto;
-            margin-right: 20px;
+            margin-right: 0;
         }
         .van-tabs__content {
             flex: 1;
             min-height: 600px;
+            border-left: 1px solid var(--lineColor);
         }
         .van-tab {
             display: block;
             flex: inherit;
             width: 100%;
-            margin-bottom: 15px;
-            padding: 10px 0;
+            padding: 15px 0;
+            padding-left: 20px;
             font-size: 16px;
-            line-height: 32px;
+            line-height: 28px;
             text-align: left;
             background: none;
-            border-bottom: 1px solid var(--minorColor);
             border-radius: 0;
+            transition: ease 0.2s;
             &.van-tab--active {
-                background: none;
-                border-bottom: 1px solid var(--color);
+                background: var(--lineColor);
                 .van-tab__text {
                     color: var(--mainColor);
-                    font-weight: bold;
                 }
             }
-            &.van-tab--active:hover {
-                background: none;
-                border-bottom: 1px solid var(--color);
+            &:hover {
+                background: var(--primaryAssistColor);
                 .van-tab__text {
                     color: var(--mainColor);
-                    font-weight: bold;
                 }
+            }
+            .van-icon {
+                margin-right: 10px;
+                font-size: 24px;
+                vertical-align: -5px;
             }
         }
         .van-tabs__line {
@@ -640,8 +653,13 @@ export default {
                 font-weight: bold;
                 font-size: rem(28px);
                 line-height: rem(60px);
+                cursor: pointer;
                 span {
+                    color: var(--normalColor);
                     font-weight: normal;
+                }
+                b {
+                    color: var(--mainColor);
                 }
             }
             .msg-content {
