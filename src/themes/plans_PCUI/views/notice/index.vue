@@ -117,7 +117,7 @@
                         <van-row>
                             <van-col align='right' span='24'>
                                 <el-button class='all-read' @click='setAllMsgReaded'>
-                                    全部已读
+                                    {{ $t('notice.readAll') }}
                                 </el-button>
                             </van-col>
                         </van-row>
@@ -573,13 +573,24 @@ export default {
             padding: 10px 0;
             font-size: 16px;
             line-height: 32px;
-            text-align: center;
-            background: var(--lineColor);
-            border-radius: 10px;
+            text-align: left;
+            background: none;
+            border-bottom: 1px solid var(--minorColor);
+            border-radius: 0;
             &.van-tab--active {
-                background: var(--primary);
+                background: none;
+                border-bottom: 1px solid var(--color);
                 .van-tab__text {
-                    color: var(--assistColor);
+                    color: var(--mainColor);
+                    font-weight: bold;
+                }
+            }
+            &.van-tab--active:hover {
+                background: none;
+                border-bottom: 1px solid var(--color);
+                .van-tab__text {
+                    color: var(--mainColor);
+                    font-weight: bold;
                 }
             }
         }
@@ -597,7 +608,7 @@ export default {
         border-bottom: 1px solid var(--lineColor);
         .msg-filter {
             display: inline-block;
-            width: 120px;
+            width: 150px;
             :deep(.el-input__inner) {
                 background: var(--contentColor);
                 border: 1px solid var(--lineColor);

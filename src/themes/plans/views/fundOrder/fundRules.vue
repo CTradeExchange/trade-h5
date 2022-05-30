@@ -85,9 +85,9 @@
                         </van-col>
                     </van-row>
                 </div>
-                <van-row class='txt-row'>
+                <van-row class='txt-row noborder'>
                     <van-col span='12'>
-                        {{ $t('fundInfo.deductRuletxt2') }}
+                        <b>{{ $t('fundInfo.deductRuletxt2') }}</b>
                     </van-col>
                     <van-col align='right' span='12'>
                         <span v-if='fundData.value !== undefined'>
@@ -288,6 +288,9 @@ onBeforeMount(() => {
             border-bottom: 1px solid var(--lineColor);
             &.child {
                 padding-left: rem(40px);
+            }
+            &.noborder {
+                border-bottom: none;
             }
         }
         .title1 {

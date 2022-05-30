@@ -1149,6 +1149,7 @@
     "notice": {
         "poptitle": "最新公告",
         "detailHeader": "公告消息详情",
-        "allReadedOk": "設置全部已讀成功！"
+        "allReadedOk": "設置全部已讀成功！",
+        "readAll":"全部已读"
     }
 }
