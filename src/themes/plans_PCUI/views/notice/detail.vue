@@ -17,13 +17,13 @@
             <div class='sideBar'>
                 <ul>
                     <li :class="type === 'notice' ? 'active': ''" @click="goPage('notice')">
-                        <van-icon name='coupon-o' />{{ $t('route.notice') }}
+                        <van-icon name='volume-o' />{{ $t('route.notice') }}
                     </li>
                     <li :class="type === 'msg' ? 'active': ''" @click="goPage('msg')">
-                        <van-icon name='todo-list-o' />{{ $t('route.msg') }}
+                        <i class='icon icon_xiaoxizhongxin'></i> {{ $t('route.msg') }}
                     </li>
                     <li :class="type === 'msgcustomer' ? 'active': ''" @click="goPage('msgcustomer')">
-                        <van-icon name='friends-o' />{{ $t('route.msgCustomer') }}
+                        <van-icon name='envelop-o' />{{ $t('route.msgCustomer') }}
                     </li>
                 </ul>
             </div>
@@ -103,7 +103,6 @@ export default {
         const getNoticeDetial = (type) => {
             state.loading = true
             state.errorTip = ''
-            console.log(customInfo.value)
 
             if (type === 'notice') {
                 getNoticeDetail({
@@ -183,7 +182,6 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrapper {
-    // width: 1200px;
     .page-title {
         padding: 20px 20px 0;
         font-weight: bold;
@@ -205,6 +203,7 @@ export default {
                 width: 100%;
                 padding: 15px 0;
                 padding-left: 20px;
+                color: var(--minorColor);
                 font-size: 16px;
                 line-height: 28px;
                 text-align: left;
@@ -220,7 +219,8 @@ export default {
                     color: var(--mainColor);
                     background: var(--primaryAssistColor);
                 }
-                .van-icon {
+                .van-icon,
+                .icon {
                     margin-right: 10px;
                     font-size: 24px;
                     vertical-align: -5px;
