@@ -3,7 +3,7 @@
         <van-tabs v-model:active='orderType' class='orderTypeTab' @change='changeOrderType'>
             <van-tab v-for='(item,i) in btnList' :key='i' :name='item.val' :title='item.title' />
         </van-tabs>
-        <a v-if="[1,2].includes(product.tradeType) && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='multipleSetVisible=true'>
+        <a v-if="[1,2].includes(product.tradeType) && product.marginInfo?.type!=='1'" class='multipleBtn' href='javascript:;' @click='showMultipleSet'>
             <span class='text'>
                 {{ mVal }}x
             </span>
@@ -30,6 +30,8 @@ import { useI18n } from 'vue-i18n'
 import MultipleSet from '@plans/components/multipleSet'
 import MultipleSetCross from '@plans/components/multipleSetCross'
 import { toolHooks } from '@plans/hooks/handicap'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
 export default {
     components: {
         MultipleSet,
@@ -38,6 +40,8 @@ export default {
     props: ['modelValue', 'tradeType', 'multipleVal', 'product', 'tradeMode'],
     emits: ['update:modelValue', 'selected', 'update:multipleVal'],
     setup (props, { emit }) {
+        const store = useStore()
+        const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
         const { dealModeShowMap } = toolHooks()
         const state = reactive({
@@ -78,9 +82,17 @@ export default {
             emit('selected', val)
         }
 
+        // 显示杠杆倍数弹窗
+        const showMultipleSet = () => {
+            const customerInfo = store.state._user.customerInfo
+            if (!customerInfo) return router.push('/login')
+            state.multipleSetVisible = true
+        }
+
         return {
             ...toRefs(state),
             mVal,
+            showMultipleSet,
             changeOrderType,
             btnList,
         }
