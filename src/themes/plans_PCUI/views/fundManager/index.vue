@@ -66,7 +66,7 @@ const menus = ref([
     { name: t('fundManager.side.buy'), value: 'buy', icon: 'icon_xianhuojiaoyizhanghu' },
     { name: t('fundManager.side.ransom'), value: 'ransom', icon: 'icon_heyuezhucangzhanghu' },
     { name: t('fundManager.side.standard'), value: 'standard', icon: 'icon_heyuequancangzhanghu' },
-    { name: t('fundManager.side.deduction'), value: 'deduction', icon: 'icon_heyuequancangzhanghu' }
+    { name: t('fundManager.side.deduction'), value: 'deduction', icon: 'icon_zijinjilu' }
 ])
 // 当前选中 buy:申购管理 ransom:赎回管理 standard:下单执行标准
 const active = ref('buy')
