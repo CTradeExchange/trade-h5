@@ -225,6 +225,7 @@ const getFundInfoFn = () => {
             console.log(res)
             if (res.data) {
                 fundData.value = ref(res.data)
+                calcTimeH(res.data.dailySettlementTime)
             }
             console.log(fundData.value)
         }
