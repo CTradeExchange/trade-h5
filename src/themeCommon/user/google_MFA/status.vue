@@ -25,7 +25,6 @@ const store = useStore()
 
 const statusChecked = computed(() => store.state._user.customerInfo?.googleId > 0)
 const onUpdateStatus = (newValue) => {
-    console.log(newValue)
     router.push({ name: newValue ? 'MFA_install' : 'MFA_bind' })
 }
 </script>

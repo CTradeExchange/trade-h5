@@ -76,7 +76,7 @@ export default {
         const curIndex = ref(0)
 
         const hideAsset = ref(JSON.parse(localGet('hideAsset')))
-        const searchText = ref('')
+        const tradeSearchMap = ref({})
         const state = reactive({
             duration: 0,
             alreadySub: false
@@ -85,14 +85,15 @@ export default {
         // 获取账户列表
         const accountList = computed(() => {
             const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(tradeType.value))
+            const searchText = tradeSearchMap.value[tradeType.value] || ''
             if (hideAsset.value) {
                 if (Number(tradeType.value) === 3) {
-                    return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+                    return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.toUpperCase()))
                 } else if (Number(tradeType.value) === 5) {
-                    return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+                    return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.toUpperCase()))
                 }
             }
-            return list.filter(item => item.currency.toUpperCase().includes(searchText.value.toUpperCase())) || []
+            return list.filter(item => item.currency.toUpperCase().includes(searchText.toUpperCase())) || []
         })
 
         const customerInfo = computed(() => store.state._user.customerInfo)
@@ -193,7 +194,7 @@ export default {
 
         // 搜索资产
         const searchAsset = val => {
-            searchText.value = val
+            tradeSearchMap.value[tradeType.value] = val
         }
 
         onMounted(() => {

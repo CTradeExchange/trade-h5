@@ -96,7 +96,6 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const descriptorRules = BindDataRules(t, customerInfo.value)
         const validator = new Schema(descriptorRules)
-        console.log(customerInfo.value)
 
         const formatter = (value) => {
             // 过滤输入的非数字
