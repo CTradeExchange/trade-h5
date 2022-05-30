@@ -263,7 +263,7 @@
                 </div>
             </div>
         </div>
-        <div class='chart-wrap'>
+        <div v-if='firstDetail' class='chart-wrap'>
             <tv
                 v-if='initialValue'
                 ref='chartRef'
@@ -397,6 +397,7 @@ export default {
         const { t, locale } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
         const collect = ref(null)
+        const firstDetail = ref(false)
         const store = useStore()
         const candleKTypeList = [
             // {
@@ -846,8 +847,23 @@ export default {
         }
 
         // 图表创建完成回调
-        const onChartReady = () => {
+        const onChartReady = (tv) => {
             state.onChartReadyFlag = true
+
+            // 自动更新指标
+            // const chart = tv.widget.activeChart()
+            // setTimeout(() => {
+            //     const allStudies = chart.getAllStudies()
+            //     const chartConfig = JSON.parse(localGet('chartConfig'))
+            //     if (!chartConfig) return false
+            //     if (allStudies.length === 0 && (chartConfig.mainStudy || chartConfig.subStudy)) {
+            //         if (chartConfig.mainStudy) {
+            //             createStudy('mainStudy', JSON.parse(chartConfig.mainStudy).name)
+            //         } else if (chartConfig.subStudy) {
+            //             createStudy('subStudy', JSON.parse(chartConfig.subStudy).name)
+            //         }
+            //     }
+            // }, 1000)
         }
 
         // 实时更新买卖价线
@@ -994,7 +1010,6 @@ export default {
                     state.activeTab = candleKTypeList.find(item => String(item.ktype) === String(locChartConfig.resolution)).ktype
                     state.moreKType = { title: t('chart.more'), ktype: null }
                 }
-
                 state.initConfig = ref({
                     property: {
                         showLastPrice: locChartConfig.showLastPrice, // 现价线
@@ -1022,6 +1037,7 @@ export default {
                     }
                 })
             }
+            firstDetail.value = true
         }
 
         // 图表初始值
@@ -1250,6 +1266,7 @@ export default {
             formatAmount,
             plansLen,
             isUniapp,
+            firstDetail,
             lang
         }
     }
