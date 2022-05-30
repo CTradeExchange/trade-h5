@@ -33,7 +33,7 @@ export default {
             type: Object
         },
         account: {
-            type: Object
+            type: [Object, String]
         },
         modelValue: {
             type: [Number, String],
@@ -55,12 +55,14 @@ export default {
                 const curTradeType = props.product.tradeType
                 if (curTradeType === 1) {
                     const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
-                    return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.orderAmount') + `(${account?.currency})`
+                    const currencyText = account?.currency ? `(${account?.currency})` : ''
+                    return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.orderAmount') + currencyText
                     // } else if ([3].includes(curTradeType)) {
                     //     return t('trade.orderVolume') + `(${props.product.baseCurrency})`
                 } else if (curTradeType === 2) {
                     const account = store.state._user.customerInfo?.accountList?.find(el => el.tradeType === curTradeType)
-                    return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.margin') + `(${account?.currency})`
+                    const currencyText = account?.currency ? `(${account?.currency})` : ''
+                    return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + '(' + t('trade.volumeUnit') + ')' : t('trade.margin') + currencyText
                 } else if ([3, 5].includes(curTradeType)) {
                     return parseInt(props.entryType) === 1 ? t('trade.orderVolume') + `(${props.product.baseCurrency})` : t('trade.orderAmount') + `(${props.product.profitCurrency})`
                 } else {
