@@ -144,6 +144,9 @@ export default {
                                 popShowNum: 1,
                                 userNo: ''
                             }
+                            if (nData) {
+                                noticeParams.pubTime = nData.pubTime
+                            }
                         }
                         console.log(noticeParams)
                         // getPublicData(true)
