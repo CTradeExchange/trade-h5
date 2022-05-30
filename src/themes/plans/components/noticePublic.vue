@@ -115,15 +115,16 @@ export default {
                             var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
                             // console.log(nData)
                             if (customInfo.value.customerNo) { // 已登录用户
-                                if (nData.popShowNum < 1) {
-                                    getPublicData(true) // 普通游客第一次显示公告弹窗
-                                }
+                                // if (nData.popShowNum < 1) {
+                                //     getPublicData(true) // 普通游客第一次显示公告弹窗
+                                // }
                                 noticeParams = {
                                     type: 'user', // 'user' ? 'guest'
                                     pubTime: state.noticeData[0].pubTime,
                                     popShowNum: nData.popShowNum + 1,
                                     userNo: customInfo.value.companyId
                                 }
+                                getPublicData(true)
                             } else { // 未登录
                                 if (nData.popShowNum === 1) {
                                     getPublicData(true) // 普通游客第一次显示公告弹窗
@@ -131,7 +132,7 @@ export default {
                                 noticeParams = {
                                     type: 'guest',
                                     pubTime: nData.pubTime,
-                                    popShowNum: nData.popShowNum + 1,
+                                    popShowNum: 1,
                                     userNo: ''
                                 }
                             }
