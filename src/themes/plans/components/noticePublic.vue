@@ -111,8 +111,8 @@ export default {
                         // 判断是否新游客
                         console.log(localGet('noticeParams'))
                         // localGet('noticeParams')?.userNo
+                        var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
                         if (customInfo ? customInfo.value.customerNo : false) { // 不是
-                            var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
                             // console.log(nData)
                             if (customInfo.value.customerNo) { // 已登录用户
                                 // if (nData.popShowNum < 1) {
