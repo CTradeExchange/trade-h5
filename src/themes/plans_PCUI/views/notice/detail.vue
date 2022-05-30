@@ -19,6 +19,9 @@
                     <li :class="type === 'notice' ? 'active': ''" @click="goPage('notice')">
                         <van-icon name='coupon-o' />{{ $t('route.notice') }}
                     </li>
+                    <li :class="type === 'msg' ? 'active': ''" @click="goPage('msg')">
+                        <van-icon name='todo-list-o' />{{ $t('route.msg') }}
+                    </li>
                     <li :class="type === 'msgcustomer' ? 'active': ''" @click="goPage('msgcustomer')">
                         <van-icon name='friends-o' />{{ $t('route.msgCustomer') }}
                     </li>

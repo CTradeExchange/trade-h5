@@ -519,12 +519,20 @@ export default {
                     state.listCustomer = []
                     getCustomerMsgListData()
                 }
+                if (route.query.from === 'msg') {
+                    // activeIndex.value = ref('msgps')
+                    state.activeIndex = ref('msg')
+                    state.current = 1
+                    state.finished = false
+                    state.list = []
+                    getMsgList()
+                }
             } else {
                 state.isUser = false
             }
-            console.log(state.isUser)
+            // console.log(state.isUser)
             // const index = localGet('noticeActive')
-            console.log(route.query.from)
+            // console.log(route.query.from)
         })
 
         return {
