@@ -192,11 +192,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
+    position: relative;
     padding: 8px;
     font-size: 14px;
     // background: var(--bgColor);
     background-color: #FBF9F8;
-    position: relative;
     // &::before{
     //     content: "";
     //     position: absolute;
@@ -210,7 +210,6 @@ export default {
     //     filter: opacity(0.08);
     //     background: url('../../images/rw-pattern4.png') repeat;
     // }
-
     .content-top {
         position: relative;
         display: flex;
@@ -246,7 +245,7 @@ export default {
             }
             .trade-content {
                 position: relative;
-                padding: 5px 16px 15px 16px;
+                padding: 5px 16px 15px;
             }
         }
         .right-wrap {
@@ -311,7 +310,7 @@ export default {
         }
     }
     .orders-wrap {
-        height: 398px;
+        height: 458px;
         margin-top: 8px;
         background: var(--contentColor);
     }
