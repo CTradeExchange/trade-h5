@@ -23,12 +23,13 @@ import { defineProps, ref, defineEmits, defineExpose, watch } from 'vue'
 import { localGet, debounce, localSet, isEmpty } from '@/utils/util'
 const emit = defineEmits(['changeState', 'searchAsset'])
 const props = defineProps({
-    hideAsset: Boolean
+    hideAsset: Boolean,
+    searchText: String
 })
 
 const checked = ref(JSON.parse(localGet('hideAsset')))
 
-const searchText = ref('')
+const searchText = ref(props.searchText || '')
 console.log('checked====', checked, props.hideAsset)
 
 if (isEmpty(localGet('hideAsset'))) {
@@ -51,8 +52,8 @@ const clear = () => {
     emit('searchAsset', '')
 }
 
-watch(() => props.hideAsset, val => {
-    checked.value = val
+watch(() => props.hideAsset, newVal => {
+    checked.value = newVal
 })
 
 </script>

@@ -32,7 +32,12 @@
         <!-- 资产 -->
         <div v-if="current === 'assets'" class='assets-list'>
             <!-- 资产搜索 -->
-            <AssetFilter @changeState='changeState' @searchAsset='searchAsset' />
+            <AssetFilter
+                :hide-asset='hideAsset'
+                :search-text='tradeSearchMap[tradeType]'
+                @changeState='changeState'
+                @searchAsset='searchAsset'
+            />
             <van-empty v-if='accountList.length === 0' :description='$t("trade.noAssets")' image='/images/empty.png' />
             <assetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
         </div>
@@ -86,22 +91,23 @@ export default {
             // 需要订阅的产品symbolKey集合
             productKyes: [],
             hideAsset: JSON.parse(localGet('hideAsset')),
-            searchText: ''
+            searchText: '',
+            tradeSearchMap: {}
         })
 
         // 账户列表
         const accountList = computed(() => {
             const accountList = store.state._user?.customerInfo?.accountList || []
             const list = accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
-
+            const searchText = state.tradeSearchMap[props.tradeType] || ''
             if (state.hideAsset) {
                 if (Number(props.tradeType) === 3) {
-                    return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(state.searchText.toUpperCase()))
+                    return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.toUpperCase()))
                 } else if (Number(props.tradeType) === 5) {
-                    return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(state.searchText.toUpperCase()))
+                    return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.toUpperCase()))
                 }
             }
-            return list.filter(item => item.currency.toUpperCase().includes(state.searchText.toUpperCase())) || []
+            return list.filter(item => item.currency.toUpperCase().includes(searchText.toUpperCase())) || []
         })
 
         const customerInfo = computed(() => store.state._user.customerInfo)
@@ -267,7 +273,7 @@ export default {
 
         // 搜索资产
         const searchAsset = val => {
-            state.searchText = val
+            state.tradeSearchMap[props.tradeType] = val
         }
 
         return {
