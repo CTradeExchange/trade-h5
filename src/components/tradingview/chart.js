@@ -542,6 +542,7 @@ class Chart {
                 open: lastBar.value[1],
                 high: lastBar.value[2],
                 low: lastBar.value[3],
+                volume: lastBar.value[5],
             }
         }
     }
@@ -624,8 +625,10 @@ class Chart {
 
         addList.forEach(e => {
             this.widget.activeChart().createStudy(e.name, ...e.params, {
-                'palettes.plot_0_Palette.colors.0.color': this.property.upColor, // 涨的颜色
-                'palettes.plot_0_Palette.colors.1.color': this.property.downColor, // 跌的颜色
+                'palettes.plot_0_Palette.colors.0.color': this.property.upColor, // MACD指标涨的颜色
+                'palettes.plot_0_Palette.colors.1.color': this.property.downColor, // MACD跌的颜色
+                'palettes.volumePalette.colors.0.color': this.property.upColor, // 涨的颜色
+                'palettes.volumePalette.colors.1.color': this.property.downColor, // 跌的颜色
                 precision: this.initial.digits
             }).then(id => {
                 // 更新指标实体
@@ -692,8 +695,9 @@ class Chart {
     }
 
     // 实时tick
-    setTick (price, time) {
-        this.datafeed._historyProvider.onTick(price, time)
+    setTick (price, time, volume) {
+        // console.log(this.widget)
+        this.datafeed._historyProvider.onTick(price, time, volume)
         this._setLastPrice(price)
     }
 

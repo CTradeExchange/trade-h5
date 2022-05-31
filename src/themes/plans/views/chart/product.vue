@@ -594,9 +594,11 @@ export default {
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
             QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
+            QuoteSocket.deal_subscribe(getSymbolId(), 1, product.value.symbolDigits, getTradeType(), 1) // 该页面因为要实时更新成交量，所以改成订阅deal_subscribe成交记录显示最新价
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
+        const dealLastPrice = computed(() => store.state._quote.dealLastPrice)
 
         // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
         const fundtoken = computed(() => {
@@ -868,7 +870,7 @@ export default {
 
         // 实时更新买卖价线
         watch(() => [product.value?.buy_price, product.value?.sell_price, product.value?.cur_price, product.value?.tick_time], (newValues) => {
-            state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time)
+            state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time, dealLastPrice.value.volume)
 
             state.onChartReadyFlag && unref(chartRef).updateLineData({
                 buyPrice: product.value?.buy_price,
