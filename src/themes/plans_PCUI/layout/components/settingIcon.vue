@@ -102,7 +102,6 @@ export default {
         // 退出登录
         const logoutHandler = () => {
             MsgSocket.logout()
-            localRemove('noticeParams')
             Promise.resolve().then(() => {
                 return store.dispatch('_user/logout')
             }).then(() => {

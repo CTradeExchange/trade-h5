@@ -864,6 +864,7 @@
     },
     "notice": {
         "poptitle": "最新公告",
-        "detailHeader": "公告消息详情"
+        "detailHeader": "公告消息详情",
+        "readAll":"全部已读"
     }
 }

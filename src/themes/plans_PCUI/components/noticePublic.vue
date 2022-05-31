@@ -73,25 +73,36 @@ export default {
                 lang: state.lang,
                 size: 5,
             }
+            // debugger
             if (customInfo.value.companyId) {
                 params.companyId = customInfo.value.companyId
             }
             if (customInfo.value.customerNo) {
                 params.customerNo = customInfo.value.customerNo
             }
-            console.log(localGet('noticeParams'))
+            let noticeParams = {}
+            // console.log(localGet('noticeParams'))
             // 判断是否新游客
-            if (localGet('noticeParams')) { // 不是
+            if (customInfo.value.customerNo) { // 不是
                 var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
-                if (nData.type === 'user') { // 已登录用户
-                    params.viewPubTime = nData.pubTime
+                noticeParams = {
+                    type: 'user', // 'user' ? 'guest'
+                    pubTime: '',
+                    popShowNum: 0,
+                    userNo: customInfo.value.companyId
                 }
-                // if (nData.type === 'guest') { // 已登录用户
-                // }
+                if (nData) {
+                    if (nData.pubTime) { // 已登录用户
+                        params.viewPubTime = nData.pubTime
+                    }
+                    noticeParams.pubTime = nData.pubTime
+                    noticeParams.popShowNum = nData.popShowNum
+                }
+                localSet('noticeParams', JSON.stringify(noticeParams))
             } else { // 是
                 // 获取当日的所有公告，显示完且缓存弹出次数
             }
-            // getPublicData(true)
+
             getNoticePop(params).then(res => {
                 // console.log(res)
                 if (res.check()) {
@@ -100,27 +111,30 @@ export default {
                         // 获取公告列表后，再缓存最新的一条的pubTime在本地
                         let noticeParams = {}
                         // 判断是否新游客
-                        // console.log(localGet('noticeParams'))
-                        if (localGet('noticeParams')) { // 不是
-                            var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
+                        console.log(localGet('noticeParams'))
+                        // localGet('noticeParams')?.userNo
+                        var nData = JSON.parse(localGet('noticeParams')) // 提取最新的pubTime
+                        if (customInfo ? customInfo.value.customerNo : false) { // 不是
+                            // console.log(nData)
                             if (customInfo.value.customerNo) { // 已登录用户
-                                if (nData.popShowNum < 1) {
-                                    getPublicData(true) // 普通游客第一次显示公告弹窗
-                                }
+                                // if (nData.popShowNum < 1) {
+                                //     getPublicData(true) // 普通游客第一次显示公告弹窗
+                                // }
                                 noticeParams = {
                                     type: 'user', // 'user' ? 'guest'
-                                    pubTime: state.noticeData[0].pubTime,
+                                    pubTime: state.noticeData[0].pubTime, // 每次获取第一条为最新公告时间，记录到本地缓存
                                     popShowNum: nData.popShowNum + 1,
                                     userNo: customInfo.value.companyId
                                 }
+                                getPublicData(true)
                             } else { // 未登录
-                                if (nData.popShowNum === 0) {
+                                if (nData.popShowNum === 1) {
                                     getPublicData(true) // 普通游客第一次显示公告弹窗
                                 }
                                 noticeParams = {
-                                    type: 'guest', // 'user' ? 'guest'
-                                    pubTime: '',
-                                    popShowNum: nData.popShowNum + 1,
+                                    type: 'guest',
+                                    pubTime: nData.pubTime,
+                                    popShowNum: 1,
                                     userNo: ''
                                 }
                             }
@@ -128,14 +142,17 @@ export default {
                             getPublicData(true) // 普通游客第一次显示公告弹窗
                             // 获取当日的所有公告，显示完且缓存弹出次数
                             noticeParams = {
-                                type: 'guest', // 'user' ? 'guest'
+                                type: 'guest',
                                 pubTime: '',
                                 popShowNum: 1,
                                 userNo: ''
                             }
+                            if (nData) {
+                                noticeParams.pubTime = nData.pubTime
+                            }
                         }
                         console.log(noticeParams)
-
+                        // getPublicData(true)
                         localSet('noticeParams', JSON.stringify(noticeParams))
                     }
                 }
@@ -184,8 +201,8 @@ export default {
 @import '~@/sass/mixin.scss';
 .public-pop {
     border-radius: rem(10px);
-    --van-popup-round-border-radius: 10px;
 
+    --van-popup-round-border-radius: 10px;
     .pop-top {
         padding-left: rem(30px);
         font-size: rem(36px);
@@ -193,10 +210,10 @@ export default {
         text-align: center;
     }
     .pop-content {
-        max-height: rem(650px);
         min-height: rem(550px);
+        max-height: rem(650px);
         margin-bottom: rem(20px);
-        padding: 0 rem(0px) rem(20px) rem(0px);
+        padding: 0 0 rem(20px) 0;
         overflow: auto;
         background: var(--bgColor);
     }
@@ -204,12 +221,10 @@ export default {
         margin: 0;
         .item {
             padding: rem(15px) rem(30px) rem(25px) rem(30px);
-            transition: ease-in .2s;
-
-            &:hover{
+            transition: ease-in 0.2s;
+            &:hover {
                 background-color: var(--contentColor);
             }
-
             .item-tit {
                 margin-bottom: rem(10px);
                 color: var(--color);

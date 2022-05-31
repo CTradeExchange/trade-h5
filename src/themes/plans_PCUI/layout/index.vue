@@ -46,7 +46,7 @@ export default {
         })
 
         onUnmounted(() => {
-            localRemove('noticeParams')
+            // localRemove('noticeParams')
         })
         return {
             cacheViews,

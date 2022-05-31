@@ -6,13 +6,18 @@
             <van-tab name='public' :title='$t("route.notice")'>
                 <div class='msg-list'>
                     <van-pull-refresh
+
                         v-model='loadingNt'
                         :loading-text="$t('compLang.loading')"
                         :loosing-text="$t('compLang.vanPullRefresh.loosing')"
                         :pulling-text="$t('compLang.vanPullRefresh.pulling')"
                         @refresh='onRefreshNotice'
                     >
+                        <div v-if='listNotice.length === 0'>
+                            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                        </div>
                         <van-list
+                            v-else
                             v-model='loadingNt'
                             v-model:error='isError'
                             :error-text='errorTip'
@@ -21,9 +26,6 @@
                             :loading-text="$t('compLang.loading')"
                             @load='onLoadNotice'
                         >
-                            <div v-if='listNotice.length === 0'>
-                                <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-                            </div>
                             <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
                                 <p class='msg-title'>
                                     {{ item.title === 'null'? '': item.title }}
@@ -47,18 +49,20 @@
                             </van-col>
                         </van-row>
                     </div>
-                    <div v-if='list.length === 0'>
-                        <van-empty :description='$t("common.noData")' image='/images/empty.png' />
-                    </div>
+
                     <van-pull-refresh
-                        v-else
+
                         v-model='loading'
                         :loading-text="$t('compLang.loading')"
                         :loosing-text="$t('compLang.vanPullRefresh.loosing')"
                         :pulling-text="$t('compLang.vanPullRefresh.pulling')"
                         @refresh='onRefresh'
                     >
+                        <div v-if='list.length === 0'>
+                            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                        </div>
                         <van-list
+                            v-else
                             v-model='loading'
                             v-model:error='isError'
                             :error-text='errorTip'
@@ -92,13 +96,18 @@
             <van-tab v-if='isUser' name='msgps' :title='$t("route.msgCustomer")'>
                 <div class='msg-list'>
                     <van-pull-refresh
+
                         v-model='loadingPs'
                         :loading-text="$t('compLang.loading')"
                         :loosing-text="$t('compLang.vanPullRefresh.loosing')"
                         :pulling-text="$t('compLang.vanPullRefresh.pulling')"
                         @refresh='onRefreshPs'
                     >
+                        <div v-if='listCustomer.length === 0'>
+                            <van-empty :description='$t("common.noData")' image='/images/empty.png' />
+                        </div>
                         <van-list
+                            v-else
                             v-model='loadingPs'
                             v-model:error='isError'
                             :error-text='errorTip'
@@ -111,13 +120,10 @@
                                 <van-row>
                                     <van-col align='right' span='24'>
                                         <span class='all-read' @click='setAllMsgReaded'>
-                                            全部已读
+                                            {{ $t('notice.readAll') }}
                                         </span>
                                     </van-col>
                                 </van-row>
-                            </div>
-                            <div v-if='listCustomer.length === 0'>
-                                <van-empty :description='$t("common.noData")' image='/images/empty.png' />
                             </div>
 
                             <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer')">

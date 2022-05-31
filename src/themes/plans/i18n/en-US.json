@@ -945,6 +945,7 @@
     },
     "notice": {
         "poptitle": "Latest Notice",
-        "detailHeader": "Detail"
+        "detailHeader": "Detail",
+        "readAll":"Set read all"
     }
 }
