@@ -420,6 +420,7 @@ export default {
                 state.isOptional = val
             },
         })
+        const dealLastPrice = computed(() => store.state._quote.dealLastPrice)
 
         watch(() => isSelfSymbol.value, val => {
             state.isOptional = !!val
@@ -478,7 +479,7 @@ export default {
 
         // 实时更新买卖价线
         watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
-            state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
+            state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time, dealLastPrice.value.volume)
 
             state.onChartReadyFlag && unref(chartRef).updateLineData({
                 buyPrice: product.value.buy_price,
@@ -741,7 +742,7 @@ export default {
                         chartType: locChartConfig.chartType, // 图表类型
                         showSeriesTitle: false, // K线标题
                         upColor: style.value.riseColor,
-                        downColor: style.value.fallColor
+                        downColor: style.value.fallColor,
 
                     },
                     indicators: [

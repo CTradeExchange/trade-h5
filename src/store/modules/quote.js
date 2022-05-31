@@ -3,7 +3,7 @@ import { findFundPage, findFundPageRealTime, fundNetValueChangeQuote, getFundInf
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { sessionSet, sessionGet } from '@/utils/util.js'
-import { createListByPlans, fillProductLabel, planMapToArray } from './storeUtil.js'
+import { createListByPlans, fillProductLabel, handlerDealLastPrice, priceToPip } from './storeUtil.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
 
@@ -23,22 +23,6 @@ function price_spread (product, data) {
     if (product.hasOwnProperty('bidSpread') && data.sell_price) product.sell_price = BigNumber(data.sell_price).plus(product.bidSpread || 0).toFixed(product.price_digits)
     spreadText(product)
 }
-/** 价格转点数  点数=价差/（Point*大点比率）
- * 点差小数位显示规则：
-    根据大点比率进行显示，大点比率的值一般为1（10的0次方）、10（10的1次方）、100（10的2次方）、1000（10的3次方）
-    则点差的小数位分别对应为0位、1位、2位、3位
-    例如：EURUSD卖价：1.19323 ，买价：1.19341，大点比率为10，则点差=（1.19341-1.19323）/10*0.00001=1.8
- */
-function priceToPip (price, product) {
-    if (product && product.hasOwnProperty('pointRatio')) {
-        const spDigit = String(product.pointRatio || 0).length - 1 // 点差小数位
-        const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
-        if (!parseFloat(pip)) return ''
-        return BigNumber(price).div(pip).toFixed(spDigit)
-    } else {
-        return ''
-    }
-}
 
 export default {
     namespaced: true,
@@ -50,6 +34,7 @@ export default {
         productActivedID: sessionGet('productActived'), // 当前操作的产品ID
         handicapList: [], // 盘口实时深度报价
         dealList: [], // 成交数据,
+        dealLastPrice: '', // 成交记录的最新价
         curTradeType: '', // 资产页面当前选中的玩法id
         deepthDigits: '',
         fundProductList: [], // 基金产品列表
@@ -270,12 +255,16 @@ export default {
         Update_dealList (state, data = {}) {
             state.dealList.unshift(data)
             state.dealList = state.dealList.splice(0, 20)
+
+            // 更新成交记录的最新价
+            state.dealLastPrice = data
         },
         Delete_handicapList (state, data = {}) {
             state.handicapList = []
         },
         Delete_dealList (state, data = {}) {
             state.dealList = []
+            state.dealLastPrice = ''
         },
         Update_tradeType (state, id) {
             state.curTradeType = id
