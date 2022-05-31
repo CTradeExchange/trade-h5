@@ -234,6 +234,7 @@ class SocketEvent {
         if (lastData && dealList.length > 0) {
             dealList.reverse().forEach(el => {
                 const dealData = {
+                    symbolKey: `${lastData.symbol_id}_${lastData.trade_type}`,
                     symbolId: lastData.symbol_id,
                     dealTime: mul(el.trade_time, 1000),
                     trade_direction: el.trade_direction,
@@ -304,6 +305,7 @@ class SocketEvent {
         // 如果推送的是当前订阅的产品，则使用改数据
         if (parseInt(symbol_id) === parseInt(priceArr[0]) && parseInt(trade_type) === parseInt(priceArr[1])) {
             const dealData = {
+                symbolKey: `${priceArr[0]}_${priceArr[1]}`,
                 symbolId: priceArr[0],
                 dealTime: priceArr[4],
                 trade_direction: priceArr[7], // Math.floor(Math.random() * 2) + 1,

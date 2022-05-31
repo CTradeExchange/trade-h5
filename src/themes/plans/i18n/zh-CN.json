@@ -499,7 +499,8 @@
         "purchaseRedeemBtn": "申/赎",
         "productEtfTip": "ETF是Exchange Traded Funds简称，是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖基金份额；同时，投资者也可向基金管理公司申购或赎回基金份额",
         "quantity": "数量(手)",
-        "upDown": "24H涨跌幅"
+        "upDown": "24H涨跌幅",
+        "loginOrRegister": "登录 或 注册"
     },
     "bizType": {
         "2": "市价平仓",
