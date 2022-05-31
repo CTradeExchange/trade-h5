@@ -74,7 +74,7 @@ export default {
         }
 
         const handleLogout = () => {
-            localRemove('noticeParams')
+            // localRemove('noticeParams')
             Dialog.confirm({
                 title: t('common.tip'),
                 message: t('setting.logoutConfirm'),

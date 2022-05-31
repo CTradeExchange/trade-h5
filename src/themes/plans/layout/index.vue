@@ -39,7 +39,8 @@ export default {
             store.commit('_base/UPDATE_wpNav', res)
         })
         onUnmounted(() => {
-            localRemove('noticeParams')
+            console.log("localRemove('noticeParams')")
+            // localRemove('noticeParams')
         })
         return {
             cacheViews,

@@ -84,7 +84,7 @@ export default {
                     }
                 })
                 // 图表实例创建完成后回调
-                context.emit('onChartReady')
+                context.emit('onChartReady', chart.value)
                 cb()
             })
         }

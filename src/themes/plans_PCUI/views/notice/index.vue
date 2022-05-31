@@ -9,7 +9,7 @@
         <van-tabs v-model:active='activeIndex' class='noticePage' @click-tab='onClickTab'>
             <van-tab name='notice'>
                 <template #title>
-                    <van-icon name='coupon-o' />{{ $t('route.notice') }}
+                    <van-icon name='volume-o' />{{ $t('route.notice') }}
                 </template>
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
@@ -54,7 +54,8 @@
             </van-tab>
             <van-tab v-if='isUser' name='msg'>
                 <template #title>
-                    <van-icon name='todo-list-o' />{{ $t('route.msg') }}
+                    <i class='icon icon_xiaoxizhongxin'></i>
+                    {{ $t('route.msg') }}
                 </template>
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
@@ -119,7 +120,7 @@
             </van-tab>
             <van-tab v-if='isUser' name='msgps'>
                 <template #title>
-                    <van-icon name='friends-o' />{{ $t('route.msgCustomer') }}
+                    <van-icon name='envelop-o' />{{ $t('route.msgCustomer') }}
                 </template>
                 <div class='list'>
                     <div class='operate'>
@@ -198,7 +199,6 @@ export default {
         const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
-        // const { type } = route.query
         const state = reactive({
             loading: false,
             active: 2,
@@ -250,9 +250,6 @@ export default {
             ]
         })
 
-        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(state.tradeType)))
-
-        // console.log(store.state)
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         const companyId = computed(() => customInfo.value.companyId)
@@ -340,8 +337,6 @@ export default {
         const getCustomerMsgListData = () => {
             state.pageLoading = true
             state.errorTip = ''
-            console.log(customInfo.value)
-
             getCustomerMsgList({
                 current: state.currentPs,
                 lang: state.lang,
@@ -369,7 +364,6 @@ export default {
         }
 
         const onClickTab = (item) => {
-            // console.log(item)
             if (item.name === 'notice') {
                 state.currentNt = 1
                 state.finishedNt = false
@@ -393,7 +387,6 @@ export default {
 
         // 跳转到公告详情页
         const goNoticeDetails = (id, type) => {
-            // console.log(id)
             if (type === 'msgcustomer') {
                 setMsgReadedFn(id)
                 var arr = []; var temp = {}
@@ -461,7 +454,6 @@ export default {
         }
 
         const changeType = (val) => {
-            console.log(val)
             state.type = val
             state.current = 1
             state.finished = false
@@ -500,11 +492,9 @@ export default {
 
         onBeforeMount(() => {
             getNoticeData()
-            console.log(customInfo.value)
             if (customInfo.value) {
                 state.isUser = true
                 if (route.query.from === 'notice') {
-                    // activeIndex.value = ref('notice')
                     state.activeIndex = ref('notice')
                     state.currentNt = 1
                     state.finishedNt = false
@@ -512,7 +502,6 @@ export default {
                     getNoticeData()
                 }
                 if (route.query.from === 'msgcustomer') {
-                    // activeIndex.value = ref('msgps')
                     state.activeIndex = ref('msgps')
                     state.currentPs = 1
                     state.finishedPs = false
@@ -520,7 +509,6 @@ export default {
                     getCustomerMsgListData()
                 }
                 if (route.query.from === 'msg') {
-                    // activeIndex.value = ref('msgps')
                     state.activeIndex = ref('msg')
                     state.current = 1
                     state.finished = false
@@ -530,9 +518,6 @@ export default {
             } else {
                 state.isUser = false
             }
-            // console.log(state.isUser)
-            // const index = localGet('noticeActive')
-            // console.log(route.query.from)
         })
 
         return {
@@ -609,7 +594,8 @@ export default {
                     color: var(--mainColor);
                 }
             }
-            .van-icon {
+            .van-icon,
+            .icon {
                 margin-right: 10px;
                 font-size: 24px;
                 vertical-align: -5px;
