@@ -581,6 +581,9 @@ export default {
     :deep(.van-tabs) {
         margin-top: rem(110px);
     }
+    :deep(.van-dropdown-menu__title) {
+        color: var(--color);
+    }
 }
 .msg-list {
     // margin-bottom: rem(50px);

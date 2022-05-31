@@ -9,7 +9,7 @@
         :style="{ width: '80%' }"
     >
         <div class='pop-top'>
-            {{ $t('route.noticeTitle') }}
+            {{ $t('notice.poptitle') }}
         </div>
         <div class='pop-content'>
             <div class='public-list'>
