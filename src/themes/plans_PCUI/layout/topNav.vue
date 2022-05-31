@@ -70,19 +70,6 @@
             <!-- 已登录 -->
             <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
-                    <div class='user'>
-                        <i class='head'></i>
-                        <span class='no'>
-                            {{ customerInfo.customerNo }}
-                        </span>
-                    </div>
-                </div>
-                <div class='item'>
-                    <span class='link' @click="$router.push('/assets')">
-                        {{ $t('common.wallet') }}
-                    </span>
-                </div>
-                <div class='item'>
                     <el-popover
                         ref='popover'
                         placement='bottom'
@@ -90,7 +77,12 @@
                         :width='240'
                     >
                         <template #reference>
-                            <i class='icon icon_gerenxinxi' :title='$t("header.set")'></i>
+                            <div class='user'>
+                                <i class='head'></i>
+                                <span class='no'>
+                                    {{ customerInfo.customerNo }}
+                                </span>
+                            </div>
                         </template>
                         <div class='settingDrapdown'>
                             <ul class='list'>
@@ -151,6 +143,12 @@
                         </div>
                     </el-popover>
                 </div>
+                <div class='item'>
+                    <span class='link' @click="$router.push('/assets')">
+                        {{ $t('common.wallet') }}
+                    </span>
+                </div>
+
                 <div class='line'></div>
             </div>
             <!-- 操作功能 -->
