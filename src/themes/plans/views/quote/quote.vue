@@ -51,6 +51,7 @@ import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { localSet, localGet } from '@/utils/util'
 export default {
     name: 'Quote',
     components: {
@@ -78,6 +79,9 @@ export default {
         const productTradeType = computed(() => unref(symbolKey).split('_')[1] || 0)
         // 1.玩法类型
         const tradeType = ref(unref(productTradeType))
+
+        const tradeTypeOld = ref(0)
+        const categoryTypeOld = ref(0)
         // 2.板块类型
         const categoryType = ref(1)
         // 获取板块列表和所选板块的产品列表
@@ -85,6 +89,8 @@ export default {
             tradeType, categoryType
         })
         // console.log(categoryList)
+
+        const localSelfSymbolListCur = computed(() => localGet('localSelfSymbolList') || '')
 
         const plansLen = computed(() => {
             const userProductCategory = store.getters.userProductCategory
@@ -103,6 +109,7 @@ export default {
         // 监听玩法类型
         const handleTradeType = async (val) => {
             tradeType.value = val
+            tradeTypeOld.value = val
             categoryType.value = 0
             await nextTick()
             unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + val)
@@ -111,7 +118,7 @@ export default {
         // 监听玩法类型/板块类型的变化，触发产品订阅
         // 获取productList.vue组件的ref对象和产品列表均是异步，所以第一次产品订阅在productList.vue组件内
         watch(
-            [tradeType, categoryType],
+            [tradeType, categoryType, productList],
             async () => {
                 await nextTick()
                 if (productListEl.value) productListEl.value.subscribeAll()
@@ -123,6 +130,15 @@ export default {
         onActivated(async () => {
             await nextTick()
             if (productListEl.value) productListEl.value.subscribeAll()
+            // console.log(localGet('localSelfSymbolList'), unref(localSelfSymbolListCur))
+            if (localGet('localSelfSymbolList') !== unref(localSelfSymbolListCur)) {
+                if (categoryType.value === 0) {
+                    tradeType.value = tradeTypeOld
+                    categoryType.value = categoryTypeOld
+                }
+                await nextTick()
+                unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + tradeTypeOld)
+            }
         })
 
         const tabChange = (i) => {}
@@ -156,6 +172,9 @@ export default {
             handleTradeType,
             tradeType,
             toETF,
+            localSelfSymbolListCur,
+            tradeTypeOld,
+            categoryTypeOld,
             showSidebar
         }
     }

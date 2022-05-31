@@ -12,6 +12,7 @@ export default function ({ tradeType, categoryType, isSort = true }) {
     const productMap = computed(() => store.state._quote.productMap)
     const userProductCategory = computed(() => store.getters.userProductCategory)
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList)
+    const customerInfo = computed(() => store.state._user.customerInfo)
 
     // 所选玩法的板块列表
     const categoryList = computed(() => {
@@ -37,8 +38,32 @@ export default function ({ tradeType, categoryType, isSort = true }) {
     const productList = computed(() => {
         const productMapVal = unref(productMap)
         const arr = []
+        let listByUserData = []
 
-        unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
+        if (!customerInfo.value) { // 未登录
+            // console.log(localSelfSymbolList)
+            console.log(unref(categoryType))
+            if (unref(categoryType.value) === 0) {
+                const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+                const obj = {}
+                const arr = localSelfSymbolList
+                arr.map(el => {
+                    const tradeType = el.split('_')[1]
+                    if (obj[tradeType] !== undefined) {
+                        obj[tradeType].push(el.split('_')[0])
+                    } else {
+                        obj[tradeType] = [el.split('_')[0]]
+                    }
+                })
+                const listByUser = obj[unref(tradeType)] || []
+                listByUserData = listByUser
+            } else {
+                listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+            }
+        } else { // 已登录
+            listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+        }
+        listByUserData.forEach(id => {
             const newId = `${id}_${unref(tradeType)}`
             if (productMapVal[newId]?.symbolName) {
                 arr.push(productMapVal[newId])

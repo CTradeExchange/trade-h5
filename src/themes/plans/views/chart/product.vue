@@ -552,6 +552,7 @@ export default {
             tradeType: getTradeType(),
             onChartReadyFlag: false,
             loading: false,
+            isSelfSymbol: false,
             findFundPageList: [], // 基金产品列表
         })
 
@@ -596,7 +597,19 @@ export default {
             QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
         }
 
-        const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
+        // const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
+
+        const checkIsSelfSymbol = () => {
+            if (isEmpty(customerInfo.value)) {
+                const newId = getSymbolId() + '_' + getTradeType()
+                if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                    state.isSelfSymbol = true
+                }
+                console.log(localGet('localSelfSymbolList'), newId)
+            } else {
+                state.isSelfSymbol = !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId())))
+            }
+        }
 
         // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
         const fundtoken = computed(() => {
@@ -1059,35 +1072,56 @@ export default {
         // 添加自选
         const addOptional = () => {
             if (isEmpty(customerInfo.value)) {
-                Toast(t('common.noLogin'))
-                return router.push('/login')
-            }
-            state.loading = true
-            if (isSelfSymbol.value) {
-                removeCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
-                    if (res.check()) {
-                        state.loading = false
-                        store.dispatch('_user/queryCustomerOptionalList')
-                        Toast(t('trade.removeOptionalOk'))
-                        // collect.value.classList.remove('icon_zixuan2')
-                    }
-                }).catch(err => {
-                    state.loading = false
-                })
+                // 未登录 缓存到本地
+                var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+                const newId = getSymbolId() + '_' + getTradeType()
+                if (localSelfSymbolList.indexOf(newId) !== -1) {
+                    localSelfSymbolList.map((it, index) => {
+                        if (it === newId) {
+                            localSelfSymbolList.splice(index, 1)
+                            state.isSelfSymbol = false
+                            // store.dispatch('_user/removeLocalCustomerOptionals')
+                            Toast(t('trade.removeOptionalOk'))
+                        }
+                    })
+                } else {
+                    localSelfSymbolList.push(newId)
+                    state.isSelfSymbol = true
+                    // store.dispatch('_user/addLocalCustomerOptionals')
+                    Toast(t('trade.addOptionalOk'))
+                }
+                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
+                // Toast(t('common.noLogin'))
+                // return router.push('/login')
             } else {
-                addCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
-                    if (res.check()) {
+                state.loading = true
+                if (state.isSelfSymbol) {
+                    removeCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
+                        if (res.check()) {
+                            state.loading = false
+                            store.dispatch('_user/queryCustomerOptionalList')
+                            state.isSelfSymbol = false
+                            Toast(t('trade.removeOptionalOk'))
+                        // collect.value.classList.remove('icon_zixuan2')
+                        }
+                    }).catch(err => {
                         state.loading = false
-                        // 手动修改optional值
-                        store.commit('_user/Update_optional', 1)
-                        store.dispatch('_user/queryCustomerOptionalList')
-                        // collect.value.classList.add('icon_zixuan2')
-
-                        Toast(t('trade.addOptionalOk'))
-                    }
-                }).catch(err => {
-                    state.loading = false
-                })
+                    })
+                } else {
+                    addCustomerOptional({ symbolList: [getSymbolId()], tradeType: getTradeType() }).then(res => {
+                        if (res.check()) {
+                            state.loading = false
+                            // 手动修改optional值
+                            store.commit('_user/Update_optional', 1)
+                            store.dispatch('_user/queryCustomerOptionalList')
+                            // collect.value.classList.add('icon_zixuan2')
+                            state.isSelfSymbol = true
+                            Toast(t('trade.addOptionalOk'))
+                        }
+                    }).catch(err => {
+                        state.loading = false
+                    })
+                }
             }
         }
 
@@ -1219,6 +1253,7 @@ export default {
 
         onMounted(() => {
             subscribeToProduct()
+            checkIsSelfSymbol()
         })
 
         onBeforeUnmount(() => {
@@ -1234,12 +1269,12 @@ export default {
             onBeforeChange,
             onClickStudy,
             showTips,
+            checkIsSelfSymbol,
             updateShow,
             onClickMoreTime,
             setChartType,
             klineTypeDropdown,
             klineTypeIndex,
-            isSelfSymbol,
             product,
             initialValue,
             indicatorRemoved,
