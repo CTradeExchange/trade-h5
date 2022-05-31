@@ -53,11 +53,11 @@ export const useInvestCompose = (params) => {
     }
 
     // 绘制环形图
-    const newPieDoughnutChart = (chartDom, chartData) => {
+    const newPieDoughnutChart = (chartDom, chartData, ops) => {
         const myChart = echarts.init(chartDom)
-        const invertColor = localGet('invertColor')
+
         const option = {
-            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            backgroundColor: ops.invertColor,
             color: ['#B72122', '#E9393A', '#FF762C', '#FF9E2C', '#FFC62C', '#F1DE3F', '#D2C02A', '#B6A622', '#9E9123', '#648319', '#198351', '#2AA46B', '#41CE8D', '#6BF1B3', '#56F5DD', '#82ECFF', '#82D7FF', '#7BBCF6', '#589EDC', '#2B70AE'],
             legend: {
                 top: 10,
@@ -101,11 +101,10 @@ export const useInvestCompose = (params) => {
     }
 
     // 绘制柱状图
-    const newBarChart = (chartDom, [xData, yData]) => {
+    const newBarChart = (chartDom, [xData, yData], ops) => {
         const myChart = echarts.init(chartDom)
-        const invertColor = localGet('invertColor')
         const option = {
-            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            backgroundColor: ops.invertColor,
             tooltip: {
                 trigger: 'axis',
                 extraCssText: 'z-index:99',
