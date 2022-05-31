@@ -107,20 +107,20 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.search-input{
+.search-input {
     flex: 0 0 220px;
     height: 40px;
-    :deep{
-        .el-autocomplete{
+    :deep {
+        .el-autocomplete {
             display: flex;
             width: 100%;
             height: 100%;
         }
-        .el-input__inner{
-            border-color: transparent;
+        .el-input__inner {
             background: var(--assistColor);
-            &:focus{
-                border-color: var(--el-input-focus-border,var(--primary));
+            border-color: transparent;
+            &:focus {
+                border-color: var(--el-input-focus-border, var(--primary));
             }
         }
         .el-input__prefix {
@@ -139,12 +139,12 @@ const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
             line-height: 1;
         }
         li:hover {
-            background-color: var(--bgColor)
+            background-color: var(--bgColor);
         }
         .item {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
             padding: 8px 0;
             .etf-icon {
                 margin-top: 2px;

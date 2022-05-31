@@ -50,6 +50,7 @@ import { useI18n } from 'vue-i18n'
 // import { QuoteSocket } from '@/plugins/socket/socket'
 import SortIcon from '@planspc/components/sortIcon.vue'
 import { sortFieldFn, sortTypeFn, sortFunc } from '@planspc/hooks/useProduct'
+import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
 
 const store = useStore()
 const router = useRouter()
@@ -109,29 +110,50 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
 const addOptional = ({ symbolId, tradeType }) => {
+    debugger
     if (!customerInfo.value) {
-        ElMessage.warning(t('common.noLogin'))
-        return router.push('/login')
-    }
-
-    if (isCollect(tradeType, symbolId)) {
-        removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-            if (res.check()) {
-                store.dispatch('_user/queryCustomerOptionalList')
-                ElMessage.success(t('trade.removeOptionalOk'))
-            }
-        }).catch(err => {
-        })
+        // ElMessage.warning(t('common.noLogin'))
+        // return router.push('/login')
+        console.log({ symbolId, tradeType })
+        // 未登录 缓存到本地
+        var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+        const newId = symbolId + '_' + tradeType
+        if (localSelfSymbolList.indexOf(newId) !== -1) {
+            localSelfSymbolList.map((it, index) => {
+                if (it === newId) {
+                    localSelfSymbolList.splice(index, 1)
+                    // state.isSelfSymbol = false
+                    ElMessage.warning(t('trade.removeOptionalOk'))
+                    // Toast(t('trade.removeOptionalOk'))
+                }
+            })
+        } else {
+            localSelfSymbolList.push(newId)
+            // state.isSelfSymbol = true
+            ElMessage.warning(t('trade.addOptionalOk'))
+            // Toast(t('trade.addOptionalOk'))
+        }
+        store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
     } else {
-        addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-            if (res.check()) {
-                // 手动修改optional值
-                store.commit('_user/Update_optional', 1)
-                store.dispatch('_user/queryCustomerOptionalList')
-                ElMessage.success(t('trade.addOptionalOk'))
-            }
-        }).catch(err => {
-        })
+        if (isCollect(tradeType, symbolId)) {
+            removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                if (res.check()) {
+                    store.dispatch('_user/queryCustomerOptionalList')
+                    ElMessage.success(t('trade.removeOptionalOk'))
+                }
+            }).catch(err => {
+            })
+        } else {
+            addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                if (res.check()) {
+                    // 手动修改optional值
+                    store.commit('_user/Update_optional', 1)
+                    store.dispatch('_user/queryCustomerOptionalList')
+                    ElMessage.success(t('trade.addOptionalOk'))
+                }
+            }).catch(err => {
+            })
+        }
     }
 }
 /** 添加自选逻辑 */
@@ -139,19 +161,19 @@ const addOptional = ({ symbolId, tradeType }) => {
 
 <style lang="scss" scoped>
 .listWrap {
+    position: relative;
     display: flex;
     flex: 1;
     flex-direction: column;
     box-sizing: border-box;
     width: 100%;
+    margin-top: 9px;
+    overflow: hidden;
     color: var(--color);
+    font-weight: 500;
     font-size: rem(30px);
     line-height: rem(32px);
-    overflow: hidden;
-    font-weight: 500;
-    margin-top: 9px;
-    position: relative;
-    .item{
+    .item {
         display: flex;
         align-items: center;
         user-select: none;
@@ -160,21 +182,21 @@ const addOptional = ({ symbolId, tradeType }) => {
         }
         .box {
             display: inline-flex;
-            flex-direction: column;
             flex: 1;
+            flex-direction: column;
         }
-        .change{
+        .change {
             width: 85px;
             text-align: right;
         }
     }
-    .listHead{
+    .listHead {
         display: flex;
         align-items: center;
         width: 100%;
         padding: 0 16px;
-        font-size: 12px;
         color: var(--minorColor);
+        font-size: 12px;
         line-height: 26px;
         .name {
             flex: 1;
@@ -183,15 +205,15 @@ const addOptional = ({ symbolId, tradeType }) => {
         .price {
             cursor: pointer;
         }
-        .change{
-            cursor: pointer;
+        .change {
             width: 85px;
             text-align: right;
+            cursor: pointer;
         }
     }
-    .items{
-        width: 100%;
+    .items {
         flex: 1;
+        width: 100%;
         overflow-x: hidden;
         overflow-y: auto;
         .li {
@@ -199,12 +221,12 @@ const addOptional = ({ symbolId, tradeType }) => {
             padding: 0 8px;
             font-size: 12px;
             cursor: pointer;
-            .name{
-                font-weight: 400;
+            .name {
                 color: var(--color);
+                font-weight: 400;
             }
             &.active,
-            &:hover{
+            &:hover {
                 background: var(--primaryAssistColor);
                 border-radius: 4px;
             }
@@ -214,12 +236,12 @@ const addOptional = ({ symbolId, tradeType }) => {
         }
     }
     .none-data {
+        position: absolute;
+        top: 0;
+        left: 0;
         display: flex;
         justify-content: center;
         width: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
     }
 }
 

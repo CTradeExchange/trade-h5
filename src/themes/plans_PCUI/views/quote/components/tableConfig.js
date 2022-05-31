@@ -9,6 +9,7 @@ import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import SortIcon from '@planspc/components/sortIcon.vue'
 import { sortFieldFn, sortTypeFn, sortFunc } from '@planspc/hooks/useProduct'
+import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
 
 export const getColumns = tradeTypeValue => {
     const store = useStore()
@@ -18,6 +19,7 @@ export const getColumns = tradeTypeValue => {
 
     const sortField = sortFieldFn()
     const sortType = sortTypeFn()
+    const customerInfo = computed(() => store.state._user.customerInfo)
 
     const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '--'
     // 基金列表
@@ -30,25 +32,50 @@ export const getColumns = tradeTypeValue => {
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
     const isCollect = (tradeType, symbolId) => userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
     const addOptional = (event, { symbolId, tradeType }) => {
+        // debugger
         event.stopPropagation()
-        if (isCollect(tradeType, symbolId)) {
-            removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-                if (res.check()) {
-                    store.dispatch('_user/queryCustomerOptionalList')
-                    ElMessage.success(t('trade.removeOptionalOk'))
-                }
-            }).catch(err => {
-            })
+        console.log(isCollect(tradeType, symbolId))
+        if (customerInfo.value) {
+            if (isCollect(tradeType, symbolId)) {
+                removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                    if (res.check()) {
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        ElMessage.success(t('trade.removeOptionalOk'))
+                    }
+                }).catch(err => {
+                })
+            } else {
+                addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                    if (res.check()) {
+                    // 手动修改optional值
+                        store.commit('_user/Update_optional', 1)
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        ElMessage.success(t('trade.addOptionalOk'))
+                    }
+                }).catch(err => {
+                })
+            }
         } else {
-            addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-                if (res.check()) {
-                // 手动修改optional值
-                    store.commit('_user/Update_optional', 1)
-                    store.dispatch('_user/queryCustomerOptionalList')
-                    ElMessage.success(t('trade.addOptionalOk'))
-                }
-            }).catch(err => {
-            })
+            console.log({ symbolId, tradeType })
+            // 未登录 缓存到本地
+            var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+            const newId = symbolId + '_' + tradeType
+            if (localSelfSymbolList.indexOf(newId) !== -1) {
+                localSelfSymbolList.map((it, index) => {
+                    if (it === newId) {
+                        localSelfSymbolList.splice(index, 1)
+                        // state.isSelfSymbol = false
+                        ElMessage.warning(t('trade.removeOptionalOk'))
+                    // Toast(t('trade.removeOptionalOk'))
+                    }
+                })
+            } else {
+                localSelfSymbolList.push(newId)
+                // state.isSelfSymbol = true
+                ElMessage.warning(t('trade.addOptionalOk'))
+            // Toast(t('trade.addOptionalOk'))
+            }
+            store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
         }
     }
     /** 添加自选逻辑 */
