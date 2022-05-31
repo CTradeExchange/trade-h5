@@ -1,51 +1,54 @@
 <template>
-    <div class='layout'>
-        <!-- 加载中组件 -->
-        <Loading :show='loading' />
-        <!-- 头部导航 -->
-        <Top
-            back
-            left-icon='arrow-left'
-            show-center
-        />
-        <div class='container'>
-            <div v-if='addressList.length > 0' class='address-list'>
-                <div v-for='item in addressList' :key='item.id' class='item'>
-                    <div class='above'>
-                        <p class='info'>
-                            <span class='name'>
-                                {{ item.currency }}-{{ item.chainName }}
+    <centerViewDialog>
+        <div class='layout'>
+            <!-- 加载中组件 -->
+            <Loading :show='loading' />
+            <!-- 头部导航 -->
+            <Top
+                back
+                left-icon='arrow-left'
+                show-center
+            />
+            <div class='container'>
+                <div v-if='addressList.length > 0' class='address-list'>
+                    <div v-for='item in addressList' :key='item.id' class='item'>
+                        <div class='above'>
+                            <p class='info'>
+                                <span class='name'>
+                                    {{ item.currency }}-{{ item.chainName }}
+                                </span>
+                                <span v-if='item.remark' class='tag'>
+                                    {{ item.remark }}
+                                </span>
+                            </p>
+                            <p class='code'>
+                                {{ item.address }}
+                            </p>
+                        </div>
+                        <div class='below'>
+                            <span class='delete' @click='deleteWallet(item.id)'>
+                                {{ $t('walletAddress.deleteBtn') }}
                             </span>
-                            <span v-if='item.remark' class='tag'>
-                                {{ item.remark }}
-                            </span>
-                        </p>
-                        <p class='code'>
-                            {{ item.address }}
-                        </p>
-                    </div>
-                    <div class='below'>
-                        <span class='delete' @click='deleteWallet(item.id)'>
-                            {{ $t('walletAddress.deleteBtn') }}
-                        </span>
+                        </div>
                     </div>
                 </div>
+                <van-empty
+                    v-else
+                    :description="$t('walletAddress.none')"
+                    image='/images/empty.png'
+                />
             </div>
-            <van-empty
-                v-else
-                :description="$t('walletAddress.none')"
-                image='/images/empty.png'
-            />
+            <!-- 底部按钮 -->
+            <button class='footer-btn' @click="handRoutTo('walletAdd')">
+                <van-icon :color='style.color' name='plus' />
+                <span>{{ $t('walletAddress.addBtn') }}</span>
+            </button>
         </div>
-        <!-- 底部按钮 -->
-        <button class='footer-btn' @click="$router.push({ path: '/walletAdd' })">
-            <van-icon :color='style.color' name='plus' />
-            <span>{{ $t('walletAddress.addBtn') }}</span>
-        </button>
-    </div>
+    </centerViewDialog>
 </template>
 
 <script>
+import centerViewDialog from '@planspc/layout/centerViewDialog'
 // vue
 import { onMounted, reactive, toRefs, computed } from 'vue'
 // components
@@ -54,15 +57,19 @@ import { Toast, Dialog } from 'vant'
 // i18n
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
+import { useRouter, useRoute } from 'vue-router'
 
 // api
 import { getWalletAddressList, deleteWalletAddress } from '@/api/user'
 
 export default {
     components: {
-        Top
+        Top,
+        centerViewDialog
     },
     setup () {
+        const router = useRouter()
+        const route = useRoute()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const style = computed(() => store.state.style)
@@ -103,6 +110,10 @@ export default {
             })
         }
 
+        const handRoutTo = (path) => {
+            router.push(route.path.slice(0, -13) + path)
+        }
+
         onMounted(() => {
             // 获取钱包地址列表
             getWalletAddress()
@@ -111,6 +122,7 @@ export default {
         return {
             ...toRefs(state),
             deleteWallet,
+            handRoutTo,
             style
         }
     }
@@ -179,6 +191,7 @@ export default {
             .delete {
                 color: var(--minorColor);
                 font-size: rem(24px);
+                cursor: pointer;
             }
         }
     }
@@ -191,6 +204,7 @@ export default {
     height: rem(104px);
     background-color: var(--contentColor);
     border-top: 1px solid var(--lineColor);
+    cursor: pointer;
     :deep(.van-icon-plus) {
         font-weight: bold;
     }

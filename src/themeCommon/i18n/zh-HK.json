@@ -221,7 +221,8 @@
         "24hLow": "24H最低",
         "24hNumber": "24H成交量",
         "24hAmount": "24H成交额",
-        "viewMore": "查看更多"
+        "viewMore": "查看更多",
+        "wallet": "錢包"
     },
     "faceAuth": {
         "faceDetectTip": "請正對手機，保持光線充足",

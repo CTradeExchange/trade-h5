@@ -219,7 +219,8 @@
         "24hLow": "24H Low",
         "24hNumber": "24H Vol",
         "24hAmount": "24H Amt",
-        "viewMore": "View more markets"
+        "viewMore": "View more markets",
+        "wallet": "Wallet"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",

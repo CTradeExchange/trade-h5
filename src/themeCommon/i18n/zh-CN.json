@@ -221,7 +221,8 @@
     "24hLow": "24H最低",
     "24hNumber": "24H量",
     "24hAmount": "24H额",
-    "viewMore": "查看更多"
+    "viewMore": "查看更多",
+    "wallet": "钱包"
   },
   "faceAuth": {
     "faceDetectTip": "请正对手机，保持光线充足",
