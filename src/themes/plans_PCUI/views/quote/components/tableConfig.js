@@ -30,11 +30,26 @@ export const getColumns = tradeTypeValue => {
 
     /** 添加自选逻辑 */
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
-    const isCollect = (tradeType, symbolId) => userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
+    // const isCollect = (tradeType, symbolId) => userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
+
+    /** 添加自选逻辑 标星状态 */
+    const isCollect = (tradeType, symbolId) => {
+        if (isEmpty(customerInfo.value)) {
+            const newId = symbolId + '_' + tradeType
+            if (localGet('localSelfSymbolList')) {
+                if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        } else {
+            return userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
+        }
+    }
+
     const addOptional = (event, { symbolId, tradeType }) => {
-        // debugger
         event.stopPropagation()
-        console.log(isCollect(tradeType, symbolId))
         if (customerInfo.value) {
             if (isCollect(tradeType, symbolId)) {
                 removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
@@ -56,7 +71,6 @@ export const getColumns = tradeTypeValue => {
                 })
             }
         } else {
-            console.log({ symbolId, tradeType })
             // 未登录 缓存到本地
             var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
             const newId = symbolId + '_' + tradeType
@@ -64,16 +78,12 @@ export const getColumns = tradeTypeValue => {
                 localSelfSymbolList.map((it, index) => {
                     if (it === newId) {
                         localSelfSymbolList.splice(index, 1)
-                        // state.isSelfSymbol = false
                         ElMessage.warning(t('trade.removeOptionalOk'))
-                    // Toast(t('trade.removeOptionalOk'))
                     }
                 })
             } else {
                 localSelfSymbolList.push(newId)
-                // state.isSelfSymbol = true
                 ElMessage.warning(t('trade.addOptionalOk'))
-            // Toast(t('trade.addOptionalOk'))
             }
             store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
         }

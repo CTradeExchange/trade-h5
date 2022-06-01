@@ -39,7 +39,7 @@ import { useStore } from 'vuex'
 import { addCustomerOptional, removeCustomerOptional, getSymbolList } from '@/api/trade'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { debounce } from '@/utils/util'
+import { debounce, localSet, localGet, isEmpty } from '@/utils/util'
 
 const router = useRouter()
 const store = useStore()
@@ -54,6 +54,7 @@ const props = defineProps({
 
 const state = ref('')
 const productMap = computed(() => store.state._quote.productMap)
+const customerInfo = computed(() => store.state._user.customerInfo)
 
 // 搜索
 const querySearch = (queryString, cb) => {
@@ -78,27 +79,61 @@ const gotoOrder = (product) => {
 
 /** 添加自选逻辑 */
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)
-const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
+// const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
+
+/** 添加自选逻辑 标星状态 */
+const isCollect = (tradeType, symbolId) => {
+    if (isEmpty(customerInfo.value)) {
+        const newId = symbolId + '_' + tradeType
+        if (localGet('localSelfSymbolList')) {
+            if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                return true
+            } else {
+                return false
+            }
+        }
+    } else {
+        return selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
+    }
+}
 
 const addOptional = ({ id: symbolId, tradeType = props.tradeType }) => {
-    if (isCollect(tradeType, symbolId)) {
-        removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-            if (res.check()) {
-                store.dispatch('_user/queryCustomerOptionalList')
-                ElMessage.success(t('trade.removeOptionalOk'))
-            }
-        }).catch(err => {
-        })
+    if (customerInfo.value) {
+        if (isCollect(tradeType, symbolId)) {
+            removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                if (res.check()) {
+                    store.dispatch('_user/queryCustomerOptionalList')
+                    ElMessage.success(t('trade.removeOptionalOk'))
+                }
+            }).catch(err => {
+            })
+        } else {
+            addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                if (res.check()) {
+                    // 手动修改optional值
+                    store.commit('_user/Update_optional', 1)
+                    store.dispatch('_user/queryCustomerOptionalList')
+                    ElMessage.success(t('trade.addOptionalOk'))
+                }
+            }).catch(err => {
+            })
+        }
     } else {
-        addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-            if (res.check()) {
-                // 手动修改optional值
-                store.commit('_user/Update_optional', 1)
-                store.dispatch('_user/queryCustomerOptionalList')
-                ElMessage.success(t('trade.addOptionalOk'))
-            }
-        }).catch(err => {
-        })
+        // 未登录 缓存到本地
+        var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+        const newId = symbolId + '_' + tradeType
+        if (localSelfSymbolList.indexOf(newId) !== -1) {
+            localSelfSymbolList.map((it, index) => {
+                if (it === newId) {
+                    localSelfSymbolList.splice(index, 1)
+                    ElMessage.warning(t('trade.removeOptionalOk'))
+                }
+            })
+        } else {
+            localSelfSymbolList.push(newId)
+            ElMessage.warning(t('trade.addOptionalOk'))
+        }
+        store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
     }
 }
 /** 添加自选逻辑 */

@@ -73,39 +73,39 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.content{
+.content {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: flex-start;
+    justify-content: flex-start;
     width: 100%;
+    margin-bottom: 80px;
+    padding-bottom: 20px;
     background: var(--contentColor);
     border-radius: 10px;
-    padding-bottom: 20px;
-    margin-bottom: 80px;
-    .header{
+    .header {
         position: relative;
-        flex: 0 0 56px;
-        line-height: 56px;
         display: flex;
+        flex: 0 0 56px;
         flex-direction: row;
         flex-wrap: nowrap;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         width: 100%;
         padding: 0 20px;
-        &::after{
-            content: "";
+        line-height: 56px;
+        &::after {
             position: absolute;
-            left: 0;
             bottom: -1px;
+            left: 0;
+            z-index: var(--el-index-normal);
             width: 100%;
             height: 3px;
             background-color: var(--assistColor);
-            z-index: var(--el-index-normal);
+            content: '';
         }
     }
-    .icon_lansezixuan{
+    .icon_lansezixuan {
         margin-right: 5px;
         font-size: 14px;
     }
