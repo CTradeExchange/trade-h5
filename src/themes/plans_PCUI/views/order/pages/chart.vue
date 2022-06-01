@@ -674,7 +674,7 @@ export default {
                 const volumeIndex = SUBSTUDIES.findIndex(el => el.name === 'Volume')
                 if (volumeIndex > -1) SUBSTUDIES.splice(volumeIndex, 1)
             }
-            state.sideStudyList = SUBSTUDIES.slice(0, 5)
+            state.sideStudyList = SUBSTUDIES.slice(0, 10)
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))

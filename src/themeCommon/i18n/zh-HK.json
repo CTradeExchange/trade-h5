@@ -954,6 +954,23 @@
         "mainTradersTips": "主賬戶持有人/交易員手持證件相",
         "infoList": "開始企業認證前,請準備以下文件"
     },
+    "newHomeFooter":{ 
+        "product": "產品",
+        "trading": "現貨交易",
+        "fund": "加密基金",
+        "service": "服務",
+        "program": "新客活動",
+        "vip": "機構及VIP",
+        "customer": "在線客服",
+        "help": "幫助",
+        "faqs": "FAQs",
+        "terms": "條款條例",
+        "policy": "隱私政策",
+        "community": "社媒",
+        "aboutus": "關於我們",
+        "followus": "關注我們",
+        "fees": "費用"
+    },
     "ranking": {
         "increaseRanking": "漲幅榜",
         "declineRanking": "跌幅榜",
