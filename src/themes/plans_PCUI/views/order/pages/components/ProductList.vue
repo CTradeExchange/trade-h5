@@ -110,7 +110,7 @@ const customerInfo = computed(() => store.state._user.customerInfo)
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
 const addOptional = ({ symbolId, tradeType }) => {
-    debugger
+    // debugger
     if (!customerInfo.value) {
         // ElMessage.warning(t('common.noLogin'))
         // return router.push('/login')
