@@ -74,7 +74,7 @@
                         ref='popover'
                         placement='bottom'
                         trigger='hover'
-                        :width='240'
+                        :width='250'
                     >
                         <template #reference>
                             <div class='user'>
