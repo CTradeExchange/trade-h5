@@ -1850,8 +1850,6 @@ export default {
                 background: none;
                 border: 1px solid var(--primary);
                 &.en-US {
-                    padding-top: rem(18px);
-                    line-height: 1.2;
                     .text {
                         font-size: rem(26px);
                     }
