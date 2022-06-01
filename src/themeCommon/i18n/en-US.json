@@ -955,7 +955,7 @@
     "newHomeFooter": {
         "product": "Products",
         "trading": "Spot Trading",
-        "fund": "Index Fund",
+        "fund": "Crypto Fund",
         "service": "Services",
         "program": "Program for New Clients",
         "vip": "Institutional & VIP",
@@ -969,19 +969,6 @@
         "about": "About",
         "followus": "Follow Us",
         "fees": "Fees"
-    },
-    "aboutUs": {
-        "title": "About Us",
-        "introduce": "Vitatoken is licensed in CAGAYAN ECONOMIC ZONE AUTHORITY (CAZA) under the registrated legal entity of Dragon Empire Developments Limited in 6th September, 2021, for fintech solution and cryptocurrency exchange regulations. In the first quarter of 2022, Vitatoken will provide services as follow, a cryptocurrency spot trading platform; ETF Secondary Market Trade, fund subscription and Redeem; support fund real-time net value and statement release; mobile application; full support of ETH chain and tokens; full support of TRX chain and tokens; upgrade on wallets; and will achieve the standard of FIPS 140-2 level 3. More functions and supports are coming soon.",
-        "servicesTitle": "Our Services",
-        "visionsTitle": "Our Services",
-        "visionsTextCell1": "We aim to make everyone’s cryptocurrency journey easier.",
-        "visionsTextCell2": "Vitatoken is named and inspired by Vitamin,",
-        "visionsTextCell3": "an important molecule,",
-        "visionsTextCell4": "to benefit users from cryptocurrency trading or issuance,",
-        "visionsTextCell5": "to lower the passing standard",
-        "visionsTextCell6": "and make increase the probability of profit, ",
-        "visionsTextCell7": "and essentially earn from the market."
     },
     "ranking": {
         "increaseRanking": "Top Gainers",

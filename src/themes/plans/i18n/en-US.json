@@ -774,6 +774,7 @@
         "applyRule_tipRemark1": "基金管理费指基金管理人管理基金资产所收取的报酬。",
         "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
         "noTradeMarket": "No trading market",
+        "applyNow": "Explore",
         "fundsList": "Fund list",
         "records": "Records",
         "iknow": "I know",
@@ -856,8 +857,9 @@
             "text2": "The tracking index of the V10 Crypto Index Fund，has outperformed Bitcoin 71% of the time since its establishment",
             "text3": "White Paper (PDF)",
             "text4": "V10 Crypto Index Fund",
-            "text5": "V10 is an autonomous, high-performing, low-cost cryptocurrency index fund. Consists of 10 leading cryptocurrencies.",
-            "text6": "White Paper (PDF)"
+            "text5": "The top 10 cryptocurrencies form  V10, it reflects the overall trend in cryptocurrency with asset transparency.",
+            "text6": "White Paper (PDF)",
+            "text7": "Invest Now"
         },
         "portfolio": {
             "text1": "Create your cryptocurrency portfolio today",
@@ -898,6 +900,23 @@
         "subTitle": "All the power of Vitatoken's cryptocurrency exchange, in the palm of your hand. Download the Vitatoken mobile crypto trading app today.",
         "android": "Download for Android",
         "ios": "Download for iphone"
+    },
+    "aboutUs": {
+        "introduceTitle": "About Us",
+        "introduce1": "Vitatoken is licensed in CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) under the legal entity of Dragon Empire Developments Limited in 6th September, 2021, for fintech solution and cryptocurrency exchange regulations. ",
+        "introduce2": "Vitatoken is the world first-ever cryptocurrency fund trading platform. In the future, Vitatoken will be supporting different fund managers issuing fund on the platform, which allow users to purchase fund as needed.",
+        "introduce3": "Aims to make everyone’s cryptocurrency journey easier. Vitatoken offers crypto trading and cryptocurrency funds. They target to raise user’s probability of returns and lower the risk on cryptocurrency investment. More functions and supports are coming soon.",
+        "licenseTitle": "Vitatoken has obtained the official certificate of CEZA virtual currency exchange license",
+        "servicesTitle": "Our Services",
+        "guide": "Beginners’Guide",
+        "trading": "Spot Trading",
+        "issuance": "Fund Issuance",
+        "ETFTrade": "ETF Trade",
+        "indexFund": "Index Fund",
+        "assistingTools": "Assisting Tools", 
+        "newsUpdates": "News & Updates",
+        "visionsTitle": "Our Visions",
+        "visionsText": "Entering cryptocurrency is challenging.Our mission is to create an opportunity for everyone to participle in the crypto market.Vitamin is vital, just like Vitatoken.We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
     },
     "api": {
         "title": "API Manage",
