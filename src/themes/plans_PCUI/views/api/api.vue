@@ -262,9 +262,7 @@ export default {
                     confirmButtonText: t('api.mfaGoset'),
                     message: t('api.mfaTips'),
                 }).then(() => {
-                    router.replace({
-                        name: 'MFA_status'
-                    })
+                    handRoutTo('/googleMFA/status')
                 })
             }
         }
