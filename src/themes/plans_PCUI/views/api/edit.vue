@@ -350,6 +350,7 @@ export default {
 @import '@/sass/mixin.scss';
 .wrapper {
     width: 1200px;
+    min-height: 82vh;
     margin: 20px auto;
     .page-title {
         font-weight: bold;
