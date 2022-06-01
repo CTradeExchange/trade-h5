@@ -18,8 +18,8 @@
         </div>
 
         <div class='item range'>
-            <p :class='product?.cur_color'>
-                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.symbolDigits) : '--' }}
+            <p v-if='dealLastPrice' :class='dealLastPrice?.price_color'>
+                {{ dealLastPrice?.price ? parseFloat(dealLastPrice?.price).toFixed(product.symbolDigits) : '--' }}
             </p>
             <p>
                 <span :class='product?.rolling_upDownColor'>
@@ -885,6 +885,7 @@ export default {
             addOptional,
             isSelfSymbol,
             formatAmount,
+            dealLastPrice,
             contractRoute
         }
     }

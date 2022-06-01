@@ -32,8 +32,8 @@
         <div class='productInfo'>
             <div v-if='product?.symbolDigits' class='hd'>
                 <div class='hd-left'>
-                    <p class='cur_price' :class='product?.cur_color'>
-                        {{ product.cur_price ? parseFloat(product?.cur_price).toFixed(product?.symbolDigits) :'' }}
+                    <p v-if='dealLastPrice' class='cur_price' :class='dealLastPrice?.price_color'>
+                        {{ dealLastPrice.price ? parseFloat(dealLastPrice.price).toFixed(product?.symbolDigits) :'' }}
                     </p>
                 </div>
                 <div class='others'>
@@ -869,8 +869,11 @@ export default {
         }
 
         // 实时更新买卖价线
-        watch(() => [product.value?.buy_price, product.value?.sell_price, product.value?.cur_price, product.value?.tick_time], (newValues) => {
-            state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time, dealLastPrice.value.volume)
+        watch(() => [dealLastPrice.value?.price], (newValues) => {
+            if (newValues) {
+                // console.log('dealLastPrice.value.volume', dealLastPrice.value.volume)
+                state.onChartReadyFlag && unref(chartRef).setTick(dealLastPrice.value.price, dealLastPrice.value.dealTime, dealLastPrice.value.volume)
+            }
 
             state.onChartReadyFlag && unref(chartRef).updateLineData({
                 buyPrice: product.value?.buy_price,
@@ -1269,6 +1272,7 @@ export default {
             plansLen,
             isUniapp,
             firstDetail,
+            dealLastPrice,
             lang
         }
     }
