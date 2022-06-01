@@ -14,8 +14,14 @@
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
+
                     <div class='msg-list'>
-                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
+                        <van-empty
+                            v-if='listNotice.length === 0'
+                            :description="$t('api.listnone')"
+                            image='/images/empty.png'
+                        />
+                        <div v-for='(item,index) in listNotice' v-else :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
@@ -45,11 +51,6 @@
                             </template>
                         </van-pagination>
                     </div>
-                    <van-empty
-                        v-if='listNotice.length === 0'
-                        :description="$t('api.listnone')"
-                        image='/images/empty.png'
-                    />
                 </div>
             </van-tab>
             <van-tab v-if='isUser' name='msg'>
@@ -78,7 +79,12 @@
                     </div>
                     <div class='msg-list'>
                         <van-loading v-if='loading' />
-                        <div v-for='(item,index) in msgList' :key='index' class='msg-item'>
+                        <van-empty
+                            v-if='msgList.length === 0'
+                            :description="$t('api.listnone')"
+                            image='/images/empty.png'
+                        />
+                        <div v-for='(item,index) in msgList' v-else :key='index' class='msg-item'>
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
@@ -89,11 +95,6 @@
                                 {{ formatTime(item.createTime) }}
                             </p>
                         </div>
-                        <van-empty
-                            v-if='msgList.length === 0'
-                            :description="$t('api.listnone')"
-                            image='/images/empty.png'
-                        />
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
@@ -134,7 +135,12 @@
                     </div>
                     <van-loading v-if='loading' />
                     <div class='msg-list'>
-                        <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'msgcustomer')">
+                        <van-empty
+                            v-if='listNotice.length === 0'
+                            :description="$t('api.listnone')"
+                            image='/images/empty.png'
+                        />
+                        <div v-for='(item,index) in listCustomer' v-else :key='index' class='msg-item' @click="goNoticeDetails(item.id,'msgcustomer')">
                             <p class='msg-title'>
                                 <b v-if='item.readStatus == 1'>
                                     {{ item.title === 'null'? '': item.title }}
@@ -169,11 +175,6 @@
                             </template>
                         </van-pagination>
                     </div>
-                    <van-empty
-                        v-if='listNotice.length === 0'
-                        :description="$t('api.listnone')"
-                        image='/images/empty.png'
-                    />
                 </div>
             </van-tab>
         </van-tabs>

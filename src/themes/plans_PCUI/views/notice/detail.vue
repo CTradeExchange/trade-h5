@@ -19,10 +19,10 @@
                     <li :class="type === 'notice' ? 'active': ''" @click="goPage('notice')">
                         <van-icon name='volume-o' />{{ $t('route.notice') }}
                     </li>
-                    <li :class="type === 'msg' ? 'active': ''" @click="goPage('msg')">
+                    <li v-if='isUser' :class="type === 'msg' ? 'active': ''" @click="goPage('msg')">
                         <i class='icon icon_xiaoxizhongxin'></i> {{ $t('route.msg') }}
                     </li>
-                    <li :class="type === 'msgcustomer' ? 'active': ''" @click="goPage('msgcustomer')">
+                    <li v-if='isUser' :class="type === 'msgcustomer' ? 'active': ''" @click="goPage('msgcustomer')">
                         <van-icon name='envelop-o' />{{ $t('route.msgCustomer') }}
                     </li>
                 </ul>
@@ -44,12 +44,12 @@
 </template>
 
 <script>
-import { computed, toRefs, reactive, onMounted, ref } from 'vue'
+import { computed, toRefs, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Toast, Dialog } from 'vant'
-import { isEmpty, getCookie } from '@/utils/util'
+import { Toast } from 'vant'
+import { getCookie } from '@/utils/util'
 import { getNoticeDetail, getCustomerMsgDetail } from '@/api/user'
 
 export default {
@@ -71,6 +71,7 @@ export default {
                 whiteIps: ''
             },
             type: null,
+            isUser: false,
             detailData: {},
         })
 
@@ -163,6 +164,11 @@ export default {
 
         onMounted(() => {
             initData()
+            if (customInfo.value) {
+                state.isUser = true
+            } else {
+                state.isUser = false
+            }
         })
 
         return {
