@@ -52,16 +52,20 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
                 const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
                 const obj = {}
                 const arr = localSelfSymbolList
-                arr.map(el => {
-                    const tradeType = el.split('_')[1]
-                    if (obj[tradeType] !== undefined) {
-                        obj[tradeType].push(el.split('_')[0])
-                    } else {
-                        obj[tradeType] = [el.split('_')[0]]
-                    }
-                })
-                const listByUser = obj[unref(tradeType)] || []
-                listByUserData = listByUser
+                if (arr.length > 0) {
+                    arr.map(el => {
+                        const tradeType = el.split('_')[1]
+                        if (obj[tradeType] !== undefined) {
+                            obj[tradeType].push(el.split('_')[0])
+                        } else {
+                            obj[tradeType] = [el.split('_')[0]]
+                        }
+                    })
+                    const listByUser = obj[unref(tradeType)] || []
+                    listByUserData = listByUser
+                } else {
+                    listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+                }
             } else {
                 listByUserData = unref(categoryList)[unref(categoryType)].listByUser
             }
