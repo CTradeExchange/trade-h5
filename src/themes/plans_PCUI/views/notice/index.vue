@@ -32,7 +32,7 @@
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
-                            v-if='listNotice.length > 0'
+                            v-if='listNotice.length > 0 && totalNt > 10'
                             v-model='currentNt'
                             class='list-page'
                             force-ellipses
@@ -98,7 +98,7 @@
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
-                            v-if='msgList.length > 0'
+                            v-if='msgList.length > 0 && total>10'
                             v-model='current'
                             class='list-page'
                             force-ellipses
@@ -156,7 +156,7 @@
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
-                            v-if='listCustomer.length > 0'
+                            v-if='listCustomer.length > 0 && totalPs>10'
                             v-model='currentPs'
                             class='list-page'
                             force-ellipses
@@ -546,6 +546,7 @@ export default {
 @import '@/sass/mixin.scss';
 .wrapper {
     // width: 1200px;
+    min-height: 82vh;
     .page-title {
         padding: 20px 20px 0;
         font-weight: bold;

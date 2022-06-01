@@ -188,6 +188,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrapper {
+    min-height: 82vh;
     .page-title {
         padding: 20px 20px 0;
         font-weight: bold;
