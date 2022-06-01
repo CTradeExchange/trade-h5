@@ -724,6 +724,7 @@ export default {
                 if (state.subStudy === 'Volume' && !canUseVolume) {
                     state.subStudy = SUBSTUDIES[0].name
                     localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                    locChartConfig.subStudy = JSON.stringify(SUBSTUDIES[0])
                 }
 
                 state.klineType = locChartConfig.chartType
@@ -920,9 +921,9 @@ export default {
             }
             &.ohlc {
                 color: var(--normalColor);
-                white-space: nowrap;
                 font-size: 12px;
                 line-height: 2;
+                white-space: nowrap;
             }
             &.collect {
                 flex: 1;

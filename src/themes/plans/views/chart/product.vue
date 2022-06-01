@@ -594,7 +594,7 @@ export default {
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
             QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
-            const curDigits = pow(0.1, product.value.symbolDigits)
+            const curDigits = pow(0.1, product.value?.symbolDigits)
             QuoteSocket.deal_subscribe(getSymbolId(), 1, curDigits, getTradeType(), 1) // 该页面因为要实时更新成交量，所以改成订阅deal_subscribe成交记录显示最新价
         }
 
@@ -1003,6 +1003,7 @@ export default {
                 if (state.subStudy === 'Volume' && !canUseVolume) {
                     state.subStudy = SUBSTUDIES[0].name
                     localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                    locChartConfig.subStudy = JSON.stringify(SUBSTUDIES[0])
                 }
 
                 state.klineType = locChartConfig.chartType
