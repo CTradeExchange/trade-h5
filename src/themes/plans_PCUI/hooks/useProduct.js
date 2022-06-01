@@ -64,13 +64,13 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
                     const listByUser = obj[unref(tradeType)] || []
                     listByUserData = listByUser
                 } else {
-                    listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+                    listByUserData = unref(categoryList)[unref(categoryType)].listByUser || []
                 }
             } else {
-                listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+                listByUserData = unref(categoryList)[unref(categoryType)].listByUser || []
             }
         } else { // 已登录
-            listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+            listByUserData = unref(categoryList)[unref(categoryType)].listByUser || []
         }
         listByUserData.forEach(id => {
             const newId = `${id}_${unref(tradeType)}`
