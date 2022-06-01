@@ -60,6 +60,13 @@
                         </span>
                     </router-link>
                 </div>
+                <div :class="['item', { 'active': $route.path === '/notice' }]">
+                    <router-link to='/notice'>
+                        <span class='link'>
+                            {{ $t('route.noticeTitle') }}
+                        </span>
+                    </router-link>
+                </div>
             </div>
         </div>
         <div class='nav-right'>
@@ -75,46 +82,85 @@
             <!-- 已登录 -->
             <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
-                    <div class='user'>
-                        <i class='head'></i>
-                        <span class='no'>
-                            {{ customerInfo.customerNo }}
-                        </span>
-                    </div>
-                </div>
-                <div class='item'>
-                    <i class='icon icon_zichan' :title="$t('header.assets')" @click="$router.push('/assets')"></i>
-                </div>
-                <div class='item'>
-                    <Msg />
-                </div>
-                <div class='item'>
-                    <el-dropdown>
-                        <i class='icon icon_gerenxinxi' :title="$t('cRoute.personal')"></i>
-                        <template #dropdown>
-                            <el-dropdown-menu>
-                                <el-dropdown-item v-if='Number(customerInfo.openAccountType) === 1' @click="$router.push('/businessKYC')">
-                                    {{ $t('businessKYC.enterpriseKYC') }}
-                                </el-dropdown-item>
-                                <el-dropdown-item v-if='Number(customerInfo.openAccountType) === 0' @click="handRoutTo('/authentication')">
-                                    {{ $t('cRoute.regKyc') }}
-                                </el-dropdown-item>
-                                <!-- <el-dropdown-item @click="handRoutTo('/bankList')">
-                                    {{ $t('cRoute.bankList') }}
-                                </el-dropdown-item> -->
-                                <el-dropdown-item @click="$router.push('/api')">
-                                    {{ $t('api.title') }}
-                                </el-dropdown-item>
-                                <el-dropdown-item @click="handRoutTo('/googleMFA/status')">
-                                    {{ $t('mfa.routeTitile') }}
-                                </el-dropdown-item>
-                            </el-dropdown-menu>
+                    <el-popover
+                        ref='popover'
+                        placement='bottom'
+                        trigger='hover'
+                        :width='250'
+                    >
+                        <template #reference>
+                            <div class='user'>
+                                <i class='head'></i>
+                                <span class='no'>
+                                    {{ customerInfo.customerNo }}
+                                </span>
+                            </div>
                         </template>
-                    </el-dropdown>
+                        <div class='settingDrapdown'>
+                            <ul class='list'>
+                                <li v-if='Number(customerInfo.openAccountType) === 1' class='item' @click="$router.push('/businessKYC')">
+                                    {{ $t('businessKYC.enterpriseKYC') }}
+                                </li>
+                                <li v-if='Number(customerInfo.openAccountType) === 0' class='item' @click="handRoutTo('/authentication')">
+                                    {{ $t('cRoute.regKyc') }}
+                                </li>
+                                <li v-if='customInfo' class='item' @click='handRoutTo("/bindMobile")'>
+                                    {{ customInfo.phone ? $t("setting.replacePhone") : $t('setting.bindPhone') }}
+                                </li>
+                                <li v-if='customInfo' class='item' @click='handRoutTo("/bindEmail")'>
+                                    {{ customInfo.email ? $t("setting.replaceEmail") : $t('setting.bindEmail') }}
+                                </li>
+                                <li class='item' @click="handRoutTo('/googleMFA/status')">
+                                    {{ $t('mfa.routeTitile') }}
+                                </li>
+                                <li class='item' @click="handRoutTo('/walletAddress')">
+                                    {{ $t('withdraw.withdrawLink') }}
+                                </li>
+                                <li class='item' @click="handRoutTo('/bankList')">
+                                    {{ $t('cRoute.bankList') }}
+                                </li>
+                                <li v-if='customInfo' class='item' @click='handRoutTo("/setLoginPwd")'>
+                                    {{ Number(customInfo.loginPassStatus) === 1 ? $t("forgot.setPwd") : $t('login.modifyLoginPwd') }}
+                                </li>
+                                <li v-if='customInfo' class='item' @click='handRoutTo("/setFundPwd")'>
+                                    {{ Number(customInfo.assertPassStatus) === 1 ? $t("forgot.setFundPwd") : $t('forgot.resetFundPwd') }}
+                                </li>
+                                <li class='item flexBetween'>
+                                    <span>{{ $t('setting.chartColor') }}</span>
+                                    <van-icon class='arrowIcon' name='arrow' />
+                                    <div class='subDrapdown'>
+                                        <ul class='list'>
+                                            <li
+                                                v-for='(item,i) in chartColorAction'
+                                                :key='i'
+                                                class='item flexBetween'
+                                                :class='{ active:Number(item.val)===Number(chartColorActive) }'
+                                                @click='changeChartColor(item)'
+                                            >
+                                                <span>{{ item.name }}</span>
+                                                <van-icon v-show='Number(item.val)===Number(chartColorActive)' name='success' />
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
+                                <li class='item' @click="$router.push('/api')">
+                                    {{ $t('api.title') }}
+                                </li>
+
+                                <li class='item' @click='logoutHandler'>
+                                    {{ $t('quitLogin') }}
+                                </li>
+                            </ul>
+                        </div>
+                    </el-popover>
                 </div>
                 <div class='item'>
-                    <SettingIcon />
+                    <span class='link' @click="$router.push('/assets')">
+                        {{ $t('common.wallet') }}
+                    </span>
                 </div>
+
                 <div class='line'></div>
             </div>
             <!-- 操作功能 -->
@@ -141,19 +187,19 @@
 <script>
 import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, localGet, localSet, localRemove } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import SettingIcon from './components/settingIcon'
 import ThemeIcon from './components/themeIcon'
 import LangIcon from './components/langIcon'
 import Msg from './components/msg'
 import DownloadIcon from './components/downloadIcon'
+import { colors, setRootVariable } from '@planspc/colorVariables'
+import { MsgSocket } from '@/plugins/socket/socket'
 const logoImg = require('@planspc/images/logo.png')
 
 export default {
     components: {
-        SettingIcon,
         ThemeIcon,
         LangIcon,
         Msg,
@@ -165,8 +211,13 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            rightAction: { title: 444 }
+            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1
         })
+
+        const chartColorAction = [
+            { val: '1', name: t('common.redDown') },
+            { val: '2', name: t('common.redUp') },
+        ]
 
         const plansName = computed(() => {
             if (route.query.tradeType) {
@@ -219,6 +270,43 @@ export default {
         const toOrder = () => {
             changePlans({ name: t('tradeType.5'), id: '5' })
         }
+        // 设置涨跌颜色
+        const changeChartColor = item => {
+            const locChartConfig = JSON.parse(localGet('chartConfig'))
+            if (isEmpty(locChartConfig)) {
+                localSet('chartConfig', JSON.stringify({
+                    'chartColorType': item.val
+                }))
+            } else {
+                locChartConfig['chartColorType'] = item.val
+                localSet('chartConfig', JSON.stringify(locChartConfig))
+            }
+
+            state.chartColorActive = item.val
+
+            const { riseColor, fallColor } = colors.common
+            if (parseInt(item.val) === 1) {
+                document.body.style.setProperty('--riseColor', riseColor)
+                document.body.style.setProperty('--fallColor', fallColor)
+            } else {
+                document.body.style.setProperty('--riseColor', fallColor)
+                document.body.style.setProperty('--fallColor', riseColor)
+            }
+            setRootVariable()
+            const event = new CustomEvent('Launch_chartColor', { detail: item.val })
+            document.body.dispatchEvent(event)
+        }
+        // 退出登录
+        const logoutHandler = () => {
+            MsgSocket.logout()
+            Promise.resolve().then(() => {
+                return store.dispatch('_user/logout')
+            }).then(() => {
+                return router.push({ name: 'Login' })
+            }).then(() => {
+                location.reload()
+            })
+        }
 
         // 路由跳转
         const handRoutTo = (path) => router.push(route.path + path)
@@ -237,6 +325,9 @@ export default {
             plansName,
             ...toRefs(state),
             // 是否显示基金功能
+            chartColorAction,
+            changeChartColor,
+            logoutHandler,
             fundShow: window['fundShow']
         }
     }
@@ -248,8 +339,8 @@ export default {
     position: relative;
     z-index: 100;
     display: flex;
-    justify-content: space-between;
     flex-shrink: 0;
+    justify-content: space-between;
     min-width: 1200px;
     height: 64px;
     padding: 0 16px;
@@ -266,7 +357,7 @@ export default {
         align-items: center;
         height: 100%;
         .logo {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             margin-right: 32px;
         }
@@ -296,13 +387,13 @@ export default {
                     color: var(--primary);
                 }
             }
-            .symbolUp{
+            .symbolUp {
                 display: inline-block;
-                margin-left: 4px;
-                vertical-align: middle;
-                margin-top: -2px;
                 width: 14px;
                 height: 14px;
+                margin-top: -2px;
+                margin-left: 4px;
+                vertical-align: middle;
                 background: url('/images/arrowUp.png') no-repeat;
                 background-size: cover;
             }
@@ -325,6 +416,7 @@ export default {
                 }
             }
             .register {
+                @include hover();
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
@@ -333,7 +425,6 @@ export default {
                 color: #FFF;
                 background: var(--primary);
                 border-radius: 4px;
-                @include hover();
             }
         }
         .handle-have {
@@ -344,6 +435,14 @@ export default {
                 margin-right: 20px;
                 &:nth-last-child(2) {
                     margin-right: 0;
+                }
+                .link {
+                    color: #FFF;
+                    font-size: 14px;
+                    cursor: pointer;
+                    &:hover {
+                        color: var(--primary);
+                    }
                 }
                 .user {
                     display: flex;
@@ -482,6 +581,47 @@ export default {
                 line-height: 30px;
             }
         }
+    }
+}
+.settingDrapdown {
+    font-size: 14px;
+    .item {
+        position: relative;
+        height: 40px;
+        padding: 0 10px 0 17px;
+        color: var(--color);
+        line-height: 40px;
+        border-radius: 5px;
+        cursor: pointer;
+        .arrowIcon {
+            display: none;
+            float: right;
+        }
+        &:hover,
+        &.active {
+            color: var(--primary);
+            .arrowIcon,
+            .subDrapdown {
+                display: block;
+            }
+        }
+    }
+    .flexBetween {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .subDrapdown {
+        position: absolute;
+        top: 0;
+        right: 100%;
+        display: none;
+        width: 150%;
+        padding: 8px;
+        color: var(--color);
+        background: var(--contentColor);
+        border-radius: 5px;
+        box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
     }
 }
 </style>

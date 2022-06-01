@@ -188,17 +188,18 @@ export default {
     padding-bottom: 20px;
     .titleBar {
         display: flex;
+        align-items: center;
         justify-content: space-between;
         line-height: 40px;
         .title {
-            font-size: 16px;
             font-weight: normal;
+            font-size: 16px;
         }
     }
     .categorySelect {
         position: absolute;
-        right: 20px;
         top: 0;
+        right: 20px;
     }
     .currencySelect {
         width: 150px;
@@ -212,27 +213,26 @@ export default {
     margin-top: 20px;
     .labelBar {
         height: 32px;
-        line-height: 32px;
         color: var(--minorColor);
+        line-height: 32px;
     }
     .item {
         display: grid;
-        grid-template-columns: 3fr 2fr 2fr;
         grid-column-gap: 15px;
-        height: 24px;
-        line-height: 24px;
-        padding: 5px 6px;
+        grid-template-columns: 3fr 2fr 2fr;
         box-sizing: content-box;
-        &.productItem{
-            cursor: pointer;
+        height: 24px;
+        padding: 5px 6px;
+        line-height: 24px;
+        &.productItem {
             padding: 7px 6px;
-            &:hover{
+            cursor: pointer;
+            &:hover {
                 background: var(--assistColor);
                 border-radius: 5px;
             }
         }
-
-        .label{
+        .label {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -246,9 +246,9 @@ export default {
     }
     .symbolCurrency {
         display: inline-block;
+        font-size: 14px;
         line-height: 16px;
         vertical-align: middle;
-        font-size: 14px;
     }
 }
 .showIndex {

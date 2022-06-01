@@ -26,12 +26,25 @@
 import { nextTick, onMounted, ref } from 'vue'
 import { usePerformance } from './hooks/persormanceData'
 import BottomTip from './bottomTip.vue'
+import { localGet } from '@/utils/util'
+import { useRoute } from 'vue-router'
 
 const marketPriceJZ_DOM = ref('')
 const marketPriceJZ_DOM1 = ref('')
 const marketAppearance_DOM = ref('')
 const marketAppearance_DOM1 = ref('')
 const { getMarketPerformanceData, getMarketPerformanceData1, getMarketPerformanceQuoteChange, getMarketPerformanceQuoteChange1, newChart } = usePerformance()
+
+const route = useRoute()
+
+const { theme, isUniapp } = route.query
+let invertColor
+if (isUniapp) {
+    invertColor = theme === 'light' ? '#fff' : '#000'
+} else {
+    invertColor = localGet('invertColor') === 'light' ? '#fff' : '#000'
+}
+
 onMounted(async () => {
     await nextTick()
 
@@ -65,7 +78,7 @@ onMounted(async () => {
         }
 
         if (yData) {
-            newChart(marketPriceJZ_DOM.value, [xData, yData])
+            newChart(marketPriceJZ_DOM.value, [xData, yData], { invertColor })
         } else {
             marketPriceJZ_DOM.value.style.display = 'none'
         }
@@ -135,7 +148,8 @@ onMounted(async () => {
         }
         if (yData.length) {
             newChart(marketAppearance_DOM.value, [xData, yData], {
-                'yAxis.ext': '%'
+                'yAxis.ext': '%',
+                invertColor
             })
         } else {
             marketAppearance_DOM.value.style.display = 'none'
@@ -182,20 +196,20 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.fundPerformance{
-    .title{
+.fundPerformance {
+    .title {
         font-size: rem(32px);
     }
-    .chartModule{
+    .chartModule {
         margin-top: rem(30px);
     }
-    .spaceLine{
-        border-top: 6px solid var(--bgColor);
+    .spaceLine {
         margin-top: rem(40px);
         padding-top: rem(40px);
+        border-top: 6px solid var(--bgColor);
     }
 }
-.chartLine{
+.chartLine {
     height: rem(500px);
 }
 </style>

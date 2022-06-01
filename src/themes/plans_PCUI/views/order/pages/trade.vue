@@ -32,7 +32,10 @@
             </div>
             <!-- 基金代币产品 -->
             <van-popover v-model:show='showFundPopover' placement='left' theme='dark'>
-                <p style='padding:10px; width:300px;'>
+                <p
+                    style=' width: 300px;
+padding: 10px;'
+                >
                     {{ $t('trade.purchaseOrRedemptionTip') }}
                 </p>
                 <template #reference>
@@ -322,6 +325,8 @@ export default {
                 emit('update:multipleVal', val)
             }
         })
+        // 业务配置
+        const businessConfig = computed(() => store.state.businessConfig)
 
         const showLeverage = computed(() => Number(product.value.tradeType) === 2 && product.value.marginInfo?.type !== '1')
 
@@ -484,10 +489,14 @@ export default {
 
         // 跳转到基金的产品详情
         const fundtokenLink = () => {
-            if (!unref(fundtoken)) {
-                return Toast(t('trade.noFeature'))
+            if (unref(businessConfig)?.v10Link) {
+                router.replace(unref(businessConfig).v10Link)
+            } else {
+                if (!unref(fundtoken)) {
+                    return Toast(t('trade.noFeature'))
+                }
+                router.push('/fund?fundId=' + fundtoken.value.fundId)
             }
-            router.push('/fund?fundId=' + fundtoken.value.fundId)
         }
 
         // 初始化设置
@@ -582,19 +591,18 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.trade-header{
+.trade-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    .tabs-trade{
+    .tabs-trade {
         width: 150px;
         margin-bottom: 20px;
-
         :deep(.van-tab) {
             flex: 1;
-            padding-bottom: 5px;
             flex-basis: auto !important;
             padding: 0;
+            padding-bottom: 5px;
             font-size: 14px;
             white-space: nowrap;
         }
@@ -608,101 +616,99 @@ export default {
             }
         }
     }
-    .switch{
+    .switch {
         display: inline-block;
-        >span{
+        >span {
             margin-right: 9px;
             vertical-align: middle;
         }
-        .van-switch{
+        .van-switch {
             vertical-align: middle;
         }
     }
-    .right-wrap{
-        .multipleBtn,.fundtokenLink{
-            vertical-align: middle;
-            display: inline-block;
-            height: 24px;
-            color: var(--color);
-            background: var(--assistColor);
-            padding: 0 rem(16px);
-            border-radius: 4px;
-            margin-right: rem(24px);
-            border: solid 1px var(--color);
+    .right-wrap {
+        .multipleBtn,
+        .fundtokenLink {
             @include active();
             @include hover();
-            .text{
+            display: inline-block;
+            height: 24px;
+            margin-right: rem(24px);
+            padding: 0 rem(16px);
+            color: var(--color);
+            vertical-align: middle;
+            background: var(--assistColor);
+            border: solid 1px var(--color);
+            border-radius: 4px;
+            .text {
                 display: inline-block;
                 padding-right: 10px;
                 font-size: 14px;
-
             }
-            .icon_icon_arrow{
+            .icon_icon_arrow {
                 font-size: 12px;
             }
         }
-        .fundtokenLink{
-            cursor: pointer;
+        .fundtokenLink {
+            color: var(--primary);
             background: none;
             border: 1px solid var(--primary);
             border-radius: 5px;
-            color: var(--primary);
+            cursor: pointer;
         }
     }
 }
-
-.trade-wrap{
+.trade-wrap {
     display: flex;
     width: 100%;
-    .buy-wrap{
+    .buy-wrap {
         position: relative;
         flex: 1;
-        padding-right: 15px;
         margin-right: 15px;
+        padding-right: 15px;
         border-right: dashed 1px var(--placeholdColor);
-        &:hover .loginMaskPop{
+        &:hover .loginMaskPop {
             display: flex;
         }
     }
-    .sell-wrap{
+    .sell-wrap {
         position: relative;
         flex: 1;
-        &:hover .loginMaskPop{
+        &:hover .loginMaskPop {
             display: flex;
         }
     }
-    .loginMaskPop{
+    .loginMaskPop {
         display: none;
     }
-    .form-item{
-        color: var(--minorColor);
-        height: 40px;
-        background: var(--assistColor);
-        border-radius: 4px;
+    .form-item {
         display: flex;
         justify-content: space-between;
-        padding: 10px 14px;
+        height: 40px;
         margin-bottom: 16px;
-        label{
+        padding: 10px 14px;
+        color: var(--minorColor);
+        background: var(--assistColor);
+        border-radius: 4px;
+        label {
             margin-right: 9px;
             color: var(--normalColor);
-            .minor{
+            .minor {
                 color: var(--minorColor);
             }
         }
-        &.disable{
+        &.disable {
             background-color: var(--lineColor);
         }
     }
-
     .footerBtn {
         width: 100%;
-        background: var(--contentColor);
         height: 40px;
-        border-radius: 4px;
-        font-weight: bold;
         margin-bottom: 5px;
-        &:hover{
+        font-weight: bold;
+        background: var(--contentColor);
+        border-radius: 4px;
+        &:hover {
             opacity: 0.7;
         }
         &.buy {

@@ -136,7 +136,7 @@ export default {
         const curInstance = getCurrentInstance()
 
         // 玩法列表
-        const isWallet = store.state._base.wpCompanyInfo.isWallet
+        const isWallet = store.state._base.wpCompanyInfo?.isWallet
         const plansList = computed(() =>
             store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
                 .map(el => {
@@ -250,11 +250,11 @@ export default {
 .trade-module {
     margin-top: 96px;
 }
-.homeQuoteImg{
+.homeQuoteImg {
+    display: block;
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    display: block;
 }
 
 // 玩法选项
@@ -269,9 +269,9 @@ export default {
             margin-right: 0;
         }
         span {
-            font-size: 32px;
-            font-weight: bold;
             color: var(--minorColor);
+            font-weight: bold;
+            font-size: 32px;
         }
     }
     li:hover {
@@ -295,13 +295,13 @@ export default {
     }
     li {
         display: inline-flex;
-        justify-content: center;
         align-items: center;
+        justify-content: center;
         height: 32px;
-        padding: 0 22px;
         margin-right: 10px;
-        font-size: 14px;
+        padding: 0 22px;
         color: var(--color);
+        font-size: 14px;
         background: var(--bgColor);
         border-radius: 4px;
         cursor: pointer;
@@ -328,16 +328,16 @@ export default {
         background: var(--contentColor);
         li {
             display: flex;
-            align-items: center;
             flex: 1;
+            align-items: center;
             height: 100%;
             span {
-                font-size: 14px;
                 color: var(--minorColor);
+                font-size: 14px;
             }
-            .pointer{
+            .pointer {
                 cursor: pointer;
-                &:hover{
+                &:hover {
                     color: var(--color);
                 }
             }
@@ -379,13 +379,13 @@ export default {
             justify-content: flex-end;
             button {
                 display: inline-flex;
-                justify-content: center;
                 align-items: center;
+                justify-content: center;
                 width: 80px;
                 height: 32px;
                 margin-right: 16px;
+                color: #FFF;
                 font-size: 16px;
-                color: #fff;
                 border-radius: 4px;
                 cursor: pointer;
                 &.buy {
@@ -404,8 +404,8 @@ export default {
 }
 .view-more {
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
     height: 50px;
     cursor: pointer;
     a {

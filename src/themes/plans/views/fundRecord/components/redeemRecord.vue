@@ -162,7 +162,7 @@ const showDetail = item => {
         }
         span {
             flex: 1;
-            padding: rem(15px);
+            padding: rem(12px);
             color: var(--normalColor);
             font-size: rem(24px);
             border-top: 1px solid var(--minorColor);

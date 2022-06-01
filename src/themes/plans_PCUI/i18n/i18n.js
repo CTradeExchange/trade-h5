@@ -4,6 +4,7 @@ import { Locale } from 'vant';
 // import zhCN_common from '../../../themeCommon/i18n/zh-CN.json'
 // import zhCN from './zh-CN.json'
 import {getCookie} from '@/utils/util';
+import { deepAssign} from 'vant/lib/utils/deep-assign'
 
 const defaultLocal = getCookie('lang')
 
@@ -41,9 +42,11 @@ export async function loadLocaleMessages(i18n, locale) {
     // load locale messages with dynamic import
     const messages = await import(/* webpackChunkName: "locale-[request]" */ `./${locale}.json`)
     const commonMessages = await import(/* webpackChunkName: "locale-[request]" */ `@/themeCommon/i18n/${locale}.json`)
+    const bsMessages = await import(/* webpackChunkName: "locale-[request]" */ `@/business/i18n/${locale}.json`)
     const newMessages = Object.assign({},commonMessages.default, messages.default)
+    const resultMessages = deepAssign(newMessages, bsMessages.default)
     // set locale and locale message
-    i18n.global.setLocaleMessage(locale, newMessages)
+    i18n.global.setLocaleMessage(locale, resultMessages)
 
     return nextTick()
 }

@@ -47,7 +47,9 @@
             </div>
         </div>
         <div class='assets-body'>
-            <el-table :cell-style="{ background: 'none' }" :data='accountList' :empty-text="$t('c.noData')" height='100%'>
+            <!-- 资产搜索 -->
+            <AssetFilter @changeState='changeState' @searchAsset='searchAsset' />
+            <el-table :cell-style="{ background: 'none' }" :data='accountList' :empty-text="$t('c.noData')">
                 <el-table-column :label="$t('trade.name')" min-width='150' prop='currency' />
                 <el-table-column :label="$t('trade.totalAssets')" min-width='150' prop='balance' />
                 <el-table-column :label="$t('trade.free')" min-width='150' prop='available' />
@@ -78,12 +80,17 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import AssetFilter from '@planspc/components/assetFilter.vue'
+import { localGet, debounce, localSet, isEmpty } from '@/utils/util'
 
 export default {
+    components: {
+        AssetFilter
+    },
     props: {
         // 玩法类型
         tradeType: {
@@ -95,12 +102,25 @@ export default {
         const store = useStore()
         const router = useRouter()
         const { t } = useI18n({ useScope: 'global' })
+
+        const hideAsset = ref(JSON.parse(localGet('hideAsset')))
+        const searchText = ref('')
+
         // 用户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
         // 资产信息
         const assetsInfo = computed(() => store.state._user.assetsInfo[props.tradeType])
+
         // 账户列表
-        const accountList = computed(() => customerInfo.value?.accountList.filter(el => Number(el.tradeType) === props.tradeType))
+        const accountList = computed(() => {
+            const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
+
+            if (hideAsset.value) {
+                return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+            }
+            return list.filter(item => item.currency.toUpperCase().includes(searchText.value.toUpperCase())) || []
+        })
+
         // 账户信息
         const accountInfo = computed(() => accountList?.value[0])
 
@@ -177,6 +197,16 @@ export default {
             3: t('riskLevel.danger')
         }
 
+        // 隐藏0资产事件
+        const changeState = val => {
+            hideAsset.value = val
+        }
+
+        // 搜索资产
+        const searchAsset = val => {
+            searchText.value = val
+        }
+
         return {
             assetsInfo,
             accountList,
@@ -185,7 +215,9 @@ export default {
             goTransfer,
             riskLevelMap,
             goRecord,
-            customerInfo
+            customerInfo,
+            changeState,
+            searchAsset
         }
     }
 }

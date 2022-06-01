@@ -7,6 +7,7 @@ const lang = getCookie('lang') || 'zh-CN'
 const basePath = '/' + (location.pathname.split('/')[1] || lang) + '/'
 const router = createRouter({
     history: createWebHistory(basePath),
+    scrollBehavior: () => ({ top: 0 }),
     routes
 })
 

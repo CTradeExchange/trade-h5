@@ -98,6 +98,9 @@ export function localSet (key, val) {
 export function localGet (key) {
     return localStorage.getItem(key)
 }
+export function localRemove (key) {
+    return localStorage.removeItem(key)
+}
 export function sessionSet (key, val) {
     return sessionStorage.setItem(key, val)
 }
@@ -360,8 +363,8 @@ function isElement (node) {
     const ELEMENT_NODE_TYPE = 1
     return (
         node.tagName !== 'HTML' &&
-    node.tagName !== 'BODY' &&
-    node.nodeType === ELEMENT_NODE_TYPE
+        node.tagName !== 'BODY' &&
+        node.nodeType === ELEMENT_NODE_TYPE
     )
 }
 // 获取父层的滚动DOM
@@ -377,4 +380,13 @@ export function getScrollParent (el, root) {
     }
 
     return root
+}
+
+// 排序
+export function compare (property) {
+    return function (a, b) {
+        var value1 = a[property]
+        var value2 = b[property]
+        return value1 - value2
+    }
 }

@@ -122,7 +122,11 @@
         "fundPurchase": "基金申購",
         "fundRedemption": "基金贖回",
         "transfer": "划轉",
-        "fundRules": "交易規則"
+        "fundRules": "交易規則",
+        "noticeTitle": "公告消息",
+        "notice": "公告",
+        "msg": "系统消息",
+        "msgCustomer": "個人消息"
     },
     "search": {
         "keywords": "請匯入產品名稱/程式碼/拼音搜索",
@@ -436,6 +440,7 @@
         "pendingPriceError": "掛單價格不正確",
         "handicap": "槃口",
         "nullAssets": "沒有該資產賬戶",
+        "noAssets": "暂无資產",
         "yi": "以",
         "huan": "還",
         "daihuan": "待還",
@@ -490,9 +495,10 @@
         "multilpSettingTip1": "過高的杠杆會增加倉位強平風險，請注意自身風險承受級別，合理設定杠杆",
         "saveSetting": "儲存設定",
         "noFeature": "暫不支持該功能",
-        "purchaseRedeemBtn": "申/贖",
+        "purchaseRedeemBtn": "申購",
         "productEtfTip": "ETF是一種特殊的開放式基金，投資者可以像買賣加密貨幣一樣，在現貨市場買賣ETF基金份額；同時，投資者也可向基金管理公司申購或贖回ETF份額",
-        "quantity": "數量(手)"
+        "quantity": "數量(手)",
+        "loginOrRegister": "登錄 或 註冊"
     },
     "bizType": {
         "2": "市價平倉",
@@ -602,7 +608,9 @@
         "transferTip6": "划轉金額無法小於0",
         "transferSuccess": "划轉成功",
         "transferAsset": "划轉資產",
-        "assets": "資產賬戶"
+        "assets": "資產賬戶",
+        "hideAsset": "隱藏0資產",
+        "searchAsset":"搜索資產"
     },
     "record": {
         "repaymentAmount": "還款數量",
@@ -801,7 +809,31 @@
         "applyDetail": "申購明細",
         "applyAssets": "申購資產",
         "redeemDetail": "贖回明細",
-        "redeemAssetsTitle": "贖回資產"
+        "redeemAssetsTitle": "贖回資產",
+        "deductRuletit1": "费用类别",
+        "deductRuletxt1": "申购费",
+        "deductRuletxt2": "管理费",
+        "deductRuletxt3": "(每年)",
+        "deductRuletxt4": "赎回费",
+        "deductRuledesc": "基金管理费指基金管理人管理基金资产所收取的报酬.基金管理费从基金资产中每日{time}结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
+        "deductRuledesc2": "赎回费指赎回基金的时候产生的手续费，一次性收取"
+    },
+    "aboutUs": {
+        "introduceTitle":  "關於我們",
+        "introduce1": "Vitatoken於2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 獲得許可，有金融科技解決方案和加密貨幣交易牌照。",
+        "introduce2": "Vitatoken是全球首個加密貨幣基金交易平台。Vitatoken未來將支持不同的基金管理人在平台上發行基金，讓用戶可以按需購買基金。",
+        "introduce3": "旨在讓每個人的加密貨幣之旅更輕鬆。 Vitatoken提供加密貨幣交易和加密貨幣基金。目標是提高用戶的回報概率並降低加密貨幣投資的風險。更多功能和支持即將推出。",
+        "licenseTitle": "Vitatoken已獲得CEZA虛擬貨幣交易所官方證書",
+        "servicesTitle": "基礎服務",
+        "guide": "新手教學",
+        "trading": "現貨交易",
+        "issuance": "基金發行",
+        "ETFTrade": "ETF交易",
+        "indexFund": "指數基金",
+        "assistingTools": "輔助工具", 
+        "newsUpdates": "最新資訊",
+        "visionsTitle": "願景",
+        "visionsText": "我們的願景是幫助所有人輕鬆參與加密貨幣市場，我們像維他命那樣，是重要組成部分，使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，提高獲利概率，從而在這個快速變化的市場中賺錢。"
     },
     "api": {
         "title": "API管理",
@@ -847,5 +879,10 @@
         "editHelpTxt": "讀取權限是指用戶僅能通過此API進行查詢賬戶信息，資金流程及訂單信息等只讀操作</br>提現權限是指用戶可通過此API進行提現操作</br>交易權限指用戶可通過此API進行下單、撤單等交易操作",
         "phoneSmsTips": "請獲取動態手機驗證碼",
         "emailSmsTips": "請獲取動態郵箱驗證碼"
+    },
+    "notice": {
+        "poptitle": "最新公告",
+        "detailHeader": "公告消息详情",
+        "readAll":"全部已读"
     }
 }

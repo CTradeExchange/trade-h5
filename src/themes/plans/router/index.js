@@ -80,7 +80,6 @@ const routes = [
                 component: () => import(/* webpackChunkName: "order" */ '../views/order/order.vue'),
                 meta: {
                     title: 'route.order',
-                    roles: ['User'],
                 }
             },
             {
@@ -273,7 +272,8 @@ const routes = [
         name: 'List',
         component: () => import(/* webpackChunkName: "otherpage" */ '../views/orderList/list.vue'),
         meta: {
-            title: ''
+            title: '',
+            roles: ['User'],
         }
     },
     {
@@ -367,6 +367,7 @@ const lang = getCookie('lang') || 'zh-CN'
 const basePath = '/' + (location.pathname.split('/')[1] || lang) + '/'
 const router = createRouter({
     history: createWebHistory(basePath),
+    scrollBehavior: () => ({ top: 0 }),
     routes
 })
 

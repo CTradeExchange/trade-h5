@@ -2,9 +2,12 @@
     <div v-if='fund' class='pageWrapp'>
         <LayoutTop :back='true' :menu='false'>
             <template #right>
-                <router-link class='text' href='javascript:;' to='/fundRules?direction=sell'>
+                <!-- <router-link class='text' href='javascript:;' to='/fundRules?direction=sell'>
                     {{ $t('fundInfo.redeemRules1') }}
-                </router-link>
+                </router-link> -->
+                <span class='text' @click='goFundRulesPage'>
+                    {{ $t('fundInfo.redeemRules1') }}
+                </span>
             </template>
         </LayoutTop>
         <div class='currencyBar'>
@@ -118,9 +121,12 @@
             </div>
             <div v-if="activeCurrency === 'self'" class='notice'>
                 {{ $t('fundInfo.t2Tip2') }}
-                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
+                <!-- <router-link class='toRule' href='javascript:;' to='/fundRules?direction=sell'>
                     {{ $t('fundInfo.viewRule') }}
-                </router-link>
+                </router-link> -->
+                <span class='toRule' @click='goFundRulesPage'>
+                    {{ $t('fundInfo.viewRule') }}
+                </span>
             </div>
         </div>
 
@@ -263,6 +269,16 @@ const submitHandler = () => {
                     }
                 })
             }).catch(() => {})
+        }
+    })
+}
+
+const goFundRulesPage = () => {
+    router.push({
+        path: '/fundRules',
+        query: {
+            direction: 'sell',
+            fundId: fundId
         }
     })
 }

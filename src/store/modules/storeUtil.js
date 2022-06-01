@@ -1,3 +1,22 @@
+import BigNumber from 'bignumber.js'
+
+/** 价格转点数  点数=价差/（Point*大点比率）
+ * 点差小数位显示规则：
+    根据大点比率进行显示，大点比率的值一般为1（10的0次方）、10（10的1次方）、100（10的2次方）、1000（10的3次方）
+    则点差的小数位分别对应为0位、1位、2位、3位
+    例如：EURUSD卖价：1.19323 ，买价：1.19341，大点比率为10，则点差=（1.19341-1.19323）/10*0.00001=1.8
+ */
+export function priceToPip (price, product) {
+    if (product && product.hasOwnProperty('pointRatio')) {
+        const spDigit = String(product.pointRatio || 0).length - 1 // 点差小数位
+        const pip = BigNumber(0.1).pow(product.price_digits).times(product.pointRatio) // 1pip=point*大点比率
+        if (!parseFloat(pip)) return ''
+        return BigNumber(price).div(pip).toFixed(spDigit)
+    } else {
+        return ''
+    }
+}
+
 // 根据玩法板块创建产品列表
 export function createListByPlans (plans) {
     const planMap = {}
@@ -106,4 +125,38 @@ function assetsIncludes (a, b) {
     a = a.split(',')
     b = b.split(',')
     return b.every(cur => a.includes(cur))
+}
+
+// 处理产品标签
+export const fillProductLabel = (product) => {
+    const labelsArr = product.labels?.split(',') ?? []
+    product.isIndex = labelsArr.includes('index') // 指数产品
+    product.isCryptocurrency = labelsArr.includes('cryptocurrency') // 加密货币
+    product.isFX = labelsArr.includes('FX') // 外汇产品
+    product.isCommodites = labelsArr.includes('commodites') // 商品
+}
+
+// 处理成交记录的最新价
+export const handlerDealLastPrice = (data, dataPrev, product) => {
+    const yesterday_close_price = product.yesterday_close_price
+    const upDownAmount = BigNumber(data.price).minus(yesterday_close_price).toFixed(product.symbolDigits) // 涨跌额
+    const upDownAmount_pip = priceToPip(upDownAmount, product) // 涨跌额(点)
+    const upDownWidthTemp = BigNumber(upDownAmount).div(yesterday_close_price).times(100).toFixed(2)
+    const upDownWidth = upDownWidthTemp > 0 ? '+' + upDownWidthTemp + '%' : upDownWidthTemp + '%' // 涨跌幅
+    const upDownColor = parseFloat(upDownAmount) === 0 ? 'grayColor' : (parseFloat(upDownAmount) > 0 ? 'riseColor' : 'fallColor')
+    const price_color = BigNumber(data.price).eq(dataPrev.price) ? (dataPrev.price_color || 'grayColor') : BigNumber(data.price).lt(dataPrev.price) ? 'fallColor' : 'riseColor'
+    return {
+        ...data,
+        price_color,
+        upDownAmount,
+        upDownAmount_pip,
+        upDownWidth,
+        upDownColor,
+        price_pre: dataPrev.price,
+        // dealTime: "1653963451717"
+        // price: "325.33"
+        // symbolId: "15"
+        // trade_direction: "1"
+        // volume: "12.244"
+    }
 }

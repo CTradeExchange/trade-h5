@@ -263,7 +263,7 @@ const selectionChange = (list) => {
     selectList.value = list
     if (list.length > 0) {
         // 获取基金产品赎回总金额
-        queryFundRedeemMoney()
+        // queryFundRedeemMoney()
         currency.value = list[0].currencyRedeem
     } else {
         totalLot.value = 0

@@ -31,6 +31,14 @@
         <positionList v-if="current === 'position'" :show-header='false' />
         <!-- 资产 -->
         <div v-if="current === 'assets'" class='assets-list'>
+            <!-- 资产搜索 -->
+            <AssetFilter
+                :hide-asset='hideAsset'
+                :search-text='tradeSearchMap[tradeType]'
+                @changeState='changeState'
+                @searchAsset='searchAsset'
+            />
+            <van-empty v-if='accountList.length === 0' :description='$t("trade.noAssets")' image='/images/empty.png' />
             <assetsItem v-for='account in accountList' :key='account.accountId' class='block' :data='account' />
         </div>
     </div>
@@ -40,19 +48,22 @@
 import trustItem from '@plans/modules/trust/trustItem.vue'
 import assetsItem from '@plans/modules/assets/assetsItem.vue'
 import dealList from '@plans/modules/deal/dealList.vue'
+import AssetFilter from '@plans/components/assetFilter.vue'
 import positionList from '@plans/modules/positionList/positionList.vue'
 import { reactive, toRefs, watch, computed } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { tradeRecordList } from '@/api/user'
+import { localGet, debounce, localSet, isEmpty } from '@/utils/util'
 
 export default {
     components: {
         trustItem,
         assetsItem,
         dealList,
-        positionList
+        positionList,
+        AssetFilter
     },
     props: {
         // 玩法类型
@@ -78,11 +89,28 @@ export default {
             // bizTypeText
             bizTypeText: {},
             // 需要订阅的产品symbolKey集合
-            productKyes: []
+            productKyes: [],
+            hideAsset: JSON.parse(localGet('hideAsset')),
+            searchText: '',
+            tradeSearchMap: {}
         })
 
         // 账户列表
-        const accountList = computed(() => store.state._user.customerInfo.accountList.filter(el => Number(el.tradeType) === Number(props.tradeType)))
+        const accountList = computed(() => {
+            const accountList = store.state._user?.customerInfo?.accountList || []
+            const list = accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
+            const searchText = state.tradeSearchMap[props.tradeType] || ''
+            if (state.hideAsset) {
+                if (Number(props.tradeType) === 3) {
+                    return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.toUpperCase()))
+                } else if (Number(props.tradeType) === 5) {
+                    return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.toUpperCase()))
+                }
+            }
+            return list.filter(item => item.currency.toUpperCase().includes(searchText.toUpperCase())) || []
+        })
+
+        const customerInfo = computed(() => store.state._user.customerInfo)
         // 当前委托、当前挂单数据
         const pendingList = computed(() => store.state._trade.pendingList[props.tradeType] || [])
 
@@ -153,14 +181,17 @@ export default {
                     break
                 case 'assets':
                     // 每次切换资产页面拉取用户信息
-                    store.dispatch('_user/findCustomerInfo', false)
-                    getAssetsInfo()
+                    if (customerInfo.value) {
+                        store.dispatch('_user/findCustomerInfo', false)
+                        getAssetsInfo()
+                    }
                     break
             }
         }
 
         // 获取成交记录数据
         function getDealRecord () {
+            if (!customerInfo.value) return
             const params = {
                 current: 1,
                 size: 10,
@@ -235,13 +266,25 @@ export default {
             emit('subscribe', state.productKyes)
         }
 
+        // 隐藏0资产事件
+        const changeState = val => {
+            state.hideAsset = val
+        }
+
+        // 搜索资产
+        const searchAsset = val => {
+            state.tradeSearchMap[props.tradeType] = val
+        }
+
         return {
             ...toRefs(state),
             changeTab,
             goList,
             init,
             pendingList,
-            accountList
+            accountList,
+            searchAsset,
+            changeState
         }
     }
 }
@@ -285,8 +328,7 @@ export default {
     }
 }
 .assets-list {
-    margin-top: rem(20px);
-    padding: 0 rem(20px);
+    padding: rem(20px);
     .block {
         margin-bottom: rem(20px);
         border-radius: 4px;

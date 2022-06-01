@@ -123,8 +123,12 @@
         "MFA_check": "谷歌安全驗證",
         "download": "下載",
         "ranking": "排行榜",
-        "about": "關於我們"
-	},
+        "about": "關於我們",
+        "noticeTitle": "公告消息",
+        "notice": "公告",
+        "msg": "系统消息",
+        "msgCustomer": "個人消息"
+    },
     "historyList": {
         "noMore": "沒有更多了"
     },
@@ -757,7 +761,9 @@
         "transferTip5": "划轉金額無法小於最小可划轉金額",
         "transferTip6": "划轉金額無法小於0",
         "transferSuccess": "划轉成功",
-        "confirmClose": "確認平倉"
+        "confirmClose": "確認平倉",
+        "hideAsset": "隱藏0資產",
+        "searchAsset": "搜索資產"
     },
     "transRecords": {
         "searchPlaceholder": "請匯入關鍵字搜索",
@@ -781,7 +787,8 @@
             "title": "基金作業專區",
             "buy": "申購管理",
             "ransom": "贖回管理",
-            "standard": "下單執行標准"
+            "standard": "下單執行標准",
+            "deduction": "管理費扣減記錄"
         },
         "executeStatus": {
             "0": "未確認",
@@ -856,6 +863,22 @@
             "tip2": "匯入下單比例",
             "tip3": "暫未設定下單執行標准，請添加！",
             "tip5": "所有下單比例加起來無法大於100%"
+        },
+        "deduction": {
+            "waitRecord": "待扣減記錄",
+            "doneRecord": "已扣減記錄",
+            "date": "扣減日期",
+            "column1": "管理費扣減日期(UTC)",
+            "column2": "應扣金額",
+            "column3": "扣款狀態",
+            "column4": "扣減金額",
+            "deductSuceess": "成功",
+            "deductFail": "失敗",
+            "deductPopTitle": "扣減確認",
+            "deductPopTxt1": "總扣減金額",
+            "tip1": "USDT資產可用餘額不足",
+            "tip2": "管理費扣減成功",
+            "deductBtn": "執行扣減"
         }
     },
     "fundInfo": {
@@ -1010,7 +1033,14 @@
         "applyAmount": "申購金額",
         "applyFees": "申購手續費",
         "redeemFees": "贖回手續費",
-        "redeemAmount": "贖回金額"
+        "redeemAmount": "贖回金額",
+        "deductRuletit1": "費用類別",
+        "deductRuletxt1": "申購費",
+        "deductRuletxt2": "管理費",
+        "deductRuletxt3": "(每年)",
+        "deductRuletxt4": "贖回費",
+        "deductRuledesc": "基金管理費指基金管理人管理基金資產所收取的報酬。基金管理費從基金資產中每日{time}結算，結算後的基金淨值已經扣除相應費用，無需投資者在每筆交易中另行支付。",
+        "deductRuledesc2": "贖回費指贖回基金的時候產生的手續費，一次性收取"
     },
     "funds": {
         "fundShare": "基金份額",
@@ -1075,7 +1105,8 @@
             "text3": "閱讀白皮書（PDF）",
             "text4": "V10 指數基金",
             "text5": "降低門檻、分散投資、優化配置、動態調整...... <br />您所需要的一切均由專業的基金經理打理，而您只需要坐享其成",
-            "text6": "閱讀白皮書（PDF）"
+            "text6": "閱讀白皮書（PDF）",
+            "text7": "馬上投資"
         },
         "portfolio": {
             "text1": "立即建立您的加密貨幣投資組合",
@@ -1114,16 +1145,15 @@
         "title": "隨時隨地開啟交易",
         "subTitle": "下載Vitatoken用戶端，所有交易盡在手中。",
         "android": "下載安卓端",
-        "ios": "下載蘋果端"
+        "ios": "下載蘋果端",
+        "google": "從Google Play下載"
     },
     "aboutUs": {
-        "introduceTitle":  {
-            "about": "關於",
-            "us": "我們"
-        },
+        "introduceTitle":  "關於我們",
         "introduce1": "Vitatoken於2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 獲得許可，有金融科技解決方案和加密貨幣交易牌照。",
         "introduce2": "Vitatoken是全球首個加密貨幣基金交易平台。Vitatoken未來將支持不同的基金管理人在平台上發行基金，讓用戶可以按需購買基金。",
         "introduce3": "旨在讓每個人的加密貨幣之旅更輕鬆。 Vitatoken 提供加密貨幣交易和加密貨幣基金。目標是提高用戶的回報概率並降低加密貨幣投資的風險。更多功能和支持即將推出。",
+        "licenseTitle": "Vitatoken已獲得CEZA虛擬貨幣交易所官方證書",
         "servicesTitle": "基礎服務",
         "guide": "新手教學",
         "trading": "現貨交易",
@@ -1133,10 +1163,7 @@
         "assistingTools": "輔助工具", 
         "newsUpdates": "最新資訊",
         "visionsTitle": "願景",
-        "visionsTextCell1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場，",
-        "visionsTextCell2": "我們像維他命那樣，是重要組成部分，",
-        "visionsTextCell3": "使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，",
-        "visionsTextCell4": "提高獲利概率，從而在這個快速變化的市場中賺錢。"
+        "visionsText": "我們的願景是幫助所有人輕鬆參與加密貨幣市場，我們像維他命那樣，是重要組成部分，使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，提高獲利概率，從而在這個快速變化的市場中賺錢。"
     },
     "api": {
         "title": "API管理",
@@ -1183,5 +1210,12 @@
         "editHelpTxt": "讀取權限是指用戶僅能通過此API進行查詢賬戶信息，資金流程及訂單信息等只讀操作</br>提現權限是指用戶可通過此API進行提現操作</br>交易權限指用戶可通過此API進行下單、撤單等交易操作",
         "phoneSmsTips": "請獲取動態手機驗證碼",
         "emailSmsTips": "請獲取動態郵箱驗證碼"
+    },
+    "notice": {
+        "poptitle": "最新公告",
+        "detailHeader": "公告消息详情",
+        "allReadedOk": "設置全部已讀成功！",
+        "readAll":"全部已读",
+        "detailTxt":"详情"
     }
 }

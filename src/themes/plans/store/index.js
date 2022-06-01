@@ -31,7 +31,8 @@ export default createStore({
         supportLanguages: supportLanguages,
         countryList: [],
         cacheViews: ['Layout'],
-        currencyList: []
+        currencyList: [],
+        businessConfig: '' // 业务渠道自定义配置
     },
     getters: {
         productActived (state) {
@@ -126,6 +127,9 @@ export default createStore({
         },
         Update_supportLanguages (state, data) {
             state.supportLanguages = data
+        },
+        Update_businessConfig (state, data) {
+            state.businessConfig = data
         }
     },
     actions: {

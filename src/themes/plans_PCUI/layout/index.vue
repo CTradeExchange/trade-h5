@@ -19,10 +19,13 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, reactive, toRefs, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import topNav from './topNav'
-import footerNav from './footer.vue'
+import footerNav from '../modules/footer/footer.vue'
+
+import { localRemove } from '@/utils/util'
+
 export default {
     name: 'Layout',
     components: {
@@ -38,8 +41,16 @@ export default {
     setup () {
         const store = useStore()
         const cacheViews = computed(() => store.state.cacheViews)
+        const state = reactive({
+            noticePopShow: false
+        })
+
+        onUnmounted(() => {
+            // localRemove('noticeParams')
+        })
         return {
             cacheViews,
+            ...toRefs(state)
         }
     }
 }

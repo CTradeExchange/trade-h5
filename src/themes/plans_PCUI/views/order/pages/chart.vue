@@ -18,8 +18,8 @@
         </div>
 
         <div class='item range'>
-            <p :class='product?.cur_color'>
-                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.symbolDigits) : '--' }}
+            <p v-if='dealLastPrice' :class='dealLastPrice?.price_color'>
+                {{ dealLastPrice?.price ? parseFloat(dealLastPrice?.price).toFixed(product.symbolDigits) : '--' }}
             </p>
             <p>
                 <span :class='product?.rolling_upDownColor'>
@@ -260,7 +260,7 @@ import EtfIcon from '@planspc/components/etfIcon.vue'
 import KIcon from './components/icons/kIcon.vue'
 import StudyList from './studyList.vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
-import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
+import { MAINSTUDIES, SUBSTUDIES, VolumeStudy } from '@/components/tradingview/datafeeds/userConfig/config'
 import Loading from '@/components/loading.vue'
 import { ElMessage } from 'element-plus'
 
@@ -420,6 +420,7 @@ export default {
                 state.isOptional = val
             },
         })
+        const dealLastPrice = computed(() => store.state._quote.dealLastPrice)
 
         watch(() => isSelfSymbol.value, val => {
             state.isOptional = !!val
@@ -478,7 +479,7 @@ export default {
 
         // 实时更新买卖价线
         watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
-            state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
+            state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time, dealLastPrice.value.volume)
 
             state.onChartReadyFlag && unref(chartRef).updateLineData({
                 buyPrice: product.value.buy_price,
@@ -657,10 +658,23 @@ export default {
         }
 
         // 设置图表设置缓存
-        const locChartConfig = JSON.parse(localGet('chartConfig'))
+        let locChartConfig = JSON.parse(localGet('chartConfig'))
         const initChartData = () => {
+            locChartConfig = JSON.parse(localGet('chartConfig'))
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
+
+            // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
+            const canUseVolume = !product.value.isFX && !product.value.isCommodites
+            console.log(canUseVolume, isEmpty(locChartConfig))
+            // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
+            if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
+                SUBSTUDIES.unshift(VolumeStudy)
+            } else if (!canUseVolume) {
+                const volumeIndex = SUBSTUDIES.findIndex(el => el.name === 'Volume')
+                if (volumeIndex > -1) SUBSTUDIES.splice(volumeIndex, 1)
+            }
+            state.sideStudyList = SUBSTUDIES.slice(0, 10)
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -707,6 +721,10 @@ export default {
             } else {
                 state.mainStudy = JSON.parse(locChartConfig.mainStudy)?.name
                 state.subStudy = JSON.parse(locChartConfig.subStudy)?.name
+                if (state.subStudy === 'Volume' && !canUseVolume) {
+                    state.subStudy = SUBSTUDIES[0].name
+                    localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                }
 
                 state.klineType = locChartConfig.chartType
                 state.settingList = locChartConfig.lineSetList
@@ -724,7 +742,7 @@ export default {
                         chartType: locChartConfig.chartType, // 图表类型
                         showSeriesTitle: false, // K线标题
                         upColor: style.value.riseColor,
-                        downColor: style.value.fallColor
+                        downColor: style.value.fallColor,
 
                     },
                     indicators: [
@@ -867,6 +885,7 @@ export default {
             addOptional,
             isSelfSymbol,
             formatAmount,
+            dealLastPrice,
             contractRoute
         }
     }

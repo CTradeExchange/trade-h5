@@ -68,6 +68,37 @@
                     ...
                 </p>
             </section>
+            <section class='block'>
+                <h2 class='title'>
+                    {{ $t('fundInfo.deductRuletit1') }}
+                </h2>
+                <h3 class='title1'>
+                    {{ $t('fundInfo.deductRuletxt1') }}
+                </h3>
+                <div v-if='fundData.value' class=''>
+                    <van-row v-for='(item,index) in fundData.value.purchaseCurrencySetting' :key='index' class='txt-row child'>
+                        <van-col span='12'>
+                            {{ item.currencyCode === ('self'||'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
+                        </van-col>
+                        <van-col align='right' span='12'>
+                            {{ item.purchaseFeeProportion? mulData(item.purchaseFeeProportion,100):0 }}%
+                        </van-col>
+                    </van-row>
+                </div>
+                <van-row class='txt-row noborder'>
+                    <van-col span='12'>
+                        <b>{{ $t('fundInfo.deductRuletxt2') }}</b>
+                    </van-col>
+                    <van-col align='right' span='12'>
+                        <span v-if='fundData.value !== undefined'>
+                            {{ fundData.value.managementFee? mulData(fundData.value.managementFee,100):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
+                        </span>
+                    </van-col>
+                </van-row>
+                <p class='text'>
+                    {{ $t('fundInfo.deductRuledesc',{ time: dailySettlementTime.value }) }}
+                </p>
+            </section>
         </div>
 
         <!-- 赎回规则 -->
@@ -145,15 +176,79 @@
                     ...
                 </p>
             </section>
+
+            <section class='block'>
+                <h2 class='title'>
+                    {{ $t('fundInfo.deductRuletit1') }}
+                </h2>
+                <h3 class='title1'>
+                    {{ $t('fundInfo.deductRuletxt4') }}
+                </h3>
+                <div v-if='fundData.value.redemptionCurrencySetting !== undefined' class=''>
+                    <van-row v-for='(item,index) in fundData.value.redemptionCurrencySetting' :key='index' class='txt-row child'>
+                        <van-col span='12'>
+                            {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
+                        </van-col>
+                        <van-col align='right' span='12'>
+                            {{ item.redemptionFeeProportion ? mulData(item.redemptionFeeProportion,100):0 }}%
+                        </van-col>
+                    </van-row>
+                </div>
+                <p class='text'>
+                    {{ $t('fundInfo.deductRuledesc2') }}
+                </p>
+            </section>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { mul } from '@/utils/calculation'
+import { getFundInfo } from '@/api/fund'
+import { isEmpty } from '@/utils/util'
+
 const route = useRoute()
 const active = ref(route.query.direction === 'buy' ? 0 : 1)
+const { fundId } = route.query
+const fundData = ref({})
+const { t } = useI18n({ useScope: 'global' })
+const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || window.dayjs().utcOffset()
+const dailySettlementTime = ref('')
+
+// 获取基金产品详情
+const getFundInfoFn = () => {
+    getFundInfo({ fundId }).then(res => {
+        if (res.check()) {
+            console.log(res)
+            if (res.data) {
+                fundData.value = ref(res.data)
+                calcTimeH(res.data.dailySettlementTime)
+            }
+            console.log(fundData.value)
+        }
+    })
+}
+
+const mulData = (value) => {
+    return mul(value, 100)
+}
+
+const calcTimeH = (value) => {
+    if (!isEmpty(value)) {
+        dailySettlementTime.value = ref(window.dayjs().utc().startOf('day').utcOffset(utcOffset).add(parseInt(value), 'minute').format('HH:mm'))
+    } else {
+        dailySettlementTime.value = ref('')
+    }
+}
+
+onBeforeMount(() => {
+    // 获取基金产品详情
+    getFundInfoFn()
+})
+
 </script>
 
 <style lang="scss" scoped>
@@ -186,6 +281,20 @@ const active = ref(route.query.direction === 'buy' ? 0 : 1)
             &.indent {
                 padding-left: 22px;
             }
+        }
+        .txt-row {
+            padding: rem(20px) 0 rem(20px) 0;
+            font-size: rem(20px);
+            border-bottom: 1px solid var(--lineColor);
+            &.child {
+                padding-left: rem(40px);
+            }
+            &.noborder {
+                border-bottom: none;
+            }
+        }
+        .title1 {
+            font-size: rem(26px);
         }
     }
     .n {

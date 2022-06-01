@@ -2,9 +2,12 @@
     <div v-if='fund' class='pageWrapp'>
         <LayoutTop :back='true' :menu='false'>
             <template #right>
-                <router-link class='text' href='javascript:;' to='/fundRules?direction=buy'>
+                <!-- <router-link class='text' href='javascript:;' to='/fundRules?direction=buy'>
                     {{ $t('fundInfo.applyRules1') }}
-                </router-link>
+                </router-link> -->
+                <span class='text' @click='goFundRulesPage'>
+                    {{ $t('fundInfo.applyRules1') }}
+                </span>
             </template>
         </LayoutTop>
         <div class='currencyBar'>
@@ -116,16 +119,22 @@
             </ul>
             <div class='notice'>
                 {{ $t('fundInfo.applyCalculateTip') }}
-                <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
+                <!-- <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
                     {{ $t('fundInfo.viewRule') }}
-                </router-link>
+                </router-link> -->
+                <!-- <router-link class='toRule' href='javascript:;' to='/fundRules?direction=buy'>
+                    {{ $t('fundInfo.viewRule') }}
+                </router-link> -->
+                <span class='toRule' @click='goFundRulesPage'>
+                    {{ $t('fundInfo.viewRule') }}
+                </span>
             </div>
         </div>
     </div>
 
     <div class='footerBtn'>
-        <van-button block :disabled='loading || fund.canPurchase!==1' size='normal' @click='submitHandler'>
-            {{ fund.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
+        <van-button block :disabled='loading || fund?.canPurchase!==1' size='normal' @click='submitHandler'>
+            {{ fund?.canPurchase === 1 ? $t('fundInfo.buy'): $t('fundInfo.disabledBuy') }}
         </van-button>
     </div>
 
@@ -276,6 +285,16 @@ const submitHandler = () => {
                 .catch(() => {
                     // on cancel
                 })
+        }
+    })
+}
+
+const goFundRulesPage = () => {
+    router.push({
+        path: '/fundRules',
+        query: {
+            direction: 'buy',
+            fundId: fundId
         }
     })
 }

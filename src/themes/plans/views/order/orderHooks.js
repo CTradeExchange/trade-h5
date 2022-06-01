@@ -14,6 +14,7 @@ export default function hooks (state) {
         let account = ''
         if (!product.value) return account
         const accountList = customerInfo.value?.accountList || []
+        if(accountList.length===0) return account
         const tradeType = parseInt(product.value?.tradeType)
         if ([1, 2].includes(tradeType)) {
             account = accountList.find(el => el.tradeType === tradeType)

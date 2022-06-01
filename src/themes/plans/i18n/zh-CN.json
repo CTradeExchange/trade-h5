@@ -123,7 +123,11 @@
         "fundRedemption": "基金赎回",
         "transfer": "划转",
         "fundRules": "交易规则",
-        "spotTrade": "现货交易"
+        "spotTrade": "现货交易",
+        "noticeTitle": "公告消息",
+        "notice": "公告",
+        "msg": "系统消息",
+        "msgCustomer": "个人消息"
     },
     "search": {
         "keywords": "请输入产品名称/代码/拼音搜索",
@@ -437,6 +441,7 @@
         "pendingPriceError": "挂单价格不正确",
         "handicap": "盘口",
         "nullAssets": "没有该资产账户",
+        "noAssets": "暂无资产",
         "yi": "以",
         "huan": "还",
         "daihuan": "待还",
@@ -491,10 +496,11 @@
         "multilpSettingTip1": "过高的杠杆会增加仓位强平风险，请注意自身风险承受级别，合理设置杠杆",
         "saveSetting": "保存设置",
         "noFeature": "暂不支持该功能",
-        "purchaseRedeemBtn": "申/赎",
+        "purchaseRedeemBtn": "申购",
         "productEtfTip": "ETF是Exchange Traded Funds简称，是一种特殊的开放式基金，投资者可以像买卖加密货币一样，在现货市场买卖基金份额；同时，投资者也可向基金管理公司申购或赎回基金份额",
         "quantity": "数量(手)",
-        "upDown": "24H涨跌幅"
+        "upDown": "24H涨跌幅",
+        "loginOrRegister": "登录 或 注册"
     },
     "bizType": {
         "2": "市价平仓",
@@ -604,7 +610,9 @@
         "transferTip6": "划转金额不能小于0",
         "transferSuccess": "划转成功",
         "transferAsset": "划转资产",
-        "assets": "资产账户"
+        "assets": "资产账户",
+        "hideAsset": "隐藏0资产",
+        "searchAsset":"搜索资产"
     },
     "record": {
         "repaymentAmount": "还款数量",
@@ -728,7 +736,7 @@
         "fundRedeemFormula5": "申购支付费用=申购份额*基金净值*（1+手续费率）",
         "fundRedeemFormula6": "使用一篮子资产申购，支付费用计算：",
         "fundRedeemFormula7": "资产{number}支付费用：",
-        "fundRedeemFormula8": "资产{number}=投资构成1/基金份额*申购份额*（1+手续费率）",
+        "fundRedeemFormula8": "资产{number}=投资构成{number}/基金份额*申购份额*（1+手续费率）",
         "fundRedeemFormula9": "赎回USDT时将会扣除USDT手续费，赎回一篮子资产时，会根据比例在每一项资产中扣除手续费",
         "fundRedeemFormula10": "赎回USDT的计算",
         "fundRedeemFormula11": "收到的USDT=赎回份额*基金净值*（1-手续费率%）",
@@ -814,7 +822,14 @@
         "applyDetail": "申购明细",
         "applyAssets": "申购资产",
         "redeemDetail": "赎回明细",
-        "redeemAssetsTitle": "赎回资产"
+        "redeemAssetsTitle": "赎回资产",
+        "deductRuletit1": "费用类别",
+        "deductRuletxt1": "申购费",
+        "deductRuletxt2": "管理费",
+        "deductRuletxt3": "(每年)",
+        "deductRuletxt4": "赎回费",
+        "deductRuledesc": "基金管理费指基金管理人管理基金资产所收取的报酬.基金管理费从基金资产中每日{time}结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
+        "deductRuledesc2": "赎回费指赎回基金的时候产生的手续费，一次性收取"
     },
     "home": {
         "quick": {
@@ -850,7 +865,8 @@
             "text3": "阅读白皮书（PDF）",
             "text4": "V10加密指数基金 ",
             "text5": "V10是一种自主性、高绩效、低成本加密货币指数基金，由10种领先加密货币组成。",
-            "text6": "阅读白皮书（PDF）"
+            "text6": "阅读白皮书（PDF）",
+            "text7": "马上投资"
         },
         "portfolio": {
             "text1": "立即创建您的加密货币投资组合",
@@ -893,26 +909,21 @@
         "ios": "下载苹果端"
     },
     "aboutUs": {
-        "introduceTitle":  {
-            "about": "關於",
-            "us": "我們"
-        },
-        "introduce1": "Vitatoken於2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 獲得許可，有金融科技解決方案和加密貨幣交易牌照。",
-        "introduce2": "Vitatoken是全球首個加密貨幣基金交易平台。Vitatoken未來將支持不同的基金管理人在平台上發行基金，讓用戶可以按需購買基金。",
-        "introduce3": "旨在讓每個人的加密貨幣之旅更輕鬆。 Vitatoken 提供加密貨幣交易和加密貨幣基金。目標是提高用戶的回報概率並降低加密貨幣投資的風險。更多功能和支持即將推出。",
-        "servicesTitle": "基礎服務",
-        "guide": "新手教學",
-        "trading": "現貨交易",
-        "issuance": "基金發行",
+        "introduceTitle":  "关于我们",
+        "introduce1": "Vitatoken于2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 获得许可，有金融科技解決方案和加密货币交易牌照。",
+        "introduce2": "Vitatoken是全球首个加密货币基金交易平台。Vitatoken未來将支持不同的基金管理人在平台上发行基金，让用户可以按需购买基金。",
+        "introduce3": "旨在让每个人的加密货币之旅更轻松。 Vitatoken提供加密货币交易和加密货币基金。目标是提高用户的回报概率并降低加密货币投资的风险。更多功能和支持即將推出。",
+        "licenseTitle": "Vitatoken已获得CEZA虚拟货币交易所官方证书",
+        "servicesTitle": "基础服务",
+        "guide": "新手教学",
+        "trading": "现货交易",
+        "issuance": "基金发行",
         "ETFTrade": "ETF交易",
-        "indexFund": "指數基金",
-        "assistingTools": "輔助工具", 
-        "newsUpdates": "最新資訊",
-        "visionsTitle": "願景",
-        "visionsTextCell1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場，",
-        "visionsTextCell2": "我們像維他命那樣，是重要組成部分，",
-        "visionsTextCell3": "使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，",
-        "visionsTextCell4": "提高獲利概率，從而在這個快速變化的市場中賺錢。"
+        "indexFund": "指数基金",
+        "assistingTools": "辅助工具", 
+        "newsUpdates": "最新资讯",
+        "visionsTitle": "愿景",
+        "visionsText": "我们的愿景是帮助所有人轻松参与加密货币市场，我们像维他命那样，是重要组成部分，使用我们平台发行或者买卖加密货币基金，降低参与门槛，提高获利概率，从而在这个快速变化的市场中赚钱。"
     },
     "api": {
         "title": "API管理",
@@ -958,5 +969,10 @@
         "editHelpTxt": "读取权限是指用户仅能通过此API进行查询账户信息，资金流程及订单信息等只读操作</br>提现权限是指用户可通过此API进行提现操作</br>交易权限指用户可通过此API进行下单、撤单等交易操作",
         "phoneSmsTips": "请获取动态手机验证码",
         "emailSmsTips": "请获取动态邮箱验证码"
+    },
+    "notice": {
+        "poptitle": "最新公告",
+        "detailHeader": "公告消息详情",
+        "readAll":"全部已读"
     }
 }

@@ -123,7 +123,11 @@
         "download": "Download",
         "ranking": "Rankings",
         "MFA_check": "Google Security Verification",
-        "about": "About us"
+        "about": "About us",
+        "noticeTitle": "Notice & Message",
+        "notice": "Notice",
+        "msg": "System",
+        "msgCustomer": "Personal"
     },
     "historyList": {
         "noMore": "No more"
@@ -598,8 +602,8 @@
         "saveSetting": "Save",
         "offer": "Quote",
         "etfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
-        "purchaseOrRedemptionTip": "Subscription / Redeem: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to.",
-        "purchaseOrRedemption": "Subscription / Redeem",
+        "purchaseOrRedemptionTip": "Purchase / Redeem: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to.",
+        "purchaseOrRedemption": "Purchase / Redeem",
         "noFeature": "This feature is not currently supported",
         "material": "Fund Facts"
     },
@@ -717,7 +721,9 @@
         "transferTip5": "Transfer amount cannot less than minimum available transfer amount",
         "transferTip6": "Transfer amount cannot less than 00",
         "transferSuccess": "Tranfer success",
-        "confirmClose": "Confirm close"
+        "confirmClose": "Confirm close",
+        "hideAsset": "Hide 0 assets",
+        "searchAsset": "Search"
     },
     "transRecords": {
         "searchPlaceholder": "Name/Symbol",
@@ -741,7 +747,8 @@
             "title": "Fund Area",
             "buy": "Purchase management",
             "ransom": "Redeem management",
-            "standard": "Order execution standard"
+            "standard": "Order execution standard",
+            "deduction": "Management Fee Record"
         },
         "executeStatus": {
             "0": "Unconfirmed",
@@ -816,6 +823,22 @@
             "tip2": "Enter proportion",
             "tip3": "The order execution standard has not been set yet, please add！",
             "tip5": "The sum of all percentages cannot be greater than 100%"
+        },
+        "deduction": {
+            "waitRecord": "To be deducted",
+            "doneRecord": "Record",
+            "date": "Date",
+            "column1": "Fee Deduction Date (UTC)",
+            "column2": "Amount to be deducted",
+            "column3": "Status",
+            "column4": "Deduct Amount",
+            "deductSuceess": "Success",
+            "deductFail": "Failed",
+            "deductPopTitle": "Confirm to deduct",
+            "deductPopTxt1": "Total Deduct Amount",
+            "tip1": "USDT balance insufficient ",
+            "tip2": "Fee deduct success",
+            "deductBtn": "Execute Deduct"
         }
     },
     "fundInfo": {
@@ -971,7 +994,15 @@
         "applyAmount": "Purchase amount",
         "applyFees": "Purchase fee",
         "redeemAmount": "Redeem amount",
-        "redeemFees": "Redeem fee"
+        "redeemFees": "Redeem fee",
+
+        "deductRuletit1": "Fee type",
+        "deductRuletxt1": "Purchase Fee",
+        "deductRuletxt2": "Management Fee",
+        "deductRuletxt3": "(Annually )",
+        "deductRuletxt4": "Redeem Fee",
+        "deductRuledesc": "Management fee refers to the cost of managing the fund from fund manager. Management fee is settled from fund asset each date {time}, NAV reflects the fee deducted, no further fee deduct from each trade.",
+        "deductRuledesc2": "Redeem fee refers to fee generated from redeem, which collect once only . "
     },
     "funds": {
         "fundShare": "Fund Share",
@@ -1032,8 +1063,9 @@
             "text2": "The tracking index of the V10 Crypto Index Fund，has outperformed Bitcoin 71% of the time since its establishment",
             "text3": "White Paper (PDF)",
             "text4": "V10 Crypto Index Fund",
-            "text5": "V10 is an autonomous, high-performing, low-cost cryptocurrency index fund. Consists of 10 leading cryptocurrencies.",
-            "text6": "White Paper (PDF)"
+            "text5": "The top 10 cryptocurrencies form  V10, it reflects the overall trend in cryptocurrency with asset transparency.",
+            "text6": "White Paper (PDF)",
+            "text7": "Invest Now"
         },
         "portfolio": {
             "text1": "Create your cryptocurrency portfolio today",
@@ -1075,15 +1107,13 @@
         "ios": "Download for iphone"
     },
     "aboutUs": {
-        "introduceTitle": {
-            "about": "About ",
-            "us": " Us"
-        },
+        "introduceTitle": "About Us",
         "introduce1": "Vitatoken is licensed in CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) under the legal entity of Dragon Empire Developments Limited in 6th September, 2021, for fintech solution and cryptocurrency exchange regulations. ",
         "introduce2": "Vitatoken is the world first-ever cryptocurrency fund trading platform. In the future, Vitatoken will be supporting different fund managers issuing fund on the platform, which allow users to purchase fund as needed.",
         "introduce3": "Aims to make everyone’s cryptocurrency journey easier. Vitatoken offers crypto trading and cryptocurrency funds. They target to raise user’s probability of returns and lower the risk on cryptocurrency investment. More functions and supports are coming soon.",
-        "our": "Our ",
-        "servicesTitle": " Services",
+        "licenseTitle1": "Vitatoken has obtained the official certificate of ",
+        "licenseTitle2": "CEZA virtual currency exchange license",
+        "servicesTitle": "Our Services",
         "guide": "Beginners’Guide",
         "trading": "Spot Trading",
         "issuance": "Fund Issuance",
@@ -1091,11 +1121,8 @@
         "indexFund": "Index Fund",
         "assistingTools": "Assisting Tools", 
         "newsUpdates": "News & Updates",
-        "visionsTitle": " Visions",
-        "visionsTextCell1": "Entering cryptocurrency is challenging.",
-        "visionsTextCell2": "Our mission is to create an opportunity for everyone to participle in the crypto market. ",
-        "visionsTextCell3": "Vitamin is vital, just like Vitatoken.",
-        "visionsTextCell4": "We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
+        "visionsTitle": "Our Visions",
+        "visionsText": "Entering cryptocurrency is challenging.Our mission is to create an opportunity for everyone to participle in the crypto market.Vitamin is vital, just like Vitatoken.We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
     },
     "api": {
         "title": "API Manage",
@@ -1142,5 +1169,12 @@
         "editHelpTxt": "Read permission means user can only query the account information, fund flow and order details via this API</br>Withdrawal permission allows users to withdraw through the current API Key.</br>Trading rights means that users can use this API to place orders, cancel orders and other trading operations",
         "phoneSmsTips": "Please get the dynamic mobile phone verification code",
         "emailSmsTips": "Please get the dynamic email verification code"
+    },
+    "notice": {
+        "poptitle": "Latest Notice",
+        "detailHeader": "Detail",
+        "allReadedOk": "Set all read successfully！",
+        "readAll":"Set read all",
+        "detailTxt":"details"
     }
 }

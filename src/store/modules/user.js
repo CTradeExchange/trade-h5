@@ -260,7 +260,7 @@ export default {
                 return res
             })
         },
-        // 如果和没有添加过自选产品，自动添加默认自选产品
+        // 如果没有添加过自选产品，自动添加默认自选产品
         addCustomerOptionalDefault ({ state, rootGetters, dispatch, commit }) {
             if (state.customerInfo.optional === 1) return Promise.resolve()
             const tradeTypeCurrencyList = []

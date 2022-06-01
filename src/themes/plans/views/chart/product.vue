@@ -32,8 +32,8 @@
         <div class='productInfo'>
             <div v-if='product?.symbolDigits' class='hd'>
                 <div class='hd-left'>
-                    <p class='cur_price' :class='product?.cur_color'>
-                        {{ product.cur_price ? parseFloat(product?.cur_price).toFixed(product?.symbolDigits) :'' }}
+                    <p v-if='dealLastPrice' class='cur_price' :class='dealLastPrice?.price_color'>
+                        {{ dealLastPrice.price ? parseFloat(dealLastPrice.price).toFixed(product?.symbolDigits) :'' }}
                     </p>
                 </div>
                 <div class='others'>
@@ -263,7 +263,7 @@
                 </div>
             </div>
         </div>
-        <div class='chart-wrap'>
+        <div v-if='firstDetail' class='chart-wrap'>
             <tv
                 v-if='initialValue'
                 ref='chartRef'
@@ -359,11 +359,11 @@ import StudyList from './components/studyList.vue'
 import { useI18n } from 'vue-i18n'
 import { computed, reactive, toRefs, ref, unref, watch, onUnmounted, onMounted, nextTick, onBeforeUnmount } from 'vue'
 import KIcon from './icons/kIcon.vue'
-import { MAINSTUDIES, SUBSTUDIES } from '@/components/tradingview/datafeeds/userConfig/config'
+import { MAINSTUDIES, SUBSTUDIES, VolumeStudy } from '@/components/tradingview/datafeeds/userConfig/config'
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
-import { formatAmount } from '@/utils/calculation'
+import { formatAmount, pow } from '@/utils/calculation'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
@@ -397,6 +397,7 @@ export default {
         const { t, locale } = useI18n({ useScope: 'global' })
         const klineTypeDropdown = ref(null)
         const collect = ref(null)
+        const firstDetail = ref(false)
         const store = useStore()
         const candleKTypeList = [
             // {
@@ -586,13 +587,19 @@ export default {
         // 颜色值
         const style = computed(() => store.state.style)
 
+        // 业务配置
+        const businessConfig = computed(() => store.state.businessConfig)
+
         // 订阅产品
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
             QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
+            const curDigits = pow(0.1, product.value?.symbolDigits)
+            QuoteSocket.deal_subscribe(getSymbolId(), 1, curDigits, getTradeType(), 1) // 该页面因为要实时更新成交量，所以改成订阅deal_subscribe成交记录显示最新价
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
+        const dealLastPrice = computed(() => store.state._quote.dealLastPrice)
 
         // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
         const fundtoken = computed(() => {
@@ -843,13 +850,31 @@ export default {
         }
 
         // 图表创建完成回调
-        const onChartReady = () => {
+        const onChartReady = (tv) => {
             state.onChartReadyFlag = true
+
+            // 自动更新指标
+            // const chart = tv.widget.activeChart()
+            // setTimeout(() => {
+            //     const allStudies = chart.getAllStudies()
+            //     const chartConfig = JSON.parse(localGet('chartConfig'))
+            //     if (!chartConfig) return false
+            //     if (allStudies.length === 0 && (chartConfig.mainStudy || chartConfig.subStudy)) {
+            //         if (chartConfig.mainStudy) {
+            //             createStudy('mainStudy', JSON.parse(chartConfig.mainStudy).name)
+            //         } else if (chartConfig.subStudy) {
+            //             createStudy('subStudy', JSON.parse(chartConfig.subStudy).name)
+            //         }
+            //     }
+            // }, 1000)
         }
 
         // 实时更新买卖价线
-        watch(() => [product.value?.buy_price, product.value?.sell_price, product.value?.cur_price, product.value?.tick_time], (newValues) => {
-            state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time)
+        watch(() => [dealLastPrice.value?.price], (newValues) => {
+            if (newValues) {
+                // console.log('dealLastPrice.value.volume', dealLastPrice.value.volume)
+                state.onChartReadyFlag && unref(chartRef).setTick(dealLastPrice.value.price, dealLastPrice.value.dealTime, dealLastPrice.value.volume)
+            }
 
             state.onChartReadyFlag && unref(chartRef).updateLineData({
                 buyPrice: product.value?.buy_price,
@@ -914,6 +939,16 @@ export default {
                 downColor = '#26a69a'
             }
 
+            // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
+            const canUseVolume = !product.value?.isFX && !product.value?.isCommodites
+            // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
+            if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
+                SUBSTUDIES.unshift(VolumeStudy)
+            } else if (!canUseVolume) {
+                const volumeIndex = SUBSTUDIES.findIndex(el => el.name === 'Volume')
+                if (volumeIndex > -1) SUBSTUDIES.splice(volumeIndex, 1)
+            }
+            state.sideStudyList = SUBSTUDIES.slice(0, 5)
             if (isEmpty(locChartConfig) || !locChartConfig.chartType) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -965,6 +1000,10 @@ export default {
             } else {
                 state.mainStudy = JSON.parse(locChartConfig.mainStudy)?.name
                 state.subStudy = JSON.parse(locChartConfig.subStudy)?.name
+                if (state.subStudy === 'Volume' && !canUseVolume) {
+                    state.subStudy = SUBSTUDIES[0].name
+                    localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                }
 
                 state.klineType = locChartConfig.chartType
                 state.settingList = locChartConfig.lineSetList
@@ -977,7 +1016,6 @@ export default {
                     state.activeTab = candleKTypeList.find(item => String(item.ktype) === String(locChartConfig.resolution)).ktype
                     state.moreKType = { title: t('chart.more'), ktype: null }
                 }
-
                 state.initConfig = ref({
                     property: {
                         showLastPrice: locChartConfig.showLastPrice, // 现价线
@@ -1005,6 +1043,7 @@ export default {
                     }
                 })
             }
+            firstDetail.value = true
         }
 
         // 图表初始值
@@ -1094,28 +1133,32 @@ export default {
 
         // 跳转到基金的产品详情
         const fundtokenLink = () => {
-            if (!unref(fundtoken)) {
-                return Toast(t('trade.noFeature'))
-            }
-            if (isUniapp && uni) {
-                return uni.postMessage({
-                    data: {
-                        action: 'message',
-                        type: 'fund',
-                        params: {
-                            fundId: fundtoken.value.fundId
+            if (unref(businessConfig)?.v10Link) {
+                router.push(unref(businessConfig).v10Link)
+            } else {
+                if (!unref(fundtoken)) {
+                    return Toast(t('trade.noFeature'))
+                }
+                if (isUniapp && uni) {
+                    return uni.postMessage({
+                        data: {
+                            action: 'message',
+                            type: 'fund',
+                            params: {
+                                fundId: fundtoken.value.fundId
+                            }
                         }
-                    }
-                })
+                    })
+                }
+                router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
             }
-            router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
         }
 
-        // 初始化图表配置
-        initChartData()
-
         // 获取产品详情
-        store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() })
+        store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() }).then(() => {
+            // 初始化图表配置
+            initChartData()
+        })
 
         // 获取基金列表
         getFundPage()
@@ -1157,6 +1200,7 @@ export default {
                 if (query.symbolId) {
                     symbolId.value = parseInt(query.symbolId)
                     tradeType.value = parseInt(query.tradeType)
+                    store.dispatch('_quote/querySymbolInfo', { symbolId: getSymbolId(), tradeType: getTradeType() })
                     store.commit('_quote/Update_productActivedID', `${query.symbolId}_${query.tradeType}`)
                     await nextTick()
                     const product = store.getters.productActived
@@ -1228,6 +1272,8 @@ export default {
             formatAmount,
             plansLen,
             isUniapp,
+            firstDetail,
+            dealLastPrice,
             lang
         }
     }
@@ -1410,9 +1456,9 @@ export default {
                 flex-direction: column;
                 margin-left: rem(40px);
                 &:first-child {
-                    margin-left: 0;
-                    width: 43%;
                     flex: none;
+                    width: 43%;
+                    margin-left: 0;
                 }
                 &:first-child {
                     margin-right: rem(5px);
@@ -1421,9 +1467,9 @@ export default {
                     display: flex;
                     flex-direction: row;
                     flex-wrap: nowrap;
+                    align-items: center;
                     justify-content: space-between;
                     white-space: nowrap;
-                    align-items: center;
                     &.priceBottom {
                         margin-bottom: rem(10px);
                     }
@@ -1794,19 +1840,17 @@ export default {
                 margin-right: rem(20px);
             }
             .fundTradeBtn {
-                width: rem(140px);
                 flex: none;
+                width: rem(140px);
                 margin-left: rem(20px);
-                white-space: normal;
-                word-break: break-word;
-                text-align: center;
-                background: none;
                 color: var(--primary);
+                white-space: normal;
+                text-align: center;
+                word-break: break-word;
+                background: none;
                 border: 1px solid var(--primary);
-                &.en-US{
-                    padding-top: rem(18px);
-                    line-height: 1.2;
-                     .text{
+                &.en-US {
+                    .text {
                         font-size: rem(26px);
                     }
                 }

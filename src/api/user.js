@@ -1114,3 +1114,94 @@ export function editCustomerApiSave (data) {
         data
     })
 }
+
+/* 获取个人消息列表 */
+export function getCustomerMsgList (data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewMsgPage',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取个人消息详情 */
+export function getCustomerMsgDetail (data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewMsgDetail',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取公告列表 */
+export function getNoticeList (data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewNoticePage',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 设置消息已读 */
+export function setMsgReaded (data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.msgRead',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 消息全部已读 */
+export function setMsgAllReaded (data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.msgAllRead',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取公告详情 */
+export function getNoticeDetail (data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewNoticeDetail',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取公告弹窗 */
+export function getNoticePop (data) {
+    return request({
+        url: '/global/message.app.CompanyNoticeApiService.customerViewNoticePopup',
+        method: 'post',
+        toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}

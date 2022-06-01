@@ -1,4 +1,6 @@
 <template>
+    <!-- 资产搜索 -->
+    <AssetFilter v-if='[3,5].includes(tradeType)' @changeState='changeState' @searchAsset='searchAsset' />
     <customTable
         :component-refs='componentRefs'
         :data='tableData'
@@ -35,6 +37,9 @@ import Sltp from '@planspc/views/assets/components/sltp.vue'
 import MultipleSet from '@planspc/components/multipleSet.vue'
 import MultipleSetCross from '@planspc/components/multipleSetCross.vue'
 import { useRoute, useRouter } from 'vue-router'
+import AssetFilter from '@planspc/components/assetFilter.vue'
+import { localGet } from '@/utils/util'
+
 const componentRefs = ref({})
 const props = defineProps({
     tradeType: {
@@ -49,13 +54,28 @@ const props = defineProps({
 const router = useRouter()
 const route = useRoute()
 const store = useStore()
-// 用户信息
+
+const hideAsset = ref(JSON.parse(localGet('hideAsset')))
+const searchText = ref('')
 
 const product = computed(() => store.getters.productActived)
 const customerInfo = computed(() => store.state._user.customerInfo)
 // 持仓列表
-// 资产列表
-const accountList = computed(() => customerInfo.value?.accountList?.filter(el => Number(el.tradeType) === props.tradeType) || [])
+
+// 账户列表
+const accountList = computed(() => {
+    const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
+
+    if (hideAsset.value) {
+        if (Number(props.tradeType) === 3) {
+            return list.filter(item => (item.balance > 0 || item.liabilitiesPrincipal > 0) && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+        } else if (Number(props.tradeType) === 5) {
+            return list.filter(item => item.balance > 0 && item.currency.toUpperCase().includes(searchText.value.toUpperCase()))
+        }
+    }
+    return list.filter(item => item.currency.toUpperCase().includes(searchText.value.toUpperCase())) || []
+})
+
 const positionList = computed(() => store.state._trade.positionList[props.tradeType] || [])
 const tableData = computed(() => {
     if ([1, 2].includes(props.tradeType)) {
@@ -96,6 +116,16 @@ const initData = () => {
     } else if ([3, 5, 9].includes(val)) {
         store.dispatch('_user/queryCustomerAssetsInfo', { tradeType: val })
     }
+}
+
+// 隐藏0资产事件
+const changeState = val => {
+    hideAsset.value = val
+}
+
+// 搜索资产
+const searchAsset = val => {
+    searchText.value = val
 }
 
 watch(() => props.tradeType, () => {

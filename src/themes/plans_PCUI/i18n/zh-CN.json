@@ -124,7 +124,11 @@
         "MFA_check": "谷歌安全验证",
         "download": "下载",
         "ranking": "排行榜",
-        "about": "关于我们"
+        "about": "关于我们",
+        "noticeTitle": "公告消息",
+        "notice": "公告",
+        "msg": "系统消息",
+        "msgCustomer": "个人消息"
     },
     "historyList": {
         "noMore": "没有更多了"
@@ -719,7 +723,9 @@
         "transferTip5": "划转金额不能小于最小可划转金额",
         "transferTip6": "划转金额不能小于0",
         "transferSuccess": "划转成功",
-        "confirmClose": "确认平仓"
+        "confirmClose": "确认平仓",
+        "hideAsset": "隐藏0资产",
+        "searchAsset": "搜索资产"
     },
     "transRecords": {
         "searchPlaceholder": "请输入关键字搜索",
@@ -743,7 +749,8 @@
             "title": "基金操作专区",
             "buy": "申购管理",
             "ransom": "赎回管理",
-            "standard": "下单执行标准"
+            "standard": "下单执行标准",
+            "deduction": "管理费扣减记录"
         },
         "executeStatus": {
             "0": "未确认",
@@ -818,6 +825,22 @@
             "tip2": "输入下单比例",
             "tip3": "暂未设置下单执行标准，请添加！",
             "tip5": "所有下单比例加起来不能大于100%"
+        },
+        "deduction": {
+            "waitRecord": "待扣减记录",
+            "doneRecord": "已扣减记录",
+            "date": "扣减日期",
+            "column1": "管理费扣减日期(UTC)",
+            "column2": "应扣金额",
+            "column3": "扣款状态",
+            "column4": "扣减金额",
+            "deductSuceess": "成功",
+            "deductFail": "失败",
+            "deductPopTitle": "扣减确认",
+            "deductPopTxt1": "总扣减金额",
+            "tip1": "USDT资产可用余额不足",
+            "tip2": "管理费扣减成功",
+            "deductBtn": "执行扣减"
         }
     },
     "fundInfo": {
@@ -971,8 +994,14 @@
         "applyAmount": "申购金额",
         "redeemAmount": "赎回金额",
         "applyFees": "申购手续费",
-        "redeemFees": "赎回手续费"
-
+        "redeemFees": "赎回手续费",
+        "deductRuletit1": "费用类别",
+        "deductRuletxt1": "申购费",
+        "deductRuletxt2": "管理费",
+        "deductRuletxt3": "(每年)",
+        "deductRuletxt4": "赎回费",
+        "deductRuledesc": "基金管理费指基金管理人管理基金资产所收取的报酬。基金管理费从基金资产中每日{time}结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
+        "deductRuledesc2": "赎回费指赎回基金的时候产生的手续费，一次性收取"
     },
     "funds": {
         "fundShare": "基金份额",
@@ -1036,7 +1065,8 @@
             "text3": "阅读白皮书（PDF）",
             "text4": "V10加密指数基金",
             "text5": "V10是一种自主性、高绩效、低成本加密货币指数基金，由10种领先加密货币组成。",
-            "text6": "阅读白皮书（PDF）"
+            "text6": "阅读白皮书（PDF）",
+            "text7": "马上投资"
         },
         "portfolio": {
             "text1": "立即创建您的加密货币投资组合",
@@ -1078,26 +1108,21 @@
         "ios": "下载苹果端"
     },
     "aboutUs": {
-        "introduceTitle":  {
-            "about": "關於",
-            "us": "我們"
-        },
-        "introduce1": "Vitatoken於2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 獲得許可，有金融科技解決方案和加密貨幣交易牌照。",
-        "introduce2": "Vitatoken是全球首個加密貨幣基金交易平台。Vitatoken未來將支持不同的基金管理人在平台上發行基金，讓用戶可以按需購買基金。",
-        "introduce3": "旨在讓每個人的加密貨幣之旅更輕鬆。 Vitatoken 提供加密貨幣交易和加密貨幣基金。目標是提高用戶的回報概率並降低加密貨幣投資的風險。更多功能和支持即將推出。",
-        "servicesTitle": "基礎服務",
-        "guide": "新手教學",
-        "trading": "現貨交易",
-        "issuance": "基金發行",
+        "introduceTitle":  "关于我们",
+        "introduce1": "Vitatoken于2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 获得许可，有金融科技解決方案和加密货币交易牌照。",
+        "introduce2": "Vitatoken是全球首个加密货币基金交易平台。Vitatoken未來将支持不同的基金管理人在平台上发行基金，让用户可以按需购买基金。",
+        "introduce3": "旨在让每个人的加密货币之旅更轻松。 Vitatoken提供加密货币交易和加密货币基金。目标是提高用户的回报概率并降低加密货币投资的风险。更多功能和支持即將推出。",
+        "licenseTitle": "Vitatoken已获得CEZA虚拟货币交易所官方证书",
+        "servicesTitle": "基础服务",
+        "guide": "新手教学",
+        "trading": "现货交易",
+        "issuance": "基金发行",
         "ETFTrade": "ETF交易",
-        "indexFund": "指數基金",
-        "assistingTools": "輔助工具", 
-        "newsUpdates": "最新資訊",
-        "visionsTitle": "願景",
-        "visionsTextCell1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場，",
-        "visionsTextCell2": "我們像維他命那樣，是重要組成部分，",
-        "visionsTextCell3": "使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，",
-        "visionsTextCell4": "提高獲利概率，從而在這個快速變化的市場中賺錢。"
+        "indexFund": "指数基金",
+        "assistingTools": "辅助工具", 
+        "newsUpdates": "最新资讯",
+        "visionsTitle": "愿景",
+        "visionsText": "我们的愿景是帮助所有人轻松参与加密货币市场，我们像维他命那样，是重要组成部分，使用我们平台发行或者买卖加密货币基金，降低参与门槛，提高获利概率，从而在这个快速变化的市场中赚钱。"
     },
     "api": {
         "title": "API管理",
@@ -1144,5 +1169,12 @@
         "editHelpTxt": "读取权限是指用户仅能通过此API进行查询账户信息，资金流程及订单信息等只读操作</br>提现权限是指用户可通过此API进行提现操作</br>交易权限指用户可通过此API进行下单、撤单等交易操作",
         "phoneSmsTips": "请获取动态手机验证码",
         "emailSmsTips": "请获取动态邮箱验证码"
+    },
+    "notice": {
+        "poptitle": "最新公告",
+        "detailHeader": "公告消息详情",
+        "allReadedOk": "设置全部已读成功！",
+        "readAll":"全部已读",
+        "detailTxt":"详情"
     }
 }

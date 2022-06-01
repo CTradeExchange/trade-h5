@@ -23,6 +23,9 @@ export const getColumns = tradeTypeValue => {
     // 基金列表
     const fundList = ref([])
 
+    // 业务配置
+    const businessConfig = computed(() => store.state.businessConfig)
+
     /** 添加自选逻辑 */
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
     const isCollect = (tradeType, symbolId) => userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
@@ -75,16 +78,20 @@ export const getColumns = tradeTypeValue => {
     // 去基金
     const gotoFund = (event, product) => {
         event.stopPropagation()
-        const fund = fundList.value.find(el => el.shareTokenCode === product.baseCurrency)
-        if (fund) {
-            router.push({
-                name: 'Fund',
-                query: {
-                    fundId: product.fundId
-                }
-            })
+        if (unref(businessConfig)?.v10Link) {
+            router.push(unref(businessConfig).v10Link)
         } else {
-            Toast(t('trade.noFeature'))
+            const fund = fundList.value.find(el => el.shareTokenCode === product.baseCurrency)
+            if (fund) {
+                router.push({
+                    name: 'Fund',
+                    query: {
+                        fundId: product.fundId
+                    }
+                })
+            } else {
+                Toast(t('trade.noFeature'))
+            }
         }
     }
 

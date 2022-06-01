@@ -48,8 +48,8 @@ export default {
             query: {
                 purview: [],
                 tag: '',
-                originPage: '',
             },
+            originPage: '',
             params: {},
             editParams: {},
             isCreateOk: false, // 是否创建成功
@@ -90,8 +90,8 @@ export default {
             state.loading = true
             console.log(state.query)
             const params = state.query
-            delete params.originPage
-            delete params.purview
+            // delete params.originPage
+            // delete params.purview
             createCustomerApi(params).then(res => {
                 state.loading = false
                 console.log(res)
@@ -124,8 +124,8 @@ export default {
                 ...state.editParams,
                 ...state.query
             }
-            delete _params.originPage
-            delete _params.purview
+            // delete _params.originPage
+            // delete _params.purview
             console.log(_params)
             editCustomerApiSave(_params).then(res => {
                 state.loading = false
@@ -150,15 +150,18 @@ export default {
                 state.ggSafetyPopupShow = false
                 state.googleSafetyData.tag = state.query.tag
                 state.query = {
-                    ...state.query,
+                    purview: state.query.purview,
+                    tag: state.query.tag,
+                    originPage: state.query.originPage,
                     ...state.googleSafetyData,
                 }
                 console.log(state.query)
-                if (state.query.originPage === 'apiList') {
+                console.log('updateGoogleSafetyData:157')
+                if (state.originPage === 'apiList') {
                     handleSaveCheck()
                 }
 
-                if (state.query.originPage === 'apiEdit') {
+                if (state.originPage === 'apiEdit') {
                     handleEditSave()
                 }
             }
@@ -172,7 +175,7 @@ export default {
             state.params = route.query
             console.log(state.params)
             state.query.tag = route.query.tag
-            state.query.originPage = route.query.originPage
+            state.originPage = route.query.originPage
             if (route.query.editParams) {
                 state.editParams = JSON.parse(route.query.editParams)
             }
@@ -208,25 +211,25 @@ export default {
 
 <style lang="scss">
 @import '@/sass/mixin.scss';
-.custom-dialog{
+.custom-dialog {
     display: flex;
     flex-direction: column;
     height: 92%;
     overflow: hidden;
     background: var(--bgColor);
-    .header{
+    .header {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: space-between;
         padding: rem(37px) rem(30px) rem(50px);
-        .header-title{
-            font-size: rem(48px);
-            font-weight: bold;
+        .header-title {
             color: var(--color);
-        }
-        .icon_guanbi{
-            font-size: rem(30px);
             font-weight: bold;
+            font-size: rem(48px);
+        }
+        .icon_guanbi {
+            font-weight: bold;
+            font-size: rem(30px);
         }
     }
 }
@@ -234,7 +237,6 @@ export default {
 
 <style lang='scss' scoped>
 @import '@/sass/mixin.scss';
-
 .page-wrap {
     width: 100%;
     height: 100%;

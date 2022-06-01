@@ -124,7 +124,11 @@
         "transfer": "Transfer",
         "fundRules": "Trading Rule",
         "spotTrade": "Spot",
-        "MFA_check": "Google Security Verification"
+        "MFA_check": "Google Security Verification",
+        "noticeTitle": "Notice & Message",
+        "notice": "Notice",
+        "msg": "System",
+        "msgCustomer": "Personal"
     },
     "search": {
         "keywords": "Name/Symbol/Phonics",
@@ -438,6 +442,7 @@
         "pendingPriceError": "The order price is incorrect",
         "handicap": "Order Book",
         "nullAssets": "No account asset",
+        "noAssets": "No account asset",
         "yi": "Use",
         "huan": "Repay",
         "daihuan": "Outstanding",
@@ -492,10 +497,11 @@
         "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
         "saveSetting": "Save",
         "noFeature": "This feature is not currently supported",
-        "purchaseRedeemBtn": "Purchase Redeem",
+        "purchaseRedeemBtn": "Purchase",
         "productEtfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
         "quantity": "QTY(Lots)",
-        "upDown": "24H Change%"
+        "upDown": "24H Change%",
+        "loginOrRegister": "Login or Register"
     },
     "bizType": {
         "2": "Market close",
@@ -605,7 +611,9 @@
         "transferTip6": "The transfer amount cannot be less than0",
         "transferSuccess": "Transfer success",
         "transferAsset": "Transfer asset",
-        "assets": "Assets"
+        "assets": "Assets",
+        "hideAsset": "Hide 0 assets",
+        "searchAsset":"Search"
     },
     "record": {
         "repaymentAmount": "Repayment quantity",
@@ -807,7 +815,14 @@
         "applyDetail": "Purchase details",
         "applyAssets": "Purchase asset",
         "redeemDetail": "Redeem details",
-        "redeemAssetsTitle": "Redeem asset"
+        "redeemAssetsTitle": "Redeem asset",
+        "deductRuletit1": "Cost Category",
+        "deductRuletxt1": "Subscription fee",
+        "deductRuletxt2": "management fee",
+        "deductRuletxt3": "(Per year)",
+        "deductRuletxt4": "redemption fee",
+        "deductRuledesc": "Fund management fee refers to the remuneration charged by the fund manager for managing the fund assets. The fund management fee is settled from the fund assets at {time} every day, and the net value of the fund after settlement has already deducted the corresponding fees, and investors do not need to pay separately in each transaction.",
+        "deductRuledesc2": "Redemption fee refers to the handling fee incurred when redeeming the fund, which is charged at one time"
     },
     "home": {
         "quick": {
@@ -842,8 +857,9 @@
             "text2": "The tracking index of the V10 Crypto Index Fund，has outperformed Bitcoin 71% of the time since its establishment",
             "text3": "White Paper (PDF)",
             "text4": "V10 Crypto Index Fund",
-            "text5": "V10 is an autonomous, high-performing, low-cost cryptocurrency index fund. Consists of 10 leading cryptocurrencies.",
-            "text6": "White Paper (PDF)"
+            "text5": "The top 10 cryptocurrencies form  V10, it reflects the overall trend in cryptocurrency with asset transparency.",
+            "text6": "White Paper (PDF)",
+            "text7": "Invest Now"
         },
         "portfolio": {
             "text1": "Create your cryptocurrency portfolio today",
@@ -886,15 +902,12 @@
         "ios": "Download for iphone"
     },
     "aboutUs": {
-        "introduceTitle": {
-            "about": "About ",
-            "us": " Us"
-        },
+        "introduceTitle": "About Us",
         "introduce1": "Vitatoken is licensed in CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) under the legal entity of Dragon Empire Developments Limited in 6th September, 2021, for fintech solution and cryptocurrency exchange regulations. ",
         "introduce2": "Vitatoken is the world first-ever cryptocurrency fund trading platform. In the future, Vitatoken will be supporting different fund managers issuing fund on the platform, which allow users to purchase fund as needed.",
         "introduce3": "Aims to make everyone’s cryptocurrency journey easier. Vitatoken offers crypto trading and cryptocurrency funds. They target to raise user’s probability of returns and lower the risk on cryptocurrency investment. More functions and supports are coming soon.",
-        "our": "Our ",
-        "servicesTitle": " Services",
+        "licenseTitle": "Vitatoken has obtained the official certificate of CEZA virtual currency exchange license",
+        "servicesTitle": "Our Services",
         "guide": "Beginners’Guide",
         "trading": "Spot Trading",
         "issuance": "Fund Issuance",
@@ -902,11 +915,8 @@
         "indexFund": "Index Fund",
         "assistingTools": "Assisting Tools", 
         "newsUpdates": "News & Updates",
-        "visionsTitle": " Visions",
-        "visionsTextCell1": "Entering cryptocurrency is challenging.",
-        "visionsTextCell2": "Our mission is to create an opportunity for everyone to participle in the crypto market. ",
-        "visionsTextCell3": "Vitamin is vital, just like Vitatoken.",
-        "visionsTextCell4": "We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
+        "visionsTitle": "Our Visions",
+        "visionsText": "Entering cryptocurrency is challenging.Our mission is to create an opportunity for everyone to participle in the crypto market.Vitamin is vital, just like Vitatoken.We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
     },
     "api": {
         "title": "API Manage",
@@ -952,5 +962,10 @@
         "editHelpTxt": "Read permission means user can only query the account information, fund flow and order details via this API</br>Withdrawal permission allows users to withdraw through the current API Key.</br>Trading rights means that users can use this API to place orders, cancel orders and other trading operations",
         "phoneSmsTips": "Please get the dynamic mobile phone verification code",
         "emailSmsTips": "Please get the dynamic email verification code"
+    },
+    "notice": {
+        "poptitle": "Latest Notice",
+        "detailHeader": "Detail",
+        "readAll":"Set read all"
     }
 }

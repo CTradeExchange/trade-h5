@@ -44,7 +44,10 @@
                     </p>
                     <p class='ft'>
                         <van-popover v-if='item.weightRealValue' v-model:show='item.popover' placement='bottom-end' theme='dark'>
-                            <p style='padding: 5px 10px; white-space: nowrap;'>
+                            <p
+                                style='padding: 5px 10px;
+white-space: nowrap;'
+                            >
                                 {{ item.weightRealValue }}({{ item.previousPeriodWeightCompare }})
                             </p>
                             <template #reference>
@@ -82,7 +85,7 @@
 </template>
 
 <script setup>
-import { delayAwaitTime } from '@/utils/util'
+import { delayAwaitTime, localGet } from '@/utils/util'
 import { computed, inject, nextTick, onMounted, ref } from 'vue'
 import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
@@ -90,6 +93,7 @@ import BottomTip from './bottomTip.vue'
 import { useRoute } from 'vue-router'
 import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
+
 const fundId = inject('fundId')
 const { t } = useI18n({ useScope: 'global' })
 
@@ -101,6 +105,15 @@ const props = defineProps({
     symbolId: [String, Number],
 })
 
+// 判断主题颜色
+const { theme, isUniapp } = route.query
+let invertColor
+if (isUniapp) {
+    invertColor = theme === 'light' ? '#fff' : '#000'
+} else {
+    invertColor = localGet('invertColor') === 'light' ? '#fff' : '#000'
+}
+
 // 显示数据列表还是显示环形图
 const showBlock = ref('list') // chart 显示饼图  list 显示列表
 // 切换数据列表和环形图的显示
@@ -108,7 +121,7 @@ const switchAction = async () => {
     showBlock.value = showBlock.value === 'list' ? 'chart' : 'list'
     if (showBlock.value === 'chart') {
         await nextTick()
-        newPieDoughnutChart(chartPieDOM.value, chartData.value)
+        newPieDoughnutChart(chartPieDOM.value, chartData.value, { invertColor })
     }
 }
 
@@ -167,78 +180,77 @@ onMounted(async () => {
             chartXData.push(el.xAxisName)
         })
         assetPerformanceList.value = data
-        newBarChart(chartBarDOM.value, [chartXData, chartYData])
+        newBarChart(chartBarDOM.value, [chartXData, chartYData], { invertColor })
     })
 })
 </script>
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-.title{
+.title {
     font-size: rem(32px);
 }
-.rightSwitch{
+.rightSwitch {
     float: right;
     font-size: rem(28px);
     line-height: 1.5;
 }
-.assetsTitle{
+.assetsTitle {
     margin-top: rem(30px);
     color: var(--minorColor);
     font-size: rem(24px);
 }
-.assetsList{
+.assetsList {
     margin-top: rem(20px);
     font-size: rem(28px);
-    li{
+    li {
         line-height: rem(60px);
     }
-
 }
-.cellflex{
+.cellflex {
     display: flex;
     text-align: right;
-    .hd{
+    .hd {
         text-align: left;
     }
-    .bd{
+    .bd {
         flex: 1;
     }
-    .ft{
+    .ft {
         width: rem(300px);
     }
-    .small{
+    .small {
         font-size: rem(22px);
     }
 }
-.block{
+.block {
     margin-top: rem(40px);
     border-top: 6px solid var(--bgColor);
 }
-.chartPieDOM{
+.chartPieDOM {
     height: rem(400px);
 }
-.singleAssetTitle{
+.singleAssetTitle {
     padding: rem(30px) 0;
     font-size: rem(32px);
 }
-.chartBarDOM{
+.chartBarDOM {
     height: rem(500px);
 }
-.downArrow{
+.downArrow {
     display: inline-block;
     width: 0;
     height: 0;
     vertical-align: middle;
-    border:0 solid transparent;
-    border-radius: 3px;
-    border-width: 5px 5px 0 5px;
+    border: 0 solid transparent;
+    border-width: 5px 5px 0;
     border-top-color: var(--fallColor);
+    border-radius: 3px;
 }
-.upArrow{
-    @extend .downArrow;
-    border-width: 0 5px 5px 5px;
+.upArrow {
+    border-width: 0 5px 5px;
     border-top-color: transparent;
     border-bottom-color: var(--riseColor);
+    @extend .downArrow;
 }
 </style>

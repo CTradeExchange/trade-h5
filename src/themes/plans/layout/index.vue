@@ -24,11 +24,12 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute } from 'vue-router'
 import Top from './layoutTop.vue'
 import Bottom from './layoutBottom.vue'
+
 export default {
     name: 'Layout',
     components: {
@@ -42,6 +43,10 @@ export default {
         const navData = computed(() => store.state._base.wpNav.find(el => el.tag === 'nav'))
         store.dispatch('_base/getPageConfig', 'Nav').then(res => {
             store.commit('_base/UPDATE_wpNav', res)
+        })
+        onUnmounted(() => {
+            console.log("localRemove('noticeParams')")
+            // localRemove('noticeParams')
         })
         return {
             route,

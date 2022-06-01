@@ -391,7 +391,8 @@ const openApplyRecords = () => {
 
 // 打开规则弹窗
 const openRules = () => {
-    applyRulesDialogRef.value.open()
+    const fund = props.fund
+    applyRulesDialogRef.value.open(true, fund.fundId)
 }
 
 // 切换申购赎回

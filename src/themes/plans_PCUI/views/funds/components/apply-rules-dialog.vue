@@ -2,7 +2,6 @@
     <div class='dialog-layer'>
         <el-dialog
             v-model='show'
-            :before-close='close'
             :close-on-click-modal='false'
             :title="$t('fundInfo.applyRules')"
             width='520px'
@@ -74,20 +73,99 @@
                         ...
                     </p>
                 </div>
+                <div class='block'>
+                    <h2 class='title'>
+                        {{ $t('fundInfo.deductRuletit1') }}
+                    </h2>
+                    <h3 class='title1'>
+                        {{ $t('fundInfo.deductRuletxt1') }}
+                    </h3>
+                    <div v-if='fundData.value' class=''>
+                        <van-row v-for='(item,index) in purchaseCurrencySetting.value' :key='index' class='txt-row child'>
+                            <van-col span='12'>
+                                {{ item.currencyCode === ('self'|| 'SELF') ? $t('fundInfo.basketAssets') : item.currencyName }}
+                            </van-col>
+                            <van-col align='right' span='12'>
+                                {{ item.purchaseFeeProportion ? mulData(item.purchaseFeeProportion):0 }}%
+                            </van-col>
+                        </van-row>
+                        <van-row class='txt-row'>
+                            <van-col span='12'>
+                                {{ $t('fundInfo.deductRuletxt2') }}
+                            </van-col>
+                            <van-col align='right' span='12'>
+                                <span v-if='fundData.value !== undefined'>
+                                    {{ fundData.value.managementFee? mulData(fundData.value.managementFee,100):0 }}% {{ $t('fundInfo.deductRuletxt3') }}
+                                </span>
+                            </van-col>
+                        </van-row>
+                    </div>
+                    <p class='text'>
+                        {{ $t('fundInfo.deductRuledesc',{ time: dailySettlementTime.value }) }}
+                    </p>
+                </div>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script setup>
-import { ref, defineExpose } from 'vue'
+import { ref, defineExpose, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+import { isEmpty } from '@/utils/util'
+import { mul } from '@/utils/calculation'
+import { getFundInfo } from '@/api/fund'
+
 // 是否显示弹窗
 const show = ref(false)
+const fundId = ref()
+const purchaseCurrencySetting = ref({})
+const utcOffset = parseFloat(sessionStorage.getItem('utcOffset')) || window.dayjs().utcOffset()
+const dailySettlementTime = ref('')
 
 // 打开弹窗
-const open = () => {
-    show.value = true
+const open = (showType, id) => {
+    console.log(showType)
+    show.value = showType
+    fundId.value = id
+    getFundInfoFn()
 }
+const fundData = ref({})
+const { t } = useI18n({ useScope: 'global' })
+
+const calcTimeH = (value) => {
+    if (!isEmpty(value)) {
+        dailySettlementTime.value = ref(window.dayjs().utc().startOf('day').utcOffset(utcOffset).add(parseInt(value), 'minute').format('HH:mm'))
+    } else {
+        dailySettlementTime.value = ref('')
+    }
+}
+
+// 获取基金产品详情
+const getFundInfoFn = () => {
+    const param = {
+        fundId: fundId.value
+    }
+    getFundInfo(param).then(res => {
+        if (res.check()) {
+            if (res.data) {
+                fundData.value = ref(res.data)
+                purchaseCurrencySetting.value = ref(res.data.purchaseCurrencySetting)
+                calcTimeH(res.data.dailySettlementTime)
+            }
+        }
+    })
+}
+
+const mulData = (value) => {
+    return mul(value, 100)
+}
+
+onMounted(() => {
+    // 获取基金产品详情
+    // getFundInfoFn()
+})
 
 defineExpose({
     open
@@ -129,6 +207,23 @@ defineExpose({
                 padding-left: 22px;
             }
         }
+    }
+    .txt-row {
+        padding: rem(20px) 0 rem(20px) 0;
+        font-size: 14px;
+        border-bottom: 1px solid var(--lineColor);
+        &.child {
+            padding-left: rem(40px);
+        }
+    }
+    .title1 {
+        margin-top: 10px;
+        font-weight: normal;
+        font-size: 16px;
+    }
+    .title {
+        font-weight: normal;
+        font-size: 16px;
     }
 }
 </style>

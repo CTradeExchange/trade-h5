@@ -84,7 +84,7 @@ export default {
                     }
                 })
                 // 图表实例创建完成后回调
-                context.emit('onChartReady')
+                context.emit('onChartReady', chart.value)
                 cb()
             })
         }
@@ -138,8 +138,8 @@ export default {
             unref(chart).updateProperty(...args)
         }
         // 实时更新tick
-        const setTick = (price, time) => {
-            unref(chart).setTick(price, time)
+        const setTick = (price, time, volume) => {
+            unref(chart).setTick(price, time, volume)
         }
         // 重新初始化图表
         const reset = (newProps, cb) => {

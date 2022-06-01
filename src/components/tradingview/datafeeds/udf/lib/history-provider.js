@@ -36,21 +36,22 @@ class HistoryProvider {
         }
     }
     // 实时更新k线
-    async onTick(price, time){
+    async onTick(price, time, volume=0){
         if(!(this._previousBar && this._onTick)){
             return
         }
-
         let ticks = []
         const {_previousBar} = this
         if (isSameTime( this.symbolParams.resolution, _previousBar.time, time)) {
+            _previousBar.volume = parseFloat(volume) + parseFloat(_previousBar.volume || 0)
             ticks = [
                 {
-                    time: _previousBar.time,
+                    time: parseFloat(_previousBar.time),
                     open: _previousBar.open,
                     high: Math.max(_previousBar.high, price),
                     low: Math.min(_previousBar.low, price),
                     close: Number(price),
+                    volume: parseFloat(_previousBar.volume),
                 }
             ]
         } else {

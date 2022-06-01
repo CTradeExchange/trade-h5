@@ -221,7 +221,8 @@
         "24hLow": "24H最低",
         "24hNumber": "24H成交量",
         "24hAmount": "24H成交额",
-        "viewMore": "查看更多"
+        "viewMore": "查看更多",
+        "wallet": "錢包"
     },
     "faceAuth": {
         "faceDetectTip": "請正對手機，保持光線充足",
@@ -952,6 +953,23 @@
         "tradersTips": "賬戶持有人/ 交易員身份證件證明文件及個人肖像照",
         "mainTradersTips": "主賬戶持有人/交易員手持證件相",
         "infoList": "開始企業認證前,請準備以下文件"
+    },
+    "newHomeFooter":{ 
+        "product": "產品",
+        "trading": "現貨交易",
+        "fund": "加密基金",
+        "service": "服務",
+        "program": "新客活動",
+        "vip": "機構及VIP",
+        "customer": "在線客服",
+        "help": "幫助",
+        "faqs": "FAQs",
+        "terms": "條款條例",
+        "policy": "隱私政策",
+        "community": "社媒",
+        "aboutus": "關於我們",
+        "followus": "關注我們",
+        "fees": "費用"
     },
     "ranking": {
         "increaseRanking": "漲幅榜",

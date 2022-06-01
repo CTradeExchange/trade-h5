@@ -64,6 +64,19 @@ export function addOrder (data) {
     })
 }
 
+/* 设置杠杆倍数 */
+export function setCrossLevelNum (data) {
+    return request({
+        url: '/global/tradeapi.app.OrderApiService.setCrossLevelNum',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+            group: 'tradeApi'
+        },
+        data
+    })
+}
+
 /* 查看持仓列表 */
 export function queryPositionPage (data) {
     return request({

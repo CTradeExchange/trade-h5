@@ -375,7 +375,8 @@ const selectAssets = (item) => {
 
 // 打开规则弹窗
 const openRules = () => {
-    redeemRulesDialogRef.value.open()
+    const fund = props.fund
+    redeemRulesDialogRef.value.open(true, fund.fundId)
 }
 
 // 切换申购赎回
