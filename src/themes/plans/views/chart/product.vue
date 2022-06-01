@@ -363,7 +363,7 @@ import { MAINSTUDIES, SUBSTUDIES, VolumeStudy } from '@/components/tradingview/d
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
-import { formatAmount } from '@/utils/calculation'
+import { formatAmount, pow } from '@/utils/calculation'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
@@ -594,7 +594,8 @@ export default {
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
             QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
-            QuoteSocket.deal_subscribe(getSymbolId(), 1, product.value.symbolDigits, getTradeType(), 1) // 该页面因为要实时更新成交量，所以改成订阅deal_subscribe成交记录显示最新价
+            const curDigits = pow(0.1, product.value.symbolDigits)
+            QuoteSocket.deal_subscribe(getSymbolId(), 1, curDigits, getTradeType(), 1) // 该页面因为要实时更新成交量，所以改成订阅deal_subscribe成交记录显示最新价
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
