@@ -42,7 +42,7 @@ export default function ({ tradeType, categoryType, isSort = true }) {
 
         if (!customerInfo.value) { // 未登录
             // console.log(localSelfSymbolList)
-            console.log(unref(categoryType))
+            // console.log(unref(categoryType))
             if (unref(categoryType.value) === 0) {
                 const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
                 const obj = {}

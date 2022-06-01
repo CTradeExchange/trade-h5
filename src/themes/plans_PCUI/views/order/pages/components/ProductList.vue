@@ -108,7 +108,24 @@ const scrollBarWidth = ref(0)
 /** 添加自选逻辑 */
 const customerInfo = computed(() => store.state._user.customerInfo)
 const selfSymbolList = computed(() => store.state._user.selfSymbolList)
-const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
+// const isCollect = (tradeType, symbolId) => selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
+
+/** 添加自选逻辑 标星状态 */
+const isCollect = (tradeType, symbolId) => {
+    if (isEmpty(customerInfo.value)) {
+        const newId = symbolId + '_' + tradeType
+        if (localGet('localSelfSymbolList')) {
+            if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                return true
+            } else {
+                return false
+            }
+        }
+    } else {
+        return selfSymbolList.value[tradeType]?.find(el => el.symbolId === parseInt(symbolId))
+    }
+}
+
 const addOptional = ({ symbolId, tradeType }) => {
     // debugger
     if (!customerInfo.value) {

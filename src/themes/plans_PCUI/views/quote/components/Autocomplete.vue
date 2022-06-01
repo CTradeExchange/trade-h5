@@ -84,7 +84,7 @@ const selfSymbolList = computed(() => store.state._user.selfSymbolList)
 /** 添加自选逻辑 标星状态 */
 const isCollect = (tradeType, symbolId) => {
     if (isEmpty(customerInfo.value)) {
-        const newId = symbolId + '_' + tradeType
+        const newId = parseInt(symbolId) + '_' + tradeType
         if (localGet('localSelfSymbolList')) {
             if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
                 return true

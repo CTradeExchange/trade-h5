@@ -4,7 +4,10 @@
             <p class='name'>
                 <span>{{ product?.symbolName }}</span>
                 <van-popover v-model:show='showEtfPopover' theme='dark'>
-                    <p style='padding:10px; width:400px;'>
+                    <p
+                        style=' width: 400px;
+padding: 10px;'
+                    >
                         {{ $t('trade.etfTip') }}
                     </p>
                     <template #reference>
@@ -415,7 +418,19 @@ export default {
         // 产品信息
         const product = computed(() => store.getters.productActived)
         const isSelfSymbol = computed({
-            get: () => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)),
+            get: (val) => {
+                if (isEmpty(customerInfo.value)) {
+                    const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                    if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                        return true
+                    } else {
+                        return false
+                    }
+                    // console.log(localGet('localSelfSymbolList'), newId)
+                } else {
+                    return store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
+                }
+            },
             set: (val) => {
                 state.isOptional = val
             },
@@ -493,35 +508,56 @@ export default {
         // 添加自选
         const addOptional = () => {
             if (isEmpty(customerInfo.value)) {
-                ElMessage.warning(t('common.noLogin'))
-                return router.push('/login')
-            }
-            if (isSelfSymbol.value) {
-                removeCustomerOptional({
-                    symbolList: [product.value.symbolId],
-                    tradeType: product.value.tradeType
-                }).then(res => {
-                    if (res.check()) {
-                        isSelfSymbol.value = false
-                        store.dispatch('_user/queryCustomerOptionalList')
-                        ElMessage.success(t('trade.removeOptionalOk'))
-                    }
-                }).catch(err => {
-                })
+                // ElMessage.warning(t('common.noLogin'))
+                // return router.push('/login')
+
+                // 未登录 缓存到本地
+                var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+                const newId = symbolId + '_' + tradeType
+                if (localSelfSymbolList.indexOf(newId) !== -1) {
+                    localSelfSymbolList.map((it, index) => {
+                        if (it === newId) {
+                            localSelfSymbolList.splice(index, 1)
+                            isSelfSymbol.value = false
+                            ElMessage.warning(t('trade.removeOptionalOk'))
+                            // Toast(t('trade.removeOptionalOk'))
+                        }
+                    })
+                } else {
+                    localSelfSymbolList.push(newId)
+                    isSelfSymbol.value = true
+                    ElMessage.warning(t('trade.addOptionalOk'))
+                    // Toast(t('trade.addOptionalOk'))
+                }
+                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
             } else {
-                addCustomerOptional({
-                    symbolList: [product.value.symbolId],
-                    tradeType: product.value.tradeType
-                }).then(res => {
-                    if (res.check()) {
-                        isSelfSymbol.value = true
-                        // 手动修改optional值
-                        store.commit('_user/Update_optional', 1)
-                        store.dispatch('_user/queryCustomerOptionalList')
-                        ElMessage.success(t('trade.addOptionalOk'))
-                    }
-                }).catch(err => {
-                })
+                if (isSelfSymbol.value) {
+                    removeCustomerOptional({
+                        symbolList: [product.value.symbolId],
+                        tradeType: product.value.tradeType
+                    }).then(res => {
+                        if (res.check()) {
+                            isSelfSymbol.value = false
+                            store.dispatch('_user/queryCustomerOptionalList')
+                            ElMessage.success(t('trade.removeOptionalOk'))
+                        }
+                    }).catch(err => {
+                    })
+                } else {
+                    addCustomerOptional({
+                        symbolList: [product.value.symbolId],
+                        tradeType: product.value.tradeType
+                    }).then(res => {
+                        if (res.check()) {
+                            isSelfSymbol.value = true
+                            // 手动修改optional值
+                            store.commit('_user/Update_optional', 1)
+                            store.dispatch('_user/queryCustomerOptionalList')
+                            ElMessage.success(t('trade.addOptionalOk'))
+                        }
+                    }).catch(err => {
+                    })
+                }
             }
         }
 
@@ -918,9 +954,9 @@ export default {
             }
             &.ohlc {
                 color: var(--normalColor);
-                white-space: nowrap;
                 font-size: 12px;
                 line-height: 2;
+                white-space: nowrap;
             }
             &.collect {
                 flex: 1;
