@@ -136,7 +136,7 @@
                     <van-loading v-if='loading' />
                     <div class='msg-list'>
                         <van-empty
-                            v-if='listNotice.length === 0'
+                            v-if='listCustomer.length === 0'
                             :description="$t('api.listnone')"
                             image='/images/empty.png'
                         />

@@ -34,7 +34,7 @@
                         {{ detailData.title }}
                     </div>
                     <div class='time'>
-                        {{ formatTime(detailData.pubTime) }}
+                        {{ detailData.pubTime?formatTime(detailData.pubTime):'' }}
                     </div>
                     <div class='content' v-html='detailData.content'></div>
                 </div>
