@@ -423,7 +423,7 @@ export default {
                 if (isEmpty(customerInfo.value)) {
                     const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
                     console.log(newId)
-                    if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                    if (localGet('localSelfSymbolList') && localGet('localSelfSymbolList').indexOf(newId) !== -1) {
                         return true
                     } else {
                         return false
@@ -706,6 +706,8 @@ export default {
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
 
+            console.log('initChartData = ()')
+
             // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
             const canUseVolume = !product.value.isFX && !product.value.isCommodites
             console.log(canUseVolume, isEmpty(locChartConfig))
@@ -803,6 +805,19 @@ export default {
             console.log('upColor', style.value.riseColor)
             console.log('downColor', style.value.fallColor)
             console.log('state.initConfig.property', state.initConfig.property)
+
+            if (isEmpty(customerInfo.value)) {
+                const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                console.log(newId)
+                if (localGet('localSelfSymbolList') && localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                    state.isOptional = true
+                } else {
+                    state.isOptional = false
+                }
+                // console.log(localGet('localSelfSymbolList'), newId)
+            } else {
+                state.isOptional = store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
+            }
         }
 
         // 设置图表类型
