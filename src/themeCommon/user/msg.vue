@@ -126,7 +126,7 @@
                                 </van-row>
                             </div>
 
-                            <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer')">
+                            <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer',item)">
                                 <p class='msg-title'>
                                     <span v-if='item.readStatus === 2'>
                                         {{ item.title === 'null'? '': item.title }}
@@ -262,10 +262,12 @@ export default {
         }
 
         // 跳转到公告详情页
-        const goNoticeDetails = (id, type) => {
+        const goNoticeDetails = (id, type, item) => {
             // console.log(id)
             if (type === 'msgcustomer') {
-                setMsgReadedFn(id)
+                if (item.readStatus === 1) {
+                    setMsgReadedFn(id)
+                }
                 var arr = []; var temp = {}
                 state.listCustomer.map((item) => {
                     temp = item
@@ -502,8 +504,10 @@ export default {
             state.currentPs = 1
             state.finishedPs = false
             state.listCustomer = []
-
-            getNoticeData()
+            if (!route.query.from) {
+                getNoticeData()
+            }
+            // getNoticeData()
         }
 
         const back = () => {
@@ -516,21 +520,12 @@ export default {
 
         onMounted(() => {
             initList()
-            console.log(customInfo.value)
-            // if (customInfo.value) {
-            //     state.isUser = true
-            // } else {
-            //     state.isUser = false
-            // }
         })
 
         onBeforeMount(() => {
-            // getNoticeData()
             if (customInfo.value) {
                 state.isUser = true
-                console.log(route.query.from)
                 if (route.query.from === 'notice') {
-                    console.log('++1')
                     state.activeIndex = ref('public')
                     state.currentNt = 1
                     state.finishedNt = false
@@ -538,7 +533,7 @@ export default {
                     getNoticeData()
                 }
                 if (route.query.from === 'msgcustomer') {
-                    console.log('++2')
+                    // console.log('++2')
                     state.activeIndex = ref('msgps')
                     state.currentPs = 1
                     state.finishedPs = false
@@ -546,7 +541,7 @@ export default {
                     getCustomerMsgListData()
                 }
                 if (route.query.from === 'msg') {
-                    console.log('++3')
+                    // console.log('++3')
                     state.activeIndex = ref('msg')
                     state.current = 1
                     state.finished = false
@@ -555,6 +550,10 @@ export default {
                 }
             } else {
                 state.isUser = false
+                state.currentNt = 1
+                state.finishedNt = false
+                state.listNotice = []
+                getNoticeData()
             }
         })
 

@@ -707,13 +707,13 @@ export default {
 
 @media screen and (max-width: 1200px) {
     .wrapper {
-        width: 980px;
+        width: 100%;
     }
 }
 
 @media screen and (max-width: 980px) {
     .wrapper {
-        width: 720px;
+        width: 100%;
     }
 }
 </style>
