@@ -553,7 +553,7 @@ export default {
                 state.currentNt = 1
                 state.finishedNt = false
                 state.listNotice = []
-                getNoticeData()
+                if (route.query.from) getNoticeData()
             }
         })
 
