@@ -2,7 +2,7 @@
     <div class='publicPage'>
         <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
         <!-- <Loading :show='pageLoading' /> -->
-        <van-tabs v-model:active='activeIndex' sticky @click-tab='onClickTab'>
+        <van-tabs v-model:active='activeIndex' class='msgTab' sticky @click-tab='onClickTab'>
             <van-tab name='public' :title='$t("route.notice")'>
                 <div class='msg-list'>
                     <van-pull-refresh
@@ -507,7 +507,7 @@ export default {
         }
 
         const back = () => {
-            router.push('/mine')
+            router.push('/')
         }
 
         const formatTime = (val) => {
@@ -604,6 +604,9 @@ export default {
     box-shadow: none;
 
     --van-dropdown-menu-title-font-size: 12px;
+}
+.msgTab{
+    --van-tabs-bottom-bar-color: var(--primary);
 }
 .publicPage {
     flex: 1;
