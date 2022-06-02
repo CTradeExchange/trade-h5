@@ -116,9 +116,9 @@
                                 <li class='item' @click="handRoutTo('/walletAddress')">
                                     {{ $t('withdraw.withdrawLink') }}
                                 </li>
-                                <li class='item' @click="handRoutTo('/bankList')">
+                                <!-- <li class='item' @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
-                                </li>
+                                </li> -->
                                 <li v-if='customInfo' class='item' @click='handRoutTo("/setLoginPwd")'>
                                     {{ Number(customInfo.loginPassStatus) === 1 ? $t("forgot.setPwd") : $t('login.modifyLoginPwd') }}
                                 </li>
