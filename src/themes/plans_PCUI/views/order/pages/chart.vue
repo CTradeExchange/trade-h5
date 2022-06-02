@@ -442,7 +442,7 @@ export default {
         })
 
         watch(() => isSelfSymbol.value, val => {
-            console.log(val, '---->')
+            console.log(val, 'watch---->1')
             console.log('isSelfSymbol-watch')
             state.isOptional = !!val
         }, { immediate: true })
@@ -506,10 +506,28 @@ export default {
                 buyPrice: product.value.buy_price,
                 sellPrice: product.value.sell_price
             })
+            checkIsSelfSymbol()
         })
 
         const handleClick = () => {
 
+        }
+
+        const checkIsSelfSymbol = () => {
+            // 自选星标状态
+            if (isEmpty(customerInfo.value)) {
+                const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                if (localGet('localSelfSymbolList')) {
+                    if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
+                        state.isOptional = true
+                    } else {
+                        state.isOptional = false
+                    }
+                }
+            } else {
+                state.isOptional = store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
+            }
+            console.log(state.isOptional)
         }
 
         // 添加自选
@@ -526,17 +544,13 @@ export default {
                         if (it === newId) {
                             localSelfSymbolList.splice(index, 1)
                             isSelfSymbol.value = false
-                            // isSelfSymbol.set(false)
-                            ElMessage.warning(t('trade.removeOptionalOk'))
-                            // Toast(t('trade.removeOptionalOk'))
+                            ElMessage.success(t('trade.removeOptionalOk'))
                         }
                     })
                 } else {
                     localSelfSymbolList.push(newId)
                     isSelfSymbol.value = true
-                    // isSelfSymbol.set(true)
-                    ElMessage.warning(t('trade.addOptionalOk'))
-                    // Toast(t('trade.addOptionalOk'))
+                    ElMessage.success(t('trade.addOptionalOk'))
                 }
                 store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
             } else {
@@ -809,18 +823,7 @@ export default {
             console.log('state.initConfig.property', state.initConfig.property)
 
             // 自选星标状态
-            if (isEmpty(customerInfo.value)) {
-                const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
-                console.log(newId)
-                if (localGet('localSelfSymbolList') && localGet('localSelfSymbolList').indexOf(newId) !== -1) {
-                    state.isOptional = true
-                } else {
-                    state.isOptional = false
-                }
-                // console.log(localGet('localSelfSymbolList'), newId)
-            } else {
-                state.isOptional = store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
-            }
+            checkIsSelfSymbol()
         }
 
         // 设置图表类型
@@ -905,6 +908,7 @@ export default {
         // 监听路由变化
         watch(
             () => route.query, (val, oval) => {
+                console.log('watch---->3')
                 changeRoute()
             }, {
                 immediate: true
@@ -945,7 +949,8 @@ export default {
             addOptional,
             isSelfSymbol,
             formatAmount,
-            contractRoute
+            contractRoute,
+            checkIsSelfSymbol
         }
     }
 }

@@ -139,16 +139,12 @@ const addOptional = ({ symbolId, tradeType }) => {
             localSelfSymbolList.map((it, index) => {
                 if (it === newId) {
                     localSelfSymbolList.splice(index, 1)
-                    // state.isSelfSymbol = false
-                    ElMessage.warning(t('trade.removeOptionalOk'))
-                    // Toast(t('trade.removeOptionalOk'))
+                    ElMessage.success(t('trade.removeOptionalOk'))
                 }
             })
         } else {
             localSelfSymbolList.push(newId)
-            // state.isSelfSymbol = true
-            ElMessage.warning(t('trade.addOptionalOk'))
-            // Toast(t('trade.addOptionalOk'))
+            ElMessage.success(t('trade.addOptionalOk'))
         }
         store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
     } else {
