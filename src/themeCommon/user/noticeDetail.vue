@@ -1,6 +1,6 @@
 <template>
     <div class='msgDetail'>
-        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
+        <LayoutTop :custom-back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
         <Loading :show='loading' />
         <div class='pageWrap'>
             <div class='detailTop'>
@@ -43,7 +43,6 @@ export default {
             type: '',
             errorTip: '',
             detailData: {}
-
         })
 
         // 获取账户信息
@@ -98,6 +97,15 @@ export default {
             }
         }
 
+        const back = (type) => {
+            router.push({
+                path: '/msg',
+                query: {
+                    from: state.type
+                }
+            })
+        }
+
         onBeforeMount(() => {
             initData()
         })
@@ -113,6 +121,7 @@ export default {
             initData,
             getNoticeDetial,
             formatTime,
+            back,
             ...toRefs(state)
         }
     }

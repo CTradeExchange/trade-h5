@@ -1,6 +1,6 @@
 <template>
     <div class='publicPage'>
-        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
+        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
         <!-- <Loading :show='pageLoading' /> -->
         <van-tabs v-model:active='activeIndex' sticky @click-tab='onClickTab'>
             <van-tab name='public' :title='$t("route.notice")'>
@@ -194,6 +194,7 @@ export default {
             isUser: false,
             errorTip: '',
             rightAction: { title: 444 },
+            activeIndex: 'public',
             options: [
                 {
                     'text': t('msg.all'),
@@ -218,7 +219,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        const activeIndex = ref('public')
+        // const activeIndex = ref('')
         const onClickTab = ({ title, name }) => {
             if (name === 'public') {
                 state.currentNt = 1
@@ -505,6 +506,10 @@ export default {
             getNoticeData()
         }
 
+        const back = () => {
+            router.push('/mine')
+        }
+
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
@@ -512,8 +517,42 @@ export default {
         onMounted(() => {
             initList()
             console.log(customInfo.value)
+            // if (customInfo.value) {
+            //     state.isUser = true
+            // } else {
+            //     state.isUser = false
+            // }
+        })
+
+        onBeforeMount(() => {
+            getNoticeData()
             if (customInfo.value) {
                 state.isUser = true
+                console.log(route.query.from)
+                if (route.query.from === 'notice') {
+                    console.log('++1')
+                    state.activeIndex = ref('public')
+                    state.currentNt = 1
+                    state.finishedNt = false
+                    state.listNotice = []
+                    getNoticeData()
+                }
+                if (route.query.from === 'msgcustomer') {
+                    console.log('++2')
+                    state.activeIndex = ref('msgps')
+                    state.currentPs = 1
+                    state.finishedPs = false
+                    state.listCustomer = []
+                    getCustomerMsgListData()
+                }
+                if (route.query.from === 'msg') {
+                    console.log('++3')
+                    state.activeIndex = ref('msg')
+                    state.current = 1
+                    state.finished = false
+                    state.list = []
+                    getMsgList()
+                }
             } else {
                 state.isUser = false
             }
@@ -527,6 +566,7 @@ export default {
             getMsgList,
             onRefreshNotice,
             onLoadNotice,
+            back,
             isError,
             getNoticeData,
             getCustomerMsgListData,
@@ -539,7 +579,6 @@ export default {
             changeType,
             goNoticeDetails,
             computeHtmlTime,
-            activeIndex,
             onClickTab,
             setMsgReadedFn,
             setAllMsgReaded,
