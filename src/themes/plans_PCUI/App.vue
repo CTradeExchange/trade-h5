@@ -142,6 +142,7 @@ export default {
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
             document.body.removeEventListener('GotMsg_disconnect', disconnect, false)
+            document.body.removeEventListener('GotMsg_notice', gotMsg, false)
         })
 
         return {
