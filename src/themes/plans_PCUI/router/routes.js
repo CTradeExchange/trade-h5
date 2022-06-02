@@ -619,6 +619,14 @@ const routes = [
             },
         ],
     },
+    {
+        path: '/fundV11/index',
+        name: 'FundV11',
+        component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV11/home/v11.vue'),
+        meta: {
+            title: 'api.editHeader',
+        }
+    },
     // {
     //     path: '/:params/setting',
     //     name: 'Setting',
