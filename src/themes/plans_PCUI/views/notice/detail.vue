@@ -188,7 +188,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrapper {
-    min-height: 82vh;
+    min-height: calc(100% - 257px);
     .page-title {
         padding: 20px 20px 0;
         font-weight: bold;
@@ -236,7 +236,7 @@ export default {
         }
         .notice-detail {
             flex: 1;
-            min-height: 600px;
+            min-height: calc(100vh - 354px);
             background: var(--contentColor);
             border-left: 1px solid var(--lineColor);
         }
@@ -254,7 +254,8 @@ export default {
             text-align: left;
         }
         .content {
-            min-height: 600px;
+            // min-height: 400px;
+
             margin-top: 0;
             padding: 20px;
             color: var(--normalColor);

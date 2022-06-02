@@ -546,7 +546,7 @@ export default {
 @import '@/sass/mixin.scss';
 .wrapper {
     // width: 1200px;
-    min-height: 82vh;
+    // min-height: calc(100% - 297px);
     .page-title {
         padding: 20px 20px 0;
         font-weight: bold;
@@ -569,7 +569,7 @@ export default {
         }
         .van-tabs__content {
             flex: 1;
-            min-height: 600px;
+            // min-height: 600px;
             border-left: 1px solid var(--lineColor);
         }
         .van-tab {
@@ -625,7 +625,7 @@ export default {
         }
     }
     .msg-list {
-        min-height: 500px;
+        min-height: calc(100vh - 445px);
         padding: 15px;
         background: var(--contentColor);
         .header {
