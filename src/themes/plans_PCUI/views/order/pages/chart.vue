@@ -417,9 +417,11 @@ export default {
         // const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
         // 产品信息
         const product = computed(() => store.getters.productActived)
+        const customerInfo = computed(() => store.state._user.customerInfo)
         const isSelfSymbol = computed({
             get: () => {
                 console.log('isSelfSymbol-get')
+                console.log(customerInfo)
                 if (isEmpty(customerInfo.value)) {
                     const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
                     console.log(newId)
@@ -480,7 +482,7 @@ export default {
         // 颜色值
         const style = computed(() => store.state.style)
 
-        const customerInfo = computed(() => store.state._user.customerInfo)
+        // const customerInfo = computed(() => store.state._user.customerInfo)
 
         // 重新渲染图表
         const renderChart = (product, property) => {
@@ -806,6 +808,7 @@ export default {
             console.log('downColor', style.value.fallColor)
             console.log('state.initConfig.property', state.initConfig.property)
 
+            // 自选星标状态
             if (isEmpty(customerInfo.value)) {
                 const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
                 console.log(newId)
