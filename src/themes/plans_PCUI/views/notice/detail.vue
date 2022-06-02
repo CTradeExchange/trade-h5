@@ -1,6 +1,6 @@
 <template>
     <router-view />
-    <div class='wrapper'>
+    <div class='wrapper' :style='"min-height:" + wrapperHeight'>
         <div class='page-title'>
             <span class='back-icon' @click='back'>
                 <van-icon name='arrow-left' />
@@ -73,6 +73,7 @@ export default {
             type: null,
             isUser: false,
             detailData: {},
+            wrapperHeight: 0,
         })
 
         // console.log(store.state)
@@ -162,6 +163,13 @@ export default {
             state.helpPopupShow = true
         }
 
+        const setMinHeight = () => {
+            const heightFooter = document.querySelectorAll("div[class='footer-nav']")
+            const headerFooter = document.querySelectorAll("div[class='nav-left']")
+            const calcHeight = heightFooter[0].clientHeight + headerFooter[0].clientHeight
+            state.wrapperHeight = 'calc(100vh - ' + calcHeight + 'px)'
+        }
+
         onMounted(() => {
             initData()
             if (customInfo.value) {
@@ -169,10 +177,12 @@ export default {
             } else {
                 state.isUser = false
             }
+            setMinHeight()
         })
 
         return {
             initData,
+            setMinHeight,
             handRoutTo,
             getNoticeDetial,
             showApiHelp,
@@ -255,7 +265,6 @@ export default {
         }
         .content {
             // min-height: 400px;
-
             margin-top: 0;
             padding: 20px;
             color: var(--normalColor);
