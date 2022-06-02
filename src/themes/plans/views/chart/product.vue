@@ -602,8 +602,14 @@ export default {
         const checkIsSelfSymbol = () => {
             if (isEmpty(customerInfo.value)) {
                 const newId = getSymbolId() + '_' + getTradeType()
-                if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
-                    state.isSelfSymbol = true
+                if (localGet('localSelfSymbolList')) {
+                    if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
+                        state.isSelfSymbol = true
+                    } else {
+                        state.isSelfSymbol = false
+                    }
+                } else {
+                    state.isSelfSymbol = false
                 }
                 console.log(localGet('localSelfSymbolList'), newId)
             } else {

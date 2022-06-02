@@ -421,15 +421,20 @@ export default {
         const isSelfSymbol = computed({
             get: () => {
                 console.log('isSelfSymbol-get')
-                console.log(customerInfo)
+                // console.log(customerInfo)
                 if (isEmpty(customerInfo.value)) {
                     const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
-                    console.log(newId)
-                    if (localGet('localSelfSymbolList') && localGet('localSelfSymbolList').indexOf(newId) !== -1) {
-                        return true
+                    // console.log(newId)
+                    if (localGet('localSelfSymbolList')) {
+                        if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
+                            return true
+                        } else {
+                            return false
+                        }
                     } else {
                         return false
                     }
+
                     // console.log(localGet('localSelfSymbolList'), newId)
                 } else {
                     return store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))

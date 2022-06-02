@@ -86,7 +86,7 @@ const isCollect = (tradeType, symbolId) => {
     if (isEmpty(customerInfo.value)) {
         const newId = parseInt(symbolId) + '_' + tradeType
         if (localGet('localSelfSymbolList')) {
-            if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+            if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
                 return true
             } else {
                 return false

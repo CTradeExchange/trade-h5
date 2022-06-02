@@ -115,7 +115,7 @@ const isCollect = (tradeType, symbolId) => {
     if (isEmpty(customerInfo.value)) {
         const newId = parseInt(symbolId) + '_' + tradeType
         if (localGet('localSelfSymbolList')) {
-            if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+            if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
                 return true
             } else {
                 return false
@@ -135,7 +135,7 @@ const addOptional = ({ symbolId, tradeType }) => {
         // 未登录 缓存到本地
         var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
         const newId = symbolId + '_' + tradeType
-        if (localSelfSymbolList.indexOf(newId) !== -1) {
+        if (localSelfSymbolList.find(el => el === newId)) {
             localSelfSymbolList.map((it, index) => {
                 if (it === newId) {
                     localSelfSymbolList.splice(index, 1)

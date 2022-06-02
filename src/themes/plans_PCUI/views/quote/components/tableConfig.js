@@ -37,7 +37,7 @@ export const getColumns = tradeTypeValue => {
         if (isEmpty(customerInfo.value)) {
             const newId = symbolId + '_' + tradeType
             if (localGet('localSelfSymbolList')) {
-                if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
+                if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
                     return true
                 } else {
                     return false
