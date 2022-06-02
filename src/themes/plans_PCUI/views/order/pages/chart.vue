@@ -418,9 +418,11 @@ export default {
         // 产品信息
         const product = computed(() => store.getters.productActived)
         const isSelfSymbol = computed({
-            get: (val) => {
+            get: () => {
+                console.log('isSelfSymbol-get')
                 if (isEmpty(customerInfo.value)) {
                     const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                    console.log(newId)
                     if (localGet('localSelfSymbolList').indexOf(newId) !== -1) {
                         return true
                     } else {
@@ -432,11 +434,14 @@ export default {
                 }
             },
             set: (val) => {
+                console.log('isSelfSymbol-set')
                 state.isOptional = val
             },
         })
 
         watch(() => isSelfSymbol.value, val => {
+            console.log(val, '---->')
+            console.log('isSelfSymbol-watch')
             state.isOptional = !!val
         }, { immediate: true })
 
@@ -513,12 +518,13 @@ export default {
 
                 // 未登录 缓存到本地
                 var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
-                const newId = symbolId + '_' + tradeType
+                const newId = product.value.symbolId + '_' + product.value.tradeType
                 if (localSelfSymbolList.indexOf(newId) !== -1) {
                     localSelfSymbolList.map((it, index) => {
                         if (it === newId) {
                             localSelfSymbolList.splice(index, 1)
                             isSelfSymbol.value = false
+                            // isSelfSymbol.set(false)
                             ElMessage.warning(t('trade.removeOptionalOk'))
                             // Toast(t('trade.removeOptionalOk'))
                         }
@@ -526,6 +532,7 @@ export default {
                 } else {
                     localSelfSymbolList.push(newId)
                     isSelfSymbol.value = true
+                    // isSelfSymbol.set(true)
                     ElMessage.warning(t('trade.addOptionalOk'))
                     // Toast(t('trade.addOptionalOk'))
                 }
