@@ -1,7 +1,7 @@
 <template>
     <router-view />
 
-    <div class='wrapper'>
+    <div class='wrapper' :style='"min-height:" + wrapperHeight'>
         <div class='page-title'>
             {{ $t('route.noticeTitle') }}
         </div>
@@ -229,6 +229,8 @@ export default {
 
             isUser: false,
             activeIndex: '',
+
+            wrapperHeight: 0,
 
             type: '',
             options: [
@@ -521,11 +523,23 @@ export default {
             }
         })
 
+        const setMinHeight = () => {
+            const heightFooter = document.querySelectorAll("div[class='footer-nav']")
+            const headerFooter = document.querySelectorAll("div[class='nav-left']")
+            const calcHeight = heightFooter[0].clientHeight + headerFooter[0].clientHeight
+            state.wrapperHeight = 'calc(100vh - ' + calcHeight + 'px)'
+        }
+
+        onMounted(() => {
+            setMinHeight()
+        })
+
         return {
             handRoutTo,
             computeHtmlTime,
             goNoticeDetails,
             changePage,
+            setMinHeight,
             changePagePs,
             changePageNt,
             getNoticeData,

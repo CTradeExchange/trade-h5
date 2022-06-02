@@ -1,7 +1,7 @@
 <template>
     <router-view />
 
-    <div class='wrapper'>
+    <div class='wrapper' :style='"min-height:" + wrapperHeight'>
         <div class='page-title'>
             {{ $t('api.title') }}
         </div>
@@ -139,7 +139,8 @@ export default {
                 tag: ''
             },
             apiList: [],
-            isReLoad: false
+            isReLoad: false,
+            wrapperHeight: 0
         })
 
         provide('isReLoad', (value) => {
@@ -379,12 +380,21 @@ export default {
             }
         })
 
+        const setMinHeight = () => {
+            const heightFooter = document.querySelectorAll("div[class='footer-nav']")
+            const headerFooter = document.querySelectorAll("div[class='nav-left']")
+            const calcHeight = heightFooter[0].clientHeight + headerFooter[0].clientHeight + 40
+            state.wrapperHeight = 'calc(100vh - ' + calcHeight + 'px)'
+        }
+
         onMounted(() => {
             getAPIList()
+            setMinHeight()
         })
 
         return {
             handRoutTo,
+            setMinHeight,
             collapseChange,
             showApiHelp,
             activeIndex,

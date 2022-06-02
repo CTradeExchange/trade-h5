@@ -1,6 +1,6 @@
 <template>
     <router-view />
-    <div class='wrapper'>
+    <div class='wrapper' :style='"min-height:" + wrapperHeight'>
         <div class='page-title'>
             <span class='back-icon' @click='back'>
                 ＜
@@ -326,12 +326,21 @@ export default {
             state.helpPopupShow = true
         }
 
+        const setMinHeight = () => {
+            const heightFooter = document.querySelectorAll("div[class='footer-nav']")
+            const headerFooter = document.querySelectorAll("div[class='nav-left']")
+            const calcHeight = heightFooter[0].clientHeight + headerFooter[0].clientHeight
+            state.wrapperHeight = 'calc(100vh - ' + calcHeight + 'px)'
+        }
+
         onMounted(() => {
             initData()
+            setMinHeight()
         })
 
         return {
             initData,
+            setMinHeight,
             handRoutTo,
             handleSave,
             regWhiteIps,
