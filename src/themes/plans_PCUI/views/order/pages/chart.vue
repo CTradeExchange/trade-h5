@@ -538,21 +538,22 @@ export default {
 
                 // 未登录 缓存到本地
                 var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
-                const newId = product.value.symbolId + '_' + product.value.tradeType
-                if (localSelfSymbolList.indexOf(newId) !== -1) {
+                const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                if (localSelfSymbolList.find(el => el === newId)) {
                     localSelfSymbolList.map((it, index) => {
                         if (it === newId) {
                             localSelfSymbolList.splice(index, 1)
                             isSelfSymbol.value = false
                             ElMessage.success(t('trade.removeOptionalOk'))
+                            state.isOptional = false
                         }
                     })
                 } else {
                     localSelfSymbolList.push(newId)
                     isSelfSymbol.value = true
+                    state.isOptional = true
                     ElMessage.success(t('trade.addOptionalOk'))
                 }
-                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
             } else {
                 if (isSelfSymbol.value) {
                     removeCustomerOptional({

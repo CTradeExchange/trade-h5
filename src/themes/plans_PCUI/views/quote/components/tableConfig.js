@@ -74,16 +74,16 @@ export const getColumns = tradeTypeValue => {
             // 未登录 缓存到本地
             var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
             const newId = symbolId + '_' + tradeType
-            if (localSelfSymbolList.indexOf(newId) !== -1) {
+            if (localSelfSymbolList.find(el => el === newId)) {
                 localSelfSymbolList.map((it, index) => {
                     if (it === newId) {
                         localSelfSymbolList.splice(index, 1)
-                        ElMessage.warning(t('trade.removeOptionalOk'))
+                        ElMessage.success(t('trade.removeOptionalOk'))
                     }
                 })
             } else {
                 localSelfSymbolList.push(newId)
-                ElMessage.warning(t('trade.addOptionalOk'))
+                ElMessage.success(t('trade.addOptionalOk'))
             }
             store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
         }
