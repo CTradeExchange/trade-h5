@@ -97,7 +97,7 @@
                     <img class='ellipse-bg animation-spin' :src="require('@public/images/V11/ellipse_bg.png')" />
                     <div class='trend-chart'>
                         <h3 class='title'>
-                            Reflecting the trend of cryptocurrency in general
+                            Reflecting the trend of currency in general
                         </h3>
                         <div class='block trend-block'>
                             <div class='above'>
@@ -105,7 +105,7 @@
                             </div>
                             <div class='below'>
                                 <p class='text'>
-                                    V10 contains 10 major cryptocurrencies. The underlying assets’ weighting will be rebalanced on a monthly basis based on their average daily volume within the past 120 days. V10 reflects the overall trend in cryptocurrency with asset transparency. By holding V10, you do not need to worry about choosing which cryptocurrency to invest.
+                                    V10 contains 10 major currency. The underlying assets’ weighting will be rebalanced on a monthly basis based on their average daily volume within the past 120 days. V10 reflects the overall trend in currency with asset transparency. By holding V10, you do not need to worry about choosing which currency to invest.
                                 </p>
                             </div>
                         </div>
@@ -145,7 +145,7 @@
                             </div>
                             <div class='below'>
                                 <p class='text'>
-                                    The key features of V10 are that it is fully transparent, and it is able to provide the location of assets, as well as provide safe and reliable trading. With V10, you won’t miss out on investing in the fast-growing cryptocurrency market.
+                                    The key features of V10 are that it is fully transparent, and it is able to provide the location of assets, as well as provide safe and reliable trading. With V10, you won’t miss out on investing in the fast-growing currency market.
                                 </p>
                             </div>
                         </div>
