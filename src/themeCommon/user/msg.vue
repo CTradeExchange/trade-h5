@@ -525,7 +525,7 @@ export default {
         })
 
         onBeforeMount(() => {
-            getNoticeData()
+            // getNoticeData()
             if (customInfo.value) {
                 state.isUser = true
                 console.log(route.query.from)
