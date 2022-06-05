@@ -559,6 +559,7 @@ export default {
                     state.isOptional = true
                     ElMessage.success(t('trade.addOptionalOk'))
                 }
+                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
             } else {
                 if (isSelfSymbol.value) {
                     removeCustomerOptional({
