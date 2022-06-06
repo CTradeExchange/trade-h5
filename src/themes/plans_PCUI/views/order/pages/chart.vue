@@ -18,8 +18,8 @@
         </div>
 
         <div class='item range'>
-            <p :class='product?.cur_color'>
-                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.symbolDigits) : '--' }}
+            <p v-if='dealLastPrice' :class='dealLastPrice?.price_color'>
+                {{ dealLastPrice?.price ? parseFloat(dealLastPrice?.price).toFixed(product.symbolDigits) : '--' }}
             </p>
             <p>
                 <span :class='product?.rolling_upDownColor'>
@@ -674,7 +674,7 @@ export default {
                 const volumeIndex = SUBSTUDIES.findIndex(el => el.name === 'Volume')
                 if (volumeIndex > -1) SUBSTUDIES.splice(volumeIndex, 1)
             }
-            state.sideStudyList = SUBSTUDIES.slice(0, 5)
+            state.sideStudyList = SUBSTUDIES.slice(0, 10)
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -724,6 +724,7 @@ export default {
                 if (state.subStudy === 'Volume' && !canUseVolume) {
                     state.subStudy = SUBSTUDIES[0].name
                     localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                    locChartConfig.subStudy = JSON.stringify(SUBSTUDIES[0])
                 }
 
                 state.klineType = locChartConfig.chartType
@@ -885,6 +886,7 @@ export default {
             addOptional,
             isSelfSymbol,
             formatAmount,
+            dealLastPrice,
             contractRoute
         }
     }
@@ -919,9 +921,9 @@ export default {
             }
             &.ohlc {
                 color: var(--normalColor);
-                white-space: nowrap;
                 font-size: 12px;
                 line-height: 2;
+                white-space: nowrap;
             }
             &.collect {
                 flex: 1;

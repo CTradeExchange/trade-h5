@@ -10,30 +10,32 @@
             <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' />
             <!-- 公告 -->
             <div class='top-public'>
-                <van-notice-bar class='top-notice' left-icon='volume-o' :scrollable='false'>
-                    <van-row>
-                        <van-col span='22'>
-                            <van-swipe
-                                :autoplay='3000'
-                                class='notice-swipe'
-                                :show-indicators='false'
-                                vertical
-                            >
-                                <van-swipe-item v-for='(item,index) in noticeData' :key='index' @click='goNoticeDetail(item.id)'>
-                                    <span class='pubTitle'>
-                                        {{ item.title }}
-                                    </span>
-                                    <span class='pubTime'>
-                                        {{ formatTime(item.pubTime) }}
-                                    </span>
-                                </van-swipe-item>
-                            </van-swipe>
-                        </van-col>
-                        <van-col align='center' span='2'>
-                            <van-icon name='more-o' @click='publicLink' />
-                        </van-col>
-                    </van-row>
-                </van-notice-bar>
+                <div class='center'>
+                    <van-notice-bar class='top-notice' left-icon='volume-o' :scrollable='false'>
+                        <van-row>
+                            <van-col span='22'>
+                                <van-swipe
+                                    :autoplay='3000'
+                                    class='notice-swipe'
+                                    :show-indicators='false'
+                                    vertical
+                                >
+                                    <van-swipe-item v-for='(item,index) in noticeData' :key='index' @click='goNoticeDetail(item.id)'>
+                                        <span class='pubTitle'>
+                                            {{ item.title }}
+                                        </span>
+                                        <span class='pubTime'>
+                                            {{ formatTime(item.pubTime) }}
+                                        </span>
+                                    </van-swipe-item>
+                                </van-swipe>
+                            </van-col>
+                            <van-col align='center' span='2'>
+                                <van-icon name='more-o' @click='publicLink' />
+                            </van-col>
+                        </van-row>
+                    </van-notice-bar>
+                </div>
             </div>
 
             <!-- 公共模块 -->
@@ -189,23 +191,16 @@ export default {
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo
             }).then(res => {
-                // console.log(res)
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
-                        // state.listNotice = state.listNotice.concat(res.data.records)
                         state.noticeData = res.data.records
                     }
-
-                    // // 数据全部加载完成
-                    // if (res.data.size * res.data.current >= res.data.total) {
-                    //     state.finishedNt = true
-                    // }
                 }
             }).catch(err => {
                 state.errorTip = t('c.loadError')
-                // state.pageLoading = false
             })
         }
+        const formatTime = val => window.dayjs(val).format('YYYY-MM-DD')
 
         const goNoticeDetail = (id) => {
             router.push({
@@ -248,6 +243,7 @@ export default {
             switchFlow,
             getNoticeData,
             publicLink,
+            formatTime,
             goNoticeDetail
         }
     }
@@ -266,24 +262,34 @@ export default {
     }
     .top-public {
         background: var(--contentColor);
-        .top-notice {
+        .center {
             width: 1200px;
             margin: 0 auto;
+        }
+        .top-notice {
+            width: 600px;
+            height: 45px;
             color: var(--color);
             background: var(--contentColor);
             .van-icon {
-                margin-top: rem(15px);
-                font-size: rem(36px);
+                margin-top: 8px;
+                font-size: 18px;
                 vertical-align: middle;
+                cursor: pointer;
             }
             .van-row {
                 font-size: rem(24px);
+            }
+            :deep(.van-notice-bar__left-icon) {
+                margin-top: -5px;
             }
         }
         .pubTitle {
             display: inline-block;
             max-width: 80%;
+            margin-right: 10px;
             overflow: hidden;
+            font-size: 14px;
             white-space: nowrap;
             text-overflow: ellipsis;
             vertical-align: middle;
@@ -294,7 +300,7 @@ export default {
             vertical-align: middle;
         }
         .notice-swipe {
-            height: 36px;
+            height: 40px;
             line-height: 38px;
         }
         :deep(.van-notice-bar__content) {

@@ -79,7 +79,12 @@
                     />
                 </div>
             </div>
-            <div v-if='product && product.tradeEnable===1' class='footerBtn' :class='[direction]'>
+            <div v-if='!customerInfo' class='footerBtn' :class='[direction]'>
+                <van-button block size='normal' @click='toRegister'>
+                    {{ $t('trade.loginOrRegister') }}
+                </van-button>
+            </div>
+            <div v-else-if='product && product.tradeEnable===1' class='footerBtn' :class='[direction]'>
                 <van-button block :disabled='loading' :loading='loading' size='normal' @click='submitHandler'>
                     <i class='icon' :class='direction==="buy" ? "icon_mairu" : "icon_maichu"'></i>
                     {{ directionText }}
@@ -443,6 +448,11 @@ export default {
             { immediate: true }
         )
 
+        // 去注册
+        const toRegister = () => {
+            router.push('/register')
+        }
+
         init()
 
         onBeforeUnmount(() => {
@@ -473,6 +483,7 @@ export default {
             changeOrderType,
             quoteSubscribe,
             submitHandler,
+            toRegister,
             directionText,
             setProductKeys
         }

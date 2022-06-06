@@ -630,6 +630,7 @@ class Chart {
                 'palettes.volumePalette.colors.0.color': this.property.upColor, // 涨的颜色
                 'palettes.volumePalette.colors.1.color': this.property.downColor, // 跌的颜色
                 precision: this.initial.digits
+                // precision: e.name === 'Volume' ? 'default' : this.initial.digits
             }).then(id => {
                 // 更新指标实体
                 this._indicatorsEntity.push({

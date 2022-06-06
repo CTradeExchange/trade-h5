@@ -257,7 +257,9 @@ export default {
             state.dealList = state.dealList.splice(0, 20)
 
             // 更新成交记录的最新价
-            state.dealLastPrice = data
+            const product = state.productMap[data.symbolKey]
+            const newData = handlerDealLastPrice(data, state.dealLastPrice || data, product)
+            state.dealLastPrice = newData
         },
         Delete_handicapList (state, data = {}) {
             state.handicapList = []

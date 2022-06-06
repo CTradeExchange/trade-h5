@@ -204,7 +204,6 @@ export default {
     background: var(--contentColor);
 }
 .van-empty {
-    background-color: var(--contentColor);
     border-radius: rem(6px);
 }
 </style>

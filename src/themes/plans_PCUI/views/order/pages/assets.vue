@@ -252,6 +252,9 @@ export default {
             color: var(--color);
             font-size: 14px;
         }
+        &.riskRate {
+            line-height: 30px;
+        }
     }
     .riskRate {
         .amount {

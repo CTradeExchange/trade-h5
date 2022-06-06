@@ -319,6 +319,7 @@ export default {
         }
         :deep(.el-input__inner) {
             text-align: right;
+            background: var(--contentColor);
             border: none;
         }
         .select_lab {
@@ -371,8 +372,8 @@ export default {
             display: none;
         }
     }
-    .tip{
-        padding-top: rem(20px) ;
+    .tip {
+        padding-top: rem(20px);
         color: var(--normalColor);
     }
 }

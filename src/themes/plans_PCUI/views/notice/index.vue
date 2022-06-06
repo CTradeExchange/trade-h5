@@ -1,7 +1,7 @@
 <template>
     <router-view />
 
-    <div class='wrapper'>
+    <div class='wrapper' :style='"min-height:" + wrapperHeight'>
         <div class='page-title'>
             {{ $t('route.noticeTitle') }}
         </div>
@@ -14,8 +14,14 @@
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->
                     <van-loading v-if='loading' />
+
                     <div class='msg-list'>
-                        <div v-for='(item,index) in listNotice' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
+                        <van-empty
+                            v-if='listNotice.length === 0'
+                            :description="$t('api.listnone')"
+                            image='/images/empty.png'
+                        />
+                        <div v-for='(item,index) in listNotice' v-else :key='index' class='msg-item' @click="goNoticeDetails(item.id,'notice')">
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
@@ -26,7 +32,7 @@
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
-                            v-if='listNotice.length > 0'
+                            v-if='listNotice.length > 0 && totalNt > 10'
                             v-model='currentNt'
                             class='list-page'
                             force-ellipses
@@ -45,11 +51,6 @@
                             </template>
                         </van-pagination>
                     </div>
-                    <van-empty
-                        v-if='listNotice.length === 0'
-                        :description="$t('api.listnone')"
-                        image='/images/empty.png'
-                    />
                 </div>
             </van-tab>
             <van-tab v-if='isUser' name='msg'>
@@ -78,7 +79,12 @@
                     </div>
                     <div class='msg-list'>
                         <van-loading v-if='loading' />
-                        <div v-for='(item,index) in msgList' :key='index' class='msg-item'>
+                        <van-empty
+                            v-if='msgList.length === 0'
+                            :description="$t('api.listnone')"
+                            image='/images/empty.png'
+                        />
+                        <div v-for='(item,index) in msgList' v-else :key='index' class='msg-item'>
                             <p class='msg-title'>
                                 {{ item.title === 'null'? '': item.title }}
                             </p>
@@ -89,15 +95,10 @@
                                 {{ formatTime(item.createTime) }}
                             </p>
                         </div>
-                        <van-empty
-                            v-if='msgList.length === 0'
-                            :description="$t('api.listnone')"
-                            image='/images/empty.png'
-                        />
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
-                            v-if='msgList.length > 0'
+                            v-if='msgList.length > 0 && total>10'
                             v-model='current'
                             class='list-page'
                             force-ellipses
@@ -134,7 +135,12 @@
                     </div>
                     <van-loading v-if='loading' />
                     <div class='msg-list'>
-                        <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id,'msgcustomer')">
+                        <van-empty
+                            v-if='listCustomer.length === 0'
+                            :description="$t('api.listnone')"
+                            image='/images/empty.png'
+                        />
+                        <div v-for='(item,index) in listCustomer' v-else :key='index' class='msg-item' @click="goNoticeDetails(item.id,'msgcustomer')">
                             <p class='msg-title'>
                                 <b v-if='item.readStatus == 1'>
                                     {{ item.title === 'null'? '': item.title }}
@@ -150,7 +156,7 @@
                     </div>
                     <div class='list-page-box'>
                         <van-pagination
-                            v-if='listCustomer.length > 0'
+                            v-if='listCustomer.length > 0 && totalPs>10'
                             v-model='currentPs'
                             class='list-page'
                             force-ellipses
@@ -169,11 +175,6 @@
                             </template>
                         </van-pagination>
                     </div>
-                    <van-empty
-                        v-if='listNotice.length === 0'
-                        :description="$t('api.listnone')"
-                        image='/images/empty.png'
-                    />
                 </div>
             </van-tab>
         </van-tabs>
@@ -228,6 +229,8 @@ export default {
 
             isUser: false,
             activeIndex: '',
+
+            wrapperHeight: 0,
 
             type: '',
             options: [
@@ -520,11 +523,23 @@ export default {
             }
         })
 
+        const setMinHeight = () => {
+            const heightFooter = document.querySelectorAll("div[class='footer-nav']")
+            const headerFooter = document.querySelectorAll("div[class='nav-left']")
+            const calcHeight = heightFooter[0].clientHeight + headerFooter[0].clientHeight
+            state.wrapperHeight = 'calc(100vh - ' + calcHeight + 'px)'
+        }
+
+        onMounted(() => {
+            setMinHeight()
+        })
+
         return {
             handRoutTo,
             computeHtmlTime,
             goNoticeDetails,
             changePage,
+            setMinHeight,
             changePagePs,
             changePageNt,
             getNoticeData,
@@ -545,6 +560,7 @@ export default {
 @import '@/sass/mixin.scss';
 .wrapper {
     // width: 1200px;
+    // min-height: calc(100% - 297px);
     .page-title {
         padding: 20px 20px 0;
         font-weight: bold;
@@ -567,7 +583,7 @@ export default {
         }
         .van-tabs__content {
             flex: 1;
-            min-height: 600px;
+            // min-height: 600px;
             border-left: 1px solid var(--lineColor);
         }
         .van-tab {
@@ -623,7 +639,7 @@ export default {
         }
     }
     .msg-list {
-        min-height: 500px;
+        min-height: calc(100vh - 445px);
         padding: 15px;
         background: var(--contentColor);
         .header {
@@ -691,13 +707,13 @@ export default {
 
 @media screen and (max-width: 1200px) {
     .wrapper {
-        width: 980px;
+        width: 100%;
     }
 }
 
 @media screen and (max-width: 980px) {
     .wrapper {
-        width: 720px;
+        width: 100%;
     }
 }
 </style>

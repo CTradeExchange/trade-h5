@@ -90,13 +90,12 @@ export const usePerformance = () => {
     // 创建市场价格 vs 基金净值的图表
     const newChart = (chartDom, [xData, yData], opts) => {
         // console.log(chartDom, xData, yData, opts)
-        if (!chartDom || !xData?.length) return false
 
-        const invertColor = localGet('invertColor')
+        if (!chartDom || !xData?.length) return false
         const myChart = echarts.init(chartDom)
 
         const option = {
-            backgroundColor: invertColor === 'light' ? '#fff' : '#000',
+            backgroundColor: opts.invertColor,
             tooltip: {
                 trigger: 'axis',
                 extraCssText: 'z-index:99',

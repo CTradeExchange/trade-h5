@@ -1,6 +1,6 @@
 <template>
     <router-view />
-    <div class='wrapper'>
+    <div class='wrapper' :style='"min-height:" + wrapperHeight'>
         <div class='page-title'>
             <span class='back-icon' @click='back'>
                 <van-icon name='arrow-left' />
@@ -19,10 +19,10 @@
                     <li :class="type === 'notice' ? 'active': ''" @click="goPage('notice')">
                         <van-icon name='volume-o' />{{ $t('route.notice') }}
                     </li>
-                    <li :class="type === 'msg' ? 'active': ''" @click="goPage('msg')">
+                    <li v-if='isUser' :class="type === 'msg' ? 'active': ''" @click="goPage('msg')">
                         <i class='icon icon_xiaoxizhongxin'></i> {{ $t('route.msg') }}
                     </li>
-                    <li :class="type === 'msgcustomer' ? 'active': ''" @click="goPage('msgcustomer')">
+                    <li v-if='isUser' :class="type === 'msgcustomer' ? 'active': ''" @click="goPage('msgcustomer')">
                         <van-icon name='envelop-o' />{{ $t('route.msgCustomer') }}
                     </li>
                 </ul>
@@ -34,7 +34,7 @@
                         {{ detailData.title }}
                     </div>
                     <div class='time'>
-                        {{ formatTime(detailData.pubTime) }}
+                        {{ detailData.pubTime?formatTime(detailData.pubTime):'' }}
                     </div>
                     <div class='content' v-html='detailData.content'></div>
                 </div>
@@ -44,12 +44,12 @@
 </template>
 
 <script>
-import { computed, toRefs, reactive, onMounted, ref } from 'vue'
+import { computed, toRefs, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { Toast, Dialog } from 'vant'
-import { isEmpty, getCookie } from '@/utils/util'
+import { Toast } from 'vant'
+import { getCookie } from '@/utils/util'
 import { getNoticeDetail, getCustomerMsgDetail } from '@/api/user'
 
 export default {
@@ -71,7 +71,9 @@ export default {
                 whiteIps: ''
             },
             type: null,
+            isUser: false,
             detailData: {},
+            wrapperHeight: 0,
         })
 
         // console.log(store.state)
@@ -161,12 +163,26 @@ export default {
             state.helpPopupShow = true
         }
 
+        const setMinHeight = () => {
+            const heightFooter = document.querySelectorAll("div[class='footer-nav']")
+            const headerFooter = document.querySelectorAll("div[class='nav-left']")
+            const calcHeight = heightFooter[0].clientHeight + headerFooter[0].clientHeight
+            state.wrapperHeight = 'calc(100vh - ' + calcHeight + 'px)'
+        }
+
         onMounted(() => {
             initData()
+            if (customInfo.value) {
+                state.isUser = true
+            } else {
+                state.isUser = false
+            }
+            setMinHeight()
         })
 
         return {
             initData,
+            setMinHeight,
             handRoutTo,
             getNoticeDetial,
             showApiHelp,
@@ -182,6 +198,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrapper {
+    min-height: calc(100% - 257px);
     .page-title {
         padding: 20px 20px 0;
         font-weight: bold;
@@ -229,7 +246,7 @@ export default {
         }
         .notice-detail {
             flex: 1;
-            min-height: 600px;
+            min-height: calc(100vh - 354px);
             background: var(--contentColor);
             border-left: 1px solid var(--lineColor);
         }
@@ -247,7 +264,7 @@ export default {
             text-align: left;
         }
         .content {
-            min-height: 600px;
+            // min-height: 400px;
             margin-top: 0;
             padding: 20px;
             color: var(--normalColor);

@@ -56,7 +56,8 @@ const clear = () => {
 .filter-block {
     display: flex;
     justify-content: space-between;
-    padding: 0 rem(30px);
+    height: 60px;
+    padding: 0 15px;
     background: var(--contentColor);
     border-bottom: solid 1px var(--lineColor);
     :deep(.van-checkbox) {

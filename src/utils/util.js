@@ -390,3 +390,25 @@ export function compare (property) {
         return value1 - value2
     }
 }
+
+// 处理公告里面的时间标签
+export function computeHtmlTime (content) {
+    try {
+        const reg = /<?time[^>]*>[^<]*<\/time>/gi
+        const tag = content.match(reg)
+        let returnVal
+        if (!isEmpty(tag) && tag.length > 0) {
+            tag.forEach(item => {
+                returnVal = content.replace(reg, function (matchStr) {
+                    const time = matchStr.toString().replace(/<\/?time>/g, '')
+                    return window.dayjs(Number(time)).format('YYYY-MM-DD HH:mm:ss')
+                })
+            })
+            return returnVal
+        } else {
+            return content
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}

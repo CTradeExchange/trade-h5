@@ -22,9 +22,10 @@ import { useStore } from 'vuex'
 import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Dialog } from 'vant'
+import { ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 import { MsgSocket } from '@/plugins/socket/socket'
-import { getQueryVariable, sessionSet, unzip } from '@/utils/util'
+import { getQueryVariable, sessionSet, unzip, computeHtmlTime } from '@/utils/util'
 import { configSystem } from '@/api/base'
 export default {
     setup () {
@@ -34,6 +35,7 @@ export default {
         const cacheViews = computed(() => store.state.cacheViews)
         const googleAnalytics = computed(() => store.state._base.wpCompanyInfo.googleAnalytics)
         const tipTextCountDown = ref(t('confirm') + '(3s)')
+        const noticeContent = ref(null)
         window.store = store
         if (getQueryVariable('b_superiorAgent')) {
             sessionSet('b_superiorAgent', getQueryVariable('b_superiorAgent'))
@@ -80,6 +82,16 @@ export default {
             })
         }
 
+        // 全局通知
+        const gotMsg = (res) => {
+            noticeContent.value = res.detail.content
+            ElNotification({
+                title: noticeContent.value.title || t('c.biaoTi'),
+                dangerouslyUseHTMLString: true,
+                message: `<div class='content'>${computeHtmlTime(noticeContent.value.text)}</div>`
+            })
+        }
+
         // 检查系统是否在维护
         configSystem()
             .then(res => {
@@ -120,6 +132,7 @@ export default {
         // 监听ws全局事件
         document.body.addEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
         document.body.addEventListener('GotMsg_disconnect', disconnect, false)
+        document.body.addEventListener('GotMsg_notice', gotMsg, false)
 
         // 跳珠新路由滚动到顶部
         router.afterEach((to, from, next) => {
@@ -129,6 +142,7 @@ export default {
         onUnmounted(() => {
             document.body.removeEventListener('GotMsg_UserForceLogoutRet', kickOut, false)
             document.body.removeEventListener('GotMsg_disconnect', disconnect, false)
+            document.body.removeEventListener('GotMsg_notice', gotMsg, false)
         })
 
         return {

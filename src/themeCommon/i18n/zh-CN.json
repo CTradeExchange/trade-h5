@@ -221,7 +221,8 @@
     "24hLow": "24H最低",
     "24hNumber": "24H量",
     "24hAmount": "24H额",
-    "viewMore": "查看更多"
+    "viewMore": "查看更多",
+    "wallet": "钱包"
   },
   "faceAuth": {
     "faceDetectTip": "请正对手机，保持光线充足",
@@ -955,34 +956,22 @@
     "infoList": "开始企业认证前，请准备以下文件"
   },
   "newHomeFooter": {
-    "product": "產品",
-    "trading": "現貨交易",
-    "fund": "指數基金",
+    "product": "产品",
+    "trading": "现货交易",
+    "fund": "加密基金",
     "service": "服务",
-    "program": "新客活動",
-    "vip": "機構及VIP",
-    "customer": "在線客服",
-    "help": "幫助",
+    "program": "新客活动",
+    "vip": "机构及VIP",
+    "customer": "在线客服",
+    "help": "帮助",
     "faqs": "FAQs",
-    "terms": "條款条例",
-    "policy": "隱私政策",
+    "terms": "条款条例",
+    "policy": "隐私政策",
     "community": "社媒",
-    "aboutus": "關於我們",
+    "aboutus": "关于我们",
     "followus": "关注我们",
-    "fees": "費用"
-  },
-  "aboutUs": {
-    "title": "關於我們",
-    "introduce": "Vitatoken在CAGAYAN ECONOMIC ZONE AUTHORITY（CAZA）以Dragon Empire Developments Limited 於2021年9月6日成立，提供金融科技解決方案，有加密貨幣交易牌照。 2022年一季度將實現如下功能：加密貨幣現貨交易，ETF基金二級市場交易，基金申購、贖回，支持基金實時淨值及報表發布，APP上線，全面支持eth主鍊及代幣，全面支持trx主鍊及代幣，交易所錢包升級，將符合FIPS 140-2 level 3標準。更多功能敬請期待。",
-    "servicesTitle": "基礎服務",
-    "visionsTitle": "願景",
-    "visionsTextCell1": "我們的願景是幫助所有人輕鬆參與加密貨幣市場",
-    "visionsTextCell2": "我們像維他命那樣",
-    "visionsTextCell3": "是重要組成部分",
-    "visionsTextCell4": "使用我們平台發行或者買賣加密貨幣基金",
-    "visionsTextCell5": "降低參與門檻",
-    "visionsTextCell6": "提高獲利概率",
-    "visionsTextCell7": "從而在這個快速變化的市場中賺錢"
+    "fees": "費用",
+    "registerFund": "入驻基金"
   },
   "ranking": {
     "increaseRanking": "涨幅榜",

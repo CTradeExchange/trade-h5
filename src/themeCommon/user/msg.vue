@@ -1,8 +1,8 @@
 <template>
     <div class='publicPage'>
-        <LayoutTop :back='true' :menu='false' :title='$t("route.noticeTitle")' />
+        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
         <!-- <Loading :show='pageLoading' /> -->
-        <van-tabs v-model:active='activeIndex' sticky @click-tab='onClickTab'>
+        <van-tabs v-model:active='activeIndex' class='msgTab' sticky @click-tab='onClickTab'>
             <van-tab name='public' :title='$t("route.notice")'>
                 <div class='msg-list'>
                     <van-pull-refresh
@@ -126,7 +126,7 @@
                                 </van-row>
                             </div>
 
-                            <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer')">
+                            <div v-for='(item,index) in listCustomer' :key='index' class='msg-item' @click="goNoticeDetails(item.id, 'msgcustomer',item)">
                                 <p class='msg-title'>
                                     <span v-if='item.readStatus === 2'>
                                         {{ item.title === 'null'? '': item.title }}
@@ -194,6 +194,7 @@ export default {
             isUser: false,
             errorTip: '',
             rightAction: { title: 444 },
+            activeIndex: 'public',
             options: [
                 {
                     'text': t('msg.all'),
@@ -218,7 +219,7 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
 
-        const activeIndex = ref('public')
+        // const activeIndex = ref('')
         const onClickTab = ({ title, name }) => {
             if (name === 'public') {
                 state.currentNt = 1
@@ -261,10 +262,12 @@ export default {
         }
 
         // 跳转到公告详情页
-        const goNoticeDetails = (id, type) => {
+        const goNoticeDetails = (id, type, item) => {
             // console.log(id)
             if (type === 'msgcustomer') {
-                setMsgReadedFn(id)
+                if (item.readStatus === 1) {
+                    setMsgReadedFn(id)
+                }
                 var arr = []; var temp = {}
                 state.listCustomer.map((item) => {
                     temp = item
@@ -501,8 +504,14 @@ export default {
             state.currentPs = 1
             state.finishedPs = false
             state.listCustomer = []
+            if (!route.query.from) {
+                getNoticeData()
+            }
+            // getNoticeData()
+        }
 
-            getNoticeData()
+        const back = () => {
+            router.push('/mine')
         }
 
         const formatTime = (val) => {
@@ -511,11 +520,40 @@ export default {
 
         onMounted(() => {
             initList()
-            console.log(customInfo.value)
+        })
+
+        onBeforeMount(() => {
             if (customInfo.value) {
                 state.isUser = true
+                if (route.query.from === 'notice') {
+                    state.activeIndex = ref('public')
+                    state.currentNt = 1
+                    state.finishedNt = false
+                    state.listNotice = []
+                    getNoticeData()
+                }
+                if (route.query.from === 'msgcustomer') {
+                    // console.log('++2')
+                    state.activeIndex = ref('msgps')
+                    state.currentPs = 1
+                    state.finishedPs = false
+                    state.listCustomer = []
+                    getCustomerMsgListData()
+                }
+                if (route.query.from === 'msg') {
+                    // console.log('++3')
+                    state.activeIndex = ref('msg')
+                    state.current = 1
+                    state.finished = false
+                    state.list = []
+                    getMsgList()
+                }
             } else {
                 state.isUser = false
+                state.currentNt = 1
+                state.finishedNt = false
+                state.listNotice = []
+                if (route.query.from) getNoticeData()
             }
         })
 
@@ -527,6 +565,7 @@ export default {
             getMsgList,
             onRefreshNotice,
             onLoadNotice,
+            back,
             isError,
             getNoticeData,
             getCustomerMsgListData,
@@ -539,7 +578,6 @@ export default {
             changeType,
             goNoticeDetails,
             computeHtmlTime,
-            activeIndex,
             onClickTab,
             setMsgReadedFn,
             setAllMsgReaded,
@@ -565,6 +603,9 @@ export default {
     box-shadow: none;
 
     --van-dropdown-menu-title-font-size: 12px;
+}
+.msgTab{
+    --van-tabs-bottom-bar-color: var(--primary);
 }
 .publicPage {
     flex: 1;

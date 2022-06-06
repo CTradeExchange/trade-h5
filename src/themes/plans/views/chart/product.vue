@@ -32,8 +32,8 @@
         <div class='productInfo'>
             <div v-if='product?.symbolDigits' class='hd'>
                 <div class='hd-left'>
-                    <p class='cur_price' :class='product?.cur_color'>
-                        {{ product.cur_price ? parseFloat(product?.cur_price).toFixed(product?.symbolDigits) :'' }}
+                    <p v-if='dealLastPrice' class='cur_price' :class='dealLastPrice?.price_color'>
+                        {{ dealLastPrice.price ? parseFloat(dealLastPrice.price).toFixed(product?.symbolDigits) :'' }}
                     </p>
                 </div>
                 <div class='others'>
@@ -363,7 +363,7 @@ import { MAINSTUDIES, SUBSTUDIES, VolumeStudy } from '@/components/tradingview/d
 import { useStore } from 'vuex'
 import { Dialog, Toast } from 'vant'
 import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
-import { formatAmount } from '@/utils/calculation'
+import { formatAmount, pow } from '@/utils/calculation'
 import tv from '@/components/tradingview/tv'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import StallsAndDeal from './components/StallsAndDeal'
@@ -594,7 +594,8 @@ export default {
         const subscribeToProduct = () => {
             QuoteSocket.send_subscribe([`${getSymbolId()}_${getTradeType()}`])
             QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
-            QuoteSocket.deal_subscribe(getSymbolId(), 1, product.value.symbolDigits, getTradeType(), 1) // 该页面因为要实时更新成交量，所以改成订阅deal_subscribe成交记录显示最新价
+            const curDigits = pow(0.1, product.value?.symbolDigits)
+            QuoteSocket.deal_subscribe(getSymbolId(), 1, curDigits, getTradeType(), 1) // 该页面因为要实时更新成交量，所以改成订阅deal_subscribe成交记录显示最新价
         }
 
         const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
@@ -869,8 +870,11 @@ export default {
         }
 
         // 实时更新买卖价线
-        watch(() => [product.value?.buy_price, product.value?.sell_price, product.value?.cur_price, product.value?.tick_time], (newValues) => {
-            state.onChartReadyFlag && unref(chartRef).setTick(product.value?.cur_price, product.value?.tick_time, dealLastPrice.value.volume)
+        watch(() => [dealLastPrice.value?.price], (newValues) => {
+            if (newValues) {
+                // console.log('dealLastPrice.value.volume', dealLastPrice.value.volume)
+                state.onChartReadyFlag && unref(chartRef).setTick(dealLastPrice.value.price, dealLastPrice.value.dealTime, dealLastPrice.value.volume)
+            }
 
             state.onChartReadyFlag && unref(chartRef).updateLineData({
                 buyPrice: product.value?.buy_price,
@@ -936,7 +940,7 @@ export default {
             }
 
             // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
-            const canUseVolume = !product.value.isFX && !product.value.isCommodites
+            const canUseVolume = !product.value?.isFX && !product.value?.isCommodites
             // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
             if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
                 SUBSTUDIES.unshift(VolumeStudy)
@@ -999,6 +1003,7 @@ export default {
                 if (state.subStudy === 'Volume' && !canUseVolume) {
                     state.subStudy = SUBSTUDIES[0].name
                     localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                    locChartConfig.subStudy = JSON.stringify(SUBSTUDIES[0])
                 }
 
                 state.klineType = locChartConfig.chartType
@@ -1269,6 +1274,7 @@ export default {
             plansLen,
             isUniapp,
             firstDetail,
+            dealLastPrice,
             lang
         }
     }
@@ -1845,8 +1851,6 @@ export default {
                 background: none;
                 border: 1px solid var(--primary);
                 &.en-US {
-                    padding-top: rem(18px);
-                    line-height: 1.2;
                     .text {
                         font-size: rem(26px);
                     }
