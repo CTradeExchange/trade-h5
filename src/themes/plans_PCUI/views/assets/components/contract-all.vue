@@ -45,7 +45,7 @@
         </div>
         <div class='assets-body'>
             <el-table :cell-style="{ background:'none' }" :data='positionList' :empty-text="$t('c.noData')" height='100%'>
-                <el-table-column :label="$t('trade.asset')" prop='symbolName' width='120' />
+                <el-table-column :label="$t('trade.name')" prop='symbolName' width='120' />
                 <el-table-column :label="$t('trade.profit') + '('+ assetsInfo.currency +')'" :min-width='minWidth'>
                     <template #default='scope'>
                         <span :class="parseFloat(scope.row.profitLoss) > 0 ? 'riseColor': 'fallColor'">
