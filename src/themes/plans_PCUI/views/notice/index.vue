@@ -55,8 +55,7 @@
             </van-tab>
             <van-tab v-if='isUser' name='msg'>
                 <template #title>
-                    <i class='icon icon_xiaoxizhongxin'></i>
-                    {{ $t('route.msg') }}
+                    <i class='icon icon_xiaoxizhongxin'></i>{{ $t('route.msg') }}
                 </template>
                 <div class='list'>
                     <!-- <Loading :show='loading' /> -->

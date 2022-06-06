@@ -33,6 +33,7 @@
         <div v-if="current === 'assets'" class='assets-list'>
             <!-- 资产搜索 -->
             <AssetFilter
+                v-if='customerInfo'
                 :hide-asset='hideAsset'
                 :search-text='tradeSearchMap[tradeType]'
                 @changeState='changeState'
@@ -284,7 +285,9 @@ export default {
             pendingList,
             accountList,
             searchAsset,
-            changeState
+            changeState,
+            customerInfo
+
         }
     }
 }
