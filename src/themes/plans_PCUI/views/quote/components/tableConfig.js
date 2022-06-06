@@ -177,7 +177,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_last_price'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.last_color}>
+                        { getVal(row.symbolKey, 'rolling_last_price')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonLasPrice,
                 }
@@ -186,7 +190,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonUpDownAmount
                 }
@@ -251,7 +259,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_last_price'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.last_color}>
+                        { getVal(row.symbolKey, 'rolling_last_price')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonLasPrice,
                 }
@@ -260,7 +272,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonUpDownAmount
                 }
