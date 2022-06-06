@@ -1148,23 +1148,6 @@
         "ios": "下載蘋果端",
         "google": "從Google Play下載"
     },
-    "aboutUs": {
-        "introduceTitle":  "關於我們",
-        "introduce1": "Vitatoken於2021年9月6日在CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) 獲得許可，有金融科技解決方案和加密貨幣交易牌照。",
-        "introduce2": "Vitatoken是全球首個加密貨幣基金交易平台。Vitatoken未來將支持不同的基金管理人在平台上發行基金，讓用戶可以按需購買基金。",
-        "introduce3": "旨在讓每個人的加密貨幣之旅更輕鬆。 Vitatoken 提供加密貨幣交易和加密貨幣基金。目標是提高用戶的回報概率並降低加密貨幣投資的風險。更多功能和支持即將推出。",
-        "licenseTitle": "Vitatoken已獲得CEZA虛擬貨幣交易所官方證書",
-        "servicesTitle": "基礎服務",
-        "guide": "新手教學",
-        "trading": "現貨交易",
-        "issuance": "基金發行",
-        "ETFTrade": "ETF交易",
-        "indexFund": "指數基金",
-        "assistingTools": "輔助工具", 
-        "newsUpdates": "最新資訊",
-        "visionsTitle": "願景",
-        "visionsText": "我們的願景是幫助所有人輕鬆參與加密貨幣市場，我們像維他命那樣，是重要組成部分，使用我們平台發行或者買賣加密貨幣基金，降低參與門檻，提高獲利概率，從而在這個快速變化的市場中賺錢。"
-    },
     "api": {
         "title": "API管理",
         "createHeader": "創建API",

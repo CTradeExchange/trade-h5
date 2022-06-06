@@ -1106,24 +1106,6 @@
         "android": "Download for Android",
         "ios": "Download for iphone"
     },
-    "aboutUs": {
-        "introduceTitle": "About Us",
-        "introduce1": "Vitatoken is licensed in CAGAYAN ECONOMIC ZONE AUTHORITY (CEZA) under the legal entity of Dragon Empire Developments Limited in 6th September, 2021, for fintech solution and cryptocurrency exchange regulations. ",
-        "introduce2": "Vitatoken is the world first-ever cryptocurrency fund trading platform. In the future, Vitatoken will be supporting different fund managers issuing fund on the platform, which allow users to purchase fund as needed.",
-        "introduce3": "Aims to make everyone’s cryptocurrency journey easier. Vitatoken offers crypto trading and cryptocurrency funds. They target to raise user’s probability of returns and lower the risk on cryptocurrency investment. More functions and supports are coming soon.",
-        "licenseTitle1": "Vitatoken has obtained the official certificate of ",
-        "licenseTitle2": "CEZA virtual currency exchange license",
-        "servicesTitle": "Our Services",
-        "guide": "Beginners’Guide",
-        "trading": "Spot Trading",
-        "issuance": "Fund Issuance",
-        "ETFTrade": "ETF Trade",
-        "indexFund": "Index Fund",
-        "assistingTools": "Assisting Tools", 
-        "newsUpdates": "News & Updates",
-        "visionsTitle": "Our Visions",
-        "visionsText": "Entering cryptocurrency is challenging.Our mission is to create an opportunity for everyone to participle in the crypto market.Vitamin is vital, just like Vitatoken.We provide a platform that allows you to join the party easily at a low cost and hassle-free in this fast-growing market."
-    },
     "api": {
         "title": "API Manage",
         "createHeader": "Create API",
