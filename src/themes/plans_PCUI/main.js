@@ -64,9 +64,9 @@ if (loginParams || token) store.commit('_user/Update_loginLoading', true)
 else if (location.search.includes('from=officialWebsite')) loginParams = getPreDemoAccountParams() // 从官网过来自动分配pre的Demo账号
 
 // 加载业务渠道自定义配置json
-// requestBusinessConfig().then(res => {
-//     store.commit('Update_businessConfig', res)
-// })
+requestBusinessConfig().then(res => {
+    store.commit('Update_businessConfig', res)
+})
 
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
