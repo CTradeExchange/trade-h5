@@ -74,10 +74,11 @@
                         ref='popover'
                         placement='bottom'
                         trigger='hover'
+                        :visible='visible'
                         :width='250'
                     >
                         <template #reference>
-                            <div class='user'>
+                            <div class='user' @mouseover='visible=true'>
                                 <i class='head'></i>
                                 <span class='no'>
                                     {{ customerInfo.customerNo }}
@@ -199,7 +200,8 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
-            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1
+            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1,
+            visible: false
         })
 
         const chartColorAction = [
@@ -225,12 +227,6 @@ export default {
         // 在线客服地址
         const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
-        onBeforeMount(() => {
-
-        })
-        onUnmounted(() => {
-
-        })
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
@@ -304,7 +300,11 @@ export default {
         }
 
         // 路由跳转
-        const handRoutTo = (path) => router.push(route.path + path)
+        const handRoutTo = (path) => {
+            if (route.path.includes(path)) return
+            state.visible = false
+            router.push(route.path + path)
+        }
 
         return {
             logoUrl,
@@ -370,7 +370,7 @@ export default {
                 }
                 .link {
                     color: #FFF;
-                    font-size: 14px;
+                    font-size: 16px;
                     cursor: pointer;
                     &:hover {
                         color: var(--primary);
