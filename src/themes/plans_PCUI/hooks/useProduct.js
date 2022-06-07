@@ -8,6 +8,7 @@ import { localGet, localSet } from '@/utils/util'
 // 排序
 const sortField = ref(localGet('productListSortField') || '') // 排序字段
 const sortType = ref(localGet('productListSortType') || '') // 排序方式， asc-升序； desc-降序；
+const customerInfo = computed(() => store.state._user.customerInfo)
 
 export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     // wp拖拽预览的时候直接返回空数据
@@ -28,6 +29,7 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     // 所选玩法的板块列表
     const categoryList = computed(() => {
         const listByUser = unref(userSelfSymbolList)[unref(tradeType)] || []
+        // console.log(listByUser)
         const selfSymbol = {
             title: t('trade.favorites'),
             id: 'selfSymbol',
@@ -43,12 +45,52 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
         const productMapVal = unref(productMap)
         const arr = []
 
-        unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
-            const newId = `${id}_${unref(tradeType)}`
-            if (productMapVal[newId]?.symbolName) {
-                arr.push(productMapVal[newId])
+        let listByUserData = []
+        if (!customerInfo.value) { // 未登录
+            // console.log(localSelfSymbolList)
+            // console.log(unref(categoryType))
+            if (unref(categoryType.value) === '0') {
+                const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+                const obj = {}
+                const arr = localSelfSymbolList
+                if (arr.length > 0) {
+                    arr.map(el => {
+                        const tradeType = el.split('_')[1]
+                        if (obj[tradeType] !== undefined) {
+                            obj[tradeType].push(el.split('_')[0])
+                        } else {
+                            obj[tradeType] = [el.split('_')[0]]
+                        }
+                    })
+                    const listByUser = obj[unref(tradeType)]
+                    listByUserData = listByUser
+                } else {
+                    listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
+                }
+            } else {
+                listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
             }
-        })
+        } else { // 已登录
+            listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
+        }
+        console.log(unref(categoryList.value)[unref(categoryType.value)])
+        console.log(unref(categoryType.value))
+        // console.log(Number(unref(categoryType.value)))
+        if (listByUserData?.length > 0) {
+            listByUserData.forEach(id => {
+                const newId = `${id}_${unref(tradeType)}`
+                if (productMapVal[newId]?.symbolName) {
+                    arr.push(productMapVal[newId])
+                }
+            })
+        }
+
+        // unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
+        //     const newId = `${id}_${unref(tradeType)}`
+        //     if (productMapVal[newId]?.symbolName) {
+        //         arr.push(productMapVal[newId])
+        //     }
+        // })
 
         // 按字段排序
         arr.sort((a, b) => {

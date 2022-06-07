@@ -15,6 +15,7 @@ import customTable from '@planspc/views/order/pages/components/customTable.vue'
 import { getColumns } from './tableConfig.js'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
+import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
 
 const props = defineProps({
     list: {
@@ -54,6 +55,13 @@ const pagination = computed(() => {
 const computedList = computed(() => {
     return props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size)
 })
+
+// watch(
+//     () => computedList.value, list => {
+//         console.log(list)
+//     }
+// )
+
 // const moduleId = 'quote_' + Date.now()
 // let unSubscribe = () => {}
 

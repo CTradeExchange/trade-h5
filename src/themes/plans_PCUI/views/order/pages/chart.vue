@@ -4,7 +4,10 @@
             <p class='name'>
                 <span>{{ product?.symbolName }}</span>
                 <van-popover v-model:show='showEtfPopover' theme='dark'>
-                    <p style='padding:10px; width:400px;'>
+                    <p
+                        style=' width: 400px;
+padding: 10px;'
+                    >
                         {{ $t('trade.etfTip') }}
                     </p>
                     <template #reference>
@@ -414,15 +417,39 @@ export default {
         // const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
         // 产品信息
         const product = computed(() => store.getters.productActived)
+        const customerInfo = computed(() => store.state._user.customerInfo)
         const isSelfSymbol = computed({
-            get: () => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)),
+            get: () => {
+                console.log('isSelfSymbol-get')
+                // console.log(customerInfo)
+                if (isEmpty(customerInfo.value)) {
+                    const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                    // console.log(newId)
+                    if (localGet('localSelfSymbolList')) {
+                        if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
+                            return true
+                        } else {
+                            return false
+                        }
+                    } else {
+                        return false
+                    }
+
+                    // console.log(localGet('localSelfSymbolList'), newId)
+                } else {
+                    return store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
+                }
+            },
             set: (val) => {
+                console.log('isSelfSymbol-set')
                 state.isOptional = val
             },
         })
         const dealLastPrice = computed(() => store.state._quote.dealLastPrice)
 
         watch(() => isSelfSymbol.value, val => {
+            console.log(val, 'watch---->1')
+            console.log('isSelfSymbol-watch')
             state.isOptional = !!val
         }, { immediate: true })
 
@@ -461,7 +488,7 @@ export default {
         // 颜色值
         const style = computed(() => store.state.style)
 
-        const customerInfo = computed(() => store.state._user.customerInfo)
+        // const customerInfo = computed(() => store.state._user.customerInfo)
 
         // 重新渲染图表
         const renderChart = (product, property) => {
@@ -485,44 +512,83 @@ export default {
                 buyPrice: product.value.buy_price,
                 sellPrice: product.value.sell_price
             })
+            checkIsSelfSymbol()
         })
 
         const handleClick = () => {
 
         }
 
+        const checkIsSelfSymbol = () => {
+            // 自选星标状态
+            if (isEmpty(customerInfo.value)) {
+                const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                if (localGet('localSelfSymbolList')) {
+                    if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
+                        state.isOptional = true
+                    } else {
+                        state.isOptional = false
+                    }
+                }
+            } else {
+                state.isOptional = store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
+            }
+            console.log(state.isOptional)
+        }
+
         // 添加自选
         const addOptional = () => {
             if (isEmpty(customerInfo.value)) {
-                ElMessage.warning(t('common.noLogin'))
-                return router.push('/login')
-            }
-            if (isSelfSymbol.value) {
-                removeCustomerOptional({
-                    symbolList: [product.value.symbolId],
-                    tradeType: product.value.tradeType
-                }).then(res => {
-                    if (res.check()) {
-                        isSelfSymbol.value = false
-                        store.dispatch('_user/queryCustomerOptionalList')
-                        ElMessage.success(t('trade.removeOptionalOk'))
-                    }
-                }).catch(err => {
-                })
+                // ElMessage.warning(t('common.noLogin'))
+                // return router.push('/login')
+
+                // 未登录 缓存到本地
+                var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+                const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
+                if (localSelfSymbolList.find(el => el === newId)) {
+                    localSelfSymbolList.map((it, index) => {
+                        if (it === newId) {
+                            localSelfSymbolList.splice(index, 1)
+                            isSelfSymbol.value = false
+                            ElMessage.success(t('trade.removeOptionalOk'))
+                            state.isOptional = false
+                        }
+                    })
+                } else {
+                    localSelfSymbolList.push(newId)
+                    isSelfSymbol.value = true
+                    state.isOptional = true
+                    ElMessage.success(t('trade.addOptionalOk'))
+                }
+                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
             } else {
-                addCustomerOptional({
-                    symbolList: [product.value.symbolId],
-                    tradeType: product.value.tradeType
-                }).then(res => {
-                    if (res.check()) {
-                        isSelfSymbol.value = true
-                        // 手动修改optional值
-                        store.commit('_user/Update_optional', 1)
-                        store.dispatch('_user/queryCustomerOptionalList')
-                        ElMessage.success(t('trade.addOptionalOk'))
-                    }
-                }).catch(err => {
-                })
+                if (isSelfSymbol.value) {
+                    removeCustomerOptional({
+                        symbolList: [product.value.symbolId],
+                        tradeType: product.value.tradeType
+                    }).then(res => {
+                        if (res.check()) {
+                            isSelfSymbol.value = false
+                            store.dispatch('_user/queryCustomerOptionalList')
+                            ElMessage.success(t('trade.removeOptionalOk'))
+                        }
+                    }).catch(err => {
+                    })
+                } else {
+                    addCustomerOptional({
+                        symbolList: [product.value.symbolId],
+                        tradeType: product.value.tradeType
+                    }).then(res => {
+                        if (res.check()) {
+                            isSelfSymbol.value = true
+                            // 手动修改optional值
+                            store.commit('_user/Update_optional', 1)
+                            store.dispatch('_user/queryCustomerOptionalList')
+                            ElMessage.success(t('trade.addOptionalOk'))
+                        }
+                    }).catch(err => {
+                    })
+                }
             }
         }
 
@@ -664,6 +730,8 @@ export default {
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
 
+            console.log('initChartData = ()')
+
             // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
             const canUseVolume = !product.value.isFX && !product.value.isCommodites
             console.log(canUseVolume, isEmpty(locChartConfig))
@@ -762,6 +830,9 @@ export default {
             console.log('upColor', style.value.riseColor)
             console.log('downColor', style.value.fallColor)
             console.log('state.initConfig.property', state.initConfig.property)
+
+            // 自选星标状态
+            checkIsSelfSymbol()
         }
 
         // 设置图表类型
@@ -846,6 +917,7 @@ export default {
         // 监听路由变化
         watch(
             () => route.query, (val, oval) => {
+                console.log('watch---->3')
                 changeRoute()
             }, {
                 immediate: true
@@ -886,8 +958,10 @@ export default {
             addOptional,
             isSelfSymbol,
             formatAmount,
+            checkIsSelfSymbol,
             dealLastPrice,
             contractRoute
+
         }
     }
 }

@@ -16,17 +16,29 @@
                     {{ $t('signIn.fundLogin') }}
                 </button>
             </div>
-            <loginTypeBar v-model='loginType' />
+            <loginNameTypeBar v-model='loginNameType' @change="loginName=''" />
             <form class='loginForm'>
-                <h2 class='loginTitle'>
+                <!-- <h2 class='loginTitle'>
                     {{ loginType==='password' ? $t("signIn.loginByPwd") : $t("signIn.loginByCode") }}
-                </h2>
-                <div class='field'>
+                </h2> -->
+                <div v-if="loginNameType==='mobile'" class='field'>
+                    <areaInputPc
+                        ref='loginNameEl'
+                        v-model.trim='loginName'
+                        v-model:zone='zone'
+                        block
+                        :placeholder="$t('common.inputPhone')"
+                        @keyup.enter='onLoginNameKeyupEnter'
+                        @onBlur='checkUserMfa'
+                        @zoneSelect='zoneSelect'
+                    />
+                </div>
+                <div v-else class='field'>
                     <compInput
                         ref='loginNameEl'
                         v-model.trim='loginName'
                         block
-                        :placeholder="$t('signIn.loginNamePlaceholder')"
+                        :placeholder="$t('common.inputEmail')"
                         @keyup.enter='onLoginNameKeyupEnter'
                         @onBlur='checkUserMfa'
                     />
@@ -67,6 +79,9 @@
                 <router-link to='/register'>
                     {{ $t('signIn.register') }}
                 </router-link>
+                <a class='switchLoginType' href='javascript:;' @click='switchLoginType'>
+                    {{ loginType==='password' ? $t("signIn.loginByCode") : $t("signIn.loginByPwd") }}
+                </a>
                 <router-link :to='{ path: "/forgot",query:{ type: "login" } }'>
                     {{ $t('signIn.forgot') }}
                 </router-link>
@@ -96,14 +111,15 @@
 
 <script>
 import topNav from '@planspc/layout/topNav'
-import loginTypeBar from './loginTypeBar'
+import loginNameTypeBar from './loginNameTypeBar'
 import compInput from '@planspc/components/form/input'
+import areaInputPc from '@/components/form/areaInputPc'
 import LoginPwdDialog from './loginPwdDialog.vue'
 import { reactive, ref, toRefs, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { localGet, isEmpty } from '@/utils/util'
+import { localGet, isEmpty, localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 import LoginHook from './loginHook'
 import LoginByGoogle from '@/themeCommon/user/login/components/loginByGoogle.vue'
@@ -116,9 +132,10 @@ export default {
     name: 'Login',
     components: {
         LoginPwdDialog,
-        loginTypeBar,
+        loginNameTypeBar,
         topNav,
         compInput,
+        areaInputPc,
         googleVerifyCode,
         LoginByGoogle,
         LoginByFacebook,
@@ -138,13 +155,27 @@ export default {
             loginPwdPop: false,
             sendVerifyLoading: false,
             loginName: '',
+            zone: localGet('loginZone') || '',
             pwd: '',
             googleCodeVis: '',
             checkCode: '',
             token: '', // 验证码token
+            loginNameType: localGet('loginNameType') || 'mobile', // mobile 手机号登录   email 邮箱登录
             loginType: 'password', // password 密码登录   checkCode 验证码登录
         })
 
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode').then(res => {
+            if (res.check() && res.data.length) {
+                const countryList = store.state.countryList
+                const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
+                const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
+                if (defaultZoneConfig?.code && !state.zone) {
+                    state.countryVal = defaultZoneConfig.code
+                    state.zone = defaultZoneConfig.countryCode
+                }
+            }
+        })
         const countryList = computed(() => store.state.countryList)
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
 
@@ -157,6 +188,11 @@ export default {
             })
         }
 
+        // 切换登录方式
+        const switchLoginType = () => {
+            state.loginType = state.loginType === 'password' ? 'checkCode' : 'password'
+        }
+
         // 点击登录
         const loginHandle = () => {
             if (state.googleCodeVis && isEmpty(state.googleCode)) {
@@ -166,6 +202,7 @@ export default {
             loginSubmit({
                 loginName: state.loginName,
                 loginType: state.loginType,
+                phoneArea: state.zone,
                 checkCode: state.checkCode,
                 pwd: state.pwd,
                 token: state.token,
@@ -175,6 +212,9 @@ export default {
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
                 if (res.invalid()) return res
+                localSet('loginNameType', state.loginNameType)
+                localSet('loginZone', state.zone)
+
                 if (Number(res.data.companyKycStatus) === 1) {
                     if (Number(res.data.kycAuditStatus === 0)) {
                         return Dialog.alert({
@@ -258,11 +298,11 @@ export default {
         }
 
         // 检测客户是否开启GoogleMFA
-        const checkUserMfa = (ev) => {
-            const val = ev.target.value
+        const checkUserMfa = (val) => {
             if (val) {
                 checkGoogleMFAStatus({
                     loginName: val,
+                    phoneArea: state.zone,
                     type: val.includes('@') ? 1 : 2
                 }).then(res => {
                     if (res.check()) {
@@ -277,6 +317,11 @@ export default {
             state.googleCode = val
         }
 
+        // 选择登录手机号区号
+        const zoneSelect = (data) => {
+            state.zone = data.code
+        }
+
         onMounted(() => {
             if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
                 // 获取国家区号
@@ -289,8 +334,10 @@ export default {
         return {
             ...toRefs(state),
             loginHandle,
+            switchLoginType,
             verifyCodeBtnText,
             sendVerifyHandler,
+            zoneSelect,
             loginNameEl,
             pwdEl,
             checkCodeEl,

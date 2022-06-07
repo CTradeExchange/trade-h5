@@ -1,7 +1,7 @@
 <template>
     <div class='mobileBar van-hairline--bottom'>
         <div class='zone' :class='{ disabled: disabled }'>
-            <VueSelect v-model='zoneVal' :actions='countryList' :text="type === 'mobile' ? 'name': 'countryName'" value='name' @select='zoneOnSelect' />
+            <VueSelect v-model='zoneVal' :actions='countryList' :text="type === 'mobile' ? 'name': 'countryName'" value='countryCode' @select='zoneOnSelect' />
         </div>
         <div class='inputWrapper'>
             <input
@@ -80,8 +80,8 @@ export default {
                 countryList.forEach(item => {
                     tempArr.push({
                         name: item.name + ' (' + item.countryCode + ')',
-                        code: item.countryCode,
-                        countryCode: item.code,
+                        code: item.code,
+                        countryCode: item.countryCode,
                         countryName: item.name
                     })
                 })
@@ -107,8 +107,8 @@ export default {
                 res.data.forEach(item => {
                     tempArr.push({
                         name: item.name + ' (' + item.countryCode + ')',
-                        code: item.countryCode,
-                        countryCode: item.code,
+                        code: item.code,
+                        countryCode: item.countryCode,
                         countryName: item.name
                     })
                 })

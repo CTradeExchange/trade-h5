@@ -10,19 +10,32 @@
             <van-tab :title='$t("login.loginByPersonal")' />
             <van-tab :title='$t("login.loginByCorporate")' />
         </van-tabs>
-        <header class='header'>
+
+        <van-tabs
+            v-model:active='loginNameType'
+            class='mtop10'
+            :color='$style.primary'
+            shrink
+            :title-active-color='$style.primary'
+        >
+            <van-tab name='email' :title='$t("register.email")' />
+            <van-tab name='mobile' :title='$t("register.phoneNo")' />
+        </van-tabs>
+        <!-- <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
             </h1>
-        </header>
+        </header> -->
 
         <form class='loginForm'>
-            <div v-if="loginAccount==='mobile'" class='field'>
-                <InputComp
+            <div v-if="loginNameType==='mobile'" class='field'>
+                <areaInputMobile
                     v-model.trim='loginName'
+                    v-model:zone='phoneArea'
                     clear
-                    :label="$t('login.loginNamePlaceholder')"
+                    :placeholder="$t('login.loginNamePlaceholder')"
                     @onBlur='checkUserMfa'
+                    @zoneSelect='zoneSelect'
                 />
             </div>
             <div v-else class='field'>
@@ -102,6 +115,7 @@
 
 <script>
 import Schema from 'async-validator'
+import areaInputMobile from '@/components/form/areaInputMobile'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
@@ -128,6 +142,7 @@ import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 export default {
     components: {
         Vline,
+        areaInputMobile,
         InputComp,
         LoginByGoogle,
         LoginByFacebook,
@@ -149,10 +164,13 @@ export default {
             loginPwdPop: false,
             tabActive: 0,
             loginName: '',
+            email: '',
             pwd: '',
+            zone: localGet('loginZone') || '',
+            phoneArea: localGet('loginPhoneArea') || '',
             checkCode: '',
             loginType: 'password', // checkCode
-            loginAccount: 'mobile',
+            loginNameType: localGet('loginNameType') || 'mobile',
             bindAddShow: false,
             userId: '',
             googleCodeVis: false,
@@ -180,13 +198,19 @@ export default {
             state.googleCode = val
         }
 
+        // 选择登录手机号区号
+        const zoneSelect = (data) => {
+            state.phoneArea = data.countryCode
+        }
+
         const loginHandle = () => {
             if (state.googleCodeVis && isEmpty(state.googleCode)) {
                 return Toast(t('common.inputGoogleCode'))
             }
             const loginParams = {
-                type: state.loginName.includes('@') ? 1 : 2,
-                loginName: state.loginName,
+                type: state.loginNameType === 'email' ? 1 : 2,
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName,
+                phoneArea: state.phoneArea,
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
@@ -207,7 +231,7 @@ export default {
                     ...state,
                     first: true
                 }, (errors, fields) => {
-                    // console.log(errors, fields)
+                    // console.log(errors, fields, loginParams)
                     if (errors) {
                         state.loading = false
                         Toast(errors[0].message)
@@ -237,6 +261,8 @@ export default {
                 instance.appContext.config.globalProperties.$MsgSocket.login()
                 store.commit('del_cacheViews', 'Home')
                 store.commit('del_cacheViews', 'Layout')
+                localSet('loginNameType', state.loginNameType)
+                localSet('loginPhoneArea', state.phoneArea)
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
@@ -299,7 +325,8 @@ export default {
             if (val) {
                 checkGoogleMFAStatus({
                     loginName: val,
-                    type: val.includes('@') ? 1 : 2
+                    phoneArea: state.phoneArea,
+                    type: state.loginNameType === 'email' ? 1 : 2
                 }).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
@@ -313,8 +340,9 @@ export default {
         // 发送验证码
         const verifyCodeSendHandler = (callback) => {
             const verifyParams = {
-                type: state.loginName.includes('@') ? 1 : 2,
-                loginName: state.loginName
+                type: state.loginNameType === 'email' ? 1 : 2,
+                phoneArea: state.phoneArea,
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName
             }
 
             const validator = new Schema(RuleFn(t))
@@ -332,10 +360,10 @@ export default {
                             callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
-                            state.zone = res.data.phoneArea
+                            // state.zone = res.data.phoneArea
                             const params = {
-                                bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-                                toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
+                                bizType: state.loginNameType === 'email' ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+                                toUser: state.loginNameType === 'email' ? state.loginName : String(state.phoneArea) + ' ' + state.loginName,
                             }
                             verifyCodeSend(params).then(res => {
                                 if (res.check()) {
@@ -388,6 +416,7 @@ export default {
             ...toRefs(state),
             changeLoginType,
             rightAction,
+            zoneSelect,
             loginHandle,
             topRightClick,
             verifyCodeSendHandler,
@@ -443,7 +472,7 @@ export default {
     font-size: rem(34px);
 }
 .loginForm {
-    margin: rem(50px) rem(30px);
+    margin: rem(30px) rem(30px) rem(50px);
     .field {
         position: relative;
         display: flex;

@@ -228,7 +228,6 @@ const h5Children = [{
         roles: ['User']
     }
 },
-
 {
     path: 'loan', // 借款
     component: () =>
@@ -592,6 +591,16 @@ const routes = [
             },
             children: h5Children
         },
+        {
+            path: '/barrage',
+            name: 'Barrage',
+            component: () =>
+                import(/* webpackChunkName: "api" */ '../views/barrage/index.vue'),
+            meta: {
+                title: 'Barrage弹幕'
+            },
+            children: h5Children
+        }
         ],
     },
     // {

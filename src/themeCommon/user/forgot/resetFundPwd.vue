@@ -94,6 +94,7 @@ export default {
             const params = {
                 type: route.query['type'], // 1邮箱，2手机号码，3客户账号
                 loginName: route.query['loginName'],
+                phoneArea: route.query['phoneArea'],
                 verifyCode: route.query['verifyCode'],
                 newPwd: md5(state.confirmPwd),
                 sendToken: route.query['sendToken'],
