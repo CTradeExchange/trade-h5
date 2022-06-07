@@ -44,7 +44,7 @@
     "reconnectingwebsocket": "^1.0.0",
     "script-loader": "^0.7.2",
     "skywalking-client-js": "^0.6.0",
-    "vant": "3.3.7",
+    "vant": "3.4.8",
     "vconsole": "3.4.1",
     "vue": "3.2.20",
     "vue-i18n": "^9.1.6",
