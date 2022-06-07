@@ -38,10 +38,10 @@ export default function ({ tradeType, categoryType, isSort = true }) {
     const productList = computed(() => {
         const productMapVal = unref(productMap)
         const arr = []
-        let listByUserData = []
+        let listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
 
         if (!customerInfo.value) { // 未登录
-            console.log(categoryList)
+            // console.log(categoryList)
             // console.log(unref(categoryType))
             if (unref(categoryType.value) === 0) {
                 const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
@@ -57,16 +57,16 @@ export default function ({ tradeType, categoryType, isSort = true }) {
                         }
                     })
                     const listByUser = obj[unref(tradeType)] || []
-                    listByUserData = listByUser
-                } else {
-                    listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
+                    listByUserData = listByUserData.concat(listByUser)
                 }
             } else {
-                listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
+                listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser
             }
         } else { // 已登录
-            listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
+            listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser
         }
+
+        console.log(listByUserData)
         if (listByUserData?.length > 0) {
             listByUserData.forEach(id => {
                 const newId = `${id}_${unref(tradeType)}`

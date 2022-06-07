@@ -38,6 +38,11 @@
             </span>
         </div>
         <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
+        <div class='AddToOptional'>
+            <van-button plain size='small' type='primary' @click='goSearchPage'>
+                + {{ $t('trade.addToOptional') }}
+            </van-button>
+        </div>
     </div>
 </template>
 
@@ -122,8 +127,8 @@ export default {
             async () => {
                 await nextTick()
                 if (productListEl.value) productListEl.value.subscribeAll()
-                console.log(productList)
-                console.log(productListEl.value)
+
+                // console.log(productListEl.value)
             }
         )
 
@@ -138,6 +143,7 @@ export default {
                 }
                 await nextTick()
                 unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + tradeTypeOld)
+                console.log(unref(tradeType))
             }
         })
 
@@ -154,6 +160,11 @@ export default {
             store.commit('del_cacheViews', 'FundProductList')
             router.push('/fundProductList')
         }
+
+        const goSearchPage = () => {
+            router.push(`/productSearch?tradeType=${tradeType.value}`)
+        }
+
         return {
             locale,
             fundBannerPosition: window['fundBannerPosition'].split('-'),
@@ -175,7 +186,8 @@ export default {
             localSelfSymbolListCur,
             tradeTypeOld,
             categoryTypeOld,
-            showSidebar
+            showSidebar,
+            goSearchPage
         }
     }
 }
@@ -254,5 +266,9 @@ export default {
         display: block;
         width: 100%;
     }
+}
+.AddToOptional {
+    margin: rem(26px) 0;
+    text-align: center;
 }
 </style>
