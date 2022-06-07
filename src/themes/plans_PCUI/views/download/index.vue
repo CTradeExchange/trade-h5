@@ -74,7 +74,7 @@ const downloads = {
     }
     .content {
         display: flex;
-        justify-content: start;
+        justify-content: flex-start;
         padding-top: 80px;
         .btn-wrap {
             margin-right: rem(30px);

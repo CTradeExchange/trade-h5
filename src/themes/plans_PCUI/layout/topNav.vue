@@ -72,8 +72,6 @@
                 <div class='item'>
                     <el-popover
                         ref='popoverRef'
-                        hide-after='0'
-                        :overlay='true'
                         placement='bottom'
                         trigger='hover'
                         :width='250'
@@ -203,7 +201,6 @@ export default {
         const popoverRef = ref()
         const state = reactive({
             chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1,
-            visible: true
         })
 
         const chartColorAction = [
@@ -304,8 +301,7 @@ export default {
         // 路由跳转
         const handRoutTo = (path) => {
             if (route.path.includes(path)) return
-            state.visible = false
-            popoverRef.value.hide()
+            popoverRef.value.visibility = false
             router.push(route.path + path)
         }
 
