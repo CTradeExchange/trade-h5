@@ -39,7 +39,7 @@
                 />
             </div>
             <div v-else class='field'>
-                <InputComp v-model.trim='email' clear :label="$t('login.email')" />
+                <InputComp v-model.trim='email' clear :label="$t('common.inputEmail')" />
             </div>
             <div v-if="loginType==='password'" class='field'>
                 <InputComp v-model='pwd' clear :label="$t('login.pwd')" pwd />

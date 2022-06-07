@@ -29,9 +29,9 @@
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div v-if="type==='login'" class='field'>
-                    <areaInput
+                    <areaInputMobile
                         v-model.trim='mobile'
-                        v-model:zone='zone'
+                        v-model:zone='phoneArea'
                         clear
                         :placeholder='$t("common.inputPhone")'
                         @onBlur='checkUserMfa'
@@ -112,7 +112,7 @@
 import Top from '@/components/top'
 import InputComp from '@/components/form/input'
 import { reactive, toRefs, computed } from 'vue'
-import areaInput from '@/components/form/areaInput'
+import areaInputMobile from '@/components/form/areaInputMobile'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
@@ -129,7 +129,7 @@ import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 export default {
     components: {
         Top,
-        areaInput,
+        areaInputMobile,
         InputComp,
         checkCode,
         uInput,
