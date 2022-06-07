@@ -588,7 +588,6 @@ const routes = [
                 import(/* webpackChunkName: "api" */ '../views/notice/detail.vue'),
             meta: {
                 title: 'route.noticeTitle'
-<<<<<<< HEAD
             },
             children: h5Children
         },
@@ -602,11 +601,6 @@ const routes = [
             },
             children: h5Children
         }
-=======
-            },
-            children: h5Children
-        },
->>>>>>> uat
         ],
     },
     // {
