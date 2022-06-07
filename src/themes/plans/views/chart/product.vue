@@ -597,8 +597,6 @@ export default {
             QuoteSocket.send_subscribe24H([`${getSymbolId()}_${getTradeType()}`])
         }
 
-        // const isSelfSymbol = computed(() => !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId()))))
-
         const checkIsSelfSymbol = () => {
             if (isEmpty(customerInfo.value)) {
                 const newId = getSymbolId() + '_' + getTradeType()

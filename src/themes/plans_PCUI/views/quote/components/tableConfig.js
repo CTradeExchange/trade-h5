@@ -30,7 +30,6 @@ export const getColumns = tradeTypeValue => {
 
     /** 添加自选逻辑 */
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
-    // const isCollect = (tradeType, symbolId) => userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
 
     /** 添加自选逻辑 标星状态 */
     const isCollect = (tradeType, symbolId) => {

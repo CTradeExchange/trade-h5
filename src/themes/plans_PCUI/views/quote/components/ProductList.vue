@@ -116,7 +116,7 @@ const computedList = computed(() => {
             color: var(--primary);
             font-weight: 400;
             font-size: 14px;
-            line-height: 28px;
+            line-height: 30px;
             text-align: center;
             vertical-align: middle;
             border: 1px solid var(--primary);
