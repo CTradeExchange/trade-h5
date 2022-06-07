@@ -15,6 +15,7 @@ import customTable from '@planspc/views/order/pages/components/customTable.vue'
 import { getColumns } from './tableConfig.js'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import { useRouter } from 'vue-router'
+import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
 
 const props = defineProps({
     list: {
@@ -54,6 +55,13 @@ const pagination = computed(() => {
 const computedList = computed(() => {
     return props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size)
 })
+
+// watch(
+//     () => computedList.value, list => {
+//         console.log(list)
+//     }
+// )
+
 // const moduleId = 'quote_' + Date.now()
 // let unSubscribe = () => {}
 
@@ -72,58 +80,57 @@ const computedList = computed(() => {
 
 <style lang="scss" scoped>
 @import '~@/sass/mixin.scss';
-
-.productList{
-    width: 100%;
-    overflow: hidden;
+.productList {
     display: flex;
     flex-direction: column;
+    width: 100%;
     padding: 0 12px;
-    :deep{
-        .el-table__row{
+    overflow: hidden;
+    :deep {
+        .el-table__row {
             cursor: pointer;
         }
-        .el-table td.el-table__cell{
+        .el-table td.el-table__cell {
             padding: 12px 0;
         }
-        .el-table__empty-block{
+        .el-table__empty-block {
             margin-top: 80px;
         }
-        .star{
-            cursor: pointer;
-            margin-right: 5px;
+        .star {
             align-self: self-start;
+            margin-right: 5px;
+            cursor: pointer;
         }
         // tbody td.el-table__cell.primaryText{
         //     color: var(--primary);
         // }
-        .btn{
+        .btn {
             @include hover();
             position: relative;
             z-index: 0;
             display: inline-block;
             width: 80px;
-            color: var(--primary);
-            border: 1px solid var(--primary);
             height: 30px;
-            line-height: 28px;
-            border-radius: 4px;
-            text-align: center;
             margin-right: 10px;
-            font-size: 14px;
-            font-weight: 400;
-            vertical-align: middle;
-            cursor: pointer;
             overflow: hidden;
+            color: var(--primary);
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 28px;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid var(--primary);
+            border-radius: 4px;
+            cursor: pointer;
             &.active {
-                color: #fff;
+                color: #FFF;
                 background: var(--primary);
             }
-            &:last-child{
+            &:last-child {
                 margin-right: 0;
             }
-            &:hover{
-                color: #fff;
+            &:hover {
+                color: #FFF;
                 background: var(--primary);
             }
         }

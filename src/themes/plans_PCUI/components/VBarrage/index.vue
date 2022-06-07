@@ -44,7 +44,7 @@ export default {
         // 速度
         speed: {
             type: Number,
-            default: 90
+            default: 50
         }
     },
 
@@ -283,7 +283,7 @@ export default {
             state.barrageMainDm.appendChild(dom) // 一定要在获取宽度和执行动画之前渲染dom
 
             dom.style.transform = `translate3d(${state.barMainWidth / 2 - (dom.clientWidth / 2)}px,${channel * dom.clientHeight}px,0)`
-            dom.style.animation = 'barrage-fade 2s'
+            dom.style.animation = 'barrage-fade 6s'
         }
 
         // 获取空闲通道中空闲的dom

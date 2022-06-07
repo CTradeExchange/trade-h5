@@ -1,7 +1,7 @@
 import ETF from '@planspc/components/etfIcon'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import { computed, unref, ref } from 'vue'
+import { computed, unref, ref, inject } from 'vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import { findFundPage } from '@/api/fund.js'
 import { ElMessage } from 'element-plus'
@@ -48,6 +48,8 @@ export const getColumns = tradeTypeValue => {
         }
     }
 
+    const isReLoadProductList = inject('isReLoadProductList')
+
     const addOptional = (event, { symbolId, tradeType }) => {
         event.stopPropagation()
         if (customerInfo.value) {
@@ -86,6 +88,7 @@ export const getColumns = tradeTypeValue => {
                 ElMessage.success(t('trade.addOptionalOk'))
             }
             store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
+            isReLoadProductList(true, newId)
         }
     }
     /** 添加自选逻辑 */

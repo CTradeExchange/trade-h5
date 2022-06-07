@@ -5,12 +5,12 @@
             <Autocomplete :trade-type='tradeType' />
         </div>
         <CategoryList v-model='categoryType' :list='computedCategoryList' />
-        <ProductList v-if='tradeType' :list='productList' :trade-type='tradeType' />
+        <ProductList v-if='tradeType' :list='productListData.value' :trade-type='tradeType' />
     </div>
 </template>
 
 <script setup>
-import { ref, watch, unref, computed, onUnmounted } from 'vue'
+import { ref, watch, unref, computed, onUnmounted, onMounted, onBeforeMount, provide, nextTick } from 'vue'
 import PlansType from './PlansType'
 import useProduct from '@planspc/hooks/useProduct'
 import { QuoteSocket } from '@/plugins/socket/socket'
@@ -21,6 +21,7 @@ import { useStore } from 'vuex'
 
 const store = useStore()
 const tradeType = ref('')
+const productListData = ref([])
 
 // 获取板块列表和所选板块的产品列表
 const categoryType = ref('1')
@@ -28,6 +29,29 @@ const { categoryList, productList } = useProduct({
     tradeType, categoryType
 })
 const planMap = computed(() => store.state._quote.planMap) // 每个玩法下配置的产品
+
+provide('isReLoadProductList', (value, productId) => {
+    console.log('isReLoadProductList')
+    if (value === true) {
+        const ArrPro = unref(productListData).value
+        // console.log(ArrPro, unref(categoryType), productId)
+        // console.log(ArrPro.property)
+        if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
+            ArrPro.map((it, index) => {
+                if (it.symbolKey === productId) {
+                    ArrPro.splice(index, 1)
+                }
+            })
+
+            // nextTick()
+            // nextTick(() => {
+            // productListData.value = ref(ArrPro)
+            // initList()
+            console.log(ArrPro)
+            // })
+        }
+    }
+})
 
 const computedCategoryList = computed((el) => {
     const list = [...unref(categoryList)]
@@ -64,6 +88,15 @@ watch(
         unSubscribe = QuoteSocket.add_subscribe24H({ moduleId, symbolKeys: subscribeSymbolsList.value })
     }
 )
+
+const initList = () => {
+    productListData.value = ref(productList)
+}
+
+onBeforeMount(() => {
+    // console.log(productList)
+    initList()
+})
 
 onUnmounted(() => {
     unSubscribe()
