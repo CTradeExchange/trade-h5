@@ -129,7 +129,7 @@ export default {
             const accountIds = []
             if ([1, 2].includes(Number(props.tradeType))) {
                 tabList = [
-                    { title: t('trade.curPending'), value: 'pending' },
+                    { title: t('trade.curTrust'), value: 'pending' },
                     { title: t('trade.dealList'), value: 'deal' },
                     { title: t('trade.position'), value: 'position' }
                 ]
