@@ -12,14 +12,14 @@
         </van-tabs>
 
         <van-tabs
-            v-model:active='loginAccount'
+            v-model:active='loginNameType'
             class='mtop10'
             :color='$style.primary'
             shrink
             :title-active-color='$style.primary'
         >
-            <van-tab name='mobile' :title='$t("register.phoneNo")' />
             <van-tab name='email' :title='$t("register.email")' />
+            <van-tab name='mobile' :title='$t("register.phoneNo")' />
         </van-tabs>
         <!-- <header class='header'>
             <h1 class='pageTitle'>
@@ -28,10 +28,10 @@
         </header> -->
 
         <form class='loginForm'>
-            <div v-if="loginAccount==='mobile'" class='field'>
-                <areaInput
+            <div v-if="loginNameType==='mobile'" class='field'>
+                <areaInputMobile
                     v-model.trim='loginName'
-                    v-model:zone='zone'
+                    v-model:zone='phoneArea'
                     clear
                     :placeholder="$t('login.loginNamePlaceholder')"
                     @onBlur='checkUserMfa'
@@ -115,7 +115,7 @@
 
 <script>
 import Schema from 'async-validator'
-import areaInput from '@/components/form/areaInput'
+import areaInputMobile from '@/components/form/areaInputMobile'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
@@ -142,7 +142,7 @@ import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 export default {
     components: {
         Vline,
-        areaInput,
+        areaInputMobile,
         InputComp,
         LoginByGoogle,
         LoginByFacebook,
@@ -170,7 +170,7 @@ export default {
             phoneArea: localGet('loginPhoneArea') || '',
             checkCode: '',
             loginType: 'password', // checkCode
-            loginAccount: localGet('loginAccount') || 'mobile',
+            loginNameType: localGet('loginNameType') || 'mobile',
             bindAddShow: false,
             userId: '',
             googleCodeVis: false,
@@ -200,7 +200,7 @@ export default {
 
         // 选择登录手机号区号
         const zoneSelect = (data) => {
-            state.phoneArea = data.code
+            state.phoneArea = data.countryCode
         }
 
         const loginHandle = () => {
@@ -261,9 +261,8 @@ export default {
                 instance.appContext.config.globalProperties.$MsgSocket.login()
                 store.commit('del_cacheViews', 'Home')
                 store.commit('del_cacheViews', 'Layout')
-                localSet('loginAccount', state.loginAccount)
+                localSet('loginNameType', state.loginNameType)
                 localSet('loginPhoneArea', state.phoneArea)
-                localSet('loginZone', state.zone)
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启

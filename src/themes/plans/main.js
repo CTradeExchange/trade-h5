@@ -88,10 +88,9 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     store.commit('_base/Update_plansNames', tradeTypeClone)
 
     // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
-    if (loginParams || token) {
+    if (token) {
         Promise.resolve().then(() => {
-            if (token) return store.dispatch('_user/findCustomerInfo')
-            else return store.dispatch('_user/login', loginParams)
+            return store.dispatch('_user/findCustomerInfo')
         }).then(res => {
             if (typeof (res.check) === 'function' && res.check()) {
                 checkUserKYC({ res, Dialog, router, store, t: I18n.global.t })
