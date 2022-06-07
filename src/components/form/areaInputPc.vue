@@ -6,9 +6,17 @@
                 <el-option
                     v-for='item in countryList'
                     :key='item.code'
-                    :label='item.name'
                     :value='item.code'
-                />
+                >
+                    <span class='label-country'>
+                        {{ item.countryName }}
+                    </span>
+                    <span
+                        class='label-zone'
+                    >
+                        {{ item.code }}
+                    </span>
+                </el-option>
             </el-select>
         </div>
 
@@ -167,6 +175,21 @@ export default {
                     line-height: 48px;
                 }
             }
+        }
+    }
+}
+.el-select-dropdown {
+    .el-select-dropdown__item {
+        padding: 0 10px;
+        .label-country {
+            float: left;
+            width: 100px;
+            overflow: hidden; //超出的文本隐藏
+            white-space: nowrap; //溢出不换行
+            text-overflow: ellipsis; //溢出用省略号显示
+        }
+        .label-zone {
+            float: right;
         }
     }
 }

@@ -71,14 +71,15 @@
             <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
                     <el-popover
-                        ref='popover'
+                        ref='popoverRef'
+                        hide-after='0'
+                        :overlay='true'
                         placement='bottom'
                         trigger='hover'
-                        :visible='visible'
                         :width='250'
                     >
                         <template #reference>
-                            <div class='user' @mouseover='visible=true'>
+                            <div class='user'>
                                 <i class='head'></i>
                                 <span class='no'>
                                     {{ customerInfo.customerNo }}
@@ -174,7 +175,7 @@
 </template>
 
 <script>
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, ref, unref, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { isEmpty, localGet, localSet, localRemove } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -199,9 +200,10 @@ export default {
         const router = useRouter()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const popoverRef = ref()
         const state = reactive({
             chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1,
-            visible: false
+            visible: true
         })
 
         const chartColorAction = [
@@ -303,6 +305,7 @@ export default {
         const handRoutTo = (path) => {
             if (route.path.includes(path)) return
             state.visible = false
+            popoverRef.value.hide()
             router.push(route.path + path)
         }
 
@@ -323,7 +326,8 @@ export default {
             chartColorAction,
             changeChartColor,
             logoutHandler,
-            fundShow: window['fundShow']
+            fundShow: window['fundShow'],
+            popoverRef
         }
     }
 }

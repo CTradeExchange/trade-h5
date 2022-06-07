@@ -17,8 +17,8 @@
                 line-width='20px'
                 :title-inactive-color='style.mutedColor'
             >
-                <van-tab name='mobile' :title='$t("register.phoneNo")' />
                 <van-tab name='email' :title='$t("register.email")' />
+                <van-tab name='mobile' :title='$t("register.phoneNo")' />
             </van-tabs>
 
             <form class='form'>
@@ -27,18 +27,20 @@
                 <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
                 <div class='cell'>
                     <a class='countryPlease van-hairline--bottom' @click='countrySheetVisible=true'>
-                        <span>{{ country.name }}</span>
+                        <span>{{ country.displayName }}</span>
                         <van-icon name='arrow-down' />
                     </a>
                 </div>
+
                 <div v-if="openType === 'mobile'" class='cell'>
                     <areaInput
                         v-model.trim='mobile'
                         v-model:zone='zone'
                         :all-country='true'
                         clear
+                        :data='countryList'
                         :placeholder='$t("register.phoneNo")'
-                        :show-select='false'
+                        :show-select='true'
                         @zoneSelect='zoneSelect'
                     />
                 </div>
@@ -138,7 +140,7 @@ export default {
             verifyCodeLoading: false,
             checkCode: '',
             mobile: '',
-            openType: 'mobile', // mobile 手机号开户， email 邮箱开户
+            openType: 'email', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
             tradeType: 1,
             email: '',
@@ -367,8 +369,7 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            // state.country = data
-            state.countryZone = data.code
+            state.countrySheetVisible = true
         }
 
         // 获取白标后台配置的企业开户国家

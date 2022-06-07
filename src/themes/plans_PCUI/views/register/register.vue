@@ -22,8 +22,8 @@
                     line-height='2px'
                     :title-inactive-color='style.mutedColor'
                 >
-                    <van-tab name='mobile' :title='$t("register.phoneNo")' />
                     <van-tab name='email' :title='$t("register.email")' />
+                    <van-tab name='mobile' :title='$t("register.phoneNo")' />
                 </van-tabs>
 
                 <form class='form'>
@@ -40,13 +40,26 @@
                         @zoneSelect='zoneSelect'
                     /> -->
                     <div class='cell'>
-                        <el-select v-model='countryVal' class='select-conuntry' :placeholder='$t("auth.countrySelect")' @change='zoneOnSelect'>
+                        <el-select
+                            v-model='countryVal'
+                            class='select-conuntry'
+                            :placeholder='$t("auth.countrySelect")'
+                            @change='zoneOnSelect'
+                        >
                             <el-option
                                 v-for='item in countryList'
                                 :key='item.code'
-                                :label='item.name'
                                 :value='item.code'
-                            />
+                            >
+                                <span style='float: left;'>
+                                    {{ item.displayName }}
+                                </span>
+                                <span
+                                    style='float: right;'
+                                >
+                                    {{ item.countryCode }}
+                                </span>
+                            </el-option>
                         </el-select>
                     </div>
 
@@ -55,7 +68,7 @@
                             v-model.trim='mobile'
                             v-model:zone='zone'
                             clear
-                            :disabled='true'
+                            :disabled='false'
                             :placeholder='$t("register.phoneNo")'
                             type='mobile'
                             @zoneSelect='zoneSelect'
@@ -164,7 +177,7 @@ export default {
             verifyCodeLoading: false,
             checkCode: '',
             mobile: '',
-            openType: 'mobile', // mobile 手机号开户， email 邮箱开户
+            openType: 'email', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
             tradeType: 1,
             email: '',
@@ -189,7 +202,7 @@ export default {
                 const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
                 if (defaultZoneConfig?.code) {
                     state.countryVal = defaultZoneConfig.code
-                    state.zone = `(${defaultZoneConfig.countryCode})`
+                    state.zone = `${defaultZoneConfig.countryCode}`
                     state.countryCode = defaultZoneConfig.code
                     state.countryZone = defaultZoneConfig.countryCode
                 }
@@ -393,8 +406,11 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            state.countryZone = data.code
-            state.countryCode = data.countryCode
+            state.countryVal = data.countryCode
+            zoneOnSelect(data.countryCode)
+
+            // state.countryZone = data.code
+            // state.countryCode = data.countryCode
         }
 
         // 获取白标后台配置的企业开户国家
@@ -588,18 +604,16 @@ export default {
     border-radius: 4px;
 }
 .checkbox {
-    align-items: flex-start;
+    //align-items: flex-start;
     :deep(.van-badge__wrapper) {
         width: 16px;
         height: 16px;
         overflow: hidden;
         font-size: 14px;
-        line-height: 16px;
     }
     :deep(.van-checkbox__icon) {
         flex: none;
         height: 16px;
-        margin-top: 4px;
         font-size: 12px;
         line-height: 16px;
         background-color: var(--primary);
@@ -610,7 +624,6 @@ export default {
     :deep(.van-checkbox__label) {
         color: var(--placeholdColor);
         font-size: 14px;
-        line-height: 20px;
     }
 }
 .verifyCodeCell {

@@ -5,7 +5,12 @@
             <van-icon v-if='showSelect' name='arrow-down' />
         </span>
     </div>
-    <van-action-sheet v-if='actions && actions.length' v-model:show='show' :actions='actions' @select='onSelect' />
+    <van-action-sheet
+        v-if='actions && actions.length'
+        v-model:show='show'
+        :actions='actions'
+        @select='onSelect'
+    />
 </template>
 
 <script>

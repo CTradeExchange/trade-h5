@@ -159,6 +159,9 @@ export default createStore({
                 if (res.check()) {
                     const registrable = state._base.wpCompanyInfo?.registrable || []
                     const list = registrable.length ? res.data.filter(el => registrable.find(o => o.code === el.code)) : res.data
+                    list.sort((a, b) => {
+                        return a.displayName.localeCompare(b.displayName, 'zh')
+                    })
                     commit('Update_countryList', list)
                 }
                 return res
