@@ -208,8 +208,8 @@ export default {
                 return Toast(t('common.inputGoogleCode'))
             }
             const loginParams = {
-                type: state.loginName.includes('@') ? 1 : 2,
-                loginName: state.loginName,
+                type: state.loginNameType === 'email' ? 1 : 2,
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName,
                 phoneArea: state.phoneArea,
                 device: getDevice(),
                 verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
@@ -231,7 +231,7 @@ export default {
                     ...state,
                     first: true
                 }, (errors, fields) => {
-                    // console.log(errors, fields)
+                    // console.log(errors, fields, loginParams)
                     if (errors) {
                         state.loading = false
                         Toast(errors[0].message)
@@ -326,7 +326,7 @@ export default {
                 checkGoogleMFAStatus({
                     loginName: val,
                     phoneArea: state.phoneArea,
-                    type: val.includes('@') ? 1 : 2
+                    type: state.loginNameType === 'email' ? 1 : 2
                 }).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
@@ -340,7 +340,7 @@ export default {
         // 发送验证码
         const verifyCodeSendHandler = (callback) => {
             const verifyParams = {
-                type: state.loginName.includes('@') ? 1 : 2,
+                type: state.loginNameType === 'email' ? 1 : 2,
                 phoneArea: state.phoneArea,
                 loginName: state.loginName
             }
@@ -362,8 +362,8 @@ export default {
                         } else {
                             // state.zone = res.data.phoneArea
                             const params = {
-                                bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-                                toUser: state.loginName.includes('@') ? state.loginName : String(state.phoneArea) + ' ' + state.loginName,
+                                bizType: state.loginNameType === 'email' ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+                                toUser: state.loginNameType === 'email' ? state.loginName : String(state.phoneArea) + ' ' + state.loginName,
                             }
                             verifyCodeSend(params).then(res => {
                                 if (res.check()) {
