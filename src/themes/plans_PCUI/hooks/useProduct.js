@@ -29,6 +29,7 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
     // 所选玩法的板块列表
     const categoryList = computed(() => {
         const listByUser = unref(userSelfSymbolList)[unref(tradeType)] || []
+        // console.log(listByUser)
         const selfSymbol = {
             title: t('trade.favorites'),
             id: 'selfSymbol',
@@ -48,7 +49,7 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
         if (!customerInfo.value) { // 未登录
             // console.log(localSelfSymbolList)
             // console.log(unref(categoryType))
-            if (unref(categoryType) === '0') {
+            if (unref(categoryType.value) === '0') {
                 const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
                 const obj = {}
                 const arr = localSelfSymbolList
@@ -64,20 +65,25 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
                     const listByUser = obj[unref(tradeType)]
                     listByUserData = listByUser
                 } else {
-                    listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+                    listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
                 }
             } else {
-                listByUserData = unref(categoryList)[unref(categoryType)].listByUser
+                listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
             }
         } else { // 已登录
-            listByUserData = unref(categoryList)[unref(categoryType)].listByUser || []
+            listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
         }
-        listByUserData.forEach(id => {
-            const newId = `${id}_${unref(tradeType)}`
-            if (productMapVal[newId]?.symbolName) {
-                arr.push(productMapVal[newId])
-            }
-        })
+        console.log(unref(categoryList.value)[unref(categoryType.value)])
+        console.log(unref(categoryType.value))
+        // console.log(Number(unref(categoryType.value)))
+        if (listByUserData?.length > 0) {
+            listByUserData.forEach(id => {
+                const newId = `${id}_${unref(tradeType)}`
+                if (productMapVal[newId]?.symbolName) {
+                    arr.push(productMapVal[newId])
+                }
+            })
+        }
 
         // unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
         //     const newId = `${id}_${unref(tradeType)}`
