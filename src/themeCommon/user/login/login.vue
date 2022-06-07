@@ -342,7 +342,7 @@ export default {
             const verifyParams = {
                 type: state.loginNameType === 'email' ? 1 : 2,
                 phoneArea: state.phoneArea,
-                loginName: state.loginName
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName
             }
 
             const validator = new Schema(RuleFn(t))
