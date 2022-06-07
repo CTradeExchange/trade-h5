@@ -497,10 +497,11 @@
         "multilpSettingTip1": "Over leverage will increase the risk of liquidation，please remind the risk level",
         "saveSetting": "Save",
         "noFeature": "This feature is not currently supported",
-        "purchaseRedeemBtn": "Purchase Redeem",
+        "purchaseRedeemBtn": "Purchase",
         "productEtfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
         "quantity": "QTY(Lots)",
-        "upDown": "24H Change%"
+        "upDown": "24H Change%",
+        "loginOrRegister": "Login or Register"
     },
     "bizType": {
         "2": "Market close",
@@ -773,6 +774,7 @@
         "applyRule_tipRemark1": "基金管理费指基金管理人管理基金资产所收取的报酬。",
         "applyRule_tipRemark2": "基金管理费从基金资产中每日00:00结算，结算后的基金净值已经扣除相应费用，无需投资者在每笔交易中另行支付。",
         "noTradeMarket": "No trading market",
+        "applyNow": "Explore",
         "fundsList": "Fund list",
         "records": "Records",
         "iknow": "I know",
@@ -819,7 +821,7 @@
         "deductRuletxt2": "management fee",
         "deductRuletxt3": "(Per year)",
         "deductRuletxt4": "redemption fee",
-        "deductRuledesc": "Fund management fee refers to the remuneration charged by the fund manager for managing the fund assets. The fund management fee is settled from the fund assets at {time} every day, and the net value of the fund after settlement has already deducted the corresponding fees, and investors do not need to pay separately in each transaction..",
+        "deductRuledesc": "Fund management fee refers to the remuneration charged by the fund manager for managing the fund assets. The fund management fee is settled from the fund assets at {time} every day, and the net value of the fund after settlement has already deducted the corresponding fees, and investors do not need to pay separately in each transaction.",
         "deductRuledesc2": "Redemption fee refers to the handling fee incurred when redeeming the fund, which is charged at one time"
     },
     "home": {
@@ -855,8 +857,9 @@
             "text2": "The tracking index of the V10 Crypto Index Fund，has outperformed Bitcoin 71% of the time since its establishment",
             "text3": "White Paper (PDF)",
             "text4": "V10 Crypto Index Fund",
-            "text5": "V10 is an autonomous, high-performing, low-cost cryptocurrency index fund. Consists of 10 leading cryptocurrencies.",
-            "text6": "White Paper (PDF)"
+            "text5": "The top 10 cryptocurrencies form  V10, it reflects the overall trend in cryptocurrency with asset transparency.",
+            "text6": "White Paper (PDF)",
+            "text7": "Invest Now"
         },
         "portfolio": {
             "text1": "Create your cryptocurrency portfolio today",

@@ -220,6 +220,15 @@ const h5Children = [{
     }
 },
 {
+    path: 'walletAddress', // 添加钱包
+    component: () =>
+        import(/* webpackChunkName: "Bank" */ '../views/wallet/walletAddress.vue'),
+    meta: {
+        title: 'cRoute.walletAdd',
+        roles: ['User']
+    }
+},
+{
     path: 'loan', // 借款
     component: () =>
         import(/* webpackChunkName: "loan" */ '../views/loan/loan.vue'),
@@ -579,6 +588,7 @@ const routes = [
                 import(/* webpackChunkName: "api" */ '../views/notice/detail.vue'),
             meta: {
                 title: 'route.noticeTitle'
+<<<<<<< HEAD
             },
             children: h5Children
         },
@@ -592,6 +602,11 @@ const routes = [
             },
             children: h5Children
         }
+=======
+            },
+            children: h5Children
+        },
+>>>>>>> uat
         ],
     },
     // {

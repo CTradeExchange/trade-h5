@@ -121,7 +121,7 @@ import CheckCode from '@/components/form/checkCode'
 import areaInputPc from '@/components/form/areaInputPc'
 // import CurrencyAction from './components/currencyAction'
 // import TradeTypeAction from './components/tradeTypeAction'
-import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
+import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet, localSet } from '@/utils/util'
 import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
@@ -251,6 +251,8 @@ export default {
                     // 注册成功
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
+                    localSet('loginNameType', state.openType)
+                    localSet('loginZone', state.countryZone)
                     if (res.data.token) setToken(res.data.token)
 
                     // 注册成功重新获取客户信息

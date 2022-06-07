@@ -2,7 +2,7 @@
     <div class='filter-block'>
         <van-checkbox
             v-model='checked'
-            icon-size='16px'
+            icon-size='14px'
             shape='round'
             @change='changeState'
         >
@@ -56,15 +56,13 @@ const clear = () => {
 .filter-block {
     display: flex;
     justify-content: space-between;
-    padding: 0 rem(30px);
+    height: 60px;
+    padding: 0 15px;
     background: var(--contentColor);
     border-bottom: solid 1px var(--lineColor);
     :deep(.van-checkbox) {
         //flex: 1;
         width: 200px;
-        .van-checkbox__label {
-            margin-top: 3px;
-        }
     }
     :deep(.van-search) {
         width: 300px;

@@ -110,13 +110,13 @@ const computedList = computed(() => {
             z-index: 0;
             display: inline-block;
             width: 80px;
-            height: 30px;
+            height: 28px;
             margin-right: 10px;
             overflow: hidden;
             color: var(--primary);
             font-weight: 400;
             font-size: 14px;
-            line-height: 30px;
+            line-height: 28px;
             text-align: center;
             vertical-align: middle;
             border: 1px solid var(--primary);

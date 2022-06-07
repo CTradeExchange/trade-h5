@@ -134,7 +134,8 @@ export default {
                 background-color: #EC4E56;
                 background-image: linear-gradient(to right, #EC4E56, #C92E36);
             }
-            &.BG_CIB,&.BG_SPDB {
+            &.BG_CIB,
+            &.BG_SPDB {
                 background-color: #2F70BB;
                 background-image: linear-gradient(to right, #2F70BB, #0C53A5);
             }
@@ -150,7 +151,8 @@ export default {
                 background-color: #4492D8;
                 background-image: linear-gradient(to right, #4492D8, #2073BC);
             }
-            &.BG_JSBANK,&.BG_BCM {
+            &.BG_JSBANK,
+            &.BG_BCM {
                 background-color: #4492D8;
                 background-image: linear-gradient(to right, #4492D8, #2073BC);
             }
@@ -204,7 +206,7 @@ export default {
             }
             &.BG_SDB {
                 background-color: #3D3DB4;
-                background-image: linear-gradient(to right, #4242f1, #03033b);
+                background-image: linear-gradient(to right, #4242F1, #03033B);
             }
             &.BG_SRCB {
                 background-color: #187AAD;
@@ -252,7 +254,7 @@ export default {
             }
             &.BG_BANK {
                 background-color: #727070;
-                background-image: linear-gradient(to right, #727272 #1d0d0d);
+                background-image: linear-gradient(to right, #727272 #1D0D0D);
             }
             & .bank-bg {
                 position: absolute;

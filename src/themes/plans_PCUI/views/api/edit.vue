@@ -1,6 +1,6 @@
 <template>
     <router-view />
-    <div class='wrapper'>
+    <div class='wrapper' :style='"min-height:" + wrapperHeight'>
         <div class='page-title'>
             <span class='back-icon' @click='back'>
                 ＜
@@ -225,9 +225,7 @@ export default {
                     confirmButtonText: t('api.mfaGoset'),
                     message: t('api.mfaTips'),
                 }).then(() => {
-                    router.replace({
-                        name: 'MFA_status'
-                    })
+                    handRoutTo('/googleMFA/status')
                 })
                 return
             }
@@ -328,12 +326,21 @@ export default {
             state.helpPopupShow = true
         }
 
+        const setMinHeight = () => {
+            const heightFooter = document.querySelectorAll("div[class='footer-nav']")
+            const headerFooter = document.querySelectorAll("div[class='nav-left']")
+            const calcHeight = heightFooter[0].clientHeight + headerFooter[0].clientHeight
+            state.wrapperHeight = 'calc(100vh - ' + calcHeight + 'px)'
+        }
+
         onMounted(() => {
             initData()
+            setMinHeight()
         })
 
         return {
             initData,
+            setMinHeight,
             handRoutTo,
             handleSave,
             regWhiteIps,
@@ -352,6 +359,7 @@ export default {
 @import '@/sass/mixin.scss';
 .wrapper {
     width: 1200px;
+    min-height: calc(100% - 297px);
     margin: 20px auto;
     .page-title {
         font-weight: bold;

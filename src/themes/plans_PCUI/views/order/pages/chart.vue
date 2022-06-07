@@ -21,8 +21,8 @@ padding: 10px;'
         </div>
 
         <div class='item range'>
-            <p :class='product?.cur_color'>
-                {{ product?.cur_price ? parseFloat(product?.cur_price).toFixed(product.symbolDigits) : '--' }}
+            <p v-if='dealLastPrice' :class='dealLastPrice?.price_color'>
+                {{ dealLastPrice?.price ? parseFloat(dealLastPrice?.price).toFixed(product.symbolDigits) : '--' }}
             </p>
             <p>
                 <span :class='product?.rolling_upDownColor'>
@@ -445,6 +445,7 @@ export default {
                 state.isOptional = val
             },
         })
+        const dealLastPrice = computed(() => store.state._quote.dealLastPrice)
 
         watch(() => isSelfSymbol.value, val => {
             console.log(val, 'watch---->1')
@@ -505,7 +506,7 @@ export default {
 
         // 实时更新买卖价线
         watch(() => [product.value.buy_price, product.value.sell_price, product.value.cur_price, product.value.tick_time], (newValues) => {
-            state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time)
+            state.onChartReadyFlag && unref(chartRef).setTick(product.value.cur_price, product.value.tick_time, dealLastPrice.value.volume)
 
             state.onChartReadyFlag && unref(chartRef).updateLineData({
                 buyPrice: product.value.buy_price,
@@ -741,7 +742,7 @@ export default {
                 const volumeIndex = SUBSTUDIES.findIndex(el => el.name === 'Volume')
                 if (volumeIndex > -1) SUBSTUDIES.splice(volumeIndex, 1)
             }
-            state.sideStudyList = SUBSTUDIES.slice(0, 5)
+            state.sideStudyList = SUBSTUDIES.slice(0, 10)
             if (isEmpty(locChartConfig)) {
                 localSetChartConfig('showLastPrice', false)
                 localSetChartConfig('mainStudy', JSON.stringify(MAINSTUDIES[0]))
@@ -791,6 +792,7 @@ export default {
                 if (state.subStudy === 'Volume' && !canUseVolume) {
                     state.subStudy = SUBSTUDIES[0].name
                     localSetChartConfig('subStudy', JSON.stringify(SUBSTUDIES[0]))
+                    locChartConfig.subStudy = JSON.stringify(SUBSTUDIES[0])
                 }
 
                 state.klineType = locChartConfig.chartType
@@ -809,7 +811,7 @@ export default {
                         chartType: locChartConfig.chartType, // 图表类型
                         showSeriesTitle: false, // K线标题
                         upColor: style.value.riseColor,
-                        downColor: style.value.fallColor
+                        downColor: style.value.fallColor,
 
                     },
                     indicators: [
@@ -956,8 +958,10 @@ export default {
             addOptional,
             isSelfSymbol,
             formatAmount,
-            contractRoute,
-            checkIsSelfSymbol
+            checkIsSelfSymbol,
+            dealLastPrice,
+            contractRoute
+
         }
     }
 }
