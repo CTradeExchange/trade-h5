@@ -61,7 +61,7 @@
         <div class='header'>
             <i class='icon_icon_close_big' @click='show=false'></i>
         </div>
-        <van-search v-model='searchVal' placeholder='请输入搜索关键词' />
+        <!-- <van-search v-model='searchVal' placeholder='请输入搜索关键词' /> -->
         <div class='country-list'>
             <div
                 v-for='item in actions'
@@ -152,7 +152,7 @@ export default {
         }
     }
     .country-list {
-        height: rem(600px);
+        height: rem(660px);
         overflow: auto;
         .country-item {
             display: flex;
