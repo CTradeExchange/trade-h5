@@ -3,7 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
-import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
+import { getListByParentCode, getCountryListByParentCode, findCompanyCountry } from '@/api/base'
 import Colors from '@plans/colorVariables'
 import { localGet, localSet, getQueryVariable } from '@/utils/util'
 
@@ -30,7 +30,9 @@ export default createStore({
         zoneList: [],
         bankDict: [],
         supportLanguages: supportLanguages,
-        countryList: [],
+        countryList: [], // 个人登录开户的国家列表
+        countryListAll: [], // 总的国家列表
+        companyCountry: '', // 企业登录开户的国家列表， 逗号隔开的国家编码列表 "CN,GB,BG"
         cacheViews: ['Layout'],
         currencyList: [],
         businessConfig: '' // 业务渠道自定义配置
@@ -86,6 +88,12 @@ export default createStore({
             return plansProducts
             // return categories
         },
+        // 企业登录开户的国家列表
+        companyCountryList (state, getters) {
+            const companyCountry = state.companyCountry.split(',')
+            const result = state.countryListAll.filter(el => companyCountry.find(o => o === el.code))
+            return result
+        }
     },
     mutations: {
         Update_style (state, data) {
@@ -102,6 +110,12 @@ export default createStore({
         },
         Update_countryList (state, list) {
             state.countryList = list
+        },
+        Update_countryListAll (state, list) {
+            state.countryListAll = list
+        },
+        Update_companyCountryList (state, list) {
+            state.companyCountry = list
         },
         Update_invertColor (state, data) {
             state.invertColor = data
@@ -154,6 +168,7 @@ export default createStore({
                 return res
             })
         },
+        // 获取国家列表
         getCountryListByParentCode ({ dispatch, commit, state }) {
             return getCountryListByParentCode({ parentCode: '-1' }).then(res => {
                 if (res.check()) {
@@ -163,6 +178,16 @@ export default createStore({
                         return a.displayName.localeCompare(b.displayName, 'zh')
                     })
                     commit('Update_countryList', list)
+                    commit('Update_countryListAll', res.data)
+                }
+                return res
+            })
+        },
+        // 获取白标公司企业开户的国家列表
+        getCompanyCountry ({ dispatch, commit, state }) {
+            return findCompanyCountry().then(res => {
+                if (res.check()) {
+                    commit('Update_companyCountryList', res.data.openCompanyCountry)
                 }
                 return res
             })
