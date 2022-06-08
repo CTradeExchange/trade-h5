@@ -17,6 +17,7 @@
             :color='$style.primary'
             shrink
             :title-active-color='$style.primary'
+            @change='loginNameTypeChange'
         >
             <van-tab name='email' :title='$t("register.email")' />
             <van-tab name='mobile' :title='$t("register.phoneNo")' />
@@ -45,7 +46,8 @@
                 <InputComp v-model='pwd' clear :label="$t('login.pwd')" pwd />
             </div>
             <div v-else class='field'>
-                <CheckCode v-model.trim='checkCode' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
+                <CheckCode v-show="loginNameType==='mobile'" v-model.trim='checkCodeMobile' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
+                <CheckCode v-show="loginNameType==='email'" v-model.trim='checkCodeEmail' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
             </div>
             <div v-if='googleCodeVis' class='field field-google'>
                 <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
@@ -168,7 +170,8 @@ export default {
             pwd: '',
             zone: localGet('loginZone') || '',
             phoneArea: localGet('loginPhoneArea') || '',
-            checkCode: '',
+            checkCodeMobile: '', // 手机号验证码
+            checkCodeEmail: '', // 邮箱验证码
             loginType: 'password', // checkCode
             loginNameType: localGet('loginNameType') || 'mobile',
             bindAddShow: false,
@@ -198,6 +201,11 @@ export default {
             state.googleCode = val
         }
 
+        // 切换手机号邮箱登录方式
+        const loginNameTypeChange = () => {
+            state.pwd = ''
+        }
+
         // 选择登录手机号区号
         const zoneSelect = (data) => {
             state.phoneArea = data.countryCode
@@ -207,12 +215,13 @@ export default {
             if (state.googleCodeVis && isEmpty(state.googleCode)) {
                 return Toast(t('common.inputGoogleCode'))
             }
+            const verifyCode = state.loginNameType === 'email' ? state.checkCodeEmail : state.checkCodeMobile
             const loginParams = {
                 type: state.loginNameType === 'email' ? 1 : 2,
                 loginName: state.loginNameType === 'email' ? state.email : state.loginName,
                 phoneArea: state.phoneArea,
                 device: getDevice(),
-                verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
+                verifyCode: state.loginType === 'checkCode' ? verifyCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
                 thirdSource: route.query.thirdSource || '',
@@ -341,9 +350,9 @@ export default {
         const verifyCodeSendHandler = (callback) => {
             const verifyParams = {
                 type: state.loginNameType === 'email' ? 1 : 2,
-                phoneArea: state.phoneArea,
                 loginName: state.loginNameType === 'email' ? state.email : state.loginName
             }
+            if (state.loginNameType === 'mobile') verifyParams.phoneArea = state.phoneArea
 
             const validator = new Schema(RuleFn(t))
             validator.validate({
@@ -416,6 +425,7 @@ export default {
             ...toRefs(state),
             changeLoginType,
             rightAction,
+            loginNameTypeChange,
             zoneSelect,
             loginHandle,
             topRightClick,
