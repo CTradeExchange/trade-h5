@@ -91,7 +91,6 @@ export default {
 
         // 获取公告列表
         const getNoticeData = () => {
-            console.log(customInfo.value)
             getNoticeList({
                 current: state.currentNt,
                 // pubTimeFrom: '',
@@ -101,7 +100,6 @@ export default {
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo
             }).then(res => {
-                console.log(res)
                 if (res.check()) {
                     if (res.data.records && res.data.records.length > 0) {
                         // state.listNotice = state.listNotice.concat(res.data.records)
@@ -130,9 +128,7 @@ export default {
         }
 
         store.dispatch('_base/getPageConfig', 'Home').then(res => {
-            console.log(res)
             pageModules.value = res
-
             // 找到行情模块的产品，并开始订阅
             const productModule = res.filter(el => ['productsSwipe', 'productsTimeSharing'].includes(el.tag))
             if (productModule.length > 0) {
