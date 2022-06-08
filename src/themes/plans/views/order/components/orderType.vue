@@ -11,7 +11,7 @@
         </a>
     </div>
     <MultipleSet
-        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-if="product && [2].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
         v-model:multipleVal='mVal'
         :product='product'
