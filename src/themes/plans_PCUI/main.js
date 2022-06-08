@@ -96,10 +96,11 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
     if (localSelfSymbolList.length === 0) {
         const systemOptional = store.state._base.wpSelfSymbol[0].data.product
+        console.log(systemOptional)
         const proArr = []
         Object.keys(systemOptional).forEach(el => {
             if (Object.keys(systemOptional[el]).find(it => it === '2')) { // 普通游客选取客户组为2的数据加载到本地自选缓存中
-                systemOptional[el][2].forEach(item => {
+                systemOptional[el]['2'].forEach(item => {
                     proArr.push(item + '_' + el)
                 })
             }

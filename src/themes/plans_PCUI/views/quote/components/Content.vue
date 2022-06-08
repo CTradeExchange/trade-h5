@@ -5,7 +5,7 @@
             <Autocomplete :trade-type='tradeType' />
         </div>
         <CategoryList v-model='categoryType' :list='computedCategoryList' />
-        <ProductList v-if='tradeType' :list='productListData.value' :trade-type='tradeType' />
+        <ProductList v-if='tradeType' :list='productList' :trade-type='tradeType' />
     </div>
 </template>
 
@@ -34,7 +34,7 @@ provide('isReLoadProductList', (value, productId) => {
     console.log('isReLoadProductList')
     if (value === true) {
         const ArrPro = unref(productListData).value
-        // console.log(ArrPro, unref(categoryType), productId)
+        console.log(ArrPro, unref(categoryType), productId)
         // console.log(ArrPro.property)
         if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
             ArrPro.map((it, index) => {
@@ -90,6 +90,7 @@ watch(
 )
 
 const initList = () => {
+    console.log(productList)
     productListData.value = ref(productList)
 }
 

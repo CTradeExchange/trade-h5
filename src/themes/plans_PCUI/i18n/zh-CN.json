@@ -607,7 +607,8 @@
         "purchaseOrRedemptionTip": "申购/赎回：指投资者可向基金管理公司申购或者赎回基金份额代币，点击转至。",
         "purchaseOrRedemption": "申购/赎回",
         "noFeature": "暂不支持该功能",
-        "material": "资料"
+        "material": "资料",
+        "addToOptional":"添加自选"
     },
     "contract": {
         "advance": "预付款",

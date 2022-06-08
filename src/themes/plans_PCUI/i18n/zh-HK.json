@@ -645,7 +645,8 @@
         "purchaseOrRedemptionTip": "申購/贖回：指投資者可向基金管理公司申購或者贖回基金份額代幣，點擊前往",
         "purchaseOrRedemption": "申購/贖回",
         "noFeature": "暫不支持該功能",
-        "material": "資料"
+        "material": "資料",
+        "addToOptional":"添加自选"
     },
     "contract": {
         "advance": "預付款",
