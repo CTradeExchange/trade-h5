@@ -127,7 +127,6 @@ const isCollect = (tradeType, symbolId) => {
 }
 
 const addOptional = ({ symbolId, tradeType }) => {
-    // debugger
     if (!customerInfo.value) {
         // ElMessage.warning(t('common.noLogin'))
         // return router.push('/login')

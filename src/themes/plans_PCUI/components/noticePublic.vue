@@ -73,7 +73,6 @@ export default {
                 lang: state.lang,
                 size: 5,
             }
-            // debugger
             if (customInfo.value.companyId) {
                 params.companyId = customInfo.value.companyId
             }

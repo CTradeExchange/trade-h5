@@ -38,15 +38,34 @@ export default function ({ tradeType, categoryType, isSort = true }) {
     const productList = computed(() => {
         const productMapVal = unref(productMap)
         const arr = []
-        let listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
-        // console.log(listByUserData)
+        let listByUserData = [] // 用户自主添加的自选列表
+        const systemOptional = unref(categoryList.value)[unref(categoryType.value)].listByUser // 系统默认推送的自选列表
+
         if (!customerInfo.value) { // 未登录
-            // console.log(categoryList)
-            // console.log(unref(categoryType))
             if (unref(categoryType.value) === 0) {
+                // 取本地缓存的自选列表
                 const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+                const AllSymbolist = []
+                // 把本地缓存的自选列表加到总列表（本地 + WP配的系统自选）
+                localSelfSymbolList.map((item) => {
+                    if (!AllSymbolist.includes(item)) {
+                        AllSymbolist.push(item)
+                    }
+                })
+                // 筛选本地缓存中，该玩法没有存在过缓存里的，从WP获取并存到缓存中
+                if (!localSelfSymbolList.find(el => el.split('_')[1] === unref(tradeType))) {
+                    systemOptional.map((item) => {
+                        if (!AllSymbolist.includes(item + '_' + unref(tradeType))) {
+                            AllSymbolist.push(item + '_' + unref(tradeType))
+                        }
+                    })
+                }
+
+                // 把总的自选产品列表存到缓存中
+                localSet('localSelfSymbolList', JSON.stringify(AllSymbolist))
+
                 const obj = {}
-                const arr = localSelfSymbolList
+                const arr = AllSymbolist
                 if (arr.length > 0) {
                     arr.map(el => {
                         const tradeType = el.split('_')[1]
@@ -57,16 +76,17 @@ export default function ({ tradeType, categoryType, isSort = true }) {
                         }
                     })
                     const listByUser = obj[unref(tradeType)] || []
-                    listByUserData = listByUserData.concat(listByUser)
+                    listByUserData = listByUser
+                } else {
+                    listByUserData = systemOptional
                 }
             } else {
-                listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser
+                listByUserData = systemOptional
             }
         } else { // 已登录
-            listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser
+            listByUserData = systemOptional
         }
 
-        // console.log(listByUserData)
         if (listByUserData?.length > 0) {
             listByUserData.forEach(id => {
                 const newId = `${id}_${unref(tradeType)}`
