@@ -6,7 +6,7 @@ export default (t) => {
         },
         loginName: [
             {
-                message: t('login.loginNamePlaceholder'),
+                message: t('common.inputPhone'),
                 validator: (rule, value, callback, source, options) => {
                     return source.type === 2 ? !!value : true
                 },
