@@ -188,13 +188,17 @@ export default {
 
         const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
 
+        // 监听个人登录还是企业登录,设置不同国家列表
         watch(() => state.accountType, val => {
-            console.log(val)
             if (val === 2) {
                 state.zone = store.getters.companyCountryList[0]?.countryCode
             } else {
                 setDefaultZone()
             }
+        })
+
+        watch(() => state.loginNameType, val => {
+            state.pwd = ''
         })
 
         // 设置默认区号
