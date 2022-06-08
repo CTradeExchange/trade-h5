@@ -611,7 +611,6 @@ export default {
                 } else {
                     state.isSelfSymbol = false
                 }
-                console.log(localGet('localSelfSymbolList'), newId)
             } else {
                 state.isSelfSymbol = !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId())))
             }

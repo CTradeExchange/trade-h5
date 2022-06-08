@@ -420,11 +420,9 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
         const isSelfSymbol = computed({
             get: () => {
-                // console.log('isSelfSymbol-get')
-                // console.log(customerInfo)
                 if (isEmpty(customerInfo.value)) {
                     const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
-                    // console.log(newId)
+
                     if (localGet('localSelfSymbolList')) {
                         if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
                             return true
@@ -434,22 +432,17 @@ export default {
                     } else {
                         return false
                     }
-
-                    // console.log(localGet('localSelfSymbolList'), newId)
                 } else {
                     return store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
                 }
             },
             set: (val) => {
-                // console.log('isSelfSymbol-set')
                 state.isOptional = val
             },
         })
         const dealLastPrice = computed(() => store.state._quote.dealLastPrice)
 
         watch(() => isSelfSymbol.value, val => {
-            // console.log(val, 'watch---->1')
-            // console.log('isSelfSymbol-watch')
             state.isOptional = !!val
         }, { immediate: true })
 
@@ -533,7 +526,6 @@ export default {
             } else {
                 state.isOptional = store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
             }
-            // console.log(state.isOptional)
         }
 
         // 添加自选
@@ -730,11 +722,8 @@ export default {
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
 
-            // console.log('initChartData = ()')
-
             // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
             const canUseVolume = !product.value.isFX && !product.value.isCommodites
-            // console.log(canUseVolume, isEmpty(locChartConfig))
             // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
             if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
                 SUBSTUDIES.unshift(VolumeStudy)
@@ -827,9 +816,6 @@ export default {
                     }
                 })
             }
-            // console.log('upColor', style.value.riseColor)
-            // console.log('downColor', style.value.fallColor)
-            // console.log('state.initConfig.property', state.initConfig.property)
 
             // 自选星标状态
             checkIsSelfSymbol()
@@ -885,7 +871,6 @@ export default {
         // 监听图表颜色修改
         const changeChartColor = () => {
             initChartData()
-            // console.log('state.initConfig.property', state.initConfig.property)
             renderChart(product, state.initConfig.property)
             chartRef.value && chartRef.value.reset({
                 initialValue: initialValue.value,
@@ -917,7 +902,6 @@ export default {
         // 监听路由变化
         watch(
             () => route.query, (val, oval) => {
-                // console.log('watch---->3')
                 changeRoute()
             }, {
                 immediate: true

@@ -6,6 +6,11 @@
             :options='tableOptions'
             :pagination='pagination'
         />
+        <div class='AddToOptional'>
+            <van-button plain size='small' type='primary' @click='goSearchPage'>
+                + {{ $t('trade.addToOptional') }}
+            </van-button>
+        </div>
     </div>
 </template>
 

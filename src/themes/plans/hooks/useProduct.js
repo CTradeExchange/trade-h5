@@ -39,7 +39,7 @@ export default function ({ tradeType, categoryType, isSort = true }) {
         const productMapVal = unref(productMap)
         const arr = []
         let listByUserData = [] // 用户自主添加的自选列表
-        const systemOptional = unref(categoryList.value)[unref(categoryType.value)].listByUser // 系统默认推送的自选列表
+        const systemOptional = unref(categoryList.value)[unref(categoryType.value)].listByUser || [] // 系统默认推送的自选列表
 
         if (!customerInfo.value) { // 未登录
             if (unref(categoryType.value) === 0) {
@@ -60,23 +60,22 @@ export default function ({ tradeType, categoryType, isSort = true }) {
                         }
                     })
                 }
-
                 // 把总的自选产品列表存到缓存中
                 localSet('localSelfSymbolList', JSON.stringify(AllSymbolist))
 
-                const obj = {}
+                const newArr = {}
                 const arr = AllSymbolist
                 if (arr.length > 0) {
+                    // 重组存储自选的格式 id_玩法 加在数列中输出arr
                     arr.map(el => {
                         const tradeType = el.split('_')[1]
-                        if (obj[tradeType] !== undefined) {
-                            obj[tradeType].push(el.split('_')[0])
+                        if (newArr[tradeType] !== undefined) {
+                            newArr[tradeType].push(el.split('_')[0])
                         } else {
-                            obj[tradeType] = [el.split('_')[0]]
+                            newArr[tradeType] = [el.split('_')[0]]
                         }
                     })
-                    const listByUser = obj[unref(tradeType)] || []
-                    listByUserData = listByUser
+                    listByUserData = newArr[unref(tradeType)] || []
                 } else {
                     listByUserData = systemOptional
                 }
