@@ -4,7 +4,7 @@ import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
 import Home from './modules/home'
-import { getListByParentCode, getCountryListByParentCode } from '@/api/base'
+import { getListByParentCode, getCountryListByParentCode, findCompanyCountry } from '@/api/base'
 import Colors from '@planspc/colorVariables'
 import { localGet, localSet } from '@/utils/util'
 
@@ -32,7 +32,9 @@ export default createStore({
         zoneList: [],
         bankDict: [],
         supportLanguages: supportLanguages,
-        countryList: [],
+        countryList: [], // 个人登录开户的国家列表
+        countryListAll: [], // 总的国家列表
+        companyCountry: '', // 企业登录开户的国家列表， 逗号隔开的国家编码列表 "CN,GB,BG"
         cacheViews: ['Layout'],
         currencyList: [],
         stopLossPprofitProductID: '', // 用于止损止盈弹层
@@ -84,6 +86,12 @@ export default createStore({
             const productID = state.stopLossPprofitProductID
             const product = rootState._quote.productMap[productID]
             return product
+        },
+        // 企业登录开户的国家列表
+        companyCountryList (state, getters) {
+            const companyCountry = state.companyCountry.split(',')
+            const result = state.countryListAll.filter(el => companyCountry.find(o => o === el.code))
+            return result
         }
     },
     mutations: {
@@ -101,6 +109,12 @@ export default createStore({
         },
         Update_countryList (state, list) {
             state.countryList = list
+        },
+        Update_countryListAll (state, list) {
+            state.countryListAll = list
+        },
+        Update_companyCountryList (state, list) {
+            state.companyCountry = list
         },
         Update_invertColor (state, data) {
             state.invertColor = data
@@ -156,12 +170,25 @@ export default createStore({
                 return res
             })
         },
+        // 获取国家列表
         getCountryListByParentCode ({ dispatch, commit, state }) {
             return getCountryListByParentCode({ parentCode: '-1' }).then(res => {
                 if (res.check()) {
+                    let data = res.data || []
+                    data = data.filter(el => !!el.countryCode)
                     const registrable = state._base.wpCompanyInfo?.registrable || []
-                    const list = registrable.length ? res.data.filter(el => registrable.find(o => o.code === el.code)) : res.data
+                    const list = registrable.length ? data.filter(el => registrable.find(o => o.code === el.code)) : data
                     commit('Update_countryList', list)
+                    commit('Update_countryListAll', data)
+                }
+                return res
+            })
+        },
+        // 获取白标公司企业开户的国家列表
+        getCompanyCountry ({ dispatch, commit, state }) {
+            return findCompanyCountry().then(res => {
+                if (res.check()) {
+                    commit('Update_companyCountryList', res.data.openCompanyCountry)
                 }
                 return res
             })
