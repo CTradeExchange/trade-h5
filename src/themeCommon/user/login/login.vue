@@ -392,7 +392,7 @@ export default {
                             // state.zone = res.data.phoneArea
                             const params = {
                                 bizType: state.loginNameType === 'email' ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-                                toUser: state.loginNameType === 'email' ? state.loginName : String(state.phoneArea) + ' ' + state.loginName,
+                                toUser: state.loginNameType === 'email' ? state.email : String(state.phoneArea) + ' ' + state.loginName,
                             }
                             verifyCodeSend(params).then(res => {
                                 if (res.check()) {
