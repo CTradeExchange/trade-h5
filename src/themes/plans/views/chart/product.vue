@@ -602,16 +602,24 @@ export default {
         const checkIsSelfSymbol = () => {
             if (isEmpty(customerInfo.value)) {
                 const newId = getSymbolId() + '_' + getTradeType()
+                // console.log(localGet('localSelfSymbolList'), newId, store.state._user)
                 if (localGet('localSelfSymbolList')) {
                     if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
                         state.isSelfSymbol = true
                     } else {
-                        state.isSelfSymbol = false
+                        if (!isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId())))) {
+                            state.isSelfSymbol = true
+                        } else {
+                            state.isSelfSymbol = false
+                        }
                     }
                 } else {
-                    state.isSelfSymbol = false
+                    if (!isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId())))) {
+                        state.isSelfSymbol = true
+                    } else {
+                        state.isSelfSymbol = false
+                    }
                 }
-                console.log(localGet('localSelfSymbolList'), newId)
             } else {
                 state.isSelfSymbol = !isEmpty(selfSymbolList.value[getTradeType()]?.find(el => el.symbolId === parseInt(getSymbolId())))
             }
@@ -1211,7 +1219,7 @@ export default {
 
         // 侧边栏-切换产品
         const onSelect = (product, close) => {
-            console.log(product)
+            // console.log(product)
             router.replace({
                 query: {
                     ...route.query,

@@ -501,7 +501,8 @@
         "productEtfTip": "ETF is the abbreviation of Exchange Traded Funds, which is a special open-end fund. Investors can buy and sell fund shares in the spot market just like cryptocurrencies. At the same time, investors can also subscribe or redeem fund shares from fund management companies.",
         "quantity": "QTY(Lots)",
         "upDown": "24H Change%",
-        "loginOrRegister": "Login or Register"
+        "loginOrRegister": "Login or Register",
+        "addToOptional":"Add optional"
     },
     "bizType": {
         "2": "Market close",

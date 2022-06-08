@@ -37,8 +37,8 @@
                 <SortIcon name='rolling_upDownWidth' :sort-field='sortField' :sort-type='sortType' />
             </span>
         </div>
-        <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
-        <div class='AddToOptional'>
+        <productListComp ref='productListEl' :product-list='productList' />
+        <div v-if='categoryType === 0 && productList.length === 0' class='AddToOptional'>
             <van-button plain size='small' type='primary' @click='goSearchPage'>
                 + {{ $t('trade.addToOptional') }}
             </van-button>
@@ -143,11 +143,12 @@ export default {
                 }
                 await nextTick()
                 unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + tradeTypeOld)
-                console.log(unref(tradeType))
             }
         })
 
-        const tabChange = (i) => {}
+        const tabChange = (i) => {
+            // console.log(unref(tradeType), i)
+        }
         const tabClick = (i) => {}
 
         const showSidebar = ref(false)
@@ -268,7 +269,7 @@ export default {
     }
 }
 .AddToOptional {
-    margin: rem(26px) 0;
+    margin: rem(30px) 0 rem(20px) 0;
     text-align: center;
 }
 </style>

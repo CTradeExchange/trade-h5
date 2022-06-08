@@ -73,9 +73,9 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
         } else { // 已登录
             listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
         }
-        console.log(unref(categoryList.value)[unref(categoryType.value)])
-        console.log(unref(categoryType.value))
-        // console.log(Number(unref(categoryType.value)))
+        // console.log(unref(categoryList.value)[unref(categoryType.value)])
+        // console.log(unref(categoryType.value))
+        // // console.log(Number(unref(categoryType.value)))
         if (listByUserData?.length > 0) {
             listByUserData.forEach(id => {
                 const newId = `${id}_${unref(tradeType)}`
