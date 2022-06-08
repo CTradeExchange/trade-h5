@@ -889,7 +889,6 @@ export default {
         // 实时更新买卖价线
         watch(() => [dealLastPrice.value?.price], (newValues) => {
             if (newValues) {
-                // console.log('dealLastPrice.value.volume', dealLastPrice.value.volume)
                 state.onChartReadyFlag && unref(chartRef).setTick(dealLastPrice.value.price, dealLastPrice.value.dealTime, dealLastPrice.value.volume)
             }
 
@@ -1086,22 +1085,21 @@ export default {
                 // 未登录 缓存到本地
                 var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
                 const newId = getSymbolId() + '_' + getTradeType()
-                if (localSelfSymbolList.indexOf(newId) !== -1) {
+                if (localSelfSymbolList.find(el => el === newId)) {
                     localSelfSymbolList.map((it, index) => {
                         if (it === newId) {
                             localSelfSymbolList.splice(index, 1)
                             state.isSelfSymbol = false
-                            // store.dispatch('_user/removeLocalCustomerOptionals')
                             Toast(t('trade.removeOptionalOk'))
                         }
                     })
                 } else {
                     localSelfSymbolList.push(newId)
                     state.isSelfSymbol = true
-                    // store.dispatch('_user/addLocalCustomerOptionals')
                     Toast(t('trade.addOptionalOk'))
                 }
-                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
+                localSet('localSelfSymbolList', JSON.stringify(localSelfSymbolList))
+
                 // Toast(t('common.noLogin'))
                 // return router.push('/login')
             } else {
@@ -1210,7 +1208,6 @@ export default {
 
         // 侧边栏-切换产品
         const onSelect = (product, close) => {
-            console.log(product)
             router.replace({
                 query: {
                     ...route.query,

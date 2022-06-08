@@ -94,9 +94,8 @@ export default {
         const { categoryList, productList, sortField, sortType, sortFunc } = useProduct({
             tradeType, categoryType
         })
-        // console.log(categoryList)
 
-        const localSelfSymbolListCur = computed(() => localGet('localSelfSymbolList') || '')
+        const localSelfSymbolListCur = ref(localGet('localSelfSymbolList'))
 
         const plansLen = computed(() => {
             const userProductCategory = store.getters.userProductCategory
@@ -128,32 +127,28 @@ export default {
             async () => {
                 await nextTick()
                 if (productListEl.value) productListEl.value.subscribeAll()
-
-                // console.log(productListEl.value)
             }
         )
-
-        watch(() => localGet('localSelfSymbolList'), (val) => {
-            console.log(val)
-        })
 
         onActivated(async () => {
             await nextTick()
             if (productListEl.value) productListEl.value.subscribeAll()
             // 未登录游客自选操作后返回过滤更新列表
-            // if (!customerInfo.value) {
-            if (categoryType.value === 0) {
-                if (localGet('localSelfSymbolList') !== String(localSelfSymbolListCur.value)) {
-                    tradeType.value = tradeTypeOld.value
-                    categoryType.value = 1
-                    await nextTick()
-                    var st = setTimeout(() => {
-                        categoryType.value = 0
-                        clearTimeout(st)
-                    }, 100)
+            if (!customerInfo.value) {
+                if (categoryType.value === 0) {
+                    if (JSON.parse(localGet('localSelfSymbolList')).length !== JSON.parse(localSelfSymbolListCur.value).length) {
+                        tradeType.value = tradeTypeOld.value
+                        categoryType.value = 1
+                        await nextTick()
+                        // 定时切换一下玩法，触发刷新列表
+                        var st = setTimeout(() => {
+                            categoryType.value = 0
+                            localSelfSymbolListCur.value = localGet('localSelfSymbolList')
+                            clearTimeout(st)
+                        }, 100)
+                    }
                 }
             }
-            // }
         })
 
         const tabChange = (i) => {}
