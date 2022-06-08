@@ -23,7 +23,7 @@
                     {{ $t("common.inputEmail") }}
                 </p>
                 <van-field
-                    v-model='email'
+                    v-model.trim='email'
                     class='inputEmail'
                     label=''
                     :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'

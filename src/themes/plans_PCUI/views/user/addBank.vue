@@ -4,11 +4,11 @@
             <top left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true' />
             <div class='filed-wrap'>
                 <van-cell-group>
-                    <van-field v-model='firstName' :label='$t("bank.bankPersonFirstName")' :placeholder='$t("bank.bankPersonFirstName")' />
-                    <van-field v-model='lastName' :label='$t("bank.bankPersonLastName")' :placeholder='$t("bank.bankPersonLastName")' />
-                    <van-field v-model='bankNo' :label='$t("bank.bankNo")' :placeholder='$t("bank.inputBankNo")' type='number' />
+                    <van-field v-model.trim='firstName' :label='$t("bank.bankPersonFirstName")' :placeholder='$t("bank.bankPersonFirstName")' />
+                    <van-field v-model.trim='lastName' :label='$t("bank.bankPersonLastName")' :placeholder='$t("bank.bankPersonLastName")' />
+                    <van-field v-model.trim='bankNo' :label='$t("bank.bankNo")' :placeholder='$t("bank.inputBankNo")' type='number' />
                     <van-field
-                        v-model='bankName'
+                        v-model.trim='bankName'
                         class='select'
                         :label='$t("bank.bankName")'
                         :placeholder='$t("bank.inputBankName")'
@@ -27,7 +27,7 @@
                     <CurrencyAction v-model='currency' v-model:show='currencyShow' class='cellRow' input-align='left' />
 
                     <van-field
-                        v-model='area'
+                        v-model.trim='area'
                         class='select'
                         :label='$t("bank.openAddress")'
                         :placeholder='$t("bank.inputOpenAddressText")'
@@ -35,7 +35,7 @@
                         right-icon='arrow-down'
                         @click='areaShow = true'
                     />
-                    <van-field v-model='bankArea' :label='$t("bank.branchAddress")' :placeholder='$t("bank.inputBranchAddress")' />
+                    <van-field v-model.trim='bankArea' :label='$t("bank.branchAddress")' :placeholder='$t("bank.inputBranchAddress")' />
                 </van-cell-group>
             </div>
             <van-button block class='confirm-btn' type='primary' @click='handleConfirm'>

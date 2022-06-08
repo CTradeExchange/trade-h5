@@ -54,46 +54,26 @@
                     />
                 </div>
                 <div v-else class='field'>
-                    <compInput
-                        v-show="loginNameType==='email'"
-                        ref='checkCodeEmailEl'
-                        v-model.trim='checkCodeEmail'
-                        block
-                        :placeholder="$t('signIn.verifyCode')"
-                        @keyup.enter='loginHandle'
-                    >
-                        <van-button
-                            class='verifyCodeBtn'
-                            :disabled='!isNaN(verifyCodeBtnText)'
+                    <div v-show="loginNameType==='email'" class='verifyCodeCell'>
+                        <CheckCode
+                            ref='checkCodeEmailEl'
+                            v-model.trim='checkCodeEmail'
+                            clear
+                            :label='$t("login.verifyCode")'
                             :loading='sendVerifyLoading'
-                            plain
-                            size='small'
-                            type='primary'
-                            @click='sendVerifyHandler'
-                        >
-                            {{ verifyCodeBtnText }}
-                        </van-button>
-                    </compInput>
-                    <compInput
-                        v-show="loginNameType==='mobile'"
-                        ref='checkCodeMobileEl'
-                        v-model.trim='checkCodeMobile'
-                        block
-                        :placeholder="$t('signIn.verifyCode')"
-                        @keyup.enter='loginHandle'
-                    >
-                        <van-button
-                            class='verifyCodeBtn'
-                            :disabled='!isNaN(verifyCodeBtnText)'
+                            @verifyCodeSend='sendVerifyHandler'
+                        />
+                    </div>
+                    <div v-show="loginNameType==='mobile'" class='verifyCodeCell'>
+                        <CheckCode
+                            ref='checkCodeMobileEl'
+                            v-model.trim='checkCodeMobile'
+                            clear
+                            :label='$t("login.verifyCode")'
                             :loading='sendVerifyLoading'
-                            plain
-                            size='small'
-                            type='primary'
-                            @click='sendVerifyHandler'
-                        >
-                            {{ verifyCodeBtnText }}
-                        </van-button>
-                    </compInput>
+                            @verifyCodeSend='sendVerifyHandler'
+                        />
+                    </div>
                 </div>
                 <div v-if='googleCodeVis' class='field field-google'>
                     <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
@@ -141,6 +121,7 @@ import topNav from '@planspc/layout/topNav'
 import loginNameTypeBar from './loginNameTypeBar'
 import compInput from '@planspc/components/form/input'
 import areaInputPc from '@/components/form/areaInputPc'
+import CheckCode from '@/components/form/checkCode'
 import LoginPwdDialog from './loginPwdDialog.vue'
 import { reactive, ref, toRefs, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
@@ -162,6 +143,7 @@ export default {
         loginNameTypeBar,
         topNav,
         compInput,
+        CheckCode,
         areaInputPc,
         googleVerifyCode,
         LoginByGoogle,
@@ -299,18 +281,22 @@ export default {
         }
 
         // 发送验证码
-        const sendVerifyHandler = () => {
+        const sendVerifyHandler = (callback) => {
             const param = {
                 type: state.loginNameType === 'email' ? 1 : 2,
                 loginName: state.loginNameType === 'email' ? state.email : state.loginName,
             }
             if (state.loginNameType === 'mobile') param.phoneArea = state.zone
-            state.sendVerifyLoading = false
+            state.sendVerifyLoading = true
             sendVerifyCode(param).then(res => {
-                console.log(res)
                 if (res.check && res.check()) {
                     state.token = res.data.token
+                    callback && callback()
+                } else {
+                    callback && callback(false)
                 }
+            }).catch(err => {
+                callback && callback(false)
             }).finally(() => {
                 state.sendVerifyLoading = false
             })
@@ -504,6 +490,34 @@ export default {
         width: 200px;
         margin: 15px auto 0;
         text-align: center;
+    }
+}
+.verifyCodeCell {
+    :deep {
+        .checkCodeBar {
+            background-color: var(--assistColor);
+            border-bottom: none;
+            border-radius: 4px;
+            .checkCodeInput {
+                font-size: 16px;
+            }
+            .getCodeBtn {
+                margin: 0 18px;
+                color: var(--primary);
+                font-size: 16px;
+                cursor: pointer;
+                &:disabled{
+                    color: var(--minorColor);
+                    cursor: default;
+                }
+            }
+            .input {
+                width: 100%;
+                height: 48px;
+                padding: 0 5px;
+                padding-left: 18px;
+            }
+        }
     }
 }
 </style>

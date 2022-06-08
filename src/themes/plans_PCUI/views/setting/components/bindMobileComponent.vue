@@ -14,7 +14,7 @@
         <form class='form'>
             <div class='field'>
                 <areaInput
-                    v-model='mobile'
+                    v-model.trim='mobile'
                     v-model:zone='zoneText'
                     :all-country='true'
                     clear

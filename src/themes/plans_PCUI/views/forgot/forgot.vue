@@ -20,8 +20,8 @@
                         type='line'
                         @click='handleTabChange'
                     >
-                        <van-tab :title='$t("forgot.retrievedByPhone")' />
-                        <van-tab :title='$t("forgot.retrievedByEmail")' />
+                        <van-tab :name='1' :title='$t("forgot.retrievedByEmail")' />
+                        <van-tab :name='0' :title='$t("forgot.retrievedByPhone")' />
                     </van-tabs>
                 </div>
                 <div class='tabs-content'>
@@ -34,6 +34,7 @@
                                 clear
                                 :placeholder='$t("common.inputPhone")'
                                 @onBlur='checkUserMfa'
+                                @zoneSelect='zoneSelect'
                             />
                         </div>
                         <div v-else class='field'>
@@ -206,11 +207,12 @@ export default {
         // 检测客户是否开启GoogleMFA
         const checkUserMfa = (val) => {
             if (val) {
-                checkGoogleMFAStatus({
+                const params = {
                     loginName: val,
-                    phoneArea: state.phoneArea,
-                    type: val.includes('@') ? 1 : 2
-                }).then(res => {
+                    type: state.active === 1 ? 1 : 2
+                }
+                if (params.type === 2) params.phoneArea = state.zone
+                checkGoogleMFAStatus(params).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
                     }
@@ -264,6 +266,7 @@ export default {
                     type: state.curTab === 0 ? 2 : 1,
                     loginName: state.curTab === 0 ? state.mobile : state.email
                 }
+                if (source.type === 2) source.phoneArea = state.zone
                 state.loading = true
                 checkUserStatus(source).then(res => {
                     state.loading = false
@@ -276,10 +279,10 @@ export default {
                             callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
-                            state.countryZone = res.data.phoneArea
+                            // state.countryZone = res.data.phoneArea
                             verifyCodeSend({
                                 bizType: bizTypeMap['login'][state.curTab],
-                                toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                                toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
                             }).then(res => {
                                 if (res.check()) {
                                     state.sendToken = res.data.token
@@ -397,6 +400,7 @@ export default {
         const zoneSelect = (data) => {
             state.countryZone = data.code
             state.countryCode = data.countryCode
+            if (state.mobile) checkUserMfa(state.mobile)
         }
         const back = () => {
             router.replace('/login')

@@ -10,7 +10,13 @@ export default (t) => {
                 validator: (rule, value, callback, source, options) => {
                     return source.type === 0 ? !!value : true
                 },
-            }
+            },
+            {
+                message: t('common.inputRealPhone'),
+                validator: (rule, value, callback, source, options) => {
+                    return source.type === 0 ? !isNaN(value) : true
+                }
+            },
 
         ],
         email: [
