@@ -59,6 +59,7 @@
         :style="{ width: '100%',height: '50%' }"
     >
         <div class='header'>
+            {{ $t('register.area') }}
             <i class='icon_icon_close_big' @click='show=false'></i>
         </div>
         <!-- <van-search v-model='searchVal' placeholder='请输入搜索关键词' /> -->
@@ -130,11 +131,13 @@ export default {
 .popup-country {
     background: var(--bgColor);
     .header {
+        display: flex;
+        justify-content: space-between;
+        margin: 0 rem(30px);
+        font-size: rem(32px);
         line-height: rem(120px);
         text-align: right;
         .icon_icon_close_big {
-            margin-top: rem(60px);
-            margin-right: rem(30px);
             color: var(--normalColor);
             font-weight: bold;
             font-size: rem(28px);
@@ -157,7 +160,7 @@ export default {
         .country-item {
             display: flex;
             justify-content: space-between;
-            margin: 0 rem(30px);
+            padding: 0 rem(30px);
             line-height: rem(100px);
             //border-bottom: solid 1px var(--lineColor);
             &:hover {

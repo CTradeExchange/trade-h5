@@ -75,6 +75,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        isBusiness: {
+            type: Boolean,
+            default: false
         }
     },
     data () {
@@ -85,7 +89,7 @@ export default {
     },
     computed: {
         countryList () {
-            const countryList = this.$store.state.countryList || []
+            const countryList = this.isBusiness ? this.$store.getters.companyCountryList : this.$store.state.countryList
             const tempArr = []
 
             countryList.forEach(item => {
@@ -206,8 +210,8 @@ export default {
     width: 100%;
     height: 48px;
     padding: 0 10px;
-    border-radius: 3px;
     font-size: 16px;
+    border-radius: 3px;
     &:focus~.label,
     &:valid~.label {
         transform: scale(0.8) translateY(-90%);

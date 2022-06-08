@@ -70,6 +70,7 @@
                             v-model:zone='zone'
                             clear
                             :disabled='false'
+                            :is-business='openAccountType === 1'
                             :placeholder='$t("register.phoneNo")'
                             type='mobile'
                             @zoneSelect='zoneSelect'
@@ -82,6 +83,7 @@
                             clear
                             :disabled='true'
                             input-type='text'
+                            :is-business='openAccountType === 1'
                             :placeholder='$t("register.email")'
                             type='email'
                             @zoneSelect='zoneSelect'
@@ -202,7 +204,6 @@ export default {
             protocol: true,
             visited: false, // 是否已点击过获取验证码
             countryVal: '',
-            companyCountryList: [], // 获取白标后台配置的企业开户国家
             openAccountType: Number(openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
             allCountry: [], // 所有国家列表
             emailToken: '',
@@ -226,9 +227,13 @@ export default {
                 }
             }
         })
+
+        // 获取支持企业注册国家
+        store.dispatch('getCompanyCountry')
+
         const countryList = computed(() => {
             const countryList = store.state.countryList
-            return state.openAccountType === 0 ? countryList : state.allCountry.filter(el => state.companyCountryList.includes(el.code))
+            return state.openAccountType === 0 ? countryList : store.getters.companyCountryList
         })
 
         const getAllCountry = () => {
@@ -258,7 +263,7 @@ export default {
         // 是否显示企业开户的入口
         const companyCountryVisible = computed(() => {
             if (state.openAccountType === 0) {
-                return state.companyCountryList.includes(state.countryVal)
+                return store.getters.companyCountryList.find(el => el.code === state.countryVal)
             } else {
                 return store.state.countryList.find(el => el.code === state.countryVal)
             }
@@ -433,15 +438,6 @@ export default {
             // state.countryCode = data.countryCode
         }
 
-        // 获取白标后台配置的企业开户国家
-        const queryCompanyCountry = () => {
-            findCompanyCountry().then(res => {
-                if (res.check() && res.data) {
-                    state.companyCountryList = res.data.openCompanyCountry
-                }
-            })
-        }
-
         onMounted(() => {
             const { mobile, email } = route.query
             if (mobile) {
@@ -452,7 +448,6 @@ export default {
                 state.openType = 'email'
             }
             getAllCountry()
-            queryCompanyCountry()
         })
 
         return {
@@ -463,7 +458,6 @@ export default {
             instructions,
             countryList,
             zoneOnSelect,
-            queryCompanyCountry,
             zoneSelect,
             companyCountryVisible
         }

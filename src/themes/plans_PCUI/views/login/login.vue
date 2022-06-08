@@ -27,6 +27,7 @@
                         v-model.trim='loginName'
                         v-model:zone='zone'
                         block
+                        :is-business='accountType === 2'
                         :placeholder="$t('common.inputPhone')"
                         @keyup.enter='onLoginNameKeyupEnter'
                         @onBlur='checkUserMfa'
@@ -123,7 +124,7 @@ import compInput from '@planspc/components/form/input'
 import areaInputPc from '@/components/form/areaInputPc'
 import CheckCode from '@/components/form/checkCode'
 import LoginPwdDialog from './loginPwdDialog.vue'
-import { reactive, ref, toRefs, computed, onMounted } from 'vue'
+import { reactive, ref, toRefs, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
@@ -179,19 +180,36 @@ export default {
         // 获取国家区号
         store.dispatch('getCountryListByParentCode').then(res => {
             if (res.check() && res.data.length) {
-                const countryList = store.state.countryList
-                const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
-                const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
-                if (defaultZoneConfig?.code && !state.zone) {
-                    state.countryVal = defaultZoneConfig.code
-                    state.zone = defaultZoneConfig.countryCode
-                }
+                setDefaultZone()
             }
         })
         const countryList = computed(() => store.state.countryList)
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
 
         const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
+
+        watch(() => state.accountType, val => {
+            console.log(val)
+            if (val === 2) {
+                state.zone = store.getters.companyCountryList[0]?.countryCode
+            } else {
+                setDefaultZone()
+            }
+        })
+
+        // 设置默认区号
+        const setDefaultZone = () => {
+            const countryList = store.state.countryList
+            const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
+            const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
+            if (defaultZoneConfig?.code && !state.zone) {
+                state.countryVal = defaultZoneConfig.code
+                state.zone = defaultZoneConfig.countryCode
+            } else {
+                state.countryVal = countryList[0]?.countryCode
+                state.zone = countryList[0]?.countryCode
+            }
+        }
 
         // 跳转路由
         const toRoute = path => {
@@ -353,6 +371,9 @@ export default {
             }
             // 获取三方登录配置
             store.dispatch('_base/getLoginConfig')
+
+            // 获取支持企业注册国家
+            store.dispatch('getCompanyCountry')
         })
 
         return {
@@ -506,7 +527,7 @@ export default {
                 color: var(--primary);
                 font-size: 16px;
                 cursor: pointer;
-                &:disabled{
+                &:disabled {
                     color: var(--minorColor);
                     cursor: default;
                 }
