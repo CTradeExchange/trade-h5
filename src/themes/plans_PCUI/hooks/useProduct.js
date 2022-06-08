@@ -48,12 +48,10 @@ export default function ({ tradeType, categoryType, isSelfSymbol = true }) {
         const systemOptional = unref(categoryList.value)[unref(categoryType.value)]?.listByUser || [] // 系统默认推送的自选列表
 
         if (!customerInfo.value) { // 未登录
-            console.log(unref(categoryType.value))
             if (unref(categoryType.value) === '0') {
                 // 取本地缓存的自选列表
                 const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
                 const AllSymbolist = []
-                console.log(localSelfSymbolList)
                 // 把本地缓存的自选列表加到总列表（本地 + WP配的系统自选）
                 // localSelfSymbolList.map((item) => {
                 //     if (!AllSymbolist.includes(item)) {

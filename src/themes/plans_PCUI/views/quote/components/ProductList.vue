@@ -6,11 +6,6 @@
             :options='tableOptions'
             :pagination='pagination'
         />
-        <div class='AddToOptional'>
-            <van-button plain size='small' type='primary' @click='goSearchPage'>
-                <van-icon name='add' /> {{ $t('trade.addToOptional') }}
-            </van-button>
-        </div>
     </div>
 </template>
 
@@ -141,25 +136,7 @@ const computedList = computed(() => {
             }
         }
     }
-    .AddToOptional {
-        position: absolute;
-        top: 45%;
-        right: 20%;
-        left: 20%;
-        display: inline-block;
-        margin: 0 0 20px;
-        font-size: 18px;
-        text-align: center;
-        .van-button {
-            width: 200px;
-            height: 80px;
-            color: var(--primary);
-            font-weight: bold;
-            line-height: 80px;
-            background: var(--contentColor);
-            border: none;
-        }
-    }
+
 }
 
 </style>

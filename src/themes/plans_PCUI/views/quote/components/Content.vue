@@ -5,7 +5,14 @@
             <Autocomplete :trade-type='tradeType' />
         </div>
         <CategoryList v-model='categoryType' :list='computedCategoryList' />
-        <ProductList v-if='tradeType' :list='productList' :trade-type='tradeType' />
+        <div class='productWrapper'>
+            <ProductList v-if='tradeType' :list='productList' :trade-type='tradeType' />
+            <div v-if='categoryType === "0" && productList.length === 0' class='AddToOptional'>
+                <van-button plain size='small' type='primary' @click='goAddOptional'>
+                    <van-icon name='add' /> {{ $t('trade.addToOptional') }}
+                </van-button>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -31,24 +38,21 @@ const { categoryList, productList } = useProduct({
 const planMap = computed(() => store.state._quote.planMap) // 每个玩法下配置的产品
 
 provide('isReLoadProductList', (value, productId) => {
-    console.log('isReLoadProductList')
     if (value === true) {
         const ArrPro = unref(productListData).value
-        console.log(ArrPro, unref(categoryType), productId)
-        // console.log(ArrPro.property)
+        // if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
+        //     ArrPro.map((it, index) => {
+        //         if (it.symbolKey === productId) {
+        //             ArrPro.splice(index, 1)
+        //         }
+        //     })
+        //     // productListData.value = ref(ArrPro)
+        //     console.log(ArrPro)
+        //     // })
+        // }
         if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
-            ArrPro.map((it, index) => {
-                if (it.symbolKey === productId) {
-                    ArrPro.splice(index, 1)
-                }
-            })
-
-            // nextTick()
-            // nextTick(() => {
-            // productListData.value = ref(ArrPro)
-            // initList()
-            console.log(ArrPro)
-            // })
+            categoryType.value = '1'
+            categoryType.value = '0'
         }
     }
 })
@@ -90,8 +94,11 @@ watch(
 )
 
 const initList = () => {
-    console.log(productList)
     productListData.value = ref(productList)
+}
+
+const goAddOptional = () => {
+    categoryType.value = '1'
 }
 
 onBeforeMount(() => {
@@ -144,4 +151,31 @@ onUnmounted(() => {
         font-size: 14px;
     }
 }
+.productWrapper{
+    position: relative;
+}
+.AddToOptional {
+        position: absolute;
+        top: 45%;
+        right: 20%;
+        left: 20%;
+        display: inline-block;
+        margin: 0 0 20px;
+        z-index: 9;
+        text-align: center;
+        .van-button {
+            width: 200px;
+            height: 80px;
+            font-size: 18px;
+            color: var(--primary);
+            font-weight: bold;
+            line-height: 80px;
+            background: var(--contentColor);
+            transition: ease-in .2s;
+            border: none;
+            &:hover{
+                background: var(--assistColor);
+            }
+        }
+    }
 </style>
