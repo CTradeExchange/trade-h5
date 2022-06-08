@@ -87,6 +87,23 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     })
     store.commit('_base/Update_plansNames', tradeTypeClone)
 
+    // 获取设置系统推送的自选产品加入到本地缓存
+    const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+    if (localSelfSymbolList.length === 0) {
+        const systemOptional = store.state._base.wpSelfSymbol[0].data.product
+        const proArr = []
+        Object.keys(systemOptional).forEach(el => {
+            if (Object.keys(systemOptional[el]).find(it => it === '2')) { // 普通游客选取客户组为2的数据加载到本地自选缓存中
+                systemOptional[el][2].forEach(item => {
+                    proArr.push(item + '_' + el)
+                })
+            }
+        })
+        if (proArr) {
+            localSet('localSelfSymbolList', JSON.stringify(proArr))
+        }
+    }
+
     // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
     if (token) {
         Promise.resolve().then(() => {

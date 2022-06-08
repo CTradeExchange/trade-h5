@@ -40,7 +40,7 @@
         <productListComp ref='productListEl' :product-list='productList' />
         <div v-if='categoryType === 0 && productList.length === 0' class='AddToOptional'>
             <van-button plain size='small' type='primary' @click='goSearchPage'>
-                + {{ $t('trade.addToOptional') }}
+                <van-icon name='add' /> {{ $t('trade.addToOptional') }}
             </van-button>
         </div>
     </div>
