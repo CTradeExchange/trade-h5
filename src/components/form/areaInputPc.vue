@@ -207,6 +207,7 @@ export default {
     height: 48px;
     padding: 0 10px;
     border-radius: 3px;
+    font-size: 16px;
     &:focus~.label,
     &:valid~.label {
         transform: scale(0.8) translateY(-90%);

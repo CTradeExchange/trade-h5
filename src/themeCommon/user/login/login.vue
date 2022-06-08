@@ -6,6 +6,7 @@
             :color='$style.primary'
             shrink
             :title-active-color='$style.primary'
+            @change='tabActiveChange'
         >
             <van-tab :title='$t("login.loginByPersonal")' />
             <van-tab :title='$t("login.loginByCorporate")' />
@@ -34,6 +35,7 @@
                     v-model.trim='loginName'
                     v-model:zone='phoneArea'
                     clear
+                    :country-list='countryList'
                     :placeholder="$t('login.loginNamePlaceholder')"
                     @onBlur='checkUserMfa'
                     @zoneSelect='zoneSelect'
@@ -186,12 +188,22 @@ export default {
             }
         })
 
-        const countryList = computed(() => store.state.countryList)
+        // 国家列表
+        const countryList = computed(() => {
+            let countryList = state.tabActive === 1 ? store.getters.companyCountryList : store.state.countryList
+            countryList = countryList.map(item => {
+                return {
+                    ...item,
+                    name: item.name + ' (' + item.countryCode + ')'
+                }
+            })
+            return countryList
+        })
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
-        if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
-            // 获取国家区号
-            store.dispatch('getCountryListByParentCode')
-        }
+        // 获取白标企业开户登录的国家区号列表
+        store.dispatch('getCompanyCountry')
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode')
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -199,6 +211,14 @@ export default {
         }
         const getGooleVerifyCode = val => {
             state.googleCode = val
+        }
+
+        // 切换个人登录、企业登录方式
+        const tabActiveChange = (e) => {
+            const hasArea = countryList.value.find(el => el.countryCode === state.phoneArea)
+            if (!hasArea) {
+                state.phoneArea = countryList.value[0].countryCode
+            }
         }
 
         // 切换手机号邮箱登录方式
@@ -425,6 +445,8 @@ export default {
             ...toRefs(state),
             changeLoginType,
             rightAction,
+            countryList,
+            tabActiveChange,
             loginNameTypeChange,
             zoneSelect,
             loginHandle,

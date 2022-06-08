@@ -1,7 +1,7 @@
 <template>
     <div class='mobileBar van-hairline--bottom'>
         <div class='zone' :class='{ disabled: disabled }'>
-            <VueSelect v-model='zoneVal' :actions='countryList' :text="type === 'mobile' ? 'name': 'countryName'" value='countryCode' @select='zoneOnSelect' />
+            <VueSelect v-model='zoneVal' :actions='countryList' text='name' value='countryCode' @select='zoneOnSelect' />
         </div>
         <div class='inputWrapper'>
             <input
@@ -58,9 +58,9 @@ export default {
             type: Boolean,
             default: false
         },
-        allCountry: {
-            type: Boolean,
-            default: false
+        countryList: {
+            type: Array,
+            default: () => ([])
         }
     },
     data () {
@@ -71,23 +71,6 @@ export default {
         }
     },
     computed: {
-        countryList () {
-            if (this.allCountry) {
-                return this.allCountryList
-            } else {
-                const countryList = this.$store.state.countryList || []
-                const tempArr = []
-                countryList.forEach(item => {
-                    tempArr.push({
-                        name: item.name + ' (' + item.countryCode + ')',
-                        code: item.code,
-                        countryCode: item.countryCode,
-                        countryName: item.name
-                    })
-                })
-                return tempArr
-            }
-        },
         zoneVal: {
             get () {
                 return this.zone
@@ -100,25 +83,6 @@ export default {
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect', 'onBlur'],
-    mounted () {
-        this.$store.dispatch('getCountryListByParentCode').then(res => {
-            if (res.data.length > 0) {
-                const tempArr = []
-                res.data.forEach(item => {
-                    tempArr.push({
-                        name: item.name + ' (' + item.countryCode + ')',
-                        code: item.code,
-                        countryCode: item.countryCode,
-                        countryName: item.name
-                    })
-                })
-                this.allCountryList = tempArr
-                if (this.zoneVal === '') {
-                    this.zoneOnSelect(tempArr[0])
-                }
-            }
-        })
-    },
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
