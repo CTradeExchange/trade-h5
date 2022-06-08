@@ -498,7 +498,8 @@
         "purchaseRedeemBtn": "申購",
         "productEtfTip": "ETF是一種特殊的開放式基金，投資者可以像買賣加密貨幣一樣，在現貨市場買賣ETF基金份額；同時，投資者也可向基金管理公司申購或贖回ETF份額",
         "quantity": "數量(手)",
-        "loginOrRegister": "登錄 或 註冊"
+        "loginOrRegister": "登錄 或 註冊",
+        "addToOptional":"添加自选"
     },
     "bizType": {
         "2": "市價平倉",

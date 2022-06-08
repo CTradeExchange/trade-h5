@@ -39,7 +39,7 @@ export default function ({ tradeType, categoryType, isSort = true }) {
         const productMapVal = unref(productMap)
         const arr = []
         let listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser || []
-
+        // console.log(listByUserData)
         if (!customerInfo.value) { // 未登录
             // console.log(categoryList)
             // console.log(unref(categoryType))
@@ -66,7 +66,7 @@ export default function ({ tradeType, categoryType, isSort = true }) {
             listByUserData = unref(categoryList.value)[unref(categoryType.value)].listByUser
         }
 
-        console.log(listByUserData)
+        // console.log(listByUserData)
         if (listByUserData?.length > 0) {
             listByUserData.forEach(id => {
                 const newId = `${id}_${unref(tradeType)}`
