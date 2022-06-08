@@ -141,17 +141,19 @@ export default {
             await nextTick()
             if (productListEl.value) productListEl.value.subscribeAll()
             // 未登录游客自选操作后返回过滤更新列表
-            if (!customerInfo.value) {
-                if (categoryType.value === 0) {
-                    if (localGet('localSelfSymbolList') !== unref(localSelfSymbolListCur)) {
-                        tradeType.value = tradeTypeOld.value
-                        categoryType.value = 1
-                        await nextTick()
-                        unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + tradeTypeOld)
+            // if (!customerInfo.value) {
+            if (categoryType.value === 0) {
+                if (localGet('localSelfSymbolList') !== String(localSelfSymbolListCur.value)) {
+                    tradeType.value = tradeTypeOld.value
+                    categoryType.value = 1
+                    await nextTick()
+                    var st = setTimeout(() => {
                         categoryType.value = 0
-                    }
+                        clearTimeout(st)
+                    }, 100)
                 }
             }
+            // }
         })
 
         const tabChange = (i) => {}

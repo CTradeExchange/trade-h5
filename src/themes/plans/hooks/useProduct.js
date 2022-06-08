@@ -39,7 +39,7 @@ export default function ({ tradeType, categoryType, isSort = true }) {
         const productMapVal = unref(productMap)
         const arr = []
         let listByUserData = [] // 用户自主添加的自选列表
-        const systemOptional = unref(categoryList.value)[unref(categoryType.value)].listByUser || [] // 系统默认推送的自选列表
+        const systemOptional = unref(categoryList.value)[unref(categoryType.value)]?.listByUser || [] // 系统默认推送的自选列表
 
         if (!customerInfo.value) { // 未登录
             if (unref(categoryType.value) === 0) {
