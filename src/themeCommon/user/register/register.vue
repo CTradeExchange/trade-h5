@@ -55,8 +55,11 @@
                         @zoneSelect='zoneSelect'
                     />
                 </div>
-                <div class='cell'>
-                    <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                <div v-show="openType === 'mobile'" class='cell'>
+                    <CheckCode v-model.trim='mobileCheckCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                </div>
+                <div v-show="openType === 'email'" class='cell'>
+                    <CheckCode v-model.trim='emailCheckCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
                 <div v-if='instructions' class='cell'>
                     <van-checkbox v-model='protocol' class='checkbox' shape='square'>
@@ -138,7 +141,8 @@ export default {
             countryCode: 'ISO_3166_156',
             loading: false,
             verifyCodeLoading: false,
-            checkCode: '',
+            emailCheckCode: '',
+            mobileCheckCode: '',
             mobile: '',
             openType: 'email', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
@@ -151,9 +155,10 @@ export default {
             openAccountType: Number(route.query.openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
             countrySheetVisible: false,
             country: {},
-            allCountry: [] // 所有国家列表
+            allCountry: [], // 所有国家列表
+            mobileToken: '',
+            emailToken: ''
         })
-        let token = ''
 
         // pageConfig('Register').then(res => {
         //     state.pageui = res
@@ -206,20 +211,7 @@ export default {
         // 手机正则表达式
         const mobileReg = computed(() => getArrayObj(countryList.value, 'countryCode', state.countryZone).extend || ''
         )
-        // const showProtocol = (e) => {
-        //     e.preventDefault()
-        //     if (instructions) {
-        //         debugger
-        //         const protocolHtml = unescape(instructions.value)
-        //         Dialog.alert({
-        //             allowHtml: true,
-        //             title: '用户须知',
-        //             message: protocolHtml,
-        //         }).then(() => {
-        //         // on close
-        //         })
-        //     }
-        // }
+
         const registerSubmit = (params) => {
             state.loading = true
             register(params).finally(() => {
@@ -271,17 +263,17 @@ export default {
             if (!state.visited) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (!token) {
+            if ((state.openType === 'email' && !state.emailToken) || (state.openType === 'mobile' && !state.mobileToken)) {
                 return Toast(t('common.inputRealVerifyCode'))
             }
             const params = {
                 type: state.openType === 'email' ? 1 : 2,
                 loginName: state.openType === 'email' ? state.email : state.mobile,
                 registerSource: getDevice(),
-                verifyCode: state.checkCode,
+                verifyCode: state.openType === 'email'　? state.emailCheckCode : state.mobileCheckCode,
                 // currency: state.currency,
                 // tradeType: state.tradeType,
-                sendToken: token,
+                sendToken: state.openType === 'email'　? state.emailToken : state.mobileToken,
                 utmSource: getQueryVariable('utm_source', entrySearch),
                 utmMedium: getQueryVariable('utm_medium', entrySearch),
                 utmCampaign: getQueryVariable('utm_campaign', entrySearch),
@@ -353,7 +345,7 @@ export default {
                             verifyCodeSend(params).then(res => {
                                 state.verifyCodeLoading = false
                                 if (res.check()) {
-                                    token = res.data.token
+                                    state.openType === 'mobile' ? state.mobileToken = res.data.token : state.emailToken = res.data.token
                                     callback && callback()
                                 } else {
                                     callback && callback(false)
@@ -474,7 +466,7 @@ export default {
         display: flex;
         flex: 1;
         justify-content: space-between;
-        padding: 10px 0;
+        padding: rem(20px) rem(6px);
     }
 }
 .cell {

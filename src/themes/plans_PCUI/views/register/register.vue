@@ -49,6 +49,7 @@
                             <el-option
                                 v-for='item in countryList'
                                 :key='item.code'
+                                :label='item.displayName'
                                 :value='item.code'
                             >
                                 <span style='float: left;'>
@@ -86,8 +87,23 @@
                             @zoneSelect='zoneSelect'
                         />
                     </div>
-                    <div class='cell verifyCodeCell'>
-                        <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                    <div v-show="openType === 'mobile'" class='cell verifyCodeCell'>
+                        <CheckCode
+                            v-model.trim='mobileCheckCode'
+                            clear
+                            :label='$t("login.verifyCode")'
+                            :loading='verifyCodeLoading'
+                            @verifyCodeSend='verifyCodeSendHandler'
+                        />
+                    </div>
+                    <div v-show="openType === 'email'" class='cell verifyCodeCell'>
+                        <CheckCode
+                            v-model.trim='emailCheckCode'
+                            clear
+                            :label='$t("login.verifyCode")'
+                            :loading='verifyCodeLoading'
+                            @verifyCodeSend='verifyCodeSendHandler'
+                        />
                     </div>
                     <div v-if='instructions' class='cell'>
                         <van-checkbox v-model='protocol' class='checkbox' shape='square'>
@@ -138,7 +154,7 @@ import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet, localSe
 import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
-import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
+import { reactive, toRefs, computed, getCurrentInstance, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import { unescape } from 'lodash'
@@ -175,7 +191,8 @@ export default {
             countryCode: 'ISO_3166_156',
             loading: false,
             verifyCodeLoading: false,
-            checkCode: '',
+            mobileCheckCode: '',
+            emailCheckCode: '',
             mobile: '',
             openType: 'email', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
@@ -187,9 +204,10 @@ export default {
             countryVal: '',
             companyCountryList: [], // 获取白标后台配置的企业开户国家
             openAccountType: Number(openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
-            allCountry: [] // 所有国家列表
+            allCountry: [], // 所有国家列表
+            emailToken: '',
+            mobileToken: ''
         })
-        let token = ''
 
         // pageConfig('Register').then(res => {
         //     state.pageui = res
@@ -307,17 +325,17 @@ export default {
             if (!state.visited) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (!token) {
+            if ((state.openType === 'email' && !state.emailToken) || (state.openType === 'mobile' && !state.mobileToken)) {
                 return Toast(t('common.inputRealVerifyCode'))
             }
             const params = {
                 type: state.openType === 'email' ? 1 : 2,
                 loginName: state.openType === 'email' ? state.email : state.mobile,
                 registerSource: getDevice(),
-                verifyCode: state.checkCode,
+                verifyCode: state.openType === 'email'　? state.emailCheckCode : state.mobileCheckCode,
                 // currency: state.currency,
                 // tradeType: state.tradeType,
-                sendToken: token,
+                sendToken: state.openType === 'email'　? state.emailToken : state.mobileToken,
                 utmSource: getQueryVariable('utm_source', entrySearch),
                 utmMedium: getQueryVariable('utm_medium', entrySearch),
                 utmCampaign: getQueryVariable('utm_campaign', entrySearch),
@@ -389,7 +407,7 @@ export default {
                             verifyCodeSend(params).then(res => {
                                 state.verifyCodeLoading = false
                                 if (res.check()) {
-                                    token = res.data.token
+                                    state.openType === 'mobile' ? state.mobileToken = res.data.token : state.emailToken = res.data.token
                                     callback && callback()
                                 } else {
                                     callback && callback(false)
