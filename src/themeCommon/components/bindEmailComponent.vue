@@ -17,7 +17,7 @@
                     {{ $t("common.inputEmail") }}
                 </p>
                 <van-field
-                    v-model='email'
+                    v-model.trim='email'
                     label=''
                     :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
                     type='text'
@@ -27,19 +27,19 @@
                 <p class='title'>
                     {{ $t('common.sendToYourEmail') }}
                 </p>
-                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
             <div v-if='type === "change"' class='field'>
                 <p class='title'>
                     {{ $t('common.sendToYou') }} {{ customInfo.email }}
                 </p>
-                <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
+                <CheckCode v-model.trim='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
             </div>
             <div v-else class='field'>
                 <!-- <label class='label'>
                     验证码
                 </label> -->
-                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
             <div v-if='googleCodeVis' class='field'>
                 <p class='title'>

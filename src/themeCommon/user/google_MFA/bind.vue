@@ -7,7 +7,7 @@
                     {{ $t('common.sendToYou') }}{{ customerInfo.phone }}
                 </p>
                 <van-field
-                    v-model='verifyCodeSMS'
+                    v-model.trim='verifyCodeSMS'
                     center
                     clearable
                 >
@@ -22,7 +22,7 @@
                     {{ $t('common.sendToYou') }}{{ customerInfo.email }}
                 </p>
                 <van-field
-                    v-model='verifyCodeEmail'
+                    v-model.trim='verifyCodeEmail'
                     center
                     clearable
                 >
@@ -38,7 +38,7 @@
                 </p>
                 <van-field
                     ref='googleVerifyCodeRef'
-                    v-model='googleCode'
+                    v-model.trim='googleCode'
                     center
                     clearable
                     :formatter='formatter'
