@@ -22,8 +22,8 @@
                 type='line'
                 @click='handleTabChange'
             >
-                <van-tab :title='$t("forgot.retrievedByPhone")' />
-                <van-tab :title='$t("forgot.retrievedByEmail")' />
+                <van-tab :name='1' :title='$t("forgot.retrievedByEmail")' />
+                <van-tab :name='0' :title='$t("forgot.retrievedByPhone")' />
             </van-tabs>
         </div>
         <div class='tabs-content'>
@@ -33,6 +33,7 @@
                         v-model.trim='mobile'
                         v-model:zone='phoneArea'
                         clear
+                        :country-list='countryList'
                         :placeholder='$t("common.inputPhone")'
                         @onBlur='checkUserMfa'
                         @zoneSelect='zoneSelect'
@@ -173,6 +174,23 @@ export default {
         }
 
         const customerInfo = computed(() => store.state._user.customerInfo)
+        // 国家列表
+        const countryList = computed(() => {
+            // let countryList = state.tabActive === 1 ? store.getters.companyCountryList : store.state.countryList
+            let countryList = store.state.countryList
+            countryList = countryList.map(item => {
+                return {
+                    ...item,
+                    name: item.name + ' (' + item.countryCode + ')'
+                }
+            })
+            return countryList
+        })
+        // 获取白标企业开户登录的国家区号列表
+        // store.dispatch('getCompanyCountry')
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode')
+
         if (type === 'fund') {
             state.mobile = customerInfo.value?.phone
             state.email = customerInfo.value?.email
@@ -388,6 +406,7 @@ export default {
         return {
             ...toRefs(state),
             next,
+            countryList,
             handleTabChange,
             handleVerifyCodeSend,
             style,
