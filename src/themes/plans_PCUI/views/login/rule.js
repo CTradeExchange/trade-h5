@@ -8,16 +8,27 @@ export default (t) => {
             {
                 message: t('login.loginNamePlaceholder'),
                 validator: (rule, value, callback, source, options) => {
-                    return !!value
+                    return source.type === 2 ? !!value : true
+                },
+            },
+            {
+                message: t('common.inputEmail'),
+                validator: (rule, value, callback, source, options) => {
+                    return source.type === 1 ? !!value : true
                 },
             },
             {
                 message: t('common.inputRealEmail'),
                 validator: (rule, value, callback, source, options) => {
-                    const isEmail = value.includes('@')
-                    return isEmail ? emailReg.test(value) : true
+                    return source.type === 1 ? emailReg.test(value) : true
                 },
-            }
+            },
+            {
+                message: t('common.inputRealPhone'),
+                validator: (rule, value, callback, source, options) => {
+                    return source.type === 2 ? !isNaN(value) : true
+                }
+            },
         ],
         verifyCode: {
             message: t('common.inputVerifyCode'),

@@ -40,7 +40,7 @@
                 />
             </div>
             <div v-else class='field'>
-                <InputComp v-model.trim='email' clear :label="$t('common.inputEmail')" />
+                <InputComp v-model.trim='email' clear :label="$t('common.inputEmail')" @onBlur='checkUserMfa' />
             </div>
             <div v-if="loginType==='password'" class='field'>
                 <InputComp v-model='pwd' clear :label="$t('login.pwd')" pwd />
@@ -173,7 +173,7 @@ export default {
             checkCodeMobile: '', // 手机号验证码
             checkCodeEmail: '', // 邮箱验证码
             loginType: 'password', // checkCode
-            loginNameType: localGet('loginNameType') || 'mobile',
+            loginNameType: localGet('loginNameType') || 'email',
             bindAddShow: false,
             userId: '',
             googleCodeVis: false,
