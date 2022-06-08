@@ -6,11 +6,6 @@
             :options='tableOptions'
             :pagination='pagination'
         />
-        <div class='AddToOptional'>
-            <van-button plain size='small' type='primary' @click='goSearchPage'>
-                + {{ $t('trade.addToOptional') }}
-            </van-button>
-        </div>
     </div>
 </template>
 
@@ -60,6 +55,10 @@ const pagination = computed(() => {
 const computedList = computed(() => {
     return props.list.slice((unref(currentPage) - 1) * size, unref(currentPage) * size)
 })
+
+const goSearchPage = () => {
+    router.push(`/productSearch?tradeType=${tradeType.value}`)
+}
 
 // watch(
 //     () => computedList.value, list => {
@@ -138,6 +137,23 @@ const computedList = computed(() => {
                 color: #FFF;
                 background: var(--primary);
             }
+        }
+    }
+    .AddToOptional {
+        position: absolute;
+        top: 45%;
+        right: 20%;
+        left: 20%;
+        display: inline-block;
+        margin: 0 0 rem(20px) 0;
+        text-align: center;
+        .van-button {
+            width: 80%;
+            height: rem(160px);
+            color: var(--primary);
+            font-weight: bold;
+            line-height: rem(160px);
+            border: none;
         }
     }
 }
