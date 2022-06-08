@@ -82,6 +82,7 @@ export default {
         )
         const symbolKey = computed(() => store.state._quote.productActivedID || '')
         const productTradeType = computed(() => unref(symbolKey).split('_')[1] || 0)
+        const customerInfo = computed(() => store.state._user.customerInfo)
         // 1.玩法类型
         const tradeType = ref(unref(productTradeType))
 
@@ -132,23 +133,28 @@ export default {
             }
         )
 
+        watch(() => localGet('localSelfSymbolList'), (val) => {
+            console.log(val)
+        })
+
         onActivated(async () => {
             await nextTick()
             if (productListEl.value) productListEl.value.subscribeAll()
-            // console.log(localGet('localSelfSymbolList'), unref(localSelfSymbolListCur))
-            if (localGet('localSelfSymbolList') !== unref(localSelfSymbolListCur)) {
+            // 未登录游客自选操作后返回过滤更新列表
+            if (!customerInfo.value) {
                 if (categoryType.value === 0) {
-                    tradeType.value = tradeTypeOld
-                    categoryType.value = categoryTypeOld
+                    if (localGet('localSelfSymbolList') !== unref(localSelfSymbolListCur)) {
+                        tradeType.value = tradeTypeOld.value
+                        categoryType.value = 1
+                        await nextTick()
+                        unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + tradeTypeOld)
+                        categoryType.value = 0
+                    }
                 }
-                await nextTick()
-                unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + tradeTypeOld)
             }
         })
 
-        const tabChange = (i) => {
-            // console.log(unref(tradeType), i)
-        }
+        const tabChange = (i) => {}
         const tabClick = (i) => {}
 
         const showSidebar = ref(false)
@@ -188,7 +194,8 @@ export default {
             tradeTypeOld,
             categoryTypeOld,
             showSidebar,
-            goSearchPage
+            goSearchPage,
+            customerInfo
         }
     }
 }
