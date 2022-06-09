@@ -269,13 +269,14 @@ export default {
 
         // 本地缓存客户自选产品列表
         queryLocalCustomerOptionalList ({ dispatch, commit, rootState }, params) {
+            // console.log(params)
             commit('Update_localSelfSymbolList', params || [])
         },
         // 本地缓存添加自选产品
         addLocalCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
             if (!params || !params.length) return Promise.resolve()
             commit('Update_optional', 1)
-            console.log(params)
+            // console.log(params)
             dispatch('queryLocalCustomerOptionalList') // 拉取本地缓存自选列表
         },
         // 本地缓存删除自选产品

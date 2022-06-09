@@ -415,14 +415,15 @@ export default {
 
         // 是否是自选
         // const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
+
         // 产品信息
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
+        const includeSymbol = computed(() => store.state._user.localSelfSymbolList.find(el => el === (parseInt(product.value.symbolId) + '_' + product.value.tradeType)))
         const isSelfSymbol = computed({
             get: () => {
                 if (isEmpty(customerInfo.value)) {
                     const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
-
                     if (localGet('localSelfSymbolList')) {
                         if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
                             return true
@@ -446,25 +447,18 @@ export default {
             state.isOptional = !!val
         }, { immediate: true })
 
+        watch(() => includeSymbol.value, val => {
+            state.isOptional = !!val
+        }, { immediate: true })
+
         // 图表类型
         const klineTypeIndex = computed(() => {
             const curIndex = klineTypeList.findIndex(el => el.value === state.klineType)
             return curIndex + 1
         })
 
-        provide('isMarkFav', (value, productId) => {
-            if (value === true) {
-                const ArrPro = productList
-
-                // if (unref(categoryType) === '0') {
-                //     categoryType.value = '1'
-                //     categoryType.value = '0'
-                // }
-                console.log('isMarkFav')
-            }
-        })
-
         const isReLoadProductSearch = inject('isReLoadProductSearch')
+        const updateMarkFav = inject('updateMarkFav')
 
         // 图表初始值
         const initialValue = computed(() => {
@@ -537,6 +531,7 @@ export default {
                         state.isOptional = false
                     }
                 }
+                // console.log(store.state._user.localSelfSymbolList)
             } else {
                 state.isOptional = store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
             }
@@ -568,6 +563,7 @@ export default {
                 }
                 store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
                 // isReLoadProductSearch(true, parseInt(product.value.symbolId))
+                updateMarkFav(true, parseInt(product.value.symbolId))
             } else {
                 if (isSelfSymbol.value) {
                     removeCustomerOptional({
@@ -961,6 +957,7 @@ export default {
             dealLastPrice,
             contractRoute,
             isReLoadProductSearch,
+            includeSymbol
         }
     }
 }

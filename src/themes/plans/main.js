@@ -101,6 +101,7 @@ store.dispatch('_base/initBaseConfig').then(async () => {
         })
         if (proArr) {
             localSet('localSelfSymbolList', JSON.stringify(proArr))
+            store.dispatch('_user/queryLocalCustomerOptionalList', proArr)
         }
     }
 
