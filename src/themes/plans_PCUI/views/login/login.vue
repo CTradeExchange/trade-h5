@@ -167,7 +167,7 @@ export default {
             sendVerifyLoading: false,
             loginName: '',
             email: '',
-            zone: localGet('loginZone') || '',
+            zone: localGet('phoneArea') || '',
             pwd: '',
             googleCodeVis: '',
             checkCodeMobile: '',
@@ -248,7 +248,7 @@ export default {
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
                 if (res.invalid()) return res
                 localSet('loginNameType', state.loginNameType)
-                localSet('loginZone', state.zone)
+                localSet('phoneArea', state.zone)
 
                 if (Number(res.data.companyKycStatus) === 1) {
                     if (Number(res.data.kycAuditStatus === 0)) {

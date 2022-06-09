@@ -149,8 +149,7 @@ export default {
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: localGet('loginZone') || '',
-            phoneArea: localGet('loginPhoneArea') || '',
+            zone: localGet('phoneArea') || '',
             countryZone: '86',
             curTab: 0,
             tips: {
@@ -353,7 +352,7 @@ export default {
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
-                                phoneArea: state.phoneArea,
+                                phoneArea: state.zone,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
                                 googleCode: state.googleCode,
@@ -372,7 +371,7 @@ export default {
                     query: {
                         // verifyCodeToken: res.data.token,
                         sendToken: state.sendToken,
-                        phoneArea: state.phoneArea,
+                        phoneArea: state.zone,
                         type: state.curTab === 0 ? 2 : 1,
                         loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
                         verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,

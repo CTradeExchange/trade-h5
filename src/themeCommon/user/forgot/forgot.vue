@@ -112,7 +112,7 @@
 <script>
 import Top from '@/components/top'
 import InputComp from '@/components/form/input'
-import { reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, computed, watch } from 'vue'
 import areaInputMobile from '@/components/form/areaInputMobile'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
@@ -186,6 +186,13 @@ export default {
             })
             return countryList
         })
+        watch(
+            () => countryList.value,
+            newval => {
+                // 处理用户第一次进入页面，缓存为空的区号显示问题
+                if (state.phoneArea === '' && newval.length) state.phoneArea = newval[0].countryCode
+            }
+        )
         // 获取白标企业开户登录的国家区号列表
         // store.dispatch('getCompanyCountry')
         // 获取国家区号
