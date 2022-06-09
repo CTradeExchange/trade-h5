@@ -29,7 +29,7 @@ const pre = [
     // 'https://prewppc_7.cmfbl.com/',
     // 'https://prewppc_8.cmfbl.com/',
     // 'https://prewppc_9.cmfbl.com/',
-    'http://prewppc-10.cmfbl.com/'
+    'https://prewppc-10.cmfbl.com/'
 ]
 
 module.exports = {
