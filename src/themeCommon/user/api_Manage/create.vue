@@ -11,7 +11,7 @@
         </div>
 
         <div class='api-input'>
-            <van-field v-model='query.tag' maxlength='20' :placeholder="$t('api.keyplaceholder')" />
+            <van-field v-model.trim='query.tag' maxlength='20' :placeholder="$t('api.keyplaceholder')" />
         </div>
 
         <van-button block class='confirm-btn' type='primary' @click='handleCreate'>

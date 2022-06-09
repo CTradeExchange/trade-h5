@@ -1,7 +1,7 @@
 <template>
     <div class='form-item'>
         <van-field
-            v-model='googleCode'
+            v-model.trim='googleCode'
             :formatter='formatter'
             label=''
             maxlength='6'

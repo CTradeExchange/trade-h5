@@ -51,7 +51,7 @@ export default {
         }
         // 离开输入框
         const onBlur = event => {
-            emit('onBlur', event)
+            emit('onBlur', event.target.value)
         }
 
         // 清空内容

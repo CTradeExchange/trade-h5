@@ -303,7 +303,6 @@ export default {
             let allSymbolKeys = getters.userSelfSymbolKeys.concat(getters.userProductCategoryKeys)
             allSymbolKeys = [...new Set(allSymbolKeys)]
             const symbolAllData = createListByPlans(allSymbolKeys)
-            console.log(symbolAllData)
             const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
             commit('Updata_planMap', { plans: rootState._base.plans, planMap })

@@ -22,7 +22,13 @@ export default (t) => {
                 validator: (rule, value, callback, source, options) => {
                     return source.type === 1 ? emailReg.test(value) : true
                 },
-            }
+            },
+            {
+                message: t('common.inputRealPhone'),
+                validator: (rule, value, callback, source, options) => {
+                    return source.type === 2 ? !isNaN(value) : true
+                }
+            },
         ],
         verifyCode: {
             message: t('common.inputVerifyCode'),

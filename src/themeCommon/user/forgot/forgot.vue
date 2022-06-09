@@ -22,18 +22,21 @@
                 type='line'
                 @click='handleTabChange'
             >
-                <van-tab :title='$t("forgot.retrievedByPhone")' />
-                <van-tab :title='$t("forgot.retrievedByEmail")' />
+                <van-tab :name='1' :title='$t("forgot.retrievedByEmail")' />
+                <van-tab :name='0' :title='$t("forgot.retrievedByPhone")' />
             </van-tabs>
         </div>
         <div class='tabs-content'>
             <form v-show='curTab === 0' class='loginForm'>
                 <div v-if="type==='login'" class='field'>
-                    <InputComp
+                    <areaInputMobile
                         v-model.trim='mobile'
+                        v-model:zone='phoneArea'
                         clear
-                        :label='$t("common.inputPhone")'
+                        :country-list='countryList'
+                        :placeholder='$t("common.inputPhone")'
                         @onBlur='checkUserMfa'
+                        @zoneSelect='zoneSelect'
                     />
                 </div>
                 <div v-else class='field'>
@@ -109,8 +112,8 @@
 <script>
 import Top from '@/components/top'
 import InputComp from '@/components/form/input'
-import { reactive, toRefs, computed } from 'vue'
-import areaInput from '@/components/form/areaInput'
+import { reactive, toRefs, computed, watch } from 'vue'
+import areaInputMobile from '@/components/form/areaInputMobile'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
 import { useRouter, useRoute } from 'vue-router'
@@ -120,13 +123,14 @@ import RuleFn from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 import { checkUserStatus, checkGoogleMFAStatus } from '@/api/user'
-import { isEmpty, getArrayObj } from '@/utils/util'
+import { isEmpty, getArrayObj, localGet } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 
 export default {
     components: {
         Top,
+        areaInputMobile,
         InputComp,
         checkCode,
         uInput,
@@ -144,15 +148,14 @@ export default {
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: '',
-            countryZone: '86',
-            curTab: 0,
+            phoneArea: localGet('phoneArea') || '',
+            curTab: 1,
             tips: {
                 flag: true,
                 msg: ''
             },
             sendToken: '',
-            active: 0,
+            active: 1,
             loading: false,
             googleCodeVis: false,
             googleCode: ''
@@ -170,6 +173,35 @@ export default {
         }
 
         const customerInfo = computed(() => store.state._user.customerInfo)
+        // 国家列表
+        const countryList = computed(() => {
+            // let countryList = state.tabActive === 1 ? store.getters.companyCountryList : store.state.countryList
+            let countryList = store.state.countryList
+            countryList = countryList.map(item => {
+                return {
+                    ...item,
+                    name: item.name + ' (' + item.countryCode + ')'
+                }
+            })
+            return countryList
+        })
+        watch(
+            () => countryList.value,
+            newval => {
+                // 处理用户第一次进入页面，缓存为空的区号显示问题
+                if (state.phoneArea === '' && newval.length) {
+                    state.phoneArea = newval[0].countryCode
+                } else if (state.phoneArea && newval.length) {
+                    const curPhoneArea = newval.find(el => el.countryCode === state.phoneArea)
+                    if (!curPhoneArea) state.phoneArea = newval[0].countryCode
+                }
+            }
+        )
+        // 获取白标企业开户登录的国家区号列表
+        // store.dispatch('getCompanyCountry')
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode')
+
         if (type === 'fund') {
             state.mobile = customerInfo.value?.phone
             state.email = customerInfo.value?.email
@@ -187,10 +219,12 @@ export default {
         // 检测客户是否开启GoogleMFA
         const checkUserMfa = (val) => {
             if (val) {
-                checkGoogleMFAStatus({
+                const params = {
                     loginName: val,
-                    type: val.includes('@') ? 1 : 2
-                }).then(res => {
+                    type: state.active === 1 ? 1 : 2
+                }
+                if (params.type === 2) params.phoneArea = state.phoneArea
+                checkGoogleMFAStatus(params).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
                     }
@@ -207,7 +241,7 @@ export default {
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
-                zone: state.zone,
+                zone: state.phoneArea,
                 resetType: type
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
@@ -219,6 +253,7 @@ export default {
                 // 验证手机号邮箱是否存在
                 const source = {
                     type: state.curTab === 0 ? 2 : 1,
+                    phoneArea: state.phoneArea,
                     loginName: state.curTab === 0 ? state.mobile : state.email
                 }
                 state.loading = true
@@ -233,10 +268,10 @@ export default {
                             callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
-                            state.countryZone = res.data.phoneArea
+                            // state.phoneArea = res.data.phoneArea
                             verifyCodeSend({
                                 bizType: bizTypeMap['login'][state.curTab],
-                                toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                                toUser: state.curTab === 0 ? state.phoneArea + ' ' + state.mobile : state.email,
                             }).then(res => {
                                 if (res.check()) {
                                     state.sendToken = res.data.token
@@ -313,7 +348,7 @@ export default {
         const handleVerifyCode = () => {
             // let loginName
             // if (type === 'login') {
-            //     loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
+            //     loginName = state.curTab === 0 ? state.phoneArea + ' ' + state.mobile : state.email
             // } else if (type === 'fund') {
             //     loginName = ''
             // }
@@ -321,7 +356,7 @@ export default {
             if (type === 'login') {
                 verifyCodeCheck({
                     bizType: bizTypeMap['login'][state.curTab],
-                    toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                    toUser: state.curTab === 0 ? state.phoneArea + ' ' + state.mobile : state.email,
                     sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
@@ -332,6 +367,7 @@ export default {
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
+                                phoneArea: state.phoneArea,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
                                 googleCode: state.googleCode,
@@ -350,8 +386,9 @@ export default {
                     query: {
                         // verifyCodeToken: res.data.token,
                         sendToken: state.sendToken,
+                        phoneArea: state.phoneArea,
                         type: state.curTab === 0 ? 2 : 1,
-                        loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                        loginName: state.curTab === 0 ? state.phoneArea + ' ' + state.mobile : state.email,
                         verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
                         googleCode: state.googleCode
                     }
@@ -371,8 +408,9 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            state.countryZone = data.code
+            state.phoneArea = data.countryCode
             state.countryCode = data.countryCode
+            if (state.mobile) checkUserMfa(state.mobile)
         }
         const back = () => {
             router.replace('/login')
@@ -381,6 +419,7 @@ export default {
         return {
             ...toRefs(state),
             next,
+            countryList,
             handleTabChange,
             handleVerifyCodeSend,
             style,

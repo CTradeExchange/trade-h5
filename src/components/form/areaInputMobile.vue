@@ -1,20 +1,7 @@
 <template>
     <div class='mobileBar van-hairline--bottom'>
-        <div v-if='zoneShow' class='zone' :class='{ disabled: disabled }'>
-            <!-- <VueSelect
-                v-model='zoneVal'
-                :actions='countryList'
-                :show-select='showSelect'
-                text='code'
-                value='code'
-                @select='zoneOnSelect'
-            /> -->
-            <div class='selectWrap'>
-                <span class='selectval' @click='zoneOnSelect'>
-                    {{ zoneVal }}
-                    <van-icon v-if='showSelect' name='arrow-down' />
-                </span>
-            </div>
+        <div class='zone' :class='{ disabled: disabled }'>
+            <VueSelect v-model='zoneVal' :actions='countryList' text='name' value='countryCode' @select='zoneOnSelect' />
         </div>
         <div class='inputWrapper'>
             <input
@@ -24,6 +11,7 @@
                 required
                 :type='inputType'
                 :value='modelValue'
+                @blur='onBlur'
                 @input='onInput'
             />
             <label v-if='label' class='label' :for='id'>
@@ -50,10 +38,6 @@ export default {
             type: Boolean,
             default: false
         },
-        zoneShow: {
-            type: Boolean,
-            default: true
-        },
         zone: {
             type: [Number, String],
             default: ''
@@ -66,35 +50,27 @@ export default {
             type: [String, Number],
             default: ''
         },
+        type: {
+            type: String,
+            default: 'mobile'
+        },
         disabled: {
             type: Boolean,
             default: false
         },
-        showSelect: {
-            type: Boolean,
-            default: true
+        countryList: {
+            type: Array,
+            default: () => ([])
         }
     },
     data () {
         return {
             value: '',
             id: this.$attrs.id || randomId(),
+            allCountryList: []
         }
     },
     computed: {
-        countryList () {
-            const countryList = this.$store.state.countryList || []
-            const tempArr = []
-            countryList.forEach(item => {
-                tempArr.push({
-                    name: item.name + ' (' + item.countryCode + ')',
-                    code: item.countryCode,
-                    countryCode: item.code,
-                    countryName: item.name
-                })
-            })
-            return tempArr
-        },
         zoneVal: {
             get () {
                 return this.zone
@@ -106,7 +82,7 @@ export default {
             }
         }
     },
-    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],
+    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect', 'onBlur'],
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
@@ -118,9 +94,12 @@ export default {
         },
         zoneOnSelect (item) {
             if (!this.disabled) {
-                // this.$emit('update:zone', item.code)
+                this.$emit('update:zone', item.name)
                 this.$emit('zoneSelect', item)
             }
+        },
+        onBlur ($event) {
+            this.$emit('onBlur', $event.target.value)
         }
     }
 }
@@ -142,17 +121,6 @@ export default {
         &.disabled {
             color: #C5C5C5;
             pointer-events: none;
-        }
-        :deep() {
-            .selectval {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-            .van-icon {
-                margin-top: -3px;
-                margin-left: rem(10px);
-            }
         }
     }
 }
@@ -201,32 +169,6 @@ export default {
         margin-top: rem(-25px);
         background: var(--lineColor);
         content: '';
-    }
-}
-.selectval {
-    position: relative;
-    display: block;
-    height: rem(75px);
-    padding: 0 rem(20px) 0 rem(5px);
-    overflow: hidden;
-    font-size: rem(26px);
-    line-height: rem(75px);
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    // border-radius: rem(10px);
-    // border: 1px solid var(--bdColor);
-    // &:not(:disabled){
-    //     @include active();
-    // }
-}
-.selectWrap {
-    position: relative;
-    align-items: center;
-    width: 100%;
-    .icon_arrow-down {
-        position: absolute;
-        top: rem(25px);
-        right: rem(10px);
     }
 }
 </style>

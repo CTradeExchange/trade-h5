@@ -36,6 +36,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { findPwd } from '@/api/user'
 import md5 from 'js-md5'
 import { useI18n } from 'vue-i18n'
+import { localSet } from '@/utils/util'
 
 export default {
     name: 'ResetPwd',
@@ -80,6 +81,7 @@ export default {
             const params = {
                 type: route.query['type'], // 1邮箱，2手机号码，3客户账号
                 loginName: route.query['loginName'],
+                phoneArea: route.query['phoneArea'],
                 verifyCode: route.query['verifyCode'],
                 newPwd: md5(state.confirmPwd),
                 sendToken: route.query['sendToken'],
@@ -90,6 +92,7 @@ export default {
             findPwd(params).then((res) => {
                 state.loading = false
                 if (res.check()) {
+                    localSet('loginNameType', route.query['type'] === '1' ? 'email' : 'mobile')
                     router.push('/resetSuccess')
                 }
             }).catch(err => {

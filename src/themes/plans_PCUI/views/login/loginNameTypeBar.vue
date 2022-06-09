@@ -1,8 +1,8 @@
 <template>
     <div class='loginNameTypeBar'>
         <van-tabs v-model:active='type' @change='$emit("change", $event)'>
-            <van-tab name='mobile' :title='$t("register.phoneNo")' />
             <van-tab name='email' :title='$t("register.email")' />
+            <van-tab name='mobile' :title='$t("register.phoneNo")' />
         </van-tabs>
     </div>
 </template>

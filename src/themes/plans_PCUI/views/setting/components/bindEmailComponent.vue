@@ -23,7 +23,7 @@
                     {{ $t("common.inputEmail") }}
                 </p>
                 <van-field
-                    v-model='email'
+                    v-model.trim='email'
                     class='inputEmail'
                     label=''
                     :placeholder='type === "bind" ? $t("common.inputEmail"): $t("common.inputNewEmail")'
@@ -194,6 +194,7 @@ export default {
             const existParams = {
                 type: 1,
                 loginName: state.email,
+                phoneArea: state.zone,
                 emailArea: state.zone
             }
             state.loading = true

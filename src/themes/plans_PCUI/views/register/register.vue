@@ -22,8 +22,8 @@
                     line-height='2px'
                     :title-inactive-color='style.mutedColor'
                 >
-                    <van-tab name='mobile' :title='$t("register.phoneNo")' />
                     <van-tab name='email' :title='$t("register.email")' />
+                    <van-tab name='mobile' :title='$t("register.phoneNo")' />
                 </van-tabs>
 
                 <form class='form'>
@@ -40,13 +40,27 @@
                         @zoneSelect='zoneSelect'
                     /> -->
                     <div class='cell'>
-                        <el-select v-model='countryVal' class='select-conuntry' :placeholder='$t("auth.countrySelect")' @change='zoneOnSelect'>
+                        <el-select
+                            v-model='countryVal'
+                            class='select-conuntry'
+                            :placeholder='$t("auth.countrySelect")'
+                            @change='zoneOnSelect'
+                        >
                             <el-option
                                 v-for='item in countryList'
                                 :key='item.code'
-                                :label='item.name'
+                                :label='item.displayName'
                                 :value='item.code'
-                            />
+                            >
+                                <span style='float: left;'>
+                                    {{ item.displayName }}
+                                </span>
+                                <span
+                                    style='float: right;'
+                                >
+                                    {{ item.countryCode }}
+                                </span>
+                            </el-option>
                         </el-select>
                     </div>
 
@@ -55,8 +69,9 @@
                             v-model.trim='mobile'
                             v-model:zone='zone'
                             clear
-                            :disabled='true'
-                            :placeholder='$t("register.phoneNo")'
+                            :disabled='false'
+                            :is-business='openAccountType === 1'
+                            :placeholder='$t("common.inputPhone")'
                             type='mobile'
                             @zoneSelect='zoneSelect'
                         />
@@ -68,13 +83,29 @@
                             clear
                             :disabled='true'
                             input-type='text'
-                            :placeholder='$t("register.email")'
+                            :is-business='openAccountType === 1'
+                            :placeholder='$t("common.inputEmail")'
                             type='email'
                             @zoneSelect='zoneSelect'
                         />
                     </div>
-                    <div class='cell verifyCodeCell'>
-                        <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                    <div v-show="openType === 'mobile'" class='cell verifyCodeCell'>
+                        <CheckCode
+                            v-model.trim='mobileCheckCode'
+                            clear
+                            :label='$t("login.verifyCode")'
+                            :loading='verifyCodeLoading'
+                            @verifyCodeSend='verifyCodeSendHandler'
+                        />
+                    </div>
+                    <div v-show="openType === 'email'" class='cell verifyCodeCell'>
+                        <CheckCode
+                            v-model.trim='emailCheckCode'
+                            clear
+                            :label='$t("login.verifyCode")'
+                            :loading='verifyCodeLoading'
+                            @verifyCodeSend='verifyCodeSendHandler'
+                        />
                     </div>
                     <div v-if='instructions' class='cell'>
                         <van-checkbox v-model='protocol' class='checkbox' shape='square'>
@@ -121,11 +152,11 @@ import CheckCode from '@/components/form/checkCode'
 import areaInputPc from '@/components/form/areaInputPc'
 // import CurrencyAction from './components/currencyAction'
 // import TradeTypeAction from './components/tradeTypeAction'
-import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
+import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet, localSet } from '@/utils/util'
 import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
-import { reactive, toRefs, computed, getCurrentInstance, onMounted } from 'vue'
+import { reactive, toRefs, computed, getCurrentInstance, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import { unescape } from 'lodash'
@@ -162,7 +193,8 @@ export default {
             countryCode: 'ISO_3166_156',
             loading: false,
             verifyCodeLoading: false,
-            checkCode: '',
+            mobileCheckCode: '',
+            emailCheckCode: '',
             mobile: '',
             openType: 'email', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
@@ -172,11 +204,11 @@ export default {
             protocol: true,
             visited: false, // 是否已点击过获取验证码
             countryVal: '',
-            companyCountryList: [], // 获取白标后台配置的企业开户国家
             openAccountType: Number(openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
-            allCountry: [] // 所有国家列表
+            allCountry: [], // 所有国家列表
+            emailToken: '',
+            mobileToken: ''
         })
-        let token = ''
 
         // pageConfig('Register').then(res => {
         //     state.pageui = res
@@ -189,15 +221,19 @@ export default {
                 const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
                 if (defaultZoneConfig?.code) {
                     state.countryVal = defaultZoneConfig.code
-                    state.zone = `(${defaultZoneConfig.countryCode})`
+                    state.zone = `${defaultZoneConfig.countryCode}`
                     state.countryCode = defaultZoneConfig.code
                     state.countryZone = defaultZoneConfig.countryCode
                 }
             }
         })
+
+        // 获取支持企业注册国家
+        store.dispatch('getCompanyCountry')
+
         const countryList = computed(() => {
             const countryList = store.state.countryList
-            return state.openAccountType === 0 ? countryList : state.allCountry.filter(el => state.companyCountryList.includes(el.code))
+            return state.openAccountType === 0 ? countryList : store.getters.companyCountryList
         })
 
         const getAllCountry = () => {
@@ -221,7 +257,11 @@ export default {
         })
         // 是否显示企业开户的入口
         const companyCountryVisible = computed(() => {
-            return state.companyCountryList.includes(state.countryVal)
+            if (state.openAccountType === 0) {
+                return store.getters.companyCountryList.find(el => el.code === state.countryVal)
+            } else {
+                return countryList.value.find(el => el.code === state.countryVal)
+            }
         })
 
         // 选择国家
@@ -242,6 +282,9 @@ export default {
                     // 注册成功
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
+                    localSet('loginNameType', state.openType)
+                    localSet('loginZone', state.countryZone)
+                    localSet('phoneArea', state.countryZone)
                     if (res.data.token) setToken(res.data.token)
 
                     // 注册成功重新获取客户信息
@@ -283,17 +326,17 @@ export default {
             if (!state.visited) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (!token) {
+            if ((state.openType === 'email' && !state.emailToken) || (state.openType === 'mobile' && !state.mobileToken)) {
                 return Toast(t('common.inputRealVerifyCode'))
             }
             const params = {
                 type: state.openType === 'email' ? 1 : 2,
                 loginName: state.openType === 'email' ? state.email : state.mobile,
                 registerSource: getDevice(),
-                verifyCode: state.checkCode,
+                verifyCode: state.openType === 'email'　? state.emailCheckCode : state.mobileCheckCode,
                 // currency: state.currency,
                 // tradeType: state.tradeType,
-                sendToken: token,
+                sendToken: state.openType === 'email'　? state.emailToken : state.mobileToken,
                 utmSource: getQueryVariable('utm_source', entrySearch),
                 utmMedium: getQueryVariable('utm_medium', entrySearch),
                 utmCampaign: getQueryVariable('utm_campaign', entrySearch),
@@ -365,7 +408,7 @@ export default {
                             verifyCodeSend(params).then(res => {
                                 state.verifyCodeLoading = false
                                 if (res.check()) {
-                                    token = res.data.token
+                                    state.openType === 'mobile' ? state.mobileToken = res.data.token : state.emailToken = res.data.token
                                     callback && callback()
                                 } else {
                                     callback && callback(false)
@@ -384,17 +427,11 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            state.countryZone = data.code
-            state.countryCode = data.countryCode
-        }
+            state.countryVal = data.countryCode
+            zoneOnSelect(data.countryCode)
 
-        // 获取白标后台配置的企业开户国家
-        const queryCompanyCountry = () => {
-            findCompanyCountry().then(res => {
-                if (res.check() && res.data) {
-                    state.companyCountryList = res.data.openCompanyCountry
-                }
-            })
+            // state.countryZone = data.code
+            // state.countryCode = data.countryCode
         }
 
         onMounted(() => {
@@ -407,7 +444,6 @@ export default {
                 state.openType = 'email'
             }
             getAllCountry()
-            queryCompanyCountry()
         })
 
         return {
@@ -418,7 +454,6 @@ export default {
             instructions,
             countryList,
             zoneOnSelect,
-            queryCompanyCountry,
             zoneSelect,
             companyCountryVisible
         }
@@ -579,18 +614,16 @@ export default {
     border-radius: 4px;
 }
 .checkbox {
-    align-items: flex-start;
+    //align-items: flex-start;
     :deep(.van-badge__wrapper) {
         width: 16px;
         height: 16px;
         overflow: hidden;
         font-size: 14px;
-        line-height: 16px;
     }
     :deep(.van-checkbox__icon) {
         flex: none;
         height: 16px;
-        margin-top: 4px;
         font-size: 12px;
         line-height: 16px;
         background-color: var(--primary);
@@ -601,7 +634,6 @@ export default {
     :deep(.van-checkbox__label) {
         color: var(--placeholdColor);
         font-size: 14px;
-        line-height: 20px;
     }
 }
 .verifyCodeCell {

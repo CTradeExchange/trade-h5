@@ -26,7 +26,7 @@ export default function () {
     // 点击登录
     const loginSubmit = (state) => {
         const loginParams = {
-            type: state.loginName.includes('@') ? 1 : 2,
+            type: state.type,
             loginName: state.loginName,
             googleCode: state.googleCode,
             device: getDevice(),
@@ -34,6 +34,7 @@ export default function () {
             loginPwd: state.loginType === 'password' ? state.pwd : undefined,
             sendToken: state.loginType === 'checkCode' ? state.token : undefined,
         }
+        if (state.type === 2) loginParams.phoneArea = state.phoneArea
 
         const validator = new Schema(RuleFn(t))
 
@@ -74,8 +75,7 @@ export default function () {
     const verifyCodeBtnText = ref(t('signIn.getVerifyCode'))
     const sendVerifyCode = (params) => {
         const verifyParams = {
-            type: params.loginName.includes('@') ? 1 : 2,
-            loginName: params.loginName
+            ...params
         }
 
         const validator = new Schema(RuleFn(t))
@@ -91,10 +91,10 @@ export default function () {
                     } else if (Number(res.data.status === -1)) {
                         return Toast(t('c.userDisable'))
                     } else {
-                        const zone = res.data.phoneArea
+                        // const zone = res.data.phoneArea
                         const sendParams = {
-                            bizType: params.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-                            toUser: params.loginName.includes('@') ? params.loginName : String(zone) + ' ' + params.loginName,
+                            bizType: params.type === 1 ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+                            toUser: params.type === 1 ? params.loginName : params.phoneArea + ' ' + params.loginName,
                         }
                         return verifyCodeSend(sendParams).then((res) => {
                             verifyCountDown() // 倒计时

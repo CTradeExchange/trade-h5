@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { ref, computed, unref, watch, onBeforeUnmount } from 'vue'
+import { ref, computed, unref, watch, onBeforeUnmount, provide } from 'vue'
 import { useStore } from 'vuex'
 import useProduct from '@planspc/hooks/useProduct'
 import search from './components/search'
@@ -52,6 +52,8 @@ const { categoryList, productList } = useProduct({
     tradeType, categoryType
 })
 
+const localSymbolUpdate = computed(() => store.state._user.localSelfSymbolList)
+
 const searching = ref(false)
 const searchList = ref([])
 const onSearch = (result) => {
@@ -77,9 +79,17 @@ const subscribeProducts = () => {
     const symbolList = store.state._quote.planMap[tradeType.value]?.symbolList || [] // 每个玩法下配置的产品
     const symbolKeys = symbolList.map(el => `${el}_${tradeType.value}`)
     if (symbolKeys.length === 0) return false
-    console.log(symbolKeys)
+    // console.log(symbolKeys)
     unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'productSearch', symbolKeys })
 }
+
+provide('isReLoadProductSearch', (value, productId) => {
+    if (value === true) {
+        const tempCur = categoryType.value
+        categoryType.value = categoryType.value === '1' ? '0' : '1'
+        categoryType.value = tempCur
+    }
+})
 
 watch(
     tradeType,
@@ -92,6 +102,16 @@ watch(
     }
 )
 
+watch(
+    () => localSymbolUpdate.value, list => {
+        // if (unref(categoryType) === '0') {
+        const tempCur = categoryType.value
+        categoryType.value = categoryType.value === '1' ? '0' : '1'
+        categoryType.value = tempCur
+        // }
+    }
+)
+
 onBeforeUnmount(() => {
     unSubscribe()
 })
@@ -101,16 +121,16 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .productSearch {
-    width: 360px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    width: 360px;
     height: 100%;
+    padding: 16px 0;
     overflow: hidden;
     background: var(--contentColor);
     border-radius: 10px;
-    padding: 16px 0;
     .margin {
         margin-top: rem(30px);
     }

@@ -1,37 +1,54 @@
 <template>
     <div class='pageWrap'>
         <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
+
+        <div class='account-type'>
+            <button :class="['btn', { 'active': tabActive === 0 }]" @click='tabActive = 0'>
+                {{ $t('login.loginByPersonal') }}
+            </button>
+            <button :class="['btn', { 'active': tabActive === 1 }]" @click='tabActive = 1'>
+                {{ $t('login.loginByCorporate') }}
+            </button>
+        </div>
+
         <van-tabs
-            v-model:active='tabActive'
+            v-model:active='loginNameType'
+            class='mtop10'
             :color='$style.primary'
             shrink
             :title-active-color='$style.primary'
+            @change='loginNameTypeChange'
         >
-            <van-tab :title='$t("login.loginByPersonal")' />
-            <van-tab :title='$t("login.loginByCorporate")' />
+            <van-tab name='email' :title='$t("register.email")' />
+            <van-tab name='mobile' :title='$t("register.phoneNo")' />
         </van-tabs>
-        <header class='header'>
+        <!-- <header class='header'>
             <h1 class='pageTitle'>
                 {{ $t(loginType==='password'?'login.loginByPwd':'login.loginByCode') }}
             </h1>
-        </header>
+        </header> -->
+
         <form class='loginForm'>
-            <div v-if="loginAccount==='mobile'" class='field'>
-                <InputComp
+            <div v-if="loginNameType==='mobile'" class='field'>
+                <areaInputMobile
                     v-model.trim='loginName'
+                    v-model:zone='phoneArea'
                     clear
-                    :label="$t('login.loginNamePlaceholder')"
+                    :country-list='countryList'
+                    :placeholder="$t('common.inputPhone')"
                     @onBlur='checkUserMfa'
+                    @zoneSelect='zoneSelect'
                 />
             </div>
             <div v-else class='field'>
-                <InputComp v-model.trim='email' clear :label="$t('login.email')" />
+                <InputComp v-model.trim='email' clear :label="$t('common.inputEmail')" @onBlur='checkUserMfa' />
             </div>
             <div v-if="loginType==='password'" class='field'>
                 <InputComp v-model='pwd' clear :label="$t('login.pwd')" pwd />
             </div>
             <div v-else class='field'>
-                <CheckCode v-model.trim='checkCode' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
+                <CheckCode v-show="loginNameType==='mobile'" v-model.trim='checkCodeMobile' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
+                <CheckCode v-show="loginNameType==='email'" v-model.trim='checkCodeEmail' clear :label="$t('login.verifyCode')" @verifyCodeSend='verifyCodeSendHandler' />
             </div>
             <div v-if='googleCodeVis' class='field field-google'>
                 <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
@@ -101,6 +118,7 @@
 
 <script>
 import Schema from 'async-validator'
+import areaInputMobile from '@/components/form/areaInputMobile'
 import InputComp from '@/components/form/input'
 import Vline from '@/components/vline'
 import CheckCode from '@/components/form/checkCode'
@@ -111,7 +129,7 @@ import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.v
 import Top from '@/components/top'
 import { getDevice, localGet, localSet, getArrayObj, sessionGet, isEmpty } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted } from 'vue'
+import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
@@ -127,6 +145,7 @@ import googleVerifyCode from '@/themeCommon/components/googleVerifyCode.vue'
 export default {
     components: {
         Vline,
+        areaInputMobile,
         InputComp,
         LoginByGoogle,
         LoginByFacebook,
@@ -148,10 +167,13 @@ export default {
             loginPwdPop: false,
             tabActive: 0,
             loginName: '',
+            email: '',
             pwd: '',
-            checkCode: '',
+            phoneArea: localGet('loginPhoneArea') || '',
+            checkCodeMobile: '', // 手机号验证码
+            checkCodeEmail: '', // 邮箱验证码
             loginType: 'password', // checkCode
-            loginAccount: 'mobile',
+            loginNameType: localGet('loginNameType') || 'email',
             bindAddShow: false,
             userId: '',
             googleCodeVis: false,
@@ -164,12 +186,35 @@ export default {
             }
         })
 
-        const countryList = computed(() => store.state.countryList)
+        // 国家列表
+        const countryList = computed(() => {
+            let countryList = state.tabActive === 1 ? store.getters.companyCountryList : store.state.countryList
+            countryList = countryList.map(item => {
+                return {
+                    ...item,
+                    name: item.name + ' (' + item.countryCode + ')'
+                }
+            })
+            return countryList
+        })
+        watch(
+            () => countryList.value,
+            newval => {
+                // 处理用户第一次进入页面，缓存为空的区号显示问题
+                if (state.phoneArea === '' && newval.length) {
+                    state.phoneArea = newval[0].countryCode
+                } else if (state.phoneArea && newval.length) {
+                    const curPhoneArea = newval.find(el => el.countryCode === state.phoneArea)
+                    if (!curPhoneArea) state.phoneArea = newval[0].countryCode
+                }
+            }
+        )
+
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
-        if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
-            // 获取国家区号
-            store.dispatch('getCountryListByParentCode')
-        }
+        // 获取白标企业开户登录的国家区号列表
+        store.dispatch('getCompanyCountry')
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode')
 
         const changeLoginType = () => {
             const loginType = state.loginType
@@ -179,15 +224,35 @@ export default {
             state.googleCode = val
         }
 
+        // 切换个人登录、企业登录方式
+        const tabActiveChange = (e) => {
+            const hasArea = countryList.value.find(el => el.countryCode === state.phoneArea)
+            if (!hasArea) {
+                state.phoneArea = countryList.value[0].countryCode
+            }
+        }
+
+        // 切换手机号邮箱登录方式
+        const loginNameTypeChange = () => {
+            state.pwd = ''
+        }
+
+        // 选择登录手机号区号
+        const zoneSelect = (data) => {
+            state.phoneArea = data.countryCode
+        }
+
         const loginHandle = () => {
             if (state.googleCodeVis && isEmpty(state.googleCode)) {
                 return Toast(t('common.inputGoogleCode'))
             }
+            const verifyCode = state.loginNameType === 'email' ? state.checkCodeEmail : state.checkCodeMobile
             const loginParams = {
-                type: state.loginName.includes('@') ? 1 : 2,
-                loginName: state.loginName,
+                type: state.loginNameType === 'email' ? 1 : 2,
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName,
+                phoneArea: state.phoneArea,
                 device: getDevice(),
-                verifyCode: state.loginType === 'checkCode' ? state.checkCode : undefined,
+                verifyCode: state.loginType === 'checkCode' ? verifyCode : undefined,
                 loginPwd: state.loginType === 'password' ? md5(state.pwd) : undefined,
                 sendToken: state.loginType === 'checkCode' ? token : undefined,
                 thirdSource: route.query.thirdSource || '',
@@ -206,7 +271,7 @@ export default {
                     ...state,
                     first: true
                 }, (errors, fields) => {
-                    // console.log(errors, fields)
+                    // console.log(errors, fields, loginParams)
                     if (errors) {
                         state.loading = false
                         Toast(errors[0].message)
@@ -237,6 +302,8 @@ export default {
                 instance.appContext.config.globalProperties.$MsgSocket.login()
                 store.commit('del_cacheViews', 'Home')
                 store.commit('del_cacheViews', 'Layout')
+                localSet('loginNameType', state.loginNameType)
+                localSet('loginPhoneArea', state.phoneArea)
 
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
@@ -299,7 +366,8 @@ export default {
             if (val) {
                 checkGoogleMFAStatus({
                     loginName: val,
-                    type: val.includes('@') ? 1 : 2
+                    phoneArea: state.phoneArea,
+                    type: state.loginNameType === 'email' ? 1 : 2
                 }).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
@@ -313,9 +381,10 @@ export default {
         // 发送验证码
         const verifyCodeSendHandler = (callback) => {
             const verifyParams = {
-                type: state.loginName.includes('@') ? 1 : 2,
-                loginName: state.loginName
+                type: state.loginNameType === 'email' ? 1 : 2,
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName
             }
+            if (state.loginNameType === 'mobile') verifyParams.phoneArea = state.phoneArea
 
             const validator = new Schema(RuleFn(t))
             validator.validate({
@@ -332,10 +401,10 @@ export default {
                             callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
-                            state.zone = res.data.phoneArea
+                            // state.zone = res.data.phoneArea
                             const params = {
-                                bizType: state.loginName.includes('@') ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
-                                toUser: state.loginName.includes('@') ? state.loginName : String(state.zone) + ' ' + state.loginName,
+                                bizType: state.loginNameType === 'email' ? 'EMAIL_LOGIN_VERIFICATION_CODE' : 'SMS_LOGIN_VERIFICATION_CODE',
+                                toUser: state.loginNameType === 'email' ? state.email : String(state.phoneArea) + ' ' + state.loginName,
                             }
                             verifyCodeSend(params).then(res => {
                                 if (res.check()) {
@@ -388,6 +457,10 @@ export default {
             ...toRefs(state),
             changeLoginType,
             rightAction,
+            countryList,
+            tabActiveChange,
+            loginNameTypeChange,
+            zoneSelect,
             loginHandle,
             topRightClick,
             verifyCodeSendHandler,
@@ -434,6 +507,35 @@ export default {
             width: 100%;
         }
     }
+    .account-type {
+        display: flex;
+        align-items: center;
+        height: rem(76px);
+        margin: rem(60px) rem(200px) rem(60px);
+        padding: 0 rem(10px);
+        background: var(--assistColor);
+        border-radius: rem(44px);
+        .btn {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            height: rem(58px);
+            color: var(--minorColor);
+            font-size: rem(28px);
+            background: none;
+            border-radius: rem(36px);
+            cursor: pointer;
+            &:hover {
+                color: var(--primary);
+            }
+        }
+        .active {
+            color: var(--primary);
+            font-weight: bold;
+            background: #FFF;
+        }
+    }
 }
 .icon_icon_close_big {
     position: absolute;
@@ -443,7 +545,7 @@ export default {
     font-size: rem(34px);
 }
 .loginForm {
-    margin: rem(50px) rem(30px);
+    margin: rem(30px) rem(30px) rem(50px);
     .field {
         position: relative;
         display: flex;

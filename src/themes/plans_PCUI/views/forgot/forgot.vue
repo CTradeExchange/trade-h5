@@ -20,19 +20,21 @@
                         type='line'
                         @click='handleTabChange'
                     >
-                        <van-tab :title='$t("forgot.retrievedByPhone")' />
-                        <van-tab :title='$t("forgot.retrievedByEmail")' />
+                        <van-tab :name='1' :title='$t("forgot.retrievedByEmail")' />
+                        <van-tab :name='0' :title='$t("forgot.retrievedByPhone")' />
                     </van-tabs>
                 </div>
                 <div class='tabs-content'>
                     <form v-show='curTab === 0' class='loginForm'>
                         <div v-if="type==='login'" class='field'>
-                            <InputComp
+                            <areaInputPc
                                 v-model.trim='mobile'
+                                v-model:zone='zone'
                                 class='forgotAccount'
                                 clear
-                                :label='$t("common.inputPhone")'
+                                :placeholder='$t("common.inputPhone")'
                                 @onBlur='checkUserMfa'
+                                @zoneSelect='zoneSelect'
                             />
                         </div>
                         <div v-else class='field'>
@@ -107,6 +109,7 @@
 <script>
 import topNav from '@planspc/layout/topNav'
 import userLayoutFooter from '@planspc/components/userLayoutFooter'
+import areaInputPc from '@/components/form/areaInputPc'
 import InputComp from '@/components/form/input'
 import { reactive, toRefs, computed } from 'vue'
 // import areaInput from '@/components/form/areaInput'
@@ -120,13 +123,14 @@ import RuleFn from './rule'
 import { useStore } from 'vuex'
 import { verifyCodeSend, verifyCodeCheck } from '@/api/base'
 import { checkUserStatus, checkGoogleMFAStatus } from '@/api/user'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, localGet } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
 
 export default {
     name: 'Forgot',
     components: {
         topNav,
+        areaInputPc,
         InputComp,
         checkCode,
         googleVerifyCode,
@@ -145,15 +149,14 @@ export default {
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: '',
-            countryZone: '86',
-            curTab: 0,
+            zone: localGet('phoneArea') || '',
+            curTab: 1,
             tips: {
                 flag: true,
                 msg: ''
             },
             sendToken: '',
-            active: 0,
+            active: 1,
             loading: false,
             googleCodeVis: false,
             googleCode: ''
@@ -169,6 +172,19 @@ export default {
                 1: 'EMAIL_LOGINED_VERIFICATION_CODE'
             }
         }
+
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode').then(res => {
+            if (res.check() && res.data.length) {
+                const countryList = store.state.countryList
+                const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
+                const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
+                if (defaultZoneConfig?.code && !state.zone) {
+                    state.countryVal = defaultZoneConfig.code
+                    state.zone = defaultZoneConfig.countryCode
+                }
+            }
+        })
 
         const customerInfo = computed(() => store.state._user.customerInfo)
         if (type === 'fund') {
@@ -188,10 +204,12 @@ export default {
         // 检测客户是否开启GoogleMFA
         const checkUserMfa = (val) => {
             if (val) {
-                checkGoogleMFAStatus({
+                const params = {
                     loginName: val,
-                    type: val.includes('@') ? 1 : 2
-                }).then(res => {
+                    type: state.active === 1 ? 1 : 2
+                }
+                if (params.type === 2) params.phoneArea = state.zone
+                checkGoogleMFAStatus(params).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
                     }
@@ -245,6 +263,7 @@ export default {
                     type: state.curTab === 0 ? 2 : 1,
                     loginName: state.curTab === 0 ? state.mobile : state.email
                 }
+                if (source.type === 2) source.phoneArea = state.zone
                 state.loading = true
                 checkUserStatus(source).then(res => {
                     state.loading = false
@@ -257,10 +276,9 @@ export default {
                             callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
-                            state.countryZone = res.data.phoneArea
                             verifyCodeSend({
                                 bizType: bizTypeMap['login'][state.curTab],
-                                toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                                toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
                             }).then(res => {
                                 if (res.check()) {
                                     state.sendToken = res.data.token
@@ -310,17 +328,10 @@ export default {
         }
 
         const handleVerifyCode = () => {
-            // let loginName
-            // if (type === 'login') {
-            //     loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
-            // } else if (type === 'fund') {
-            //     loginName = ''
-            // }
-
             if (type === 'login') {
                 verifyCodeCheck({
                     bizType: bizTypeMap['login'][state.curTab],
-                    toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                    toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
                     sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
@@ -331,6 +342,7 @@ export default {
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
+                                phoneArea: state.zone,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
                                 googleCode: state.googleCode,
@@ -349,8 +361,9 @@ export default {
                     query: {
                         // verifyCodeToken: res.data.token,
                         sendToken: state.sendToken,
+                        phoneArea: state.zone,
                         type: state.curTab === 0 ? 2 : 1,
-                        loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                        loginName: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
                         verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
                         googleCode: state.googleCode
                     }
@@ -370,8 +383,8 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            state.countryZone = data.code
             state.countryCode = data.countryCode
+            if (state.mobile) checkUserMfa(state.mobile)
         }
         const back = () => {
             router.replace('/login')
@@ -403,9 +416,6 @@ export default {
     flex-flow: column;
     height: 100%;
     background: var(--bgColor);
-    .forgotAccount {
-        background-color: var(--assistColor) !important;
-    }
     .container {
         display: flex;
         flex: 1;

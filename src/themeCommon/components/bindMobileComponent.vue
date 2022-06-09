@@ -6,7 +6,7 @@
         <form class='form'>
             <div class='field'>
                 <areaInput
-                    v-model='mobile'
+                    v-model.trim='mobile'
                     v-model:zone='zoneText'
                     :all-country='true'
                     clear
@@ -19,17 +19,17 @@
                 <p class='title'>
                     {{ $t('common.sendToYourPhone') }}
                 </p>
-                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
 
             <div v-if='type === "change"' class='field'>
                 <p class='title'>
                     {{ $t('common.sendToYou') }} {{ customInfo.phone }}
                 </p>
-                <CheckCode v-model='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
+                <CheckCode v-model.trim='checkCodeOld' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSendOld' />
             </div>
             <div v-else class='field'>
-                <CheckCode v-model='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
+                <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' @verifyCodeSend='handleVerifyCodeSend' />
             </div>
             <div v-if='googleCodeVis' class='field'>
                 <p class='title'>

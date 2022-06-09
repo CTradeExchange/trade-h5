@@ -80,7 +80,8 @@ export function pageConfig (id) {
 
 // 获取业务配置文件
 export function requestBusinessConfig (params) {
-    const url = '/bc/businessConfig.json'
+    const time = new Date().getTime()
+    const url = '/bc/businessConfig.json?timestamp=' + time
     return axios({
         url,
         responseType: 'json',

@@ -250,7 +250,7 @@
         "newOrder": "New order",
         "newTrade": "New trade",
         "openChart": "Open chart",
-        "pendingRange": "Pending order price range",
+        "pendingRange": "Order price range",
         "profitLossRange": "Stop profit/loss price range",
         "simpleMode": "Simple mode",
         "spread": "Spread：",
@@ -605,7 +605,8 @@
         "purchaseOrRedemptionTip": "Purchase / Redeem: means that investors can purchase or redeem fund share tokens from the fund management company, click to go to.",
         "purchaseOrRedemption": "Purchase / Redeem",
         "noFeature": "This feature is not currently supported",
-        "material": "Fund Facts"
+        "material": "Fund Facts",
+        "addToOptional":"Add optional"
     },
     "contract": {
         "advance": "Prepay",

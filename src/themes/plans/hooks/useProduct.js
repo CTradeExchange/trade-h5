@@ -12,6 +12,7 @@ export default function ({ tradeType, categoryType, isSort = true }) {
     const productMap = computed(() => store.state._quote.productMap)
     const userProductCategory = computed(() => store.getters.userProductCategory)
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList)
+    const customerInfo = computed(() => store.state._user.customerInfo)
 
     // 所选玩法的板块列表
     const categoryList = computed(() => {
@@ -37,13 +38,41 @@ export default function ({ tradeType, categoryType, isSort = true }) {
     const productList = computed(() => {
         const productMapVal = unref(productMap)
         const arr = []
+        let listByUserData = [] // 用户自主添加的自选列表
+        const systemOptional = unref(categoryList.value)[unref(categoryType.value)]?.listByUser || [] // 系统默认推送的自选列表
 
-        unref(categoryList)[unref(categoryType)].listByUser.forEach(id => {
-            const newId = `${id}_${unref(tradeType)}`
-            if (productMapVal[newId]?.symbolName) {
-                arr.push(productMapVal[newId])
+        if (!customerInfo.value) { // 未登录
+            if (unref(categoryType.value) === 0) {
+                // 取本地缓存的自选列表
+                const localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+                const newArr = {}
+                if (localSelfSymbolList.length > 0) {
+                    // 重组存储自选的格式 id_玩法 加在数列中输出arr
+                    localSelfSymbolList.map(el => {
+                        const tradeType = el.split('_')[1]
+                        if (newArr[tradeType] !== undefined) {
+                            newArr[tradeType].push(el.split('_')[0])
+                        } else {
+                            newArr[tradeType] = [el.split('_')[0]]
+                        }
+                    })
+                    listByUserData = newArr[unref(tradeType)] || []
+                }
+            } else { // 其它玩法的正常输出列表
+                listByUserData = systemOptional
             }
-        })
+        } else { // 已登录 正常输出列表
+            listByUserData = systemOptional
+        }
+
+        if (listByUserData?.length > 0) {
+            listByUserData.forEach(id => {
+                const newId = `${id}_${unref(tradeType)}`
+                if (productMapVal[newId]?.symbolName) {
+                    arr.push(productMapVal[newId])
+                }
+            })
+        }
 
         // 按字段排序
         arr.sort((a, b) => {

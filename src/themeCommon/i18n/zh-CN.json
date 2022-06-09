@@ -58,7 +58,7 @@
     "forgotFundPwd": "忘记资金密码",
     "loginByPwd": "账号密码登录",
     "loginByCode": "验证码登录",
-    "loginNamePlaceholder": "请输入手机号/邮箱",
+    "loginNamePlaceholder": "请输入手机号",
     "email": "邮箱",
     "pwd": "密码",
     "verifyCode": "验证码",

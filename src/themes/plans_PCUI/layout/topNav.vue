@@ -83,7 +83,7 @@
             <div v-else-if='customerInfo' class='handle-have'>
                 <div class='item'>
                     <el-popover
-                        ref='popover'
+                        ref='popoverRef'
                         placement='bottom'
                         trigger='hover'
                         :width='250'
@@ -185,7 +185,7 @@
 </template>
 
 <script>
-import { onBeforeMount, computed, reactive, toRefs, onUnmounted } from 'vue'
+import { onBeforeMount, computed, reactive, toRefs, ref, unref, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
 import { isEmpty, localGet, localSet, localRemove } from '@/utils/util'
 import { useI18n } from 'vue-i18n'
@@ -210,8 +210,9 @@ export default {
         const router = useRouter()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const popoverRef = ref()
         const state = reactive({
-            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1
+            chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1,
         })
 
         const chartColorAction = [
@@ -237,12 +238,6 @@ export default {
         // 在线客服地址
         const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
 
-        onBeforeMount(() => {
-
-        })
-        onUnmounted(() => {
-
-        })
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
@@ -309,7 +304,11 @@ export default {
         }
 
         // 路由跳转
-        const handRoutTo = (path) => router.push(route.path + path)
+        const handRoutTo = (path) => {
+            if (route.path.includes(path)) return
+            popoverRef.value.visibility = false
+            router.push(route.path + path)
+        }
 
         return {
             logoUrl,
@@ -328,7 +327,8 @@ export default {
             chartColorAction,
             changeChartColor,
             logoutHandler,
-            fundShow: window['fundShow']
+            fundShow: window['fundShow'],
+            popoverRef
         }
     }
 }
@@ -375,7 +375,7 @@ export default {
                 }
                 .link {
                     color: #FFF;
-                    font-size: 14px;
+                    font-size: 16px;
                     cursor: pointer;
                     &:hover {
                         color: var(--primary);
@@ -438,7 +438,7 @@ export default {
                 }
                 .link {
                     color: #FFF;
-                    font-size: 14px;
+                    font-size: 16px;
                     cursor: pointer;
                     &:hover {
                         color: var(--primary);

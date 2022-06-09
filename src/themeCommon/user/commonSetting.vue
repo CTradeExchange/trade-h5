@@ -55,7 +55,10 @@
                 :class='{ active: lang === item.val }'
                 @click='langSelect(item)'
             >
-                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png?555'" />
+                <span class='lang-label'>
+                    {{ item.name }}
+                </span>
+                <van-icon class='success-icon' name='success' />
             </div>
         </div>
     </van-popup>
@@ -153,10 +156,11 @@ export default {
         const customInfo = computed(() => store.state._user.customerInfo)
         const supportLanguages = computed(() => store.state.supportLanguages)
         const companyId = computed(() => customInfo.value.companyId)
-
         const inviteVis = computed(() => {
             return (location.href.includes('uat') && companyId.value === 1) || (location.href.includes('pre') && companyId.value === 360) || (companyId.value === 11)
         })
+        // 当前选择的语言项
+        const langItem = computed(() => supportLanguages.value.find(el => el.val === state.lang))
 
         // 选择语言
         const langSelect = (action) => {
@@ -255,6 +259,7 @@ export default {
             upDownColorSelect,
             back,
             inviteVis,
+            langItem,
             ...toRefs(state)
         }
     },
@@ -313,22 +318,33 @@ export default {
 }
 .lang-popup {
     .popup-wrap {
-        display: flex;
-        flex-wrap: wrap;
-        padding: 0 0 0 rem(25px);
         .lang-item {
-            box-sizing: content-box;
-            margin-right: rem(20px);
-            margin-bottom: rem(42px);
-            padding: rem(8px) rem(8px) rem(2px) rem(8px);
-            border: rem(4px) solid transparent;
-            .lang-icon {
-                width: rem(120px);
-                height: rem(120px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: rem(130px);
+            padding: 0 rem(30px);
+            margin-bottom: rem(12px);
+            background: var(--contentColor);
+            border-radius: rem(10px);
+            .lang-label {
+                color: var(--color);
+                font-size: rem(32px);
             }
-            &.active {
-                border: rem(4px) solid var(--primary);
+            .lang-icon {
+                width: rem(72px);
+                height: rem(72px);
                 border-radius: 50%;
+            }
+            .success-icon {
+                display: none;
+                font-size: rem(42px);
+                color: var(--primary);
+            }
+        }
+        .active {
+            .success-icon {
+                display: block;
             }
         }
     }
@@ -368,12 +384,18 @@ export default {
             :deep(.van-cell__title) {
                 color: var(--color);
             }
-            .lang-icon {
-                width: rem(56px);
+            .label {
+                color: var(--color);
                 margin-right: rem(20px);
             }
+            .lang-icon {
+                width: rem(56px);
+                height: rem(56px);
+                margin-right: rem(20px);
+                border-radius: 50%;
+            }
             .right-arrow {
-                margin-top: -2px;
+                margin-top: -4px;
                 color: var(--minorColor);
             }
             .updown-icon {

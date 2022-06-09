@@ -33,6 +33,7 @@
         <div v-if="current === 'assets'" class='assets-list'>
             <!-- 资产搜索 -->
             <AssetFilter
+                v-if='customerInfo'
                 :hide-asset='hideAsset'
                 :search-text='tradeSearchMap[tradeType]'
                 @changeState='changeState'
@@ -128,7 +129,7 @@ export default {
             const accountIds = []
             if ([1, 2].includes(Number(props.tradeType))) {
                 tabList = [
-                    { title: t('trade.curPending'), value: 'pending' },
+                    { title: t('trade.curTrust'), value: 'pending' },
                     { title: t('trade.dealList'), value: 'deal' },
                     { title: t('trade.position'), value: 'position' }
                 ]
@@ -284,7 +285,9 @@ export default {
             pendingList,
             accountList,
             searchAsset,
-            changeState
+            changeState,
+            customerInfo
+
         }
     }
 }

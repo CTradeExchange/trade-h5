@@ -6,7 +6,7 @@
             <div v-for='(item,index) in elementList' :key='index' class='condition-item'>
                 <van-field
                     v-if="item.showType === 'input'"
-                    v-model='conditionModel[item.elementCode]'
+                    v-model.trim='conditionModel[item.elementCode]'
                     class='c-item'
                     :clearable='true'
                     :label='item.elementName'
@@ -16,7 +16,7 @@
                 />
                 <div v-if="item.showType === 'inputGroup'">
                     <van-field
-                        v-model='typeValue'
+                        v-model.trim='typeValue'
                         clickable
                         :label='item.elementName'
                         :placeholder='$t("register.chooseCertificateType")'
@@ -25,7 +25,7 @@
                         right-icon='arrow'
                         @click='showPicker = true'
                     />
-                    <van-field v-model='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" required />
+                    <van-field v-model.trim='conditionModel[typeCode]' :label='$t("register.certificateNo")' :placeholder="$t('register.pleaseEnter')+ typeValue" required />
                 </div>
                 <div v-if='imgTypeVis(item)' class='c-item'>
                     <p class='upload-text'>
@@ -65,7 +65,7 @@
                 </div>
                 <div v-if="item.showType=== 'date'">
                     <van-field
-                        v-model='conditionModel[item.elementCode]'
+                        v-model.trim='conditionModel[item.elementCode]'
                         clickable
                         :label='item.elementName'
                         :placeholder='$t("common.select")+item.elementName'

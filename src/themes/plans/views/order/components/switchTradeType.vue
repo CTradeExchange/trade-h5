@@ -1,7 +1,9 @@
 <template>
     <div class='switchTradeType'>
         <div v-if='product' class='productInfo'>
-            <span class='icon_chouti1' @click="$emit('switchProduct')"></span>
+            <span class='sortIconSpan' @click="$emit('switchProduct')">
+                <van-icon class='sortIcon' name='sort' />
+            </span>
             <span class='productName'>
                 {{ product.symbolName }}
             </span>
@@ -80,6 +82,14 @@ export default {
         line-height: rem(58px);
         text-align: center;
         border-radius: 3px;
+    }
+    .sortIconSpan{
+        margin-right: 3px;
+        padding-top: 8px;
+    }
+    .sortIcon{
+        transform: rotate(90deg);
+        font-size: rem(40px);
     }
 }
 </style>

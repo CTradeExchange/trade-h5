@@ -1,7 +1,7 @@
 import ETF from '@planspc/components/etfIcon'
 import { useI18n } from 'vue-i18n'
 import { useStore } from 'vuex'
-import { computed, ref, unref } from 'vue'
+import { computed, unref, ref, inject } from 'vue'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 import { findFundPage } from '@/api/fund.js'
 import { ElMessage } from 'element-plus'
@@ -9,6 +9,7 @@ import { useRouter } from 'vue-router'
 import { Toast } from 'vant'
 import SortIcon from '@planspc/components/sortIcon.vue'
 import { sortFieldFn, sortTypeFn, sortFunc } from '@planspc/hooks/useProduct'
+import { isEmpty, localSet, localGet, getCookie, setCookie } from '@/utils/util'
 
 export const getColumns = tradeTypeValue => {
     const store = useStore()
@@ -18,6 +19,7 @@ export const getColumns = tradeTypeValue => {
 
     const sortField = sortFieldFn()
     const sortType = sortTypeFn()
+    const customerInfo = computed(() => store.state._user.customerInfo)
 
     const getVal = (symbolKey, key) => unref(productMap)[symbolKey]?.[key] || '--'
     // 基金列表
@@ -28,27 +30,64 @@ export const getColumns = tradeTypeValue => {
 
     /** 添加自选逻辑 */
     const userSelfSymbolList = computed(() => store.getters.userSelfSymbolList || {})
-    const isCollect = (tradeType, symbolId) => userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
+
+    /** 添加自选逻辑 标星状态 */
+    const isCollect = (tradeType, symbolId) => {
+        if (isEmpty(customerInfo.value)) {
+            const newId = symbolId + '_' + tradeType
+            if (localGet('localSelfSymbolList')) {
+                if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        } else {
+            return userSelfSymbolList.value[tradeType]?.find(id => parseInt(id) === parseInt(symbolId))
+        }
+    }
+
+    const isReLoadProductList = inject('isReLoadProductList')
+
     const addOptional = (event, { symbolId, tradeType }) => {
         event.stopPropagation()
-        if (isCollect(tradeType, symbolId)) {
-            removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-                if (res.check()) {
-                    store.dispatch('_user/queryCustomerOptionalList')
-                    ElMessage.success(t('trade.removeOptionalOk'))
-                }
-            }).catch(err => {
-            })
+        if (customerInfo.value) {
+            if (isCollect(tradeType, symbolId)) {
+                removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                    if (res.check()) {
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        ElMessage.success(t('trade.removeOptionalOk'))
+                    }
+                }).catch(err => {
+                })
+            } else {
+                addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
+                    if (res.check()) {
+                    // 手动修改optional值
+                        store.commit('_user/Update_optional', 1)
+                        store.dispatch('_user/queryCustomerOptionalList')
+                        ElMessage.success(t('trade.addOptionalOk'))
+                    }
+                }).catch(err => {
+                })
+            }
         } else {
-            addCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
-                if (res.check()) {
-                // 手动修改optional值
-                    store.commit('_user/Update_optional', 1)
-                    store.dispatch('_user/queryCustomerOptionalList')
-                    ElMessage.success(t('trade.addOptionalOk'))
-                }
-            }).catch(err => {
-            })
+            // 未登录 缓存到本地
+            var localSelfSymbolList = localGet('localSelfSymbolList') ? JSON.parse(localGet('localSelfSymbolList')) : []
+            const newId = symbolId + '_' + tradeType
+            if (localSelfSymbolList.find(el => el === newId)) {
+                localSelfSymbolList.map((it, index) => {
+                    if (it === newId) {
+                        localSelfSymbolList.splice(index, 1)
+                        ElMessage.success(t('trade.removeOptionalOk'))
+                    }
+                })
+            } else {
+                localSelfSymbolList.push(newId)
+                ElMessage.success(t('trade.addOptionalOk'))
+            }
+            store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
+            isReLoadProductList(true, newId)
         }
     }
     /** 添加自选逻辑 */
@@ -171,7 +210,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.sellPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_last_price'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.last_color}>
+                        { getVal(row.symbolKey, 'rolling_last_price')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonLasPrice,
                 }
@@ -180,7 +223,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.buyPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonUpDownAmount
                 }
@@ -245,7 +292,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.sellPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_last_price'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.last_color}>
+                        { getVal(row.symbolKey, 'rolling_last_price')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonLasPrice,
                 }
@@ -254,7 +305,11 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.buyPrice'),
                 align: 'left',
                 minWidth: 160,
-                formatter: row => getVal(row.symbolKey, 'rolling_upDownAmount'),
+                formatter: row => (
+                    <span className={unref(productMap)[row.symbolKey]?.rolling_upDownColor}>
+                        { getVal(row.symbolKey, 'rolling_upDownAmount') > 0 ? '+' : '' }{ getVal(row.symbolKey, 'rolling_upDownAmount')}
+                    </span>
+                ),
                 slots: {
                     header: headerCommonUpDownAmount
                 }

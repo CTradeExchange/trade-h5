@@ -6,9 +6,17 @@
                 <el-option
                     v-for='item in countryList'
                     :key='item.code'
-                    :label='item.name'
                     :value='item.code'
-                />
+                >
+                    <span class='label-country'>
+                        {{ item.countryName }}
+                    </span>
+                    <span
+                        class='label-zone'
+                    >
+                        {{ item.code }}
+                    </span>
+                </el-option>
             </el-select>
         </div>
         <div class='inputWrapper'>
@@ -19,6 +27,7 @@
                 required
                 :type='inputType'
                 :value='modelValue'
+                @blur='onBlur'
                 @input='onInput'
             />
             <label v-if='label' class='label' :for='id'>
@@ -65,6 +74,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        isBusiness: {
+            type: Boolean,
+            default: false
         }
     },
     data () {
@@ -75,7 +88,7 @@ export default {
     },
     computed: {
         countryList () {
-            const countryList = this.$store.state.countryList || []
+            const countryList = this.isBusiness ? this.$store.getters.companyCountryList : this.$store.state.countryList
             const tempArr = []
 
             countryList.forEach(item => {
@@ -101,7 +114,7 @@ export default {
             }
         }
     },
-    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],
+    emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect', 'onBlur'],
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')
@@ -127,6 +140,9 @@ export default {
                     this.$emit('zoneSelect', item)
                 }
             }
+        },
+        onBlur ($event) {
+            this.$emit('onBlur', $event.target.value)
         }
     }
 }
@@ -169,14 +185,32 @@ export default {
         }
     }
 }
+.el-select-dropdown {
+    .el-select-dropdown__item {
+        padding: 0 10px;
+        .label-country {
+            float: left;
+            width: 100px;
+            overflow: hidden; //超出的文本隐藏
+            white-space: nowrap; //溢出不换行
+            text-overflow: ellipsis; //溢出用省略号显示
+        }
+        .label-zone {
+            float: right;
+        }
+    }
+}
 .inputWrapper {
     position: relative;
     background-color: var(--assistColor) !important;
+    border-radius: 3px;
 }
 .input {
     width: 100%;
-    height: rem(75px);
-    padding: 0 5px;
+    height: 48px;
+    padding: 0 10px;
+    font-size: 16px;
+    border-radius: 3px;
     &:focus~.label,
     &:valid~.label {
         transform: scale(0.8) translateY(-90%);

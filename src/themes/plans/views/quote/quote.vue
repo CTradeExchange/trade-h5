@@ -37,7 +37,12 @@
                 <SortIcon name='rolling_upDownWidth' :sort-field='sortField' :sort-type='sortType' />
             </span>
         </div>
-        <productListComp v-if='productList.length' ref='productListEl' :product-list='productList' />
+        <productListComp ref='productListEl' :product-list='productList' />
+        <div v-if='categoryType === 0 && productList.length === 0' class='AddToOptional'>
+            <van-button plain size='small' type='primary' @click='goSearchPage'>
+                <van-icon name='add' /> {{ $t('trade.addToOptional') }}
+            </van-button>
+        </div>
     </div>
 </template>
 
@@ -51,6 +56,7 @@ import useProduct from '@plans/hooks/useProduct'
 import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { localSet, localGet } from '@/utils/util'
 export default {
     name: 'Quote',
     components: {
@@ -76,15 +82,22 @@ export default {
         )
         const symbolKey = computed(() => store.state._quote.productActivedID || '')
         const productTradeType = computed(() => unref(symbolKey).split('_')[1] || 0)
+        const customerInfo = computed(() => store.state._user.customerInfo)
         // 1.玩法类型
         const tradeType = ref(unref(productTradeType))
+
+        const tradeTypeOld = ref(0)
+        const categoryTypeOld = ref(0)
         // 2.板块类型
         const categoryType = ref(1)
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList, sortField, sortType, sortFunc } = useProduct({
             tradeType, categoryType
         })
-        // console.log(categoryList)
+
+        const localSelfSymbolListCur = ref(localGet('localSelfSymbolList'))
+
+        const localSymbolUpdate = computed(() => store.state._user.localSelfSymbolList)
 
         const plansLen = computed(() => {
             const userProductCategory = store.getters.userProductCategory
@@ -103,6 +116,7 @@ export default {
         // 监听玩法类型
         const handleTradeType = async (val) => {
             tradeType.value = val
+            tradeTypeOld.value = val
             categoryType.value = 0
             await nextTick()
             unref(productList).length && store.commit('_quote/Update_productActivedID', unref(productList)[0].symbolId + '_' + val)
@@ -111,18 +125,33 @@ export default {
         // 监听玩法类型/板块类型的变化，触发产品订阅
         // 获取productList.vue组件的ref对象和产品列表均是异步，所以第一次产品订阅在productList.vue组件内
         watch(
-            [tradeType, categoryType],
+            [tradeType, categoryType, productList],
             async () => {
                 await nextTick()
                 if (productListEl.value) productListEl.value.subscribeAll()
-                console.log(productList)
-                console.log(productListEl.value)
             }
         )
 
         onActivated(async () => {
             await nextTick()
             if (productListEl.value) productListEl.value.subscribeAll()
+            // 未登录游客自选操作后返回过滤更新列表
+            if (!customerInfo.value) {
+                console.log(categoryType.value)
+                if (categoryType.value === 0) {
+                    // if (JSON.parse(localGet('localSelfSymbolList')).length !== JSON.parse(localSelfSymbolListCur.value).length) {
+                    tradeType.value = tradeTypeOld.value
+                    categoryType.value = null
+                    // await nextTick()
+                    // 定时切换一下玩法，触发刷新列表
+                    var st = setTimeout(() => {
+                        categoryType.value = 0
+                        localSelfSymbolListCur.value = localGet('localSelfSymbolList')
+                        clearTimeout(st)
+                    }, 150)
+                    // }
+                }
+            }
         })
 
         const tabChange = (i) => {}
@@ -138,6 +167,11 @@ export default {
             store.commit('del_cacheViews', 'FundProductList')
             router.push('/fundProductList')
         }
+
+        const goSearchPage = () => {
+            router.push(`/productSearch?tradeType=${tradeType.value}`)
+        }
+
         return {
             locale,
             fundBannerPosition: window['fundBannerPosition'].split('-'),
@@ -156,7 +190,13 @@ export default {
             handleTradeType,
             tradeType,
             toETF,
-            showSidebar
+            localSelfSymbolListCur,
+            tradeTypeOld,
+            categoryTypeOld,
+            showSidebar,
+            goSearchPage,
+            customerInfo,
+            localSymbolUpdate
         }
     }
 }
@@ -234,6 +274,23 @@ export default {
     img {
         display: block;
         width: 100%;
+    }
+}
+.AddToOptional {
+    position: absolute;
+    top: 45%;
+    right: 20%;
+    left: 20%;
+    display: inline-block;
+    margin: 0 0 rem(20px) 0;
+    text-align: center;
+    .van-button {
+        width: 80%;
+        height: rem(160px);
+        color: var(--primary);
+        font-weight: bold;
+        line-height: rem(160px);
+        border: none;
     }
 }
 </style>

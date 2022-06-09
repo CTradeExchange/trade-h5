@@ -17,8 +17,8 @@
                 line-width='20px'
                 :title-inactive-color='style.mutedColor'
             >
-                <van-tab name='mobile' :title='$t("register.phoneNo")' />
                 <van-tab name='email' :title='$t("register.email")' />
+                <van-tab name='mobile' :title='$t("register.phoneNo")' />
             </van-tabs>
 
             <form class='form'>
@@ -27,17 +27,19 @@
                 <!-- <van-cell title="账户币种" is-link arrow-direction="down" value="USD" /> -->
                 <div class='cell'>
                     <a class='countryPlease van-hairline--bottom' @click='countrySheetVisible=true'>
-                        <span>{{ country.name }}</span>
+                        <span>{{ country.displayName }}</span>
                         <van-icon name='arrow-down' />
                     </a>
                 </div>
+
                 <div v-if="openType === 'mobile'" class='cell'>
                     <areaInput
                         v-model.trim='mobile'
                         v-model:zone='zone'
                         clear
+                        :data='countryList'
                         :placeholder='$t("register.phoneNo")'
-                        :show-select='false'
+                        :show-select='true'
                         @zoneSelect='zoneSelect'
                     />
                 </div>
@@ -52,8 +54,11 @@
                         @zoneSelect='zoneSelect'
                     />
                 </div>
-                <div class='cell'>
-                    <CheckCode v-model.trim='checkCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                <div v-show="openType === 'mobile'" class='cell'>
+                    <CheckCode v-model.trim='mobileCheckCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
+                </div>
+                <div v-show="openType === 'email'" class='cell'>
+                    <CheckCode v-model.trim='emailCheckCode' clear :label='$t("login.verifyCode")' :loading='verifyCodeLoading' @verifyCodeSend='verifyCodeSendHandler' />
                 </div>
                 <div v-if='instructions' class='cell'>
                     <van-checkbox v-model='protocol' class='checkbox' shape='square'>
@@ -95,7 +100,7 @@ import areaInput from './components/areaInput'
 import CountrySheet from './components/countrySheet'
 // import CurrencyAction from './components/currencyAction'
 // import TradeTypeAction from './components/tradeTypeAction'
-import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet } from '@/utils/util'
+import { getDevice, getQueryVariable, setToken, getArrayObj, sessionGet, localSet } from '@/utils/util'
 import { register, checkUserStatus } from '@/api/user'
 import { verifyCodeSend, findCompanyCountry, getCountryListByParentCode } from '@/api/base'
 import { useStore } from 'vuex'
@@ -135,7 +140,8 @@ export default {
             countryCode: 'ISO_3166_156',
             loading: false,
             verifyCodeLoading: false,
-            checkCode: '',
+            emailCheckCode: '',
+            mobileCheckCode: '',
             mobile: '',
             openType: 'email', // mobile 手机号开户， email 邮箱开户
             currency: 'USD',
@@ -144,13 +150,13 @@ export default {
             pageui: '',
             protocol: true,
             visited: false, // 是否已点击过获取验证码
-            companyCountryList: [], // 获取白标后台配置的企业开户国家
             openAccountType: Number(route.query.openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
             countrySheetVisible: false,
             country: {},
-            allCountry: [] // 所有国家列表
+            allCountry: [], // 所有国家列表
+            mobileToken: '',
+            emailToken: ''
         })
-        let token = ''
 
         // pageConfig('Register').then(res => {
         //     state.pageui = res
@@ -169,9 +175,12 @@ export default {
                 }
             }
         })
+        // 获取支持企业注册国家
+        store.dispatch('getCompanyCountry')
+
         const countryList = computed(() => {
             const countryList = store.state.countryList
-            return state.openAccountType === 0 ? countryList : state.allCountry.filter(el => state.companyCountryList.includes(el.code))
+            return state.openAccountType === 0 ? countryList : store.getters.companyCountryList
         })
 
         const getAllCountry = () => {
@@ -198,20 +207,7 @@ export default {
         // 手机正则表达式
         const mobileReg = computed(() => getArrayObj(countryList.value, 'countryCode', state.countryZone).extend || ''
         )
-        // const showProtocol = (e) => {
-        //     e.preventDefault()
-        //     if (instructions) {
-        //         debugger
-        //         const protocolHtml = unescape(instructions.value)
-        //         Dialog.alert({
-        //             allowHtml: true,
-        //             title: '用户须知',
-        //             message: protocolHtml,
-        //         }).then(() => {
-        //         // on close
-        //         })
-        //     }
-        // }
+
         const registerSubmit = (params) => {
             state.loading = true
             register(params).finally(() => {
@@ -225,6 +221,9 @@ export default {
                     // 注册成功
                     sessionStorage.setItem('RegisterParams', JSON.stringify({ ...params, openType: state.openType }))
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
+                    if (params.phoneArea) localSet('loginPhoneArea', params.phoneArea)
+                    localSet('loginNameType', params.loginNameType === 1 ? 'email' : 'mobile')
+
                     if (res.data.token) setToken(res.data.token)
 
                     // 注册成功重新获取客户信息
@@ -260,17 +259,17 @@ export default {
             if (!state.visited) {
                 return Toast(t('common.getVerifyCode'))
             }
-            if (!token) {
+            if ((state.openType === 'email' && !state.emailToken) || (state.openType === 'mobile' && !state.mobileToken)) {
                 return Toast(t('common.inputRealVerifyCode'))
             }
             const params = {
                 type: state.openType === 'email' ? 1 : 2,
                 loginName: state.openType === 'email' ? state.email : state.mobile,
                 registerSource: getDevice(),
-                verifyCode: state.checkCode,
+                verifyCode: state.openType === 'email'　? state.emailCheckCode : state.mobileCheckCode,
                 // currency: state.currency,
                 // tradeType: state.tradeType,
-                sendToken: token,
+                sendToken: state.openType === 'email'　? state.emailToken : state.mobileToken,
                 utmSource: getQueryVariable('utm_source', entrySearch),
                 utmMedium: getQueryVariable('utm_medium', entrySearch),
                 utmCampaign: getQueryVariable('utm_campaign', entrySearch),
@@ -342,7 +341,7 @@ export default {
                             verifyCodeSend(params).then(res => {
                                 state.verifyCodeLoading = false
                                 if (res.check()) {
-                                    token = res.data.token
+                                    state.openType === 'mobile' ? state.mobileToken = res.data.token : state.emailToken = res.data.token
                                     callback && callback()
                                 } else {
                                     callback && callback(false)
@@ -361,22 +360,16 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            // state.country = data
-            state.countryZone = data.code
-        }
-
-        // 获取白标后台配置的企业开户国家
-        const queryCompanyCountry = () => {
-            findCompanyCountry().then(res => {
-                if (res.check() && res.data) {
-                    state.companyCountryList = res.data.openCompanyCountry
-                }
-            })
+            state.countrySheetVisible = true
         }
 
         // 是否显示企业开户的入口
         const companyCountryVisible = computed(() => {
-            return state.companyCountryList.includes(state.country.code)
+            if (state.openAccountType === 0) {
+                return store.getters.companyCountryList.find(el => el.code === state.country.code)
+            } else {
+                return store.state.countryList.find(el => el.code === state.country.code)
+            }
         })
 
         // 选择国家
@@ -398,7 +391,6 @@ export default {
             }
 
             getAllCountry()
-            queryCompanyCountry()
         })
 
         return {
@@ -460,7 +452,7 @@ export default {
         display: flex;
         flex: 1;
         justify-content: space-between;
-        padding: 10px 0;
+        padding: rem(20px) rem(6px);
     }
 }
 .cell {

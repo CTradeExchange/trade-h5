@@ -1,6 +1,6 @@
 import { login, findCustomerInfo, logout, switchAccount, queryCustomerOptionalList, addCustomerOptional, queryCustomerAssetsInfo, queryAccountAssetsInfo, addCustomerOptionalBatch, findAllBizKycList, increasAccount, thirdLogin } from '@/api/user'
 import { removeCustomerOptional } from '@/api/trade'
-import { localSet, setToken, removeLoginParams, sessionSet } from '@/utils/util'
+import { localSet, setToken, removeLoginParams, sessionSet, localRemove } from '@/utils/util'
 import { vue_set, assign } from '@/utils/vueUtil.js'
 import { compareAssets } from './storeUtil.js'
 export default {
@@ -18,6 +18,7 @@ export default {
         kycState: '', // kyc认证
         selfSymbolList: [], // 自选产品列表
         kycList: [], // kyc 验证列表
+        localSelfSymbolList: [], // 缓存在本地的自选产品列表
     },
     getters: {
         userAccountType (state) {
@@ -111,6 +112,11 @@ export default {
         Update_selfSymbolList (state, data) {
             state.selfSymbolList = data
         },
+        Update_localSelfSymbolList (state, data) {
+            state.localSelfSymbolList = data
+            localSet('localSelfSymbolList', JSON.stringify(data))
+        },
+
         Update_optional (state, data) {
             state.customerInfo.optional = data
         },
@@ -260,6 +266,25 @@ export default {
                 return res
             })
         },
+
+        // 本地缓存客户自选产品列表
+        queryLocalCustomerOptionalList ({ dispatch, commit, rootState }, params) {
+            // console.log(params)
+            commit('Update_localSelfSymbolList', params || [])
+        },
+        // 本地缓存添加自选产品
+        addLocalCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
+            if (!params || !params.length) return Promise.resolve()
+            commit('Update_optional', 1)
+            // console.log(params)
+            dispatch('queryLocalCustomerOptionalList') // 拉取本地缓存自选列表
+        },
+        // 本地缓存删除自选产品
+        removeLocalCustomerOptionals ({ dispatch, commit, state, rootState }, params = []) {
+            if (!params || !params.length) return Promise.resolve()
+            dispatch('queryLocalCustomerOptionalList') // 拉取本地缓存自选列表
+        },
+
         // 如果没有添加过自选产品，自动添加默认自选产品
         addCustomerOptionalDefault ({ state, rootGetters, dispatch, commit }) {
             if (state.customerInfo.optional === 1) return Promise.resolve()
@@ -275,6 +300,7 @@ export default {
                 if (res.check()) {
                     commit('Update_optional', 1)
                     dispatch('queryCustomerOptionalList')
+                    localSet('localSelfSymbolList', [])
                 }
             })
         },

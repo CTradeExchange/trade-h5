@@ -16,17 +16,30 @@
                     {{ $t('signIn.fundLogin') }}
                 </button>
             </div>
-            <loginTypeBar v-model='loginType' />
+            <loginNameTypeBar v-model='loginNameType' />
             <form class='loginForm'>
-                <h2 class='loginTitle'>
+                <!-- <h2 class='loginTitle'>
                     {{ loginType==='password' ? $t("signIn.loginByPwd") : $t("signIn.loginByCode") }}
-                </h2>
-                <div class='field'>
-                    <compInput
+                </h2> -->
+                <div v-if="loginNameType==='mobile'" class='field'>
+                    <areaInputPc
                         ref='loginNameEl'
                         v-model.trim='loginName'
+                        v-model:zone='zone'
                         block
-                        :placeholder="$t('signIn.loginNamePlaceholder')"
+                        :is-business='accountType === 2'
+                        :placeholder="$t('common.inputPhone')"
+                        @keyup.enter='onLoginNameKeyupEnter'
+                        @onBlur='checkUserMfa'
+                        @zoneSelect='zoneSelect'
+                    />
+                </div>
+                <div v-else class='field'>
+                    <compInput
+                        ref='loginNameEl'
+                        v-model.trim='email'
+                        block
+                        :placeholder="$t('common.inputEmail')"
                         @keyup.enter='onLoginNameKeyupEnter'
                         @onBlur='checkUserMfa'
                     />
@@ -42,19 +55,26 @@
                     />
                 </div>
                 <div v-else class='field'>
-                    <compInput ref='checkCodeEl' v-model.trim='checkCode' block :placeholder="$t('signIn.verifyCode')" @keyup.enter='loginHandle'>
-                        <van-button
-                            class='verifyCodeBtn'
-                            :disabled='!isNaN(verifyCodeBtnText)'
+                    <div v-show="loginNameType==='email'" class='verifyCodeCell'>
+                        <CheckCode
+                            ref='checkCodeEmailEl'
+                            v-model.trim='checkCodeEmail'
+                            clear
+                            :label='$t("login.verifyCode")'
                             :loading='sendVerifyLoading'
-                            plain
-                            size='small'
-                            type='primary'
-                            @click='sendVerifyHandler'
-                        >
-                            {{ verifyCodeBtnText }}
-                        </van-button>
-                    </compInput>
+                            @verifyCodeSend='sendVerifyHandler'
+                        />
+                    </div>
+                    <div v-show="loginNameType==='mobile'" class='verifyCodeCell'>
+                        <CheckCode
+                            ref='checkCodeMobileEl'
+                            v-model.trim='checkCodeMobile'
+                            clear
+                            :label='$t("login.verifyCode")'
+                            :loading='sendVerifyLoading'
+                            @verifyCodeSend='sendVerifyHandler'
+                        />
+                    </div>
                 </div>
                 <div v-if='googleCodeVis' class='field field-google'>
                     <googleVerifyCode @getGooleVerifyCode='getGooleVerifyCode' />
@@ -67,6 +87,9 @@
                 <router-link to='/register'>
                     {{ $t('signIn.register') }}
                 </router-link>
+                <a class='switchLoginType' href='javascript:;' @click='switchLoginType'>
+                    {{ loginType==='password' ? $t("signIn.loginByCode") : $t("signIn.loginByPwd") }}
+                </a>
                 <router-link :to='{ path: "/forgot",query:{ type: "login" } }'>
                     {{ $t('signIn.forgot') }}
                 </router-link>
@@ -96,14 +119,16 @@
 
 <script>
 import topNav from '@planspc/layout/topNav'
-import loginTypeBar from './loginTypeBar'
+import loginNameTypeBar from './loginNameTypeBar'
 import compInput from '@planspc/components/form/input'
+import areaInputPc from '@/components/form/areaInputPc'
+import CheckCode from '@/components/form/checkCode'
 import LoginPwdDialog from './loginPwdDialog.vue'
-import { reactive, ref, toRefs, computed, onMounted } from 'vue'
+import { reactive, ref, toRefs, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
-import { localGet, isEmpty } from '@/utils/util'
+import { localGet, isEmpty, localSet } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 import LoginHook from './loginHook'
 import LoginByGoogle from '@/themeCommon/user/login/components/loginByGoogle.vue'
@@ -116,9 +141,11 @@ export default {
     name: 'Login',
     components: {
         LoginPwdDialog,
-        loginTypeBar,
+        loginNameTypeBar,
         topNav,
         compInput,
+        CheckCode,
+        areaInputPc,
         googleVerifyCode,
         LoginByGoogle,
         LoginByFacebook,
@@ -129,7 +156,8 @@ export default {
         const store = useStore()
         const loginNameEl = ref()
         const pwdEl = ref()
-        const checkCodeEl = ref()
+        const checkCodeEmailEl = ref()
+        const checkCodeMobileEl = ref()
         const { t } = useI18n({ useScope: 'global' })
         const state = reactive({
             loading: false,
@@ -138,17 +166,49 @@ export default {
             loginPwdPop: false,
             sendVerifyLoading: false,
             loginName: '',
+            email: '',
+            zone: localGet('phoneArea') || '',
             pwd: '',
             googleCodeVis: '',
-            checkCode: '',
+            checkCodeMobile: '',
+            checkCodeEmail: '',
             token: '', // 验证码token
+            loginNameType: localGet('loginNameType') || 'email', // mobile 手机号登录   email 邮箱登录
             loginType: 'password', // password 密码登录   checkCode 验证码登录
         })
 
+        // 获取国家区号
+        store.dispatch('getCountryListByParentCode').then(res => {
+            if (res.check() && res.data.length) {
+                setDefaultZone()
+            }
+        })
         const countryList = computed(() => store.state.countryList)
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
 
         const { loginSubmit, loginToPath, verifyCodeBtnText, sendVerifyCode } = LoginHook()
+
+        // 监听个人登录还是企业登录,设置不同国家列表
+        watch(() => state.accountType, val => {
+            setDefaultZone()
+        })
+
+        watch(() => state.loginNameType, val => {
+            state.pwd = ''
+        })
+
+        // 设置默认区号
+        const setDefaultZone = () => {
+            const localArea = localGet('phoneArea')
+            let localObj
+            if (state.accountType === 2) {
+                localObj = store.getters.companyCountryList.find(el => el.countryCode === localArea)
+                state.zone = localObj ? localArea : store.getters.companyCountryList[0]?.countryCode
+            } else {
+                localObj = countryList.value.find(el => el.countryCode === localArea)
+                state.zone = localObj ? localArea : countryList.value[0]?.countryCode
+            }
+        }
 
         // 跳转路由
         const toRoute = path => {
@@ -157,24 +217,34 @@ export default {
             })
         }
 
+        // 切换登录方式
+        const switchLoginType = () => {
+            state.loginType = state.loginType === 'password' ? 'checkCode' : 'password'
+        }
+
         // 点击登录
         const loginHandle = () => {
             if (state.googleCodeVis && isEmpty(state.googleCode)) {
                 return Toast(t('common.inputGoogleCode'))
             }
             state.loading = true
-            loginSubmit({
-                loginName: state.loginName,
+            const params = {
+                type: state.loginNameType === 'email' ? 1 : 2,
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName,
                 loginType: state.loginType,
-                checkCode: state.checkCode,
+                phoneArea: state.zone,
+                checkCode: state.loginNameType === 'email' ? state.checkCodeEmail : state.checkCodeMobile,
                 pwd: state.pwd,
                 token: state.token,
                 googleCode: state.googleCode
-            }).then(res => {
-                console.log('success')
+            }
+            loginSubmit(params).then(res => {
                 // 登录KYC,kycAuditStatus:0未认证跳,需转到认证页面,1待审核,2审核通过,3审核不通过
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
                 if (res.invalid()) return res
+                localSet('loginNameType', state.loginNameType)
+                localSet('phoneArea', state.zone)
+
                 if (Number(res.data.companyKycStatus) === 1) {
                     if (Number(res.data.kycAuditStatus === 0)) {
                         return Dialog.alert({
@@ -228,16 +298,22 @@ export default {
         }
 
         // 发送验证码
-        const sendVerifyHandler = () => {
+        const sendVerifyHandler = (callback) => {
             const param = {
-                loginName: state.loginName,
+                type: state.loginNameType === 'email' ? 1 : 2,
+                loginName: state.loginNameType === 'email' ? state.email : state.loginName,
             }
-            state.sendVerifyLoading = false
+            if (state.loginNameType === 'mobile') param.phoneArea = state.zone
+            state.sendVerifyLoading = true
             sendVerifyCode(param).then(res => {
-                console.log(res)
-                if (res.check()) {
+                if (res.check && res.check()) {
                     state.token = res.data.token
+                    callback && callback()
+                } else {
+                    callback && callback(false)
                 }
+            }).catch(err => {
+                callback && callback(false)
             }).finally(() => {
                 state.sendVerifyLoading = false
             })
@@ -249,8 +325,11 @@ export default {
             if (state.loginType === 'password' && state.pwd === '') {
                 const iputEl = pwdEl.value?.$el?.querySelector('input')
                 iputEl && iputEl.focus()
-            } else if (state.loginType === 'checkCode' && state.checkCode === '') {
-                const iputEl = checkCodeEl.value?.$el?.querySelector('input')
+            } else if (state.loginType === 'checkCode' && state.loginNameType === 'mobile' && state.checkCodeMobile === '') {
+                const iputEl = checkCodeMobileEl.value?.$el?.querySelector('input')
+                iputEl && iputEl.focus()
+            } else if (state.loginType === 'checkCode' && state.loginNameType === 'email' && state.checkCodeEmail === '') {
+                const iputEl = checkCodeEmailEl.value?.$el?.querySelector('input')
                 iputEl && iputEl.focus()
             } else {
                 console.log('调用登录')
@@ -258,13 +337,14 @@ export default {
         }
 
         // 检测客户是否开启GoogleMFA
-        const checkUserMfa = (ev) => {
-            const val = ev.target.value
+        const checkUserMfa = (val) => {
             if (val) {
-                checkGoogleMFAStatus({
+                const param = {
                     loginName: val,
-                    type: val.includes('@') ? 1 : 2
-                }).then(res => {
+                    type: state.loginNameType === 'email' ? 1 : 2
+                }
+                if (state.loginNameType === 'mobile') param.phoneArea = state.zone
+                checkGoogleMFAStatus(param).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
                     }
@@ -277,6 +357,12 @@ export default {
             state.googleCode = val
         }
 
+        // 选择登录手机号区号
+        const zoneSelect = (data) => {
+            state.zone = data.code
+            if (state.loginName) checkUserMfa(state.loginName)
+        }
+
         onMounted(() => {
             if (isEmpty(countryList.value) && !isEmpty(thirdLoginArr.value)) {
                 // 获取国家区号
@@ -284,16 +370,22 @@ export default {
             }
             // 获取三方登录配置
             store.dispatch('_base/getLoginConfig')
+
+            // 获取支持企业注册国家
+            store.dispatch('getCompanyCountry')
         })
 
         return {
             ...toRefs(state),
             loginHandle,
+            switchLoginType,
             verifyCodeBtnText,
             sendVerifyHandler,
+            zoneSelect,
             loginNameEl,
             pwdEl,
-            checkCodeEl,
+            checkCodeMobileEl,
+            checkCodeEmailEl,
             thirdLoginArr,
             checkUserMfa,
             getGooleVerifyCode,
@@ -418,6 +510,34 @@ export default {
         width: 200px;
         margin: 15px auto 0;
         text-align: center;
+    }
+}
+.verifyCodeCell {
+    :deep {
+        .checkCodeBar {
+            background-color: var(--assistColor);
+            border-bottom: none;
+            border-radius: 4px;
+            .checkCodeInput {
+                font-size: 16px;
+            }
+            .getCodeBtn {
+                margin: 0 18px;
+                color: var(--primary);
+                font-size: 16px;
+                cursor: pointer;
+                &:disabled {
+                    color: var(--minorColor);
+                    cursor: default;
+                }
+            }
+            .input {
+                width: 100%;
+                height: 48px;
+                padding: 0 5px;
+                padding-left: 18px;
+            }
+        }
     }
 }
 </style>
