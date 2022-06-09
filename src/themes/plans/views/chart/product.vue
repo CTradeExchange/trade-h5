@@ -1064,6 +1064,7 @@ export default {
                 })
             }
             firstDetail.value = true
+            checkIsSelfSymbol()
         }
 
         // 图表初始值
@@ -1101,8 +1102,8 @@ export default {
                     state.isSelfSymbol = true
                     Toast(t('trade.addOptionalOk'))
                 }
-                localSet('localSelfSymbolList', JSON.stringify(localSelfSymbolList))
-
+                // localSet('localSelfSymbolList', JSON.stringify(localSelfSymbolList))
+                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
                 // Toast(t('common.noLogin'))
                 // return router.push('/login')
             } else {
@@ -1342,13 +1343,13 @@ export default {
             margin-right: rem(20px);
             font-size: rem(26px);
         }
-        .sortIconSpan{
+        .sortIconSpan {
             margin-right: 3px;
             padding-top: 5px;
         }
-        .sortIcon{
-            transform: rotate(90deg);
+        .sortIcon {
             font-size: rem(50px);
+            transform: rotate(90deg);
         }
     }
     &.isIframe {
