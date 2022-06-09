@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { ref, computed, unref, toRaw } from 'vue'
+import { ref, computed, unref, toRaw, watch } from 'vue'
 import plansType from '@/themes/plans/components/plansType.vue'
 import TopTab from '@plans/components/topTab'
 import useProduct from '@plans/hooks/useProduct'
@@ -106,6 +106,8 @@ export default {
             unref(searchRef) && unref(searchRef).reset()
         }
 
+        const localSymbolUpdate = computed(() => store.state._user.localSelfSymbolList)
+
         // 获取板块列表和所选板块的产品列表
         const { categoryList, productList } = useProduct({
             tradeType, categoryType, isSort: false
@@ -124,6 +126,16 @@ export default {
         const onClosed = () => {
             unref(searchRef) && unref(searchRef).reset()
         }
+
+        watch(
+            () => localSymbolUpdate.value, list => {
+                if (unref(categoryType) === 0) {
+                    const tempCur = categoryType.value
+                    categoryType.value = categoryType.value === '1' ? '0' : '1'
+                    categoryType.value = tempCur
+                }
+            }
+        )
 
         return {
             show,

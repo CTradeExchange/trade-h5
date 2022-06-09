@@ -97,6 +97,8 @@ export default {
 
         const localSelfSymbolListCur = ref(localGet('localSelfSymbolList'))
 
+        const localSymbolUpdate = computed(() => store.state._user.localSelfSymbolList)
+
         const plansLen = computed(() => {
             const userProductCategory = store.getters.userProductCategory
             let arr = Object.keys(userProductCategory)
@@ -192,7 +194,8 @@ export default {
             categoryTypeOld,
             showSidebar,
             goSearchPage,
-            customerInfo
+            customerInfo,
+            localSymbolUpdate
         }
     }
 }
