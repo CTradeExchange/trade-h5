@@ -289,6 +289,7 @@ export default {
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
                     localSet('loginNameType', state.openType)
                     localSet('loginZone', state.countryZone)
+                    localSet('phoneArea', state.countryZone)
                     if (res.data.token) setToken(res.data.token)
 
                     // 注册成功重新获取客户信息
