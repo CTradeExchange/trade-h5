@@ -530,7 +530,6 @@ export default {
                         state.isOptional = false
                     }
                 }
-                // console.log(store.state._user.localSelfSymbolList)
             } else {
                 state.isOptional = store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId))
             }

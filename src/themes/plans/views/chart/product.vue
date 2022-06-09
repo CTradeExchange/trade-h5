@@ -2,7 +2,10 @@
     <div class='page-wrap' :class='{ isIframe: isUniapp }'>
         <LayoutTop v-if='!isUniapp' :back='true' :menu='false'>
             <p class='symbolName'>
-                <i v-if='product?.symbolName' class='icon_chouti1' @click='showSidebar=true'></i>
+                <span v-if='product?.symbolName' class='sortIconSpan' @click='showSidebar=true'>
+                    <van-icon class='sortIcon' name='sort' />
+                </span>
+                <!-- <i v-if='product?.symbolName' class='icon_chouti1' @click='showSidebar=true'></i> -->
                 {{ product?.symbolName }}
             </p>
             <!-- <p class='infomation'>
@@ -1338,6 +1341,14 @@ export default {
         .icon_chouti1 {
             margin-right: rem(20px);
             font-size: rem(26px);
+        }
+        .sortIconSpan{
+            margin-right: 3px;
+            padding-top: 5px;
+        }
+        .sortIcon{
+            transform: rotate(90deg);
+            font-size: rem(50px);
         }
     }
     &.isIframe {
