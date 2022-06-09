@@ -151,13 +151,13 @@ export default {
             emailCode: '',
             zone: localGet('phoneArea') || '',
             countryZone: '86',
-            curTab: 0,
+            curTab: 1,
             tips: {
                 flag: true,
                 msg: ''
             },
             sendToken: '',
-            active: 0,
+            active: 1,
             loading: false,
             googleCodeVis: false,
             googleCode: ''
