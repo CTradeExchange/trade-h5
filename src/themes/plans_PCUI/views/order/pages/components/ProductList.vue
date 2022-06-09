@@ -73,7 +73,6 @@ const sortHandler = (field) => {
 }
 
 const isReLoadProductSearch = inject('isReLoadProductSearch')
-const updateMarkFav = inject('updateMarkFav')
 
 // 监听列表滚动，订阅/获取产品数据
 // const list = toRef(props, 'list')
@@ -150,7 +149,6 @@ const addOptional = ({ symbolId, tradeType }) => {
         }
         store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
         isReLoadProductSearch(true, symbolId)
-        updateMarkFav(true, symbolId)
     } else {
         if (isCollect(tradeType, symbolId)) {
             removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {

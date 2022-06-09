@@ -35,7 +35,7 @@
                     v-model:zone='phoneArea'
                     clear
                     :country-list='countryList'
-                    :placeholder="$t('login.loginNamePlaceholder')"
+                    :placeholder="$t('common.inputPhone')"
                     @onBlur='checkUserMfa'
                     @zoneSelect='zoneSelect'
                 />

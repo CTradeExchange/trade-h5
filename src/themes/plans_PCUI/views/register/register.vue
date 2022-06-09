@@ -71,7 +71,7 @@
                             clear
                             :disabled='false'
                             :is-business='openAccountType === 1'
-                            :placeholder='$t("register.phoneNo")'
+                            :placeholder='$t("common.inputPhone")'
                             type='mobile'
                             @zoneSelect='zoneSelect'
                         />
@@ -84,7 +84,7 @@
                             :disabled='true'
                             input-type='text'
                             :is-business='openAccountType === 1'
-                            :placeholder='$t("register.email")'
+                            :placeholder='$t("common.inputEmail")'
                             type='email'
                             @zoneSelect='zoneSelect'
                         />
