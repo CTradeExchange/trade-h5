@@ -458,7 +458,6 @@ export default {
         })
 
         const isReLoadProductSearch = inject('isReLoadProductSearch')
-        const updateMarkFav = inject('updateMarkFav')
 
         // 图表初始值
         const initialValue = computed(() => {
@@ -562,8 +561,6 @@ export default {
                     ElMessage.success(t('trade.addOptionalOk'))
                 }
                 store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
-                // isReLoadProductSearch(true, parseInt(product.value.symbolId))
-                updateMarkFav(true, parseInt(product.value.symbolId))
             } else {
                 if (isSelfSymbol.value) {
                     removeCustomerOptional({
