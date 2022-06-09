@@ -250,7 +250,7 @@ padding: 10px;'
 </template>
 
 <script>
-import { reactive, toRefs, computed, unref, ref, watch, onMounted, onUnmounted } from 'vue'
+import { reactive, toRefs, computed, unref, ref, watch, onMounted, onUnmounted, provide, inject } from 'vue'
 import { Dialog, Toast } from 'vant'
 import tv from '@/components/tradingview/tv'
 import { useI18n } from 'vue-i18n'
@@ -452,6 +452,20 @@ export default {
             return curIndex + 1
         })
 
+        provide('isMarkFav', (value, productId) => {
+            if (value === true) {
+                const ArrPro = productList
+
+                // if (unref(categoryType) === '0') {
+                //     categoryType.value = '1'
+                //     categoryType.value = '0'
+                // }
+                console.log('isMarkFav')
+            }
+        })
+
+        const isReLoadProductSearch = inject('isReLoadProductSearch')
+
         // 图表初始值
         const initialValue = computed(() => {
             if (product.value.symbolName) {
@@ -553,6 +567,7 @@ export default {
                     ElMessage.success(t('trade.addOptionalOk'))
                 }
                 store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
+                // isReLoadProductSearch(true, parseInt(product.value.symbolId))
             } else {
                 if (isSelfSymbol.value) {
                     removeCustomerOptional({
@@ -944,8 +959,8 @@ export default {
             formatAmount,
             checkIsSelfSymbol,
             dealLastPrice,
-            contractRoute
-
+            contractRoute,
+            isReLoadProductSearch,
         }
     }
 }

@@ -40,7 +40,7 @@
 
 <script setup>
 import ETF from '@planspc/components/etfIcon'
-import { ref, watch, nextTick, computed, toRef, defineProps } from 'vue'
+import { ref, watch, nextTick, computed, toRef, defineProps, inject } from 'vue'
 import { useStore } from 'vuex'
 import { addCustomerOptional, removeCustomerOptional } from '@/api/trade'
 // import subscribeProducts from '@planspc/hooks/subscribeProducts'
@@ -71,6 +71,8 @@ const sortType = sortTypeFn()
 const sortHandler = (field) => {
     sortFunc(field)
 }
+
+const isReLoadProductSearch = inject('isReLoadProductSearch')
 
 // 监听列表滚动，订阅/获取产品数据
 // const list = toRef(props, 'list')
@@ -146,6 +148,7 @@ const addOptional = ({ symbolId, tradeType }) => {
             ElMessage.success(t('trade.addOptionalOk'))
         }
         store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
+        isReLoadProductSearch(true, symbolId)
     } else {
         if (isCollect(tradeType, symbolId)) {
             removeCustomerOptional({ symbolList: [symbolId], tradeType }).then(res => {
