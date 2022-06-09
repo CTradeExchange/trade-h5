@@ -50,10 +50,12 @@ provide('isReLoadProductList', (value, productId) => {
         //     console.log(ArrPro)
         //     // })
         // }
-        if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
-            categoryType.value = '1'
-            categoryType.value = '0'
-        }
+        console.log(tradeType.value, categoryType.value)
+        const tempCur = categoryType.value
+        // if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
+        categoryType.value = categoryType.value === '1' ? '0' : '1'
+        categoryType.value = tempCur
+        // }
     }
 })
 
@@ -151,31 +153,31 @@ onUnmounted(() => {
         font-size: 14px;
     }
 }
-.productWrapper{
+.productWrapper {
     position: relative;
 }
 .AddToOptional {
-        position: absolute;
-        top: 45%;
-        right: 20%;
-        left: 20%;
-        display: inline-block;
-        margin: 0 0 20px;
-        z-index: 9;
-        text-align: center;
-        .van-button {
-            width: 200px;
-            height: 80px;
-            font-size: 18px;
-            color: var(--primary);
-            font-weight: bold;
-            line-height: 80px;
-            background: var(--contentColor);
-            transition: ease-in .2s;
-            border: none;
-            &:hover{
-                background: var(--assistColor);
-            }
+    position: absolute;
+    top: 45%;
+    right: 20%;
+    left: 20%;
+    z-index: 9;
+    display: inline-block;
+    margin: 0 0 20px;
+    text-align: center;
+    .van-button {
+        width: 200px;
+        height: 80px;
+        color: var(--primary);
+        font-weight: bold;
+        font-size: 18px;
+        line-height: 80px;
+        background: var(--contentColor);
+        border: none;
+        transition: ease-in 0.2s;
+        &:hover {
+            background: var(--assistColor);
         }
     }
+}
 </style>
