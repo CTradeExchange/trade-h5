@@ -265,7 +265,7 @@ export default {
             if (state.openAccountType === 0) {
                 return store.getters.companyCountryList.find(el => el.code === state.countryVal)
             } else {
-                return store.state.countryList.find(el => el.code === state.countryVal)
+                return countryList.value.find(el => el.code === state.countryVal)
             }
         })
 

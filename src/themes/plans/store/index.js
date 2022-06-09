@@ -92,6 +92,10 @@ export default createStore({
         companyCountryList (state, getters) {
             const companyCountry = state.companyCountry.split(',')
             const result = state.countryListAll.filter(el => companyCountry.find(o => o === el.code))
+            result.sort((a, b) => {
+                return a.displayName.localeCompare(b.displayName, 'zh')
+            })
+
             return result
         }
     },
