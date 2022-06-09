@@ -83,10 +83,14 @@ const subscribeProducts = () => {
 
 provide('isReLoadProductSearch', (value, productId) => {
     if (value === true) {
-        if (unref(categoryType) === '0') {
-            categoryType.value = '1'
-            categoryType.value = '0'
-        }
+        const tempCur = categoryType.value
+        categoryType.value = categoryType.value === '1' ? '0' : '1'
+        categoryType.value = tempCur
+
+        // if (unref(categoryType) === '0') {
+        //     categoryType.value = '1'
+        //     categoryType.value = '0'
+        // }
     }
 })
 
@@ -110,16 +114,16 @@ onBeforeUnmount(() => {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .productSearch {
-    width: 360px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    width: 360px;
     height: 100%;
+    padding: 16px 0;
     overflow: hidden;
     background: var(--contentColor);
     border-radius: 10px;
-    padding: 16px 0;
     .margin {
         margin-top: rem(30px);
     }

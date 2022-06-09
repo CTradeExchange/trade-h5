@@ -50,7 +50,6 @@ provide('isReLoadProductList', (value, productId) => {
         //     console.log(ArrPro)
         //     // })
         // }
-        console.log(tradeType.value, categoryType.value)
         const tempCur = categoryType.value
         // if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
         categoryType.value = categoryType.value === '1' ? '0' : '1'
