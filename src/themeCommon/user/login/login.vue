@@ -202,7 +202,12 @@ export default {
             () => countryList.value,
             newval => {
                 // 处理用户第一次进入页面，缓存为空的区号显示问题
-                if (state.phoneArea === '' && newval.length) state.phoneArea = newval[0].countryCode
+                if (state.phoneArea === '' && newval.length) {
+                    state.phoneArea = newval[0].countryCode
+                } else if (state.phoneArea && newval.length) {
+                    const curPhoneArea = newval.find(el => el.countryCode === state.phoneArea)
+                    if (!curPhoneArea) state.phoneArea = newval[0].countryCode
+                }
             }
         )
 
