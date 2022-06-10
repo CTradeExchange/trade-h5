@@ -1175,7 +1175,16 @@ export default {
         // 跳转到基金的产品详情
         const fundtokenLink = () => {
             if (unref(businessConfig)?.v10Link) {
-                router.push(unref(businessConfig).v10Link)
+                if (isUniapp && uni) {
+                    return uni.postMessage({
+                        data: {
+                            action: 'message',
+                            type: 'v10'
+                        }
+                    })
+                } else {
+                    router.push(unref(businessConfig).v10Link)
+                }
             } else {
                 if (!unref(fundtoken)) {
                     return Toast(t('trade.noFeature'))
@@ -1191,7 +1200,7 @@ export default {
                         }
                     })
                 }
-                router.replace('/fundProductInfo??fundId=' + fundtoken.value.fundId)
+                router.replace('/fundProductInfo?fundId=' + fundtoken.value.fundId)
             }
         }
 
