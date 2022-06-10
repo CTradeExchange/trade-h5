@@ -898,8 +898,11 @@ export default {
             // renderChart(product, state.initConfig.property)
         }
 
-        // 初始化图表配置
-        initChartData()
+        // 获取产品详情
+        store.dispatch('_quote/querySymbolInfo', { symbolId: product.value.symbolId, tradeType: product.value.tradeType }).then(() => {
+            // 初始化图表配置
+            initChartData()
+        })
 
         // 图表创建完成回调
         const onChartReady = () => {
