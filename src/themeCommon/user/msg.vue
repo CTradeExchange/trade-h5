@@ -2,7 +2,7 @@
     <div class='publicPage'>
         <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
         <!-- <Loading :show='pageLoading' /> -->
-        <van-tabs v-model:active='activeIndex' class='msgTab' sticky @click-tab='onClickTab'>
+        <van-tabs v-model:active='activeIndex' class='msgTab' sticky @change='onClickTab'>
             <van-tab name='public' :title='$t("route.notice")'>
                 <div class='msg-list'>
                     <van-pull-refresh
@@ -221,19 +221,19 @@ export default {
 
         // const activeIndex = ref('')
         const onClickTab = ({ title, name }) => {
-            if (name === 'public') {
+            if (state.activeIndex === 'public') {
                 state.currentNt = 1
                 state.finishedNt = false
                 state.listNotice = []
                 getNoticeData()
             }
-            if (name === 'msgps') {
+            if (state.activeIndex === 'msgps') {
                 state.currentPs = 1
                 state.finishedPs = false
                 state.listCustomer = []
                 getCustomerMsgListData()
             }
-            if (name === 'msg') {
+            if (state.activeIndex === 'msg') {
                 state.current = 1
                 state.finished = false
                 state.list = []
@@ -604,7 +604,7 @@ export default {
 
     --van-dropdown-menu-title-font-size: 12px;
 }
-.msgTab{
+.msgTab {
     --van-tabs-bottom-bar-color: var(--primary);
 }
 .publicPage {
