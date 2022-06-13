@@ -240,6 +240,7 @@ import { investCombination } from '@/api/trade'
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
+const { isUniapp } = route.query
 const { t } = useI18n({ useScope: 'global' })
 // 基金信息
 const fund = computed(() => store.state._quote.fundInfo || {})
@@ -321,7 +322,17 @@ const goExamine = () => {
 
 // 点击购买基金
 const onFund = () => {
-    if (isPC) {
+    if (isUniapp && uni) {
+        return uni.postMessage({
+            data: {
+                action: 'message',
+                type: 'v10_fund',
+                params: {
+                    fundId
+                }
+            }
+        })
+    } else if (isPC) {
         showFundDialog.value = true
     } else {
         router.push({
@@ -344,8 +355,21 @@ const onTrade = () => {
     if (!product || product.baseCurrency === product.profitCurrency) {
         return Toast(t('fundInfo.noTradeMarket'))
     }
-
-    router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
+    if (isUniapp && uni) {
+        uni.postMessage({
+            data: {
+                action: 'message',
+                type: 'v10_order',
+                params: {
+                    tradeType: product.tradeType,
+                    symbolId: product.symbolId,
+                    direction: 'buy'
+                }
+            }
+        })
+    } else {
+        router.push(`/order?symbolId=${product.symbolId}&tradeType=${product.tradeType}`)
+    }
 }
 
 // 更新基金净值
@@ -377,6 +401,11 @@ onMounted(() => {
     })
     // body添加类名
     document.body.classList.add('V10')
+    // app隐藏头部和底部导航栏
+    if (isUniapp) {
+        document.querySelector('.nav-wrap').style.display = 'none'
+        document.querySelector('#nav-footer').style.display = 'none'
+    }
 })
 
 onUnmounted(() => {

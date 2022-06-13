@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id='nav-footer'>
         <div class='footer-wrap'>
             <div class='menu'>
                 <div class='main' @click="expand('about')">
