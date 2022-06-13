@@ -173,7 +173,7 @@ import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
 import { mul, divide, toFixed } from '@/utils/calculation'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
+import { queryPayType, queryPay8Type, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 
 export default {
@@ -412,8 +412,10 @@ export default {
                     state.loading = false
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
-                            const result = []
+                            // 当前支付通道是否存在Pay8
+                            let isPay8 = false
                             // 过滤掉直充支付通道、设置支付通道图标
+                            const result = []
                             res.data.forEach(el => {
                                 if (el.rechargeType !== '1') {
                                     const iconKey = el.paymentCode + '_' + el.paymentType + '_' + el.merchantNo
@@ -425,7 +427,10 @@ export default {
                                     }
                                     result.push(el)
                                 }
+                                if (el.paymentCode === 'Pay8') isPay8 = true
                             })
+                            // 获取Pay8支付通道类型
+                            if (isPay8) getPay8Type()
                             state.payTypes = result
                         }
 
@@ -456,6 +461,21 @@ export default {
             state.typeShow = false
             // 设置支付货币列表
             setPaymentList(state.checkedType)
+        }
+
+        // 获取pay8支付通道类型
+        const getPay8Type = () => {
+            queryPay8Type({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                customerGroupId: customInfo.value.customerGroupId,
+                paymentChannelCode: 'Pay8',
+                paymentChannelType: 'AggregationPlatform',
+                paymentMerchantNo: 'sdfkf2@gmail.com',
+                paymentChannelClientType: 'mobile'
+            }).then(res => {
+                console.log('res', res)
+            })
         }
 
         // 切换不同支付货币
