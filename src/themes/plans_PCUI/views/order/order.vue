@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent, provide } from 'vue'
+import { reactive, toRefs, watch, computed, onBeforeUnmount, defineAsyncComponent, provide, inject } from 'vue'
 import chart from './pages/chart.vue'
 import { useRouter, useRoute } from 'vue-router'
 import handicap from './pages/handicap.vue'

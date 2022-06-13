@@ -149,16 +149,14 @@ export default {
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: localGet('loginZone') || '',
-            phoneArea: localGet('loginPhoneArea') || '',
-            countryZone: '86',
-            curTab: 0,
+            zone: localGet('phoneArea') || '',
+            curTab: 1,
             tips: {
                 flag: true,
                 msg: ''
             },
             sendToken: '',
-            active: 0,
+            active: 1,
             loading: false,
             googleCodeVis: false,
             googleCode: ''
@@ -184,7 +182,6 @@ export default {
                 if (defaultZoneConfig?.code && !state.zone) {
                     state.countryVal = defaultZoneConfig.code
                     state.zone = defaultZoneConfig.countryCode
-                    state.phoneArea = defaultZoneConfig.countryCode
                 }
             }
         })
@@ -279,7 +276,6 @@ export default {
                             callback && callback(false)
                             return Toast(t('c.userDisable'))
                         } else {
-                            // state.countryZone = res.data.phoneArea
                             verifyCodeSend({
                                 bizType: bizTypeMap['login'][state.curTab],
                                 toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
@@ -332,17 +328,10 @@ export default {
         }
 
         const handleVerifyCode = () => {
-            // let loginName
-            // if (type === 'login') {
-            //     loginName = state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email
-            // } else if (type === 'fund') {
-            //     loginName = ''
-            // }
-
             if (type === 'login') {
                 verifyCodeCheck({
                     bizType: bizTypeMap['login'][state.curTab],
-                    toUser: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                    toUser: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
                     sendToken: state.sendToken || '11',
                     code: state.curTab === 0 ? state.checkCode : state.emailCode
                 }).then(res => {
@@ -353,7 +342,7 @@ export default {
                             query: {
                                 verifyCodeToken: res.data.token,
                                 sendToken: state.sendToken,
-                                phoneArea: state.phoneArea,
+                                phoneArea: state.zone,
                                 type: state.curTab === 0 ? 2 : 1,
                                 loginName: state.curTab === 0 ? state.mobile : state.email,
                                 googleCode: state.googleCode,
@@ -372,9 +361,9 @@ export default {
                     query: {
                         // verifyCodeToken: res.data.token,
                         sendToken: state.sendToken,
-                        phoneArea: state.phoneArea,
+                        phoneArea: state.zone,
                         type: state.curTab === 0 ? 2 : 1,
-                        loginName: state.curTab === 0 ? state.countryZone + ' ' + state.mobile : state.email,
+                        loginName: state.curTab === 0 ? state.zone + ' ' + state.mobile : state.email,
                         verifyCode: state.curTab === 0 ? state.checkCode : state.emailCode,
                         googleCode: state.googleCode
                     }
@@ -398,7 +387,6 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            state.countryZone = data.code
             state.countryCode = data.countryCode
             if (state.mobile) checkUserMfa(state.mobile)
         }

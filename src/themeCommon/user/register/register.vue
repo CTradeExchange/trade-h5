@@ -151,7 +151,6 @@ export default {
             pageui: '',
             protocol: true,
             visited: false, // 是否已点击过获取验证码
-            companyCountryList: [], // 获取白标后台配置的企业开户国家
             openAccountType: Number(route.query.openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
             countrySheetVisible: false,
             country: {},
@@ -177,9 +176,12 @@ export default {
                 }
             }
         })
+        // 获取支持企业注册国家
+        store.dispatch('getCompanyCountry')
+
         const countryList = computed(() => {
             const countryList = store.state.countryList
-            return state.openAccountType === 0 ? countryList : state.allCountry.filter(el => state.companyCountryList.includes(el.code))
+            return state.openAccountType === 0 ? countryList : store.getters.companyCountryList
         })
 
         const getAllCountry = () => {
@@ -367,19 +369,10 @@ export default {
             state.countrySheetVisible = true
         }
 
-        // 获取白标后台配置的企业开户国家
-        const queryCompanyCountry = () => {
-            findCompanyCountry().then(res => {
-                if (res.check() && res.data) {
-                    state.companyCountryList = res.data.openCompanyCountry
-                }
-            })
-        }
-
         // 是否显示企业开户的入口
         const companyCountryVisible = computed(() => {
             if (state.openAccountType === 0) {
-                return state.companyCountryList.includes(state.country.code)
+                return store.getters.companyCountryList.find(el => el.code === state.country.code)
             } else {
                 return store.state.countryList.find(el => el.code === state.country.code)
             }
@@ -404,7 +397,6 @@ export default {
             }
 
             getAllCountry()
-            queryCompanyCountry()
         })
 
         return {

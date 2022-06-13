@@ -71,7 +71,7 @@
                             clear
                             :disabled='false'
                             :is-business='openAccountType === 1'
-                            :placeholder='$t("register.phoneNo")'
+                            :placeholder='$t("common.inputPhone")'
                             type='mobile'
                             @zoneSelect='zoneSelect'
                         />
@@ -84,7 +84,7 @@
                             :disabled='true'
                             input-type='text'
                             :is-business='openAccountType === 1'
-                            :placeholder='$t("register.email")'
+                            :placeholder='$t("common.inputEmail")'
                             type='email'
                             @zoneSelect='zoneSelect'
                         />
@@ -265,7 +265,7 @@ export default {
             if (state.openAccountType === 0) {
                 return store.getters.companyCountryList.find(el => el.code === state.countryVal)
             } else {
-                return store.state.countryList.find(el => el.code === state.countryVal)
+                return countryList.value.find(el => el.code === state.countryVal)
             }
         })
 
@@ -289,6 +289,7 @@ export default {
                     sessionStorage.setItem('RegisterData', JSON.stringify(res))
                     localSet('loginNameType', state.openType)
                     localSet('loginZone', state.countryZone)
+                    localSet('phoneArea', state.countryZone)
                     if (res.data.token) setToken(res.data.token)
 
                     // 注册成功重新获取客户信息

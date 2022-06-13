@@ -40,21 +40,9 @@ const planMap = computed(() => store.state._quote.planMap) // 每个玩法下配
 provide('isReLoadProductList', (value, productId) => {
     if (value === true) {
         const ArrPro = unref(productListData).value
-        // if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
-        //     ArrPro.map((it, index) => {
-        //         if (it.symbolKey === productId) {
-        //             ArrPro.splice(index, 1)
-        //         }
-        //     })
-        //     // productListData.value = ref(ArrPro)
-        //     console.log(ArrPro)
-        //     // })
-        // }
         const tempCur = categoryType.value
-        // if (unref(categoryType) === '0' && ArrPro.find(el => el.symbolKey === productId)) {
         categoryType.value = categoryType.value === '1' ? '0' : '1'
         categoryType.value = tempCur
-        // }
     }
 })
 

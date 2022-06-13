@@ -112,7 +112,7 @@
 <script>
 import Top from '@/components/top'
 import InputComp from '@/components/form/input'
-import { reactive, toRefs, computed } from 'vue'
+import { reactive, toRefs, computed, watch } from 'vue'
 import areaInputMobile from '@/components/form/areaInputMobile'
 import checkCode from '@/components/form/checkCode'
 import { Toast } from 'vant'
@@ -148,15 +148,14 @@ export default {
             checkCode: '',
             email: '',
             emailCode: '',
-            zone: localGet('loginZone') || '',
-            phoneArea: localGet('loginPhoneArea') || '',
-            curTab: 0,
+            phoneArea: localGet('phoneArea') || '',
+            curTab: 1,
             tips: {
                 flag: true,
                 msg: ''
             },
             sendToken: '',
-            active: 0,
+            active: 1,
             loading: false,
             googleCodeVis: false,
             googleCode: ''
@@ -186,6 +185,18 @@ export default {
             })
             return countryList
         })
+        watch(
+            () => countryList.value,
+            newval => {
+                // 处理用户第一次进入页面，缓存为空的区号显示问题
+                if (state.phoneArea === '' && newval.length) {
+                    state.phoneArea = newval[0].countryCode
+                } else if (state.phoneArea && newval.length) {
+                    const curPhoneArea = newval.find(el => el.countryCode === state.phoneArea)
+                    if (!curPhoneArea) state.phoneArea = newval[0].countryCode
+                }
+            }
+        )
         // 获取白标企业开户登录的国家区号列表
         // store.dispatch('getCompanyCountry')
         // 获取国家区号
@@ -208,11 +219,12 @@ export default {
         // 检测客户是否开启GoogleMFA
         const checkUserMfa = (val) => {
             if (val) {
-                checkGoogleMFAStatus({
+                const params = {
                     loginName: val,
-                    phoneArea: state.phoneArea,
-                    type: val.includes('@') ? 1 : 2
-                }).then(res => {
+                    type: state.active === 1 ? 1 : 2
+                }
+                if (params.type === 2) params.phoneArea = state.phoneArea
+                checkGoogleMFAStatus(params).then(res => {
                     if (res.check()) {
                         state.googleCodeVis = res.data > 0
                     }
@@ -229,7 +241,7 @@ export default {
                 type: state.curTab,
                 mobile: state.mobile,
                 email: state.email,
-                zone: state.zone,
+                zone: state.phoneArea,
                 resetType: type
             }, (errors, fields) => {
                 console.log('errors:', errors, fields)
@@ -396,8 +408,9 @@ export default {
         }
 
         const zoneSelect = (data) => {
-            state.phoneArea = data.code
+            state.phoneArea = data.countryCode
             state.countryCode = data.countryCode
+            if (state.mobile) checkUserMfa(state.mobile)
         }
         const back = () => {
             router.replace('/login')

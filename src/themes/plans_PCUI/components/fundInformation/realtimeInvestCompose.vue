@@ -286,7 +286,7 @@ onMounted(async () => {
         flex: 1;
     }
     .ft {
-        width: rem(300px);
+        width: rem(280px);
     }
     .small {
         font-size: rem(22px);

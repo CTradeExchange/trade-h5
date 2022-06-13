@@ -2,7 +2,10 @@
     <div class='page-wrap' :class='{ isIframe: isUniapp }'>
         <LayoutTop v-if='!isUniapp' :back='true' :menu='false'>
             <p class='symbolName'>
-                <i v-if='product?.symbolName' class='icon_chouti1' @click='showSidebar=true'></i>
+                <span v-if='product?.symbolName' class='sortIconSpan' @click='showSidebar=true'>
+                    <van-icon class='sortIcon' name='sort' />
+                </span>
+                <!-- <i v-if='product?.symbolName' class='icon_chouti1' @click='showSidebar=true'></i> -->
                 {{ product?.symbolName }}
             </p>
             <!-- <p class='infomation'>
@@ -955,8 +958,8 @@ export default {
                 downColor = '#26a69a'
             }
 
-            // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
-            const canUseVolume = !product.value?.isFX && !product.value?.isCommodites
+            // 当前产品是否可以显示成交量，外汇、商品、指数类产品不显示成交量
+            const canUseVolume = !product.value?.isFX && !product.value?.isCommodites && !product.value?.isIndex
             // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
             if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
                 SUBSTUDIES.unshift(VolumeStudy)
@@ -1061,6 +1064,7 @@ export default {
                 })
             }
             firstDetail.value = true
+            checkIsSelfSymbol()
         }
 
         // 图表初始值
@@ -1098,8 +1102,8 @@ export default {
                     state.isSelfSymbol = true
                     Toast(t('trade.addOptionalOk'))
                 }
-                localSet('localSelfSymbolList', JSON.stringify(localSelfSymbolList))
-
+                // localSet('localSelfSymbolList', JSON.stringify(localSelfSymbolList))
+                store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
                 // Toast(t('common.noLogin'))
                 // return router.push('/login')
             } else {
@@ -1338,6 +1342,14 @@ export default {
         .icon_chouti1 {
             margin-right: rem(20px);
             font-size: rem(26px);
+        }
+        .sortIconSpan {
+            margin-right: 3px;
+            padding-top: 5px;
+        }
+        .sortIcon {
+            font-size: rem(50px);
+            transform: rotate(90deg);
         }
     }
     &.isIframe {

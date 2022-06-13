@@ -415,14 +415,15 @@ export default {
 
         // 是否是自选
         // const isSelfSymbol = computed(() => store.getters.userSelfSymbolList[product.value.tradeType]?.find(id => parseInt(id) === parseInt(product.value.symbolId)))
+
         // 产品信息
         const product = computed(() => store.getters.productActived)
         const customerInfo = computed(() => store.state._user.customerInfo)
+        const includeSymbol = computed(() => store.state._user.localSelfSymbolList.find(el => el === (parseInt(product.value.symbolId) + '_' + product.value.tradeType)))
         const isSelfSymbol = computed({
             get: () => {
                 if (isEmpty(customerInfo.value)) {
                     const newId = parseInt(product.value.symbolId) + '_' + product.value.tradeType
-
                     if (localGet('localSelfSymbolList')) {
                         if (JSON.parse(localGet('localSelfSymbolList')).find(el => el === newId)) {
                             return true
@@ -446,22 +447,14 @@ export default {
             state.isOptional = !!val
         }, { immediate: true })
 
+        watch(() => includeSymbol.value, val => {
+            state.isOptional = !!val
+        }, { immediate: true })
+
         // 图表类型
         const klineTypeIndex = computed(() => {
             const curIndex = klineTypeList.findIndex(el => el.value === state.klineType)
             return curIndex + 1
-        })
-
-        provide('isMarkFav', (value, productId) => {
-            if (value === true) {
-                const ArrPro = productList
-
-                // if (unref(categoryType) === '0') {
-                //     categoryType.value = '1'
-                //     categoryType.value = '0'
-                // }
-                console.log('isMarkFav')
-            }
         })
 
         const isReLoadProductSearch = inject('isReLoadProductSearch')
@@ -567,7 +560,6 @@ export default {
                     ElMessage.success(t('trade.addOptionalOk'))
                 }
                 store.dispatch('_user/queryLocalCustomerOptionalList', localSelfSymbolList)
-                // isReLoadProductSearch(true, parseInt(product.value.symbolId))
             } else {
                 if (isSelfSymbol.value) {
                     removeCustomerOptional({
@@ -737,8 +729,8 @@ export default {
             const invertColor = localGet('invertColor')
             const locale = getCookie('lang') === 'zh-CN' ? 'zh' : 'en'
 
-            // 当前产品是否可以显示成交量，外汇、商品类产品不显示成交量
-            const canUseVolume = !product.value.isFX && !product.value.isCommodites
+            // 当前产品是否可以显示成交量，外汇、商品、指数类产品不显示成交量
+            const canUseVolume = !product.value.isFX && !product.value.isCommodites && !product.value.isIndex
             // 如果当前可以展示成交量，则显示在副图指标第一位，否则不显示成交量指标
             if (canUseVolume && SUBSTUDIES[0].name !== 'Volume') {
                 SUBSTUDIES.unshift(VolumeStudy)
@@ -906,8 +898,11 @@ export default {
             // renderChart(product, state.initConfig.property)
         }
 
-        // 初始化图表配置
-        initChartData()
+        // 获取产品详情
+        store.dispatch('_quote/querySymbolInfo', { symbolId: product.value.symbolId, tradeType: product.value.tradeType }).then(() => {
+            // 初始化图表配置
+            initChartData()
+        })
 
         // 图表创建完成回调
         const onChartReady = () => {
@@ -961,6 +956,7 @@ export default {
             dealLastPrice,
             contractRoute,
             isReLoadProductSearch,
+            includeSymbol
         }
     }
 }

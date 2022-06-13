@@ -52,6 +52,8 @@ const { categoryList, productList } = useProduct({
     tradeType, categoryType
 })
 
+const localSymbolUpdate = computed(() => store.state._user.localSelfSymbolList)
+
 const searching = ref(false)
 const searchList = ref([])
 const onSearch = (result) => {
@@ -86,11 +88,6 @@ provide('isReLoadProductSearch', (value, productId) => {
         const tempCur = categoryType.value
         categoryType.value = categoryType.value === '1' ? '0' : '1'
         categoryType.value = tempCur
-
-        // if (unref(categoryType) === '0') {
-        //     categoryType.value = '1'
-        //     categoryType.value = '0'
-        // }
     }
 })
 
@@ -102,6 +99,16 @@ watch(
     },
     {
         immediate: true
+    }
+)
+
+watch(
+    () => localSymbolUpdate.value, list => {
+        // if (unref(categoryType) === '0') {
+        const tempCur = categoryType.value
+        categoryType.value = categoryType.value === '1' ? '0' : '1'
+        categoryType.value = tempCur
+        // }
     }
 )
 

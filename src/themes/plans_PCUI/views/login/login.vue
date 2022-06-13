@@ -167,7 +167,7 @@ export default {
             sendVerifyLoading: false,
             loginName: '',
             email: '',
-            zone: localGet('loginZone') || '',
+            zone: localGet('phoneArea') || '',
             pwd: '',
             googleCodeVis: '',
             checkCodeMobile: '',
@@ -190,11 +190,7 @@ export default {
 
         // 监听个人登录还是企业登录,设置不同国家列表
         watch(() => state.accountType, val => {
-            if (val === 2) {
-                state.zone = store.getters.companyCountryList[0]?.countryCode
-            } else {
-                setDefaultZone()
-            }
+            setDefaultZone()
         })
 
         watch(() => state.loginNameType, val => {
@@ -203,15 +199,14 @@ export default {
 
         // 设置默认区号
         const setDefaultZone = () => {
-            const countryList = store.state.countryList
-            const defaultZone = store.state._base.wpCompanyInfo?.defaultZone
-            const defaultZoneConfig = defaultZone?.code ? countryList.find(el => el.code === defaultZone.code) : countryList[0]
-            if (defaultZoneConfig?.code && !state.zone) {
-                state.countryVal = defaultZoneConfig.code
-                state.zone = defaultZoneConfig.countryCode
+            const localArea = localGet('phoneArea')
+            let localObj
+            if (state.accountType === 2) {
+                localObj = store.getters.companyCountryList.find(el => el.countryCode === localArea)
+                state.zone = localObj ? localArea : store.getters.companyCountryList[0]?.countryCode
             } else {
-                state.countryVal = countryList[0]?.countryCode
-                state.zone = countryList[0]?.countryCode
+                localObj = countryList.value.find(el => el.countryCode === localArea)
+                state.zone = localObj ? localArea : countryList.value[0]?.countryCode
             }
         }
 
@@ -248,7 +243,7 @@ export default {
                 // companyKycStatus 公司KYC开户状态，1开启 2未开启
                 if (res.invalid()) return res
                 localSet('loginNameType', state.loginNameType)
-                localSet('loginZone', state.zone)
+                localSet('phoneArea', state.zone)
 
                 if (Number(res.data.companyKycStatus) === 1) {
                     if (Number(res.data.kycAuditStatus === 0)) {

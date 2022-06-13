@@ -97,6 +97,8 @@ export default {
 
         const localSelfSymbolListCur = ref(localGet('localSelfSymbolList'))
 
+        const localSymbolUpdate = computed(() => store.state._user.localSelfSymbolList)
+
         const plansLen = computed(() => {
             const userProductCategory = store.getters.userProductCategory
             let arr = Object.keys(userProductCategory)
@@ -135,18 +137,19 @@ export default {
             if (productListEl.value) productListEl.value.subscribeAll()
             // 未登录游客自选操作后返回过滤更新列表
             if (!customerInfo.value) {
+                console.log(categoryType.value)
                 if (categoryType.value === 0) {
-                    if (JSON.parse(localGet('localSelfSymbolList')).length !== JSON.parse(localSelfSymbolListCur.value).length) {
-                        tradeType.value = tradeTypeOld.value
-                        categoryType.value = 1
-                        await nextTick()
-                        // 定时切换一下玩法，触发刷新列表
-                        var st = setTimeout(() => {
-                            categoryType.value = 0
-                            localSelfSymbolListCur.value = localGet('localSelfSymbolList')
-                            clearTimeout(st)
-                        }, 100)
-                    }
+                    // if (JSON.parse(localGet('localSelfSymbolList')).length !== JSON.parse(localSelfSymbolListCur.value).length) {
+                    tradeType.value = tradeTypeOld.value
+                    categoryType.value = null
+                    // await nextTick()
+                    // 定时切换一下玩法，触发刷新列表
+                    var st = setTimeout(() => {
+                        categoryType.value = 0
+                        localSelfSymbolListCur.value = localGet('localSelfSymbolList')
+                        clearTimeout(st)
+                    }, 150)
+                    // }
                 }
             }
         })
@@ -192,7 +195,8 @@ export default {
             categoryTypeOld,
             showSidebar,
             goSearchPage,
-            customerInfo
+            customerInfo,
+            localSymbolUpdate
         }
     }
 }

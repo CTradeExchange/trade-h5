@@ -1,16 +1,15 @@
 <template>
     <div class='pageWrap'>
         <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
-        <van-tabs
-            v-model:active='tabActive'
-            :color='$style.primary'
-            shrink
-            :title-active-color='$style.primary'
-            @change='tabActiveChange'
-        >
-            <van-tab :title='$t("login.loginByPersonal")' />
-            <van-tab :title='$t("login.loginByCorporate")' />
-        </van-tabs>
+
+        <div class='account-type'>
+            <button :class="['btn', { 'active': tabActive === 0 }]" @click='tabActive = 0'>
+                {{ $t('login.loginByPersonal') }}
+            </button>
+            <button :class="['btn', { 'active': tabActive === 1 }]" @click='tabActive = 1'>
+                {{ $t('login.loginByCorporate') }}
+            </button>
+        </div>
 
         <van-tabs
             v-model:active='loginNameType'
@@ -36,7 +35,7 @@
                     v-model:zone='phoneArea'
                     clear
                     :country-list='countryList'
-                    :placeholder="$t('login.loginNamePlaceholder')"
+                    :placeholder="$t('common.inputPhone')"
                     @onBlur='checkUserMfa'
                     @zoneSelect='zoneSelect'
                 />
@@ -130,7 +129,7 @@ import LoginByTwitter from '@/themeCommon/user/login/components/loginByTwitter.v
 import Top from '@/components/top'
 import { getDevice, localGet, localSet, getArrayObj, sessionGet, isEmpty } from '@/utils/util'
 import { verifyCodeSend } from '@/api/base'
-import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted } from 'vue'
+import { computed, reactive, toRefs, getCurrentInstance, onUnmounted, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
@@ -170,7 +169,6 @@ export default {
             loginName: '',
             email: '',
             pwd: '',
-            zone: localGet('loginZone') || '',
             phoneArea: localGet('loginPhoneArea') || '',
             checkCodeMobile: '', // 手机号验证码
             checkCodeEmail: '', // 邮箱验证码
@@ -199,6 +197,19 @@ export default {
             })
             return countryList
         })
+        watch(
+            () => countryList.value,
+            newval => {
+                // 处理用户第一次进入页面，缓存为空的区号显示问题
+                if (state.phoneArea === '' && newval.length) {
+                    state.phoneArea = newval[0].countryCode
+                } else if (state.phoneArea && newval.length) {
+                    const curPhoneArea = newval.find(el => el.countryCode === state.phoneArea)
+                    if (!curPhoneArea) state.phoneArea = newval[0].countryCode
+                }
+            }
+        )
+
         const thirdLoginArr = computed(() => store.state._base.wpCompanyInfo?.thirdLogin || [])
         // 获取白标企业开户登录的国家区号列表
         store.dispatch('getCompanyCountry')
@@ -493,6 +504,35 @@ export default {
         text-align: center;
         img {
             width: 100%;
+        }
+    }
+    .account-type {
+        display: flex;
+        align-items: center;
+        height: rem(76px);
+        margin: rem(60px) rem(200px) rem(60px);
+        padding: 0 rem(10px);
+        background: var(--assistColor);
+        border-radius: rem(44px);
+        .btn {
+            display: flex;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+            height: rem(58px);
+            color: var(--minorColor);
+            font-size: rem(28px);
+            background: none;
+            border-radius: rem(36px);
+            cursor: pointer;
+            &:hover {
+                color: var(--primary);
+            }
+        }
+        .active {
+            color: var(--primary);
+            font-weight: bold;
+            background: #FFF;
         }
     }
 }
