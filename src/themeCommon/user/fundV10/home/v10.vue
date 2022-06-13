@@ -326,7 +326,7 @@ const onFund = () => {
         return uni.postMessage({
             data: {
                 action: 'message',
-                type: 'fund',
+                type: 'v10_fund',
                 params: {
                     fundId
                 }
@@ -359,7 +359,7 @@ const onTrade = () => {
         uni.postMessage({
             data: {
                 action: 'message',
-                type: 'order',
+                type: 'v10_order',
                 params: {
                     tradeType: product.tradeType,
                     symbolId: product.symbolId,
