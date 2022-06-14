@@ -184,7 +184,7 @@ import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
-import { mul, divide, toFixed } from '@/utils/calculation'
+import { mul, divide, minus, toFixed } from '@/utils/calculation'
 import { queryPayType, queryPay8Type, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 
@@ -317,7 +317,7 @@ export default {
         // 计算预计到账金额
         const computeAccount = computed(() => {
             if (state.amount && state.checkedType) {
-                const value = parseFloat(state.amount) - parseFloat(computeFee.value)
+                const value = minus(parseFloat(state.amount), parseFloat(computeFee.value))
                 return value > 0 ? value : 0
             } else {
                 return '--'

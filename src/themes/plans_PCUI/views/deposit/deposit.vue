@@ -63,7 +63,8 @@
                                 <span class='name'>
                                     {{ item.alias || item.paymentTypeAlias || item.paymentType }}
                                 </span>
-                                <van-icon v-if='paymentTypes.length > 1 && item.id === payTypeId' name='arrow-down' />
+                                <van-icon v-if="item.paymentCode === 'Pay8' && pay8TypeList.length > 1 && item.id === payTypeId" name='arrow-down' />
+                                <van-icon v-else-if="item.paymentCode !== 'Pay8' && paymentTypes.length > 1 && item.id === payTypeId" name='arrow-down' />
                                 <van-radio v-else :name='item.id' />
                             </div>
                         </van-radio-group>
@@ -74,6 +75,17 @@
                                         {{ currencyItem }}
                                     </span>
                                     <van-radio :name='currencyItem' />
+                                </div>
+                            </van-radio-group>
+                        </div>
+                        <!-- pay8支付通道类型 -->
+                        <div v-if="item.paymentCode === 'Pay8'" :class="['currency-list', (item.id === payTypeId && pay8TypeList.length > 1) ? 'show' : 'hide']">
+                            <van-radio-group v-model='curPay8Code'>
+                                <div v-for='typeItem in pay8TypeList' :key='typeItem.code' class='item' @click='curPay8Code = typeItem.code'>
+                                    <span class='name'>
+                                        {{ typeItem.name }}
+                                    </span>
+                                    <van-radio :name='typeItem.code' />
                                 </div>
                             </van-radio-group>
                         </div>
@@ -175,8 +187,8 @@ import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
-import { mul, divide, toFixed } from '@/utils/calculation'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
+import { mul, divide, minus, toFixed } from '@/utils/calculation'
+import { queryPayType, queryPay8Type, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 
 export default {
@@ -241,6 +253,10 @@ export default {
             // payRedeem支付弹窗是否显示
             payRedeemDialogVisible: false,
             pin: '',
+            // pay8支付数据
+            pay8Item: null,
+            pay8TypeList: [],
+            curPay8Code: ''
         })
 
         // 获取账户信息
@@ -305,7 +321,7 @@ export default {
         // 计算预计到账金额
         const computeAccount = computed(() => {
             if (state.amount && state.checkedType) {
-                const value = parseFloat(state.amount) - parseFloat(computeFee.value)
+                const value = minus(parseFloat(state.amount), parseFloat(computeFee.value))
                 return value > 0 ? value : 0
             } else {
                 return '--'
@@ -429,8 +445,12 @@ export default {
                                     }
                                     result.push(el)
                                 }
+                                if (el.paymentCode === 'Pay8') state.pay8Item = el
                             })
                             state.payTypes = result
+
+                            // 获取Pay8支付通道类型
+                            if (state.pay8Item) getPay8Type()
                         }
 
                         // 处理时区时间
@@ -460,6 +480,29 @@ export default {
             state.typeShow = false
             // 设置支付货币列表
             setPaymentList(state.checkedType)
+            // 设置Pay8支付类型默认选中第一个
+            if (item.paymentCode === 'Pay8') {
+                state.curPay8Code = state.pay8TypeList[0].code
+            }
+        }
+
+        // 获取pay8支付通道类型
+        const getPay8Type = () => {
+            const pay8Item = state.pay8Item
+            queryPay8Type({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                customerGroupId: customInfo.value.customerGroupId,
+                paymentChannelCode: pay8Item.paymentCode,
+                paymentChannelType: pay8Item.paymentType,
+                paymentMerchantNo: pay8Item.merchantNo,
+                paymentChannelClientType: 'mobile'
+            }).then(res => {
+                if (res.data.length > 0) {
+                    state.pay8TypeList = res.data
+                    state.curPay8Code = state.pay8TypeList[0].code
+                }
+            })
         }
 
         // 切换不同支付货币
@@ -676,6 +719,10 @@ export default {
             // payRedeem支付
             if (params.paymentChannelCode === 'payredeem') {
                 params.extend = state.pin
+            }
+            // Pay8支付
+            if (params.paymentChannelCode === 'Pay8') {
+                params.extend = JSON.stringify({ pay8ChannelCode: state.curPay8Code })
             }
 
             state.loading = true
