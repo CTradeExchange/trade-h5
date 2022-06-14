@@ -37,7 +37,8 @@ export default {
             type: String
         },
         customBack: {
-            type: Object
+            type: Boolean,
+            default: false
         },
         showTitle: {
             type: Boolean,
@@ -85,7 +86,7 @@ export default {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 2;
+    z-index: 100;
     display: flex;
     align-items: center;
     width: 100%;

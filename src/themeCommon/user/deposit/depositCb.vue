@@ -164,17 +164,15 @@ export default {
 
         // 点击返回
         const onBack = () => {
-            router.replace('/home')
-            setTimeout(() => {
-                router.push({
-                    path: '/deposit',
-                    query: {
-                        accountId,
-                        currency,
-                        tradeType
-                    }
-                })
-            }, 20)
+            router.replace({
+                path: '/deposit',
+                query: {
+                    accountId,
+                    currency,
+                    tradeType,
+                    isCallBack: true
+                }
+            })
         }
 
         onMounted(() => {

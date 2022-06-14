@@ -35,7 +35,7 @@ export default {
             return ['TradeIndex', 'PositionIndex', 'SelfSymbolIndex'].includes(this.$route.name)
         },
         iconName () {
-            return this.icon||'icon_icon_back1'
+            return this.icon || 'icon_icon_back1'
         }
     },
     mounted () {

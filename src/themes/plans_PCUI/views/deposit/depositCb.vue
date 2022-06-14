@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='pageWrap'>
-            <LayoutTop :back='true' :menu='false' />
+            <LayoutTop :back='true' :custom-back='true' :menu='false' @back='onBack' />
             <div v-if='despositObj' class='wrap'>
                 <i class='icon' :class='statusMap[despositObj.paymentStatus].className || "icon_tishi"'></i>
 
@@ -91,7 +91,7 @@ export default {
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
         // 币种、账户id、玩法类型
-        // const { currency, accountId, tradeType } = route.query
+        const { currency, accountId, tradeType } = route.query
         const state = reactive({
             loading: false,
             despositObj: ''
@@ -146,6 +146,18 @@ export default {
             }
         }
 
+        // 点击返回
+        const onBack = () => {
+            router.replace({
+                path: '/assets/deposit',
+                query: {
+                    accountId,
+                    currency,
+                    tradeType
+                }
+            })
+        }
+
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
@@ -166,6 +178,7 @@ export default {
             formatTime,
             statusMap,
             onlineServices,
+            onBack,
             ...toRefs(state)
         }
     }

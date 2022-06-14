@@ -1,10 +1,12 @@
 <template>
     <!-- 头部导航 -->
     <LayoutTop
+        :custom-back='true'
         :custom-style='{
             "background": $style.bgColor
         }'
         :title='$t("trade.desposit")'
+        @back='onBack'
     >
         <template #right>
             <span @click='toDespositList'>
@@ -199,7 +201,7 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         // 币种、账户id、玩法类型
-        const { currency, accountId, tradeType } = route.query
+        const { currency, accountId, tradeType, isCallBack } = route.query
         // 导航栏右部文字
         const rightAction = {
             title: t('deposit.depositRecord')
@@ -263,6 +265,15 @@ export default {
         const depositData = computed(() => store.state._base.wpCompanyInfo?.depositData)
         // 获取wp配置的支付通道图标
         const paymentIconList = computed(() => store.state._base.wpCompanyInfo.paymentIconList)
+
+        // 返回页面
+        const onBack = () => {
+            if (isCallBack) {
+                router.replace({ path: '/home' })
+            } else {
+                router.go(-1)
+            }
+        }
 
         // 设置存款数据
         const setAmountList = () => {
@@ -922,14 +933,14 @@ export default {
             computeAccount,
             onlineServices,
             changePayCurrency,
-            handleAppendField
+            handleAppendField,
+            onBack
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-
 .page-content {
     display: flex;
     flex: 1;
