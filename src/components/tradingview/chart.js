@@ -629,8 +629,7 @@ class Chart {
                 'palettes.plot_0_Palette.colors.1.color': this.property.downColor, // MACD跌的颜色
                 'palettes.volumePalette.colors.0.color': this.property.upColor, // 涨的颜色
                 'palettes.volumePalette.colors.1.color': this.property.downColor, // 跌的颜色
-                precision: this.initial.digits
-                // precision: e.name === 'Volume' ? 'default' : this.initial.digits
+                precision: e.name === 'Volume' ? 'default' : this.initial.digits // 成交量指标不需要指定小数位
             }).then(id => {
                 // 更新指标实体
                 this._indicatorsEntity.push({
