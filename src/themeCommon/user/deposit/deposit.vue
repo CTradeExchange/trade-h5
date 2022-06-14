@@ -62,7 +62,8 @@
                             <span class='name'>
                                 {{ item.alias || item.paymentTypeAlias || item.paymentType }}
                             </span>
-                            <van-icon v-if='paymentTypes.length > 1 && item.id === payTypeId' name='arrow-down' />
+                            <van-icon v-if="item.paymentCode === 'Pay8' && pay8TypeList.length > 1 && item.id === payTypeId" name='arrow-down' />
+                            <van-icon v-else-if="item.paymentCode !== 'Pay8' && paymentTypes.length > 1 && item.id === payTypeId" name='arrow-down' />
                             <van-radio v-else :name='item.id' />
                         </div>
                     </van-radio-group>
@@ -73,6 +74,17 @@
                                     {{ currencyItem }}
                                 </span>
                                 <van-radio :name='currencyItem' />
+                            </div>
+                        </van-radio-group>
+                    </div>
+                    <!-- pay8支付通道类型 -->
+                    <div v-if="item.paymentCode === 'Pay8'" :class="['currency-list', (item.id === payTypeId && pay8TypeList.length > 1) ? 'show' : 'hide']">
+                        <van-radio-group v-model='curPay8Code'>
+                            <div v-for='typeItem in pay8TypeList' :key='typeItem.code' class='item' @click='curPay8Code = typeItem.code'>
+                                <span class='name'>
+                                    {{ typeItem.name }}
+                                </span>
+                                <van-radio :name='typeItem.code' />
                             </div>
                         </van-radio-group>
                     </div>
@@ -237,6 +249,10 @@ export default {
             // payRedeem支付弹窗是否显示
             payRedeemDialogVisible: false,
             pin: '',
+            // pay8支付数据
+            pay8Item: null,
+            pay8TypeList: [],
+            curPay8Code: ''
         })
 
         // 获取账户信息
@@ -412,8 +428,6 @@ export default {
                     state.loading = false
                     if (res.data && res.data.length > 0) {
                         if (res.data.length > 0) {
-                            // 当前支付通道是否存在Pay8
-                            let isPay8 = false
                             // 过滤掉直充支付通道、设置支付通道图标
                             const result = []
                             res.data.forEach(el => {
@@ -427,11 +441,12 @@ export default {
                                     }
                                     result.push(el)
                                 }
-                                if (el.paymentCode === 'Pay8') isPay8 = true
+                                if (el.paymentCode === 'Pay8') state.pay8Item = el
                             })
-                            // 获取Pay8支付通道类型
-                            if (isPay8) getPay8Type()
                             state.payTypes = result
+
+                            // 获取Pay8支付通道类型
+                            if (state.pay8Item) getPay8Type()
                         }
 
                         // 处理时区时间
@@ -461,20 +476,28 @@ export default {
             state.typeShow = false
             // 设置支付货币列表
             setPaymentList(state.checkedType)
+            // 设置Pay8支付类型默认选中第一个
+            if (item.paymentCode === 'Pay8') {
+                state.curPay8Code = state.pay8TypeList[0].code
+            }
         }
 
         // 获取pay8支付通道类型
         const getPay8Type = () => {
+            const pay8Item = state.pay8Item
             queryPay8Type({
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo,
                 customerGroupId: customInfo.value.customerGroupId,
-                paymentChannelCode: 'Pay8',
-                paymentChannelType: 'AggregationPlatform',
-                paymentMerchantNo: 'sdfkf2@gmail.com',
+                paymentChannelCode: pay8Item.paymentCode,
+                paymentChannelType: pay8Item.paymentType,
+                paymentMerchantNo: pay8Item.merchantNo,
                 paymentChannelClientType: 'mobile'
             }).then(res => {
-                console.log('res', res)
+                if (res.data.length > 0) {
+                    state.pay8TypeList = res.data
+                    state.curPay8Code = state.pay8TypeList[0].code
+                }
             })
         }
 
@@ -693,13 +716,17 @@ export default {
             if (params.paymentChannelCode === 'payredeem') {
                 params.extend = state.pin
             }
+            // Pay8支付
+            if (params.paymentChannelCode === 'Pay8') {
+                params.extend = JSON.stringify({ pay8ChannelCode: state.curPay8Code })
+            }
 
             state.loading = true
             return new Promise((resolve, reject) => {
                 handleDesposit(params).then(res => {
                     state.loading = false
                     state.pin = ''
-                    if (res.check()) {
+                    if (res.data) {
                         state.despositResult = res.data
                         if (params.paymentChannelCode !== 'payredeem') despositSuccess() // payredeem支付成功不需要处理该函数
                         resolve()
