@@ -185,7 +185,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
-import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
+import { isEmpty, localSet, localGet, localRemove, getCookie, arrayObjSort } from '@/utils/util'
 import { mul, divide, minus, toFixed } from '@/utils/calculation'
 import { queryPayType, queryPay8Type, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
@@ -756,7 +756,7 @@ export default {
         // 存款提案创建成功
         const despositSuccess = () => {
             const despositResult = state.despositResult
-            sessionStorage.setItem('proposalNo', despositResult.proposalNo)
+            localSet('proposalNo', despositResult.proposalNo)
             // 提交表单
             if (despositResult.submitType === 'post_data') {
                 setTimeout(() => {
@@ -808,7 +808,7 @@ export default {
         // 点击存款提示弹窗确认按钮
         const onConfirm = () => {
             // 请求存款提案
-            const proposalNo = sessionGet('proposalNo')
+            const proposalNo = localGet('proposalNo')
             if (proposalNo) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
@@ -829,7 +829,7 @@ export default {
                                 router.push('/depositRecord')
                             })
                         }
-                        sessionStorage.removeItem('proposalNo')
+                        localRemove('proposalNo')
                     }
                 }).catch(err => {
                     state.loading = false
@@ -840,7 +840,7 @@ export default {
 
         // 点击存款提示弹窗取消按钮
         const onCancel = () => {
-            sessionStorage.removeItem('proposalNo')
+            localRemove('proposalNo')
             state.despositVis = false
         }
 
@@ -878,8 +878,8 @@ export default {
         }
 
         onMounted(() => {
-            // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
-            if (sessionStorage.getItem('proposalNo')) {
+            // 判断有没有保存proposalNo，有则弹窗提醒
+            if (localGet('proposalNo')) {
                 state.despositVis = true
             }
             // 设置存款金额数据
@@ -909,7 +909,7 @@ export default {
         })
 
         onBeforeUnmount(() => {
-            sessionStorage.removeItem('proposalNo')
+            localRemove('proposalNo')
         })
 
         return {

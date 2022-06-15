@@ -78,7 +78,7 @@ import { toRefs, reactive, onMounted, computed, onBeforeUnmount } from 'vue'
 import { queryDepositProposal } from '@/api/user'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, localGet, localRemove } from '@/utils/util'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 export default {
@@ -116,11 +116,14 @@ export default {
             }
         }
         const getDespostProposal = () => {
-            const orderId = route.query.orderId
+            const orderId = localGet('proposalNo')
             if (!isEmpty(orderId)) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
-                    proposalNo: orderId
+                    proposalNo: orderId,
+                    tradeType,
+                    accountId,
+                    currency
                 }
                 state.loading = true
                 queryDepositProposal(params).then(res => {
@@ -148,12 +151,14 @@ export default {
 
         // 点击返回
         const onBack = () => {
+            console.log('onBack')
             router.replace({
                 path: '/assets/deposit',
                 query: {
                     accountId,
                     currency,
-                    tradeType
+                    tradeType,
+                    isCallBack: true
                 }
             })
         }
@@ -171,7 +176,7 @@ export default {
         })
 
         onBeforeUnmount(() => {
-            sessionStorage.removeItem('proposalNo')
+            localRemove('proposalNo')
         })
 
         return {
@@ -188,6 +193,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrap {
+    padding-top: rem(110px);
     text-align: center;
     .icon {
         display: inline-block;

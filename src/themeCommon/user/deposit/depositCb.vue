@@ -88,7 +88,7 @@ import { toRefs, reactive, onMounted, computed, onBeforeUnmount } from 'vue'
 import { queryDepositProposal } from '@/api/user'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, localGet, localRemove } from '@/utils/util'
 import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 export default {
@@ -125,7 +125,7 @@ export default {
             }
         }
         const getDespostProposal = () => {
-            const orderId = sessionStorage.getItem('proposalNo')
+            const orderId = localGet('proposalNo')
             if (!isEmpty(orderId)) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
@@ -180,7 +180,7 @@ export default {
         })
 
         onBeforeUnmount(() => {
-            sessionStorage.removeItem('proposalNo')
+            localRemove('proposalNo')
         })
 
         return {
