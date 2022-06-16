@@ -78,7 +78,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("route.spotTrade")' @click="routerTo('order')">
+            <van-cell class='cellItem' is-link :title='$t("route.spotTrade")' @click="routerTo('/order')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -90,7 +90,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("route.quote")' @click="routerTo('quote')">
+            <van-cell class='cellItem' is-link :title='$t("route.quote")' @click="routerTo('/quote')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -103,7 +103,7 @@
                 </template>
             </van-cell>
 
-            <van-cell class='cellItem' is-link :title='$t("route.assets")' @click="routerTo('assets')">
+            <van-cell class='cellItem' is-link :title='$t("route.assets")' @click="routerTo('/assets')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -115,7 +115,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.msg")' @click="routerTo('msg')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.msg")' @click="routerTo('/msg')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -127,7 +127,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.regKyc")' @click="routerTo('authentication')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.regKyc")' @click="routerTo('/authentication')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -139,7 +139,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.securitySetting")' @click="routerTo('securitySetting')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.securitySetting")' @click="routerTo('/securitySetting')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -151,7 +151,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.commonSetting")' @click="routerTo('commonSetting')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.commonSetting")' @click="routerTo('/commonSetting')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -278,7 +278,7 @@ const supportLanguages = computed(() => store.state.supportLanguages)
 const langItem = computed(() => supportLanguages.value.find(el => el.val === lang.value))
 
 const routerTo = path => {
-    if (path === 'order') {
+    if (path === '/order') {
         const [symbolId, tradeType] = symbolKey.value?.split('_')
         path = `/order?symbolId=${symbolId}&tradeType=${tradeType}`
     }

@@ -47,7 +47,9 @@ onMounted(() => {
         }
 
         if (yData) {
-            newChart(chartDom.value, [xData, yData])
+            newChart(chartDom.value, [xData, yData], {
+                'yAxis.ext': '%'
+            })
         } else {
             chartDom.value.style.display = 'none'
         }

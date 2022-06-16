@@ -119,7 +119,7 @@
                                 <div class='assets-info'>
                                     <div class='header'>
                                         <span>Currency</span>
-                                        <span>Percentage</span>
+                                        <span>Weights</span>
                                         <span>Main Chain</span>
                                     </div>
                                     <ul class='list'>
