@@ -46,7 +46,7 @@
             <router-link class='btn' to='/login'>
                 {{ $t('login.loginBtn') }}
             </router-link>
-            <router-link class='reg-btn' to='register'>
+            <router-link class='reg-btn' to='/register'>
                 {{ $t('register.registerBtn') }}
             </router-link>
         </div>
