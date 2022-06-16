@@ -140,7 +140,7 @@ export default {
                 console.log(categoryType.value)
                 if (categoryType.value === 0) {
                     // if (JSON.parse(localGet('localSelfSymbolList')).length !== JSON.parse(localSelfSymbolListCur.value).length) {
-                    tradeType.value = tradeTypeOld.value
+                    // tradeType.value = tradeTypeOld.value
                     categoryType.value = null
                     // await nextTick()
                     // 定时切换一下玩法，触发刷新列表
