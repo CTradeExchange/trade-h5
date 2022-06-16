@@ -1,7 +1,7 @@
 <template>
     <centerViewDialog>
         <div class='pageWrap'>
-            <LayoutTop :back='true' :menu='false' />
+            <LayoutTop :back='true' :custom-back='true' :menu='false' @back='onBack' />
             <div v-if='despositObj' class='wrap'>
                 <i class='icon' :class='statusMap[despositObj.paymentStatus].className || "icon_tishi"'></i>
 
@@ -78,7 +78,7 @@ import { toRefs, reactive, onMounted, computed, onBeforeUnmount } from 'vue'
 import { queryDepositProposal } from '@/api/user'
 import { useStore } from 'vuex'
 import { Dialog } from 'vant'
-import { isEmpty } from '@/utils/util'
+import { isEmpty, localGet, localRemove } from '@/utils/util'
 import { useRouter, useRoute, onBeforeRouteLeave } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 export default {
@@ -91,7 +91,7 @@ export default {
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
         // 币种、账户id、玩法类型
-        // const { currency, accountId, tradeType } = route.query
+        const { currency, accountId, tradeType } = route.query
         const state = reactive({
             loading: false,
             despositObj: ''
@@ -116,11 +116,14 @@ export default {
             }
         }
         const getDespostProposal = () => {
-            const orderId = route.query.orderId
+            const orderId = localGet('proposalNo')
             if (!isEmpty(orderId)) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
-                    proposalNo: orderId
+                    proposalNo: orderId,
+                    tradeType,
+                    accountId,
+                    currency
                 }
                 state.loading = true
                 queryDepositProposal(params).then(res => {
@@ -146,6 +149,20 @@ export default {
             }
         }
 
+        // 点击返回
+        const onBack = () => {
+            console.log('onBack')
+            router.replace({
+                path: '/assets/deposit',
+                query: {
+                    accountId,
+                    currency,
+                    tradeType,
+                    isCallBack: true
+                }
+            })
+        }
+
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
@@ -159,13 +176,14 @@ export default {
         })
 
         onBeforeUnmount(() => {
-            sessionStorage.removeItem('proposalNo')
+            localRemove('proposalNo')
         })
 
         return {
             formatTime,
             statusMap,
             onlineServices,
+            onBack,
             ...toRefs(state)
         }
     }
@@ -175,6 +193,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .wrap {
+    padding-top: rem(110px);
     text-align: center;
     .icon {
         display: inline-block;

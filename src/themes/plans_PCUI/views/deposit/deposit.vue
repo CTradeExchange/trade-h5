@@ -2,10 +2,12 @@
     <centerViewDialog>
         <!-- 头部导航 -->
         <LayoutTop
+            :custom-back='true'
             :custom-style='{
                 "background": $style.bgColor
             }'
             :title='$t("trade.desposit")'
+            @back='onBack'
         >
             <template #right>
                 <span @click='toDespositList'>
@@ -63,7 +65,8 @@
                                 <span class='name'>
                                     {{ item.alias || item.paymentTypeAlias || item.paymentType }}
                                 </span>
-                                <van-icon v-if='paymentTypes.length > 1 && item.id === payTypeId' name='arrow-down' />
+                                <van-icon v-if="item.paymentCode === 'Pay8' && pay8TypeList.length > 1 && item.id === payTypeId" name='arrow-down' />
+                                <van-icon v-else-if="item.paymentCode !== 'Pay8' && paymentTypes.length > 1 && item.id === payTypeId" name='arrow-down' />
                                 <van-radio v-else :name='item.id' />
                             </div>
                         </van-radio-group>
@@ -74,6 +77,17 @@
                                         {{ currencyItem }}
                                     </span>
                                     <van-radio :name='currencyItem' />
+                                </div>
+                            </van-radio-group>
+                        </div>
+                        <!-- pay8支付通道类型 -->
+                        <div v-if="item.paymentCode === 'Pay8'" :class="['currency-list', (item.id === payTypeId && pay8TypeList.length > 1) ? 'show' : 'hide']">
+                            <van-radio-group v-model='curPay8Code'>
+                                <div v-for='typeItem in pay8TypeList' :key='typeItem.code' class='item' @click='curPay8Code = typeItem.code'>
+                                    <span class='name'>
+                                        {{ typeItem.name }}
+                                    </span>
+                                    <van-radio :name='typeItem.code' />
                                 </div>
                             </van-radio-group>
                         </div>
@@ -174,9 +188,9 @@ import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { Toast, Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
-import { isEmpty, sessionGet, getCookie, arrayObjSort } from '@/utils/util'
-import { mul, divide, toFixed } from '@/utils/calculation'
-import { queryPayType, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
+import { isEmpty, localSet, localGet, localRemove, getCookie, arrayObjSort } from '@/utils/util'
+import { mul, divide, minus, toFixed } from '@/utils/calculation'
+import { queryPayType, queryPay8Type, queryDepositExchangeRate, handleDesposit, checkKycApply, queryDepositProposal, judgeIsAlreadyDeposit } from '@/api/user'
 import { getListByParentCode } from '@/api/base'
 
 export default {
@@ -191,7 +205,7 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         // 币种、账户id、玩法类型
-        const { currency, accountId, tradeType } = route.query
+        const { currency, accountId, tradeType, isCallBack } = route.query
         // 导航栏右部文字
         const rightAction = {
             title: t('deposit.depositRecord')
@@ -241,6 +255,10 @@ export default {
             // payRedeem支付弹窗是否显示
             payRedeemDialogVisible: false,
             pin: '',
+            // pay8支付数据
+            pay8Item: null,
+            pay8TypeList: [],
+            curPay8Code: ''
         })
 
         // 获取账户信息
@@ -251,6 +269,15 @@ export default {
         const depositData = computed(() => store.state._base.wpCompanyInfo?.depositData)
         // 获取wp配置的支付通道图标
         const paymentIconList = computed(() => store.state._base.wpCompanyInfo.paymentIconList)
+
+        // 返回页面
+        const onBack = () => {
+            if (isCallBack) {
+                router.replace({ path: '/assets' })
+            } else {
+                router.go(-1)
+            }
+        }
 
         // 设置存款数据
         const setAmountList = () => {
@@ -305,7 +332,7 @@ export default {
         // 计算预计到账金额
         const computeAccount = computed(() => {
             if (state.amount && state.checkedType) {
-                const value = parseFloat(state.amount) - parseFloat(computeFee.value)
+                const value = minus(parseFloat(state.amount), parseFloat(computeFee.value))
                 return value > 0 ? value : 0
             } else {
                 return '--'
@@ -429,8 +456,12 @@ export default {
                                     }
                                     result.push(el)
                                 }
+                                if (el.paymentCode === 'Pay8') state.pay8Item = el
                             })
                             state.payTypes = result
+
+                            // 获取Pay8支付通道类型
+                            if (state.pay8Item) getPay8Type()
                         }
 
                         // 处理时区时间
@@ -460,6 +491,29 @@ export default {
             state.typeShow = false
             // 设置支付货币列表
             setPaymentList(state.checkedType)
+            // 设置Pay8支付类型默认选中第一个
+            if (item.paymentCode === 'Pay8') {
+                state.curPay8Code = state.pay8TypeList[0].code
+            }
+        }
+
+        // 获取pay8支付通道类型
+        const getPay8Type = () => {
+            const pay8Item = state.pay8Item
+            queryPay8Type({
+                companyId: customInfo.value.companyId,
+                customerNo: customInfo.value.customerNo,
+                customerGroupId: customInfo.value.customerGroupId,
+                paymentChannelCode: pay8Item.paymentCode,
+                paymentChannelType: pay8Item.paymentType,
+                paymentMerchantNo: pay8Item.merchantNo,
+                paymentChannelClientType: 'mobile'
+            }).then(res => {
+                if (res.data.length > 0) {
+                    state.pay8TypeList = res.data
+                    state.curPay8Code = state.pay8TypeList[0].code
+                }
+            })
         }
 
         // 切换不同支付货币
@@ -641,7 +695,7 @@ export default {
 
         // 创建存款提案
         const handleDeposit = () => {
-            const callbackUrl = `${window.location.protocol}//${window.location.host}/${state.lang}/depositCb?accountId=${accountId}&currency=${currency}&tradeType=${tradeType}`
+            const callbackUrl = `${window.location.protocol}//${window.location.host}/${state.lang}/assets/depositCb?accountId=${accountId}&currency=${currency}&tradeType=${tradeType}`
             let paymentCurrency
             if (state.checkedType.paymentCurrency === 'USDT') {
                 paymentCurrency = 'USDT'
@@ -677,6 +731,10 @@ export default {
             if (params.paymentChannelCode === 'payredeem') {
                 params.extend = state.pin
             }
+            // Pay8支付
+            if (params.paymentChannelCode === 'Pay8') {
+                params.extend = JSON.stringify({ pay8ChannelCode: state.curPay8Code })
+            }
 
             state.loading = true
             return new Promise((resolve, reject) => {
@@ -702,7 +760,7 @@ export default {
         // 存款提案创建成功
         const despositSuccess = () => {
             const despositResult = state.despositResult
-            sessionStorage.setItem('proposalNo', despositResult.proposalNo)
+            localSet('proposalNo', despositResult.proposalNo)
             // 提交表单
             if (despositResult.submitType === 'post_data') {
                 setTimeout(() => {
@@ -754,7 +812,7 @@ export default {
         // 点击存款提示弹窗确认按钮
         const onConfirm = () => {
             // 请求存款提案
-            const proposalNo = sessionGet('proposalNo')
+            const proposalNo = localGet('proposalNo')
             if (proposalNo) {
                 const params = {
                     customerNo: customInfo.value.customerNo,
@@ -775,7 +833,7 @@ export default {
                                 router.push('/assets/depositRecord')
                             })
                         }
-                        sessionStorage.removeItem('proposalNo')
+                        localRemove('proposalNo')
                     }
                 }).catch(err => {
                     state.loading = false
@@ -786,7 +844,7 @@ export default {
 
         // 点击存款提示弹窗取消按钮
         const onCancel = () => {
-            sessionStorage.removeItem('proposalNo')
+            localRemove('proposalNo')
             state.despositVis = false
         }
 
@@ -830,8 +888,8 @@ export default {
         }
 
         onMounted(() => {
-            // 判断sessionStorage 里面有没有保存proposalNo，有则弹窗提醒
-            if (sessionStorage.getItem('proposalNo')) {
+            // 判断有没有保存proposalNo，有则弹窗提醒
+            if (localGet('proposalNo')) {
                 state.despositVis = true
             }
             // 设置存款金额数据
@@ -861,7 +919,7 @@ export default {
         })
 
         onBeforeUnmount(() => {
-            sessionStorage.removeItem('proposalNo')
+            localRemove('proposalNo')
         })
 
         return {
@@ -885,7 +943,8 @@ export default {
             computeAccount,
             onlineServices,
             changePayCurrency,
-            handleAppendField
+            handleAppendField,
+            onBack
         }
     }
 }
