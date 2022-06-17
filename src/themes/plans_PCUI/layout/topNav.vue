@@ -588,11 +588,15 @@ export default {
     .item {
         position: relative;
         height: 40px;
-        padding: 0 10px 0 17px;
+        padding: 0 0 0 10px;
         color: var(--color);
         line-height: 40px;
         border-radius: 5px;
         cursor: pointer;
+        width: 220px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
         .arrowIcon {
             display: none;
             float: right;
