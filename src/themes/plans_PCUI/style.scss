@@ -1,17 +1,15 @@
 @import '~@/sass/mixin.scss';
-
 .auto-width {
-	width: 1200px;
-	margin: 0 auto;
+    width: 1200px;
+    margin: 0 auto;
 }
-
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
     border: 0;
 }
-html{
+html {
     font-size: 35px;
 }
 html,
@@ -22,15 +20,15 @@ body,
     height: 100%;
     color: var(--color);
     background-color: var(--bgColor);
-	// @include scroll-pc();
+    // @include scroll-pc();
     // scrollbar-color:var(--lineColor) var(--bgColor);
     // scrollbar-width:thin;
 }
 body {
     font-size: 14px;
-    line-height: 1.5;
     /* no */
-    // font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
+    font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
+    line-height: 1.5;
     //font-family: 'Trebuchet MS', 'roboto', 'ubuntu', 'sans-serif';
     //background-color: var(--bgColor2);
     font-family: roboto,sans-serif;
@@ -160,7 +158,7 @@ i {
     margin-top: rem(90px);
     overflow-y: auto;
 }
-.fixedHeader{
+.fixedHeader {
     position: sticky !important;
     top: 0;
 }
@@ -570,13 +568,13 @@ body {
         color: var(--lightenPrimary);
     }
     .van-popup {
-		z-index: 3000 !important;
+        z-index: 3000 !important;
         //background: var(--contentColor);
     }
     .van-button--default {
-        border-color: var(--lineColor);
-        background: var(--contentColor);
         color: var(--color);
+        background: var(--contentColor);
+        border-color: var(--lineColor);
     }
     .van-dialog {
         background-color: var(--contentColor);
@@ -650,75 +648,76 @@ body {
     .van-calendar {
         background-color: var(--bgColor) !important;
     }
-    .van-button--primary{
+    .van-button--primary {
         background-color: var(--primary);
         border: 1px solid var(--primary);
     }
-    .van-button--plain.van-button--primary{
+    .van-button--plain.van-button--primary {
         color: var(--primary);
     }
-	
-	// element-plus
-	.el-dialog {
-		background: var(--contentColor);
-		.el-dialog__title {
-			color: var(--color);
-		}
-		.el-icon-close {
-			&:hover {
-				color: var(--primary);
-			}
-		}
-	}
-	.el-loading-mask {
-		background-color: var(--contentColor);
-		opacity: .9;
-	}
-	.el-dropdown-menu {
-		background: var(--contentColor);
-	}
-	.el-dropdown-menu__item, .el-select-dropdown__item {
-		color: var(--color);
-		&.selected {
-			color: var(--primary);
-			background: var(--contentColor) !important;
-		}
-		&:hover{
-			color: var(--primary);
-			background: var(--contentColor) !important;
-		}
+
+    // element-plus
+    .el-dialog {
+        background: var(--contentColor);
+        .el-dialog__title {
+            color: var(--color);
+        }
+        .el-icon-close {
+            &:hover {
+                color: var(--primary);
+            }
+        }
+    }
+    .el-loading-mask {
+        background-color: var(--contentColor);
+        opacity: 0.9;
+    }
+    .el-dropdown-menu {
+        background: var(--contentColor);
+    }
+    .el-dropdown-menu__item,
+    .el-select-dropdown__item {
+        color: var(--color);
+        &.selected {
+            color: var(--primary);
+            background: var(--contentColor) !important;
+        }
+        &:hover {
+            color: var(--primary);
+            background: var(--contentColor) !important;
+        }
         &.hover {
             background: none;
         }
-	}
-	.el-popper {
-		color: var(--color) !important;
-		background: var(--contentColor) !important;
-		border: 1px solid var(--lineColor) !important;
+    }
+    .el-popper {
+        color: var(--color) !important;
         font-size: 14px;
-		&.is-light {
-			border: 1px solid var(--lineColor) !important;
-			.el-popper__arrow::before {
-				background: var(--contentColor) !important;
-				border-left-color: var(--lineColor) !important;
-				border-top-color: var(--lineColor) !important;
-			}
-		}
-	}
-	.el-pagination {
+        background: var(--contentColor) !important;
+        border: 1px solid var(--lineColor) !important;
+        &.is-light {
+            border: 1px solid var(--lineColor) !important;
+            .el-popper__arrow::before {
+                background: var(--contentColor) !important;
+                border-top-color: var(--lineColor) !important;
+                border-left-color: var(--lineColor) !important;
+            }
+        }
+    }
+    .el-pagination {
         display: flex;
         align-items: center;
-		li {
-			font-size: 16px;
-			font-weight: normal;
-			color: var(--color) !important;
+        li {
+            color: var(--color) !important;
+            font-weight: normal;
+            font-size: 16px;
             background-color: transparent !important;
-			&.active {
-				font-weight: bold;
+            &.active {
+                color: var(--primary) !important;
+                font-weight: bold;
                 background-color: var(--primaryAssistColor) !important;
-				color: var(--primary) !important;
-			}
-		}
+            }
+        }
         button {
             color: var(--color) !important;
             background-color: transparent !important;
@@ -726,49 +725,48 @@ body {
                 font-size: 16px !important;
             }
         }
-	}
-	.el-input__inner {
-		color: var(--color);
-		background: var(--assistColor);
-		border: none;
-		&:hover {
-			border: 1px solid var(--primary) !important;
-		}
-	}
-	.el-checkbox__input {
-		&.is-checked .el-checkbox__inner {
-			background: var(--primary);
-			border-color: var(--primary);
-		}
-		&.is-indeterminate .el-checkbox__inner {
-			background: var(--primary);
-			border-color: var(--primary);
-		}
-		&.is-focus .el-checkbox__inner {
-			border-color: var(--primary);
-		}
-	}
-	.el-checkbox__inner {
-		&:hover {
-			border-color: var(--primary);
-		}
-	}
-	.el-table {
-		th {
-			border-color: var(--lineColor) !important;
-		}
-		tbody tr td {
-			border-color: var(--lineColor) !important;
-		}
-	}
-	.el-table--border {
-		border-color: var(--lineColor);
-		&::after {
-			background: var(--lineColor);
-		}
-	}
+    }
+    .el-input__inner {
+        color: var(--color);
+        background: var(--assistColor);
+        border: none;
+        &:hover {
+            border: 1px solid var(--primary) !important;
+        }
+    }
+    .el-checkbox__input {
+        &.is-checked .el-checkbox__inner {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        &.is-indeterminate .el-checkbox__inner {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+        &.is-focus .el-checkbox__inner {
+            border-color: var(--primary);
+        }
+    }
+    .el-checkbox__inner {
+        &:hover {
+            border-color: var(--primary);
+        }
+    }
+    .el-table {
+        th {
+            border-color: var(--lineColor) !important;
+        }
+        tbody tr td {
+            border-color: var(--lineColor) !important;
+        }
+    }
+    .el-table--border {
+        border-color: var(--lineColor);
+        &::after {
+            background: var(--lineColor);
+        }
+    }
 }
-
 /* 滚动条 */
 // ::-webkit-scrollbar {
 // 	width: 7px;
@@ -789,55 +787,55 @@ body {
 // 	background: #7D7D7D;
 // }
 
-
 // element-plus
 .dialog-layer {
-	.el-overlay {
-		.el-overlay-dialog {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-		}
-		.el-dialog {
-			display: flex;
-			flex-direction: column;
-			margin: 0 !important;
-			height: 600px;
-			border-radius: 10px;
-			overflow: hidden;
-			.el-icon-close {
-				font-size: 22px;
-			}
-			.el-dialog__header {
-				width: 90%;
-				text-align: center;
-				margin: auto;
-				color: var(--color);
-			}
-			.el-dialog__body {
-				@include scroll-pc();
-				flex: 1;
-				padding: 20px;
-				overflow-y: auto;
-				word-break: normal;
-				img {
-					max-width: 100%;
-				}
-			}
-		}
-	}
+    .el-overlay {
+        .el-overlay-dialog {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .el-dialog {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            margin: 0 !important;
+            overflow: hidden;
+            border-radius: 10px;
+            .el-icon-close {
+                font-size: 22px;
+            }
+            .el-dialog__header {
+                width: 90%;
+                margin: auto;
+                color: var(--color);
+                text-align: center;
+            }
+            .el-dialog__body {
+                @include scroll-pc();
+                flex: 1;
+                padding: 20px;
+                overflow-y: auto;
+                word-break: normal;
+                img {
+                    max-width: 100%;
+                }
+            }
+        }
+    }
 }
-
-.icon_zixuan2, .icon_hangqingliebiaoyijiazixuan{
+.icon_zixuan2,
+.icon_hangqingliebiaoyijiazixuan {
     color: var(--focusColor);
 }
-.icon_hangqingliebiaoweijiazixuan{
+.icon_hangqingliebiaoweijiazixuan {
     color: var(--minorColor);
 }
 
 // pcui登录页面选择国家的actionsheet样式
-.loginAreaActionsheet,.actionsheetCenter{
+.loginAreaActionsheet,
+.actionsheetCenter {
     right: 50% !important;
-    margin-right: -200px;
     bottom: 0 !important;
+    margin-right: -200px;
 }

@@ -6,7 +6,7 @@
             {{ $t('route.noticeTitle') }}
         </div>
 
-        <van-tabs v-model:active='activeIndex' class='noticePage' @click-tab='onClickTab'>
+        <van-tabs v-model:active='activeIndex' class='noticePage' @change='onClickTab'>
             <van-tab name='notice'>
                 <template #title>
                     <van-icon name='volume-o' />{{ $t('route.notice') }}
@@ -366,19 +366,20 @@ export default {
         }
 
         const onClickTab = (item) => {
-            if (item.name === 'notice') {
+            console.log(state.activeIndex)
+            if (state.activeIndex === 'notice') {
                 state.currentNt = 1
                 state.finishedNt = false
                 state.listNotice = []
                 getNoticeData()
             }
-            if (item.name === 'msgps') {
+            if (state.activeIndex === 'msgps') {
                 state.currentPs = 1
                 state.finishedPs = false
                 state.listCustomer = []
                 getCustomerMsgListData()
             }
-            if (item.name === 'msg') {
+            if (state.activeIndex === 'msg') {
                 state.current = 1
                 state.finished = false
                 state.list = []

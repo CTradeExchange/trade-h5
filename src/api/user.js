@@ -187,6 +187,17 @@ export function queryPayType (data) {
         data
     })
 }
+/* 获取pay8支付通道类型 */
+export function queryPay8Type (data) {
+    return request({
+        url: '/global/fund.app.DepositAppDubboService.queryPayChannelType',
+        method: 'post',
+        headers: {
+            version: '0.0.1',
+        },
+        data
+    })
+}
 /* 获取直充支付通道支持币种信息 */
 export function getCryptoBlockchainInfo (data) {
     return request({
