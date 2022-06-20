@@ -156,7 +156,11 @@ export default {
         watch(
             () => lastPrice.value,
             (newval, oldval) => {
-                (state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor')
+                if (!newval) {
+                    state.lastPriceShow = '--'
+                    return
+                }
+                state.lastPriceColor = lt(newval, oldval) ? 'fallColor' : 'riseColor'
                 const askFirst = ask_deep.value[0]
                 const bidFirst = bid_deep.value[0]
                 if (lte(lastPrice.value, askFirst.price_ask) && gte(lastPrice.value, bidFirst.price_bid)) {
