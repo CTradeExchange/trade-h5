@@ -194,6 +194,24 @@ const h5Children = [{
     }
 },
 {
+    path: 'pay8Account',
+    component: () =>
+        import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/pay8Account.vue'),
+    meta: {
+        title: 'cRoute.withdraw',
+        roles: ['User']
+    }
+},
+{
+    path: 'pay8Bank',
+    component: () =>
+        import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/pay8Bank.vue'),
+    meta: {
+        title: 'cRoute.withdraw',
+        roles: ['User']
+    }
+},
+{
     path: 'withdrawRecord',
     component: () =>
         import(/* webpackChunkName: "withdrawAccount" */ '../views/withdraw/withdrawRecord.vue'),
@@ -616,6 +634,85 @@ const routes = [
                 },
                 children: h5Children
             },
+            // {
+            //     path: '/barrage',
+            //     name: 'Barrage',
+            //     component: () =>
+            //         import(/* webpackChunkName: "api" */ '../views/barrage/index.vue'),
+            //     meta: {
+            //         title: 'Barrage弹幕'
+            //     },
+            //     children: h5Children
+            // },
+            // {
+            //     path: '/web3',
+            //     name: 'Web3',
+            //     component: () =>
+            //         import(/* webpackChunkName: "api" */ '../views/web3test/web3.vue'),
+            //     meta: {
+            //         title: 'web3'
+            //     },
+            //     children: h5Children
+            // },
+            {
+                path: '/fundDEX',
+                name: 'fundDEX',
+                redirect: '/dashboard',
+                component: () =>
+                    import(/* webpackChunkName: "api" */ '../layout/fundDEX.vue'),
+                children: [
+                    {
+                        path: '/dashboard',
+                        name: 'Dashboard',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '../views/fundDEX/dashboard/index.vue'),
+                        meta: {
+                            title: ''
+                        },
+                        children: h5Children
+                    },
+                    {
+                        path: '/earning',
+                        name: 'Earning',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '../views/fundDEX/staking/index.vue'),
+                        meta: {
+                            title: ''
+                        },
+                        children: h5Children
+                    },
+                    {
+                        path: '/earning/detail',
+                        name: 'Earning-Detail',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '../views/fundDEX/staking/detail.vue'),
+                        meta: {
+                            title: ''
+                        },
+                        children: h5Children
+                    },
+                    {
+                        path: '/indexFunds',
+                        name: 'IndexFunds',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '../views/fundDEX/indexFunds/index.vue'),
+                        meta: {
+                            title: ''
+                        },
+                        children: h5Children
+                    },
+                    {
+                        path: '/indexFunds/detail',
+                        name: 'IndexFunds-Detail',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '../views/fundDEX/indexFunds/detail.vue'),
+                        meta: {
+                            title: ''
+                        },
+                        children: h5Children
+                    }
+                ]
+            }
         ],
     },
     {

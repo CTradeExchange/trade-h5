@@ -125,19 +125,34 @@ export function limitDecimal (num, digits) {
 }
 
 // 金额格式化显示
-export function formatAmount (num) {
+export function formatAmount (num, decimals = 2) {
     let result = ''
-    if (num >= 1000 && num < 1000000) {
-        num = toFixed((num / 1000))
-        result = num + 'K'
-    } else if (num >= 1000000000) {
-        num = toFixed((num / 1000000000))
+    if (num >= 1000000000000000000000000) { // 10^24 yotta 尧[它 Y
+        num = toFixed((num / 1000000000000000000000000), decimals)
+        result = num + 'Y'
+    } else if (num >= 1000000000000000000000 && num < 1000000000000000000000000) { // 10^21 zetta 泽[它] Z
+        num = toFixed((num / 1000000000000000000000), decimals)
+        result = num + 'Z'
+    } else if (num >= 1000000000000000000 && num < 1000000000000000000000) { // 10^18 exa 艾[可萨] E
+        num = toFixed((num / 1000000000000000000), decimals)
+        result = num + 'E'
+    } else if (num >= 1000000000000000 && num < 1000000000000000000) { // 10^15 peta 拍[它] P
+        num = toFixed((num / 1000000000000000), decimals)
+        result = num + 'P'
+    } else if (num >= 1000000000000 && num < 1000000000000000) { // 10^12 tera 太[拉] T
+        num = toFixed((num / 1000000000000), decimals)
+        result = num + 'T'
+    } else if (num >= 1000000000 && num < 1000000000000) {
+        num = toFixed((num / 1000000000), decimals)
         result = num + 'B'
-    } else if (num >= 1000000) {
-        num = toFixed((num / 1000000))
+    } else if (num >= 1000000 && num < 1000000000) {
+        num = toFixed((num / 1000000), decimals)
         result = num + 'M'
+    } else if (num >= 1000) {
+        num = toFixed((num / 1000), decimals)
+        result = num + 'K'
     } else {
-        result = num
+        result = toFixed(num, decimals)
     }
     return result
 }

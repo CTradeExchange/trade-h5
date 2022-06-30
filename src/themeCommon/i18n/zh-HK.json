@@ -222,7 +222,7 @@
         "24hNumber": "24H成交量",
         "24hAmount": "24H成交额",
         "viewMore": "查看更多",
-        "wallet": "錢包"
+        "wallet": "賬戶"
     },
     "faceAuth": {
         "faceDetectTip": "請正對手機，保持光線充足",
@@ -980,5 +980,12 @@
         "tradeVolumeRanking": "成交量榜",
         "24hTradeVolume": "24H成交量",
         "24hUpdown": "24H漲跌"
+    },
+    "pay8Account": {
+        "title": "收款賬戶信息",
+        "inputName": "請輸入本人姓名",
+        "inputAccount": "請輸入{ name }註冊賬號",
+        "bankAccount": "請輸入銀行賬號",
+        "bankSelect": "請選擇銀行"
     }
 }

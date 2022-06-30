@@ -182,10 +182,29 @@ export default {
                 tradeType,
                 accountId: state.accountId
             }
-            // 跳转到提现页面
+
             if (['bank', 'otc365_cny'].includes(state.currentTab)) {
+                // 跳转到提现银行卡页面
                 router.push({
                     path: '/withdrawMoney',
+                    query
+                })
+            } else if (['payredeem'].includes(state.currentTab)) {
+                // 跳转到提现payredeem页面
+                router.push({
+                    path: '/withdrawRedeem',
+                    query
+                })
+            } else if (['GCash', 'Maya'].includes(state.currentTab)) {
+                // 跳转到提现pay8Account页面
+                router.push({
+                    path: '/pay8Account',
+                    query
+                })
+            } else if (['Bank_Account'].includes(state.currentTab)) {
+                // 跳转到提现pay8Bank页面
+                router.push({
+                    path: '/pay8Bank',
                     query
                 })
             } else {

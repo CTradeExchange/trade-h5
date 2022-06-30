@@ -220,7 +220,7 @@
         "24hNumber": "24H Vol",
         "24hAmount": "24H Amt",
         "viewMore": "View more markets",
-        "wallet": "Wallet"
+        "wallet": "Accounts"
     },
     "faceAuth": {
         "faceDetectTip": "Please face your phone and keep it well lit",
@@ -977,5 +977,12 @@
         "tradeVolumeRanking": "Top Volume",
         "24hTradeVolume": "24H Volume",
         "24hUpdown": "24H Chg%"
+    },
+    "pay8Account": {
+        "title": "Receiving account information",
+        "inputName": "Please enter your name",
+        "inputAccount": "Please enter { name } to register an account",
+        "bankAccount": "Please enter bank account number",
+        "bankSelect": "Please select a bank"
     }
 }

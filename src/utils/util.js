@@ -412,3 +412,10 @@ export function computeHtmlTime (content) {
         console.log(error)
     }
 }
+
+/* 隐藏地址中间部分 */
+export function hideWalletMiddleInfo (address) {
+    if (!address) return ''
+    var reg = /(.{4}).+(.{3}.+)/g
+    return address.replace(reg, '$1****$2')
+}

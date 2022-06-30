@@ -214,7 +214,6 @@ export default {
         Top, DialogFundPwd
     },
     setup (props) {
-        console.log('===============', md5('222222'))
         const { t } = useI18n({ useScope: 'global' })
         const store = useStore()
         const router = useRouter()

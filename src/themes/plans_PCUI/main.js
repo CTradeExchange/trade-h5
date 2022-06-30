@@ -25,7 +25,7 @@ import { requestBusinessConfig } from '@/api/wpApi'
 
 const isProduction = process.env.NODE_ENV === 'production'
 
-BigNumber.config({ EXPONENTIAL_AT: [-16, 20] })
+BigNumber.config({ EXPONENTIAL_AT: [-16, 26] })
 
 sessionSet('entrySearch', location.search) // 缓存入口url的参数，给注册开会来源使用
 

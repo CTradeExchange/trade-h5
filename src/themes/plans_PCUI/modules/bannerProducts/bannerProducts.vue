@@ -59,7 +59,6 @@ export default {
             resultList = symbolKeys.map(symbolKey => productMap.value[symbolKey]).filter(el => el).sort((a, b) => {
                 return a.sortNum - b.sortNum
             })
-            console.log('resultList====', resultList)
             return resultList
         })
 

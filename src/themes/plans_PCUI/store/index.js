@@ -3,6 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
+import Web3 from '@/store/modules/web3'
 import Home from './modules/home'
 import { getListByParentCode, getCountryListByParentCode, findCompanyCountry } from '@/api/base'
 import Colors from '@planspc/colorVariables'
@@ -22,6 +23,7 @@ export default createStore({
         _user: User,
         _quote: Quote,
         _trade: Trade,
+        _web3: Web3,
         home: Home,
     },
     state: {

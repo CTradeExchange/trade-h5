@@ -360,7 +360,6 @@ export default {
         }
     }
     .record-list {
-        height: 100%;
         .van-collapse-item {
             border-top: solid rem(20px) var(--bgColor);
         }

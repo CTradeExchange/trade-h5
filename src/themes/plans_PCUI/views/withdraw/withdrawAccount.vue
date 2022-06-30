@@ -186,10 +186,29 @@ export default {
                 tradeType,
                 accountId: state.accountId
             }
-            // 跳转到提现页面
+
             if (['bank', 'otc365_cny'].includes(state.currentTab)) {
+                // 跳转到提现银行卡页面
                 router.push({
                     path: '/assets/withdrawMoney',
+                    query
+                })
+            } else if (['payredeem'].includes(state.currentTab)) {
+                // 跳转到提现payredeem页面
+                router.push({
+                    path: '/assets/withdrawRedeem',
+                    query
+                })
+            } else if (['GCash', 'Maya'].includes(state.currentTab)) {
+                // 跳转到提现pay8Account页面
+                router.push({
+                    path: '/assets/pay8Account',
+                    query
+                })
+            } else if (['Bank_Account'].includes(state.currentTab)) {
+                // 跳转到提现pay8Bank页面
+                router.push({
+                    path: '/assets/pay8Bank',
                     query
                 })
             } else {
@@ -201,12 +220,6 @@ export default {
             }
         }
 
-        // 取款方式弹窗确定
-        const onMethonConfirm = (option) => {
-            state.currentTab = option.val
-            state.withdrawMethodText = option.methonText
-            state.methodPickerShow = false
-        }
         // 取款方式确定
         const changeWithdrawMethod = (option) => {
             state.currentTab = option
@@ -277,13 +290,13 @@ export default {
         margin-top: rem(20px);
         padding: 0 rem(30px);
         background: var(--contentColor);
-        :deep(.el-select){
-            width:100%;
+        :deep(.el-select) {
+            width: 100%;
         }
-        :deep(.el-input__inner){
-            border: none;
-            background: var(--assistColor);
+        :deep(.el-input__inner) {
             color: var(--color);
+            background: var(--assistColor);
+            border: none;
         }
         .head-text {
             color: var(--minorColor);

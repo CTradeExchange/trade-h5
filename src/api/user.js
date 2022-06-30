@@ -748,7 +748,6 @@ export function addRepaymentOrder (data) {
 }
 
 // 手动借款
-
 export function manualLoan (data) {
     return request({
         url: '/global/fund.app.DepositAppDubboService.manualLoan',
@@ -1210,6 +1209,18 @@ export function getNoticePop (data) {
         url: '/global/message.app.CompanyNoticeApiService.customerViewNoticePopup',
         method: 'post',
         toastErr: false,
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 查询第三方取款银行列表（pay8） */
+export function queryPayWithdrawBankList (data) {
+    return request({
+        url: '/global/fund.app.WithdrawAppDubboService.queryPayWithdrawBankList',
+        method: 'post',
         headers: {
             version: '0.0.1'
         },

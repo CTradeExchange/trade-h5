@@ -690,20 +690,20 @@ body {
             background: none;
         }
     }
-    .el-popper {
-        color: var(--color) !important;
-        font-size: 14px;
-        background: var(--contentColor) !important;
-        border: 1px solid var(--lineColor) !important;
-        &.is-light {
-            border: 1px solid var(--lineColor) !important;
-            .el-popper__arrow::before {
-                background: var(--contentColor) !important;
-                border-top-color: var(--lineColor) !important;
-                border-left-color: var(--lineColor) !important;
-            }
-        }
-    }
+    // .el-popper {
+    //     color: var(--color) !important;
+    //     font-size: 14px;
+    //     background: var(--contentColor) !important;
+    //     border: 1px solid var(--lineColor) !important;
+    //     &.is-light {
+    //         border: 1px solid var(--lineColor) !important;
+    //         .el-popper__arrow::before {
+    //             background: var(--contentColor) !important;
+    //             border-top-color: var(--lineColor) !important;
+    //             border-left-color: var(--lineColor) !important;
+    //         }
+    //     }
+    // }
     .el-pagination {
         display: flex;
         align-items: center;
@@ -824,6 +824,9 @@ body {
         }
     }
 }
+.el-overlay-dialog {
+    overflow: hidden;
+}
 .icon_zixuan2,
 .icon_hangqingliebiaoyijiazixuan {
     color: var(--focusColor);
@@ -838,4 +841,10 @@ body {
     right: 50% !important;
     bottom: 0 !important;
     margin-right: -200px;
+}
+//web3Modal 样式覆盖
+@media only screen and (min-width: 768px) {
+    .walletconnect-connect__buttons__wrapper__wrap {
+        //margin-top: 0 !important;
+    }
 }

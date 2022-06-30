@@ -7,6 +7,13 @@
                 </h1>
             </router-link>
             <div class='menus'>
+                <div :class="['item', { 'active': $route.path === '/earning' }]">
+                    <router-link to='/earning'>
+                        <span class='link'>
+                            Funds
+                        </span>
+                    </router-link>
+                </div>
                 <div :class="['item', { 'active': $route.path.startsWith('/fundV10') }]">
                     <router-link to='/fundV10/index'>
                         <span class='link'>
@@ -127,6 +134,7 @@
                                 </li>
                                 <li class='item flexBetween'>
                                     <span>{{ $t('setting.chartColor') }}</span>
+
                                     <van-icon class='arrowIcon' name='arrow' />
                                     <div class='subDrapdown'>
                                         <ul class='list'>
@@ -587,16 +595,15 @@ export default {
     font-size: 14px;
     .item {
         position: relative;
+        width: 220px;
         height: 40px;
         padding: 0 0 0 10px;
         color: var(--color);
         line-height: 40px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
         border-radius: 5px;
         cursor: pointer;
-        width: 220px;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
         .arrowIcon {
             display: none;
             float: right;
@@ -618,9 +625,9 @@ export default {
     .subDrapdown {
         position: absolute;
         top: 0;
-        right: 100%;
+        right: 106%;
         display: none;
-        width: 150%;
+        width: 110%;
         padding: 8px;
         color: var(--color);
         background: var(--contentColor);
