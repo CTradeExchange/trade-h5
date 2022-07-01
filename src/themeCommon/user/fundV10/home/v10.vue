@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='wrap'>
         <!-- 轮播图 -->
         <Swiper :is-p-c='isPC' />
@@ -417,30 +418,30 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .pc-bg {
     .blue1-bg {
-        width: 100%;
         position: absolute;
-        left: 0;
         top: 436px;
+        left: 0;
+        width: 100%;
     }
     .blue2-bg {
-        width: 100%;
         position: absolute;
-        left: 0;
         bottom: 0;
+        left: 0;
+        width: 100%;
     }
 }
 .h5-bg {
     .blue1-bg {
-        width: 100%;
         position: absolute;
-        left: 0;
         top: 135px;
+        left: 0;
+        width: 100%;
     }
     .blue2-bg {
-        width: 100%;
         position: absolute;
-        left: 0;
         bottom: 643px;
+        left: 0;
+        width: 100%;
     }
 }
 .tier-body {
@@ -449,13 +450,13 @@ onUnmounted(() => {
 }
 .module-content {
     position: relative;
-    background-color: #f4f4f4;
     overflow: hidden;
+    background-color: #F4F4F4;
     .video-block {
+        position: relative;
+        overflow: hidden;
         background-color: #000;
         border-radius: 20px;
-        overflow: hidden;
-        position: relative;
         video {
             display: block;
             width: 100%;
@@ -463,35 +464,35 @@ onUnmounted(() => {
             object-fit: cover;
         }
         .mask {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,.4);
             position: absolute;
             top: 0;
             left: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
             cursor: pointer;
         }
         .control {
             text-align: center;
             .title {
+                color: #FFF;
                 font-weight: 700;
-                color: #fff;
             }
         }
     }
     .fund-info {
-        color: #333;
         position: relative;
+        color: #333;
         ul {
             position: relative;
             z-index: 100;
             li {
                 display: flex;
-                align-items: center;
                 flex-wrap: wrap;
+                align-items: center;
                 &.href {
                     cursor: pointer;
                     &:hover {
@@ -513,14 +514,14 @@ onUnmounted(() => {
         position: relative;
         z-index: 100;
         .title {
-            font-weight: bold;
             color: #333;
+            font-weight: bold;
         }
         .assets-info {
             .header {
                 display: flex;
-                font-size: 14px;
                 color: #999;
+                font-size: 14px;
                 span {
                     flex: 1;
                 }
@@ -536,12 +537,13 @@ onUnmounted(() => {
                         align-items: center;
                         .currency {
                             margin-left: 12px;
-                            font-size: 14px;
-                            font-weight: 700;
                             color: #333;
+                            font-weight: 700;
+                            font-size: 14px;
                         }
                     }
-                    div, span {
+                    div,
+                    span {
                         @include single-line-clamp;
                         flex: 1;
                     }
@@ -557,14 +559,14 @@ onUnmounted(() => {
     }
     .how-buy {
         position: relative;
-        background-color:#ffffff;
-        border-radius:20px;
-        box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
+        background-color: #FFF;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
         .title {
-            text-align: center;
-            font-weight: 700;
             color: #333;
-            border-bottom: 1px solid #c2c2c2;
+            font-weight: 700;
+            text-align: center;
+            border-bottom: 1px solid #C2C2C2;
         }
         .method {
             color: var(--primary);
@@ -576,8 +578,8 @@ onUnmounted(() => {
                     border-radius: 10px;
                     cursor: pointer;
                     &:hover {
+                        color: #FFF;
                         background: var(--primary);
-                        color: #fff;
                     }
                 }
             }
@@ -586,8 +588,8 @@ onUnmounted(() => {
             padding-bottom: 40px;
             li {
                 display: flex;
-                font-size: 14px;
                 color: #333;
+                font-size: 14px;
                 line-height: 20px;
                 strong {
                     font-weight: 700;
@@ -596,7 +598,6 @@ onUnmounted(() => {
         }
     }
 }
-
 .pc-content {
     padding: 60px 0 150px;
     .video-block {
@@ -622,9 +623,9 @@ onUnmounted(() => {
             li {
                 width: calc(100% / 3);
                 margin-top: 25px;
-                line-height: 28px;
-                font-size: 20px;
                 font-weight: 700;
+                font-size: 20px;
+                line-height: 28px;
             }
         }
     }
@@ -648,23 +649,23 @@ onUnmounted(() => {
             width: 412px;
         }
         .block {
+            position: relative;
             margin-top: 32px;
             padding: 0 30px;
-            background-color:#ffffff;
-            border-radius:20px;
-            box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
-            position: relative;
+            background-color: #FFF;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
             .above {
                 height: 510px;
-                border-bottom: 1px solid #c2c2c2;
+                border-bottom: 1px solid #C2C2C2;
             }
             .below {
                 height: 150px;
                 padding-top: 20px;
                 .text {
-                    line-height: 20px;
-                    font-size: 14px;
                     color: #999;
+                    font-size: 14px;
+                    line-height: 20px;
                 }
             }
         }
@@ -706,13 +707,13 @@ onUnmounted(() => {
             }
             .handle {
                 display: inline-flex;
-                justify-content: space-between;
                 flex: 1;
+                justify-content: space-between;
                 font-size: 14px;
                 button {
                     display: inline-flex;
-                    justify-content: center;
                     align-items: center;
+                    justify-content: center;
                     height: 40px;
                 }
             }
@@ -725,8 +726,8 @@ onUnmounted(() => {
                 }
                 .col {
                     display: inline-flex;
-                    justify-content: space-between;
                     flex: 1;
+                    justify-content: space-between;
                 }
             }
         }
@@ -743,7 +744,6 @@ onUnmounted(() => {
         }
     }
 }
-
 .h5-content {
     padding: 40px 20px 88px;
     .video-block {
@@ -761,9 +761,9 @@ onUnmounted(() => {
             display: flex;
             flex-wrap: wrap;
             li {
+                min-width: 140px;
                 margin-top: 10px;
                 font-size: 14px;
-                min-width: 140px;
                 &:nth-of-type(3) {
                     order: 5;
                 }
@@ -785,8 +785,8 @@ onUnmounted(() => {
             left: -60px;
         }
         .title {
-            line-height: 32px;
             font-size: 24px;
+            line-height: 32px;
         }
         > div {
             margin-top: 40px;
@@ -794,19 +794,19 @@ onUnmounted(() => {
         .block {
             margin-top: 32px;
             padding: 40px 20px;
-            background-color:#ffffff;
-            border-radius:20px;
-            box-shadow:0px 10px 30px rgba(0, 0, 0, 0.04);
+            background-color: #FFF;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
             .above {
                 padding-bottom: 20px;
-                border-bottom: 1px solid #c2c2c2;
+                border-bottom: 1px solid #C2C2C2;
             }
             .below {
                 padding-top: 20px;
                 .text {
-                    line-height: 16px;
-                    font-size: 12px;
                     color: #999;
+                    font-size: 12px;
+                    line-height: 16px;
                 }
             }
         }
@@ -836,16 +836,16 @@ onUnmounted(() => {
             padding: 20px 0;
             .name {
                 flex: 1;
-                line-height: 40px;
                 font-size: 14px;
+                line-height: 40px;
             }
             .handle {
                 display: inline-flex;
                 font-size: 12px;
                 button {
                     display: inline-flex;
-                    justify-content: center;
                     align-items: center;
+                    justify-content: center;
                     height: 36px;
                     &:first-of-type {
                         margin-right: 5px;
@@ -856,7 +856,7 @@ onUnmounted(() => {
         .info {
             li {
                 padding: 20px 0;
-                border-top: 1px solid #c2c2c2;
+                border-top: 1px solid #C2C2C2;
                 .col {
                     display: flex;
                     text-align: center;
@@ -878,10 +878,10 @@ onUnmounted(() => {
     max-width: 1200px;
     margin: 0 auto;
 }
-
 .animation-spin {
     animation: spin 10s linear infinite;
 }
+
 @keyframes spin {
     0% {
         transform: translate(-0%, -0%) scale(1);
@@ -890,13 +890,13 @@ onUnmounted(() => {
         transform: translate(-1%, -1%) scale(1.1);
     }
     50% {
-        transform: translate(-0%, -2%) scale(1.0);
+        transform: translate(-0%, -2%) scale(1);
     }
     75% {
         transform: translate(1%, -1%) scale(1.1);
     }
     100% {
-        transform: translate(-0%, -0%) scale(1.0);
+        transform: translate(-0%, -0%) scale(1);
     }
 }
 </style>

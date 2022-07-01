@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='joinWrapper' :class='{ isPC:isPC }'>
         <div class='banner'></div>
         <ul class='features'>
@@ -67,7 +68,7 @@ export default {
 <style lang="scss" scoped>
 .joinWrapper {
     padding-bottom: 150px;
-    &.isPC{
+    &.isPC {
         min-height: calc(100vh - 444px);
     }
 }
@@ -83,19 +84,15 @@ export default {
     }
 }
 .features {
-    margin: 60px auto 0;
     max-width: 1200px;
-    // 适配移动端
-    @media screen and (max-width: 768px) {
-        margin: 40px 20px;
-    }
+    margin: 60px auto 0;
     .item {
-        margin-bottom: 20px;
         display: flex;
+        margin-bottom: 20px;
         padding: 20px;
-        border-radius: 20px;
         background: var(--contentColor);
-        box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.04);
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
         .img {
             width: 316px;
         }
@@ -105,8 +102,8 @@ export default {
         }
         .title {
             padding-top: 34px;
-            font-weight: 700;
             color: var(--color);
+            font-weight: 700;
             font-size: 20px;
         }
         .desc {
@@ -118,23 +115,27 @@ export default {
         // 适配移动端
         @media screen and (max-width: 768px) {
             display: block;
-            padding-bottom: 38px;
             margin-bottom: 40px;
+            padding-bottom: 38px;
             .img {
                 width: 100%;
             }
-            .rightColumn{
+            .rightColumn {
                 padding: 0;
             }
-            .title{
+            .title {
                 padding-top: 4px;
             }
-            .desc{
+            .desc {
                 padding-top: 13px;
-                line-height:20px;
                 font-size: 14px;
+                line-height: 20px;
             }
         }
+    }
+    // 适配移动端
+    @media screen and (max-width: 768px) {
+        margin: 40px 20px;
     }
 }
 .contact {
@@ -150,8 +151,8 @@ export default {
         vertical-align: middle;
     }
     @media screen and (max-width: 768px) {
-        padding-top: 0px;
-        .text{
+        padding-top: 0;
+        .text {
             display: block;
             margin-bottom: 30px;
         }

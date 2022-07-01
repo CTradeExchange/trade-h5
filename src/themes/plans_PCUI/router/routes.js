@@ -596,7 +596,8 @@ const routes = [
                 component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/home/v10.vue'),
                 meta: {
                     title: 'api.editHeader',
-                }
+                },
+                children: h5Children
             },
             {
                 path: '/fundV10/join',
@@ -604,7 +605,8 @@ const routes = [
                 component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/join.vue'),
                 meta: {
                     title: 'api.editHeader'
-                }
+                },
+                children: h5Children
             },
             {
                 path: '/fundV10/examine',
@@ -612,7 +614,8 @@ const routes = [
                 component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/examine.vue'),
                 meta: {
                     title: 'api.editHeader'
-                }
+                },
+                children: h5Children
             },
             {
                 path: '/notice',

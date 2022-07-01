@@ -1,4 +1,5 @@
 <template>
+    <router-view />
     <div class='inFundManager' :class='{ isPC: isPC }'>
         <div class='banner'></div>
         <ul class='features'>
@@ -64,24 +65,19 @@ export default {
 
 <style lang="scss" scoped>
 .inFundManager {
-    padding: 0 0 100px;
     margin: 0 auto;
+    padding: 0 0 100px;
     font-size: 14px;
     background: var(--bgColor);
-    &.isPC{
+    &.isPC {
         min-height: calc(100vh - 444px);
     }
-    // 适配移动端
-    @media screen and (max-width: 768px){
-        padding: 0 0 100px;
-    }
-
-    .banner{
+    .banner {
         width: 100%;
         height: 400px;
         background: url('/images/V10/pc/METAVERSE.jpg') no-repeat center;
         // 适配移动端
-        @media screen and (max-width: 768px){
+        @media screen and (max-width: 768px) {
             height: 64vw;
             background-image: url('/images/V10/h5/METAVERSE.jpg');
             background-size: cover;
@@ -89,96 +85,99 @@ export default {
     }
     .features {
         max-width: 590px;
-        font-size: 20px;
         margin: 0 auto;
         padding-top: 64px;
+        font-size: 20px;
         line-height: 48px;
-        &::after{
-            content: "";
+        &::after {
+            @include bd();
             display: block;
             width: 500px;
             margin: 35px auto 0;
-            @include bd();
+            content: '';
         }
-        .item{
+        .item {
             position: relative;
             padding-right: 50px;
         }
-        .icon{
+        .icon {
             position: absolute;
-            color: var(--primary);
-            right: 0;
             top: 2px;
+            right: 0;
+            color: var(--primary);
         }
 
         // 适配移动端
         @media screen and (max-width: 768px) {
+            padding: 0 20px;
             font-size: 14px;
             line-height: 20px;
-            padding: 0 20px;
-            &::after{
-                margin-top: 5px;
+            &::after {
                 width: 100%;
+                margin-top: 5px;
             }
-            .item{
+            .item {
                 padding: 12px 25px 12px 0;
             }
-            .icon{
-                font-size: 20px;
+            .icon {
                 top: 17px;
+                font-size: 20px;
             }
         }
     }
-    .say{
+    .say {
         margin-top: 68px;
+        font-weight: bold;
         font-size: 30px;
         line-height: 36px;
         text-align: center;
-        font-weight: bold;
         // 适配移动端
-        @media screen and (max-width: 768px){
-            padding: 0 20px;
+        @media screen and (max-width: 768px) {
             margin-top: 40px;
+            padding: 0 20px;
             font-size: 24px;
             line-height: 32px;
         }
     }
-    .mark{
+    .mark {
         margin-top: 27px;
+        color: var(--primary);
+        font-weight: bold;
         font-size: 20px;
         line-height: 24px;
-        text-align: center;
         letter-spacing: 1px;
-        font-weight: bold;
-        color: var(--primary);
+        text-align: center;
         // 适配移动端
-        @media screen and (max-width: 768px){
-            padding: 0 20px;
+        @media screen and (max-width: 768px) {
             margin-top: 16px;
+            padding: 0 20px;
             font-size: 16px;
             line-height: 24px;
         }
     }
-    .btnBottom{
+    .btnBottom {
+        @include hover();
         display: block;
-        margin: 24px auto 0;
         width: 304px;
         height: 50px;
+        margin: 24px auto 0;
+        color: #FFF;
+        font-size: 16px;
         line-height: 1;
         text-align: center;
-        font-size: 16px;
-        color: #fff;
-        border-radius: 6px;
         background: var(--primary);
+        border-radius: 6px;
         cursor: pointer;
-        @include hover();
         // 适配移动端
-        @media screen and (max-width: 768px){
-            padding: 0 20px;
-            margin-top: 20px;
+        @media screen and (max-width: 768px) {
             width: 295px;
+            margin-top: 20px;
+            padding: 0 20px;
         }
     }
-
+    // 适配移动端
+    @media screen and (max-width: 768px) {
+        padding: 0 0 100px;
+    }
 }
 </style>

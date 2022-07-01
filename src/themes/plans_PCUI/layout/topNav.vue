@@ -625,7 +625,7 @@ export default {
     .subDrapdown {
         position: absolute;
         top: 0;
-        right: 106%;
+        right: 100%;
         display: none;
         width: 110%;
         padding: 8px;

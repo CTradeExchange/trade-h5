@@ -590,11 +590,7 @@ const switchNetworkFn = (id) => {
     switchNetwork(id).then(res => {
         loading_page.value = false
         // console.log(res)
-        if (fund.value.chainId === networkId.value) { // 判断是否eth代币
-            chainIdOk.value = true
-        } else {
-            chainIdOk.value = false
-        }
+        chainIdOk.value = true
     }).catch(res => {
         loading_page.value = false
         console.log(res)
