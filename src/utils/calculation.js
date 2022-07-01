@@ -127,7 +127,9 @@ export function limitDecimal (num, digits) {
 // 金额格式化显示
 export function formatAmount (num, decimals = 2) {
     let result = ''
-    if (num >= 1000000000000000000000000) { // 10^24 yotta 尧[它 Y
+    if (isNaN(num)) {
+        result = num
+    } else if (num >= 1000000000000000000000000) { // 10^24 yotta 尧[它 Y
         num = toFixed((num / 1000000000000000000000000), decimals)
         result = num + 'Y'
     } else if (num >= 1000000000000000000000 && num < 1000000000000000000000000) { // 10^21 zetta 泽[它] Z

@@ -584,7 +584,7 @@ const routes = [
                 path: '/apiEdit',
                 name: 'ApiEdit',
                 component: () =>
-                    import(/* webpackChunkName: "api" */ '../views/api/edit.vue'),
+                    import(/* webpackChunkName: "ApiEdit" */ '../views/api/edit.vue'),
                 meta: {
                     title: 'route.api'
                 },
@@ -618,7 +618,7 @@ const routes = [
                 path: '/notice',
                 name: 'Notice',
                 component: () =>
-                    import(/* webpackChunkName: "api" */ '../views/notice/index.vue'),
+                    import(/* webpackChunkName: "Notice" */ '../views/notice/index.vue'),
                 meta: {
                     title: 'route.noticeTitle'
                 },
@@ -628,7 +628,7 @@ const routes = [
                 path: '/noticeDetail',
                 name: 'NoticeDetail',
                 component: () =>
-                    import(/* webpackChunkName: "api" */ '../views/notice/detail.vue'),
+                    import(/* webpackChunkName: "NoticeDetail" */ '../views/notice/detail.vue'),
                 meta: {
                     title: 'route.noticeTitle'
                 },
@@ -659,13 +659,13 @@ const routes = [
                 name: 'fundDEX',
                 redirect: '/dashboard',
                 component: () =>
-                    import(/* webpackChunkName: "api" */ '../layout/fundDEX.vue'),
+                    import(/* webpackChunkName: "fundDEX" */ '../layout/fundDEX.vue'),
                 children: [
                     {
                         path: '/dashboard',
                         name: 'Dashboard',
                         component: () =>
-                            import(/* webpackChunkName: "api" */ '../views/fundDEX/dashboard/index.vue'),
+                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/dashboard/index.vue'),
                         meta: {
                             title: ''
                         },
@@ -675,7 +675,7 @@ const routes = [
                         path: '/earning',
                         name: 'Earning',
                         component: () =>
-                            import(/* webpackChunkName: "api" */ '../views/fundDEX/staking/index.vue'),
+                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/staking/index.vue'),
                         meta: {
                             title: ''
                         },
@@ -685,7 +685,7 @@ const routes = [
                         path: '/earning/detail',
                         name: 'Earning-Detail',
                         component: () =>
-                            import(/* webpackChunkName: "api" */ '../views/fundDEX/staking/detail.vue'),
+                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/staking/detail.vue'),
                         meta: {
                             title: ''
                         },
@@ -695,7 +695,7 @@ const routes = [
                         path: '/indexFunds',
                         name: 'IndexFunds',
                         component: () =>
-                            import(/* webpackChunkName: "api" */ '../views/fundDEX/indexFunds/index.vue'),
+                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/indexFunds/index.vue'),
                         meta: {
                             title: ''
                         },
@@ -705,7 +705,7 @@ const routes = [
                         path: '/indexFunds/detail',
                         name: 'IndexFunds-Detail',
                         component: () =>
-                            import(/* webpackChunkName: "api" */ '../views/fundDEX/indexFunds/detail.vue'),
+                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/indexFunds/detail.vue'),
                         meta: {
                             title: ''
                         },
