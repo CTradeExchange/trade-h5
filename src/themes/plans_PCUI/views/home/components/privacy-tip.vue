@@ -21,6 +21,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { localGet, localSet } from '@/utils/util.js'
 
 // 是否显示隐私协议
@@ -36,9 +37,10 @@ const onAgree = () => {
 const onClose = () => {
     showPrivacy.value = false
 }
-// 打开隐私协议页面
+// 打开cookie协议页面
+const router = useRouter()
 const openPrivacy = () => {
-    window.open('https://www.vitatoken.io/site/privacy-policy')
+    router.push({ path: 'cookies-policy' })
 }
 </script>
 
@@ -63,7 +65,7 @@ const openPrivacy = () => {
         color: var(--color);
         .link {
             text-decoration: underline;
-            color: #F9B72B;
+            color: #0062FF;
         }
     }
     .buttons {

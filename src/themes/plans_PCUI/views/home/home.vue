@@ -1,325 +1,139 @@
 <template>
     <div class='homePage'>
         <router-view />
-
         <!-- 轮播模块 -->
-        <FullBanner v-if='fullBannerData' :data='fullBannerData.data' />
-
+        <swiper />
         <div class='relativeFloor'>
             <!-- 产品模块 -->
-            <BannerProducts v-if='bannerProductsData' :data='bannerProductsData.data' />
-            <!-- 公告 -->
-            <div class='top-public'>
-                <div class='center'>
-                    <van-notice-bar class='top-notice' left-icon='volume-o' :scrollable='false'>
-                        <van-row>
-                            <van-col span='22'>
-                                <van-swipe
-                                    :autoplay='3000'
-                                    class='notice-swipe'
-                                    :show-indicators='false'
-                                    vertical
-                                >
-                                    <van-swipe-item v-for='(item,index) in noticeData' :key='index' @click='goNoticeDetail(item.id)'>
-                                        <span class='pubTitle'>
-                                            {{ item.title }}
-                                        </span>
-                                        <span class='pubTime'>
-                                            {{ formatTime(item.pubTime) }}
-                                        </span>
-                                    </van-swipe-item>
-                                </van-swipe>
-                            </van-col>
-                            <van-col align='center' span='2'>
-                                <van-icon name='more-o' @click='publicLink' />
-                            </van-col>
-                        </van-row>
-                    </van-notice-bar>
-                </div>
-            </div>
+            <!-- <product @update='setProductKeys' /> -->
 
-            <!-- 公共模块 -->
-            <HomeNotice v-if='homeNoticeData' :data='homeNoticeData.data' />
+            <!-- 公告模块 -->
+            <!-- <notice /> -->
+
             <!-- 内容模块 -->
-            <div v-if='pageModules.length>0' class='content-module'>
-                <PageComp class='homePageComp' :data='pageModulesList' />
+            <div class='content-module'>
+                <!-- 快速注册模块 -->
+                <quick />
+                <FundDesc />
 
                 <!-- 指引模块 -->
                 <!-- <guide /> -->
-                <!-- 为什么选择模块 -->
-                <!-- <why /> -->
+                <!-- 交易模块 -->
+                <trade @update='setProductKeys' />
+
+                <protfolio-create />
+
+                <!-- 信息流模块 -->
+                <div class='newsFullWidth'>
+                    <div class='flow-module auto-width'>
+                        <div class='flow-left'>
+                            <h3 class='title'>
+                                {{ $t('information.focusNews') }}
+                            </h3>
+                            <!-- 新闻 -->
+                            <news />
+                        </div>
+                        <div class='flow-right'>
+                            <h3 class='title'>
+                                {{ $t('information.newsFlash') }}
+                            </h3>
+                            <!-- 7x24 -->
+                            <seven />
+                        </div>
+                    </div>
+                </div>
+
+                <portfolio />
+
+                <!-- why模块 -->
+                <why />
+
+                <div v-if='!$store.state._user.customerInfo' class='registerFooter'>
+                    <div class='css-128y11d'>
+                        <div class='immediatelyText'>
+                            {{ $t('home.getProfit') }}
+                        </div>
+                        <div class='css-1r4nzjd'>
+                            <a id='buttom_cta_trade_now' class=' css-1alo8h7' data-bn-type='button' href='https://accounts.binance.com/zh-CN/register'>
+                            </a>
+                            <van-button class='lijiRegister' type='primary' @click="$router.push('/register')">
+                                {{ $t('home.toReg') }}
+                            </van-button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- 统一公告弹窗 -->
-        <NoticePublic />
     </div>
+    <!-- 客服 -->
+    <service />
+    <!-- 底部隐私协议 -->
+    <privacy-tip />
 </template>
 
-<script>
-// components
-import ad from './components/ad.vue'
-import trade from './components/trade.vue'
-import download from './components/download.vue'
-import guide from './components/guide.vue'
-import why from './components/why.vue'
-import seven from './components/seven.vue'
-import FullBanner from '../../modules/fullBanner/fullBanner'
-import BannerProducts from '../../modules/bannerProducts/bannerProducts'
-import HomeNotice from '../../modules/homeNotice/homeNotice'
-import NoticePublic from '@planspc/components/noticePublic'
-
-import { reactive, toRefs, onMounted, onUnmounted, computed, watch } from 'vue'
+<script setup>
+import { ref, onUnmounted } from 'vue'
 import { QuoteSocket } from '@/plugins/socket/socket'
-import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { getCookie, localGet, localSet } from '@/utils/util'
-import { getNoticeList } from '@/api/user'
-export default {
-    name: 'Home',
-    components: {
-        ad,
-        trade,
-        download,
-        guide,
-        why,
-        seven,
-        HomeNotice,
-        FullBanner,
-        BannerProducts,
-        NoticePublic
-    },
-    setup () {
-        const store = useStore()
-        const router = useRouter()
-        const { t } = useI18n({ useScope: 'global' })
-        const state = reactive({
-            // 当前信息流选项卡
-            currentFlow: 1,
-            // 页面
-            pageModules: [],
-            // 产品组件symbolKey
-            productKeys: [],
-            // 行情组件symbolKey
-            tradeKeys: [],
-            // 需要订阅产品的symbolKey
-            allProductKeys: [],
+import swiper from './components/swiper.vue'
+import product from './components/product.vue'
+import notice from './components/notice.vue'
+import quick from './components/quick.vue'
+import guide from './components/guide.vue'
+import trade from './components/trade.vue'
+import news from './components/news.vue'
+import seven from './components/seven.vue'
+import why from './components/why.vue'
+import protfolioCreate from './components/protfolio-create.vue'
+import portfolio from './components/portfolio.vue'
+import FundDesc from './components/fundDesc.vue'
+import service from './components/service.vue'
+import privacyTip from './components/privacy-tip.vue'
 
-            // 公告请求参数
-            lang: getCookie('lang') || 'zh-CN',
-            currentNt: 1,
-            noticeData: []
-        })
+// 当前页面的产品symbolKey
+const productKeys = ref([])
 
-        const fullBannerData = computed(() => state.pageModules.find(el => el.tag === 'fullBanner'))
-        const bannerProductsData = computed(() => state.pageModules.find(el => el.tag === 'bannerProducts'))
-        const homeNoticeData = computed(() => state.pageModules.find(el => el.tag === 'homeNotice'))
-        const pageModulesList = computed(() => state.pageModules.filter(el => ['homeNotice', 'bannerProducts', 'fullBanner'].indexOf(el.tag) === -1))
-        const subscribeList = computed(() => store.state.home.subscribeBannerList.concat(store.state.home.subscribeQuoteList))
-        // 获取账户信息
-        const customInfo = computed(() => store.state._user.customerInfo)
-
-        // 切换信息流
-        const switchFlow = (num) => {
-            state.currentFlow = num
-        }
-
-        // 发送行情订阅
-        watch(
-            () => subscribeList.value,
-            (newval, oldval) => {
-                QuoteSocket.send_subscribe(newval)
-            },
-            { immediate: true }
-        )
-
-        // 获取首页配置
-        store.dispatch('_base/getPageConfig', 'Home').then(res => {
-            console.log('首页配置', res)
-            state.pageModules = res
-        })
-
-        // WL--start 底部nav跳转
-        const jumpUrl = (index) => {
-            console.log('=======', index, getCookie('lang'))
-            const lang = getCookie('lang') || 'zh-CN'
-            let linkList = {}
-            if (lang === 'zh-CN') {
-                linkList = {
-                    trading: 'https://www.vitatoken.com/zh-CN/order?symbolId=364&tradeType=5',
-                    fund: 'https://www.vitatoken.com/zh-CN/fund',
-                    program: 'https://www.vitatoken.com/zh-CN/new1',
-                    vip: 'https://www.vitatoken.com/zh-CN/vip',
-                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.io/site/faqs',
-                    terms: 'https://www.vitatoken.io/site/terms-conditions',
-                    policy: 'https://www.vitatoken.io/site/privacy-policy'
-                }
-            } else {
-                linkList = {
-                    trading: 'https://www.vitatoken.com/en-US/order?symbolId=364&tradeType=5',
-                    fund: 'https://www.vitatoken.com/en-US/fund',
-                    program: 'https://www.vitatoken.com/en-US/new1',
-                    vip: 'https://www.vitatoken.com/en-US/vip',
-                    customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.io/site/faqs',
-                    terms: 'https://www.vitatoken.io/site/terms-conditions',
-                    policy: 'https://www.vitatoken.io/site/privacy-policy'
-                }
-            }
-            const community = {
-                fb: 'https://www.facebook.com/Vitatoken-100578379186941',
-                ig: 'https://www.instagram.com/vitatoken_official/',
-                twitter: 'https://twitter.com/Vitatoken_',
-                telegram: 'https://t.me/vitatoke',
-                yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
-            }
-            const newLinkList = { ...linkList, ...community }
-            window.open(newLinkList[index])
-        }
-
-        // 获取公告列表
-        const getNoticeData = () => {
-            // console.log(customInfo.value)
-            getNoticeList({
-                current: state.currentNt,
-                // pubTimeFrom: '',
-                // pubTimeTo: '',
-                lang: state.lang,
-                size: 3,
-                companyId: customInfo.value.companyId,
-                customerNo: customInfo.value.customerNo
-            }).then(res => {
-                if (res.check()) {
-                    if (res.data.records && res.data.records.length > 0) {
-                        state.noticeData = res.data.records
-                    }
-                }
-            }).catch(err => {
-                state.errorTip = t('c.loadError')
-            })
-        }
-        const formatTime = val => window.dayjs(val).format('YYYY-MM-DD')
-
-        const goNoticeDetail = (id) => {
-            router.push({
-                path: '/noticeDetail',
-                query: {
-                    id: id,
-                    type: 'notice'
-                }
-            })
-        }
-
-        const publicLink = () => {
-            router.push('/notice')
-        }
-
-        // 发送行情订阅
-        onMounted(() => {
-            // 头部固定
-            const headerEl = document.querySelector('.header-nav')
-            if (headerEl) headerEl.classList.add('fixedHeader')
-            // 获取公告列表
-            getNoticeData()
-        })
-
-        // 取消行情订阅
-        onUnmounted(() => {
-            const headerEl = document.querySelector('.header-nav')
-            if (headerEl) headerEl.classList.remove('fixedHeader')
-            QuoteSocket.cancel_subscribe()
-        })
-
-        return {
-            ...toRefs(state),
-            jumpUrl,
-            customInfo,
-            pageModulesList,
-            fullBannerData,
-            homeNoticeData,
-            bannerProductsData,
-            switchFlow,
-            getNoticeData,
-            publicLink,
-            formatTime,
-            goNoticeDetail
-        }
-    }
+// 发起行情订阅
+const sendSubscribe = () => {
+    QuoteSocket.send_subscribe24H(productKeys.value)
 }
+// 设置页面产品的symbolKey
+const setProductKeys = (arr) => {
+    const list = productKeys.value.concat(arr)
+    productKeys.value = Array.from(new Set(list))
+    sendSubscribe()
+}
+
+onUnmounted(() => {
+    // 取消行情订阅
+    QuoteSocket.cancel_subscribe()
+})
 </script>
 
-<style lang="scss" scoped>
-
-// WL--end
+<style lang='scss' scoped>
+@import '@/sass/mixin.scss';
 .homePage {
     position: relative;
-    padding-top: 490px;
+    padding-top: 540px;
     .relativeFloor {
         position: relative;
         z-index: 101;
     }
-    .top-public {
-        background: var(--contentColor);
-        .center {
-            width: 1200px;
-            margin: 0 auto;
-        }
-        .top-notice {
-            width: 600px;
-            height: 45px;
-            color: var(--color);
-            background: var(--contentColor);
-            .van-icon {
-                margin-top: 8px;
-                font-size: 18px;
-                vertical-align: middle;
-                cursor: pointer;
-            }
-            .van-row {
-                font-size: rem(24px);
-            }
-            :deep(.van-notice-bar__left-icon) {
-                margin-top: -5px;
-            }
-        }
-        .pubTitle {
-            display: inline-block;
-            max-width: 80%;
-            margin-right: 10px;
-            overflow: hidden;
-            font-size: 14px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            vertical-align: middle;
-        }
-        .pubTime {
-            display: inline-block;
-            color: var(--minorColor);
-            vertical-align: middle;
-        }
-        .notice-swipe {
-            height: 40px;
-            line-height: 38px;
-        }
-        :deep(.van-notice-bar__content) {
-            width: 100%;
-        }
-    }
 }
-
 // 内容模块
 .content-module {
-    padding-bottom: 80px;
+    padding-bottom: 20px;
     overflow: auto;
-    background-color: var(--contentColor);
+    background-color: var(--bgColor);
 }
 
 // 信息流模块
+.newsFullWidth{
+    margin-top: 20px;
+    padding: 50px 0;
+    background-color: var(--contentColor);
+}
 .flow-module {
     display: flex;
-    margin-top: 90px;
     .flow-left {
         flex: 1;
     }
@@ -328,21 +142,18 @@ export default {
         padding-left: 30px;
     }
     .title {
-        @include font();
         margin-bottom: 38px;
         color: var(--color);
         font-weight: bold;
-        font-size: 32px;
+        font-size: 30px;
     }
     .case {
         height: 600px;
     }
     .tabs {
-        @include font();
         margin-bottom: 38px;
         span {
             margin-right: 45px;
-            padding-bottom: 6px;
             color: var(--minorColor);
             font-weight: bold;
             font-size: 32px;
@@ -360,6 +171,25 @@ export default {
         }
     }
 }
-
-@import '@/sass/mixin.scss';
+.registerFooter {
+    padding: 86px 16px 60px;
+    text-align: center;
+    .immediatelyText {
+        color: #1E2329;
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 48px;
+        text-align: center;
+    }
+    .lijiRegister {
+        padding: 0 50px;
+        height: 44px;
+        margin-top: 30px;
+        font-size: 16px;
+        background-color: #0062FF;
+        border-color: #0062FF;
+        border-radius: 5px;
+        @include hover();
+    }
+}
 </style>

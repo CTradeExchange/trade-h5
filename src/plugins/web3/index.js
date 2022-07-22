@@ -234,7 +234,7 @@ export const web3Hooks = () => {
         if (!networkConfigs[state.networkId]?.lendingPool) return console.error('不支持该网络', state.networkId)
         const lendingPool = networkConfigs[state.networkId]?.lendingPool // '0xe0fba4fc209b4948668006b2be61711b7f465bae'
         const from = state.userAddress // '0xa19515df175e7482E3De4f8040696A83071d51bD'
-        const gas = await queryGasLimit(daiAddress, value, false)
+        const gas = await queryGasLimit(daiAddress, value, false, true)
         const WZGLToken2 = new web3.eth.Contract(abi_depositWithdraw, lendingPool, {
             from,
             gas
@@ -292,7 +292,7 @@ export const web3Hooks = () => {
         const from = state.userAddress // '0xa19515df175e7482E3De4f8040696A83071d51bD'
         const network = networkConfigs[state.networkId] || {}
         const lendingPool = network.lendingPool // '0xe0fba4fc209b4948668006b2be61711b7f465bae'
-        const gas = await queryGasLimit(daiAddress, value, false)
+        const gas = await queryGasLimit(daiAddress, value, false, false)
         var WZGLToken2 = new web3.eth.Contract(abi_depositWithdraw, lendingPool, {
             from,
             gas
@@ -337,14 +337,18 @@ export const web3Hooks = () => {
     /**
      * 获取gasLimit
      */
-    const getGasLimit = async (daiAddress, amount) => {
+    const getGasLimit = async (daiAddress, amount, isPurchase) => {
         const state = store.state._web3
         const from = state.userAddress // '0xa19515df175e7482E3De4f8040696A83071d51bD'
         const network = networkConfigs[state.networkId] || {}
         const lendingPool = network.lendingPool // '0xe0fba4fc209b4948668006b2be61711b7f465bae'
         const WETHGateway = network.WETHGateway // '0xA61ca04DF33B72b235a8A28CfB535bb7A5271B70'
         const myContract = new web3.eth.Contract(abi_depositWithdraw, lendingPool)
-        return myContract.methods.deposit(daiAddress, amount, from, '0').estimateGas({ from })
+        const type = isPurchase ? 'deposit' : 'withdraw'
+        const params = isPurchase ? [daiAddress, amount, from, '0'] : [daiAddress, amount, from]
+        const gas = await myContract.methods[type](...params).estimateGas({ from })
+        console.log(gas)
+        return gas
     }
     /**
      * 获取ETH gasLimit
@@ -362,9 +366,9 @@ export const web3Hooks = () => {
     /** 获取gasLimit
      * aave源码上 eth增加了 30%，polygon链增加了60%
      */
-    const queryGasLimit = async (daiAddress, amount, isETH) => {
+    const queryGasLimit = async (daiAddress, amount, isETH, isPurchase) => {
         const { chainId } = store.state._web3
-        let gasLimit = isETH ? await getGasLimitETH(daiAddress, amount) : await getGasLimit(daiAddress, amount)
+        let gasLimit = isETH ? await getGasLimitETH(daiAddress, amount, isPurchase) : await getGasLimit(daiAddress, amount, isPurchase)
         if (chainId === 1 || chainId === 42) {
             gasLimit = plus(gasLimit, mul(gasLimit, 0.3))
         } else if (chainId === 137) {
@@ -381,9 +385,9 @@ export const web3Hooks = () => {
         3、消耗的ETH数量 = gasPrice * gasLimit / 18;
         4、得到的eth数量 * eth的价格 = 预估消耗的⼿续费
     */
-    const estimateFee = async (daiAddress, amount, isETH) => {
+    const estimateFee = async (daiAddress, amount, isETH, isPurchase = true) => {
         amount = amount.split('.')[0]
-        const gasLimit = await queryGasLimit(daiAddress, amount, isETH)
+        const gasLimit = await queryGasLimit(daiAddress, amount, isETH, isPurchase)
         let gasPrice = await web3.eth.getGasPrice()
         gasPrice = utils.fromWei(gasPrice)
         console.log('gasLimit', gasLimit)

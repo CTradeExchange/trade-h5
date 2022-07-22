@@ -421,7 +421,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.direction'),
                 align: 'right',
-                width: 80,
+                width: 100,
                 formatter: row => <span class={Number(row.direction) === 1 ? 'riseColor' : 'fallColor'}>
                     { Number(row.direction) === 1 ? t('trade.buy') : t('trade.sell') }
                 </span>
@@ -438,7 +438,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.pendingUnit') + ' (' + t('trade.volumeUnit') + ')',
                 prop: 'requestNum',
                 align: 'right',
-                minWidth: 120
+                minWidth: 100
             },
             // {
             //     name: t('transRecords.byAmount'),
@@ -456,7 +456,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('trade.dealVolume') + ' (' + t('trade.volumeUnit') + ')',
                 prop: 'executeNum',
                 align: 'right',
-                minWidth: 120,
+                minWidth: 100,
                 // formatter: row => formatExecuteNum(row.executeNum, tradeType, row)
             },
             {
@@ -513,7 +513,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.direction'),
                 align: 'right',
-                width: 80,
+                width: 100,
                 formatter: row => <span class={Number(row.direction) === 1 ? 'riseColor' : 'fallColor'}>
                     { Number(row.direction) === 1 ? t('trade.buy') : t('trade.sell') }
                 </span>
@@ -530,7 +530,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
-                minWidth: 160,
+                minWidth: 150,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
@@ -600,7 +600,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.direction'),
                 align: 'right',
-                width: 80,
+                width: 100,
                 formatter: row => <span class={Number(row.direction) === 1 ? 'riseColor' : 'fallColor'}>
                     { Number(row.direction) === 1 ? t('trade.buy') : t('trade.sell') }
                 </span>
@@ -617,7 +617,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
-                width: 160,
+                width: 140,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode]
             },
             {
@@ -677,7 +677,7 @@ export const getTransactionColumns = (tradeType) => {
             {
                 name: t('trade.direction'),
                 align: 'right',
-                width: 80,
+                minWidth: 100,
                 formatter: row => <span class={Number(row.direction) === 1 ? 'riseColor' : 'fallColor'}>
                     { Number(row.direction) === 1 ? t('trade.buy') : t('trade.sell') }
                 </span>
@@ -694,7 +694,7 @@ export const getTransactionColumns = (tradeType) => {
                 name: t('transRecords.byAmount'),
                 prop: 'numberStatisticMode',
                 align: 'right',
-                minWidth: 160,
+                minWidth: 150,
                 formatter: row => numberStatisticModeMap[row.numberStatisticMode] || '- -'
             },
             {

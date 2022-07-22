@@ -13,24 +13,25 @@ const routes = [
         component: Layout,
         keepAlive: true,
         children: [
-            {
-                path: 'home',
-                name: 'Home',
-                component: () => import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
-                meta: {
-                    title: 'route.home',
-                    keepAlive: true,
-                }
-            },
             // {
             //     path: 'home',
             //     name: 'Home',
-            //     component: () => import(/* webpackChunkName: "Quote" */ '../views/home/index.vue'),
+            //     component: () => import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
             //     meta: {
             //         title: 'route.home',
             //         keepAlive: true,
             //     }
             // },
+            {
+                path: 'home',
+                name: 'Home',
+                component: () => import(/* webpackChunkName: "Quote" */ '../views/home/index.vue'),
+                meta: {
+                    title: 'route.home',
+                    keepAlive: true,
+                    showFooter: true
+                }
+            },
             {
                 path: 'selfSymbol',
                 name: 'SelfSymbol',
@@ -97,6 +98,135 @@ const routes = [
                     title: 'route.download',
                 }
             },
+            {
+                path: 'about',
+                name: 'About',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
+                meta: {
+                    title: 'route.about'
+                }
+            },
+            {
+                path: 'fees',
+                name: 'Fees',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+                meta: {
+                    title: 'route.fees'
+                }
+            },
+            {
+                path: 'cookies-policy',
+                name: 'CookiesPolicy',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/cookiesPolicy/index.vue'),
+                meta: {
+                    title: 'route.cookies',
+                }
+            },
+            {
+                path: 'faqs',
+                name: 'Faqs',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/faqs/index.vue'),
+                meta: {
+                    title: 'route.faqs',
+                }
+            },
+            {
+                path: 'privacy-policy',
+                name: 'privacy-policy',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/privacyPolicy/index.vue'),
+                meta: {
+                    title: 'route.privacy',
+                }
+            },
+            {
+                path: 'terms-conditions',
+                name: 'terms-conditions',
+                component: () => import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/terms/index.vue'),
+                meta: {
+                    title: 'route.terms',
+                }
+            },
+            {
+                path: '/fundV10/index',
+                name: 'FundV10',
+                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/home/v10.vue'),
+                meta: {
+                    title: 'api.editHeader',
+                    showFooter: true
+                }
+            },
+            {
+                path: '/fundV10/join',
+                name: 'v10Join',
+                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/join.vue'),
+                meta: {
+                    title: 'api.editHeader',
+                    showFooter: true
+                }
+            },
+            {
+                path: '/fundV10/examine',
+                name: 'v10Examine',
+                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/examine.vue'),
+                meta: {
+                    title: 'api.editHeader',
+                    showFooter: true
+                }
+            },
+            {
+                path: '/fundDEX',
+                name: 'fundDEX',
+                redirect: '/dashboard',
+                component: () =>
+                    import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/components/layout.vue'),
+                children: [
+                    {
+                        path: '/dashboard',
+                        name: 'Dashboard',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/dashboard/index.vue'),
+                        meta: {
+                            title: ''
+                        }
+                    },
+                    {
+                        path: '/earning',
+                        name: 'Earning',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/staking/index.vue'),
+                        meta: {
+                            title: ''
+                        }
+                    },
+                    {
+                        path: '/earning/detail',
+                        name: 'Earning-Detail',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/staking/detail.vue'),
+                        meta: {
+                            title: ''
+                        }
+                    },
+                    {
+                        path: '/indexFunds',
+                        name: 'IndexFunds',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/indexFunds/index.vue'),
+                        meta: {
+                            title: ''
+                        }
+                    },
+                    {
+                        path: '/indexFunds/detail',
+                        name: 'IndexFunds-Detail',
+                        component: () =>
+                            import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/indexFunds/detail.vue'),
+                        meta: {
+                            title: ''
+                        }
+                    }
+                ]
+            }
         ]
     },
     {
@@ -283,60 +413,6 @@ const routes = [
             title: 'route.fundRules',
             roles: ['User'],
         }
-    },
-    {
-        path: '/fundDEX',
-        name: 'fundDEX',
-        redirect: '/dashboard',
-        component: () =>
-            import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/components/layout.vue'),
-        children: [
-            {
-                path: '/dashboard',
-                name: 'Dashboard',
-                component: () =>
-                    import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/dashboard/index.vue'),
-                meta: {
-                    title: ''
-                }
-            },
-            {
-                path: '/earning',
-                name: 'Earning',
-                component: () =>
-                    import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/staking/index.vue'),
-                meta: {
-                    title: ''
-                }
-            },
-            {
-                path: '/earning/detail',
-                name: 'Earning-Detail',
-                component: () =>
-                    import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/staking/detail.vue'),
-                meta: {
-                    title: ''
-                }
-            },
-            {
-                path: '/indexFunds',
-                name: 'IndexFunds',
-                component: () =>
-                    import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/indexFunds/index.vue'),
-                meta: {
-                    title: ''
-                }
-            },
-            {
-                path: '/indexFunds/detail',
-                name: 'IndexFunds-Detail',
-                component: () =>
-                    import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/indexFunds/detail.vue'),
-                meta: {
-                    title: ''
-                }
-            }
-        ]
     },
     { path: '/:pathMatch(.*)*', redirect: { name: 'Mine' } },
 ]

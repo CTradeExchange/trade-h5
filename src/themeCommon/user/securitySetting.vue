@@ -1,6 +1,6 @@
 <template>
     <div class='page-wrap'>
-        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.mine")' @back='$router.push("/mine")' />
+        <LayoutTop :back='true' :custom-back='true' :menu='false' :title='$t("route.mine")' @back='$router.push("/")' />
         <p class='header'>
             {{ $t('cRoute.securitySetting') }}
         </p>
@@ -60,13 +60,13 @@
                     <van-icon name='arrow' />
                 </template>
             </van-cell>
-            <van-cell
+            <!-- <van-cell
                 class='cellItem'
                 is-link
                 :title='$t("bank.bankList")'
                 to='/bankList'
                 value=''
-            />
+            /> -->
             <van-cell
                 class='cellItem'
                 is-link

@@ -19,7 +19,8 @@ export default function () {
     // 登录成功跳转
     const loginToPath = () => {
         const toURL = route.query.back ? decodeURIComponent(route.query.back) : '/'
-        router.replace(toURL)
+        const backURL = route.query.activityBack ? decodeURIComponent(route.query.activityBack) : toURL // 返回活动页面的链接
+        router.replace(backURL)
     }
 
     // 点击登录

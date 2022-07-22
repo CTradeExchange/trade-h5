@@ -709,9 +709,7 @@
         "hint_6": "Insuffient balance to withdraw",
         "hint_7": "Within 24 hours no of Withdrawal should not be more than",
         "bankTips": "This transaction is not support because the bank card currency is different with account currency",
-        "digitsTip": "Max 4 decimal place",
-        "receiptAddress": "Payout Address",
-        "inputReceiptAddress": "Please enter payout address"
+        "digitsTip": "Max 4 decimal place"
     },
     "withdrawRecord": {
         "noneHint": "No data",
@@ -963,7 +961,7 @@
         "customer": "Customer Service",
         "help": "Support",
         "faqs": "FAQs",
-        "terms": "Terms&Conditions ",
+        "terms": "Terms & Conditions ",
         "policy": "Privacy Policy ",
         "community": "Community",
         "aboutus": "About Us",

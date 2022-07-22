@@ -290,7 +290,13 @@ const {
 // 是否需要切换网络
 const isSwitchNetwork = computed(() => Number(fund.value.chainId !== Number(chainId.value)))
 // 是否需要授权额度
-const showAllowance = computed(() => isQueryBalance.value && Number(count.value) > Number(allowanceBalance.value))
+const showAllowance = computed(() => {
+    if (isApproved.value) {
+        return true
+    } else {
+        return !isETH.value && Number(count.value) > Number(allowanceBalance.value)
+    }
+})
 // 是否可进行申购
 const isPurchase = computed(() => {
     if (isEmpty(count.value) || count.value <= 0 || !fund.value.recharge) return false
@@ -324,8 +330,6 @@ const showTotalPopover = ref(false)
 const count = ref('')
 // 是否显示授权提示弹窗
 const showApproveTip = ref(false)
-// 是否需要查询授权额度
-const isQueryBalance = ref(true)
 // 授权额度查询中
 const allowanceBalanceLoading = ref(false)
 // 代币授权额度
@@ -365,7 +369,6 @@ const reset = () => {
     allowanceLoading.value = false
     purchaseLoading.value = false
     feeLoading.value = false
-    isQueryBalance.value = true
     assetBalanceLoading.value = true
     rejectTip.value = ''
     setTimeout(() => {
@@ -379,12 +382,11 @@ const reset = () => {
 // 初始化
 const init = () => {
     isETH.value = ['WETH', 'ETH'].includes(fund.value.thirdCoinCode)
-    isQueryBalance.value = fund.value.thirdCoinCode !== 'ETH'
     show.value = true
     // 获取代币余额
     getAssetBalance()
     // 查询授权余额
-    if (isQueryBalance.value) allowanceHandler()
+    if (!isETH.value) allowanceHandler()
 }
 
 // 切换电子钱包账户
@@ -488,9 +490,12 @@ const depositApproveHandler = () => {
 // 获取手续费
 const getFee = () => {
     if (fund.value.chainId !== chainId.value) return
-    if (allowanceBalance.value === 0 || count.value > allowanceBalance.value) {
-        feeLoading.value = false
-        return
+    // 不是ETH则当前输入的申购数量大于授权余额不进行获取手续费
+    if (!isETH.value) {
+        if (allowanceBalance.value === 0 || Number(count.value) > Number(allowanceBalance.value)) {
+            feeLoading.value = false
+            return
+        }
     }
     const value = mul(count.value, pow(10, fund.value.decimals))
     estimateFee(fund.value.assetId, value, unref(isETH)).then(res => {

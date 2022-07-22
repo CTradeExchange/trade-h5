@@ -556,7 +556,7 @@
         "enterMarginAmountRequire": "Please input adjustment amount",
         "enterMarginAmountTip": "Adjustment amount cannot be negative",
         "order": "Order",
-        "dealList": "Trade record",
+        "dealList": "Trade records",
         "openClose": "Open/Close",
         "openPosition": "Open",
         "closePosition": "Close",

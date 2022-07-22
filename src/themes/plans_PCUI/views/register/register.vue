@@ -250,14 +250,9 @@ export default {
         )
         // 开户须知内容
         const instructions = computed(() => {
-            const lang = locale.value || 'zh-CN'
-            const instructionMap = {
-                'zh-CN': 'instructions_zh',
-                'en-US': 'instructions_en',
-                'zh-HK': 'instructions_hk'
-            }
+            const lang = locale.value
             const wpCompanyInfo = store.state._base.wpCompanyInfo || {}
-            const protocol = wpCompanyInfo[instructionMap[lang]]
+            const protocol = wpCompanyInfo[lang === 'zh-CN' ? 'instructions_zh' : 'instructions_en']
             return protocol ? decodeURIComponent(unescape(protocol)) : ''
         })
         // 是否显示企业开户的入口

@@ -207,7 +207,7 @@ export default {
     justify-content: flex-start;
     width: 100%;
     // margin-top: rem(90px);
-    padding-bottom: rem(100px);
+    // padding-bottom: rem(100px);
     overflow: auto;
     background: var(--bgColor);
     .productListWrap {
@@ -218,7 +218,7 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        bottom: rem(100px);
+        bottom: 0;
         left: 0;
         z-index: 2;
         background: var(--contentColor);

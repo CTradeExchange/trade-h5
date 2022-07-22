@@ -1,10 +1,10 @@
 <template>
-    <div class='footer-nav'>
+    <div class='footer-nav' :class='[$route.name]'>
         <div class='auto-width'>
             <div class='footer-auto'>
                 <div class='nav-left'>
                     <ul>
-                        <!-- <li>
+                        <li>
                             <h4 class='title'>
                                 {{ $t('newHomeFooter.aboutus') }}
                             </h4>
@@ -18,7 +18,7 @@
                                     {{ $t('newHomeFooter.fees') }}
                                 </a>
                             </p>
-                        </li> -->
+                        </li>
                         <li>
                             <h4 class='title'>
                                 {{ $t('newHomeFooter.product') }}
@@ -54,7 +54,7 @@
                                 </a>
                             </p>
                         </li>
-                        <!-- <li>
+                        <li>
                             <h4 class='title'>
                                 {{ $t('newHomeFooter.help') }}
                             </h4>
@@ -73,7 +73,7 @@
                                     {{ $t('newHomeFooter.policy') }}
                                 </a>
                             </p>
-                        </li> -->
+                        </li>
                     </ul>
                 </div>
                 <div class='nav-right'>
@@ -122,7 +122,7 @@
             </div>
             <div class='footer-last'>
                 <p class='year'>
-                    Trade Switcher © 2022
+                    Vitatoken © 2022
                 </p>
             </div>
         </div>
@@ -172,9 +172,9 @@ export default {
                     program: 'https://www.vitatoken.io/zh-CN/new1',
                     vip: 'https://www.vitatoken.io/zh-CN/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.io/site/faqs',
-                    terms: 'https://www.vitatoken.io/site/terms-conditions',
-                    policy: 'https://www.vitatoken.io/site/privacy-policy',
+                    // faqs: 'https://www.vitatoken.io/site/faqs',
+                    // terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    // policy: 'https://www.vitatoken.io/site/privacy-policy',
                     // about: 'https://www.vitatoken.io/site/about-us'
                 }
             } else {
@@ -184,9 +184,9 @@ export default {
                     program: 'https://www.vitatoken.io/en-US/new1',
                     vip: 'https://www.vitatoken.io/en-US/vip',
                     customer: 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en',
-                    faqs: 'https://www.vitatoken.io/site/faqs',
-                    terms: 'https://www.vitatoken.io/site/terms-conditions',
-                    policy: 'https://www.vitatoken.io/site/privacy-policy',
+                    // faqs: 'https://www.vitatoken.io/site/faqs',
+                    // terms: 'https://www.vitatoken.io/site/terms-conditions',
+                    // policy: 'https://www.vitatoken.io/site/privacy-policy',
                     // about: 'https://www.vitatoken.io/site/about-us'
                 }
             }
@@ -229,6 +229,15 @@ export default {
                 case 'about':
                     router.push('/about')
                     break
+                case 'faqs':
+                    router.push('/faqs')
+                    break
+                case 'policy':
+                    router.push('/privacy-policy')
+                    break
+                case 'terms':
+                    router.push('/terms-conditions')
+                    break
                 default:
                     const newLinkList = { ...linkList, ...community }
                     if (newLinkList[index]) {
@@ -265,7 +274,7 @@ export default {
             display: flex;
         }
         li {
-            margin-right: 200px;
+            margin-right: 100px;
             &:last-of-type {
                 margin-right: 0;
             }

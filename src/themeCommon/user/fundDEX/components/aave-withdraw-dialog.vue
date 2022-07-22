@@ -268,7 +268,11 @@ const {
 const isSwitchNetwork = computed(() => Number(fund.value.chainId !== Number(chainId.value)))
 // 是否需要授权额度
 const showAllowance = computed(() => {
-    return isETH.value && Number(count.value) > Number(allowanceBalance.value)
+    if (isApproved.value) {
+        return true
+    } else {
+        return isETH.value && Number(count.value) > Number(allowanceBalance.value)
+    }
 })
 // 是否可进行赎回
 const isWithdraw = computed(() => {
@@ -422,7 +426,7 @@ const withdrawApproveHandler = () => {
 const getFee = () => {
     if (fund.value.chainId !== chainId.value) return
     const value = mul(count.value, pow(10, fund.value.decimals))
-    estimateFee(fund.value.assetId, value, unref(isETH)).then(res => {
+    estimateFee(fund.value.assetId, value, unref(isETH), false).then(res => {
         console.log('获取手续费成功', res)
         feeLoading.value = false
         fee.value = toFixed(res)

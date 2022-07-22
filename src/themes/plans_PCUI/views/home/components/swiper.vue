@@ -27,7 +27,7 @@ const bannerList = [
 ]
 // 点击轮播图
 const bannerClick = (item) => {
-    router.push({ path: '/fund' })
+    router.push({ path: '/fundV10/index' })
 }
 </script>
 

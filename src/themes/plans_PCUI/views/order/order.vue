@@ -18,7 +18,7 @@
             </div>
             <div v-if='dealModeShowMap[product?.dealMode]?.handicap && product?.symbolName' class='right-wrap'>
                 <!-- 选项卡 -->
-                <el-tabs v-if='product.etf && product.tradeEnable===1' v-model='activeName'>
+                <el-tabs v-if='product.etf' v-model='activeName'>
                     <el-tab-pane :label="$t('trade.offer')" name='offer' />
                     <el-tab-pane :label="$t('trade.material')" name='material' />
                 </el-tabs>

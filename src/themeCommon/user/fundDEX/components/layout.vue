@@ -245,6 +245,11 @@ const route = useRoute()
 const router = useRouter()
 if (route.query.isUniapp) {
     sessionSet('isUniapp', route.query.isUniapp)
+    // app隐藏头部和底部导航栏
+    const topElem = document.querySelector('.nav-wrap')
+    const bottomElem = document.querySelector('#nav-footer')
+    if (topElem) topElem.style.display = 'none'
+    if (bottomElem) bottomElem.style.display = 'none'
 }
 
 const style = computed(() => store.state?.style)

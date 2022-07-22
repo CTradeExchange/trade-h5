@@ -511,7 +511,7 @@ export default {
         }
 
         const back = () => {
-            router.push('/mine')
+            router.push('/')
         }
 
         const formatTime = (val) => {
