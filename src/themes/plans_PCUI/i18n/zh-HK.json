@@ -36,7 +36,8 @@
         "languageAreas": "語言和地區",
         "SelectLanguageAreas": "選取語言和地區",
         "lastBox": "上一個",
-        "nextBox": "下一個"
+        "nextBox": "下一個",
+        "timeLimit": "最多選擇180天"
     },
     "c": {
         "login": "登入",

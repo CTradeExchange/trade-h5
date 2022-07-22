@@ -73,27 +73,40 @@ export default {
         showSelect: {
             type: Boolean,
             default: true
+        },
+        openAccountType: {
+            type: [Number],
+            default: 0
+        },
+        allCountry: {
+            type: Boolean,
+            default: false
         }
     },
     data () {
         return {
             value: '',
             id: this.$attrs.id || randomId(),
+            allCountryList: []
         }
     },
     computed: {
         countryList () {
-            const countryList = this.$store.state.countryList || []
-            const tempArr = []
-            countryList.forEach(item => {
-                tempArr.push({
-                    name: item.name + ' (' + item.countryCode + ')',
-                    code: item.countryCode,
-                    countryCode: item.code,
-                    countryName: item.name
+            if (this.allCountry) {
+                return this.allCountryList
+            } else {
+                const countryList = this.$store.state.countryList || []
+                const tempArr = []
+                countryList.forEach(item => {
+                    tempArr.push({
+                        name: item.name + ' (' + item.countryCode + ')',
+                        code: item.countryCode,
+                        countryCode: item.code,
+                        countryName: item.name
+                    })
                 })
-            })
-            return tempArr
+                return tempArr
+            }
         },
         zoneVal: {
             get () {
@@ -107,6 +120,22 @@ export default {
         }
     },
     emits: ['update:modelValue', 'update:zone', 'input', 'zoneSelect'],
+    mounted () {
+        this.$store.dispatch('getCountryListByParentCode').then(res => {
+            if (res.data.length > 0) {
+                const tempArr = []
+                res.data.forEach(item => {
+                    tempArr.push({
+                        name: item.name + ' (' + item.countryCode + ')',
+                        code: item.countryCode,
+                        countryCode: item.code,
+                        countryName: item.name
+                    })
+                })
+                this.allCountryList = tempArr
+            }
+        })
+    },
     methods: {
         onClear () {
             this.$emit('update:modelValue', '')

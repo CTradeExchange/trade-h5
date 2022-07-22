@@ -96,7 +96,7 @@ export default {
         }
 
         const back = () => {
-            router.replace('/')
+            router.replace('/mine')
         }
 
         onBeforeRouteLeave((to, from) => {

@@ -15,8 +15,6 @@ html {
 html,
 body,
 #app {
-    // display: flex;
-    // flex-direction: column;
     height: 100%;
     color: var(--color);
     background-color: var(--bgColor);
@@ -27,11 +25,10 @@ body,
 body {
     font-size: 14px;
     /* no */
-    font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
     line-height: 1.5;
+    // font-family: 'PingFang SC', '-apple-system', 'Heiti SC', 'Helvetica Neue', 'Droid Sans Fallback', 'Droid Sans';
     //font-family: 'Trebuchet MS', 'roboto', 'ubuntu', 'sans-serif';
     //background-color: var(--bgColor2);
-    font-family: roboto,sans-serif;
     webkit-text-size-adjust: none;
 }
 a {
@@ -567,10 +564,10 @@ body {
     .van-dropdown-item__option {
         color: var(--lightenPrimary);
     }
-    .van-popup {
-        z-index: 3000 !important;
-        //background: var(--contentColor);
-    }
+    // .van-popup {
+    //     z-index: 3000 !important;
+    //     //background: var(--contentColor);
+    // }
     .van-button--default {
         color: var(--color);
         background: var(--contentColor);
@@ -765,6 +762,9 @@ body {
         &::after {
             background: var(--lineColor);
         }
+    }
+    .web3modal-modal-lightbox {
+        z-index: 102;
     }
 }
 /* 滚动条 */

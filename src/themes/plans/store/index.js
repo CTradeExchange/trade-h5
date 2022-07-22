@@ -3,6 +3,7 @@ import Base from '@/store/modules/base'
 import User from '@/store/modules/user'
 import Quote from '@/store/modules/quote'
 import Trade from '@/store/modules/trade'
+import Web3 from '@/store/modules/web3'
 import { getListByParentCode, getCountryListByParentCode, findCompanyCountry } from '@/api/base'
 import Colors from '@plans/colorVariables'
 import { localGet, localSet, getQueryVariable } from '@/utils/util'
@@ -12,7 +13,8 @@ const style = {
 }
 const supportLanguages = [
     { val: 'zh-CN', name: '中文' },
-    { val: 'en-US', name: 'English' },
+    { val: 'zh-HK', name: '中文繁体' },
+    { val: 'en-US', name: 'English' }
 ]
 
 export default createStore({
@@ -21,6 +23,7 @@ export default createStore({
         _user: User,
         _quote: Quote,
         _trade: Trade,
+        _web3: Web3
     },
     state: {
         style,

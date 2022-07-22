@@ -3,7 +3,7 @@
         <div class='nav-left'>
             <router-link to='/home'>
                 <h1 class='logo'>
-                    <img alt='' height='24' src='/images/logo_vitamin.png' />
+                    <img alt='' height='20' :src='logoUrl' />
                 </h1>
             </router-link>
             <div class='menus'>
@@ -14,27 +14,14 @@
                         </span>
                     </router-link>
                 </div>
-                <div :class="['item', { 'active': $route.path.startsWith('/fundV10') }]">
-                    <router-link to='/fundV10/index'>
+                <div :class="['item', { 'active': $route.path === '/quote' }]">
+                    <router-link to='/quote'>
                         <span class='link'>
-                            V10
+                            {{ $t('header.quote') }}
                         </span>
                     </router-link>
                 </div>
-                <!-- <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
-                    <router-link to='/fund'>
-                        <span class='link'>
-                            {{ $t('header.fund') }}
-                        </span>
-                        <span class='symbolUp'></span>
-                    </router-link>
-                </div> -->
-                <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
-                    <span class='link'>
-                        {{ $t('tradeType.5') }}
-                    </span>
-                </div>
-                <!-- <div :class="['item', { 'active': $route.path === '/order' }]">
+                <div :class="['item', { 'active': $route.path === '/order' }]">
                     <el-dropdown @command='changePlans'>
                         <span class='link'>
                             {{ plansName }}
@@ -52,12 +39,13 @@
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-                </div> -->
-                <div :class="['item', { 'active': $route.path === '/quote' }]">
-                    <router-link to='/quote'>
+                </div>
+                <div v-if='fundShow' :class="['item', { 'active': $route.path === '/fund' }]">
+                    <router-link to='/fund'>
                         <span class='link'>
-                            {{ $t('header.quote') }}
+                            {{ $t('header.fund') }}
                         </span>
+                        <span class='symbolUp'></span>
                     </router-link>
                 </div>
                 <div v-if='customerInfo.isFund === 1' :class="['item', { 'active': $route.path === '/fundManager' }]">
@@ -123,9 +111,9 @@
                                 <li class='item' @click="handRoutTo('/walletAddress')">
                                     {{ $t('withdraw.withdrawLink') }}
                                 </li>
-                                <!-- <li class='item' @click="handRoutTo('/bankList')">
+                                <li class='item' @click="handRoutTo('/bankList')">
                                     {{ $t('cRoute.bankList') }}
-                                </li> -->
+                                </li>
                                 <li v-if='customInfo' class='item' @click='handRoutTo("/setLoginPwd")'>
                                     {{ Number(customInfo.loginPassStatus) === 1 ? $t("forgot.setPwd") : $t('login.modifyLoginPwd') }}
                                 </li>
@@ -134,7 +122,6 @@
                                 </li>
                                 <li class='item flexBetween'>
                                     <span>{{ $t('setting.chartColor') }}</span>
-
                                     <van-icon class='arrowIcon' name='arrow' />
                                     <div class='subDrapdown'>
                                         <ul class='list'>
@@ -173,14 +160,14 @@
             </div>
             <!-- 操作功能 -->
             <div class='handle-feature'>
-                <!-- <div v-if='onlineService' class='item'>
+                <div v-if='onlineService' class='item'>
                     <a :href='onlineService' target='_blank'>
                         <i class='icon icon_kefu' :title="$t('newHomeFooter.customer')"></i>
                     </a>
-                </div> -->
-                <div class='item'>
-                    <DownloadIcon />
                 </div>
+                <!-- <div class='item'>
+                    <DownloadIcon />
+                </div> -->
                 <div class='item'>
                     <LangIcon />
                 </div>
@@ -244,14 +231,21 @@ export default {
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
         // 在线客服地址
-        const onlineService = 'https://cs.vitatoken.io:443/im/text/1cayxu.html?lang=en'
+        const onlineService = computed(() => store.state._base.wpCompanyInfo?.onlineService)
 
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
         }
 
         // 玩法列表
-        const plansList = computed(() => store.state._base.plans)
+        const isWallet = store.state._base.wpCompanyInfo.isWallet
+        const plansList = computed(() =>
+            store.state._base.plans.filter(e => !(e.tradeType === '5' && isWallet))
+                .map(el => {
+                    el.name = t('tradeType.' + el.tradeType)
+                    return el
+                })
+        )
         const userAccountType = computed(() => store.getters['_user/userAccountType'])
         const customerInfo = computed(() => store.state._user.customerInfo)
 

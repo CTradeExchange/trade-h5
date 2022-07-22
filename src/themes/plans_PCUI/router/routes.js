@@ -424,307 +424,271 @@ const routes = [
         name: 'Layout',
         component: Layout,
         // keepAlive: true,
-        children: [
-            {
-                path: 'home',
-                name: 'Home',
-                component: () =>
-                    import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
-                meta: {
-                    title: 'route.home',
-                    // keepAlive: true,
-                    roles: [],
-                },
-                children: h5Children
+        children: [{
+            path: 'home',
+            name: 'Home',
+            component: () =>
+                import(/* webpackChunkName: "Home" */ '../views/home/home.vue'),
+            meta: {
+                title: 'route.home',
+                // keepAlive: true,
+                roles: [],
             },
-            {
-                path: 'quote',
-                name: 'Quote',
-                component: () =>
-                    import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
-                meta: {
-                    title: 'route.quote',
-                    roles: [],
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'quote',
+            name: 'Quote',
+            component: () =>
+                import(/* webpackChunkName: "Quote" */ '../views/quote/quote.vue'),
+            meta: {
+                title: 'route.quote',
+                roles: [],
             },
-            {
-                path: 'order',
-                name: 'Order',
-                component: () =>
-                    import(/* webpackChunkName: "Order" */ '../views/order/order.vue'),
-                meta: {
-                    title: 'route.order',
-                    roles: [],
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'order',
+            name: 'Order',
+            component: () =>
+                import(/* webpackChunkName: "Order" */ '../views/order/order.vue'),
+            meta: {
+                title: 'route.order',
+                roles: [],
             },
-            {
-                path: 'assets',
-                name: 'Assets',
-                component: () =>
-                    import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
-                meta: {
-                    title: 'route.assets',
-                    roles: []
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'assets',
+            name: 'Assets',
+            component: () =>
+                import(/* webpackChunkName: "Assets" */ '../views/assets/assets.vue'),
+            meta: {
+                title: 'route.assets',
+                roles: []
             },
-            {
-                path: 'transRecords',
-                name: 'TransRecords',
-                component: () =>
-                    import(/* webpackChunkName: "Quote" */ '../views/transRecords/transRecords.vue'),
-                meta: {
-                    title: 'route.transRecords',
-                    roles: [],
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'transRecords',
+            name: 'TransRecords',
+            component: () =>
+                import(/* webpackChunkName: "Quote" */ '../views/transRecords/transRecords.vue'),
+            meta: {
+                title: 'route.transRecords',
+                roles: [],
             },
-            {
-                path: 'fees',
-                name: 'Fees',
-                component: () =>
-                    import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'fees',
+            name: 'Fees',
+            component: () =>
+                import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/fees/index.vue'),
+            meta: {
+                title: '',
             },
-            {
-                path: 'about',
-                name: 'About',
-                component: () =>
-                    import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'about',
+            name: 'About',
+            component: () =>
+                import(/* webpackChunkName: "footerUrlPage" */ '../views/footerUrlPage/aboutUs/index.vue'),
+            meta: {
+                title: '',
             },
-            {
-                path: 'fund',
-                name: 'Fund',
-                component: () =>
-                    import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
-                meta: {
-                    title: '',
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'fund',
+            name: 'Fund',
+            component: () =>
+                import(/* webpackChunkName: "returnMoney" */ '../views/funds/index.vue'),
+            meta: {
+                title: '',
             },
-            {
-                path: 'fundManager', // 基金操作专区
-                name: 'FundManager',
-                component: () =>
-                    import(/* webpackChunkName: "returnMoney" */ '../views/fundManager/index.vue'),
-                meta: {
-                    title: 'route.fundManager',
-                    roles: ['User']
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'fundManager', // 基金操作专区
+            name: 'FundManager',
+            component: () =>
+                import(/* webpackChunkName: "returnMoney" */ '../views/fundManager/index.vue'),
+            meta: {
+                title: 'route.fundManager',
+                roles: ['User']
             },
-            {
-                path: 'businessKYC/index',
-                name: 'BusinessKYC',
-                component: () =>
-                    import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/index.vue'),
-                meta: {
-                    title: '企业KYC',
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'businessKYC/index',
+            name: 'BusinessKYC',
+            component: () =>
+                import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/index.vue'),
+            meta: {
+                title: '企业KYC',
             },
-            {
-                path: 'businessKYC',
-                name: 'BusinessKYCList',
-                component: () =>
-                    import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/kycList.vue'),
-                meta: {
-                    title: '企业KYC',
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: 'businessKYC',
+            name: 'BusinessKYCList',
+            component: () =>
+                import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/kycList.vue'),
+            meta: {
+                title: '企业KYC',
             },
-            {
-                path: '/businessKYC/content',
-                name: 'BusinessKYCContent',
-                component: () =>
-                    import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
-                meta: {
-                    title: '企业KYC',
-                },
-                children: h5Children
+            children: h5Children
+        },
+        {
+            path: '/businessKYC/content',
+            name: 'BusinessKYCContent',
+            component: () =>
+                import(/* webpackChunkName: "businessKYC" */ '../views/businessKYC/content.vue'),
+            meta: {
+                title: '企业KYC',
             },
-            {
-                path: '/download',
-                name: 'Download',
-                component: () =>
-                    import(/* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
-                meta: {
-                    title: 'route.download'
-                }
-            },
-            {
-                path: '/ranking',
-                name: 'Ranking',
-                component: () =>
-                    import(/* webpackChunkName: "resetFail" */ '../views/ranking/ranking.vue'),
-                meta: {
-                    title: 'route.ranking'
-                }
-            },
-            {
-                path: '/api',
-                name: 'Api',
-                component: () =>
-                    import(/* webpackChunkName: "api" */ '../views/api/api.vue'),
-                meta: {
-                    title: 'route.api'
-                },
-                children: h5Children
-            },
-            {
-                path: '/apiEdit',
-                name: 'ApiEdit',
-                component: () =>
-                    import(/* webpackChunkName: "ApiEdit" */ '../views/api/edit.vue'),
-                meta: {
-                    title: 'route.api'
-                },
-                children: h5Children
-            },
-            {
-                path: '/fundV10/index',
-                name: 'FundV10',
-                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/home/v10.vue'),
-                meta: {
-                    title: 'api.editHeader',
-                },
-                children: h5Children
-            },
-            {
-                path: '/fundV10/join',
-                name: 'v10Join',
-                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/join.vue'),
-                meta: {
-                    title: 'api.editHeader'
-                },
-                children: h5Children
-            },
-            {
-                path: '/fundV10/examine',
-                name: 'v10Examine',
-                component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV10/examine.vue'),
-                meta: {
-                    title: 'api.editHeader'
-                },
-                children: h5Children
-            },
-            {
-                path: '/notice',
-                name: 'Notice',
-                component: () =>
-                    import(/* webpackChunkName: "Notice" */ '../views/notice/index.vue'),
-                meta: {
-                    title: 'route.noticeTitle'
-                },
-                children: h5Children
-            },
-            {
-                path: '/noticeDetail',
-                name: 'NoticeDetail',
-                component: () =>
-                    import(/* webpackChunkName: "NoticeDetail" */ '../views/notice/detail.vue'),
-                meta: {
-                    title: 'route.noticeTitle'
-                },
-                children: h5Children
-            },
-            // {
-            //     path: '/barrage',
-            //     name: 'Barrage',
-            //     component: () =>
-            //         import(/* webpackChunkName: "api" */ '../views/barrage/index.vue'),
-            //     meta: {
-            //         title: 'Barrage弹幕'
-            //     },
-            //     children: h5Children
-            // },
-            // {
-            //     path: '/web3',
-            //     name: 'Web3',
-            //     component: () =>
-            //         import(/* webpackChunkName: "api" */ '../views/web3test/web3.vue'),
-            //     meta: {
-            //         title: 'web3'
-            //     },
-            //     children: h5Children
-            // },
-            {
-                path: '/fundDEX',
-                name: 'fundDEX',
-                redirect: '/dashboard',
-                component: () =>
-                    import(/* webpackChunkName: "fundDEX" */ '../layout/fundDEX.vue'),
-                children: [
-                    {
-                        path: '/dashboard',
-                        name: 'Dashboard',
-                        component: () =>
-                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/dashboard/index.vue'),
-                        meta: {
-                            title: ''
-                        },
-                        children: h5Children
-                    },
-                    {
-                        path: '/earning',
-                        name: 'Earning',
-                        component: () =>
-                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/staking/index.vue'),
-                        meta: {
-                            title: ''
-                        },
-                        children: h5Children
-                    },
-                    {
-                        path: '/earning/detail',
-                        name: 'Earning-Detail',
-                        component: () =>
-                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/staking/detail.vue'),
-                        meta: {
-                            title: ''
-                        },
-                        children: h5Children
-                    },
-                    {
-                        path: '/indexFunds',
-                        name: 'IndexFunds',
-                        component: () =>
-                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/indexFunds/index.vue'),
-                        meta: {
-                            title: ''
-                        },
-                        children: h5Children
-                    },
-                    {
-                        path: '/indexFunds/detail',
-                        name: 'IndexFunds-Detail',
-                        component: () =>
-                            import(/* webpackChunkName: "fundDEX" */ '../views/fundDEX/indexFunds/detail.vue'),
-                        meta: {
-                            title: ''
-                        },
-                        children: h5Children
-                    }
-                ]
+            children: h5Children
+        },
+        {
+            path: '/download',
+            name: 'Download',
+            component: () =>
+                import(/* webpackChunkName: "resetFail" */ '../views/download/index.vue'),
+            meta: {
+                title: 'route.download'
             }
-        ],
-    },
-    {
-        path: '/fundV11/index',
-        name: 'FundV11',
-        component: () => import(/* webpackChunkName: "fundV10" */ '@/themeCommon/user/fundV11/home/v11.vue'),
-        meta: {
-            title: 'api.editHeader',
+        },
+        {
+            path: '/ranking',
+            name: 'Ranking',
+            component: () =>
+                import(/* webpackChunkName: "resetFail" */ '../views/ranking/ranking.vue'),
+            meta: {
+                title: 'route.ranking'
+            }
+        },
+        {
+            path: '/api',
+            name: 'Api',
+            component: () =>
+                import(/* webpackChunkName: "api" */ '../views/api/api.vue'),
+            meta: {
+                title: 'route.api'
+            },
+            children: h5Children
+        },
+        {
+            path: '/apiEdit',
+            name: 'ApiEdit',
+            component: () =>
+                import(/* webpackChunkName: "api" */ '../views/api/edit.vue'),
+            meta: {
+                title: 'route.api'
+            },
+            children: h5Children
+        },
+        {
+            path: '/notice',
+            name: 'Notice',
+            component: () =>
+                import(/* webpackChunkName: "api" */ '../views/notice/index.vue'),
+            meta: {
+                title: 'route.noticeTitle'
+            },
+            children: h5Children
+        },
+        {
+            path: '/noticeDetail',
+            name: 'NoticeDetail',
+            component: () =>
+                import(/* webpackChunkName: "api" */ '../views/notice/detail.vue'),
+            meta: {
+                title: 'route.noticeTitle'
+            },
+            children: h5Children
+        },
+        // {
+        //     path: '/barrage',
+        //     name: 'Barrage',
+        //     component: () =>
+        //         import(/* webpackChunkName: "api" */ '../views/barrage/index.vue'),
+        //     meta: {
+        //         title: 'Barrage弹幕'
+        //     },
+        //     children: h5Children
+        // },
+        // {
+        //     path: '/web3',
+        //     name: 'Web3',
+        //     component: () =>
+        //         import(/* webpackChunkName: "api" */ '../views/web3test/web3.vue'),
+        //     meta: {
+        //         title: 'web3'
+        //     },
+        //     children: h5Children
+        // },
+        {
+            path: '/fundDEX',
+            name: 'fundDEX',
+            redirect: '/dashboard',
+            component: () =>
+                import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/components/layout.vue'),
+            children: [
+                {
+                    path: '/dashboard',
+                    name: 'Dashboard',
+                    component: () =>
+                        import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/dashboard/index.vue'),
+                    meta: {
+                        title: ''
+                    },
+                    children: h5Children
+                },
+                {
+                    path: '/earning',
+                    name: 'Earning',
+                    component: () =>
+                        import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/staking/index.vue'),
+                    meta: {
+                        title: ''
+                    },
+                    children: h5Children
+                },
+                {
+                    path: '/earning/detail',
+                    name: 'Earning-Detail',
+                    component: () =>
+                        import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/staking/detail.vue'),
+                    meta: {
+                        title: ''
+                    },
+                    children: h5Children
+                },
+                {
+                    path: '/indexFunds',
+                    name: 'IndexFunds',
+                    component: () =>
+                        import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/indexFunds/index.vue'),
+                    meta: {
+                        title: ''
+                    },
+                    children: h5Children
+                },
+                {
+                    path: '/indexFunds/detail',
+                    name: 'IndexFunds-Detail',
+                    component: () =>
+                        import(/* webpackChunkName: "api" */ '@/themeCommon/user/fundDEX/indexFunds/detail.vue'),
+                    meta: {
+                        title: ''
+                    },
+                    children: h5Children
+                }
+            ]
         }
+        ],
     },
     // {
     //     path: '/:params/setting',

@@ -1,7 +1,7 @@
 <template>
     <div class='pageWrapp'>
         <LayoutTop :back='true' :menu='false' />
-        <FundCard v-if='fund' class='fundCardInfo' :fund='fund' page='info' />
+        <FundCard v-if='fund' class='fundCardInfo' :fund='fund' />
         <fundInformation v-if='fund' class='fundInfoBlock' :fund-id='fundId' />
         <fundBottomBtn :fund='fund' />
     </div>

@@ -41,7 +41,7 @@ const gotoOrder = (symbolKey) => {
 // 产品列表
 const productMap = computed(() => store.state._quote.productMap)
 // const symbolKeys = ['1564_5', '706_5', '709_5', '714_5', '720_5'] // pre
-const symbolKeys = ['368_5', '328_5', '329_5', '331_5', '332_5'] // prd
+const symbolKeys = ['1_5', '20_5', '21_5', '38_5', '2_5'] // prd
 const unSubscribe = QuoteSocket.add_subscribe24H({ moduleId: 'topQuote', symbolKeys })
 
 onUnmounted(() => {

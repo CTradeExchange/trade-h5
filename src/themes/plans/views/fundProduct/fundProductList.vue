@@ -9,7 +9,7 @@
             <van-empty :description='$t("common.noData")' image='/images/empty.png' />
         </div>
         <div v-else ref='lazyParent'>
-            <FundCard v-for='item in fundProductList' :key='item.fundId' :fund='item' page='list' @click='goInfo(item)' />
+            <FundCard v-for='item in fundProductList' :key='item.fundId' :fund='item' @click='goInfo(item)' />
         </div>
     </div>
 </template>

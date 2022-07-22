@@ -1,5 +1,5 @@
 <template>
-    <van-cell @click='openRange'>
+    <van-cell class='cell' @click='openRange'>
         <template #title>
             <div class='rangeWrap' :name='6'>
                 <span class='field' :class='{ placeholder: !rangeText[0] }'>
@@ -11,7 +11,7 @@
             </div>
         </template>
         <template #default>
-            <van-icon v-if='showIcon' class='van-dropdown-item__icon' name='success' />
+            <van-icon v-if='showIcon' class='van-dropdown-item__icon' :color='style.primary' name='success' />
         </template>
     </van-cell>
     <van-calendar
@@ -20,6 +20,7 @@
         :allow-same-day='true'
         :color='$style.primary'
         :max-date='maxDate'
+        :max-range='180'
         :min-date='minDate'
         position='left'
         :round='false'
@@ -31,6 +32,7 @@
 
 <script>
 import { ref, unref, computed, watch } from 'vue'
+import { useStore } from 'vuex'
 import dayjs from 'dayjs'
 
 export default {
@@ -42,7 +44,9 @@ export default {
     },
     emits: ['change'],
     setup (props, context) {
+        const store = useStore()
         const showIcon = computed(() => props.isSelected)
+        const style = computed(() => store.state.style)
         watch(() => unref(showIcon), (val) => {
             if (!val) {
                 range.value = []
@@ -87,7 +91,8 @@ export default {
             minDate,
             maxDate,
             openRange,
-            onRangeConfirm
+            onRangeConfirm,
+            style
         }
     }
 }
@@ -95,6 +100,9 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
+.cell {
+    cursor: pointer;
+}
 .rangeWrap {
     display: flex;
     flex-direction: row;

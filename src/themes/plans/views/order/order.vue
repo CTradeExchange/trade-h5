@@ -517,7 +517,7 @@ export default {
     display: flex;
     flex-direction: column;
     height: 100%;
-    // margin-bottom: rem(100px);
+    margin-bottom: rem(100px);
     overflow-y: auto;
     color: var(--color);
     background: var(--bgColor);

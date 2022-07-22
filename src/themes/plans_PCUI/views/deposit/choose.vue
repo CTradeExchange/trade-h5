@@ -185,6 +185,7 @@ export default {
         // 过滤支付通道数据
         const filterPayment = () => {
             const paymentTypes = state.paymentTypes
+            state.paymentInfo = ''
             if (paymentTypes.length === 0) {
                 state.disable = true
                 state.way = ''

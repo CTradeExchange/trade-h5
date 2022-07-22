@@ -293,7 +293,6 @@ export default {
             }
         }
     }
-
     .crossLevelNum{
         vertical-align: middle;
         position: relative;
@@ -306,7 +305,6 @@ export default {
         border-radius: 3px;
         border: 1px solid var(--color);
     }
-
     .directionCell {
         display: flex;
         margin: rem(20px) 0;

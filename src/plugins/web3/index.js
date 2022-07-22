@@ -8,8 +8,8 @@ import networkConfigs from './config/networkConfigs'
 import BigNumber from 'bignumber.js'
 import { getETHPrice } from '@/api/fundDEX'
 import { useStore } from 'vuex'
-import { localRemove, localSet } from '@/utils/util'
-import { divide, mul, pow } from '@/utils/calculation'
+import { localRemove, localSet, getDevice, sessionGet } from '@/utils/util'
+import { divide, mul, plus, pow, toNonExponential } from '@/utils/calculation'
 import { getBaseUrl } from '@/plugins/web3/config/infuraConfig.js'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
@@ -18,6 +18,8 @@ export let provider = null
 export let web3Modal = null
 
 export const assets = ref(0)
+
+export const baseSymbol = ['eth', 'matic'] // 各个链的标准货币
 
 const fetching = ref(false)
 const loading = ref(false)
@@ -47,54 +49,63 @@ export const web3Hooks = () => {
 
     // 链接狐狸钱包
     const executeConnect = async () => {
-        if (!window.ethereum) {
-            return ElMessageBox.confirm(
-                'This dapp requires access to your MetaMask wallet, go to install MetaMask wallet?',
-                'Warning',
-                {
-                    title: 'Login and authorize your wallet',
-                    confirmButtonText: 'OK',
-                    cancelButtonText: 'Cancel',
-                    type: 'warning',
-                }
-            )
-                .then(() => {
-                    window.open('https://metamask.io/download/')
-                })
-                .catch(() => {
+        // if (!window.ethereum) {
+        //     return ElMessageBox.confirm(
+        //         'This dapp requires access to your MetaMask wallet, go to install MetaMask wallet?',
+        //         'Warning',
+        //         {
+        //             title: 'Login and authorize your wallet',
+        //             confirmButtonText: 'OK',
+        //             cancelButtonText: 'Cancel',
+        //             type: 'warning',
+        //         }
+        //     )
+        //         .then(() => {
+        //             window.open('https://metamask.io/download/')
+        //         })
+        //         .catch(() => {
 
-                })
+        //         })
+        // }
+        try {
+            const device = getDevice()
+            web3Modal = new Web3Modal({
+                theme: 'light',
+                network: getChainData(1).network,
+                cacheProvider: true,
+                providerOptions
+            })
+            let providerParam = {}
+            if (device === 1) {
+                providerParam = await web3Modal.connectTo('walletconnect')
+            } else {
+                providerParam = await web3Modal.connect()
+            }
+            await subscribeProvider(providerParam)
+            web3 = new Web3(providerParam)
+            const accounts = await web3.eth.getAccounts()
+            const address = accounts[0]
+            const networkId = await web3.eth.net.getId()
+            const networkType = await web3.eth.net.getNetworkType()
+            const chainId = await web3.eth.getChainId()
+
+            window.web3 = web3
+            window.web3utils = utils
+            provider = providerParam
+
+            store.commit('_web3/Update_userAddress', address)
+            store.commit('_web3/Update_chainId', chainId)
+            store.commit('_web3/Update_networkId', networkId.toString())
+            store.commit('_web3/Update_networkType', networkType)
+            localSet('walletProvider', 'injected')
+
+            await getAccountAssets()
+
+            return Promise.resolve()
+        } catch (error) {
+            console.log('=================', error)
+            return Promise.reject()
         }
-
-        web3Modal = new Web3Modal({
-            theme: 'light',
-            network: getChainData(1).network,
-            cacheProvider: true,
-            providerOptions,
-        })
-        const providerParam = await web3Modal.connect()
-        console.log('provider', providerParam)
-        await subscribeProvider(providerParam)
-
-        web3 = new Web3(providerParam)
-        const accounts = await web3.eth.getAccounts()
-        const address = accounts[0]
-        const networkId = await web3.eth.net.getId()
-        const networkType = await web3.eth.net.getNetworkType()
-
-        const chainId = await web3.eth.getChainId()
-
-        window.web3 = web3
-        window.web3utils = utils
-        provider = providerParam
-
-        store.commit('_web3/Update_userAddress', address)
-        store.commit('_web3/Update_chainId', chainId)
-        store.commit('_web3/Update_networkId', networkId.toString())
-        store.commit('_web3/Update_networkType', networkType)
-        localSet('walletProvider', 'injected')
-
-        await getAccountAssets()
     }
 
     // 监听provider事件
@@ -136,27 +147,20 @@ export const web3Hooks = () => {
 
     // 切换网络
     const switchNetwork = (value) => {
-        const chainId = utils.toHex(value)
-        return window.ethereum.request({
-            method: 'wallet_switchEthereumChain',
-            params: [{
-                chainId
-            }]
-        })
+        return provider.send('wallet_switchEthereumChain', [
+            { chainId: `0x${value.toString(16)}` },
+        ])
     }
 
     // 添加网络
     const addNetwork = (value) => {
         const { name, publicJsonRPCUrl } = networkConfigs[value]
         const chainId = utils.toHex(value)
-        return window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [{
-                chainId,
-                chainName: name,
-                rpcUrls: publicJsonRPCUrl
-            }]
-        })
+        return provider.send('wallet_addEthereumChain', [{
+            chainId,
+            chainName: name,
+            rpcUrls: publicJsonRPCUrl
+        }])
     }
 
     // 添加代币到狐狸钱包
@@ -176,20 +180,25 @@ export const web3Hooks = () => {
 
     /**
      * 查询代币的授权余额
+     * 关于授权：
+     * 存款的时候，除了eth之外的都需要用assetId授权，合约地址是 lendingPool
+     * 提现的时候，所有的代币都需要用atoken检查授权，aweth用WETHGateway地址授权，其他代币用 lendingPool
      *
      * @param {string} daiAddress 在当前链上需要查询的代币地址 0xff795577d9ac8bd7d90ee22b6c1703490b6512fd
      * @return {string} 代币的授权余额
      */
-    const allowance = async (daiAddress) => {
+    const allowance = async (daiAddress, isETH) => {
         const state = store.state._web3
+        const network = networkConfigs[state.networkId] || {}
         if (!daiAddress) return console.error('必须传入代币地址')
-        if (!networkConfigs[state.networkId]?.lendingPool) return console.error('不支持该网络', state.networkId)
+        if (!network.lendingPool) return console.error('不支持该网络', state.networkId)
         const from = state.userAddress // '0xa19515df175e7482E3De4f8040696A83071d51bD'
-        const lendingPool = networkConfigs[state.networkId]?.lendingPool // '0xe0fba4fc209b4948668006b2be61711b7f465bae'
+        const lendingPool = network.lendingPool // '0xe0fba4fc209b4948668006b2be61711b7f465bae'
+        const WETHGateway = network.WETHGateway // '0xa61ca04df33b72b235a8a28cfb535bb7a5271b70'
         var WZGLToken = new web3.eth.Contract(abi_approve, daiAddress, {
             from
         })
-        const aa = await WZGLToken.methods.allowance(from, lendingPool).call()
+        const aa = await WZGLToken.methods.allowance(from, isETH ? WETHGateway : lendingPool).call()
         return aa
     }
 
@@ -218,15 +227,17 @@ export const web3Hooks = () => {
      * @param {string} daiAddress 在当前链上需要查询的代币地址 0xff795577d9ac8bd7d90ee22b6c1703490b6512fd
      * @param {string} value 存款额度(以太币单位)
      */
-    const depositDAI = (daiAddress, value) => {
+    const depositDAI = async (daiAddress, value) => {
         if (!daiAddress) return console.error('必须传入代币地址')
         if (!value) return console.error('必须传入存款额度')
         const state = store.state._web3
         if (!networkConfigs[state.networkId]?.lendingPool) return console.error('不支持该网络', state.networkId)
         const lendingPool = networkConfigs[state.networkId]?.lendingPool // '0xe0fba4fc209b4948668006b2be61711b7f465bae'
         const from = state.userAddress // '0xa19515df175e7482E3De4f8040696A83071d51bD'
+        const gas = await queryGasLimit(daiAddress, value, false)
         const WZGLToken2 = new web3.eth.Contract(abi_depositWithdraw, lendingPool, {
-            from
+            from,
+            gas
         })
 
         return WZGLToken2.methods.deposit(daiAddress, value, from, 0).send()
@@ -276,19 +287,19 @@ export const web3Hooks = () => {
      * @param {string} value 取款额度(以太币单位)
      *
      */
-    const withdrawDAI = (daiAddress, value) => {
+    const withdrawDAI = async (daiAddress, value) => {
         const state = store.state._web3
         const from = state.userAddress // '0xa19515df175e7482E3De4f8040696A83071d51bD'
         const network = networkConfigs[state.networkId] || {}
         const lendingPool = network.lendingPool // '0xe0fba4fc209b4948668006b2be61711b7f465bae'
+        const gas = await queryGasLimit(daiAddress, value, false)
         var WZGLToken2 = new web3.eth.Contract(abi_depositWithdraw, lendingPool, {
-            from
+            from,
+            gas
         })
 
         return WZGLToken2.methods.withdraw(daiAddress, value, from).send()
     }
-
-    console.log(utils.toWei('0.0003'))
 
     /**
      * ETH 提现授权
@@ -303,7 +314,7 @@ export const web3Hooks = () => {
         var WZGLToken = new web3.eth.Contract(abi_approve, aTokenAddress, {
             from
         })
-        WZGLToken.methods.approve(WETHGateway, value).send().then(console.log)
+        return WZGLToken.methods.approve(WETHGateway, value).send()
     }
 
     /**
@@ -348,6 +359,21 @@ export const web3Hooks = () => {
         return myContract.methods.depositETH(lendingPool, from, 0).estimateGas({ from, value: amount })
     }
 
+    /** 获取gasLimit
+     * aave源码上 eth增加了 30%，polygon链增加了60%
+     */
+    const queryGasLimit = async (daiAddress, amount, isETH) => {
+        const { chainId } = store.state._web3
+        let gasLimit = isETH ? await getGasLimitETH(daiAddress, amount) : await getGasLimit(daiAddress, amount)
+        if (chainId === 1 || chainId === 42) {
+            gasLimit = plus(gasLimit, mul(gasLimit, 0.3))
+        } else if (chainId === 137) {
+            gasLimit = plus(gasLimit, mul(gasLimit, 0.6))
+        }
+        gasLimit = parseInt(gasLimit)
+        return gasLimit
+    }
+
     /**
      * 计算预估手续费
         1、获取gasPrice
@@ -357,10 +383,11 @@ export const web3Hooks = () => {
     */
     const estimateFee = async (daiAddress, amount, isETH) => {
         amount = amount.split('.')[0]
-        const gasLimit = isETH ? await getGasLimitETH(daiAddress, amount) : await getGasLimit(daiAddress, amount)
+        const gasLimit = await queryGasLimit(daiAddress, amount, isETH)
         let gasPrice = await web3.eth.getGasPrice()
         gasPrice = utils.fromWei(gasPrice)
-        console.log(gasPrice, gasLimit)
+        console.log('gasLimit', gasLimit)
+        // console.log('gasPrice', gasPrice, 'gasLimit', gasLimit)
         // const gasPrice = '0.000000056130521212'
         // const gasLimit = '279536'
         const ethNum = BigNumber(gasPrice).times(gasLimit).toString()
@@ -390,9 +417,30 @@ export const web3Hooks = () => {
             const balance = await myContract.methods
                 .balanceOf(state.userAddress)
                 .call()
-            return divide(balance, pow(10, decimals))
+            return toNonExponential(divide(balance, pow(10, decimals)))
         } catch (error) {
             console.log('error', error)
+        }
+    }
+
+    /**
+     * 外部浏览器打开
+     * @param {string} explorerLink url地址
+     */
+    const openExtBrowser = explorerLink => {
+        const isUniapp = sessionGet('isUniapp')
+        if (Number(isUniapp) === 1) {
+            uni.postMessage({
+                data: {
+                    action: 'message',
+                    type: 'fundDEX',
+                    params: {
+                        explorerLink
+                    }
+                }
+            })
+        } else {
+            window.open(explorerLink)
         }
     }
 
@@ -413,6 +461,7 @@ export const web3Hooks = () => {
         withdrawETHApprove,
         withdrawETH,
         estimateFee,
-        getWalletBalance
+        getWalletBalance,
+        openExtBrowser
     }
 }

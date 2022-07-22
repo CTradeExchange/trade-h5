@@ -4,6 +4,7 @@ import store from './store'
 export const colors = {
     common: {
         primary: '#0062FF',
+        primaryBg: '#0062FF1A',
         riseColor: '#ef5353',
         fallColor: '#0062FF',
         warn: '#ef5353',

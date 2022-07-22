@@ -11,6 +11,7 @@
                     ref='datePickerRef'
                     v-model='timeRange'
                     class='datePicker'
+                    :disabled-date='disabledDate'
                     range-separator='To'
                     size='small'
                     type='daterange'
@@ -79,6 +80,7 @@ import { useRoute, useRouter } from 'vue-router'
 import i18n from '@planspc/i18n/i18n.js'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
+import { Toast } from 'vant'
 const locale = computed(() => i18n.global.locale === 'zh-CN' ? zhCn : en)
 
 const props = defineProps({
@@ -91,12 +93,16 @@ const emit = defineEmits(['update:params'])
 const { t } = useI18n({ useScope: 'global' })
 const route = useRoute()
 const router = useRouter()
+// 限制选择的时间
+const disabledDate = (time) => {
+    return time.getTime() > Date.now()
+}
 const filterList = {
     time: [
-        { text: t('common.allDate'), value: 0, executeStartTime: -1 },
-        { text: t('common.curToday'), value: 1, executeStartTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf() },
-        { text: t('common.curWeek'), value: 2, executeStartTime: window.dayjs(window.dayjs().startOf('week')).valueOf() },
-        { text: t('common.curMonth'), value: 3, executeStartTime: window.dayjs(window.dayjs().startOf('month')).valueOf() },
+        // { text: t('common.allDate'), value: 0, executeStartTime: -1 },
+        { text: t('common.curToday'), value: 1, executeStartTime: window.dayjs().startOf('day').valueOf() },
+        { text: t('common.curWeek'), value: 2, executeStartTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf() },
+        { text: t('common.curMonth'), value: 3, executeStartTime: window.dayjs(window.dayjs().subtract(1, 'month').format('YYYY/MM/DD')).valueOf() },
         { text: t('common.curThreeMonth'), value: 4, executeStartTime: window.dayjs(window.dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf() },
         { text: t('information.custom'), value: 'custom' }
     ],
@@ -133,14 +139,14 @@ const orderTypeList = computed(() => {
 })
 
 const tradeType = ref(route.query.tradeType || '')
-const timeValue = ref(filterList.time[0].value)
+const timeValue = ref(2)
 const datePickerRef = ref(null)
 const timeRange = ref([])
 const direction = ref(filterList.direction[0].value)
 const productValue = ref(filterList.product[0].value)
 const orderType = ref(-1)
-const executeStartTime = ref(-1)
-const executeEndTime = ref(-1)
+const executeStartTime = ref(window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf())
+const executeEndTime = ref(window.dayjs().endOf('day').valueOf())
 const dialogProductVisible = ref(false)
 const product = ref(null)
 const symbolId = computed(() => unref(product)?.symbolId || null)
@@ -165,7 +171,7 @@ onMounted(() => {
 
         // 重置其他值
         timeRange.value = []
-        onTimeSelect(timeValue.value = filterList.time[0].value)
+        onTimeSelect(timeValue.value = filterList.time[1].value)
         direction.value = filterList.direction[0].value
         productValue.value = filterList.product[0].value
         orderType.value = -1
@@ -181,14 +187,20 @@ const onTimeSelect = async (val) => {
     } else {
         const target = filterList.time.find(e => e.value === val)
         executeStartTime.value = target.executeStartTime
-        executeEndTime.value = -1
+        executeEndTime.value = window.dayjs().endOf('day').valueOf()
         timeRange.value = []
     }
 }
 // 时间范围
 const onTimeRangeSelect = (val) => {
-    executeStartTime.value = window.dayjs(val[0]).startOf('day').valueOf()
-    executeEndTime.value = window.dayjs(val[1]).endOf('day').valueOf()
+    const diffDay = window.dayjs(val[1]).diff(window.dayjs(val[0]), 'day')
+    if (diffDay > 180) {
+        Toast(t('compLang.timeLimit'))
+        timeRange.value = []
+    } else {
+        executeStartTime.value = window.dayjs(val[0]).startOf('day').valueOf()
+        executeEndTime.value = window.dayjs(val[1]).endOf('day').valueOf()
+    }
 }
 
 // 产品弹层
@@ -218,13 +230,8 @@ const onSelect = val => {
 .header{
     position: relative;
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
     align-items: center;
-    height: 60px;
-    line-height: 60px;
     box-sizing: border-box;
-
     &::after{
         content: "";
         position: absolute;
@@ -236,24 +243,32 @@ const onSelect = val => {
         z-index: var(--el-index-normal);
     }
     .title{
+        display: inline-flex;
+        flex-shrink: 0;
         font-size: 16px;
         font-weight: bold;
         color: var(--color);
         margin: 0 50px 0 20px;
     }
     :deep{
+        .plansList {
+            line-height: 60px;
+        }
         .plansList .el-tabs__item{
             font-size: 14px;
         }
     }
 
     .filter{
+        padding: 10px 0;
+        margin-top: -5px;
         margin-right: 20px;
         :deep{
             .el-select{
+                margin-top: 5px;
                 margin-left: 8px;
                 .el-input__inner{
-                    width: 120px;
+                    width: 145px;
                     height: 32px;
                     background: var(--assistColor);
                     border-radius: 4px;
@@ -268,7 +283,7 @@ const onSelect = val => {
             }
             .datePicker{
                 width: 300px!important;
-                margin: 0 20px;
+                margin: 0 8px;
                 background: var(--bgColor);
                 border-color: transparent;
                 &.is-active{

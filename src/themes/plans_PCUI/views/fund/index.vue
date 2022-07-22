@@ -5,7 +5,7 @@
             <!-- 左侧模块 -->
             <div class='left-module module'>
                 <!-- 基金产品列表 -->
-                <fundList ref='fundListRef' />
+                <fundList ref='fundListRef' @select='selectFund' />
             </div>
             <!-- 中间模块 -->
             <div class='middle-module module'>
@@ -30,8 +30,9 @@
 </template>
 
 <script setup>
-import { ref, provide, onMounted, computed, watch } from 'vue'
+import { ref, provide, onMounted, computed } from 'vue'
 import { useStore } from 'vuex'
+import { useFund } from './hooks.js'
 import fundList from './components/fundList.vue'
 import fundContent from './components/fundContent.vue'
 import fundDeal from './components/fundDeal.vue'
@@ -50,15 +51,8 @@ const userRecordRef = ref(null)
 const fund = ref({})
 // 基金交易组件key值
 const fundDealKey = ref('')
-
-// 监听fundInfo
-watch(() => fundInfo.value, () => {
-    fund.value = Object.assign({}, fund.value, fundInfo.value)
-}, { deep: true })
-// 监听fundId
-watch(() => fundInfo.value?.fundId, () => {
-    fundDealKey.value = Date.now()
-})
+// 获取基金净值等数据
+const { getFundValue } = useFund()
 
 // 申购或赎回后更新列表数据
 provide('updateRecord', (value) => {
@@ -73,6 +67,17 @@ provide('updateRecord', (value) => {
             break
     }
 })
+
+// 选择基金产品
+const selectFund = item => {
+    fund.value = item
+    if (fund.value.fundId !== item.fundId) {
+        fundDealKey.value = Date.now()
+    }
+    getFundValue(item.fundId).then(() => {
+        fund.value = Object.assign({}, fund.value, fundInfo.value)
+    })
+}
 
 onMounted(() => {
     // 获取账户资产

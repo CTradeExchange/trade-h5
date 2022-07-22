@@ -46,7 +46,7 @@
             <router-link class='btn' to='/login'>
                 {{ $t('login.loginBtn') }}
             </router-link>
-            <router-link class='reg-btn' to='/register'>
+            <router-link class='reg-btn' to='register'>
                 {{ $t('register.registerBtn') }}
             </router-link>
         </div>
@@ -54,19 +54,7 @@
             <minePerson :data='minePersonData' />
         </div>
         <van-cell-group class='cellGroup'>
-            <!-- <van-cell class='cellItem' is-link :title='$t("fundInfo.fund")' @click="routerTo('fundProductList')">
-                <template #icon>
-                    <div class='icon-wrap'>
-                        <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
-                            <use xlink:href='#piggy-bank-f' />
-                            <symbol id='piggy-bank-f' viewBox='0 0 24 24'>
-                                <path clip-rule='evenodd' d='M12.0135 1C9.30088 1 7.10183 3.19905 7.10183 5.91171C7.10183 6.83267 7.3553 7.69443 7.79628 8.43103C5.55306 9.4109 3.95023 11.5837 3.7896 14.1476H2V15.9337H3.91462C4.26878 17.6501 5.27957 19.1265 6.67276 20.0888L5.02451 21.7371L6.28746 23L8.3573 20.9302C9.023 21.1518 9.73515 21.2719 10.4753 21.2719H15.7789L17.3705 22.8635L18.6334 21.6006L17.2935 20.2606L21.6429 15.9112L21.6429 13.2243H19.7091C19.5089 12.122 19.0149 11.1221 18.311 10.3087L20.7459 7.87386H16.5177C16.7798 7.27288 16.9252 6.60927 16.9252 5.91171C16.9252 3.19905 14.7262 1 12.0135 1ZM8.88791 5.91171C8.88791 4.18547 10.2873 2.78608 12.0135 2.78608C13.7398 2.78608 15.1392 4.18547 15.1392 5.91171C15.1392 7.63795 13.7398 9.03734 12.0135 9.03734C10.2873 9.03734 8.88791 7.63795 8.88791 5.91171ZM10.674 5.91171L12.0135 4.57215L13.3531 5.91171L12.0135 7.25127L10.674 5.91171ZM9.7484 13.2344H14.2787V11.4484H9.7484V13.2344Z' fill='currentColor' fill-rule='evenodd' />
-                            </symbol>
-                        </svg>
-                    </div>
-                </template>
-            </van-cell> -->
-            <van-cell class='cellItem' is-link title='V10' @click="routerTo('/fundV10/index')">
+            <van-cell class='cellItem' is-link :title='$t("fundInfo.fund")' @click="routerTo('fundProductList')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -78,7 +66,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("route.spotTrade")' @click="routerTo('/order')">
+            <van-cell class='cellItem' is-link :title='$t("route.spotTrade")' @click="routerTo('order')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -90,7 +78,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("route.quote")' @click="routerTo('/quote')">
+            <van-cell class='cellItem' is-link :title='$t("route.quote")' @click="routerTo('quote')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -103,7 +91,7 @@
                 </template>
             </van-cell>
 
-            <van-cell class='cellItem' is-link :title='$t("route.assets")' @click="routerTo('/assets')">
+            <van-cell class='cellItem' is-link :title='$t("route.assets")' @click="routerTo('assets')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -115,7 +103,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.msg")' @click="routerTo('/msg')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.msg")' @click="routerTo('msg')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -127,7 +115,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.regKyc")' @click="routerTo('/authentication')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.regKyc")' @click="routerTo('authentication')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -139,7 +127,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.securitySetting")' @click="routerTo('/securitySetting')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.securitySetting")' @click="routerTo('securitySetting')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -151,7 +139,7 @@
                     </div>
                 </template>
             </van-cell>
-            <van-cell class='cellItem' is-link :title='$t("cRoute.commonSetting")' @click="routerTo('/commonSetting')">
+            <van-cell class='cellItem' is-link :title='$t("cRoute.commonSetting")' @click="routerTo('commonSetting')">
                 <template #icon>
                     <div class='icon-wrap'>
                         <svg class='svg-icon' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -181,10 +169,7 @@
                     </div>
                 </template>
                 <template #right-icon>
-                    <!-- <img alt='' class='lang-icon' :src="'/images/country_icon/'+ lang + '.png'" /> -->
-                    <span class='label'>
-                        {{ langItem.name }}
-                    </span>
+                    <img alt='' class='lang-icon' :src="'/images/country_icon/'+ lang + '.png'" />
                     <van-icon class='right-arrow' name='arrow' />
                 </template>
             </van-cell>
@@ -237,10 +222,7 @@
                 :class='{ active: lang === item.val }'
                 @click='langSelect(item)'
             >
-                <span class='lang-label'>
-                    {{ item.name }}
-                </span>
-                <van-icon class='success-icon' name='success' />
+                <img alt='' class='lang-icon' :src="'/images/country_icon/'+ item.val + '.png?555'" />
             </div>
         </div>
     </van-popup>
@@ -274,11 +256,9 @@ const { t, locale } = useI18n({ useScope: 'global' })
 const symbolKey = computed(() => store.state._quote.productActivedID)
 const customerInfo = computed(() => store.state._user.customerInfo)
 const supportLanguages = computed(() => store.state.supportLanguages)
-// 当前选择的语言项
-const langItem = computed(() => supportLanguages.value.find(el => el.val === lang.value))
 
 const routerTo = path => {
-    if (path === '/order') {
+    if (path === 'order') {
         const [symbolId, tradeType] = symbolKey.value?.split('_')
         path = `/order?symbolId=${symbolId}&tradeType=${tradeType}`
     }
@@ -478,10 +458,6 @@ const colorSelect = (action) => {
             :deep(.van-cell__title) {
                 color: var(--color);
             }
-            .label {
-                color: var(--color);
-                margin-right: rem(20px);
-            }
             .lang-icon {
                 width: rem(56px);
                 margin-right: rem(20px);
@@ -523,33 +499,22 @@ const colorSelect = (action) => {
 }
 .lang-popup {
     .popup-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0 0 0 rem(25px);
         .lang-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            height: rem(130px);
-            padding: 0 rem(30px);
-            margin-bottom: rem(12px);
-            background: var(--contentColor);
-            border-radius: rem(10px);
-            .lang-label {
-                color: var(--color);
-                font-size: rem(32px);
-            }
+            box-sizing: content-box;
+            margin-right: rem(20px);
+            margin-bottom: rem(42px);
+            padding: rem(8px) rem(8px) rem(2px) rem(8px);
+            border: rem(4px) solid transparent;
             .lang-icon {
-                width: rem(72px);
-                height: rem(72px);
+                width: rem(120px);
+                height: rem(120px);
+            }
+            &.active {
+                border: rem(4px) solid var(--primary);
                 border-radius: 50%;
-            }
-            .success-icon {
-                display: none;
-                font-size: rem(42px);
-                color: var(--primary);
-            }
-        }
-        .active {
-            .success-icon {
-                display: block;
             }
         }
     }

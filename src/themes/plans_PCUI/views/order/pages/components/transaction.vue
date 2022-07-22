@@ -43,7 +43,8 @@ const queryData = () => {
         sortType: 'desc',
         current: 1,
         size: 10,
-        executeEndTime: -1,
+        executeStartTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
+        executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
         tradeType: props.tradeType
     }
     tradeRecordList(params)

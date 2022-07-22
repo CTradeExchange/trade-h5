@@ -53,8 +53,14 @@ padding: 10px;'
         </div>
     </div>
     <!-- 杠杆设置 -->
+    <MultipleSetCross
+        v-if="product && [1].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
+        v-model='multipleSetVisible'
+        v-model:multipleVal='multipleVal'
+        :product='product'
+    />
     <MultipleSet
-        v-if="product && product.tradeType===2 && product.marginInfo && product.marginInfo.type!=='1'"
+        v-if="product && [2].includes(product.tradeType) && product.marginInfo && product.marginInfo.type!=='1'"
         v-model='multipleSetVisible'
         v-model:multipleVal='multipleVal'
         :product='product'
@@ -246,6 +252,7 @@ import PendingBarCFD from './components/pendingBar_CFD'
 import LoanBar from './components/loanBar'
 import Assets from './components/assets.vue'
 import MultipleSet from '@planspc/components/multipleSet.vue'
+import MultipleSetCross from '@planspc/components/multipleSetCross.vue'
 import LoginMask from '@planspc/components/loginMask.vue'
 import { findFundPage } from '@/api/fund'
 
@@ -260,7 +267,8 @@ export default {
         LoanBar,
         Assets,
         LoginMask,
-        MultipleSet
+        MultipleSet,
+        MultipleSetCross
     },
     emits: ['update:modelValue', 'selected', 'update:multipleVal'],
     setup (props, { emit }) {
@@ -328,7 +336,7 @@ export default {
         // 业务配置
         const businessConfig = computed(() => store.state.businessConfig)
 
-        const showLeverage = computed(() => Number(product.value.tradeType) === 2 && product.value.marginInfo?.type !== '1')
+        const showLeverage = computed(() => [1, 2].includes(Number(product.value.tradeType)) && product.value.marginInfo?.type !== '1')
 
         // 现货产品的基础货币是【基金代币】的，显示【申/赎】按钮
         const fundtoken = computed(() => {
@@ -434,7 +442,7 @@ export default {
                 expireType: state[state.submitType].expireType,
                 entryType: state[state.submitType].entryType
             }
-            if (tradeType === '2' && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
+            if (['1', '2'].includes(tradeType) && product.value.marginInfo?.type !== '1') params.crossLevelNum = parseInt(state.multipleVal)
             return params
         }
 
@@ -507,6 +515,7 @@ export default {
             const [symbolId, tradeType] = symbolKey.value.split('_')
             store.commit('_quote/Update_productActivedID', `${symbolId}_${tradeType}`)
             state.operationType = parseFloat(tradeType) !== 3 // 杠杆玩法默认是普通类型
+            state.multipleVal = tradeType === '1' ? 20 : 1 // 全仓默认20倍
             setVolumeType() // 设置按额或者按手数交易
             store.dispatch('_quote/querySymbolInfo', { symbolId, tradeType }).then(product => {
                 state.sell.volume = ''

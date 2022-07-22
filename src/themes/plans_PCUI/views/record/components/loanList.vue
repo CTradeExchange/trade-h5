@@ -40,7 +40,10 @@ export default {
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY/MM/DD HH:mm:ss')
         }
-        const requestParams = ref({})
+        const requestParams = ref({
+            startTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
+            endTime: window.dayjs().endOf('day').valueOf()
+        })
 
         const params = computed(() => {
             return {

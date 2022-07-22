@@ -57,7 +57,10 @@ export default {
         const store = useStore()
         const route = useRoute()
         const { tradeType } = route.query
-        const requestParams = ref({})
+        const requestParams = ref({
+            startTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
+            endTime: window.dayjs().endOf('day').valueOf()
+        })
         const setParams = (params) => {
             requestParams.value = params || {}
         }

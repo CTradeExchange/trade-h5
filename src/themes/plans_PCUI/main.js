@@ -18,7 +18,8 @@ import { setRouter, modifybaseURL } from '@/utils/request'
 import { getLoginParams, getToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie, sessionSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
-import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
+import positiveNumber from '@/directives/positiveNumber'
+// import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
 import Setup from './setup'
 import { requestBusinessConfig } from '@/api/wpApi'
@@ -35,7 +36,7 @@ sessionSet('entrySearch', location.search) // 缓存入口url的参数，给注�
 
 const app = createApp(App)
 Setup(app)
-app.use(preventReClick)
+app.use(preventReClick).use(positiveNumber)
 app.use(VantBase).use(I18n).use(store).use(router)
 app.use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
 app.component('Loading', Loading)
@@ -46,7 +47,7 @@ app.mixin(MixinGlobal)
 app.config.errorHandler = (err, vm, info) => {
     // 处理错误  `info` 是 Vue 特定的错误信息，比如错误所在的生命周期钩子
     console.error(err, vm, info)
-    skywalkingRreportErrors(err)
+    // skywalkingRreportErrors(err)
 }
 // 如果有缓存有登录信息，先执行异步登录或者拉取用户信息
 let loginParams = getLoginParams()
@@ -68,11 +69,14 @@ requestBusinessConfig().then(res => {
     store.commit('Update_businessConfig', res)
 })
 
+window.isPC = process.env.VUE_APP_theme === 'plans_PCUI'
+
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
     store.dispatch('_base/getFooter')
-    if (isProduction) skywalkingRegister(router)
-    else modifybaseURL(store.state._base.wpCompanyInfo.apiService)
+    // if (isProduction) skywalkingRegister(router)
+    // else
+    modifybaseURL(store.state._base.wpCompanyInfo.apiService)
 
     // 注册websocket插件
     app.use(Socket, { $store: store, $router: router })

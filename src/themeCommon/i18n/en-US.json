@@ -161,8 +161,8 @@
         "all": "All",
         "allDate": "All date",
         "curToday": "Current Day",
-        "curWeek": "Current Week",
-        "curMonth": "Current Month",
+        "curWeek": "Pass 1 week",
+        "curMonth": "Pass 1 months",
         "curThreeMonth": "Pass 3 months",
         "chooseProduct": "Choose Product",
         "allProduct": "All Products",
@@ -369,7 +369,8 @@
         "payType": "Gateway",
         "inputPIN": "Please enter pin code",
         "payRedeemSuccess": "The deposit application has been submitted and it is processing. Please pay attention to your account funds condition, and the actual amount received shall prevail. If it is not received, please contact Customer Service.",
-        "appendVisDesc": "Please make sure the information is real and valid, otherwise it may cause the recharge failure"
+        "appendVisDesc": "Please make sure the information is real and valid, otherwise it may cause the recharge failure",
+        "minAmount": "Minimum recharge amount:"
     },
     "fund": {
         "marginLevel": "margin level",
@@ -708,7 +709,9 @@
         "hint_6": "Insuffient balance to withdraw",
         "hint_7": "Within 24 hours no of Withdrawal should not be more than",
         "bankTips": "This transaction is not support because the bank card currency is different with account currency",
-        "digitsTip": "Max 4 decimal place"
+        "digitsTip": "Max 4 decimal place",
+        "receiptAddress": "Payout Address",
+        "inputReceiptAddress": "Please enter payout address"
     },
     "withdrawRecord": {
         "noneHint": "No data",
@@ -960,7 +963,7 @@
         "customer": "Customer Service",
         "help": "Support",
         "faqs": "FAQs",
-        "terms": "Terms & Conditions ",
+        "terms": "Terms&Conditions ",
         "policy": "Privacy Policy ",
         "community": "Community",
         "aboutus": "About Us",

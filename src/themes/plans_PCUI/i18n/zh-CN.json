@@ -37,7 +37,8 @@
         "SelectLanguageAreas": "选择语言和地区",
         "records": "记录",
         "lastBox": "上一个",
-        "nextBox": "下一个"
+        "nextBox": "下一个",
+        "timeLimit": "最多选择180天"
     },
     "c": {
         "login": "登录",

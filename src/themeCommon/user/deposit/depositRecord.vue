@@ -4,6 +4,23 @@
         </template>
     </Top>
     <Loading :show='pageLoading' />
+    <div class='filter-wrap'>
+        <van-dropdown-menu :active-color='style.primary' :overlay='true'>
+            <van-dropdown-item
+                ref='timeDropdown'
+                v-model='timeVal'
+                :options='timeList'
+                @change='timeChange'
+            >
+                <template #title v-if='timeVal === 5'>
+                    {{ customDate }}
+                </template>
+                <template #default>
+                    <dateRange :is-selected='timeVal === 5' @change='onRangeChange' />
+                </template>
+            </van-dropdown-item>
+        </van-dropdown-menu>
+    </div>
     <div class='page-wrap'>
         <div class='record-list'>
             <van-pull-refresh
@@ -149,9 +166,11 @@ import { isEmpty } from '@/utils/util'
 import { Toast } from 'vant'
 import { useI18n } from 'vue-i18n'
 import Clipboard from 'clipboard'
+import dateRange from '@plans/components/dateRange'
 export default {
     components: {
-        Top
+        Top,
+        dateRange
     },
     setup (props) {
         const router = useRouter()
@@ -159,21 +178,7 @@ export default {
         const { t } = useI18n({ useScope: 'global' })
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
-        // 提案状态,待审批:1、审批成功:2、审批失败:3
-        // const checkStatus = {
-        //     1: '待审批',
-        //     2: '审批成功',
-        //     3: '已取消'
-        // }
-
-        // 存款状态,待存款:1、存款成功:2、存款失败:3
-        // const depositStatus = {
-        //     1: '待支付',
-        //     2: '存款成功',
-        //     3: '存款失败'
-        // }
-
+        const style = computed(() => store.state.style)
         const handleState = (checkStatus, depositStatus) => {
             // 存款成功 待支付 已取消
             if (Number(depositStatus) === 2) {
@@ -190,11 +195,21 @@ export default {
             loading: false,
             size: 20,
             current: 1,
+            startTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
+            endTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
             list: [],
             finishedText: t('common.noMore'),
             finished: false,
             pageLoading: false,
-            txid: ''
+            txid: '',
+            customDate: '',
+            timeVal: 2,
+            timeList: [
+                { text: t('common.curToday'), value: 1 },
+                { text: t('common.curWeek'), value: 2 },
+                { text: t('common.curMonth'), value: 3 },
+                { text: t('common.curThreeMonth'), value: 4 }
+            ]
         })
         const handleFold = (val) => {
             activeIndex.value = val
@@ -210,9 +225,10 @@ export default {
         const getWithdrawList = () => {
             const params = {
                 customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
                 size: state.size,
                 current: state.current,
+                startTime: state.startTime,
+                endTime: state.endTime
             }
             state.pageLoading = true
             queryDepositPageList(params).then(res => {
@@ -239,6 +255,44 @@ export default {
 
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+
+        // 时间筛选
+        const timeChange = (timeType) => {
+            if (timeType === 0) {
+                state.startTime = -1
+                state.endTime = -1
+            } else if (timeType === 1) {
+                state.startTime = window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
+            } else if (timeType === 2) {
+                state.startTime = window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf()
+            } else if (timeType === 3) {
+                state.startTime = window.dayjs(window.dayjs().subtract(1, 'month').format('YYYY/MM/DD')).valueOf()
+            } else if (timeType === 4) {
+                state.startTime = window.dayjs(window.dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
+            }
+            resetParams()
+            getWithdrawList()
+        }
+
+        // 选择自定义时间
+        const onRangeChange = (timeList) => {
+            state.timeVal = 5
+            if (timeList.length > 1) {
+                state.startTime = timeList[0]
+                state.endTime = timeList[1]
+                state.customDate = window.dayjs(timeList[0]).format('YYYY/MM/DD') + '-' + window.dayjs(timeList[1]).format('YYYY/MM/DD')
+            }
+            resetParams()
+            getWithdrawList()
+        }
+
+        // 重置参数
+        const resetParams = () => {
+            state.current = 1
+            state.finished = false
+            state.list = []
+            activeIndex.value = 0
         }
 
         // 底部加载更多
@@ -270,7 +324,10 @@ export default {
             onLoad,
             handleState,
             copyTXID,
-            ...toRefs(state)
+            ...toRefs(state),
+            style,
+            timeChange,
+            onRangeChange
         }
     }
 }
@@ -329,7 +386,7 @@ export default {
     .record-list {
         height: 100%;
         .van-collapse-item {
-            border-top: solid rem(20px) var(--bgColor);
+            border-bottom: solid rem(20px) var(--bgColor);
         }
         .amount {
             color: var(--color);
@@ -343,6 +400,43 @@ export default {
         .state {
             margin-right: rem(5px);
             color: var(--primary);
+        }
+    }
+}
+.filter-wrap {
+    :deep(.van-dropdown-menu) {
+        .van-dropdown-menu__bar {
+            align-items: center;
+            padding: 0 rem(10px);
+            background: var(--bgColor);
+            box-shadow: none;
+            .van-dropdown-menu__item {
+                position: relative;
+                justify-content: space-between;
+                height: rem(60px);
+                margin: 0 rem(10px);
+                padding: 0 rem(5px);
+                background: var(--contentColor);
+                border-radius: rem(6px);
+                .van-dropdown-menu__title {
+                    position: static;
+                    color: var(--color);
+                    font-size: rem(20px);
+                    &::after {
+                        right: rem(15px);
+                        border-color: transparent transparent  var(--normalColor) var(--normalColor);
+                    }
+                }
+                .van-cell__title {
+                    span {
+                        color: var(--color);
+                        font-size: rem(20px);
+                    }
+                }
+            }
+        }
+        .van-dropdown-item__option {
+            font-size: rem(20px);
         }
     }
 }

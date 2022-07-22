@@ -1,7 +1,5 @@
 <template>
     <!-- <router-view /> -->
-    <Top />
-
     <Suspense>
         <template #default>
             <router-view v-slot='{ Component, route }'>
@@ -19,26 +17,22 @@
             Loading...
         </template>
     </Suspense>
-
-    <Bottom v-if='route.meta?.showFooter' />
+    <footerMenu v-if='navData' id='footerMenu' class='footerMenu' :data='navData.data' />
 </template>
 
 <script>
 import { computed, onUnmounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRoute } from 'vue-router'
-import Top from './layoutTop.vue'
-import Bottom from './layoutBottom.vue'
+import footerMenu from '../modules/nav/nav'
+import { localRemove } from '@/utils/util'
 
 export default {
     name: 'Layout',
     components: {
-        Top,
-        Bottom
+        footerMenu
     },
     setup () {
         const store = useStore()
-        const route = useRoute()
         const cacheViews = computed(() => store.state.cacheViews)
         const navData = computed(() => store.state._base.wpNav.find(el => el.tag === 'nav'))
         store.dispatch('_base/getPageConfig', 'Nav').then(res => {
@@ -49,7 +43,6 @@ export default {
             // localRemove('noticeParams')
         })
         return {
-            route,
             cacheViews,
             navData
         }

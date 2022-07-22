@@ -290,13 +290,13 @@ export default {
         margin-top: rem(20px);
         padding: 0 rem(30px);
         background: var(--contentColor);
-        :deep(.el-select) {
-            width: 100%;
+        :deep(.el-select){
+            width:100%;
         }
-        :deep(.el-input__inner) {
-            color: var(--color);
-            background: var(--assistColor);
+        :deep(.el-input__inner){
             border: none;
+            background: var(--assistColor);
+            color: var(--color);
         }
         .head-text {
             color: var(--minorColor);

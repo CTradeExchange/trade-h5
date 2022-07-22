@@ -39,18 +39,18 @@
                             </div>
                         </div>
                         <div>
-                            <span :class='item.last_color'>
-                                {{ item.rolling_last_price || '--' }}
+                            <span :class='item.cur_color'>
+                                {{ item.cur_price || '--' }}
                             </span>
                         </div>
                         <div>
-                            <strong :class='item.rolling_upDownColor'>
-                                {{ item.rolling_upDownAmount || '--' }}
+                            <strong :class='item.upDownColor'>
+                                {{ item.upDownAmount || '--' }}
                             </strong>
                         </div>
                         <div class='upDownWidth'>
-                            <strong :class='item.rolling_upDownColor'>
-                                {{ item.rolling_upDownWidth || '--' }}
+                            <strong :class='item.upDownColor'>
+                                {{ item.upDownWidth || '--' }}
                             </strong>
                         </div>
                         <div class='handle'>

@@ -100,7 +100,7 @@ export default {
             switchProductVisible: false,
             directionVal: -1,
             positionTypeVal: -1,
-            timeVal: 0,
+            timeVal: 2,
             productVal: 0,
             curProduct: {},
             customDate: '',
@@ -115,7 +115,7 @@ export default {
                 { text: t('trade.closePosition'), value: 2 },
             ],
             timeList: [
-                { text: t('common.allDate'), value: 0 },
+                // { text: t('common.allDate'), value: 0 },
                 { text: t('common.curToday'), value: 1 },
                 { text: t('common.curWeek'), value: 2 },
                 { text: t('common.curMonth'), value: 3 },
@@ -136,7 +136,7 @@ export default {
             params: {
                 current: 1,
                 size: 20,
-                // executeStartTime: 0,
+                executeStartTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
                 executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf()
             },
             tradeType: route.query.tradeType,
@@ -252,9 +252,9 @@ export default {
             } else if (timeType === 1) {
                 state.params.executeStartTime = window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
             } else if (timeType === 2) {
-                state.params.executeStartTime = window.dayjs(window.dayjs().startOf('week')).valueOf()
+                state.params.executeStartTime = window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf()
             } else if (timeType === 3) {
-                state.params.executeStartTime = window.dayjs(window.dayjs().startOf('month')).valueOf()
+                state.params.executeStartTime = window.dayjs(window.dayjs().subtract(1, 'month').format('YYYY/MM/DD')).valueOf()
             } else if (timeType === 4) {
                 state.params.executeStartTime = window.dayjs(window.dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
             }

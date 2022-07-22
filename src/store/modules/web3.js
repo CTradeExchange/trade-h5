@@ -11,7 +11,8 @@ export default {
         userAddress: '', // 当前链地址
         userBalance: '', // 当前链余额
         testnetMode: JSON.parse(localGet('isTestMode')), // 是否开启测试模式
-        aaveProducts: []
+        aaveProducts: [],
+        indexcoopProducts: [],
     },
     // getters: {
     //     userAccountType (state) {
@@ -48,6 +49,9 @@ export default {
         },
         Update_aaveProducts (state, data) {
             state.aaveProducts = data
+        },
+        Update_indexcoopProducts (state, data) {
+            state.indexcoopProducts = data
         },
     },
     actions: {

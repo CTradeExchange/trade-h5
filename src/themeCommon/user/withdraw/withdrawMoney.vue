@@ -133,7 +133,7 @@
                     v-model='item.value'
                     :data='item'
                     :label='item[lang]'
-                    label-width='70'
+                    label-width='80'
                     :placeholder="$t('common.input') + item[lang]"
                     :required='true'
                 />
@@ -640,9 +640,8 @@ export default {
                 }
             }
             state.appendVis = false
-
-            // 发起提现
-            launchHandleWithdraw()
+            // 判断资金密码
+            state.fundPwdVis = true
         }
 
         // 点击确定提现

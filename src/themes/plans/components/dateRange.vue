@@ -11,7 +11,7 @@
             </div>
         </template>
         <template #default>
-            <van-icon v-if='showIcon' class='van-dropdown-item__icon' name='success' />
+            <van-icon v-if='showIcon' class='van-dropdown-item__icon' :color='primaryColor' name='success' />
         </template>
     </van-cell>
     <van-calendar
@@ -20,6 +20,7 @@
         :allow-same-day='true'
         :color='primaryColor'
         :max-date='maxDate'
+        :max-range='180'
         :min-date='minDate'
         position='left'
         :round='false'
@@ -31,6 +32,7 @@
 
 <script>
 import { ref, unref, computed, watch } from 'vue'
+import { useStore } from 'vuex'
 import Base from '@/store/modules/base'
 
 export default {

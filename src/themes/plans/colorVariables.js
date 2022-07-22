@@ -20,7 +20,8 @@ const colors = {
         contentColor: '#21262f',
         bgColor: '#191e24',
         assistColor: '#2c2e3b',
-        lineColor: '#2c2e3b'
+        lineColor: '#2c2e3b',
+        mainColor: '#ffffff'
     },
     light: {
         riseColor: '#B72122',
@@ -33,7 +34,8 @@ const colors = {
         contentColor: '#ffffff',
         bgColor: '#f4f4f4',
         assistColor: '#f4f4f4',
-        lineColor: '#eeeeee'
+        lineColor: '#eeeeee',
+        mainColor: '#000000'
     },
 
     /* 'color': '#333',
@@ -76,6 +78,7 @@ export function setRootVariable (themeColor, primaryColor) {
     const chartColorType = JSON.parse(localGet('chartConfig'))?.chartColorType || 1
     if (primaryColor) {
         colors.common.primary = primaryColor
+        colors.common.primaryBg = primaryColor + '1A'
     }
 
     const colorsArr = Object.assign({}, colors.common, colors[invertColor])

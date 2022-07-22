@@ -11,13 +11,19 @@ const { USDT_ADDRESS } = process.env.NODE_ENV === 'production' ? require('./cons
 //
 const providerOptions = {
     // https://docs.walletconnect.org/
-    // walletconnect: {
-    //     package: WalletConnectProvider,
-    //     options: {
-    //         infuraId, // TODO infuraId
-    //     },
-    // },
-    // // https://github.com/torusresearch/torus-embed#readme
+    walletconnect: {
+        package: WalletConnectProvider,
+        options: {
+            infuraId, // TODO infuraId
+            // desktopLinks: [
+            //     'encrypted ink',
+            // ]
+        },
+        // bridge: 'https://bridge.walletconnect.org', // Required
+        // bridge: 'https://bridge.myhostedserver.com',
+    },
+
+    // https://github.com/torusresearch/torus-embed#readme
     // torus: {
     //     package: Torus,
     // },

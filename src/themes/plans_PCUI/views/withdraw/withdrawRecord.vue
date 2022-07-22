@@ -1,18 +1,31 @@
 <template>
     <centerViewDialog>
-        <!-- <Top back left-icon='arrow-left' :menu='false' :right-action='false' :show-center='true'>
-            <template #right>
-            </template>
-        </Top> -->
         <LayoutTop />
-        <Loading :show='loadingPage' />
         <div class='page-wrap'>
+            <div class='filter-wrap'>
+                <van-dropdown-menu :active-color='style.primary' :overlay='true'>
+                    <van-dropdown-item
+                        ref='timeDropdown'
+                        v-model='timeVal'
+                        :options='timeList'
+                        @change='timeChange'
+                    >
+                        <template #title v-if='timeVal === 5'>
+                            {{ customDate }}
+                        </template>
+                        <template #default>
+                            <dateRange :is-selected='timeVal === 5' @change='onRangeChange' />
+                        </template>
+                    </van-dropdown-item>
+                </van-dropdown-menu>
+            </div>
             <div class='record-list'>
                 <van-pull-refresh v-model='loading' @refresh='onRefresh'>
                     <div v-if='list.length === 0'>
                         <van-empty :description="$t('withdrawRecord.noneHint')" image='/images/empty.png' />
                     </div>
                     <van-list
+                        v-else
                         v-model:loading='loading'
                         :finished='finished'
                         :finished-text='finishedText'
@@ -169,12 +182,14 @@ import { useRoute, useRouter } from 'vue-router'
 import Clipboard from 'clipboard'
 import { isEmpty } from '@/utils/util'
 import centerViewDialog from '@planspc/layout/centerViewDialog'
+import dateRange from '@planspc/components/dateRange'
 
 // i18n
 import { useI18n } from 'vue-i18n'
 export default {
     components: {
-        centerViewDialog
+        centerViewDialog,
+        dateRange
     },
     setup (props) {
         const { t } = useI18n({ useScope: 'global' })
@@ -182,7 +197,7 @@ export default {
         const route = useRoute()
         // 获取账户信息
         const customInfo = computed(() => store.state._user.customerInfo)
-
+        const style = computed(() => store.state.style)
         const { withdrawType } = route.query
 
         // 审核状态 取款状态：审核中、已取消、成功
@@ -214,10 +229,20 @@ export default {
             loading: false,
             size: 20,
             current: 1,
+            startTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
+            endTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
             list: [],
             finishedText: t('withdrawRecord.noMore'),
             finished: false,
-            loadingPage: false
+            loadingPage: false,
+            customDate: '',
+            timeVal: 2,
+            timeList: [
+                { text: t('common.curToday'), value: 1 },
+                { text: t('common.curWeek'), value: 2 },
+                { text: t('common.curMonth'), value: 3 },
+                { text: t('common.curThreeMonth'), value: 4 }
+            ]
         })
         const handleFold = (val) => {
             activeIndex.value = val
@@ -234,10 +259,11 @@ export default {
             const params = {
                 companyId: customInfo.value.companyId,
                 customerNo: customInfo.value.customerNo,
-                accountId: customInfo.value.accountId,
                 withdrawType,
                 size: state.size,
                 current: state.current,
+                startTime: state.startTime,
+                endTime: state.endTime
             }
             state.loadingPage = true
             queryWithdrawPageList(params).then(res => {
@@ -265,6 +291,44 @@ export default {
 
         const formatTime = (val) => {
             return window.dayjs(val).format('YYYY-MM-DD HH:mm:ss')
+        }
+
+        // 时间筛选
+        const timeChange = (timeType) => {
+            if (timeType === 0) {
+                state.startTime = -1
+                state.endTime = -1
+            } else if (timeType === 1) {
+                state.startTime = window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 00:00:00')).valueOf()
+            } else if (timeType === 2) {
+                state.startTime = window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf()
+            } else if (timeType === 3) {
+                state.startTime = window.dayjs(window.dayjs().subtract(1, 'month').format('YYYY/MM/DD')).valueOf()
+            } else if (timeType === 4) {
+                state.startTime = window.dayjs(window.dayjs().subtract(3, 'month').format('YYYY/MM/DD')).valueOf()
+            }
+            resetParams()
+            getWithdrawList()
+        }
+
+        // 选择自定义时间
+        const onRangeChange = (timeList) => {
+            state.timeVal = 5
+            if (timeList.length > 1) {
+                state.startTime = timeList[0]
+                state.endTime = timeList[1]
+                state.customDate = window.dayjs(timeList[0]).format('YYYY/MM/DD') + '-' + window.dayjs(timeList[1]).format('YYYY/MM/DD')
+            }
+            resetParams()
+            getWithdrawList()
+        }
+
+        // 重置参数
+        const resetParams = () => {
+            state.current = 1
+            state.finished = false
+            state.list = []
+            activeIndex.value = 0
         }
 
         // 底部加载更多
@@ -303,7 +367,10 @@ export default {
             handleState,
             transferStatus,
             copyTXID,
-            ...toRefs(state)
+            ...toRefs(state),
+            style,
+            timeChange,
+            onRangeChange
         }
     }
 }
@@ -312,10 +379,11 @@ export default {
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
 .page-wrap {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    padding-top: rem(90px);
-    overflow: auto;
+    margin-top: 42px;
+    overflow: hidden;
     background-color: var(--bgColor);
     .withdraw-desc {
         .w-item {
@@ -357,8 +425,10 @@ export default {
         }
     }
     .record-list {
+        flex: 1;
+        overflow: auto;
         .van-collapse-item {
-            border-top: solid rem(20px) var(--bgColor);
+            border-bottom: solid rem(20px) var(--bgColor);
         }
         .amount {
             color: var(--color);
@@ -382,7 +452,49 @@ export default {
         }
     }
 }
-.van-pull-refresh {
-    height: 100%;
+.filter-wrap {
+    :deep(.van-dropdown-menu) {
+        .van-dropdown-item {
+            width: 520px;
+            margin: 0 auto;
+        }
+        .van-dropdown-item {
+            height: 510px;
+            border-radius: 8px;
+        }
+        .van-dropdown-menu__bar {
+            align-items: center;
+            padding: 0 rem(10px);
+            background: var(--bgColor);
+            box-shadow: none;
+            .van-dropdown-menu__item {
+                position: relative;
+                justify-content: space-between;
+                height: rem(60px);
+                margin: 0 rem(10px);
+                padding: 0 rem(5px);
+                background: var(--contentColor);
+                border-radius: rem(6px);
+                .van-dropdown-menu__title {
+                    position: static;
+                    color: var(--color);
+                    font-size: rem(20px);
+                    &::after {
+                        right: rem(15px);
+                        border-color: transparent transparent  var(--normalColor) var(--normalColor);
+                    }
+                }
+                .van-cell__title {
+                    span {
+                        color: var(--color);
+                        font-size: rem(20px);
+                    }
+                }
+            }
+        }
+        .van-dropdown-item__option {
+            font-size: rem(20px);
+        }
+    }
 }
 </style>

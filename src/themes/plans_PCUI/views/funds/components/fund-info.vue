@@ -54,7 +54,7 @@
                 </van-popover>
                 <div class='col'>
                     <span>{{ $t('fundInfo.totalMarketValue') }}({{ fund.currencyCode }})</span>
-                    <strong>{{ formatAmount(fund.totalBalance) }}</strong>
+                    <strong>{{ calculate(fund.totalBalance) }}</strong>
                 </div>
                 <div v-if='fund.upDate' class='col'>
                     <span>{{ $t('fundInfo.fundCreateTime') }}</span>
@@ -67,7 +67,7 @@
 
 <script setup>
 import { ref, defineProps, inject } from 'vue'
-import { toFixed, formatAmount } from '@/utils/calculation.js'
+import { toFixed } from '@/utils/calculation.js'
 import currencyIcon from '@/components/currencyIcon.vue'
 
 defineProps({
@@ -84,6 +84,21 @@ const sharesNet = inject('sharesNet')
 // 提示
 const showPopover1 = ref(false)
 const showPopover2 = ref(false)
+
+// 计算显示的数值
+const calculate = (num) => {
+    let result = ''
+    if (num >= 1000 && num < 1000000) {
+        num = toFixed((num / 1000))
+        result = num + 'K'
+    } else if (num >= 1000000) {
+        num = toFixed((num / 1000000))
+        result = num + 'M'
+    } else {
+        result = num
+    }
+    return result
+}
 </script>
 
 <style lang='scss' scoped>

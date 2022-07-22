@@ -196,6 +196,7 @@ export default {
             const params = {
                 current: 1,
                 size: 10,
+                executeStartTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
                 executeEndTime: window.dayjs(window.dayjs(new Date()).format('YYYY/MM/DD 23:59:59')).valueOf(),
                 accountIds: state.accountIds.toString(),
                 tradeType: Number(props.tradeType),

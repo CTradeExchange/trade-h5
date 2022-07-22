@@ -151,6 +151,7 @@ module.exports = {
         'vue/no-v-model-argument': 'off', // v-slot是否有效
         'vue/no-multiple-template-root': 'off', // 单文件组件不允许多个根节点
         'vue/no-v-for-template-key': 'off', // 单文件组件不允许多个根节点
+        'vue/no-mutating-props': 'off',
         'comma-dangle': 'off',
         'dot-notation': 'off',
         'prefer-promise-reject-errors': 'off',

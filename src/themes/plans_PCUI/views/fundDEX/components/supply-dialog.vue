@@ -38,10 +38,10 @@
                                     </template>
                                 </el-dropdown>
                                 -->
-                                <span class='el-dropdown-link' @click='changeToken'>
+                                <a class='el-dropdown-link' href='javascript:;' @click='changeToken'>
                                     <img alt='' class='currencyIcon' src='/img/BTC.e8d20076.png' /> ETF
                                     <i class='el-icon-arrow-down el-icon--right'></i>
-                                </span>
+                                </a>
                             </div>
 
                             <div class='Balance'>
@@ -110,26 +110,8 @@
                 </button>
             </template>
         </el-dialog>
-
-        <el-dialog
-            ref='selectToken'
-            v-model='tokenSelectShow'
-            title='Select a token'
-            width='400px'
-        >
-            <div class='body-module'>
-                <div class='tokenListBox'>
-                    <div v-for='item in options' :key='item.id' class='row tokenCell' :index='item.id' @click='handleSelectToken(item)'>
-                        <div class='value'>
-                            <img alt='' class='currencyIcon' :src='item.icon' /> {{ item.label }}
-                        </div>
-                        <div class='name'>
-                            <span>0.00</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </el-dialog>
+        {{ selectTokenDialogVisible }}
+        <SelectTokenDialog v-model='selectTokenDialogVisible' @select='tokenSelect' />
     </div>
 </template>
 
@@ -138,42 +120,24 @@ import { computed, reactive, watch, toRefs, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
+import SelectTokenDialog from './coop-selectToken-dialog.vue'
 
 export default {
-    // components: { },
+    components: {
+        SelectTokenDialog,
+    },
     props: ['show', 'data'],
     setup (props, context) {
         const store = useStore()
         const state = reactive({
             loading: false,
             dialogShow: props.show,
-            tokenSelectShow: false,
+            selectTokenDialogVisible: false,
             isSubmit: false,
             data: props.data,
             topTitle: 'Quick Trade',
             isSuccess: false,
-            options: [
-                {
-                    id: 1,
-                    label: 'BTC',
-                    icon: '/img/BTC.e8d20076.png'
-                },
-                {
-                    id: 2,
-                    label: 'DAI',
-                    icon: '/img/BTC.e8d20076.png'
-                },
-                {
-                    id: 3,
-                    label: 'ETH',
-                    icon: '/img/BTC.e8d20076.png'
-                },
-                {
-                    id: 4,
-                    label: 'JPG',
-                    icon: '/img/BTC.e8d20076.png'
-                },
-            ],
+            from: {},
             optionsVal: ''
         })
 
@@ -205,12 +169,12 @@ export default {
         }
 
         const changeToken = () => {
-            state.tokenSelectShow = true
+            state.selectTokenDialogVisible = true
         }
 
-        const handleSelectToken = (item) => {
-            // console.log(item)
-            state.tokenSelectShow = false
+        // 选择token
+        const tokenSelect = item => {
+            state.from = item
         }
 
         onMounted(() => {
@@ -220,9 +184,9 @@ export default {
         return {
             ...toRefs(state),
             closeFn,
+            tokenSelect,
             checkSubmit,
             changeToken,
-            handleSelectToken
         }
     }
 }

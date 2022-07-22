@@ -76,8 +76,8 @@
                     <van-popover v-model:show='item.popover' placement='bottom-end' theme='dark'>
                         <p
                             style='padding: 5px;
-                            font-size: 10px;
-                            white-space: nowrap;'
+font-size: 10px;
+white-space: nowrap;'
                         >
                             {{ item.weight }}
                         </p>

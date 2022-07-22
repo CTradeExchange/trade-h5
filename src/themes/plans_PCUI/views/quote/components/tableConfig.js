@@ -136,6 +136,12 @@ export const getColumns = tradeTypeValue => {
 
     const commonBtns = ({ row }) => (
         <>
+            {/* <span class='btn' onclick={(event) => gotoOrder(event, row)}>
+                { t('trade.buy') }
+            </span>
+            <span class='btn' onclick={(event) => gotoOrder(event, row)}>
+                { t('trade.sell') }
+            </span> */}
             <span class='btn active' onclick={(event) => gotoFund(event, row)} v-show={row.etf}>
                 { t('fundInfo.buy') }
             </span>
@@ -207,7 +213,7 @@ export const getColumns = tradeTypeValue => {
                 }
             },
             {
-                name: t('trade.sellPrice'),
+                name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
                 formatter: row => (
@@ -220,7 +226,7 @@ export const getColumns = tradeTypeValue => {
                 }
             },
             {
-                name: t('trade.buyPrice'),
+                name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
                 formatter: row => (
@@ -233,7 +239,7 @@ export const getColumns = tradeTypeValue => {
                 }
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 160,
                 className: 'upDownWidth',
@@ -289,7 +295,7 @@ export const getColumns = tradeTypeValue => {
                 }
             },
             {
-                name: t('trade.sellPrice'),
+                name: t('trade.newPrice'),
                 align: 'left',
                 minWidth: 160,
                 formatter: row => (
@@ -302,7 +308,7 @@ export const getColumns = tradeTypeValue => {
                 }
             },
             {
-                name: t('trade.buyPrice'),
+                name: t('trade.changePrice'),
                 align: 'left',
                 minWidth: 160,
                 formatter: row => (
@@ -315,7 +321,7 @@ export const getColumns = tradeTypeValue => {
                 }
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 160,
                 className: 'upDownWidth',
@@ -399,7 +405,7 @@ export const getColumns = tradeTypeValue => {
 
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 160,
                 className: 'upDownWidth',
@@ -484,7 +490,7 @@ export const getColumns = tradeTypeValue => {
 
             },
             {
-                name: t('trade.upDownWidth'),
+                name: t('trade.changePercent'),
                 align: 'left',
                 minWidth: 150,
                 className: 'upDownWidth',

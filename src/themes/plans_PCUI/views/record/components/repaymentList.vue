@@ -58,7 +58,10 @@ export default {
         }
         const route = useRoute()
         const { accountId } = route.query
-        const requestParams = ref({})
+        const requestParams = ref({
+            startTime: window.dayjs(window.dayjs().subtract(7, 'day').format('YYYY/MM/DD')).valueOf(),
+            endTime: window.dayjs().endOf('day').valueOf()
+        })
         const setParams = (params) => {
             requestParams.value = params || {}
         }

@@ -97,7 +97,7 @@ import { Dialog } from 'vant'
 import { useI18n } from 'vue-i18n'
 import { orderHook } from '../hooks.js'
 import { limitNumber, limitDecimal, toFixed } from '@/utils/calculation'
-import { getCookie } from '@/utils/util.js'
+import { getCookie } from '@/utils/util'
 
 const router = useRouter()
 const store = useStore()

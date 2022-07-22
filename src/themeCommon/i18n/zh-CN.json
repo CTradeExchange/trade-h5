@@ -51,134 +51,6 @@
         "invite": "邀请好友",
         "rule": "规则"
     },
-    "directionBtns": [
-      {
-        "name": "全部流向",
-        "value": 0
-      },
-      {
-        "name": "入账",
-        "value": 1
-      },
-      {
-        "name": "出帐",
-        "value": 2
-      }
-    ],
-    "dateBtns": [
-      {
-        "name": "全部日期",
-        "value": 0
-      },
-      {
-        "name": "今天",
-        "value": 1
-      },
-      {
-        "name": "最近一周",
-        "value": 2
-      },
-      {
-        "name": "最近一月",
-        "value": 3
-      },
-      {
-        "name": "最近三月",
-        "value": 4
-      }
-    ]
-  },
-  "msg": {
-    "all": "全部消息",
-    "accountMsg": "账户消息",
-    "tradeMsg": "交易消息",
-    "assetsMsg": "资金消息"
-  },
-  "setting": {
-    "enableNews": "启用新闻",
-    "bindPhone": "绑定手机",
-    "bindEmail": "绑定邮箱",
-    "replaceEmail": "更换邮箱",
-    "replacePhone": "更换手机",
-    "logout": "退出账号",
-    "logoutConfirm": "确定退出登录吗",
-    "setLang": "设置语言",
-    "chartColor": "涨跌设置",
-    "color": "皮肤颜色"
-  },
-  "withdraw": {
-    "withdrawLink": "提现地址",
-    "wayMsg": "暂无取款功能",
-    "successHint": "操作成功",
-    "coinTitle": "提现",
-    "moneyTitle": "提现",
-    "coinRecordText": "提币记录",
-    "moneyRecordText": "提现记录",
-    "confirm": "确定",
-    "hint": "提示",
-    "close": "关闭",
-    "contact": "联系客服",
-    "timeName": "取款时间",
-    "timeHint": "当前时间不可取款",
-    "withdrawLimitHint": "账户暂不能取款，如有疑问请联系在线客服",
-    "kycBtn_1": "去查看",
-    "kycBtn_2": "去认证",
-    "kycMsg_1": "KYC审核中，请耐心等待",
-    "kycMsg_2": "当前操作需要KYC认证",
-    "activateMsg": "账户激活后才可取款",
-    "activateBtn": "去激活",
-    "bindBtn": "去绑定",
-    "bindPhoneHint": "暂未绑定手机号码，请前往绑定",
-    "backHome": "返回首页",
-    "successText": "提交成功",
-    "coinSuccessMsg": "您的提现申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服",
-    "moneySuccessMsg": "您的提现申请已经提交成功，我们将尽快完成审核，如有疑问或其他帮助请联系客服",
-    "outAccount": "请选择提现的账户币种",
-    "inAccount": "请选择到账币种",
-    "withdrawRecord": "取款明细",
-    "withdrawMethod": "请选择取款方式",
-    "withdrawDigitsTip": "取款金额小数位不能大于账户货币小数位",
-    "tips1": "暂不可取款，请稍后再试或联系客服"
-  },
-  "withdrawMoney": {
-    "moneyName": "提现金额",
-    "moneyPlaceholder": "请输入取款金额",
-    "allBtn": "全部取出",
-    "canName": "可提金额",
-    "serviceName": "手续费",
-    "bankName": "收款银行卡",
-    "bankNone": "暂无银行卡,请添加",
-    "addBtn": "去添加",
-    "predictName": "预计到账",
-    "bankPopupTitle": "选择收款银行卡",
-    "bankPopupBtn": "添加银行卡",
-    "unit": "次",
-    "hint_1": "请输入正确的金额",
-    "hint_2": "请选择取款银行卡",
-    "hint_3": "取款金额不能小于",
-    "hint_4": "取款金额不能大于",
-    "hint_5": "余额不足",
-    "hint_6": "可取资金不足",
-    "hint_7": "24小时内取款次数不超过",
-    "bankTips": "该银行卡币种与到账币种不同，不支持该笔交易",
-    "digitsTip": "最多4位小数"
-  },
-  "withdrawRecord": {
-    "noneHint": "暂无数据",
-    "moneyName": "取款金额",
-    "coinName": "币种",
-    "statusName": "状态",
-    "serviceName": "手续费",
-    "predictName": "入账金额",
-    "noName": "提案编号",
-    "timeName": "提交时间",
-    "remarkName": "备注",
-    "noMore": "没有更多了",
-    "accountDeduction": "账户扣减",
-    "auditStatus": {
-      "1": "审核中",
-      "2": "已取消",
-      "3": "成功"
     "login": {
         "loginBtn": "登录",
         "register": "注册新账户",
@@ -291,8 +163,8 @@
         "all": "全部",
         "allDate": "全部日期",
         "curToday": "当日",
-        "curWeek": "当周",
-        "curMonth": "当月",
+        "curWeek": "最近1周",
+        "curMonth": "最近1月",
         "curThreeMonth": "最近3月",
         "chooseProduct": "选择产品",
         "allProduct": "全部产品",
@@ -498,7 +370,8 @@
         "payType": "支付类型",
         "inputPIN": "请输入pin码",
         "payRedeemSuccess": "充值申请已提交，系统处理中，请留意您的账户资金情况，以实际到账金额为准。如未到账，请联系客服。",
-        "appendVisDesc": "请确保所填资料真实有效，否则可能导致充值失败"
+        "appendVisDesc": "请确保所填资料真实有效，否则可能导致充值失败",
+        "minAmount": "最小充值数量："
     },
     "fund": {
         "marginLevel": "保证金水平",

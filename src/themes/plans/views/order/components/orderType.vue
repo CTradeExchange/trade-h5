@@ -102,41 +102,42 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.orderTypeTabWrapper {
+.orderTypeTabWrapper{
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
     margin: 0 0 rem(20px);
-    .multipleBtn {
-        @include active();
+    .multipleBtn{
         height: rem(48px);
-        padding: 0 rem(16px);
-        color: var(--color);
-        color: var(--color);
         line-height: rem(48px);
+        color: var(--color);
         background: var(--assistColor);
+        padding: 0 rem(16px);
         border-radius: rem(6px);
-        .text {
+        color: var(--color);
+        @include active();
+        .text{
             display: inline-block;
             padding-right: rem(20px);
             font-size: rem(26px);
         }
-        .icon_icon_arrow {
+        .icon_icon_arrow{
             font-size: rem(20px);
             vertical-align: 1px;
         }
     }
 }
+
 .orderTypeTab {
+
+    --van-tabs-bottom-bar-width: 11vw;
+    --van-tabs-line-height: 40px;
+    --van-tabs-bottom-bar-color: var(--primary);
     :deep(.van-tab) {
         flex: none;
         margin-right: rem(40px);
         padding: 0;
         text-align: center;
     }
-
-    --van-tabs-bottom-bar-width: 11vw;
-    --van-tabs-line-height: 40px;
-    --van-tabs-bottom-bar-color: var(--primary);
 }
 </style>

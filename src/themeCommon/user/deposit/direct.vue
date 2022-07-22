@@ -65,6 +65,9 @@
                 <p class='title'>
                     {{ $t('common.warning') }}
                 </p>
+                <p class='min'>
+                    {{ $t('deposit.minAmount') }} {{ paymentInfo.singleLowAmount }} {{ currency }}
+                </p>
                 <p class='des'>
                     {{ $t('deposit.directTip') }}
                 </p>
@@ -418,8 +421,13 @@ export default {
         font-size: rem(40px);
         color: var(--warn);
     }
-    .des {
+    .min {
+        font-size: rem(24px);
+        color: var(--color);
         margin-top: rem(26px);
+        margin-bottom: rem(16px);
+    }
+    .des {
         font-size: rem(24px);
         color: var(--color);
     }

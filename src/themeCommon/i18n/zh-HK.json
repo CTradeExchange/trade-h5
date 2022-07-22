@@ -163,8 +163,8 @@
         "all": "全部",
         "allDate": "全部日期",
         "curToday": "當日",
-        "curWeek": "當周",
-        "curMonth": "當月",
+        "curWeek": "最近1周",
+        "curMonth": "最近1月",
         "curThreeMonth": "最近3月",
         "chooseProduct": "選取產品",
         "allProduct": "全部產品",
@@ -369,7 +369,8 @@
         "payType": "支付類別",
         "inputPIN": "請匯入pin碼",
         "payRedeemSuccess": "充值申請已提交，系統處理中，請留意您的賬戶資金情況，以實際到賬金額為准。如未到賬，請聯繫客服。",
-        "appendVisDesc": "請確保所填資料真實有效，否則可能導致充值失敗"
+        "appendVisDesc": "請確保所填資料真實有效，否則可能導致充值失敗",
+        "minAmount": "最小充值數量："
     },
     "fund": {
         "marginLevel": "保證金水平",

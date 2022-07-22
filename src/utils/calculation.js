@@ -158,3 +158,10 @@ export function formatAmount (num, decimals = 2) {
     }
     return result
 }
+
+// 科学计算法转 string
+export function toNonExponential (num) {
+    num = parseFloat(num)
+    const m = num.toExponential().match(/\d(?:\.(\d*))?e([+-]\d+)/)
+    return num.toFixed(Math.max(0, (m[1] || '').length - m[2]))
+}

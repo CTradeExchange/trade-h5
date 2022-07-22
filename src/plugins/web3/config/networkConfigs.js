@@ -1,7 +1,5 @@
 import { CustomMarket, marketsData } from './marketsConfig'
 
-console.log(CustomMarket, marketsData)
-
 export default {
     '1': {
         'name': 'Ethereum',
@@ -121,6 +119,7 @@ export default {
             'url': 'https://wallet.matic.network/bridge/'
         },
         'ratesHistoryApiUrl': 'https://aave-api-v2.aave.com/data/rates-history',
+        'infuraName': 'polygon'
     },
     '250': {
         'name': 'Fantom',

@@ -218,7 +218,7 @@ const current = computed({
         .emptyText{
             display: inline-block;
             width: 160px;
-            padding-top: 160px;
+            padding-top: 140px;
             background: url('/images/empty.png') center top no-repeat;
             background-size: 160px auto;
             color: var(--placeholdColor);

@@ -37,7 +37,8 @@
         "SelectLanguageAreas": "Choose a language and region",
         "records": "Records",
         "lastBox": "Last",
-        "nextBox": "Next"
+        "nextBox": "Next",
+        "timeLimit": "A maximum of 180 days can be selected"
     },
     "c": {
         "login": "Login",
@@ -555,7 +556,7 @@
         "enterMarginAmountRequire": "Please input adjustment amount",
         "enterMarginAmountTip": "Adjustment amount cannot be negative",
         "order": "Order",
-        "dealList": "Trade records",
+        "dealList": "Trade record",
         "openClose": "Open/Close",
         "openPosition": "Open",
         "closePosition": "Close",
