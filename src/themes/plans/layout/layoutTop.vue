@@ -17,7 +17,7 @@
             <van-icon class='close' color='#333' name='cross' size='18' @click='downloadVis=false' />
         </div>
     </div>
-    <div class='nav-wrap'>
+    <div v-show='!isUniapp' class='nav-wrap'>
         <div class='logo' @click="$router.push('/')">
             <img alt='' src='/images/logo_vitamin.png' srcset='' />
         </div>
@@ -274,6 +274,7 @@ const store = useStore()
 const router = useRouter()
 const route = useRoute()
 
+const isUniapp = route.query.isUniapp || route.query.isApp
 const downloadVis = ref(route.path === '/home')
 const langShow = ref(false)
 const menuVis = ref(false)

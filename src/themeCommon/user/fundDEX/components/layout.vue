@@ -15,7 +15,6 @@
                         <div :class="['handle-item']">
                             <span class='name'>
                                 <img alt='' class='svg-icon-1' src='/images/chart.svg' srcset='' />
-
                                 Funds
                             </span>
                             <i class='el-icon-caret-bottom'></i>
@@ -26,7 +25,6 @@
                                 @click="switchRouter('/earning')"
                             >
                                 <img alt='' class='svg-icon-2' src='/images/earning.svg' srcset='' />
-
                                 Earning
                             </li>
                             <li
@@ -34,7 +32,6 @@
                                 @click="switchRouter('/indexFunds')"
                             >
                                 <img alt='' class='svg-icon-2' src='/images/indexFunds.svg' srcset='' />
-
                                 Index Funds
                             </li>
                         </ul>
@@ -42,7 +39,7 @@
                 </div>
                 <div class='main-content'>
                     <div class='lead'>
-                        <div class='lead-left'>
+                        <div v-if='bodyWidth > 768' class='lead-left'>
                             <ul v-if="['Earning', 'IndexFunds'].includes(curentCrumbs)">
                                 <li class='row'>
                                     <span class='path active'>
@@ -57,6 +54,21 @@
                                     </span>
                                     <span v-if='crumbsList.length - 1 !== index' class='split'>
                                         /
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div v-else class='lead-left'>
+                            <ul>
+                                <li v-if='crumbsList.length > 1' class='row' @click='switchCrumbs(crumbsList[0])'>
+                                    <i class='back icon_icon_back1'></i>
+                                    <span class='path active'>
+                                        Details
+                                    </span>
+                                </li>
+                                <li v-else class='row'>
+                                    <span class='path active'>
+                                        {{ curentCrumbs }}
                                     </span>
                                 </li>
                             </ul>
@@ -280,7 +292,7 @@ const switchRouter = (value) => {
 
 // 是否显示钱包地址
 const showAddress = computed(() => {
-    return bodyWidth.value > 768 || (bodyWidth.value < 768 && !_web3.value.testnetMode)
+    return bodyWidth.value > 768
 })
 // 设置面包屑导航
 const setCrumbsList = () => {
@@ -493,11 +505,10 @@ onBeforeUnmount(() => {
         height: 100%;
     }
     .row {
+        display: inline-flex;
+        align-items: center;
         color: var(--minorColor);
         font-size: 16px;
-        @media (max-width: 768px){
-            font-size: 12px;
-        }
         .path {
             font-weight: bold;
             cursor: pointer;
@@ -511,6 +522,13 @@ onBeforeUnmount(() => {
         }
         .split {
             margin: 0 5px;
+        }
+        @media (max-width: 768px){
+            font-size: 13px;
+            .back {
+                margin-right: 4px;
+                color: var(--color);
+            }
         }
     }
 }

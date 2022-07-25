@@ -15,9 +15,17 @@ const providerOptions = {
         package: WalletConnectProvider,
         options: {
             infuraId, // TODO infuraId
-            // desktopLinks: [
-            //     'encrypted ink',
-            // ]
+            qrcodeModalOptions: {
+                desktopLinks: [],
+                mobileLinks: [
+                    'metamask',
+                    // 'imtoken',
+                    // 'rainbow',
+                    // 'argent',
+                    // 'trust',
+                    // 'pillar'
+                ]
+            }
         },
         // bridge: 'https://bridge.walletconnect.org', // Required
         // bridge: 'https://bridge.myhostedserver.com',

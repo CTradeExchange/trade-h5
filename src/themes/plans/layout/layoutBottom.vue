@@ -1,5 +1,5 @@
 <template>
-    <div id='nav-footer'>
+    <div v-show='!isUniapp' id='nav-footer'>
         <div class='footer-wrap'>
             <div class='menu'>
                 <div class='main' @click="expand('about')">
@@ -107,11 +107,13 @@ import LangPop from '@plans/components/langPop.vue'
 import { getCookie } from '@/utils/util'
 import { ref, computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const store = useStore()
+const route = useRoute()
 const router = useRouter()
 const customerInfo = computed(() => store.state._user.customerInfo)
 
+const isUniapp = route.query.isUniapp || route.query.isApp
 const langShow = ref(false)
 const langObj = ref({
     'zh-CN': '简体中文',
