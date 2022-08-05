@@ -38,7 +38,7 @@
                     </div>
                 </div>
                 <div class='main-content'>
-                    <div class='lead'>
+                    <div class='lead' :style="{ 'top': isUniapp ? '0' : '64px' }">
                         <div v-if='bodyWidth > 768' class='lead-left'>
                             <ul v-if="['Earning', 'IndexFunds'].includes(curentCrumbs)">
                                 <li class='row'>
@@ -64,6 +64,11 @@
                                     <i class='back icon_icon_back1'></i>
                                     <span class='path active'>
                                         Details
+                                    </span>
+                                </li>
+                                <li v-else-if="['Earning', 'IndexFunds'].includes(curentCrumbs)" class='row'>
+                                    <span class='path active'>
+                                        Funds
                                     </span>
                                 </li>
                                 <li v-else class='row'>
@@ -255,13 +260,9 @@ const { t } = useI18n({ useScope: 'global' })
 const store = useStore()
 const route = useRoute()
 const router = useRouter()
-if (route.query.isUniapp) {
-    sessionSet('isUniapp', route.query.isUniapp)
-    // app隐藏头部和底部导航栏
-    const topElem = document.querySelector('.nav-wrap')
-    const bottomElem = document.querySelector('#nav-footer')
-    if (topElem) topElem.style.display = 'none'
-    if (bottomElem) bottomElem.style.display = 'none'
+const { isUniapp } = route.query
+if (isUniapp) {
+    sessionSet('isUniapp', isUniapp)
 }
 
 const style = computed(() => store.state?.style)
@@ -282,7 +283,6 @@ const isTestMode = ref(JSON.parse(localGet('isTestMode')) || false)
 const wapMenushow = ref(false)
 // 测试模式弹窗
 const showPopover = ref(false)
-const active = ref(0)
 const { bodyWidth } = useViewport()
 // 切换路由
 const switchRouter = (value) => {
@@ -369,6 +369,20 @@ const fowardPage = path => {
 watch(() => route.path, () => {
     setCrumbsList()
 })
+// 监听isTestMode
+watch(() => isTestMode.value, () => {
+    if (isUniapp && uni) {
+        uni.postMessage({
+            data: {
+                action: 'message',
+                type: 'testMode',
+                params: {
+                    isTestMode: isTestMode.value
+                }
+            }
+        })
+    }
+}, { immediate: true })
 
 onMounted(async () => {
     // 监听页面点击事件
@@ -388,6 +402,8 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .wrap {
+    flex: 1;
+    overflow: auto;
     min-height: calc(100vh - 162px);
     padding: 20px 20px 150px;
     @media (max-width: 768px){
@@ -407,6 +423,9 @@ onBeforeUnmount(() => {
 .main-content {
     flex: 1;
     overflow: hidden;
+    @media (max-width: 768px){
+        padding-top: 55px;
+    }
 }
 .side-menu {
     width: 200px;
@@ -493,8 +512,12 @@ onBeforeUnmount(() => {
     box-shadow: rgb(0 0 0 / 5%) 0 2px 1px, rgb(0 0 0 / 25%) 0 0 1px;
     @media (max-width: 768px){
         padding: 0 10px;
+        width: 100%;
         height: 55px;
         border-radius: 0;
+        position: fixed;
+        left: 0;
+        z-index: 101;
     }
 }
 .lead-left {
@@ -625,17 +648,18 @@ onBeforeUnmount(() => {
     border-radius: 4px;
     box-shadow: rgb(0 0 0 / 20%) 0 0 2px, rgb(0 0 0 / 10%) 0 2px 10px;
     transform-origin: 32px 0;
+    transition: all ease-in-out .2s;
     &.show {
         transform: scale(1, 1);
         visibility: visible;
         opacity: 1;
-        transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        // transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     }
     &.hide {
         transform: scale(0.75, 0.5625);
         visibility: hidden;
         opacity: 0;
-        transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 103ms;
+        // transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 103ms;
     }
     .account {
         display: flex;
@@ -765,17 +789,18 @@ onBeforeUnmount(() => {
     border-radius: 4px;
     box-shadow: rgb(0 0 0 / 20%) 0 0 2px, rgb(0 0 0 / 10%) 0 2px 10px;
     transform-origin: 32px 0;
+    transition: all ease-in-out .2s;
     &.show {
         transform: scale(1, 1);
         visibility: visible;
         opacity: 1;
-        transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        // transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     }
     &.hide {
         transform: scale(0.75, 0.5625);
         visibility: hidden;
         opacity: 0;
-        transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 103ms;
+        // transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 103ms;
     }
     .testnet-mode {
         display: flex;
@@ -810,7 +835,7 @@ onBeforeUnmount(() => {
         font-size: 16px;
         justify-content: space-between;
         line-height: 30px;
-            color: var(--minorColor);
+        color: var(--minorColor);
         .van-icon{
             font-weight: bold;
             color: var(--color);

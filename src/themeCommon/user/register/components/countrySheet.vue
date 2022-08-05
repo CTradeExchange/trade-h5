@@ -56,7 +56,7 @@
         class='popup-country'
         position='bottom'
         round
-        :style="{ width: '100%',height: '50%' }"
+        :style="{ width: '100%' }"
     >
         <div class='header'>
             {{ $t('register.area') }}
@@ -155,7 +155,7 @@ export default {
         }
     }
     .country-list {
-        height: rem(660px);
+        height: 400px;
         overflow: auto;
         .country-item {
             display: flex;

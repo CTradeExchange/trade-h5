@@ -9,8 +9,12 @@
             <p class='header-title'>
                 Your portfolio
             </p>
-
-            <van-collapse v-model='activeNames'>
+            <van-empty
+                v-if='testnetMode'
+                description='no data'
+                image='https://fastly.jsdelivr.net/npm/@vant/assets/custom-empty-image.png'
+            />
+            <van-collapse v-else v-model='activeNames'>
                 <van-collapse-item v-for='(chain,i) in chainClassList' :key='i' :name='chain.chainId'>
                     <template #title>
                         <div class='title'>
@@ -98,7 +102,6 @@
             <div class='empty-icon-wrap'>
                 <img alt='' src='/images/question.svg' srcset='' />
             </div>
-
             <h2 class='text'>
                 No holding yet
             </h2>
@@ -352,6 +355,7 @@ export default {
             swapSuccess,
             isFold,
             handleShowDialog,
+            testnetMode
         }
     }
 }

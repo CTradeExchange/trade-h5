@@ -259,7 +259,7 @@ export default {
                     }).then(() => {
                         router.go(-1)
                     })
-                    Toast.success(t('withdraw.successHint'))
+                    // Toast.success(t('withdraw.successHint'))
                 } else {
                     Toast(res.msg)
                 }

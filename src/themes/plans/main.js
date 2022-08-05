@@ -18,6 +18,7 @@ import { setRouter, modifybaseURL } from '@/utils/request'
 import { getLoginParams, getQueryVariable, getToken, setToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie, sessionSet } from '@/utils/util'
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
+import positiveNumber from '@/directives/positiveNumber'
 // import { skywalkingRegister, skywalkingRreportErrors } from './skywalkingSteup.js'
 import { getPreDemoAccountParams } from './officialDemoAccount.js'
 import { requestBusinessConfig } from '@/api/wpApi'
@@ -32,7 +33,7 @@ sessionSet('entrySearch', location.search) // 缓存入口url的参数，给注�
 if (getQueryVariable('tsource')) setToken(getQueryVariable('tsource'))
 
 const app = createApp(App)
-app.use(preventReClick)
+app.use(preventReClick).use(positiveNumber)
 app.use(VantBase).use(I18n).use(store).use(router)
 // app.use(LuckDraw)
 app.use(FindCustomerInfo, { $store: store, $router: router, $I18n: I18n })
@@ -68,8 +69,7 @@ requestBusinessConfig().then(res => {
 // 获取到公司配置后初始化vue实例
 store.dispatch('_base/initBaseConfig').then(async () => {
     // if (isProduction) skywalkingRegister(router)
-    // else
-    modifybaseURL(store.state._base.wpCompanyInfo.apiService)
+    if (!isProduction) modifybaseURL(store.state._base.wpCompanyInfo.apiService)
 
     // 注册websocket插件
     app.use(Socket, { $store: store, $router: router })

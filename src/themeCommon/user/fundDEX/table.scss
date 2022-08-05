@@ -237,7 +237,16 @@
     .table-module {
         @media (max-width: 768px) {
             .pro-link {
-                min-width: 165px;
+                min-width: 168px;
+            }
+        }
+    }
+}
+.dashboardTable {
+    .table-module {
+        @media (max-width: 768px) {
+            .pro-link {
+                min-width: 168px;
             }
         }
     }

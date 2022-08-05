@@ -287,10 +287,10 @@ const queryFundDetail = () => {
 
 // 申购 弹窗
 const handleShowDialog = async (type) => {
-    if (!window.isPC) {
-        Toast('Coming Soon')
-        return false
-    }
+    // if (!window.isPC) {
+    //     Toast('Coming Soon')
+    //     return false
+    // }
     fundActived.value = {
         ...product,
         chainId: parseInt(chainId),

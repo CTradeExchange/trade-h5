@@ -633,7 +633,7 @@ defineExpose({
 .popup-model {
     width: 420px;
     min-height: 416px;
-    max-height: calc(100vh - 20px);
+    max-height: calc(100vh - 80px);
     background-color: var(--contentColor);
     color: var(--normalColor);
     transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;

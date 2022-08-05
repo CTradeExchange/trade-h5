@@ -8,11 +8,11 @@
         :title='$t("trade.desposit")'
         @back='onBack'
     >
-        <template #right>
+        <!-- <template #right>
             <span @click='toDespositList'>
                 {{ $t('deposit.depositRecord') }}
             </span>
-        </template>
+        </template> -->
     </LayoutTop>
 
     <!-- 内容区域 -->
@@ -366,7 +366,7 @@ export default {
                 let temp = state.payTypes.filter(item => item.timeRangeFlag || item.openTime === '')
                 // 筛选在存款金额内的支付通道
                 if (state.amount) {
-                    temp = temp.filter(v => (parseFloat(state.amount) >= v.singleLowAmount && parseFloat(state.amount) <= v.singleHighAmount))
+                    temp = temp.filter(v => (parseFloat(state.amount) >= parseFloat(v.singleLowAmount) && parseFloat(state.amount) <= parseFloat(v.singleHighAmount)))
                 }
                 // 对支付通道进行排序
                 temp.sort(arrayObjSort('sort'))

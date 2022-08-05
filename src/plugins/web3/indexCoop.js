@@ -57,11 +57,11 @@ export const indexCoopHooks = () => {
      * @param {string} daiAddress 在当前链上需要查询的代币地址
      * @return {string} 代币的授权余额
      */
-    const allowance = async (ZERO_EX_ADDRESS, daiAddress) => {
-        // const publicJsonRPCUrl = networkConfigs['137'].publicJsonRPCUrl
-        // const provider = publicJsonRPCUrl[0]
-        // const web3Provider = new Web3.providers.HttpProvider(provider)
-        // const web3 = new Web3(web3Provider)
+    const allowance = async (chainId, ZERO_EX_ADDRESS, daiAddress) => {
+        const publicJsonRPCUrl = networkConfigs[chainId].publicJsonRPCUrl
+        const provider = publicJsonRPCUrl[0]
+        const web3Provider = new Web3.providers.HttpProvider(provider)
+        const web3 = new Web3(web3Provider)
         const from = state.userAddress
         const myContract = new web3.eth.Contract(commonABI, daiAddress)
         const allowanceBalance = await myContract.methods.allowance(from, ZERO_EX_ADDRESS).call()

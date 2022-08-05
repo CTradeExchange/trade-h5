@@ -589,13 +589,12 @@ export default {
                             message: t('withdraw.activateMsg'),
                             confirmButtonText: t('withdraw.activateBtn')
                         }).then(() => {
-                            // on confirm
-                            router.push({
-                                path: '/deposit',
+                            router.replace({
+                                path: '/assets/depositChoose',
                                 query: {
+                                    tradeType,
                                     accountId,
-                                    currency: accountCurrency.currency,
-                                    tradeType
+                                    currency: accountCurrency.currency
                                 }
                             })
                         }).catch(() => {

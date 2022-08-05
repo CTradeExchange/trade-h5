@@ -8,11 +8,11 @@
                 }'
                 :title='$t("trade.desposit")'
             >
-                <template #right>
+                <!-- <template #right>
                     <span @click="$router.push('/assets/depositRecord')">
                         {{ $t('deposit.depositRecord') }}
                     </span>
-                </template>
+                </template> -->
             </LayoutTop>
             <!-- 页面加载状态 -->
             <Loading :show='loading' />
@@ -51,6 +51,9 @@
                             </div>
                         </div>
                     </div>
+                    <p class='min'>
+                        {{ $t('deposit.minAmount') }} {{ paymentInfo.singleLowAmount }} {{ currency }}
+                    </p>
                     <!-- 有地址 -->
                     <div v-if='address' class='address-box'>
                         <p class='text'>
@@ -71,9 +74,6 @@
                 <div class='warn-box'>
                     <p class='title'>
                         {{ $t('common.warning') }}
-                    </p>
-                    <p class='min'>
-                        {{ $t('deposit.minAmount') }} {{ paymentInfo.singleLowAmount }} {{ currency }}
                     </p>
                     <p class='des'>
                         {{ $t('deposit.directTip') }}
@@ -272,7 +272,7 @@ export default {
     overflow-y: auto;
 }
 .module {
-    min-height: rem(850px);
+    min-height: rem(825px);
     margin-top: rem(80px);
     padding: 0 rem(30px) rem(35px);
     background: var(--contentColor);
@@ -313,16 +313,19 @@ export default {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0 rem(60px);
-            height: rem(80px);
-            margin-right: rem(20px);
+            padding: rem(10px) rem(60px);
+            flex: 1;
+            min-width: 33.3333%;
+            max-width: 50%;
+            min-height: rem(80px);
+            margin-left: rem(20px);
             background: var(--assistColor);
             border: 1px solid transparent;
             border-radius: rem(10px);
             position: relative;
             cursor: pointer;
-            &:nth-of-type(3n) {
-                margin-right: 0;
+            &:first-child{
+                margin-left: 0;
             }
             .check {
                 display: none;
@@ -394,13 +397,19 @@ export default {
             }
         }
     }
+    .min {
+        font-size: rem(28px);
+        color: var(--primary);
+        margin-top: rem(26px);
+        text-align: center;
+    }
     .address-box {
         @include hover();
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: rem(25px);
-        margin-top: rem(66px);
+        margin-top: rem(26px);
         background: var(--assistColor);
         border-radius: rem(10px);
         .text {
@@ -433,12 +442,7 @@ export default {
     .title {
         font-size: rem(40px);
         color: var(--warn);
-    }
-    .min {
-        font-size: rem(24px);
-        color: var(--color);
-        margin-top: rem(26px);
-        margin-bottom: rem(16px);
+        margin-bottom: rem(26px);
     }
     .des {
         font-size: rem(24px);

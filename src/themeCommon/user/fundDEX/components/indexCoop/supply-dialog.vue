@@ -1,5 +1,5 @@
 <template>
-    <div v-if='fundData' class='purchase-dialog'>
+    <div v-if='fundData' class='dialog-wrap'>
         <van-popup v-model:show='show' @close='close' @open='onOpen'>
             <div class='popup-model'>
                 <div class='model-header'>
@@ -13,7 +13,7 @@
 
                 <div v-if='isSwitchNetwork' class='network-warn'>
                     <span>
-                        Please switch to {{ fundData.marketLinkType }} .
+                        Please switch to {{ fundData.marketLinkType }}.
                     </span>
                     <span>
                         <button @click='onSwitchNetwork'>
@@ -27,131 +27,133 @@
 
                 <!-- 申购操作 -->
                 <div v-else class='model-content'>
-                    <div v-if='from' class='block'>
-                        <div class='title'>
-                            <label>From</label>
-                        </div>
-                        <div class='box'>
-                            <div class='row-1'>
-                                <input
-                                    v-positiveNumber='18'
-                                    :disabled='isSwitchNetwork || loading'
-                                    placeholder='0.00'
-                                    type='text'
-                                    :value='fromAmount'
-                                    @input='onInputAmount'
-                                />
-                                <div v-if="swapType==='purchase'" class='coin pointer' @click='selectTokenHandler'>
-                                    <img :src='"/images/tokens/"+ from.symbol.toLowerCase() +".svg"' />
-                                    <span>{{ from.symbol }}</span>
-                                </div>
-                                <div v-else class='coin'>
-                                    <img :src='from.image' />
-                                    <span>{{ from.symbol }}</span>
-                                </div>
+                    <div class='case'>
+                        <div v-if='from' class='block'>
+                            <div class='title'>
+                                <label>From</label>
                             </div>
-                            <div class='row-2'>
-                                <b>
-                                    $ {{ toFixed(fromAmountToUSD) }}
-                                </b>
-                                <strong>
-                                    <van-loading v-if='assetBalanceLoading' :color='style.normalColor' :size='18' />
-                                    <span v-else-if="swapType==='purchase'">
-                                        Balance {{ formatAmount(from.balance, 5) }}
-                                    </span>
-                                    <span v-else>
-                                        Balance {{ formatAmount(toBalance, 5) }}
-                                    </span>
-                                    <button @click='onMax'>
-                                        MAX
-                                    </button>
-                                </strong>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='block'>
-                        <div class='title'>
-                            <label>To</label>
-                            <button class='switchSwapHandler' @click='switchSwapHandler'>
-                                <svg aria-hidden='true' class='chakra-icon css-onkibi' focusable='false' viewBox='-1 -1 9 11'>
-                                    <path d='M 3.5 0L 3.98809 -0.569442L 3.5 -0.987808L 3.01191 -0.569442L 3.5 0ZM 3.5 9L 3.01191 9.56944L 3.5 9.98781L 3.98809 9.56944L 3.5 9ZM 0.488094 3.56944L 3.98809 0.569442L 3.01191 -0.569442L -0.488094 2.43056L 0.488094 3.56944ZM 3.01191 0.569442L 6.51191 3.56944L 7.48809 2.43056L 3.98809 -0.569442L 3.01191 0.569442ZM -0.488094 6.56944L 3.01191 9.56944L 3.98809 8.43056L 0.488094 5.43056L -0.488094 6.56944ZM 3.98809 9.56944L 7.48809 6.56944L 6.51191 5.43056L 3.01191 8.43056L 3.98809 9.56944Z' fill='currentColor' />
-                                </svg>
-                            </button>
-                        </div>
-                        <div class='box'>
-                            <div class='row-1'>
-                                <input
-                                    disabled
-                                    placeholder='0.00'
-                                    type='text'
-                                    :value='swapQuoteInfo ? toFixed(swapQuoteInfo.minimumReceived, 5):""'
-                                />
-                                <div v-if="swapType==='purchase'" class='coin'>
-                                    <img :src='to.image' />
-                                    <span>{{ to.symbol }}</span>
+                            <div class='box'>
+                                <div class='row-1'>
+                                    <input
+                                        v-positiveNumber='18'
+                                        placeholder='0.00'
+                                        :readonly='isSwitchNetwork || loading'
+                                        type='text'
+                                        :value='fromAmount'
+                                        @input='onInputAmount'
+                                    />
+                                    <div v-if="swapType==='purchase'" class='coin pointer' @click='selectTokenHandler'>
+                                        <img :src='"/images/tokens/"+ from.symbol.toLowerCase() +".svg"' />
+                                        <span>{{ from.symbol }}</span>
+                                    </div>
+                                    <div v-else class='coin'>
+                                        <img :src='from.image' />
+                                        <span>{{ from.symbol }}</span>
+                                    </div>
                                 </div>
-                                <div v-else class='coin pointer' @click='selectTokenHandler'>
-                                    <img :src='"/images/tokens/"+ to.symbol.toLowerCase() +".svg"' />
-                                    <span>{{ to.symbol }}</span>
-                                </div>
-                            </div>
-                            <div class='row-2'>
-                                <span>
-                                    <b> $ {{ toFixed(toAmountToUSD) }} </b>
-                                    <b v-if='discountRate'>
-                                        ({{ discountRate }})
+                                <div class='row-2'>
+                                    <b>
+                                        $ {{ toFixed(fromAmountToUSD) }}
                                     </b>
-                                </span>
-                                <strong>
-                                    <van-loading v-if='assetBalanceLoading' :color='style.normalColor' :size='18' />
-                                    <span v-else-if="swapType==='purchase'">
-                                        Balance {{ formatAmount(toBalance, 5) }}
-                                    </span>
-                                    <span v-else>
-                                        Balance {{ formatAmount(to.balance, 5) }}
-                                    </span>
-                                </strong>
+                                    <strong>
+                                        <van-loading v-if='assetBalanceLoading' :color='style.normalColor' :size='18' />
+                                        <span v-else-if="swapType==='purchase'">
+                                            Balance {{ formatAmount(from.balance, 5) }}
+                                        </span>
+                                        <span v-else>
+                                            Balance {{ formatAmount(toBalance, 5) }}
+                                        </span>
+                                        <button @click='onMax'>
+                                            MAX
+                                        </button>
+                                    </strong>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class='block'>
+                            <div class='title'>
+                                <label>To</label>
+                                <button class='switchSwapHandler' @click='switchSwapHandler'>
+                                    <svg aria-hidden='true' class='chakra-icon css-onkibi' focusable='false' viewBox='-1 -1 9 11'>
+                                        <path d='M 3.5 0L 3.98809 -0.569442L 3.5 -0.987808L 3.01191 -0.569442L 3.5 0ZM 3.5 9L 3.01191 9.56944L 3.5 9.98781L 3.98809 9.56944L 3.5 9ZM 0.488094 3.56944L 3.98809 0.569442L 3.01191 -0.569442L -0.488094 2.43056L 0.488094 3.56944ZM 3.01191 0.569442L 6.51191 3.56944L 7.48809 2.43056L 3.98809 -0.569442L 3.01191 0.569442ZM -0.488094 6.56944L 3.01191 9.56944L 3.98809 8.43056L 0.488094 5.43056L -0.488094 6.56944ZM 3.98809 9.56944L 7.48809 6.56944L 6.51191 5.43056L 3.01191 8.43056L 3.98809 9.56944Z' fill='currentColor' />
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class='box'>
+                                <div class='row-1'>
+                                    <input
+                                        placeholder='0.00'
+                                        readonly
+                                        type='text'
+                                        :value='swapQuoteInfo ? toFixed(swapQuoteInfo.minimumReceived, 5):""'
+                                    />
+                                    <div v-if="swapType==='purchase'" class='coin'>
+                                        <img :src='to.image' />
+                                        <span>{{ to.symbol }}</span>
+                                    </div>
+                                    <div v-else class='coin pointer' @click='selectTokenHandler'>
+                                        <img :src='"/images/tokens/"+ to.symbol.toLowerCase() +".svg"' />
+                                        <span>{{ to.symbol }}</span>
+                                    </div>
+                                </div>
+                                <div class='row-2'>
+                                    <span>
+                                        <b> $ {{ toFixed(toAmountToUSD) }} </b>
+                                        <b v-if='discountRate'>
+                                            ({{ discountRate }})
+                                        </b>
+                                    </span>
+                                    <strong>
+                                        <van-loading v-if='assetBalanceLoading' :color='style.normalColor' :size='18' />
+                                        <span v-else-if="swapType==='purchase'">
+                                            Balance {{ formatAmount(toBalance, 5) }}
+                                        </span>
+                                        <span v-else>
+                                            Balance {{ formatAmount(to.balance, 5) }}
+                                        </span>
+                                    </strong>
+                                </div>
+                            </div>
+                        </div>
 
-                    <SupplySummary v-if='!!swapQuoteInfo && to && from' :count='fromAmount' :from='from' :swap-quote-info='swapQuoteInfo' :to='to' />
+                        <SupplySummary v-if='!!swapQuoteInfo && to && from' :count='fromAmount' :from='from' :swap-quote-info='swapQuoteInfo' :to='to' />
 
-                    <!-- 拒绝提示 -->
-                    <div v-if='rejectTip' class='reject-tip'>
-                        <svg aria-hidden='true' class='svg-icon' focusable='false' viewBox='0 0 24 24'>
-                            <svg
-                                aria-hidden='true'
-                                fill='none'
-                                stroke='currentColor'
-                                stroke-width='2'
-                                viewBox='0 0 24 24'
-                                xmlns='http://www.w3.org/2000/svg'
-                            >
-                                <path d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' stroke-linecap='round' stroke-linejoin='round' />
+                        <!-- 拒绝提示 -->
+                        <div v-if='rejectTip' class='reject-tip'>
+                            <svg aria-hidden='true' class='svg-icon' focusable='false' viewBox='0 0 24 24'>
+                                <svg
+                                    aria-hidden='true'
+                                    fill='none'
+                                    stroke='currentColor'
+                                    stroke-width='2'
+                                    viewBox='0 0 24 24'
+                                    xmlns='http://www.w3.org/2000/svg'
+                                >
+                                    <path d='M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z' stroke-linecap='round' stroke-linejoin='round' />
+                                </svg>
                             </svg>
-                        </svg>
-                        <span>{{ rejectTip }}</span>
-                    </div>
+                            <span>{{ rejectTip }}</span>
+                        </div>
 
-                    <div class='btnBox'>
-                        <van-button
-                            block
-                            class='btn'
-                            :disabled='!fromAmount || isSwitchNetwork || insufficientAmount'
-                            :loading='loading || quoteLoading'
-                            loading-text='Trading...'
-                            type='primary'
-                            @click='swapHandler'
-                        >
-                            {{ swapBtnText }}
-                        </van-button>
-                        <p v-if='swapQuoteInfo' class='text'>
-                            This trade will be executed on contract:
-                        </p>
-                        <p v-if='swapQuoteInfo' class='text pointer underline' @click='openContractAddress'>
-                            {{ swapQuoteInfo.to }}
-                        </p>
+                        <div class='btnBox'>
+                            <van-button
+                                block
+                                class='btn'
+                                :disabled='!fromAmount || isSwitchNetwork || insufficientAmount'
+                                :loading='loading || quoteLoading'
+                                loading-text='Trading...'
+                                type='primary'
+                                @click='swapHandler'
+                            >
+                                {{ swapBtnText }}
+                            </van-button>
+                            <p v-if='swapQuoteInfo' class='text'>
+                                This trade will be executed on contract:
+                            </p>
+                            <p v-if='swapQuoteInfo' class='text pointer underline' @click='openContractAddress'>
+                                {{ swapQuoteInfo.to }}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -177,7 +179,7 @@ const props = defineProps(['modelValue', 'fundData'])
 const emit = defineEmits(['update:modelValue', 'swapSuccess'])
 const store = useStore()
 const style = computed(() => store.state.style)
-const { switchNetwork, } = web3Hooks()
+const { switchNetwork, openExtBrowser } = web3Hooks()
 
 const {
     payCoinList,
@@ -190,9 +192,9 @@ const {
     reset,
     getEthereumPayCoinListBalance,
     querySwapQuote,
-    indexCoop_purchase,
+    indexCoopPurchase,
     allowanceApproveHandler,
-    queryAllowance,
+    queryAllowance
 } = SupplyHooks()
 
 // 是否需要切换网络
@@ -369,6 +371,7 @@ const accountsChangedFn = async (accounts) => {
 
 // 获取交易行情数据
 const getSwapQuoteHandler = () => {
+    if (!fromAmount.value) return false
     quoteLoading.value = true
     querySwapQuote(from, to, fromAmount).then(async res => {
         const fromSymbol = from.value.symbol
@@ -376,7 +379,10 @@ const getSwapQuoteHandler = () => {
         // 获取授权余额
         if (!isBaseSymbol) await getAllowance()
         showAllowance.value = !isBaseSymbol && gt(fromAmount.value, allowanceBalance)
+        console.log('获取授权余额成功', allowanceBalance)
         return res
+    }).catch(err => {
+        console.log('获取授权余额失败', err)
     }).finally(() => {
         quoteLoading.value = false
     })
@@ -410,24 +416,24 @@ const swapHandler = () => {
         // 需要授权
         loading.value = true
         allowanceApproveHandler(from, fromAmount.value).then(res => {
-            if (res?.status) {
-                allowanceBalance = fromAmount.value
-                showAllowance.value = false
-            }
+            console.log('授权成功', res)
+            allowanceBalance = fromAmount.value
+            showAllowance.value = false
         }).catch(err => {
-            console.log(err)
+            console.log('授权失败', err)
         }).finally(() => {
             loading.value = false
         })
         return
     }
     loading.value = true
-    indexCoop_purchase(swapQuoteInfo.value).then(res => {
-        console.log(res)
+    indexCoopPurchase(swapQuoteInfo.value).then(res => {
+        console.log('交易成功', res)
         successData.value = res
         showSuccess.value = true
         emit('swapSuccess')
     }).catch(err => {
+        console.log('交易失败', err)
         console.log(err)
     }).finally(() => {
         loading.value = false
@@ -447,7 +453,7 @@ const switchSwapHandler = () => {
 const openContractAddress = () => {
     const explorerLink = networkConfigs[props.fundData.chainId].explorerLink
     const url = `${explorerLink}/address/${swapQuoteInfo.value.to}`
-    window.open(url)
+    openExtBrowser(url)
 }
 
 defineExpose({ switchSwapHandler })
@@ -455,25 +461,44 @@ defineExpose({ switchSwapHandler })
 </script>
 
 <style lang="scss" scoped>
+.dialog-wrap {
+    :deep(.van-popup) {
+        background: transparent;
+        @media (max-width: 768px) {
+            width: 100%;
+        }
+    }
+}
 .popup-model {
+    display: flex;
+    flex-direction: column;
     width: 420px;
     min-height: 416px;
-    max-height: calc(100vh - 20px);
+    max-height: calc(100vh - 150px);
     background-color: var(--contentColor);
     color: var(--normalColor);
     transition: box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     border-radius: 4px;
     box-shadow: rgb(0 0 0 / 5%) 0 2px 1px, rgb(0 0 0 / 25%) 0 0 1px;
     overflow-y: auto;
-    padding: 24px;
     position: relative;
+    .case {
+        padding: 24px;
+    }
+    @media (max-width: 768px) {
+        width: calc(100% - 30px);
+        margin: 0 auto;
+        .case {
+            padding: 24px 16px;
+        }
+    }
 }
 .model-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--color);
-    margin-bottom: 24px;
+    padding: 24px;
     .title {
         font-size: 20px;
     }
@@ -481,8 +506,13 @@ defineExpose({ switchSwapHandler })
         font-size: 24px;
         cursor: pointer;
     }
+    @media (max-width: 768px) {
+        padding: 16px;
+    }
 }
 .model-content {
+    flex: 1;
+    overflow-y: auto;
     .block {
         margin-bottom: 20px;
     }
@@ -531,6 +561,7 @@ defineExpose({ switchSwapHandler })
             font-size: 18px;
             margin-right: 16px;
             min-width: 100px;
+            color: var(--color);
         }
         .coin {
             display: inline-flex;
@@ -725,11 +756,14 @@ defineExpose({ switchSwapHandler })
     align-items: flex-start;
     color: rgb(79, 25, 25);
     background: rgb(249, 235, 235);
-    margin-bottom: 24px;
+    margin: 0 24px 24px;
     button {
         background: none;
         text-decoration: underline;
         cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        margin: 0 16px 24px;
     }
 }
 .cancel-warn {

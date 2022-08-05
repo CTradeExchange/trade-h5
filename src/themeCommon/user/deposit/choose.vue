@@ -2,11 +2,19 @@
     <div class='page-wrap'>
         <!-- 头部导航栏 -->
         <LayoutTop
+            :custom-back='true'
             :custom-style='{
                 "background": $style.bgColor
             }'
             :title='$t("trade.desposit")'
-        />
+            @back='onBack'
+        >
+            <template #right>
+                <span @click='toDespositList'>
+                    {{ $t('deposit.depositRecord') }}
+                </span>
+            </template>
+        </LayoutTop>
         <!-- 页面加载状态 -->
         <Loading :show='loading' />
         <!-- 页面内容 -->
@@ -103,8 +111,8 @@ import { computed, reactive, toRefs, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { checkKycApply, queryPayType, getDepositCoinList } from '@/api/user'
-import { localSet } from '@/utils/util'
+import { checkKycApply, queryPayType, getDepositCoinList, queryMC900Url } from '@/api/user'
+import { localSet, getToken, getCookie } from '@/utils/util'
 import { Toast, Dialog } from 'vant'
 import assetsList from '@/themeCommon/components/assetsList/assetsList.vue'
 export default {
@@ -121,6 +129,8 @@ export default {
         const state = reactive({
             // 页面加载状态
             loading: false,
+            // 当前语言
+            lang: getCookie('lang') || 'zh-CN',
             // 玩法类型
             tradeType: query.tradeType,
             // 支付通道列表
@@ -137,8 +147,14 @@ export default {
             exchangeDisable: true,
             // 当前直充支付通道
             paymentInfo: '',
-            accountList: '', // 存款币种列表
-            pickerShow: false
+            // 存款币种列表
+            accountList: '',
+            // 当前选择的存款币种
+            pickerShow: false,
+            // 收银台地址
+            cashierUrl: '',
+            // 收银台地址提示
+            cashierMsg: ''
         })
 
         // 颜色变量
@@ -146,8 +162,15 @@ export default {
         // 客户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
 
+        // 返回页面
+        const onBack = () => {
+            router.replace({ path: '/assets' })
+        }
+
         // 获取支付通道
         const getPayTypes = () => {
+            state.disable = true
+            state.way = ''
             const accountInfo = state.accountInfo
             const params = {
                 tradeType: state.tradeType,
@@ -165,19 +188,30 @@ export default {
                 duration: 0
             })
             queryPayType(params).then(res => {
-                Toast.clear()
                 if (res.check()) {
                     state.paymentTypes = res.data
-                    filterPayment()
+                    state.cashierUrl = ''
+                    state.cashierMsg = ''
+                    const existMC900 = res.data.find(el => el.paymentCode === 'antpay')
+                    // 获取MC900收银台地址
+                    if (existMC900) {
+                        getMC900Url()
+                    } else {
+                        // 过滤支付通道数据
+                        filterPayment()
+                    }
                 } else {
                     state.paymentTypes = []
                     filterPayment()
                 }
+            }).catch(() => {
+                Toast.clear()
             })
         }
 
         // 过滤支付通道数据
         const filterPayment = () => {
+            Toast.clear()
             const paymentTypes = state.paymentTypes
             state.paymentInfo = ''
             if (paymentTypes.length === 0) {
@@ -231,14 +265,23 @@ export default {
                     break
                 // 跳转到汇兑页面
                 case 2:
-                    router.push({
-                        path: '/deposit',
-                        query: {
-                            tradeType: state.tradeType,
-                            currency: state.accountInfo.currency,
-                            accountId: state.accountInfo.accountId
-                        }
-                    })
+                    if (state.cashierMsg) {
+                        Toast(state.cashierMsg)
+                    } else if (state.cashierUrl) {
+                        console.log(window.location)
+                        const callbackUrl = `${window.location.protocol}//${window.location.host}/${state.lang}/depositChoose?tradeType=5`
+                        const url = state.cashierUrl + '&token=' + getToken() + '&source=2&backUrl=' + callbackUrl
+                        window.location.href = url
+                    } else {
+                        router.push({
+                            path: '/deposit',
+                            query: {
+                                tradeType: state.tradeType,
+                                currency: state.accountInfo.currency,
+                                accountId: state.accountInfo.accountId
+                            }
+                        })
+                    }
                     break
             }
         }
@@ -299,6 +342,34 @@ export default {
             })
         }
 
+        // 获取MC900收银台地址
+        const getMC900Url = () => {
+            state.cashierUrl = ''
+            state.cashierMsg = ''
+            queryMC900Url({
+                companyId: customerInfo.value.companyId,
+                customerNo: customerInfo.value.customerNo,
+                customerGroupId: customerInfo.value.customerGroupId
+            }).then(res => {
+                Toast.clear()
+                filterPayment()
+                if (res.check()) {
+                    state.cashierUrl = res.data
+                } else {
+                    state.cashierMsg = res.msg
+                }
+            }).catch(() => {
+                Toast.clear()
+            })
+        }
+
+        // 跳转到存款记录页面
+        const toDespositList = () => {
+            router.push({
+                path: '/depositRecord'
+            })
+        }
+
         onMounted(() => {
             // 检查是否需要KYC认证
             checkKyc()
@@ -312,7 +383,9 @@ export default {
             goRecharge,
             updatePopupVis,
             onCurrencyConfirm,
-            bgColor
+            bgColor,
+            toDespositList,
+            onBack
         }
     }
 }

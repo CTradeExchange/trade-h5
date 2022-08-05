@@ -12,7 +12,7 @@
         </div>
         <div :class="['select-list', show ? 'show' : 'hide']">
             <ul>
-                <li v-if='showAll' :class="{ 'active': 'all' === modelValue }" @click="selectMarket('all')">
+                <li v-if='showAll' :class="{ 'active': 'all' === modelValue }" @click.stop="selectMarket('all')">
                     <div class='all'>
                         <van-icon class='apps-o' name='apps-o' />
                     </div>
@@ -145,17 +145,18 @@ const selectMarket = (value) => {
     border: 1px solid transparent;
     box-shadow: rgb(0 0 0 / 20%) 0 0 2px, rgb(0 0 0 / 10%) 0 2px 10px;
     transform-origin: 32px 0;
+    transition: all ease-in-out .2s;
     &.show {
         transform: scale(1, 1);
         visibility: visible;
         opacity: 1;
-        transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        // transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     }
     &.hide {
         transform: scale(0.75, 0.5625);
         visibility: hidden;
         opacity: 0;
-        transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 103ms;
+        // transition: opacity 308ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, transform 205ms cubic-bezier(0.4, 0, 0.2, 1) 103ms;
     }
     ul {
         padding: 5px 0;

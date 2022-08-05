@@ -298,7 +298,8 @@ export default {
 
         // 账户币种
         const { value: accountCurrency } = computed(() => store.state._user.customerInfo.accountList.find(el => el.accountId === Number(accountId)))
-
+        console.log('currency', currency)
+        console.log('accountCurrency', accountCurrency)
         // 导航栏右侧标题点击跳转
         const rightClick = () => {
             router.push(state.rightAction.path)
@@ -546,8 +547,8 @@ export default {
                             message: t('withdraw.activateMsg'),
                             confirmButtonText: t('withdraw.activateBtn')
                         }).then(() => {
-                            router.push({
-                                path: '/deposit',
+                            router.replace({
+                                path: '/depositChoose',
                                 query: {
                                     accountId,
                                     currency: accountCurrency.currency,

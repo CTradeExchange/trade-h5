@@ -75,8 +75,7 @@ window.isPC = process.env.VUE_APP_theme === 'plans_PCUI'
 store.dispatch('_base/initBaseConfig').then(async () => {
     store.dispatch('_base/getFooter')
     // if (isProduction) skywalkingRegister(router)
-    // else
-    modifybaseURL(store.state._base.wpCompanyInfo.apiService)
+    if (!isProduction) modifybaseURL(store.state._base.wpCompanyInfo.apiService)
 
     // 注册websocket插件
     app.use(Socket, { $store: store, $router: router })

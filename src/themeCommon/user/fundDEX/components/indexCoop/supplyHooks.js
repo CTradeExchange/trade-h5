@@ -7,6 +7,7 @@ import { baseSymbol, web3Hooks } from '@/plugins/web3/index'
 
 export default () => {
     const store = useStore()
+    const isH5 = process.env.VUE_APP_theme === 'plans'
     const {
         payCoinList,
         setCurChainId,
@@ -60,7 +61,7 @@ export default () => {
     // 获取授权余额
     const queryAllowance = async (from) => {
         const daiAddress = swapType.value === 'purchase' ? from.value.address : fundAddress.value
-        return allowance(swapQuoteInfo.value.to, daiAddress).then(res => {
+        return allowance(fundData.value.chainId, swapQuoteInfo.value.to, daiAddress).then(res => {
             const amount = div(res, pow(10, 18))
             console.log(res, amount)
             return amount
@@ -80,7 +81,17 @@ export default () => {
     const allowanceApproveHandler = (from, amount) => {
         const approveAddress = swapType.value === 'purchase' ? from.value.address : fundAddress.value
         const approveAmount = mul(amount, pow(10, 18))
-        return allowanceApprove(swapQuoteInfo.value.to, approveAddress, approveAmount)
+        if (fundData.value.chainId === 137 && isH5) {
+            // 手机上metamask app的额度授权也没有回调，暂时定为30s后当作正常回调执行
+            return Promise.race([
+                allowanceApprove(swapQuoteInfo.value.to, approveAddress, approveAmount),
+                new Promise(function (resolve, reject) {
+                    setTimeout(() => resolve(), 30000)
+                })
+            ])
+        } else {
+            return allowanceApprove(swapQuoteInfo.value.to, approveAddress, approveAmount)
+        }
     }
 
     // 获取交易行情数据
@@ -93,12 +104,13 @@ export default () => {
         const sellAddress = baseSymbol.includes(fromThirdCoinCode.toLowerCase()) ? fromThirdCoinCode : fromAddress
         let [buyToken, sellToken] = [buyAddress, sellAddress]
         if (swapType.value === 'withdraw') [sellToken, buyToken] = [buyAddress, sellAddress]
+
         return getSwapQuote({
             chainId,
             sellToken,
             buyToken,
             slippagePercentage: 0.03,
-            sellAmount: mul(fromAmount.value, pow(10, payCurrency.decimals)),
+            sellAmount: mul(fromAmount.value, pow(10, from.value.decimals || 18)),
             affilliateAddress: '0x37e6365d4f6aE378467b0e24c9065Ce5f06D70bF'
             // takerAddress: store.state._web3.userAddress,
         }).then(async res => {
@@ -106,6 +118,21 @@ export default () => {
             swapQuoteInfo.value = res
             return res
         })
+    }
+
+    // 交易
+    const indexCoopPurchase = (...pramas) => {
+        if (fundData.value.chainId === 137 && isH5) {
+            return Promise.race([
+                // 手机上metamask app的额度授权也没有回调，暂时定为30s后当作正常回调执行
+                indexCoop_purchase(...pramas),
+                new Promise(function (resolve, reject) {
+                    setTimeout(() => resolve(), 30000)
+                })
+            ])
+        } else {
+            return indexCoop_purchase(...pramas)
+        }
     }
 
     return {
@@ -119,7 +146,7 @@ export default () => {
         getEthereumPayCoinListBalance,
         reset,
         queryAllowance,
-        indexCoop_purchase,
+        indexCoopPurchase,
         querySwapQuote,
         allowanceApproveHandler,
     }

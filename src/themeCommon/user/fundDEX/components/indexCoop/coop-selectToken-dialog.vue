@@ -1,35 +1,36 @@
 <template>
     <van-popup
         v-model:show='popupShow'
-        style='border-radius: 6px;'
         @open='onOpen'
     >
-        <div class='popHeader'>
-            <h2 class='popTitle'>
-                Select a token
-            </h2>
-            <a class='close' href='javascript:;'>
-                <van-icon name='cross' @click="$emit('update:modelValue', false)" />
-            </a>
-        </div>
-        <div class='popContainer'>
-            <div class='tokenListBox'>
-                <div v-for='item in payCoinList' :key='item.id' class='row tokenCell' :index='item.id' @click='handleSelectToken(item)'>
-                    <div class='hd'>
-                        <img class='currencyIcon' :src='"/images/tokens/"+ item.symbol.toLowerCase() +".svg"' />
-                    </div>
-                    <div class='center'>
-                        <p class='thirdCoinCode'>
-                            {{ item.symbol }}
-                        </p>
-                        <p class='subCoinCode'>
-                            {{ item.symbolDesc }}
-                        </p>
-                    </div>
-                    <div class='ft'>
-                        <span class='value'>
-                            {{ formatAmount(item.balance, 3) }}
-                        </span>
+        <div class='popup-model'>
+            <div class='popHeader'>
+                <h2 class='popTitle'>
+                    Select a token
+                </h2>
+                <a class='close' href='javascript:;'>
+                    <van-icon name='cross' @click="$emit('update:modelValue', false)" />
+                </a>
+            </div>
+            <div class='popContainer'>
+                <div class='tokenListBox'>
+                    <div v-for='item in payCoinList' :key='item.id' class='row tokenCell' :index='item.id' @click='handleSelectToken(item)'>
+                        <div class='hd'>
+                            <img class='currencyIcon' :src='"/images/tokens/"+ item.symbol.toLowerCase() +".svg"' />
+                        </div>
+                        <div class='center'>
+                            <p class='thirdCoinCode'>
+                                {{ item.symbol }}
+                            </p>
+                            <p class='subCoinCode'>
+                                {{ item.symbolDesc }}
+                            </p>
+                        </div>
+                        <div class='ft'>
+                            <span class='value'>
+                                {{ formatAmount(item.balance, 3) }}
+                            </span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,6 +78,15 @@ const onOpen = () => {
 </script>
 
 <style lang="scss" scoped>
+.popup-model {
+    background: var(--contentColor);
+    border-radius: 4px;
+    @media (max-width: 768px) {
+        width: calc(100% - 30px);
+        margin: 0 auto;
+        padding: 24px 16px;
+    }
+}
 .popHeader {
     display: flex;
     padding: 24px 24px 0;

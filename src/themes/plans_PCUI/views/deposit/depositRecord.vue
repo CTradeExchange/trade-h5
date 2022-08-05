@@ -244,7 +244,7 @@ export default {
                     const resdata = res.data
                     if (resdata.records && resdata.records.length > 0) {
                         state.loading = false
-                        state.list = state.list.concat(resdata.records)
+                        state.list = state.current === 1 ? resdata.records : state.list.concat(resdata.records)
                         // 数据全部加载完成
                         if (resdata.current * resdata.size >= resdata.total) {
                             state.finished = true

@@ -7,7 +7,7 @@
                 </h1>
             </router-link>
             <div class='menus'>
-                <div :class="['item', { 'active': $route.path === '/earning' }]">
+                <div v-if='businessConfig?.fundDEX' :class="['item', { 'active': $route.path === '/earning' }]">
                     <router-link to='/earning'>
                         <span class='link'>
                             Funds
@@ -29,7 +29,7 @@
                         <span class='symbolUp'></span>
                     </router-link>
                 </div> -->
-                <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrder'>
+                <div :class="['item', { 'active': $route.path === '/order' }]" @click='toOrderPriority(5)'>
                     <span class='link'>
                         {{ $t('tradeType.5') }}
                     </span>
@@ -204,6 +204,8 @@ import Msg from './components/msg'
 import DownloadIcon from './components/downloadIcon'
 import { colors, setRootVariable } from '@planspc/colorVariables'
 import { MsgSocket } from '@/plugins/socket/socket'
+import { GridItem } from 'vant'
+import useMethods from '@planspc/hooks/useMethods'
 const logoImg = require('@planspc/images/logo.png')
 
 export default {
@@ -218,11 +220,12 @@ export default {
         const router = useRouter()
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
+        const { toOrderPriority } = useMethods()
+        const businessConfig = computed(() => store.state.businessConfig)
         const popoverRef = ref()
         const state = reactive({
             chartColorActive: JSON.parse(localGet('chartConfig'))?.chartColorType || 1,
         })
-
         const chartColorAction = [
             { val: '1', name: t('common.redDown') },
             { val: '2', name: t('common.redUp') },
@@ -256,23 +259,10 @@ export default {
         const customerInfo = computed(() => store.state._user.customerInfo)
 
         const changePlans = (item) => {
-            state.plansName = item.name
-            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === Number(item.id) && el.symbolName)?.symbolId
-            store.commit('_quote/Update_productActivedID', `${symbolId}_${item.id}`)
-
-            router.push({
-                path: '/order',
-                query: {
-                    symbolId,
-                    tradeType: item.id
-                }
-            })
+            // 跳转到下单页面并优先显示指定产品
+            toOrderPriority(item.tradeType)
         }
 
-        // 跳转到现货交易页面
-        const toOrder = () => {
-            changePlans({ name: t('tradeType.5'), id: '5' })
-        }
         // 设置涨跌颜色
         const changeChartColor = item => {
             const locChartConfig = JSON.parse(localGet('chartConfig'))
@@ -327,7 +317,6 @@ export default {
             handRoutTo,
             customInfo,
             formatTime,
-            toOrder,
             changePlans,
             plansName,
             ...toRefs(state),
@@ -336,7 +325,9 @@ export default {
             changeChartColor,
             logoutHandler,
             fundShow: window['fundShow'],
-            popoverRef
+            popoverRef,
+            businessConfig,
+            toOrderPriority
         }
     }
 }

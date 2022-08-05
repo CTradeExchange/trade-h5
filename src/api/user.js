@@ -182,7 +182,7 @@ export function queryPayType (data) {
         url: '/global/fund.app.DepositAppDubboService.getPayChannels',
         method: 'post',
         headers: {
-            version: '0.0.1',
+            version: '0.0.2',
         },
         data
     })
@@ -1221,6 +1221,19 @@ export function queryPayWithdrawBankList (data) {
     return request({
         url: '/global/fund.app.WithdrawAppDubboService.queryPayWithdrawBankList',
         method: 'post',
+        headers: {
+            version: '0.0.1'
+        },
+        data
+    })
+}
+
+/* 获取MC900收银台地址 */
+export function queryMC900Url (data) {
+    return request({
+        url: '/global/fund.app.DepositMc900AppDubboService.getCashierUrl',
+        method: 'post',
+        toastErr: false,
         headers: {
             version: '0.0.1'
         },

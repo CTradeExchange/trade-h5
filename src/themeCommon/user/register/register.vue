@@ -133,6 +133,8 @@ export default {
         const entrySearch = sessionGet('entrySearch')
         const { t, locale } = useI18n({ useScope: 'global' })
         const { getCustomerGroupIdByCountry, getPlansByCountry } = hooks()
+        const { openAccountType } = route.query
+        const businessConfig = computed(() => store.state.businessConfig)
         const state = reactive({
             options: [{ country: 'Canada', code: 'CA' }],
             zone: '',
@@ -150,13 +152,17 @@ export default {
             pageui: '',
             protocol: true,
             visited: false, // 是否已点击过获取验证码
-            openAccountType: Number(route.query.openAccountType) || 0, // 开户类型 0:个人 1.企业 默认为个人
+            openAccountType: 0, // 开户类型 0:个人 1.企业 默认为个人
             countrySheetVisible: false,
             country: {},
             allCountry: [], // 所有国家列表
             mobileToken: '',
             emailToken: ''
         })
+        // 设置默认开户类型
+        if (businessConfig.value.enterpriseLogin && openAccountType) {
+            state.openAccountType = openAccountType
+        }
 
         // pageConfig('Register').then(res => {
         //     state.pageui = res
@@ -365,6 +371,7 @@ export default {
 
         // 是否显示企业开户的入口
         const companyCountryVisible = computed(() => {
+            if (!businessConfig.value.enterpriseLogin) return false
             if (state.openAccountType === 0) {
                 return store.getters.companyCountryList.find(el => el.code === state.country.code)
             } else {
@@ -405,7 +412,7 @@ export default {
             registerBanner,
             companyCountryVisible,
             countrySelect,
-        // showProtocol
+            businessConfig
         }
     }
 }

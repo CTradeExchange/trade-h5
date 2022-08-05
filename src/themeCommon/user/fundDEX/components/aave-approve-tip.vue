@@ -66,7 +66,7 @@ const close = () => {
     overflow-y: auto;
     padding: 24px;
     position: relative;
-     @media (max-width: 768px) {
+    @media (max-width: 768px) {
         width: calc(100% - 30px);
         margin: 0 auto;
         padding: 24px 16px;

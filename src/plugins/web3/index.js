@@ -433,7 +433,7 @@ export const web3Hooks = () => {
      */
     const openExtBrowser = explorerLink => {
         const isUniapp = sessionGet('isUniapp')
-        if (Number(isUniapp) === 1) {
+        if (isUniapp) {
             uni.postMessage({
                 data: {
                     action: 'message',

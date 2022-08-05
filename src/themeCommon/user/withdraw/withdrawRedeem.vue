@@ -468,9 +468,8 @@ export default {
                             message: t('withdraw.activateMsg'),
                             confirmButtonText: t('withdraw.activateBtn')
                         }).then(() => {
-                            // on confirm
-                            router.push({
-                                path: '/deposit',
+                            router.replace({
+                                path: '/depositChoose',
                                 query: {
                                     accountId,
                                     currency: accountCurrency.currency,

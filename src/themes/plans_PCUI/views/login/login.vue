@@ -4,15 +4,15 @@
 
         <div class='main'>
             <!-- 登录账号类型 -->
-            <div class='account-type'>
+            <div v-if='businessConfig.enterpriseLogin || businessConfig.fundLogin' class='account-type'>
                 <button :class="['btn', { 'active': accountType === 1 }]" @click='accountType = 1'>
                     <!-- {{ $t('signIn.defaultLogin') }} -->
                     {{ $t('login.loginByPersonal') }}
                 </button>
-                <button :class="['btn', { 'active': accountType === 2 }]" @click='accountType = 2'>
+                <button v-if='businessConfig.enterpriseLogin' :class="['btn', { 'active': accountType === 2 }]" @click='accountType = 2'>
                     {{ $t('login.loginByCorporate') }}
                 </button>
-                <button :class="['btn', { 'active': accountType === 3 }]" @click='accountType = 3'>
+                <button v-if='businessConfig.fundLogin' :class="['btn', { 'active': accountType === 3 }]" @click='accountType = 3'>
                     {{ $t('signIn.fundLogin') }}
                 </button>
             </div>
@@ -159,6 +159,7 @@ export default {
         const checkCodeEmailEl = ref()
         const checkCodeMobileEl = ref()
         const { t } = useI18n({ useScope: 'global' })
+        const businessConfig = computed(() => store.state.businessConfig)
         const state = reactive({
             loading: false,
             accountType: 1, // 账户登录方式 1.普通登录 2.基金经理
@@ -390,6 +391,7 @@ export default {
             checkUserMfa,
             getGooleVerifyCode,
             onLoginNameKeyupEnter,
+            businessConfig
         }
     }
 }

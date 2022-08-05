@@ -276,8 +276,8 @@
             &.active {
                 color: var(--primary);
                 background: var(--primaryBg);
-                border-radius: 8px;
                 transition: 0.2s;
+                border-radius: 8px;
             }
         }
     }
@@ -337,14 +337,15 @@
                 }
             }
             &.purchase {
+                @include hover();
                 color: #fff;
                 background: var(--primary);
                 cursor: pointer;
             }
             &.redeem {
-                color: #0062FF;
+                color: var(--primary);
                 background: #fff;
-                border: 1px solid #0062FF;
+                border: 1px solid var(--primary);
                 cursor: pointer;
             }
         }

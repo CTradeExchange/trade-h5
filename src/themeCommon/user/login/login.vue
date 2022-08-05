@@ -2,11 +2,11 @@
     <div class='pageWrap'>
         <Top :right-action='rightAction' @back="$router.push('/')" @rightClick='changeLoginType' />
 
-        <div class='account-type'>
+        <div v-if='businessConfig.enterpriseLogin' class='account-type'>
             <button :class="['btn', { 'active': tabActive === 0 }]" @click='tabActive = 0'>
                 {{ $t('login.loginByPersonal') }}
             </button>
-            <button :class="['btn', { 'active': tabActive === 1 }]" @click='tabActive = 1'>
+            <button v-if='businessConfig.enterpriseLogin' :class="['btn', { 'active': tabActive === 1 }]" @click='tabActive = 1'>
                 {{ $t('login.loginByCorporate') }}
             </button>
         </div>
@@ -161,6 +161,7 @@ export default {
         const store = useStore()
         const { t } = useI18n({ useScope: 'global' })
         const instance = getCurrentInstance()
+        const businessConfig = computed(() => store.state.businessConfig)
         const state = reactive({
             loading: false,
             pwdVisible: false,
@@ -470,7 +471,8 @@ export default {
             loginSubmit,
             checkUserMfa,
             getGooleVerifyCode,
-            thirdLoginArr
+            thirdLoginArr,
+            businessConfig
         }
     }
 }

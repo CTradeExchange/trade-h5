@@ -127,12 +127,20 @@ export default {
         // 计算报价小数位档数
         const digitLevelList = computed(() => {
             const digits = []
-            var symbolDigits = props.product?.price_digits
+            // 部分产品price_digits可能不存在
+            let symbolDigits = props.product?.price_digits || props.product?.symbolDigits || 0
+            // 优先取昨收，如果没有则读开盘
+            const price = (props.product?.yesterday_close_price || props.product?.open_price)
             while (symbolDigits > -3) {
-                digits.push({ text: pow(0.1, symbolDigits) })
+                const v = pow(0.1, symbolDigits)
+                // 当前档位不能大于报价缩进一位的值
+                if (v <= (price / 10)) {
+                    digits.push({ text: v })
+                } else {
+                    break
+                }
                 symbolDigits--
             }
-
             return digits.splice(0, 5)
         })
 

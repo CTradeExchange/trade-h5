@@ -64,22 +64,22 @@
                             </p>
                         </div>
                         <div class='pro-row'>
-                            <span :class="Number(item._1D) > 0 ? 'green' : 'red'">
+                            <span :class="Number(item._1D) > 0 ? 'riseColor' : 'fallColor'">
                                 {{ item._1D }}%
                             </span>
                         </div>
                         <div class='pro-row'>
-                            <span :class="Number(item._1W) > 0 ? 'green' : 'red'">
+                            <span :class="Number(item._1W) > 0 ? 'riseColor' : 'fallColor'">
                                 {{ item._1W }}%
                             </span>
                         </div>
                         <div class='pro-row'>
-                            <span :class="Number(item._1M) > 0 ? 'green' : 'red'">
+                            <span :class="Number(item._1M) > 0 ? 'riseColor' : 'fallColor'">
                                 {{ item._1M }}%
                             </span>
                         </div>
                         <div class='pro-row last-row'>
-                            <span :class="Number(item._3M) > 0 ? 'green' : 'red'">
+                            <span :class="Number(item._3M) > 0 ? 'riseColor' : 'fallColor'">
                                 {{ item._3M }}%
                             </span>
                         </div>

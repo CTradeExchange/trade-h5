@@ -221,18 +221,7 @@
             </div>
 
             <div v-else class='indexfund-wrap'>
-                <IndexCoop v-if='isPC' />
-                <template v-else>
-                    <div class='indexfund-wrapH5'>
-                        <div class='empty-icon-wrap'>
-                            <img alt='' src='/images/clock.svg' srcset='' />
-                        </div>
-
-                        <h2 class='text'>
-                            Coming Soon
-                        </h2>
-                    </div>
-                </template>
+                <IndexCoop />
             </div>
         </div>
         <div v-else class='no-login-wrap'>

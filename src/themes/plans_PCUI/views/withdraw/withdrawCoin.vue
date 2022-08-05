@@ -595,17 +595,16 @@ export default {
                 } else {
                     if (!withdrawConfig.accountActiveEnable) {
                         return Dialog.confirm({
-
                             title: t('withdraw.hint'),
                             message: t('withdraw.activateMsg'),
                             confirmButtonText: t('withdraw.activateBtn')
                         }).then(() => {
-                            router.push({
-                                path: '/deposit',
+                            router.replace({
+                                path: '/assets/depositChoose',
                                 query: {
+                                    tradeType,
                                     accountId,
-                                    currency: accountCurrency.currency,
-                                    tradeType
+                                    currency: accountCurrency.currency
                                 }
                             })
                         }).catch(() => {})

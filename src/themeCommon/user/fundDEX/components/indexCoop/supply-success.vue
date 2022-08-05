@@ -8,7 +8,10 @@
                     </svg>
                 </svg>
             </div>
-            <h4 class='all-done'>
+            <h4 v-if='isMobilePolygon' class='all-done'>
+                Submission completed!
+            </h4>
+            <h4 v-else class='all-done'>
                 All done!
             </h4>
             <!-- <p class='amount'>
@@ -26,7 +29,7 @@
         </div>
 
         <div class='handle-action'>
-            <div class='review' @click='reviewDetail(successData.transactionHash)'>
+            <div v-if='!isMobilePolygon' class='review' @click='reviewDetail(successData.transactionHash)'>
                 <span>
                     Review tx details
                 </span>
@@ -52,7 +55,10 @@
 
 <script setup>
 import networkConfigs from '@/plugins/web3/config/networkConfigs'
+import { computed } from 'vue'
 import { useStore } from 'vuex'
+
+const isMobile = process.env.VUE_APP_theme === 'plans'
 
 const store = useStore()
 const props = defineProps(['fund', 'count', 'successData'])
@@ -61,6 +67,8 @@ const emit = defineEmits(['close'])
 
 // 关闭弹窗事件
 const close = () => emit('close')
+
+const isMobilePolygon = computed(() => props.fund.chainId === 137 && isMobile)
 
 // 查看详情
 const reviewDetail = (transactionHash) => {
@@ -77,6 +85,7 @@ const addCoin = () => {}
 
 // 申购成功
 .success-content {
+    padding: 0 24px;
     .success-block {
         display: flex;
         flex-direction: column;
@@ -183,6 +192,12 @@ const addCoin = () => {}
                 color: #FFF;
                 cursor: pointer;
             }
+        }
+    }
+    @media (max-width: 768px) {
+        padding: 0 16px;
+        .add-box {
+            display: none;
         }
     }
 }
