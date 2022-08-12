@@ -98,8 +98,8 @@ white-space: nowrap;'
 </template>
 
 <script setup>
-import { delayAwaitTime, defineProps } from '@/utils/util'
-import { computed, nextTick, onMounted, ref } from 'vue'
+import { delayAwaitTime } from '@/utils/util'
+import { computed, nextTick, onMounted, ref, defineProps } from 'vue'
 import { useInvestCompose } from './hooks/realtimeInvestCompose'
 import currencyIcon from '@/components/currencyIcon'
 import BottomTip from './bottomTip.vue'

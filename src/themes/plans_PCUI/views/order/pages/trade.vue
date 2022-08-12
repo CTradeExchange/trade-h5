@@ -661,25 +661,20 @@ export default {
 .trade-wrap {
     display: flex;
     width: 100%;
-    .buy-wrap {
+    .buy-wrap, .sell-wrap{
         position: relative;
         flex: 1;
-        margin-right: 15px;
-        padding-right: 15px;
-        border-right: dashed 1px var(--placeholdColor);
+        padding: 10px 15px;
         &:hover .loginMaskPop {
-            display: flex;
+            visibility: visible;
+            opacity: 1;
+        }
+        &:hover .footerBtn{
+            opacity: .5;
         }
     }
-    .sell-wrap {
-        position: relative;
-        flex: 1;
-        &:hover .loginMaskPop {
-            display: flex;
-        }
-    }
-    .loginMaskPop {
-        display: none;
+    .sell-wrap{
+        margin-left: 20px;
     }
     .form-item {
         display: flex;

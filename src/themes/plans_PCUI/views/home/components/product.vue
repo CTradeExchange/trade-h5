@@ -49,9 +49,11 @@ export default {
 
         // 跳转到下单页面
         const goOrder = (item) => {
+            console.log({ item })
             router.push({
                 path: '/order',
                 query: {
+                    name: item.symbolName.replace(/ /g, '_'),
                     symbolId: item.symbolId,
                     tradeType: item.tradeType
                 }

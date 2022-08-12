@@ -1,7 +1,7 @@
 <template>
     <div class='page-wrap'>
         <router-view />
-        <div class='content-top' :style="'height: '+ contentHeight">
+        <div class='content-top'>
             <div class='quote-wrap'>
                 <!-- 产品列表/搜索 -->
                 <productSearch />
@@ -11,7 +11,7 @@
                     <!-- 图表 -->
                     <chart />
                 </div>
-                <div class='trade-content' :style="'height: '+ tradeContentHeight">
+                <div class='trade-content'>
                     <!-- 交易下单 -->
                     <trade />
                 </div>
@@ -114,26 +114,6 @@ export default {
         // 获取产品详情
         store.dispatch('_quote/querySymbolInfo', { 'symbolId': product.value?.symbolId, 'tradeType': product.value?.tradeType })
 
-        const tradeContentHeight = computed(() => {
-            if (Number(product.value?.tradeType) === 5) {
-                return '265px'
-            } else if (Number(product.value?.tradeType) === 3) {
-                return '340px'
-            } else {
-                return '430px'
-            }
-        })
-
-        const contentHeight = computed(() => {
-            if (Number(product.value?.tradeType) === 3) {
-                return '920px'
-            } else if (Number(product.value?.tradeType) === 5) {
-                return '840px'
-            } else {
-                return '964px'
-            }
-        })
-
         watch(
             () => product.value?.tradeType,
             (newval, oldval) => {
@@ -148,6 +128,15 @@ export default {
                 }
             },
             { immediate: true }
+        )
+
+        // 缓存每次切换的产品
+        watch(
+            [() => product.value?.symbolId, () => product.value?.tradeType],
+            newVal => {
+                store.commit('_quote/Update_lastProductActivedID', newVal.join('_'))
+            }
+            , { immediate: true }
         )
 
         // 价格跳动修改页面title
@@ -180,8 +169,6 @@ export default {
         return {
             product,
             tradeType,
-            tradeContentHeight,
-            contentHeight,
             dealModeShowMap,
             ...toRefs(state)
         }
@@ -214,7 +201,8 @@ export default {
         position: relative;
         display: flex;
         justify-content: space-between;
-        max-height: 964px;
+        align-items: stretch;
+        // max-height: 964px;
         >div {
             margin-right: 8px;
             background: var(--contentColor);
@@ -229,6 +217,9 @@ export default {
             flex-direction: row;
             flex-shrink: 0;
             width: 320px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
         }
         .middle-wrap {
             display: flex;
@@ -236,12 +227,14 @@ export default {
             flex-direction: column;
             justify-content: space-between;
             background: var(--bgColor);
+            margin-left: 328px;
             >div {
                 background: var(--contentColor);
                 border-radius: 10px;
             }
             .chart-content {
                 margin-bottom: 8px;
+                // flex: 1;
             }
             .trade-content {
                 position: relative;
@@ -310,14 +303,22 @@ export default {
         }
     }
     .orders-wrap {
-        height: 458px;
+        // min-height: 458px;
         margin-top: 8px;
         background: var(--contentColor);
     }
     .assetsSticky {
+        background-color: var(--contentColor);
+        padding: 15px 0;
         :deep(.van-sticky--fixed) {
-            background-color: var(--bgColor);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.15);
+            background-color: var(--contentColor);
+            box-shadow: 0 0px 10px rgba(0, 0, 0, 0.15);
+            width: 100%!important;
+            left: 0;
+            .assetsModule{
+                height: 100%;
+                margin-top: 0;
+            }
         }
     }
 }

@@ -108,6 +108,7 @@ export const getColumns = tradeTypeValue => {
         router.push({
             name: 'Order',
             query: {
+                name: product?.symbolName?.replace(/ /g, '_'),
                 symbolId: product.symbolId,
                 tradeType: product.tradeType
             }
@@ -262,7 +263,6 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.operating'),
                 align: 'right',
                 minWidth: 200,
-                fixed: 'right',
                 slots: {
                     default: commonBtns
                 }
@@ -345,7 +345,6 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.operating'),
                 align: 'right',
                 minWidth: 200,
-                fixed: 'right',
                 slots: {
                     default: commonBtns
                 }
@@ -429,7 +428,6 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.operating'),
                 align: 'right',
                 minWidth: 200,
-                fixed: 'right',
                 slots: {
                     default: commonBtns
                 }
@@ -516,7 +514,6 @@ export const getColumns = tradeTypeValue => {
                 name: t('trade.operating'),
                 align: 'right',
                 minWidth: 200,
-                fixed: 'right',
                 slots: {
                     default: commonBtns
                 }

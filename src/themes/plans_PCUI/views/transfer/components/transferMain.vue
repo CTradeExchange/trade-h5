@@ -359,7 +359,7 @@ export default {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            height: rem(80px);
+            height: rem(100px);
             margin-top: rem(50px);
             padding: 0 rem(30px);
             color: var(--color);
@@ -400,6 +400,7 @@ export default {
             width: 100%;
             color: var(--color);
             border: 0;
+            background: var(--contentColor);
         }
 
         --el-disabled-border-base: transparent;

@@ -28,7 +28,7 @@
 <script>
 import { computed } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 const defaultImg = require('./productSwipe.png')
 export default {
     props: {
@@ -39,7 +39,9 @@ export default {
     },
     setup (props) {
         const store = useStore()
+        const route = useRoute()
         const router = useRouter()
+        const { isUniapp } = route.query
         const productMap = computed(() => store.state._quote.productMap)
         const customerGroupId = computed(() => store.getters.customerGroupId)
         const symbolKeys = Object.entries(props.data.product || {}).map(([tradeType, item]) => {
@@ -55,8 +57,24 @@ export default {
         })
 
         // 点击进入产品详情页面
-        const handlerItem = item => {
-            router.push({ name: 'Product', query: { symbolId: item.symbolId, tradeType: item.tradeType } })
+        const handlerItem = data => {
+            if (isUniapp && uni) {
+                uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'product_click',
+                        params: {
+                            tradeType: data.tradeType,
+                            symbolId: data.symbolId,
+                            symbolName: data.symbolName,
+                            price_digits: data.price_digits,
+                            symbolCode: data.symbolCode
+                        }
+                    }
+                })
+            } else {
+                router.push({ name: 'Product', query: { symbolId: data.symbolId, tradeType: data.tradeType } })
+            }
         }
         return {
             productMap,

@@ -195,7 +195,7 @@ export default createStore({
         getCompanyCountry ({ dispatch, commit, state }) {
             return findCompanyCountry().then(res => {
                 if (res.check()) {
-                    commit('Update_companyCountryList', res.data.openCompanyCountry)
+                    commit('Update_companyCountryList', res.data?.openCompanyCountry)
                 }
                 return res
             })

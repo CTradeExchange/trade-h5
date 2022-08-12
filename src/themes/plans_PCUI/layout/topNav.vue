@@ -376,6 +376,7 @@ export default {
                     color: #FFF;
                     font-size: 16px;
                     cursor: pointer;
+                    line-height: normal;
                     &:hover {
                         color: var(--primary);
                     }

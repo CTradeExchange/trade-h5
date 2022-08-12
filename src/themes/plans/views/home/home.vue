@@ -16,13 +16,13 @@
                             </van-swipe-item>
                         </van-swipe>
                     </van-col>
-                    <van-col align='center' span='2'>
+                    <van-col v-if='!isUniapp' align='center' span='2'>
                         <van-icon name='more-o' @click='publicLink' />
                     </van-col>
                 </van-row>
             </van-notice-bar>
         </div>
-        <PageComp class='marginbottom' :data='pageModules' />
+        <PageComp :class="isUniapp ? '' : 'marginbottom'" :data='pageModules' />
         <!-- 统一公告弹窗 -->
         <NoticePublic />
     </div>
@@ -33,7 +33,7 @@ import { QuoteSocket } from '@/plugins/socket/socket'
 import { onActivated, computed, ref, toRefs, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import { NoticeBar } from 'vant' // vant公告组件
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { getNoticeList } from '@/api/user'
 import { isEmpty, getCookie } from '@/utils/util'
@@ -48,7 +48,9 @@ export default {
         const store = useStore()
         const pageModules = ref([])
         const router = useRouter()
+        const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
+        const { isUniapp } = route.query
         const customerGroupId = computed(() => store.getters.customerGroupId)
         // 暂时只在319公司显示
         const isCompanyIdShow = computed(() => Number(store.state._base.wpCompanyInfo.companyId) === 319)
@@ -118,13 +120,25 @@ export default {
         }
 
         const goNoticeDetail = (id) => {
-            router.push({
-                path: '/noticeDetail',
-                query: {
-                    id: id,
-                    type: 'notice'
-                }
-            })
+            if (isUniapp && uni) {
+                uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'notice_click',
+                        params: {
+                            path: `/noticeDetail?id=${id}&type=notice`
+                        }
+                    }
+                })
+            } else {
+                router.push({
+                    path: '/noticeDetail',
+                    query: {
+                        id: id,
+                        type: 'notice'
+                    }
+                })
+            }
         }
 
         store.dispatch('_base/getPageConfig', 'Home').then(res => {
@@ -157,7 +171,8 @@ export default {
             publicLink,
             getNoticeData,
             isCompanyIdShow,
-            ...toRefs(state)
+            ...toRefs(state),
+            isUniapp
         }
     }
 }

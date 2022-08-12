@@ -98,6 +98,15 @@ export function localSet (key, val) {
 export function localGet (key) {
     return localStorage.getItem(key)
 }
+// 获取本地存储json字符串类型
+export function localGetJSON (key, defaultValue = null) {
+    try {
+        const value = localStorage.getItem(key)
+        return JSON.parse(value) || defaultValue
+    } catch (e) {
+        return defaultValue
+    }
+}
 export function localRemove (key) {
     return localStorage.removeItem(key)
 }
@@ -418,4 +427,14 @@ export function hideWalletMiddleInfo (address) {
     if (!address) return ''
     var reg = /(.{4}).+(.{3}.+)/g
     return address.replace(reg, '$1****$2')
+}
+
+/**
+ * @desc 获取url参数
+ * @param {String} name  想要获取的参数名字
+ */
+export function getQueryString (name) {
+    var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)')
+    var r = window.location.search.substr(1).match(reg)
+    if (r != null) return unescape(r[2]); return null
 }

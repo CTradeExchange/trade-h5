@@ -15,7 +15,9 @@ import LayoutTop from '@plans/layout/top'
 import { setRootVariable } from './colorVariables'
 import { setRouter, modifybaseURL } from '@/utils/request'
 // import LuckDraw from 'vue-luck-draw/vue3'
-import { getLoginParams, getQueryVariable, getToken, setToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie, sessionSet } from '@/utils/util'
+
+import { getLoginParams, getQueryVariable, getToken, setToken, isEmpty, removeLoginParams, checkUserKYC, localGet, localSet, getCookie, sessionSet, getQueryString } from '@/utils/util'
+
 import BigNumber from 'bignumber.js'
 import preventReClick from '@/directives/preventReClick'
 import positiveNumber from '@/directives/positiveNumber'
@@ -75,7 +77,7 @@ store.dispatch('_base/initBaseConfig').then(async () => {
     app.use(Socket, { $store: store, $router: router })
 
     // 设置语言
-    const langLocal = getCookie('lang') || 'zh-CN'
+    const langLocal = getCookie('lang') || getQueryString('lang') || 'en-US'
     setI18nLanguage(I18n, langLocal)
     await loadLocaleMessages(I18n, langLocal)
 

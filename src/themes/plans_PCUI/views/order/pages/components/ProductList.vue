@@ -84,6 +84,7 @@ const onClick = product => {
     router.replace({
         query: {
             ...route.query,
+            name: product.symbolName.replace(/ /g, '_'),
             symbolId: product.symbolId,
             tradeType: product.tradeType
         }

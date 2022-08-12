@@ -2,7 +2,7 @@ import { findSymbolBaseInfoList, querySymbolInfo, getEquityPremiumRate } from '@
 import { findFundPage, findFundPageRealTime, fundNetValueChangeQuote, getFundInfo } from '@/api/fund'
 import { toFixed } from '@/utils/calculation'
 import { vue_set, assign } from '@/utils/vueUtil.js'
-import { sessionSet, sessionGet } from '@/utils/util.js'
+import { sessionSet, sessionGet, localSet, localGetJSON } from '@/utils/util.js'
 import { createListByPlans, fillProductLabel, handlerDealLastPrice, priceToPip } from './storeUtil.js'
 import CheckAPI from '@/utils/checkAPI'
 import BigNumber from 'bignumber.js'
@@ -238,8 +238,21 @@ export default {
             })
         },
         Update_productActivedID (state, id) {
-            sessionSet('productActived', JSON.stringify(state.productMap[id]))
+            const product = state.productMap[id]
             state.productActivedID = id
+            // 依据分类缓存最后一次访问的产品
+            if (product?.symbolId && product?.symbolKey && product?.tradeType) {
+                sessionSet('productActived', JSON.stringify(product))
+            }
+        },
+        Update_lastProductActivedID (state, id) {
+            // 更新最新访问的产品
+            const product = state.productMap[id]
+            if (product?.symbolId && product?.symbolKey && product?.tradeType) {
+                const lastProductActived = localGetJSON('lastProductActived', {})
+                lastProductActived[product.tradeType] = product.symbolKey
+                localSet('lastProductActived', JSON.stringify(lastProductActived))
+            }
         },
         Update_handicapList (state, data = {}) {
             // type 1: 快照 2 实时
@@ -306,11 +319,13 @@ export default {
             const { symbolList, planMap } = symbolAllData
             commit('add_products', symbolList)
             commit('Updata_planMap', { plans: rootState._base.plans, planMap })
-            const isWallet = rootState._base.wpCompanyInfo.isWallet // 现货玩法是否当钱包使用
-            const firstTradeType = rootState._base.plans.find(el => !(el.tradeType === '5' && isWallet))?.tradeType
-            const firstProductSymbolId = firstTradeType && planMap[firstTradeType] ? planMap[firstTradeType][0] : ''
-            const firstProductSymbolKey = firstProductSymbolId + '_' + firstTradeType
-            if (symbolList.length) commit('Update_productActivedID', firstProductSymbolKey)
+            if (symbolList.length) {
+                const isWallet = rootState._base.wpCompanyInfo.isWallet // 现货玩法是否当钱包使用
+                const firstTradeType = rootState._base.plans.find(el => !(el.tradeType === '5' && isWallet))?.tradeType
+                const firstProductSymbolId = firstTradeType && planMap[firstTradeType] ? planMap[firstTradeType][0] : ''
+                const firstProductSymbolKey = firstProductSymbolId + '_' + firstTradeType
+                commit('Update_productActivedID', firstProductSymbolKey)
+            }
             return planMap
         },
         // 产品基础信息列表

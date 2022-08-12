@@ -1,54 +1,54 @@
 <template>
-    <van-popup
-        v-model:show='showList'
-        :close-on-click-overlay='true'
-        closeable
-        :get-container='getContainer'
-        round
-        :style="{ width: '520px' }"
-        @click-close-icon='onClose'
-        @closed='closed'
-    >
-        <div class='content'>
-            <span class='type'>
-                {{ $t('chart.mainStudy') }}
-            </span>
-            <!-- :style="{ 'font-size': (1/item.label.length/6) + 24/75+'rem' }" -->
-            <div class='list'>
-                <span
-                    v-for='(item, i) in MAINSTUDIES'
-                    :key='i'
-                    class='item of-1px'
-                    :class="{ 'active': mainStudy === item.name }"
-                    :style="[{ 'font-size': item.label.length >=6 ? '0.28rem': '' } ]"
-                    @click='onClick("main", item.name)'
-                >
-                    {{ item.label }}
+    <div class='popup-warp'>
+        <van-popup
+            v-model:show='showList'
+            class='popup'
+            :close-on-click-overlay='true'
+            closeable
+            :get-container='getContainer'
+            :style="{ width: '520px' }"
+            @click-close-icon='onClose'
+            @closed='closed'
+        >
+            <div class='content'>
+                <span class='type'>
+                    {{ $t('chart.mainStudy') }}
                 </span>
-            </div>
+                <!-- :style="{ 'font-size': (1/item.label.length/6) + 24/75+'rem' }" -->
+                <div class='list'>
+                    <span
+                        v-for='(item, i) in MAINSTUDIES'
+                        :key='i'
+                        class='item'
+                        :class="{ 'active': mainStudy === item.name }"
+                        @click='onClick("main", item.name)'
+                    >
+                        {{ item.label }}
+                    </span>
+                </div>
 
-            <span class='type'>
-                {{ $t('chart.subStudy') }}
-            </span>
-            <div class='list'>
-                <span
-                    v-for='(item, i) in SUBSTUDIES'
-                    :key='i'
-                    class='item of-1px'
-                    :class="{ 'active': subStudy === item.name }"
-                    :style="[{ 'font-size': item.label.length >6 ? '0.28rem': '' } ]"
-                    @click='onClick("sub", item.name)'
-                >
-                    {{ item.label }}
+                <span class='type'>
+                    {{ $t('chart.subStudy') }}
                 </span>
-                <span v-for='item in (5 - SUBSTUDIES.length %5)' :key='"other" + item' class='item of-1px' style='opacity: 0;'></span>
-            </div>
+                <div class='list'>
+                    <span
+                        v-for='(item, i) in SUBSTUDIES'
+                        :key='i'
+                        class='item'
+                        :class="{ 'active': subStudy === item.name }"
+                        @click='onClick("sub", item.name)'
+                    >
+                        {{ item.label }}
+                    </span>
+                    <span v-for='item in (5 - SUBSTUDIES.length %5)' :key='"other" + item' class='item of-1px' style='opacity: 0;'></span>
+                </div>
 
-            <div class='submit' @click='onSubmit'>
-                {{ $t('confirm') }}
+                <div class='submit' @click='onSubmit'>
+                    {{ $t('confirm') }}
+                </div>
             </div>
-        </div>
-    </van-popup>
+        </van-popup>
+    </div>
 </template>
 
 <script>
@@ -131,58 +131,78 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/sass/mixin.scss';
-.van-popup {
-    width: 90%;
-    max-width: rem(736px);
-    .content {
-        display: flex;
-        height: 100%;
-        flex-direction: column;
-        width: 100%;
-        padding: rem(50px) 0 0;
-        background-color: var(--bgColor);
-        .type {
-            margin: rem(10px) 0;
-            padding: 0 rem(30px);
-            font-size: rem(28px);
-        }
-        .list {
+.popup-warp{
+    :deep(.van-popup){
+        border-radius: 8px;
+        .content {
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: flex-start;
-            margin-bottom: rem(20px);
-            padding: 15px 0;
-            .item {
-                cursor: pointer;
-                padding: 10px 10px;
-                flex: 0 0 rem(112px);
+            height: 100%;
+            flex-direction: column;
+            width: 100%;
+            padding: rem(50px) rem(20px) rem(35px) rem(20px);
+            .type {
+                margin: rem(10px) 0;
+                padding: 0 rem(30px);
+                font-size: rem(36px);
+                font-weight: bold;
+            }
+            .list {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                margin-bottom: rem(20px);
+                padding: 10px 0;
+                .item {
+                    cursor: pointer;
+                    padding: 8px 10px;
+                    flex: 0 0 rem(112px);
+                    box-sizing: border-box;
+                    margin: 6px 10px;
+                    color: var(--color);
+                    font-weight: normal;
+                    line-height: rem(40px);
+                    text-align: center;
+                    border: 1px solid var(--lineColor);
+                    border-radius: 4px;
+                    transition: all 0.2s ease 0s;
+                    &:hover{
+                        border-color: var(--primary);
+                    }
+                    &.active {
+                        color: #FFF;
+                        background: var(--primary);
+                        border-color: var(--primary);
+                    }
+                }
+            }
+            .submit {
                 box-sizing: border-box;
-                margin: 6px 10px;
-                color: var(--color);
-                font-weight: normal;
-                line-height: rem(40px);
+                width: 88%;
+                height: 45px;
+                color: #FFF;
+                line-height: 45px;
                 text-align: center;
-                border: 1px solid var(--lineColor);
-                &.active {
-                    color: #FFF;
-                    background: var(--primary);
-                    border-color: var(--primary);
+                background: var(--primary);
+                margin: 10px auto;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s ease 0s;
+                font-size: 16px;
+                &:hover{
+                    background: #6b8fff;
+                }
+                &:focus, &:active{
+                    transform: scale(0.99);
                 }
             }
         }
-        .submit {
-            box-sizing: border-box;
-            width: 90%;
-            height: 35px;
-            color: #FFF;
-            line-height: 35px;
-            text-align: center;
-            background: var(--primary);
-            margin: 10px auto;
-            border-radius: 4px;
-            cursor: pointer;
+        .van-popup__close-icon{
+            &:hover{
+                opacity: .8;
+            }
         }
     }
 }
+
 </style>

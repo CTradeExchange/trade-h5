@@ -1,5 +1,5 @@
 <template>
-    <top left-icon='arrow-left' :right-action='false' :title='title'>
+    <top v-if='!isUniapp' left-icon='arrow-left' :right-action='false' :title='title'>
         <template #right>
             <van-loading v-if='loading' class='loadingIcon' :color='primaryColor' size='20px' />
         </template>
@@ -30,6 +30,7 @@ export default {
         const primaryColor = computed(() => Base.state.wpCompanyInfo.themeColor)
         const route = useRoute()
         const contentIframe = ref(null)
+        const { isUniapp } = route.query
         const state = reactive({
             loading: true,
             title: route.query.title || '',
@@ -77,7 +78,8 @@ export default {
             ...toRefs(state),
             pageOnLoad,
             contentIframe,
-            primaryColor
+            primaryColor,
+            isUniapp
         }
     }
 }

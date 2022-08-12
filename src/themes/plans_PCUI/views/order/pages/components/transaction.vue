@@ -36,7 +36,10 @@ const tableData = ref([])
 const queryData = () => {
     const account = store.state._user.customerInfo.accountList?.filter(el => Number(el.tradeType) === Number(props.tradeType)) || []
     const accountIds = account.map(e => e.accountId).toString()
-
+    // 未登录的情况下暂不发请求
+    if (!accountIds) {
+        return
+    }
     const params = {
         accountIds,
         sortFieldName: 'executeTime',

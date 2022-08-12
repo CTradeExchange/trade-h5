@@ -106,7 +106,6 @@ export default {
     }
 }
 .borrowMoney {
-    margin-bottom: 10px;
     color: var(--minorColor);
     :deep(.el-checkbox){
         vertical-align: middle;

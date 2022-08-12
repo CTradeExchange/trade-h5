@@ -151,7 +151,7 @@
 import { reactive } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { newsListByTypeByPage, canlendarListByDate, articleDetail } from '@/api/information'
-import { getCookie } from '@/utils/util'
+import { getCookie, getQueryString } from '@/utils/util'
 const h5Preview = process.env.VUE_APP_h5Preview
 export default {
     props: ['data'],
@@ -197,7 +197,7 @@ export default {
             },
             calendarList: [],
             filterCalendarList: [],
-            lang: getCookie('lang') || 'zh-CN'
+            lang: getCookie('lang') || getQueryString('lang') || 'en-US'
         })
         const { t } = useI18n({ useScope: 'global' })
         state.newsTypes = [

@@ -137,6 +137,7 @@ import { useStore } from 'vuex'
 import { useRouter } from 'vue-router'
 import { getCookie } from '@/utils/util.js'
 import langDialog from './components/lang-dialog.vue'
+import useMethods from '@planspc/hooks/useMethods'
 export default {
     components: {
         langDialog
@@ -144,6 +145,8 @@ export default {
     setup () {
         const store = useStore()
         const router = useRouter()
+
+        const { toOrderPriority } = useMethods()
 
         // 用户信息
         const customerInfo = computed(() => store.state._user.customerInfo)
@@ -197,16 +200,9 @@ export default {
                 telegram: 'https://t.me/VitatokenEnglish',
                 yt: 'https://www.youtube.com/channel/UCWrIoUETskxOU9zIVpba6Hg'
             }
-            const symbolId = store.state._quote.productList.find(el => Number(el.tradeType) === 5 && el.symbolName)?.symbolId
             switch (index) {
                 case 'trading':
-                    router.push({
-                        path: '/order',
-                        query: {
-                            symbolId,
-                            tradeType: 5
-                        }
-                    })
+                    toOrderPriority(5)
                     break
                 case 'fund':
                     router.push({ path: '/fund' })

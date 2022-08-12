@@ -233,7 +233,7 @@ export default {
     justify-content: space-between;
     height: 60px;
     margin-top: 8px;
-    padding: 0 15px;
+    padding: 0 20px;
     color: var(--color);
     background: var(--contentColor);
     .tradeTypeName {
@@ -251,6 +251,7 @@ export default {
         .amount {
             color: var(--color);
             font-size: 14px;
+            margin-top: 4px;
         }
         &.riskRate {
             line-height: 30px;

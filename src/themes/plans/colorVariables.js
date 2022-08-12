@@ -1,4 +1,4 @@
-import { localGet } from '@/utils/util'
+import { localGet, getQueryString } from '@/utils/util'
 import store from './store'
 const colors = {
     common: {
@@ -74,8 +74,8 @@ function updateBodyClass (themeColor) {
 
 // 设置root变量
 export function setRootVariable (themeColor, primaryColor) {
-    const invertColor = themeColor || localGet('invertColor')
-    const chartColorType = JSON.parse(localGet('chartConfig'))?.chartColorType || 1
+    const invertColor = getQueryString('theme') || themeColor || localGet('invertColor')
+    const chartColorType = getQueryString('chartColorType') || JSON.parse(localGet('chartConfig'))?.chartColorType || 1
     if (primaryColor) {
         colors.common.primary = primaryColor
         colors.common.primaryBg = primaryColor + '1A'

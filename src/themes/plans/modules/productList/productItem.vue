@@ -47,7 +47,7 @@
 <script>
 import { computed, reactive, toRefs, watch } from 'vue'
 import { useStore } from 'vuex'
-import { getLen, localGet } from '@/utils/util'
+import { getLen, localGet, getQueryString } from '@/utils/util'
 import ETF from '@plans/components/etfIcon'
 export default {
     components: {
@@ -69,7 +69,7 @@ export default {
             return tick_time ? window.dayjs(Number(tick_time)).format('HH:mm:ss') : ''
         })
 
-        const chartColorType = computed(() => Number(JSON.parse(localGet('chartConfig'))?.chartColorType) || 1)
+        const chartColorType = computed(() => getQueryString('chartColorType') || Number(JSON.parse(localGet('chartConfig'))?.chartColorType) || 1)
 
         const state = reactive({
             bgClass: ''

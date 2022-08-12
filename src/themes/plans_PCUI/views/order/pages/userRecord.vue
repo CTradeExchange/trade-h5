@@ -6,7 +6,7 @@
                 <el-tab-pane :label='$t("trade.dealList")' name='1' />
                 <el-tab-pane :label='[1,2].includes(Number(tradeType)) ? $t("trade.position") : $t("trade.asset") ' name='2' />
             </el-tabs>
-            <router-link v-if='activeName === "1"' class='link' :to="{ name: 'TransRecords', query: { tradeType } }">
+            <router-link v-if='isLogin && activeName === "1"' class='link' :to="{ name: 'TransRecords', query: { tradeType } }">
                 {{ $t('trade.allTransaction') }}
             </router-link>
         </div>
@@ -17,6 +17,7 @@
             <Transaction v-if='activeName ==="1"' :common-options='commonOptions' :trade-type='tradeType' />
             <!-- 资产 -->
             <AssetsList v-if='activeName ==="2"' :common-options='commonOptions' :trade-type='tradeType' />
+            <LoginMask v-if='!isLogin' class='loginMaskPop' />
         </div>
     </div>
 </template>
@@ -28,10 +29,12 @@ import { ElTabs, ElTabPane } from 'element-plus'
 import CurrentCommission from './components/currentCommission'
 import Transaction from './components/transaction'
 import AssetsList from './components/assetsList'
+import LoginMask from '@planspc/components/loginMask.vue'
 
 const store = useStore()
 const product = computed(() => store.getters.productActived)
 const tradeType = computed(() => unref(product).tradeType)
+const isLogin = computed(() => !!store.state._user.customerInfo?.customerNo)
 const activeName = ref('0')
 
 const commonOptions = {
@@ -41,6 +44,7 @@ const commonOptions = {
 // 不同table数据混在一起了
 const mounted = ref(true)
 watch(() => tradeType.value, async () => {
+    activeName.value = '0' // 玩法切换的时候重置tab页
     mounted.value = false
     await nextTick()
     mounted.value = true
@@ -52,6 +56,7 @@ watch(() => tradeType.value, async () => {
     display: flex;
     flex-direction: column;
     width: 100%;
+    flex: 1;
     .headbar{
         display: flex;
         flex-direction: row;
@@ -92,5 +97,16 @@ watch(() => tradeType.value, async () => {
             cursor: pointer;
         }
     }
+    .content{
+        position: relative;
+        .loginMaskPop{
+            z-index: 8;
+        }
+        &:hover .loginMaskPop {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
 }
 </style>

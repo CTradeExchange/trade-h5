@@ -1,6 +1,6 @@
 <template>
     <div class='msgDetail'>
-        <LayoutTop :custom-back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
+        <LayoutTop v-if='!isUniapp' :custom-back='true' :menu='false' :title='$t("route.noticeTitle")' @back='back' />
         <Loading :show='loading' />
         <div class='pageWrap'>
             <div class='detailTop'>
@@ -34,6 +34,7 @@ export default {
         const router = useRouter()
         const route = useRoute()
         const { t } = useI18n({ useScope: 'global' })
+        const { isUniapp } = route.query
         const state = reactive({
             list: [],
             listNotice: [],
@@ -122,7 +123,8 @@ export default {
             getNoticeDetial,
             formatTime,
             back,
-            ...toRefs(state)
+            ...toRefs(state),
+            isUniapp
         }
     }
 }

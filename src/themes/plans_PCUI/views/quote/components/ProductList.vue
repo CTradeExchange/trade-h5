@@ -36,6 +36,7 @@ const tableOptions = computed(() => ({
         router.push({
             name: 'Order',
             query: {
+                name: row?.symbolName?.replace(/ /g, '_'),
                 symbolId: row.symbolId,
                 tradeType: row.tradeType
             }

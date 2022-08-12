@@ -1,5 +1,12 @@
 <template>
-    <van-tabbar v-model='active' :active-color='primaryColor' class='footerMenu' :class='{ h5Preview }' z-index='102'>
+    <van-tabbar
+        v-if='!isUniapp'
+        v-model='active'
+        :active-color='primaryColor'
+        class='footerMenu'
+        :class='{ h5Preview }'
+        z-index='102'
+    >
         <van-tabbar-item v-for='item in data.items' :key='item.href' :name='item.href.name' @click='menuHandler(item)'>
             <template #icon>
                 <img
@@ -60,7 +67,9 @@ export default {
                     href: '/mine',
                     icon: 'icon_icon_mine',
                 },
-            ]
+            ],
+            // 是否为app页面
+            isUniapp: false
         }
     },
     computed: {
@@ -72,6 +81,9 @@ export default {
         }
     },
     created () {
+        const route = useRoute()
+        const { isUniapp } = route.query
+        this.isUniapp = isUniapp
         if (!this.h5Preview) {
             this.active = this.$route.name
             this.$watch('$route.name', function (newval) {

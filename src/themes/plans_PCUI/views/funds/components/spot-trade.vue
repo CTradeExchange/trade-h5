@@ -188,6 +188,7 @@ const toOrder = () => {
     router.push({
         path: '/order',
         query: {
+            name: product.value.symbolName.replace(/ /g, '_'),
             symbolId: product.value.symbolId,
             tradeType: product.value.tradeType
         }

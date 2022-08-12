@@ -139,9 +139,9 @@ const current = computed({
 
 <style lang="scss" scoped>
 .customTable{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    // display: flex;
+    // flex-direction: column;
+    // align-items: flex-end;
     width: 100%;
     height: 100%;
     .pagination{
@@ -156,7 +156,7 @@ const current = computed({
             th.el-table__cell{
                 color: var(--minorColor);
                 font-weight: 400;
-                font-size: 12px;
+                font-size: 13px;
                 border-color: var(--assistColor);
             }
             td.el-table__cell{
@@ -169,16 +169,18 @@ const current = computed({
                 }
             }
 
-            .el-table__fixed-right::before,
-            .el-table__fixed::before,
-            tr,th.el-table__cell,
-            tr.hover-row .el-table__cell,
-            &::before{
+            tr {
                 background-color: var(--contentColor);
             }
-            tr:hover>td.el-table__cell{
+
+            tr:hover, tr.hover-row, tr.hover-row:hover {
                 background-color: var(--bgColor);
             }
+
+            tr.hover-row>td.el-table__cell{
+                background: none;
+            }
+
             .chunk {
                 display: inline-flex;
                 align-items: center;
@@ -189,6 +191,9 @@ const current = computed({
                     color: var(--color);
                 }
             }
+        }
+        .el-pagination{
+            justify-content: flex-end;
         }
         .el-pagination{
             .btn-prev,

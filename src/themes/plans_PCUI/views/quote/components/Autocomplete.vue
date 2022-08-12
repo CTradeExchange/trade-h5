@@ -71,6 +71,7 @@ const gotoOrder = (product) => {
     router.push({
         name: 'Order',
         query: {
+            name: product?.name?.replace(/ /g, '_'),
             symbolId: product.id,
             tradeType: props.tradeType
         }

@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { computed, unref, watch, onUnmounted, ref } from 'vue'
+import { computed, unref, watch, onUnmounted, ref, onMounted } from 'vue'
 import { useStore } from 'vuex'
 import customTable from './customTable'
 import { getAssetColumns } from './tableConfig'
@@ -60,11 +60,13 @@ const searchText = ref('')
 
 const product = computed(() => store.getters.productActived)
 const customerInfo = computed(() => store.state._user.customerInfo)
+const isLogin = computed(() => !!store.state._user.customerInfo?.customerNo)
+
 // 持仓列表
 
 // 账户列表
 const accountList = computed(() => {
-    const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList.filter(item => Number(item.tradeType) === Number(props.tradeType))
+    const list = store.state._user?.customerInfo?.accountList && store.state._user?.customerInfo?.accountList?.filter(item => Number(item.tradeType) === Number(props.tradeType)) || []
 
     if (hideAsset.value) {
         if (Number(props.tradeType) === 3) {
@@ -145,8 +147,12 @@ onUnmounted(() => {
     unSubscribe()
 })
 
-// 拉取用户信息
-store.dispatch('_user/findCustomerInfo', false)
+onMounted(() => {
+    // 有登录则拉取用户信息
+    if (isLogin.value) {
+        store.dispatch('_user/findCustomerInfo', false)
+    }
+})
 
 </script>
 

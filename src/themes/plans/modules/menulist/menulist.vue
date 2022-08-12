@@ -7,7 +7,7 @@
                 class='cellItem'
                 :is-link='item.isLink'
                 :title='item.title'
-                @click='open(item)'
+                @click='openUrl(item)'
             >
                 <template #icon>
                     <img

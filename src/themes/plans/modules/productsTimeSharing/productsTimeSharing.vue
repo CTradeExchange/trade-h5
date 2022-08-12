@@ -42,7 +42,7 @@
 <script>
 import { computed, unref, onMounted } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { QuoteSocket } from '@/plugins/socket/socket'
 import klineSvg from '@plans/components/klineSvg.vue'
 export default {
@@ -56,7 +56,9 @@ export default {
     setup (props) {
         const h5Preview = process.env.VUE_APP_h5Preview
         const store = useStore()
+        const route = useRoute()
         const router = useRouter()
+        const { isUniapp } = route.query
         // 产品map数据
         const productMap = computed(() => store.state._quote.productMap)
 
@@ -97,7 +99,23 @@ export default {
         })
 
         const openProduct = (data) => {
-            router.push({ name: 'Product', query: { symbolId: data.symbolId, tradeType: data.tradeType } })
+            if (isUniapp && uni) {
+                uni.postMessage({
+                    data: {
+                        action: 'message',
+                        type: 'product_click',
+                        params: {
+                            tradeType: data.tradeType,
+                            symbolId: data.symbolId,
+                            symbolName: data.symbolName,
+                            price_digits: data.price_digits,
+                            symbolCode: data.symbolCode
+                        }
+                    }
+                })
+            } else {
+                router.push({ name: 'Product', query: { symbolId: data.symbolId, tradeType: data.tradeType } })
+            }
         }
 
         const onChangeSwipe = (index) => {

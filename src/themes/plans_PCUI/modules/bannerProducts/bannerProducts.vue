@@ -67,6 +67,7 @@ export default {
             router.push({
                 path: '/order',
                 query: {
+                    name: item.symbolName.replace(/ /g, '_'),
                     symbolId: item.symbolId,
                     tradeType: item.tradeType
                 }
