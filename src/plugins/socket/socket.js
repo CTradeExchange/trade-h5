@@ -2,7 +2,7 @@ import CreateSocket from './createSocket'
 import QuoteSocketEvent from './quoteSocketEvent'
 import MsgSocketEvent from './msgSocketEvent'
 import { ungzip } from './socketUtil'
-import { getToken } from '@/utils/util.js'
+import { getToken, getQueryString } from '@/utils/util.js'
 
 export const QuoteSocket = new QuoteSocketEvent() // 行情websocket
 export const MsgSocket = new MsgSocketEvent() // 消息websocket
@@ -119,7 +119,10 @@ export default {
         quoteWS.open()
         quoteWSEvent(quoteWS) // 行情事件处理
 
-        msgWS.open()
-        msgWSEvent(msgWS) // 消息事件处理
+        // 默认开启消息推送，uniapp环境下不开
+        if (!getQueryString('isUniapp')) {
+            msgWS.open()
+            msgWSEvent(msgWS) // 消息事件处理
+        }
     }
 }
