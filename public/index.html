@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang=""
+      data-buildTime="<%= process.env.VUE_APP_build %>">
+
+<head>
+    <meta name="referrer"
+          content="origin" />
+    <meta charset="utf-8" />
+    <title>Headline | Fully Compliance Platform</title>
+    <meta name="Keywords"
+          content="Headline,price,trade,breaking news,forex,foreign exchange,trade,trading,cfd,oil price,ftse,crude brent,currency,stock,investing,crypto,crypto currency" />
+    <meta property="og:title"
+          content="Headline | Fully Compliance Platform" />
+    <meta name="twitter:title"
+          content="Headline | Fully Compliance Platform" />
+    <meta name="description"
+          content="Headline is a financial service platform based on the financial event. We provide services to investors by analyzing hot topics in finance and helping you to improve your trading efficiency, build up the top trading opportunities and trade in accordance with financial essence investing value conception. Reduce investor's difficulty of obtaining information at the bottom level of capital movement." />
+    <meta property="og:description"
+          content="Headline is a financial service platform based on the financial event. We provide services to investors by analyzing hot topics in finance and helping you to improve your trading efficiency, build up the top trading opportunities and trade in accordance with financial essence investing value conception. Reduce investor's difficulty of obtaining information at the bottom level of capital movement." />
+    <meta name="twitter:description"
+          content="Headline is a financial service platform based on the financial event. We provide services to investors by analyzing hot topics in finance and helping you to improve your trading efficiency, build up the top trading opportunities and trade in accordance with financial essence investing value conception. Reduce investor's difficulty of obtaining information at the bottom level of capital movement." />
+    <meta name="image"
+          content="https://www.headline.net/wp-content/uploads/2023/03/640x360.jpg" />
+    <meta property="og:image"
+          content="https://www.headline.net/wp-content/uploads/2023/03/640x360.jpg" />
+    <meta name="twitter:image"
+          content="https://www.headline.net/wp-content/uploads/2023/03/640x360.jpg" />
+
+    <meta http-equiv="X-UA-Compatible"
+          content="IE=edge" />
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <link rel="icon"
+          href="<%= BASE_URL %>favicon.ico" />
+    <!-- Imports the manifest to represent the web application. A web app must have a manifest to be a PWA. -->
+    <link rel="manifest" href="<%= BASE_URL %>manifest.json" />
+    <!-- <script defer="true" src="https://im.mc900.com:443/im/0gmd4m.html"></script> -->
+    <meta name="google-signin-client_id"
+          content="507643510387-ff4on5fmgb2h06tmd5vou0trprtnk0b9.apps.googleusercontent.com" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="application-name" content="Headline.net">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="./images/logo/apple-touch-icon.png" />
+    <meta name="browsermode" content="application">
+    <meta name="full-screen" content="yes" />
+    <meta name="x5-fullscreen" content="true" />
+    <meta name="x5-page-mode" content="app" />
+    <meta name="360-fullscreen" content="true" />
+    <style>  
+        html,
+        body {
+            font-size: 10vw;
+            height: 100%;
+            padding: 0;
+            /* 新增公共颜色 */
+            --primaryLc: #ffedef;
+            --primaryText: #191919;
+            --textColor: #424245;
+            --bgColor: #fbfbfb !important;
+            --placeholdColor: #9f9f9f !important;
+            --placeholdBg: #fbfbfb;
+            --f8Color: #f8f8f8;
+            --cardBg: #e8e8e8;
+            --cellBg: #f7f7f7;
+            --color1: #d9001b;
+            --color2: #3359aa;
+            --color3: #f99900;
+            --color80: #808080;
+            --colorf4: #f4f4f4;
+            --colord6: #d6d6d6;
+            --colorddd: #dddddd;
+            --colorTopBg: rgba(0, 0, 0, 0.3);
+            --passColor: #ff8365;
+            --upComingColor: #527dca;
+            --lowColor: #eed70b;
+            --mediumColor: #ff922f;
+            --highColor: #ec1c24;
+            --colorbf: #bfbfbf;
+            --color7a: #7a7a7a;
+            --color74: #747474;
+            --White: #ffffff;
+            --dashedColor: #bcbcbc;
+            --color3c: #3c3c3c;
+            --color5: #555555;
+            --color50: #505050;
+            --colorfa: #fafafa;
+            --colorth: #cf8c92;
+            --color6: #666666;
+            --colorac: #acacac;
+            --color5a: #5a5a5a;
+            --colorCalendar:#556681;
+            --gradientColor: linear-gradient(90deg, #ff343c, #be1e2d);
+        }
+
+        #app:empty::after,
+        .loadIcon::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            margin: -30px 0 0 -15px;
+            background: url(/images/loading.svg) center no-repeat;
+            background-size: 100%;
+            opacity: 0.7;
+            -webkit-animation: loading 1s linear infinite;
+            animation: loading 1s linear infinite;
+            content: "";
+        }
+
+        body {
+            overflow: overlay;
+        }
+
+        body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        body::-webkit-scrollbar-thumb {
+            background: var(--dashedColor);
+            border-radius: 6px;
+        }
+
+        body::-webkit-scrollbar-thumb:hover {
+            background: var(--color3c);
+        }
+
+        body::-webkit-scrollbar-corner {
+            background: transparent;
+        }
+
+        body::-webkit-scrollbar {
+            width: 6px;
+            height: 0;
+        }
+
+        #app:empty::after,
+        .loadIcon::after {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 30px;
+            height: 30px;
+            margin: -30px 0 0 -15px;
+            background: url(/images/loading.svg) center no-repeat;
+            background-size: 100%;
+            opacity: 0.7;
+            -webkit-animation: loading 1s linear infinite;
+            animation: loading 1s linear infinite;
+            content: "";
+        }
+
+        @-webkit-keyframes loading {
+            0% {
+                transform: translateZ(0) rotate(0deg);
+            }
+
+            100% {
+                transform: translateZ(0) rotate(360deg);
+            }
+        }
+
+        @keyframes loading {
+            0% {
+                transform: translateZ(0) rotate(0deg);
+            }
+
+            100% {
+                transform: translateZ(0) rotate(360deg);
+            }
+        }
+
+        .unsupported {
+            padding-top: 100px;
+            color: #666;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .unsupported .text1 {
+            color: #333;
+            font-weight: bold;
+            font-size: 36px;
+        }
+
+        .broswer-list {
+            width: 1200px;
+            margin: 56px auto 0;
+            text-align: center;
+        }
+
+        .broswer-item {
+            display: inline-block;
+            width: 75px;
+            margin-left: 60px;
+            color: #666;
+            font-size: 16px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .broswer-item>i {
+            display: block;
+            width: 100%;
+            width: 70px;
+            height: 70px;
+            margin-bottom: 20px;
+        }
+
+        .chrome {
+            background: url("/images/browser/chrome.png");
+        }
+
+        .safari {
+            background: url("/images/browser/safari.png");
+        }
+
+        .firefox {
+            background: url("/images/browser/firefox.png");
+        }
+
+        .opera {
+            background: url("/images/browser/opera.png");
+        }
+
+        .browser360 {
+            background: url("/images/browser/browser360.png");
+        }
+
+        .browserQQ {
+            background: url("/images/browser/browserQQ.png");
+        }
+
+        .liebao {
+            background: url("/images/browser/liebao.png");
+        }
+        body #hubspot-messages-iframe-container {
+            display: none !important;
+        }
+        .PasstoAI-mask,.PasstoAI-tips,.PasstoAI-chat-button {
+            display: none;
+        }
+        @media (max-height: 768px) {
+           .pc #PasstoAI-chat-container  {
+                height: 80vh
+            }
+        }
+    </style>
+    <!-- Google Tag Manager -->
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({
+                "gtm.start": new Date().getTime(),
+                event: "gtm.js",
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != "dataLayer" ? "&l=" + l : "";
+            j.async = true;
+            j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+            f.parentNode.insertBefore(j, f);
+        })(window, document, "script", "dataLayer", "GTM-WTL9BWW");
+    </script>
+    <!-- End Google Tag Manager -->
+  
+    <!-- clarity prd-->
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "kyfk1uat4j");
+    </script>
+  
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WTL9BWW"
+                height="0"
+                width="0"
+                style="display: none; visibility: hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Start of HubSpot Embed Code -->
+    <script type="text/javascript" id="hs-script-loader" async defer src="//js-na1.hs-scripts.com/44323870.js"></script>
+    <!-- End of HubSpot Embed Code -->
+    <script type="text/javascript">
+        (function (window) {
+            if (!!window.ActiveXObject || "ActiveXObject" in window) {
+                var str = "温馨提醒";
+                var str2 = "为确保您获得顺畅的交易体验，请使用以下浏览器访问交易平台";
+
+                var htmlText =
+                    "<pre class='unsupported'><p class='text1'>" +
+                    str +
+                    "</p><p class='text2'>" +
+                    str2 +
+                    "</p></pre>" +
+                    "<div class='broswer-list'>" +
+                    "<a class='broswer-item' target='_blank' href='https://www.google.com/chrome/'><i class='chrome'></i><p>Chrome</p></a>" +
+                    "<a class='broswer-item' target='_blank' href='https://support.apple.com/downloads/safari'><i class='safari'></i><p>Safari</p></a>" +
+                    "<a class='broswer-item' target='_blank' href='https://www.mozilla.org/en-US/firefox/new/'><i class='firefox'></i><p>火狐</p></a>" +
+                    "<a class='broswer-item' target='_blank' href='https://www.opera.com/zh-cn/browsers'><i class='opera'></i><p>Opera</p></a>" +
+                    "<a class='broswer-item' target='_blank' href='https://browser.360.cn/'><i class='browser360'></i><p>360浏览器</p></a>" +
+                    "<a class='broswer-item' target='_blank' href='https://www.liebao.cn/'><i class='liebao'></i><p>猎豹</p></a>" +
+                    "<a class='broswer-item' target='_blank' href='https://browser.qq.com/'><i class='browserQQ'></i><p>QQ浏览器</p></a>" +
+                    "</div>";
+                document.write(htmlText);
+                document.execCommand("Stop");
+            }
+        })(window);
+
+        (function (target) {
+            var appMsgFnArray = ["send_verify"];
+            if (!target) return null;
+            appMsgFnArray.forEach(function (func) {
+                target[func] = function (vals) {
+                    target.postMessage({
+                    action: "message",
+                    type: func,
+                    data: vals
+                    });
+                };
+            });
+        })(window);
+
+    </script>
+  
+  
+    <noscript>
+        <strong>We're sorry but <%= htmlWebpackPlugin.options.title
+                %> doesn't work
+                properly without JavaScript enabled. Please enable it to
+                continue.</strong>
+    </noscript>
+    <div id="app" style="overflow-x: hidden"></div>
+    <script src="<%= BASE_URL %>charting_library/charting_library.js?t=2"></script>
+    <!-- built files will be auto injected -->
+    <script>
+        window.printLog = function () {};
+        
+        window["isPRD"] = true;
+
+        /* ##wp_imsService start## */
+        window["imsService"] = "";
+        /* ##wp_imsService end## */
+
+        /* ##wp_serviceUrl start## */
+        window["serviceUrl"] = "http://uatwpapi.ixmiddle.site";
+        /* ##wp_serviceUrl end## */
+        /* ##wp_apiPath start## */
+        window["wp_apiPath"] = "/cats-manage-api/json";
+        /* ##wp_apiPath end## */
+
+        /* ##wp_ChannelSett start## */
+        window["ChannelSett"] = "";
+        /* ##wp_ChannelSett end## */
+
+        /* ##wp_SysSetting start## */
+        window["wp_SysSetting"] = "";
+        /* ##wp_SysSetting end## */
+
+        /* ##wp_Nav start## */
+        window["wp_Nav"] = "";
+        /* ##wp_Nav end## */
+
+        /* ##wp_Home start## */
+        window["wp_Home"] = "";
+        /* ##wp_Home end## */
+
+        /* ##wp_Footer start## */
+        window["wp_Footer"] = "";
+        /* ##wp_Footer end## */
+
+        /* ##wp_SelfSymbolIndex start## */
+        window["wp_SelfSymbolIndex"] = "";
+        /* ##wp_SelfSymbolIndex end## */
+
+        /* ##wp_TradeIndex start## */
+        window["wp_TradeIndex"] = "";
+        /* ##wp_TradeIndex end## */
+
+        /* ##wp_PositionIndex start## */
+        window["wp_PositionIndex"] = "";
+        /* ##wp_PositionIndex end## */
+
+        /* ##wp_Mine start## */
+        window["wp_Mine"] = "";
+        /* ##wp_Mine end## */
+
+        /* ##wp_companyId start## */
+        window["companyId"] = "";
+        /* ##wp_companyId end## */
+
+        /* ##接口域名*/
+        /* ##wp_apiService start## */ // uat //uatcatsapi.cmfbl.com //pre //precatsapi3.cmfbl.com:5443
+        window["apiService"] = "https://precatsapi3.cmfbl.com:5443";
+        // window['apiService'] = 'https://catsapi3.cmfbl.com:5443';
+        /* ##wp_apiService end## */
+
+        /* ##行情websocket地址## */
+        /* ##wp_quoteService start## */
+        window["quoteService"] = "wss://precatsapi3.cmfbl.com:5443/quote";
+        /* ##wp_quoteService end## */
+
+        /* ##消息websocket地址## */
+        /* ##wp_msgService start## */
+        window["msgService"] = "wss://precatsapi3.cmfbl.com:5443/msg";
+        /* ##wp_msgService end## */
+
+        /* ##交易websocket地址 start## */
+        /* ##wp_tradeService start## */
+        window["tradeService"] =
+            "wss://precatsapi3.cmfbl.com:5443/cats-gateway/ws";
+        /* ##wp_tradeService end## */
+
+        /* ##行情板块的基金banner图表位置## */
+        window["fundBannerPosition"] = ""; // 玩法id-板块位置  5-2
+        /* ##PCUI基金功能是否显示## */
+        window["fundShow"] = false;
+    </script>
+    <script type="text/javascript"
+            src="/libs/uni-app/uni.webview.1.5.2.js"></script>
+    <script type="text/javascript"
+            src="/libs/adapter-latest.js"></script>
+
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vConsole/3.9.1/vconsole.min.js"></script>
+    <script>
+        var vConsole = new VConsole()
+    </script> -->
+
+    <script 
+        async
+        defer
+        src="https://cloud.passto.ai/api/application/embed?protocol=https&host=cloud.passto.ai&token=82555ac02c61d78c&lang=en-US">
+        </script>
+</body>
+
+</html>

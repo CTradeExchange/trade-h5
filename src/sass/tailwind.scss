@@ -1,0 +1,490 @@
+$spacing-base-size: 4px;
+$count: 150;
+
+$colors: (
+    primary: --primary,
+    riseColor: --riseColor,
+    fallColor: --fallColor,
+    warn: --warn,
+    success: --success,
+    primaryBg: --primaryBg,
+    primaryAssistColor: --primaryAssistColor,
+    color: --color,
+    normalColor: --normalColor,
+    minorColor: --minorColor,
+    placeholdColor: --placeholdColor,
+    contentColor: --contentColor,
+    bgColor: --bgColor,
+    assistColor: --assistColor,
+    lineColor: --lineColor,
+    mainColor: --mainColor,
+    primaryLight: --primaryLight,
+);
+
+// text-red bg-red
+@each $colorKey, $color in $colors {
+    .text-#{$colorKey} {
+        color: var($color);
+    }
+    .bg-#{$colorKey} {
+        background: var($color);
+    }
+}
+
+.text-white {
+    color: #fff;
+}
+
+.bg-white {
+    background: #fff;
+}
+
+// Layout
+// display
+@each $val in (hidden, grid, flex, inline, inline-block, block, inline-flex) {
+    .#{$val} {
+        display: $val;
+    }
+}
+
+// position
+@each $val in (static, fixed, absolute, relative, sticky) {
+    .#{$val} {
+        position: $val;
+    }
+}
+
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-scroll {
+    overflow: scroll;
+}
+
+.overflow-x-auto {
+    overflow-x: auto;
+}
+
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+.overflow-x-scroll {
+    overflow-x: scroll;
+}
+
+.overflow-y-scroll {
+    overflow-y: scroll;
+}
+
+// Flexbox & Grid
+.flex-1 {
+    flex: 1 1 0%;
+}
+
+.flex-auto {
+    flex: 1 1 auto;
+}
+
+.flex-initial {
+    flex: 0 1 auto;
+}
+
+.flex-none {
+    flex: none;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-col-reverse {
+    flex-direction: column-reverse;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-row-reverse {
+    flex-direction: row-reverse;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+// justify-content align-content
+@each $val in (start, end, center, space-between, space-around, space-evenly) {
+    .justify-#{$val} {
+        justify-content: $val;
+    }
+    .content-#{$val} {
+        align-content: $val;
+    }
+}
+
+// justify-content
+@each $val in (start, end, center, stretch) {
+    .justify-self-#{$val} {
+        justify-self: $val;
+    }
+    .justify-items-#{$val} {
+        justify-self: $val;
+    }
+}
+
+// align-self
+@each $val in (flex-start, flex-end, center, stretch, baseline) {
+    .self-#{$val} {
+        align-self: $val;
+    }
+    .items-#{$val} {
+        align-items: $val;
+    }
+}
+
+.truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.text-ellipsis {
+    text-overflow: ellipsis;
+}
+.text-clip {
+    text-overflow: clip;
+}
+
+.font-normal {
+    font-weight: 400;
+}
+.font-medium {
+    font-weight: 500;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.font-bold {
+    font-weight: 700;
+}
+
+.break-normal {
+    overflow-wrap: normal;
+    word-break: normal;
+}
+.break-words {
+    overflow-wrap: break-word;
+}
+.break-all {
+    word-break: break-all;
+}
+
+.leading-normal {
+    line-height: normal;
+}
+
+// text-left text-center text-right
+@each $val in (left, center, right) {
+    .text-#{$val} {
+        text-align: $val;
+    }
+}
+
+// Spacing
+$spacing-types: (
+    m: margin,
+    p: padding,
+);
+$spacing-directions: (
+    t: top,
+    r: right,
+    b: bottom,
+    l: left,
+);
+
+/*
+ margin padding
+ eg: .m-1 .my-1 .mx-1 .mt-1, .mr-1...
+ */
+@each $typeKey, $type in $spacing-types {
+    @for $i from 1 through $count {
+        .#{$typeKey}-#{$i} {
+            #{$type}: $spacing-base-size * $i;
+        }
+        .#{$typeKey}x-#{$i} {
+            #{$type}-left: $i * $spacing-base-size;
+            #{$type}-right: $i * $spacing-base-size;
+        }
+        .#{$typeKey}y-#{$i} {
+            #{$type}-top: $i * $spacing-base-size;
+            #{$type}-bottom: $i * $spacing-base-size;
+        }
+    }
+
+    @each $directionKey, $direction in $spacing-directions {
+        @for $i from 1 through $count {
+            // .mt-1{margin-top: 0.25rem}
+            .#{$typeKey}#{$directionKey}-#{$i} {
+                #{$type}-#{$direction}: $i * $spacing-base-size;
+            }
+        }
+    }
+}
+
+.ml-0 {
+    margin-left: 0;
+}
+
+.top-0 {
+    top: 0;
+}
+
+.bottom-0 {
+    bottom: 0;
+}
+
+.right-0 {
+    right: 0;
+}
+
+.left-0 {
+    left: 0;
+}
+
+.margin-center {
+    margin: 0 auto;
+}
+
+// sizing
+$sizing-types: (
+    w: width,
+    max-w: max-width,
+    h: height,
+    max-h: max-height,
+    min-w: min-width,
+    min-h: min-height,
+);
+
+/*
+  width, min-width, max-width, height, min-height, max-height
+  eg: .w-1 .min-w-1 .max-w-1 w-full ...
+ */
+@each $typeKey, $type in $sizing-types {
+    .#{$typeKey}-full {
+        #{$type}: 100%;
+    }
+    @for $i from 1 through $count {
+        .#{$typeKey}-#{$i} {
+            #{$type}: $spacing-base-size * $i;
+        }
+    }
+}
+
+.h-auto {
+    height: auto;
+}
+
+.w-auto {
+    width: auto;
+}
+
+.text-xs {
+    font-size: 12px; /* 12px */
+    line-height: 16px; /* 16px */
+}
+
+.text-sm {
+    font-size: 14px; /* 14px */
+    line-height: 20px; /* 20px */
+}
+
+.text-base {
+    font-size: 16px; /* 16px */
+    line-height: 18px; /* 24px */
+}
+
+.text-lg {
+    font-size: 18px; /* 18px */
+    line-height: 28px; /* 28px */
+}
+
+.text-xl {
+    font-size: 20px; /* 20px */
+    line-height: 28px; /* 28px */
+}
+
+.text-2xl {
+    font-size: 24px; /* 24px */
+    line-height: 32px; /* 32px */
+}
+
+.text-3xl {
+    font-size: 30px; /* 30px */
+    line-height: 36px; /* 36px */
+}
+
+.text-4xl {
+    font-size: 36px; /* 36px */
+    line-height: 40px; /* 40px */
+}
+
+.text-5xl {
+    font-size: 48px; /* 48px */
+    line-height: 1;
+}
+
+.text-underline {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+.text-line-through {
+    text-decoration: line-through;
+}
+
+// Line Height
+$leading-types: (
+    3: 12px,
+    4: 16px,
+    5: 20px,
+    6: 24px,
+    7: 28px,
+    8: 32px,
+    9: 36px,
+    10: 40px,
+    normal: normal,
+);
+
+@each $typeKey, $type in $leading-types {
+    .leading-#{$typeKey} {
+        line-height: #{$type};
+    }
+}
+
+//尺寸数组
+$size_name_list: 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl', '4xl', '5xl';
+$rounded_size_list: 6, 8, 10, 12, 16, 24, 36, 48, 56; //圆角
+
+// 边框圆角
+@each $size in $size_name_list {
+    $i: index($size_name_list, $size); //索引
+
+    $rounded_size: nth(
+        $list: $rounded_size_list,
+        $n: $i,
+    );
+
+    .rounded-#{$size} {
+        border-radius: #{$rounded_size} + 'px';
+    }
+}
+
+.border-left {
+    border-left: 1px solid var(--lineColor);
+}
+
+.border-right {
+    border-right: 1px solid var(--lineColor);
+}
+
+.border-top {
+    border-top: 1px solid var(--lineColor);
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--lineColor);
+}
+
+.boder {
+    border: 1px solid var(--lineColor);
+}
+
+.rounded-full {
+    border-radius: 9999px;
+}
+
+.truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.white-sapce-nowrap {
+    white-space: nowrap;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+html body .plain-button {
+    background: #fef7f6;
+    &::before,
+    &::after {
+        border-color: var(--primary);
+    }
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.tooltip-cursor {
+    cursor: help;
+    text-decoration: dotted underline;
+    -webkit-text-decoration: dotted underline;
+    text-underline-offset: 3.5px;
+}
+
+.riskLevel {
+    position: relative;
+    margin-left: 10px;
+    padding-left: 10px;
+    font-size: rem(22px);
+    font-weight: normal;
+    &::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate(0, -50%);
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+    }
+    &.riskLevel1 {
+        color: var(--success);
+        &::before {
+            background: var(--success);
+        }
+    }
+    &.riskLevel2 {
+        color: var(--focusColor);
+        &::before {
+            background: var(--focusColor);
+        }
+    }
+    &.riskLevel3 {
+        color: var(--warn);
+        &::before {
+            background: var(--warn);
+        }
+    }
+}
+
+
+
+.rotate-0 {
+    transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transition: transform 0.5s;
+}
+
+.rotate--180 {
+    transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+    transition: transform 0.5s;
+}
+

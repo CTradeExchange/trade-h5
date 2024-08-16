@@ -1,0 +1,4 @@
+{
+    "dear": "Dear Customer",
+    "upgrade": "During system upgrade, all services are suspended <span id='endTime'>{time}(UTC{timezone})</span>"
+}

@@ -1,0 +1,1 @@
+export const DEFAULT_LANG = 'en-US' // 'zh-CN'; // 默认语言

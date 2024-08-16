@@ -1,0 +1,62 @@
+{
+	"ios": {
+		"isDeposit": true,
+		"isWithdraw": true,
+        "isRegisterSuccDesposit": true,
+		"google_client_id//": "ios google客户端ID",
+		"google_client_id": "272695980391-5n35v7s4p9rojbgov18h5bkhrchrfo8g.apps.googleusercontent.com",
+		"telegram_client_id//": "ios telegram客户端ID",
+		"telegram_client_id": "mc900h5_bot"
+	},
+	"android": {
+		"isDeposit": true,
+		"isWithdraw": true,
+		"isRegisterSuccDesposit": true,
+		"google_client_id//": "android google客户端ID",
+		"google_client_id": "272695980391-sa3vb273so825bvlph8f2aocn0flhotb.apps.googleusercontent.com",
+		"telegram_client_id//": "android telegram客户端ID",
+		"telegram_client_id": "mc900h5_bot"
+	},
+	"isFund//": "是否显示基金功能",
+	"isFund": false,
+    "limitOrderConfig//": "限价单交易配置说明, 例如：2_1, 2代表玩法类型, 1代表成交模式。玩法类型： 【1: 合约全仓,2: 合约逐仓,3: 杠杆,5: 现货,6: 股票】，成交模式：【 1:MM 2:蝴蝶 3:撮合 4:聚合】",
+    "limitOrderConfig": ["5_3","5_4", "3_1", "1_1"],
+    "inviteEnable//": "inviteEnable: 开户是否显示邀请码 inviteURL: 接口地址 invitePK: 公钥",
+    "inviteEnable": false,
+	"isGoogle//": "是否开放google登录",
+	"isGoogle": true,
+	"isTelegram//": "是否开放telegram登录",
+	"isTelegram": true,
+	"isApple//": "是否开放apple登录",
+	"isApple": true,
+    "minAddressDeposit":[
+        {
+          "title": "USDT",
+          "min": 5
+        },
+        {
+          "title": "NGN",
+          "min": 2400
+        },
+        {
+          "title": "VND",
+          "min": 116600
+        },
+        {
+          "title": "THB",
+          "min": 180
+        },
+        {
+          "title": "MYR",
+          "min": 25
+        },
+        {
+          "title": "IDR",
+          "min": 74500
+        },
+        {
+          "title": "CNY",
+          "min": 35
+        }
+      ]
+}

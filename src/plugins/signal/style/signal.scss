@@ -1,0 +1,643 @@
+.module-case {
+    background-color: var(--contentColor);
+    margin: 6px 0 0;
+    padding: 14px 0;
+    border-radius: 4px;
+    &.module-case-padding {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+}
+.signal-item {
+    display: flex;
+    align-items: center;
+    min-height: 38px;
+    position: relative;
+    padding: 0 12px;
+    &:active {
+        background-color: var(--primaryAssistColor);
+    }
+    &.signal-item-block {
+        border-bottom: none;
+    }
+    &.signal-item-th {
+        color: var(--minorColor);
+        font-size: 13px;
+        .van-icon-question-o {
+            cursor: pointer;
+            margin-left: 5px;
+        }
+    }
+    &.signal-item-expired {
+        color: var(--minorColor);
+        :deep {
+            .green,
+            .red,
+            .fallColor,
+            .riseColor,
+            .icon {
+                color: var(--minorColor);
+            }
+        }
+    }
+    .col {
+        display: inline-flex;
+        align-items: center;
+        flex: 1;
+        flex-shrink: 0;
+        margin-right: 6px;
+        overflow: hidden;
+        &:first-of-type {
+            flex: 0.7;
+        }
+        &:last-of-type {
+            flex: 0.8;
+            justify-content: flex-end;
+            margin-right: 0;
+        }
+        &.col-times {
+            flex: 1;
+        }
+        &.col-half {
+            flex: 0.5;
+        }
+        &.col-direction {
+            flex: 1;
+        }
+        &.col-symbol-name {
+            flex: 1.5;
+            justify-content: flex-start;
+        }
+        &.col-trigger-price {
+            flex: 1.2;
+        }
+        &.col-indicator {
+            flex: 0.7;
+        }
+        &.col-th {
+            color: var(--minorColor);
+        }
+        .direction {
+            margin-left: 6px;
+        }
+        .buy {
+            color: var(--riseColor);
+        }
+        .sell {
+            color: var(--fallColor);
+        }
+        span {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            &.direction-minwidth {
+                min-width: 30px;
+            }
+        }
+        .text-bold {
+            margin-bottom: 2px;
+            font-weight: bold;
+        }
+        .text-desc {
+            font-size: 12px;
+            color: var(--normalColor);
+        }
+        // 多行信号
+        &.col-multiple {
+            &:not(th) {
+                padding: 6px 0;
+            }
+        }
+    }
+    .col-popover {
+        display: inline-flex;
+    }
+    .indicators-col {
+        flex: 1.2;
+    }
+    :deep {
+        .icon-bell {
+            color: var(--normalColor);
+            font-size: 16px;
+            line-height: normal;
+            cursor: pointer;
+            margin-left: 10px;
+            margin-top: -3px;
+            &:hover {
+                color: var(--primary);
+            }
+        }
+        .arrow {
+            color: var(--minorColor);
+            margin-left: 8px;
+            font-size: 16px;
+            margin-top: -3px;
+        }
+        .more {
+            margin-left: 6px;
+            font-size: 16px;
+            line-height: normal;
+            transform: rotate(-90deg);
+        }
+        .green {
+            color: var(--success);
+        }
+        .red {
+            color: var(--warn);
+        }
+    }
+    .subscribed-icon {
+        font-size: 16px;
+        color: var(--color);
+        &:hover {
+            color: var(--primary);
+        }
+    }
+}
+.signal-item-bg {
+    transition-property: background;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    &.signal-item-rise {
+        animation-name: riseColor;
+    }
+    &.signal-item-fall {
+        animation-name: fallColor;
+    }
+}
+.signal-item-blank {
+    position: absolute;
+    left: 0;
+    right: 0;
+    &.signal-item-blank-h5 {
+        margin: 0 10px;
+        left: 12px;
+        right: 12px;
+    }
+    &.signal-item-blank-m10 {
+        margin: 0 10px;
+        background: var(--contentColor);
+    }
+}
+.signal-item-more {
+    position: relative;
+    margin-right: -12px;
+    padding-left: 12px;
+    padding-right: 12px;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .icon,
+    .icon_telegram_outline {
+        color: var(--primary);
+        font-size: 18px;
+    }
+}
+
+@keyframes riseColor {
+    0% {
+        background: transparent;
+    }
+    50% {
+        background: var(--risebg);
+    }
+    to {
+        background: transparent;
+    }
+}
+
+@keyframes fallColor {
+    0% {
+        background: transparent;
+    }
+    50% {
+        background: var(--fallbg);
+    }
+    to {
+        background: transparent;
+    }
+}
+
+// 指标模块
+.indicators-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin: 0 -7px;
+    .indicators-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 33.3333%;
+        padding: 7px;
+        cursor: pointer;
+        .indicators-warp {
+            border: 1px solid #000;
+            border-color: var(--normalColor);
+            flex: 1;
+            text-align: center;
+            padding: 7px;
+            &:hover {
+                background-color: var(--bgColor);
+            }
+        }
+        .indicators-name {
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+        .indicators-count {
+            font-size: 15px;
+            font-weight: bold;
+        }
+    }
+}
+
+// 信号页tab
+.signal-tab {
+    background-color: var(--contentColor);
+    padding: 10px 12px;
+    .signal-tab-warp {
+        display: flex;
+        align-items: center;
+    }
+    .tab-list {
+        flex: 1;
+        overflow: hidden;
+        .classify-list-2 {
+            :deep {
+                .item {
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+    .tab-icon {
+        margin-left: 15px;
+    }
+    .signal-tab-link {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 10px;
+        .signal-tab-symbol {
+            flex: 1;
+            font-weight: bold;
+        }
+        a {
+            color: var(--primary);
+        }
+    }
+}
+.signal-more {
+    cursor: pointer;
+    text-align: center;
+    margin-top: 10px;
+    padding: 5px;
+    font-size: 13px;
+    border-radius: 3px;
+    background-color: var(--bgColor);
+}
+// 信号块状
+.signal-warp {
+    &.signal-warp-bg {
+        margin: 6px 0;
+        background-color: var(--contentColor);
+    }
+}
+.signal-block {
+    flex: 1;
+    .signal-block-warp {
+        background-color: var(--contentColor);
+        border-color: var(--lineColor);
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 4px;
+        padding: 7px 12px;
+    }
+    .signal-col {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+    .signal-block-center {
+        text-align: center;
+    }
+    .signal-block-right {
+        text-align: right;
+    }
+    .signal-block-head {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-color: var(--lineColor);
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        padding: 8px 0;
+        font-size: 14px;
+        .label {
+            &.time {
+                font-size: 12px;
+                line-height: 21px;
+            }
+        }
+        .value {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .signal-block-symbol {
+            justify-content: flex-end;
+            flex-direction: column;
+            align-items: flex-end;
+            :deep {
+                .icon {
+                    margin-right: 0;
+                    margin-bottom: 6px;
+                }
+                .symbol-code {
+                    max-width: 100px;
+                }
+            }
+        }
+    }
+    .signal-block-footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        .label {
+            font-size: 12px;
+            color: var(--normalColor);
+            margin-bottom: 4px;
+        }
+    }
+    .signal-block-option {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .van-button {
+            min-width: 80px;
+            flex: 1;
+        }
+    }
+}
+body.night {
+    .signal-block {
+        .signal-block-option {
+            .van-button--default {
+                background-color: var(--bgColor);
+                color: var(--color);
+                border-color: var(--lineColor);
+            }
+        }
+    }
+}
+
+// 产品
+.product-block {
+    margin-bottom: 16px;
+    &:last-of-type {
+        margin-bottom: 0;
+    }
+    &:deep {
+        .none-data {
+            padding: 0;
+        }
+    }
+}
+.product-item {
+    border-bottom-color: var(--lineColor);
+    display: flex;
+    padding: 0 12px;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    .col {
+        display: inline-flex;
+        align-items: center;
+        &.name-col {
+            font-size: 16px;
+            min-width: 110px;
+        }
+        &.price-col {
+            span {
+                font-size: 13px;
+                margin-left: 10px;
+            }
+            .price {
+                font-size: 15px;
+            }
+        }
+    }
+}
+.signal-overflow {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex: 1;
+}
+.signal-overflow-y {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    // -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none; 
+    @include scroll-bar-vertical;
+}
+// pc
+
+// 页面固定样式
+.signal-page-wrap {
+    width: 1400px;
+    margin: 30px auto;
+    padding: 10px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+    background: var(--contentColor);
+    border-radius: 5px;
+    @media screen and (max-width: 1400px) {
+        width: calc(100% - 40px);
+    }
+    @media screen and (max-width: 768px) {
+        width: 100%;
+        padding: 0 15px;
+        margin: 0;
+        border-radius: 0;
+    }
+    .tab {
+        padding: 30px 30px 0;
+        @media screen and (max-width: 1200px) {
+            padding: 30px 10px 0;
+        }
+        position: relative;
+        .tab-left {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            left: 0;
+            cursor: pointer;
+            font-size: 14px;
+            &:hover {
+                opacity: 0.8;
+            }
+            .icon-arrow {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 30px;
+                height: 40px;
+                .van-icon {
+                    margin-top: -4px;
+                    margin-left: -4px;
+                }
+            }
+        }
+    }
+    .content {
+        padding: 0 30px;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        @media screen and (max-width: 1200px) {
+            padding: 0 10px;
+        }
+    }
+}
+.signal-tab-pc {
+    :deep {
+        .el-tabs__header {
+            margin: 0;
+        }
+        .el-tabs__item {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            &:hover,
+            &.is-active {
+                color: var(--primary);
+            }
+        }
+        .el-tabs__active-bar {
+            background-color: var(--primary);
+        }
+        .el-tabs__nav-wrap::after {
+            height: 1px;
+            background-color: var(--lineColor);
+        }
+    }
+}
+.signal-filter-pc {
+    width: 100%;
+    background: var(--contentColor);
+    padding: 15px 0;
+    position: sticky;
+    top: 64px;
+    z-index: 2;
+    .signal-filter-warp {
+        display: flex;
+        align-items: center;
+        .icon-filter {
+            margin-right: 20px;
+        }
+    }
+}
+
+@media (min-width: 768px) {
+    .signal-product-list {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0 -20px;
+        .product-block {
+            width: calc(50% - 40px);
+            margin: 0 20px 40px;
+        }
+    }
+    .signal-item {
+        font-size: 16px;
+        min-height: 45px;
+        padding: 0 12px;
+        cursor: pointer;
+        &:not(.signal-item-th):hover {
+            background-color: var(--primaryAssistColor);
+        }
+        &.signal-item-th {
+            color: var(--minorColor);
+            font-size: 12px;
+            border-bottom: none;
+        }
+        .col {
+            &.col-option {
+                min-width: 120px;  // 与按钮同样宽度
+            }
+        }
+        .plain-button {
+            min-width: 100px;
+            font-size: 14px;
+            padding: 4px;
+            line-height: normal;
+            height: auto;
+            &.plain-button-subscribe {
+                min-width: 154px;
+            }
+            &:not(:first-of-type) {
+                margin-left: 12px;
+            }
+        }
+        :deep {
+            .icon-arrow {
+                margin-left: 6px;
+            }
+        }
+    }
+    .signal-view-more {
+        min-width: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 50px;
+        font-size: 16px;
+        cursor: pointer;
+        color: var(--primary);
+        border-radius: 12px;
+        border: 2px solid var(--lineColor);
+        margin: 25px auto;
+        &:not(.van-button--disabled):hover {
+            border-color: var(--primary);
+        }
+        :deep {
+            .van-loading {
+                margin-right: 5px;
+            }
+        }
+    }
+}
+.none-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    .none-data-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        margin-top: 0;
+        padding: 0.6rem;
+        color: var(--van-empty-description-color);
+        font-size: var(--van-empty-description-font-size);
+        line-height: var(--van-empty-description-line-height);
+        text-align: center;
+        word-break: break-word;
+    }
+}

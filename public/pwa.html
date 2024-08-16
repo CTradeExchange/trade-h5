@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="mobile-wep-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta content="telephone=yes" name="format-detection"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="white"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta name="apple-touch-fullscreen" content="yes"/>
+    <link rel="shortcut icon" href="/images/logo-s.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/images/logo-s.png"/>
+</head>
+<body>
+    <div>
+        <span id="saveID" class="add_button_tohome">保存</span>
+    </div>
+</body>
+
+<script type="text/javascript">
+    let deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', function(e) {
+        alert('beforeinstallprompt')
+        console.log('beforeinstallprompt', e)
+        e.preventDefault();
+        deferredPrompt = e;
+    });
+
+    window.addEventListener('load', () => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker
+                .register('/add-home-sw.js')
+                .then(() => {
+                    console.log('Service Worker Registered');
+                });
+        }
+
+        const addBtn = document.querySelector('.add_button_tohome');
+        console.log('addBtn', document.getElementById('saveID'))
+        addBtn.addEventListener('click', (e) => {
+            console.log('click', e)
+            addBtn.style.display = 'none';
+            console.log('click2', e)
+            deferredPrompt.prompt();
+            console.log('click3', e)
+            deferredPrompt.userChoice.then((choiceResult) => {
+                console.log('click4', choiceResult)
+                if (choiceResult.outcome === 'accepted') {
+                    console.log('User accepted the A2HS prompt');
+                } else {
+                    console.log('User dismissed the A2HS prompt');
+                }
+                deferredPrompt = null;
+            });
+        });
+    })
+</script>
+</html>

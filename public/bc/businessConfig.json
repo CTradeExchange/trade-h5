@@ -1,0 +1,13 @@
+{
+    "//": "pcuiLogo 请配置https://开头的图片地址，如果不配置则显示公版默认Logo",
+    "pcuiLogo": "https://web.mc900.com/wp-content/uploads/2022/08/mainlogo_white.png",
+    "v10Link//": "V10基金介绍页地址，如果配置了此地址，则点击行情列表页面的申购和图表页面的申购按钮跳转到此地址，如：/fundV10/index",
+    "v10Link": "/api",
+    "fundDEX//": "是否显示去中心化基金功能",
+    "fundDEX": false,
+    "enterpriseLogin//": "是否显示企业登录功能",
+    "enterpriseLogin": false,
+    "fundLogin//": "是否显示基金登录功能",
+    "fundLogin": false,
+    "blockAtmSdk": "https://cashier-b2b-pre.ufcfan.org/libs/BlockATM.umd.js?apiKey=919F45CF-F871-49B2-9AE0-0BF201052102"
+}
